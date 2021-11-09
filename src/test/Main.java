@@ -11,7 +11,8 @@ public class Main extends PApplet {
     }
 
     public void settings() {
-        size(600,600, P2D);
+//        fullScreen(P2D);
+        size(600,1000, P2D);
     }
 
     public void setup() {
@@ -20,10 +21,10 @@ public class Main extends PApplet {
         int margin = 20;
         surface.setLocation(displayWidth - width - margin, margin);
         surface.setAlwaysOnTop(true);
+        background(0xFF36393E);
     }
 
     public void draw() {
-//        background(0xFF36393E);
         strokeWeight(3);
         stroke(255);
         if(mousePressed){

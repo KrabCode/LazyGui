@@ -3,6 +3,7 @@ package toolbox;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import toolbox.tree.TreeWindow;
 import toolbox.userInput.UserInputPublisher;
 
 import static processing.core.PConstants.HSB;
@@ -10,20 +11,15 @@ import static processing.core.PConstants.HSB;
 public class Gui {
     PApplet app;
     PGraphics pg;
-    Tree tree;
+    TreeWindow treeWindow;
 
     public Gui(PApplet p) {
         this.app = p;
         UserInputPublisher.CreateSingleton(app);
         lazyResetDisplay();
 
-        tree = new Tree(app);
+        treeWindow = new TreeWindow(app);
 
-    }
-
-    public void update() {
-        lazyResetDisplay();
-        UserInputPublisher.getInstance().update();
     }
 
     void lazyResetDisplay(){
@@ -32,11 +28,15 @@ public class Gui {
         }
     }
 
-    public PImage display() {
+    public void update() {
+        lazyResetDisplay();
+    }
+
+    public PGraphics display() {
         pg.beginDraw();
         pg.clear();
         pg.colorMode(HSB,1,1,1,1);
-        tree.update(pg);
+        treeWindow.update(pg);
         pg.endDraw();
         return pg;
     }
