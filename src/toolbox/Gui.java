@@ -1,25 +1,30 @@
 package toolbox;
 
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import toolbox.tree.TreeWindow;
+import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
+import toolbox.userInput.UserInputSubscriber;
 
-import static processing.core.PConstants.HSB;
-
-public class Gui {
+public class Gui implements UserInputSubscriber {
     PApplet app;
-    PGraphics pg;
+    public PGraphics pg;
     TreeWindow treeWindow;
+    private boolean isGuiVisible = true;
+
+    public Gui(PApplet p, boolean isGuiVisibleByDefault){
+        isGuiVisible = isGuiVisibleByDefault;
+        new Gui(p);
+    }
 
     public Gui(PApplet p) {
         this.app = p;
         UserInputPublisher.CreateSingleton(app);
+        UserInputPublisher.subscribe(this);
         lazyResetDisplay();
-
         treeWindow = new TreeWindow(app);
-
     }
 
     void lazyResetDisplay(){
@@ -30,14 +35,41 @@ public class Gui {
 
     public void update() {
         lazyResetDisplay();
-    }
-
-    public PGraphics display() {
         pg.beginDraw();
         pg.clear();
-        pg.colorMode(HSB,1,1,1,1);
-        treeWindow.update(pg);
+        if(isGuiVisible){
+            treeWindow.drawWindow(pg);
+        }
         pg.endDraw();
-        return pg;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        if(keyEvent.isAutoRepeat()){
+            return;
+        }
+         if(keyEvent.getKeyChar() == 'h'){
+             isGuiVisible = !isGuiVisible;
+         }
+    }
+
+    public float slider(String path) {
+        return 3;
+    }
+
+    public boolean button(String path) {
+        return false;
+    }
+
+    public boolean toggle(String path) {
+        return false;
+    }
+
+    public Color picker(String path){
+        return new Color();
+    }
+
+    public PGraphics gradient(String path){
+        return null;
     }
 }

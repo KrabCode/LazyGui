@@ -25,20 +25,18 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     private void registerListeners(PApplet app) {
         PSurface surface = app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {
-            com.jogamp.newt.opengl.GLWindow window = (com.jogamp.newt.opengl.GLWindow) (((PSurfaceJOGL) surface).getNative());
+            com.jogamp.newt.opengl.GLWindow window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
             window.addKeyListener(this);
             window.addMouseListener(this);
         } else {
-            System.out.println("Please use P2D or P3D.");
+            System.out.println("Please use P2D or P3D in your size() or fullScreen() in order to use Toolbox");
         }
     }
 
     public static void CreateSingleton(PApplet app) {
-        singleton = new UserInputPublisher(app);
-    }
-
-    public static UserInputPublisher getInstance() {
-        return singleton;
+        if(singleton == null){
+            singleton = new UserInputPublisher(app);
+        }
     }
 
     public static void subscribe(UserInputSubscriber subscriber) {

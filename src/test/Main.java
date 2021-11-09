@@ -17,15 +17,16 @@ public class Main extends PApplet {
 
     public void setup() {
         gui = new Gui(this);
-        background(0);
         int margin = 20;
         surface.setLocation(displayWidth - width - margin, margin);
         surface.setAlwaysOnTop(true);
-        background(0xFF36393E);
+
     }
 
     public void draw() {
-        strokeWeight(3);
+        clear();
+        background(0xFF36393E);
+        strokeWeight(gui.slider("draw/stroke weight"));
         stroke(255);
         if(mousePressed){
             if(mouseX != pmouseX || mouseY != pmouseY){
@@ -35,7 +36,7 @@ public class Main extends PApplet {
             }
         }
         gui.update();
-        image(gui.display(), 0, 0);
+        image(gui.pg, 0, 0);
     }
 
     @Override
