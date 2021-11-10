@@ -20,33 +20,18 @@ public class TreeWindow extends Window {
     }
 
     protected void drawContent(PGraphics pg) {
-//        drawGrid(pg);
-    }
-
-    @Override
-    protected void drawGrid(PGraphics pg) {
         pg.pushMatrix();
-        pg.strokeWeight(1.5f);
-        pg.stroke(Palette.darkContentStroke);
         pg.translate(contentTranslate.x, contentTranslate.y);
-        int count = 50;
-        float rectSize = 20;
-        float gridSize = rectSize * count;
-        for (float i = -gridSize; i < gridSize; i++) {
-            if (i % 5 == 0) {
-                pg.strokeWeight(3);
-            } else {
-                pg.strokeWeight(1);
-            }
-            pg.line(i * rectSize, -gridSize, i * rectSize, gridSize);
-            pg.line(-gridSize, i * rectSize, gridSize, i * rectSize);
-        }
+        drawGrid(pg);
         pg.popMatrix();
     }
 
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
         super.mousePressed(e, x, y);
+        if (isPointInsideContent(x, y)) {
+            isDraggedInside = true;
+        }
     }
 
     @Override
@@ -74,8 +59,6 @@ public class TreeWindow extends Window {
             if (isDraggedInside) {
                 contentTranslate.x += x - px;
                 contentTranslate.y += y - py;
-            } else if (isPointInsideContent(x, y)) {
-                isDraggedInside = true;
             }
             e.setConsumed(true);
         }

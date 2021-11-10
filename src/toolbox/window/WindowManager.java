@@ -5,10 +5,11 @@ import processing.core.PGraphics;
 import java.util.ArrayList;
 
 public class WindowManager {
-    static WindowManager singleton;
-    ArrayList<Window> windows = new ArrayList<>();
-    ArrayList<Window> windowsToAdd = new ArrayList<>();
-    Window windowToSetFocusOn = null;
+    private static WindowManager singleton;
+    private final ArrayList<Window> windows = new ArrayList<>();
+    private final ArrayList<Window> windowsToAdd = new ArrayList<>();
+    private final ArrayList<Window> windowsToRemove = new ArrayList<>();
+    private Window windowToSetFocusOn = null;
 
     private WindowManager(){
 
@@ -50,6 +51,8 @@ public class WindowManager {
             setFocus(singleton.windowToSetFocusOn);
             singleton.windowToSetFocusOn = null;
         }
+        singleton.windows.removeAll(singleton.windowsToRemove);
+        singleton.windowsToRemove.clear();
         singleton.windows.addAll(singleton.windowsToAdd);
         singleton.windowsToAdd.clear();
     }
@@ -61,8 +64,8 @@ public class WindowManager {
     private static void setFocus(Window window) {
         ArrayList<Window> windows = singleton.windows;
         if(windows.indexOf(window) < windows.size() - 1){
-            windows.remove(window);
-            windows.add(window);
+            singleton.windowsToRemove.add(window);
+            singleton.windowsToAdd.add(window);
         }
     }
 

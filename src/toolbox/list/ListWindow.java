@@ -14,7 +14,7 @@ public class ListWindow extends Window {
 
     @Override
     protected void drawContent(PGraphics pg) {
-
+        drawGrid(pg);
     }
 
     @Override
