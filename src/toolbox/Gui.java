@@ -4,7 +4,6 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.list.ListWindow;
 import toolbox.tree.TreeWindow;
 import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
@@ -23,11 +22,11 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
-        UserInputPublisher.CreateSingleton(app);
+        UserInputPublisher.createSingleton(app);
         UserInputPublisher.subscribe(this);
+        WindowManager.createSingleton();
         lazyResetDisplay();
-        WindowManager.createWindow(new TreeWindow(app,  "tree",new PVector(20, 20), new PVector(150, 250)));
-        WindowManager.createWindow(new ListWindow(app,  "list", new PVector(200, 20), new PVector(150, 250)));
+        WindowManager.createOrUncoverWindow(new TreeWindow(app, "/", "main", new PVector(20, 20), new PVector(150, 250), false));
     }
 
     void lazyResetDisplay(){
@@ -42,6 +41,7 @@ public class Gui implements UserInputSubscriber {
         pg.clear();
         if(isGuiVisible){
             WindowManager.updateAndDrawWindows(pg);
+            UserInputPublisher.updateSubscriberList();
         }
         pg.endDraw();
     }

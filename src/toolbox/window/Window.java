@@ -4,7 +4,6 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
 import toolbox.Math;
 import toolbox.style.Palette;
 import toolbox.userInput.UserInputPublisher;
@@ -14,58 +13,124 @@ import static processing.core.PApplet.floor;
 import static processing.core.PConstants.*;
 
 public abstract class Window implements UserInputSubscriber {
-    private final PGraphics g;
-    private final PVector windowPos;
-    private final PVector windowSize;
+    protected final String path;
+    protected final PVector windowPos;
+    protected final PVector windowSize;
+    protected boolean hidden = false;
     private final String title;
-    private final float titleBarHeight = 20;
+    private final boolean closeable;
+    protected final float cellSize = 20;
+    private PGraphics g;
+    protected final PApplet app;
     protected boolean isDraggedAround;
 
-    public Window(PApplet app, String title, PVector pos, PVector size) {
+    public Window(PApplet app, String path, String title, PVector pos, PVector size) {
+        this.app = app;
+        this.path = path;
         this.title = title;
         this.windowPos = pos;
         this.windowSize = size;
+        this.closeable = true; // default is closeable, only the main tree window cannot be closed
+        initialize(size);
+    }
+
+    public Window(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
+        this.app = app;
+        this.path = path;
+        this.title = title;
+        this.windowPos = pos;
+        this.windowSize = size;
+        this.closeable = closeable;
+        initialize(size);
+    }
+
+    private void initialize(PVector size) {
         g = app.createGraphics(floor(size.x), floor(size.y), P2D);
         UserInputPublisher.subscribe(this);
     }
 
     public void drawWindow(PGraphics gui) {
         g.beginDraw();
+        g.colorMode(HSB, 1, 1, 1, 1);
         g.clear();
+        if(hidden){
+            g.endDraw();
+            return;
+        }
+        drawBackground(g);
+        drawGrid(g);
         drawContent(g);
         drawBorder(g);
-        drawTitle(g);
+        drawTitleBar(g);
+        if (closeable) {
+            drawCloseButton(g);
+        }
         g.endDraw();
         gui.image(g, windowPos.x, windowPos.y);
+    }
+
+    private void drawBackground(PGraphics pg) {
+        pg.noStroke();
+        pg.fill(Palette.windowContentFill);
+        pg.rect(0, cellSize, pg.width, pg.height - cellSize);
     }
 
     protected abstract void drawContent(PGraphics pg);
 
     protected void drawBorder(PGraphics pg) {
-        pg.stroke(Palette.windowBorderStroke);
+        setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
-        pg.rect(0, titleBarHeight, pg.width - 1, pg.height - titleBarHeight - 1);
+        pg.rect(0, cellSize, pg.width - 1, pg.height - cellSize - 1);
     }
 
-    protected void drawTitle(PGraphics pg) {
+    protected void drawTitleBar(PGraphics pg) {
         pg.fill(Palette.windowTitleFill);
-        pg.stroke(Palette.windowBorderStroke);
-        pg.rect(0, 0, pg.width - 1, titleBarHeight);
+        setBorderStrokeBasedOnFocus(pg);
+        pg.rect(0, 0, pg.width - 1, cellSize);
         pg.fill(Palette.windowTitleTextFill);
         int textMargin = 4;
         pg.textAlign(LEFT);
         pg.textSize(16);
-        pg.text(title, textMargin, titleBarHeight - textMargin);
+        pg.text(title, textMargin, cellSize - textMargin);
+    }
 
+    private void drawCloseButton(PGraphics pg) {
+        setBorderStrokeBasedOnFocus(pg);
+        pg.noFill();
+        pg.rect(windowSize.x - cellSize, 0, cellSize, cellSize);
+    }
+
+    protected void drawGrid(PGraphics pg) {
+        pg.pushMatrix();
+        pg.strokeWeight(1.5f);
+        pg.stroke(Palette.darkContentStroke);
+        int count = 50;
+        float rectSize = 20;
+        float gridSize = rectSize * count;
+        for (float i = -gridSize; i < gridSize; i++) {
+            if (i % 5 == 0) {
+                pg.strokeWeight(3);
+            } else {
+                pg.strokeWeight(1);
+            }
+            pg.line(i * rectSize, -gridSize, i * rectSize, gridSize);
+            pg.line(-gridSize, i * rectSize, gridSize, i * rectSize);
+        }
+        pg.popMatrix();
+    }
+
+    private void setBorderStrokeBasedOnFocus(PGraphics pg) {
+        if(WindowManager.isFocused(this)){
+            pg.stroke(Palette.windowBorderStrokeFocused);
+        }else{
+            pg.stroke(Palette.windowBorderStroke);
+        }
     }
 
     public void mousePressed(MouseEvent e, float x, float y) {
-        if (isPointInsideTitleBar(x, y)) {
+         if (isPointInsideTitleBar(x, y)) {
             isDraggedAround = true;
-            e.setConsumed(true);
-        }
-        if(isPointInsideWindow(x,y)){
-            setFocus();
+            setFocusOnThis();
             e.setConsumed(true);
         }
     }
@@ -79,25 +144,51 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public void mouseReleased(MouseEvent e, float x, float y) {
+        if (closeable && isPointInsideCloseButton(x, y)) {
+            hide();
+            e.setConsumed(true);
+        } else if(isDraggedAround){
+            e.setConsumed(true);
+        } else if (isPointInsideWindow(x, y)) {
+            setFocusOnThis();
+            e.setConsumed(true);
+        }
         isDraggedAround = false;
     }
 
-    public boolean isPointInsideTitleBar(float x, float y) {
-        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, titleBarHeight);
+    private void hide() {
+        UserInputPublisher.unsubscribe(this);
+        hidden = true;
+    }
+
+    public void uncover() {
+        UserInputPublisher.subscribe(this);
+        hidden = false;
+        setFocusOnThis();
+    }
+
+    private void setFocusOnThis() {
+        WindowManager.requestFocus(this);
+        UserInputPublisher.setFocus(this);
     }
 
     public boolean isPointInsideContent(float x, float y) {
         return Math.isPointInRect(x, y,
-                windowPos.x, windowPos.y + titleBarHeight,
-                windowSize.x, windowSize.y - titleBarHeight);
+                windowPos.x, windowPos.y + cellSize,
+                windowSize.x, windowSize.y - cellSize);
     }
 
     public boolean isPointInsideWindow(float x, float y) {
         return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
     }
 
-    private void setFocus() {
-        WindowManager.requestFocus(this);
-        UserInputPublisher.setFocus(this);
+    public boolean isPointInsideTitleBar(float x, float y) {
+        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cellSize, cellSize);
+    }
+
+    protected boolean isPointInsideCloseButton(float x, float y) {
+        return Math.isPointInRect(x, y,
+                windowPos.x + windowSize.x - cellSize,windowPos.y,
+                cellSize, cellSize);
     }
 }

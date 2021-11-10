@@ -6,17 +6,19 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import processing.core.PApplet;
 import processing.core.PSurface;
-import processing.opengl.PSurfaceJOGL;
 import toolbox.window.Window;
 
 import java.util.ArrayList;
 
 import static processing.core.PApplet.floor;
-import static processing.core.PApplet.sin;
 
 public class UserInputPublisher implements KeyListener, MouseListener {
     private static UserInputPublisher singleton;
     private final ArrayList<UserInputSubscriber> subscribers = new ArrayList<>();
+    private final ArrayList<UserInputSubscriber> subscribersToAdd = new ArrayList<>();
+    private final ArrayList<UserInputSubscriber> subscribersToRemove = new ArrayList<>();
+
+
     float previousMouseX = -1;
     float previousMouseY = -1;
 
@@ -35,19 +37,30 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         }
     }
 
-    public static void CreateSingleton(PApplet app) {
+    public static void createSingleton(PApplet app) {
         if(singleton == null){
             singleton = new UserInputPublisher(app);
         }
     }
 
     public static void subscribe(UserInputSubscriber subscriber) {
-        singleton.subscribers.add(subscriber);
+        singleton.subscribersToAdd.add(0, subscriber);
+    }
+
+    public static void unsubscribe(UserInputSubscriber subscriber) {
+        singleton.subscribersToRemove.add(subscriber);
     }
 
     public static void setFocus(Window win){
         singleton.subscribers.remove(win);
         singleton.subscribers.add(0, win);
+    }
+
+    public static void updateSubscriberList(){
+        singleton.subscribers.addAll(singleton.subscribersToAdd);
+        singleton.subscribers.removeAll(singleton.subscribersToRemove);
+        singleton.subscribersToAdd.clear();
+        singleton.subscribersToRemove.clear();
     }
 
     @Override

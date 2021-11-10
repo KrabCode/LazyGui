@@ -11,13 +11,14 @@ public class Main extends PApplet {
     }
 
     public void settings() {
-//        fullScreen(P2D);
-        size(600,1000, P2D);
+        fullScreen(P2D);
+//        size(600,1000, P2D);
     }
 
     public void setup() {
         gui = new Gui(this);
-        int margin = 20;
+        int margin = 0;
+        surface.setSize(1000,1000);
         surface.setLocation(displayWidth - width - margin, margin);
         surface.setAlwaysOnTop(true);
 
@@ -26,6 +27,7 @@ public class Main extends PApplet {
     public void draw() {
         clear();
         background(0xFF36393E);
+        /*
         strokeWeight(gui.slider("draw/stroke weight"));
         stroke(255);
         if(mousePressed){
@@ -35,6 +37,7 @@ public class Main extends PApplet {
                 point(mouseX, mouseY);
             }
         }
+        */
         gui.update();
         image(gui.pg, 0, 0);
     }
