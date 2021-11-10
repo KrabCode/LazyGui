@@ -1,8 +1,10 @@
 package toolbox.tree;
 
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.Gui;
 import toolbox.style.Palette;
 import toolbox.window.Window;
 
@@ -12,8 +14,8 @@ public class TreeWindow extends Window {
     private boolean isDraggedInside = false;
     TreeNode root = new TreeNode("");
 
-    public TreeWindow(PApplet app) {
-        super(app, new PVector(20, 20), new PVector(150, 250));
+    public TreeWindow(PApplet app, Gui windowManager) {
+        super(app,  windowManager, "tree",new PVector(20, 20), new PVector(150, 250));
     }
 
     protected void drawContent(PGraphics pg) {
@@ -42,25 +44,27 @@ public class TreeWindow extends Window {
     }
 
     @Override
-    public void mousePressed(float x, float y) {
-        super.mousePressed(x, y);
+    public void mousePressed(MouseEvent e, float x, float y) {
+        super.mousePressed(e, x, y);
         if(!isDraggedAround && isPointInsideContent(x,y)){
             isDraggedInside = true;
+            e.setConsumed(true);
         }
     }
 
     @Override
-    public void mouseReleased(float x, float y) {
-        super.mouseReleased(x, y);
+    public void mouseReleased(MouseEvent e, float x, float y) {
+        super.mouseReleased(e, x, y);
         isDraggedInside = false;
     }
 
     @Override
-    public void mouseDragged(float x, float y, float px, float py) {
-        super.mouseDragged(x, y, px, py);
+    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragged(e, x, y, px, py);
         if(!isDraggedAround && isDraggedInside){
             contentTranslate.x += x - px;
             contentTranslate.y += y - py;
+            e.setConsumed(true);
         }
     }
 }

@@ -7,10 +7,12 @@ import com.jogamp.newt.event.MouseListener;
 import processing.core.PApplet;
 import processing.core.PSurface;
 import processing.opengl.PSurfaceJOGL;
+import toolbox.window.Window;
 
 import java.util.ArrayList;
 
 import static processing.core.PApplet.floor;
+import static processing.core.PApplet.sin;
 
 public class UserInputPublisher implements KeyListener, MouseListener {
     private static UserInputPublisher singleton;
@@ -43,10 +45,18 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         singleton.subscribers.add(subscriber);
     }
 
+    public static void setFocus(Window win){
+        singleton.subscribers.remove(win);
+        singleton.subscribers.add(0, win);
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyPressed(e);
+            if(e.isConsumed()){
+                break;
+            }
         }
 //        System.out.println("keyPressed " + e.getKeyCode());
     }
@@ -55,6 +65,9 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     public void keyReleased(KeyEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyReleased(e);
+            if(e.isConsumed()){
+                break;
+            }
         }
 //        System.out.println("keyReleased " + e.getKeyCode());
     }
@@ -62,7 +75,10 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseClicked(e.getX(), e.getY());
+            subscriber.mouseClicked(e, e.getX(), e.getY());
+            if(e.isConsumed()){
+                break;
+            }
         }
 //        System.out.println("mouseClicked");
     }
@@ -70,7 +86,10 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mousePressed(e.getX(), e.getY());
+            subscriber.mousePressed(e, e.getX(), e.getY());
+            if(e.isConsumed()){
+                break;
+            }
         }
 //        System.out.println("mousePressed [ " + e.getX() + ", " +  e.getY() + " ]");
     }
@@ -78,7 +97,10 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseReleased(e.getX(), e.getY());
+            subscriber.mouseReleased(e, e.getX(), e.getY());
+            if(e.isConsumed()){
+                break;
+            }
         }
 //        System.out.println("mouseReleased [ " + e.getX() + ", " +  e.getY() + " ]");
     }
@@ -86,10 +108,13 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseMoved(e.getX(), e.getY(),
+            subscriber.mouseMoved(e, e.getX(), e.getY(),
                     previousMouseX == -1 ? e.getX() : previousMouseX,
                     previousMouseY == -1 ? e.getY() : previousMouseY
             );
+            if(e.isConsumed()){
+                break;
+            }
         }
         previousMouseX = e.getX();
         previousMouseY = e.getY();
@@ -98,10 +123,13 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseDragged(e.getX(), e.getY(),
+            subscriber.mouseDragged(e, e.getX(), e.getY(),
                     previousMouseX == -1 ? e.getX() : previousMouseX,
                     previousMouseY == -1 ? e.getY() : previousMouseY
             );
+            if(e.isConsumed()){
+                break;
+            }
         }
         previousMouseX = e.getX();
         previousMouseY = e.getY();
@@ -110,21 +138,30 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseWheelMoved(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseWheelMoved(floor(e.getRotation()[1]));
+            subscriber.mouseWheelMoved(e, floor(e.getRotation()[1]));
+            if(e.isConsumed()){
+                break;
+            }
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseEntered(e.getX(), e.getY());
+            subscriber.mouseEntered(e, e.getX(), e.getY());
+            if(e.isConsumed()){
+                break;
+            }
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         for (UserInputSubscriber subscriber : subscribers) {
-            subscriber.mouseExited(e.getX(), e.getY());
+            subscriber.mouseExited(e, e.getX(), e.getY());
+            if(e.isConsumed()){
+                break;
+            }
         }
     }
 

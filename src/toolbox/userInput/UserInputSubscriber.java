@@ -1,6 +1,7 @@
 package toolbox.userInput;
 
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.MouseEvent;
 
 public interface UserInputSubscriber  {
 
@@ -12,35 +13,35 @@ public interface UserInputSubscriber  {
 
     }
 
-    default void mouseClicked(float x, float y) {
+    default void mouseClicked(MouseEvent e, float x, float y) {
 
     }
 
-    default void mouseEntered(float x, float y) {
+    default void mouseEntered(MouseEvent e,float x, float y) {
 
     }
 
-    default void mouseExited(float x, float y) {
+    default void mouseExited(MouseEvent e,float x, float y) {
 
     }
 
-    default void mousePressed(float x, float y) {
+    default void mousePressed(MouseEvent e,float x, float y) {
 
     }
 
-    default void mouseReleased(float x, float y) {
+    default void mouseReleased(MouseEvent e,float x, float y) {
 
     }
 
-    default void mouseMoved(float x, float y, float px, float py) {
+    default void mouseMoved(MouseEvent e,float x, float y, float px, float py) {
 
     }
 
-    default void mouseDragged(float x, float y, float px, float py) {
+    default void mouseDragged(MouseEvent e,float x, float y, float px, float py) {
 
     }
 
-    default void mouseWheelMoved(int dir) {
+    default void mouseWheelMoved(MouseEvent e,int dir) {
 
     }
 }
