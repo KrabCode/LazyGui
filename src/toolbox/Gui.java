@@ -9,15 +9,11 @@ import toolbox.tree.TreeWindow;
 import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.window.Window;
-
-import java.util.ArrayList;
+import toolbox.window.WindowManager;
 
 public class Gui implements UserInputSubscriber {
     PApplet app;
     public PGraphics pg;
-    ArrayList<Window> windows = new ArrayList<>();
-    Window windowToSetFocusOn = null;
     private boolean isGuiVisible = true;
 
     public Gui(PApplet p, boolean isGuiVisibleByDefault){
@@ -30,8 +26,8 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.CreateSingleton(app);
         UserInputPublisher.subscribe(this);
         lazyResetDisplay();
-        windows.add(new TreeWindow(app, this));
-        windows.add(new ListWindow(app, this, "list", new PVector(200, 20), new PVector(150, 250)));
+        WindowManager.createWindow(new TreeWindow(app,  "tree",new PVector(20, 20), new PVector(150, 250)));
+        WindowManager.createWindow(new ListWindow(app,  "list", new PVector(200, 20), new PVector(150, 250)));
     }
 
     void lazyResetDisplay(){
@@ -45,12 +41,7 @@ public class Gui implements UserInputSubscriber {
         pg.beginDraw();
         pg.clear();
         if(isGuiVisible){
-            for(Window win : windows){
-                win.drawWindow(pg);
-            }
-            if(windowToSetFocusOn != null){
-                setFocus(windowToSetFocusOn);
-            }
+            WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
     }
@@ -85,14 +76,4 @@ public class Gui implements UserInputSubscriber {
         return null;
     }
 
-    public void requestFocus(Window window){
-        windowToSetFocusOn = window;
-    }
-
-    private void setFocus(Window window) {
-        if(windows.indexOf(window) < windows.size() - 1){
-            windows.remove(window);
-            windows.add(window);
-        }
-    }
 }

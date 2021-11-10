@@ -14,8 +14,8 @@ public class TreeWindow extends Window {
     private boolean isDraggedInside = false;
     TreeNode root = new TreeNode("");
 
-    public TreeWindow(PApplet app, Gui windowManager) {
-        super(app,  windowManager, "tree",new PVector(20, 20), new PVector(150, 250));
+    public TreeWindow(PApplet app, String title, PVector pos, PVector size) {
+        super(app, title, pos, size);
     }
 
     protected void drawContent(PGraphics pg) {

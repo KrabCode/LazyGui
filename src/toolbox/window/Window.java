@@ -17,16 +17,14 @@ public abstract class Window implements UserInputSubscriber {
     private final PGraphics g;
     private final PVector windowPos;
     private final PVector windowSize;
-    private final Gui windowManager; // TODO singleton?
     private final String title;
     private final float titleBarHeight = 20;
     protected boolean isDraggedAround;
 
-    public Window(PApplet app, Gui windowManager, String title, PVector pos, PVector size) {
+    public Window(PApplet app, String title, PVector pos, PVector size) {
         this.title = title;
         this.windowPos = pos;
         this.windowSize = size;
-        this.windowManager = windowManager;
         g = app.createGraphics(floor(size.x), floor(size.y), P2D);
         UserInputPublisher.subscribe(this);
     }
@@ -99,7 +97,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void setFocus() {
-        windowManager.requestFocus(this);
+        WindowManager.requestFocus(this);
         UserInputPublisher.setFocus(this);
     }
 }

@@ -8,8 +8,8 @@ import toolbox.window.Window;
 
 public class ListWindow extends Window {
 
-    public ListWindow(PApplet app, Gui windowManager, String title, PVector pos, PVector size) {
-        super(app, windowManager, title, pos, size);
+    public ListWindow(PApplet app, String title, PVector pos, PVector size) {
+        super(app, title, pos, size);
     }
 
     @Override
