@@ -56,8 +56,10 @@ public class Gui implements UserInputSubscriber {
     }
 
     public float slider(String path) {
-        return 3;
+        return 3.14159f;
     }
+
+    public int sliderInt(String path){return 3;}
 
     public boolean button(String path) {
         return false;

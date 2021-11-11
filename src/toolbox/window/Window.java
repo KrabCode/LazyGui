@@ -12,8 +12,8 @@ import toolbox.userInput.UserInputSubscriber;
 import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
-    protected final String path;
-    protected final PVector windowPos;
+    protected final String path; // Window UID and also a path in the main gui tree structure
+    protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
     protected boolean hidden = false;
     private final String title;

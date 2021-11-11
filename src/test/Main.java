@@ -27,17 +27,15 @@ public class Main extends PApplet {
     public void draw() {
         clear();
         background(0xFF36393E);
-        /*
-        strokeWeight(gui.slider("draw/stroke weight"));
-        stroke(255);
-        if(mousePressed){
-            if(mouseX != pmouseX || mouseY != pmouseY){
-                line(mouseX, mouseY, pmouseX, pmouseY);
-            }else{
-                point(mouseX, mouseY);
-            }
-        }
-        */
+        pushMatrix();
+        translate(width/2f,height/2f);
+        noFill();
+        stroke(150);
+        rotate(radians(frameCount));
+        float n = 150;
+        rectMode(CENTER);
+        rect(0,0,n,n);
+        popMatrix();
         gui.update();
         image(gui.pg, 0, 0);
     }

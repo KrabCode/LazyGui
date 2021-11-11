@@ -21,7 +21,7 @@ public class WindowManager {
     }
 
     public static void createOrUncoverWindow(Window window) {
-        Window nullableWindow = singleton.findWindowByPath(window.path);
+        Window nullableWindow = singleton.getWindow(window.path);
         if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
         } else {
@@ -30,10 +30,10 @@ public class WindowManager {
     }
 
     public boolean windowExists(Window window) {
-        return findWindowByPath(window.path) != null;
+        return getWindow(window.path) != null;
     }
 
-    public Window findWindowByPath(String path) {
+    public Window getWindow(String path) {
         for (Window w : windows) {
             if (w.path.equals(path)) {
                 return w;
