@@ -4,6 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.font.FontProvider;
 import toolbox.tree.TreeWindow;
 import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
@@ -27,6 +28,7 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.createSingleton(app);
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
+        FontProvider.createSingleton(app);
         lazyResetDisplay();
         treeWindow = new TreeWindow(app, "/", "main",
                 new PVector(Window.cell, Window.cell),

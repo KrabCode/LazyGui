@@ -2,7 +2,7 @@ package toolbox;
 
 import processing.core.PVector;
 
-public class Math {
+public class ToolboxMath {
     public static boolean isPointInRect(float x, float y, PVector pos, PVector size) {
         return isPointInRect(x, y, pos.x, pos.y, size.x, size.y);
     }

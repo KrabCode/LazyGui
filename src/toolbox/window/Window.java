@@ -5,7 +5,8 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
-import toolbox.Math;
+import toolbox.ToolboxMath;
+import toolbox.font.FontProvider;
 import toolbox.style.Palette;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
@@ -14,6 +15,7 @@ import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
     public static float cell = 20;
+    public static float cellTextSize = 16;
     protected final String path; // Window UID and also a path in the main gui tree structure
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
@@ -46,12 +48,15 @@ public abstract class Window implements UserInputSubscriber {
 
     private void initialize(PVector size) {
         g = app.createGraphics(floor(size.x), floor(size.y), P2D);
+        g.beginDraw();
+        g.endDraw();
         UserInputPublisher.subscribe(this);
     }
 
     public void drawWindow(PGraphics gui) {
         g.beginDraw();
         g.colorMode(HSB, 1, 1, 1, 1);
+        g.textFont(FontProvider.getInstance().getFont());
         g.clear();
         if (hidden) {
             g.endDraw();
@@ -110,7 +115,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.fill(Palette.windowTitleTextFill);
         int textMargin = 4;
         pg.textAlign(LEFT);
-        pg.textSize(16);
+        pg.textSize(cellTextSize);
         pg.text(title, textMargin, cell - textMargin);
     }
 
@@ -209,25 +214,25 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideContent(float x, float y) {
-        return Math.isPointInRect(x, y,
+        return ToolboxMath.isPointInRect(x, y,
                 windowPos.x, windowPos.y + cell,
                 windowSize.x, windowSize.y - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
-        return Math.isPointInRect(x, y, 0, 0, app.width, app.height);
+        return ToolboxMath.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        return ToolboxMath.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, cell);
+        return ToolboxMath.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
-        return Math.isPointInRect(x, y,
+        return ToolboxMath.isPointInRect(x, y,
                 windowPos.x + windowSize.x - cell, windowPos.y,
                 cell, cell);
     }

@@ -5,17 +5,31 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.ToolboxMath;
+import toolbox.list.TestWindow;
+import toolbox.style.Palette;
 import toolbox.window.Window;
+import toolbox.window.WindowManager;
+
+import static processing.core.PConstants.*;
 
 public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
     PVector contentTranslate = contentTranslateOrigin.copy();
+    PVector treeDrawingOrigin = new PVector(cell, cell);
 
     private boolean isDraggedInside = false;
-    TreeNode root = new TreeNode("");
+    Node root = new Node(app, "/", "root");
 
     public TreeWindow(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
         super(app, path, title, pos, size, closeable);
+        root.children.add(new Node(app, "/test/", "test"));
+        // TODO make more than 1 recursive level translation work
+//        Node hello = new Node(app, "/hello/", "hello");
+//        hello.children.add(new Node(app, "/hello/world/", "world"));
+//        root.children.add(hello);
+        root.children.add(new Node(app, "/stroke/", "stroke"));
+        root.children.add(new Node(app, "/count/", "count"));
     }
 
     protected void drawContent(PGraphics pg) {
@@ -27,16 +41,80 @@ public class TreeWindow extends Window {
     }
 
     private void drawTree(PGraphics pg) {
-        drawNodeRecursively(pg, root);
+        pg.pushMatrix();
+        pg.translate(treeDrawingOrigin.x, treeDrawingOrigin.y);
+        drawTreeNodeRecursively(pg, root);
+        pg.popMatrix();
     }
 
-    private void drawNodeRecursively(PGraphics pg, TreeNode parent){
+    private void drawTreeNodeRecursively(PGraphics pg, Node parent) {
+        pg.stroke(Palette.windowTitleTextFill);
+        if(parent.children.size() > 0){
+            pg.strokeWeight(3);
+            pg.line(cell / 2f, cell * 1.5f, cell / 2f, cell * 0.5f + parent.children.size() * cell);
+        }
+        pg.strokeWeight(1);
+        updateDrawNodeHitbox(pg, parent, false);
 
-//        drawNodeRecursively(pg, child);
+        pg.textAlign(LEFT, TOP);
+        pg.textSize(cellTextSize);
+        pg.fill(Palette.windowTitleTextFill);
+        pg.noStroke();
+        pg.text(parent.name, 0, 0);
+
+        if(parent.children.size() > 0){
+            pg.pushMatrix();
+            pg.translate(cell, 0);
+            for (Node child : parent.children) {
+                pg.translate(0, cell);
+                drawTreeNodeRecursively(pg, child);
+            }
+            pg.popMatrix();
+        }
     }
 
-    private void tryInteractWithTree() {
+    private void updateDrawNodeHitbox(PGraphics pg, Node parent, boolean hidden) {
 
+        float paddingX = cell / 2f;
+        float x = -paddingX / 2f;
+        float y = 0;
+        float w = pg.textWidth(parent.name) + paddingX;
+        float h = cell;
+        // TODO make this reflect the actual position, debug by drawing a rectangle
+        parent.screenPos.x = pg.screenX(windowPos.x + contentTranslate.x + x, windowPos.y + contentTranslate.y + y);
+        parent.screenPos.y = pg.screenY(windowPos.x + contentTranslate.x + x, windowPos.y + contentTranslate.y + y);
+        parent.screenSize.x = w;
+        parent.screenSize.y = h;
+        pg.fill(Palette.windowContentFill);
+        pg.stroke(Palette.windowBorderStroke);
+        if (!hidden) {
+            pg.rect(x,y,w,h);
+
+        }
+    }
+
+    private void tryInteractWithTree(float x, float y) {
+        Node hitboxMatch = tryFindHitboxUnderPointRecursively(root, x, y);
+        if(hitboxMatch != null){
+            WindowManager.createOrUncoverWindow(
+                    new TestWindow(app, hitboxMatch.path, hitboxMatch.name,
+                            new PVector(windowPos.x + windowSize.x + cell, windowPos.y),
+                            new PVector(cell * 6, cell * 6))
+            );
+        }
+    }
+
+    private Node tryFindHitboxUnderPointRecursively(Node parent, float x, float y) {
+        if(ToolboxMath.isPointInRect(x, y,
+                parent.screenPos.x, parent.screenPos.y,
+                parent.screenSize.x, parent.screenSize.y
+                )){
+            return parent;
+        }
+        for(Node child : parent.children){
+            tryFindHitboxUnderPointRecursively(child, x, y);
+        }
+        return null;
     }
 
     @Override
@@ -48,7 +126,7 @@ public class TreeWindow extends Window {
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
         if (!isDraggedInside && isPointInsideContent(x, y)) {
-            tryInteractWithTree();
+            tryInteractWithTree(x, y);
             e.setConsumed(true);
         } else if (isDraggedInside) {
             isDraggedInside = false;
@@ -73,7 +151,7 @@ public class TreeWindow extends Window {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
-        if(keyEvent.getKeyChar() == 'r'){
+        if (keyEvent.getKeyChar() == 'r') {
             contentTranslate = contentTranslateOrigin.copy();
         }
     }
