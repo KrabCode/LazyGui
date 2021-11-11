@@ -41,7 +41,6 @@ public class Gui implements UserInputSubscriber {
         pg.clear();
         if(isGuiVisible){
             WindowManager.updateAndDrawWindows(pg);
-            UserInputPublisher.updateSubscriberList();
         }
         pg.endDraw();
     }
