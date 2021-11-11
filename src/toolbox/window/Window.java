@@ -4,6 +4,7 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.Gui;
 import toolbox.Math;
 import toolbox.style.Palette;
 import toolbox.userInput.UserInputPublisher;
@@ -12,13 +13,13 @@ import toolbox.userInput.UserInputSubscriber;
 import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
+    public static float cell = 20;
     protected final String path; // Window UID and also a path in the main gui tree structure
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
     protected boolean hidden = false;
     private final String title;
     private final boolean closeable;
-    protected final float cellSize = 20;
     private PGraphics g;
     protected final PApplet app;
     protected boolean isDraggedAround;
@@ -91,7 +92,7 @@ public abstract class Window implements UserInputSubscriber {
     private void drawBackground(PGraphics pg) {
         pg.noStroke();
         pg.fill(Palette.windowContentFill);
-        pg.rect(0, cellSize, pg.width, pg.height - cellSize);
+        pg.rect(0, cell, pg.width, pg.height - cell);
     }
 
     protected abstract void drawContent(PGraphics pg);
@@ -99,24 +100,24 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawBorder(PGraphics pg) {
         setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
-        pg.rect(0, cellSize, pg.width - 1, pg.height - cellSize - 1);
+        pg.rect(0, cell, pg.width - 1, pg.height - cell - 1);
     }
 
     protected void drawTitleBar(PGraphics pg) {
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
-        pg.rect(0, 0, pg.width - 1, cellSize);
+        pg.rect(0, 0, pg.width - 1, cell);
         pg.fill(Palette.windowTitleTextFill);
         int textMargin = 4;
         pg.textAlign(LEFT);
         pg.textSize(16);
-        pg.text(title, textMargin, cellSize - textMargin);
+        pg.text(title, textMargin, cell - textMargin);
     }
 
     private void drawCloseButton(PGraphics pg) {
         setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
-        pg.rect(windowSize.x - cellSize, 0, cellSize, cellSize);
+        pg.rect(windowSize.x - cell, 0, cell, cell);
     }
 
     protected void drawGrid(PGraphics pg) {
@@ -146,6 +147,9 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
+        if (isHidden()) {
+            return;
+        }
         if (isPointInsideTitleBar(x, y)) {
             isDraggedAround = true;
             setFocusOnThis();
@@ -155,11 +159,14 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+        if(isHidden()){
+            return;
+        }
         if (isDraggedAround) {
-            if(isPointInsideSketchWindow(x,y)){
+            if (isPointInsideSketchWindow(x, y)) {
                 windowPos.x += x - px;
                 windowPos.y += y - py;
-            }else{
+            } else {
                 isDraggedAround = false;
             }
             e.setConsumed(true);
@@ -168,6 +175,9 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
+        if(isHidden()){
+            return;
+        }
         if (closeable && isPointInsideCloseButton(x, y)) {
             hide();
             e.setConsumed(true);
@@ -181,14 +191,16 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void hide() {
-        // todo unsub manually here?
         hidden = true;
     }
 
     public void uncover() {
-        UserInputPublisher.subscribe(this);
         hidden = false;
         setFocusOnThis();
+    }
+
+    private boolean isHidden() {
+        return hidden || Gui.isGuiHidden;
     }
 
     private void setFocusOnThis() {
@@ -198,8 +210,8 @@ public abstract class Window implements UserInputSubscriber {
 
     public boolean isPointInsideContent(float x, float y) {
         return Math.isPointInRect(x, y,
-                windowPos.x, windowPos.y + cellSize,
-                windowSize.x, windowSize.y - cellSize);
+                windowPos.x, windowPos.y + cell,
+                windowSize.x, windowSize.y - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
@@ -211,12 +223,12 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cellSize, cellSize);
+        return Math.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
         return Math.isPointInRect(x, y,
-                windowPos.x + windowSize.x - cellSize, windowPos.y,
-                cellSize, cellSize);
+                windowPos.x + windowSize.x - cell, windowPos.y,
+                cell, cell);
     }
 }

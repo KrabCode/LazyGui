@@ -1,16 +1,15 @@
 package toolbox.tree;
 
+import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.list.ListWindow;
-import toolbox.style.Palette;
 import toolbox.window.Window;
-import toolbox.window.WindowManager;
 
 public class TreeWindow extends Window {
-    PVector contentTranslate = new PVector();
+    PVector contentTranslateOrigin = new PVector(0, cell);
+    PVector contentTranslate = contentTranslateOrigin.copy();
 
     private boolean isDraggedInside = false;
     TreeNode root = new TreeNode("");
@@ -23,7 +22,21 @@ public class TreeWindow extends Window {
         pg.pushMatrix();
         pg.translate(contentTranslate.x, contentTranslate.y);
         drawGrid(pg);
+        drawTree(pg);
         pg.popMatrix();
+    }
+
+    private void drawTree(PGraphics pg) {
+        drawNodeRecursively(pg, root);
+    }
+
+    private void drawNodeRecursively(PGraphics pg, TreeNode parent){
+
+//        drawNodeRecursively(pg, child);
+    }
+
+    private void tryInteractWithTree() {
+
     }
 
     @Override
@@ -35,16 +48,11 @@ public class TreeWindow extends Window {
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
         if (!isDraggedInside && isPointInsideContent(x, y)) {
-            // TODO draw clickable path tree
-            WindowManager.createOrUncoverWindow(
-                    new ListWindow(app, "/test/", "test",
-                            PVector.add(windowPos,
-                            new PVector(windowSize.x + 10, 0)),
-                            new PVector(cellSize * 4, cellSize * 4))
-            );
+            tryInteractWithTree();
             e.setConsumed(true);
         } else if (isDraggedInside) {
             isDraggedInside = false;
+            e.setConsumed(true);
         }
     }
 
@@ -59,6 +67,14 @@ public class TreeWindow extends Window {
                 isDraggedInside = true;
             }
             e.setConsumed(true);
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        super.keyPressed(keyEvent);
+        if(keyEvent.getKeyChar() == 'r'){
+            contentTranslate = contentTranslateOrigin.copy();
         }
     }
 }
