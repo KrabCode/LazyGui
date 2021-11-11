@@ -6,37 +6,41 @@ import java.util.ArrayList;
 
 public class WindowManager {
     private static WindowManager singleton;
+    private static Window focusedWindow = null;
     private final ArrayList<Window> windows = new ArrayList<>();
     private final ArrayList<Window> windowsToAdd = new ArrayList<>();
-    private final ArrayList<Window> windowsToRemove = new ArrayList<>();
-    private Window windowToSetFocusOn = null;
 
-    private WindowManager(){
+    private WindowManager() {
 
     }
 
-    public static void createSingleton(){
-        if(singleton == null){
+    public static void createSingleton() {
+        if (singleton == null) {
             singleton = new WindowManager();
         }
     }
 
     public static void createOrUncoverWindow(Window window) {
         Window nullableWindow = singleton.findWindowByPath(window.path);
-        if(nullableWindow == null){
+        if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
-        }else{
+        } else {
             nullableWindow.uncover();
         }
     }
 
-    public boolean windowExists(Window window){
+    public boolean windowExists(Window window) {
         return findWindowByPath(window.path) != null;
     }
 
-    public Window findWindowByPath(String path){
-        for(Window w : windows){
-            if(w.path.equals(path)){
+    public Window findWindowByPath(String path) {
+        for (Window w : windows) {
+            if (w.path.equals(path)) {
+                return w;
+            }
+        }
+        for (Window w : windowsToAdd) {
+            if (w.path.equals(path)) {
                 return w;
             }
         }
@@ -44,32 +48,24 @@ public class WindowManager {
     }
 
     public static void updateAndDrawWindows(PGraphics pg) {
-        for(Window win : singleton.windows){
+        for (Window win : singleton.windows) {
+            if(win.equals(focusedWindow)){
+                continue;
+            }
             win.drawWindow(pg);
         }
-        if(singleton.windowToSetFocusOn != null){
-            setFocus(singleton.windowToSetFocusOn);
-            singleton.windowToSetFocusOn = null;
+        if(focusedWindow != null){
+            focusedWindow.drawWindow(pg);
         }
-        singleton.windows.removeAll(singleton.windowsToRemove);
-        singleton.windowsToRemove.clear();
         singleton.windows.addAll(singleton.windowsToAdd);
         singleton.windowsToAdd.clear();
     }
 
-    public static void requestFocus(Window window){
-        singleton.windowToSetFocusOn = window;
+    protected static void setFocus(Window window) {
+        focusedWindow = window;
     }
 
-    private static void setFocus(Window window) {
-        ArrayList<Window> windows = singleton.windows;
-        if(windows.indexOf(window) < windows.size() - 1){
-            singleton.windowsToRemove.add(window);
-            singleton.windowsToAdd.add(window);
-        }
-    }
-
-    public static boolean isFocused(Window window){
-        return singleton.windows.indexOf(window) == singleton.windows.size() - 1;
+    public static boolean isFocused(Window window) {
+        return window.equals(focusedWindow);
     }
 }

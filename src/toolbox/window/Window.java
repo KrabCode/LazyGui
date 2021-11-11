@@ -10,7 +10,6 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
 import static processing.core.PApplet.*;
-import static processing.core.PConstants.*;
 
 public abstract class Window implements UserInputSubscriber {
     protected final String path;
@@ -182,7 +181,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void hide() {
-        UserInputPublisher.unsubscribe(this);
+        // todo unsub manually here?
         hidden = true;
     }
 
@@ -193,7 +192,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void setFocusOnThis() {
-        WindowManager.requestFocus(this);
+        WindowManager.setFocus(this);
         UserInputPublisher.setFocus(this);
     }
 

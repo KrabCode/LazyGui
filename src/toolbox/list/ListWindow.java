@@ -20,8 +20,9 @@ public class ListWindow extends Window {
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
         super.mousePressed(e, x, y);
-        if(isPointInsideContent(x,y)){
+        if (isPointInsideContent(x, y)) {
             e.setConsumed(true);
         }
     }
 }
+

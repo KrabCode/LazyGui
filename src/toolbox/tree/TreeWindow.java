@@ -29,21 +29,17 @@ public class TreeWindow extends Window {
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
         super.mousePressed(e, x, y);
-        if (isPointInsideContent(x, y)) {
-            isDraggedInside = true;
-        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
         if (!isDraggedInside && isPointInsideContent(x, y)) {
-            // TODO draw path tree
-            // TODO create/uncover windows based on clickable string position
+            // TODO draw clickable path tree
             WindowManager.createOrUncoverWindow(
                     new ListWindow(app, "/test/", "test",
                             PVector.add(windowPos,
-                                    new PVector(windowSize.x + 10, 0)),
+                            new PVector(windowSize.x + 10, 0)),
                             new PVector(cellSize * 4, cellSize * 4))
             );
             e.setConsumed(true);
@@ -59,6 +55,8 @@ public class TreeWindow extends Window {
             if (isDraggedInside) {
                 contentTranslate.x += x - px;
                 contentTranslate.y += y - py;
+            } else if (isPointInsideContent(x, y)) {
+                isDraggedInside = true;
             }
             e.setConsumed(true);
         }
