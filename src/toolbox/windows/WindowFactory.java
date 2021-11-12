@@ -15,8 +15,6 @@ public class WindowFactory {
     }
 
     public static TreeWindow createMainTreeWindow(){
-        return new TreeWindow("/", "tree", new PVector(0,0), new PVector(cell * 10, cell * 5), false);
+        return new TreeWindow("/", "tree", new PVector(cell,cell), new PVector(cell * 5, cell * 15), false);
     }
-
-
 }

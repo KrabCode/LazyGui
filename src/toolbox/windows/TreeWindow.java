@@ -20,11 +20,11 @@ public class TreeWindow extends Window {
 
     public TreeWindow(String path, String title, PVector pos, PVector size, boolean closeable) {
         super(path, title, pos, size, closeable);
-        root.children.add(new Node( "/test/", "test"));
         // TODO make more than 1 recursive level translation work
 //        Node hello = new Node(app, "/hello/", "hello");
 //        hello.children.add(new Node(app, "/hello/world/", "world"));
 //        root.children.add(hello);
+        root.children.add(new Node( "/test/", "test"));
         root.children.add(new Node("/stroke/", "stroke"));
         root.children.add(new Node("/count/", "count"));
     }
@@ -99,7 +99,7 @@ public class TreeWindow extends Window {
         Node hitboxMatch = tryFindHitboxUnderPointRecursively(root, x, y);
         if(hitboxMatch != null){
             WindowManager.registerOrUncoverWindow(
-                    WindowFactory.createWindowFromNode(hitboxMatch, x + cell, y + cell)
+                    WindowFactory.createWindowFromNode(hitboxMatch, x + cell * 4, y)
             );
         }
     }
@@ -125,6 +125,9 @@ public class TreeWindow extends Window {
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
+        if(hidden){
+            return;
+        }
         if (!isDraggedInside && isPointInsideContent(x, y)) {
             tryInteractWithTree(x, y);
             e.setConsumed(true);
@@ -137,6 +140,9 @@ public class TreeWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
+        if(hidden){
+            return;
+        }
         if (!isDraggedAround) {
             if (isDraggedInside) {
                 contentTranslate.x += x - px;
@@ -151,6 +157,9 @@ public class TreeWindow extends Window {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
+        if(hidden){
+            return;
+        }
         if (keyEvent.getKeyChar() == 'r') {
             contentTranslate = contentTranslateOrigin.copy();
         }
