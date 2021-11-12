@@ -23,7 +23,7 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
-        GlobalState.createSingleton(app);
+        GlobalState.init(app);
         UserInputPublisher.createSingleton(app);
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
@@ -44,7 +44,6 @@ public class Gui implements UserInputSubscriber {
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
-//        treeWindow.debugHitboxes(pg, treeWindow.root);
         pg.endDraw();
     }
 

@@ -30,6 +30,7 @@ public abstract class Window implements UserInputSubscriber {
         this.windowPos = pos;
         this.windowSize = size;
         this.closeable = true; // default is closeable, only the main tree window cannot be closed
+        // TODO resizable
         initialize();
     }
 
@@ -43,7 +44,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void initialize() {
-        g = GlobalState.getInstance().getApp().createGraphics(floor(windowSize.x), floor(windowSize.y), P2D);
+        g = GlobalState.app.createGraphics(floor(windowSize.x), floor(windowSize.y), P2D);
         // do not g.beginDraw here, it's called from a user input thread, processing doesn't like it
         UserInputPublisher.subscribe(this);
     }
@@ -51,7 +52,7 @@ public abstract class Window implements UserInputSubscriber {
     public void drawWindow(PGraphics gui) {
         g.beginDraw();
         g.colorMode(HSB, 1, 1, 1, 1);
-        g.textFont(GlobalState.getInstance().getFont());
+        g.textFont(GlobalState.font);
         g.clear();
         if (hidden) {
             g.endDraw();
@@ -107,10 +108,15 @@ public abstract class Window implements UserInputSubscriber {
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
         pg.rect(0, 0, pg.width - 1, cell);
-        pg.fill(Palette.windowTitleTextFill);
-        int textMargin = 4;
+        if(WindowManager.isFocused(this)){
+            pg.fill(Palette.selectedTextFill);
+        }else{
+            pg.fill(Palette.standardTextFill);
+        }
         pg.textAlign(LEFT);
-        pg.text(title, textMargin, cell - textMargin);
+        int textMarginX = 4;
+        float textOffsetY = GlobalState.textOffsetY;
+        pg.text(title, textMarginX, cell - textMarginX + textOffsetY);
     }
 
     private void drawCloseButton(PGraphics pg) {
@@ -153,6 +159,9 @@ public abstract class Window implements UserInputSubscriber {
             isDraggedAround = true;
             setFocusOnThis();
             e.setConsumed(true);
+        } else if (isPointInsideWindow(x, y)) {
+            WindowManager.setFocus(this);
+            e.setConsumed(true);
         }
     }
 
@@ -181,9 +190,6 @@ public abstract class Window implements UserInputSubscriber {
             hide();
             e.setConsumed(true);
         } else if (isDraggedAround) {
-            e.setConsumed(true);
-        } else if (isPointInsideWindow(x, y)) {
-            setFocusOnThis();
             e.setConsumed(true);
         }
         isDraggedAround = false;
@@ -214,7 +220,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
-        PApplet app = GlobalState.getInstance().getApp();
+        PApplet app = GlobalState.app;
         return ToolboxMath.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 

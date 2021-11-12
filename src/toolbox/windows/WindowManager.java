@@ -1,15 +1,16 @@
 package toolbox.windows;
 
 import processing.core.PGraphics;
-import processing.core.PVector;
-import toolbox.font.GlobalState;
 
 import java.util.ArrayList;
 
 public class WindowManager {
     private static WindowManager singleton;
     private static Window focusedWindow = null;
-    private static TreeWindow treeWindow = null;
+
+    @SuppressWarnings("FieldCanBeLocal") // no it can't, I want to be able to debug it globally
+    public static TreeWindow treeWindow = null;
+
     private final ArrayList<Window> windows = new ArrayList<>();
     private final ArrayList<Window> windowsToAdd = new ArrayList<>();
 
@@ -26,7 +27,7 @@ public class WindowManager {
     }
 
     public static void registerOrUncoverWindow(Window window) {
-        Window nullableWindow = singleton.getWindow(window.path);
+        Window nullableWindow = singleton.findWindowByPath(window.path);
         if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
         } else {
@@ -35,11 +36,16 @@ public class WindowManager {
         }
     }
 
-    public boolean windowExists(Window window) {
-        return getWindow(window.path) != null;
+    public static boolean isHidden(String path) {
+        Window nullableWindow = singleton.findWindowByPath(path);
+        return nullableWindow == null || nullableWindow.hidden;
     }
 
-    public Window getWindow(String path) {
+    public boolean windowExists(Window window) {
+        return findWindowByPath(window.path) != null;
+    }
+
+    public Window findWindowByPath(String path) {
         for (Window w : windows) {
             if (w.path.equals(path)) {
                 return w;
@@ -63,6 +69,9 @@ public class WindowManager {
         if(focusedWindow != null){
             focusedWindow.drawWindow(pg);
         }
+
+//        treeWindow.debugHitboxes(pg, treeWindow.root);
+
         singleton.windows.addAll(singleton.windowsToAdd);
         singleton.windowsToAdd.clear();
     }
