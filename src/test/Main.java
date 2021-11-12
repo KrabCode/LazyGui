@@ -37,6 +37,7 @@ public class Main extends PApplet {
         }
     }
 
+    float rotation = 0;
     public void draw() {
         pg.beginDraw();
         pg.fill(0xFF36393E);
@@ -47,8 +48,13 @@ public class Main extends PApplet {
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
         pg.stroke(255);
-        pg.strokeWeight(3);
-        pg.rotate(radians(frameCount));
+        if(gui.toggle("/weight/")){
+            pg.strokeWeight(3);
+        }else{
+            pg.strokeWeight(1);
+        }
+        rotation += radians(gui.slider("/rotation/"));
+        pg.rotate(rotation);
         float n = 150;
         pg.rectMode(CENTER);
         for (int i = 0; i < 8; i++) {

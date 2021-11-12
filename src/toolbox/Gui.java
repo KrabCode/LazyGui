@@ -3,7 +3,9 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import toolbox.structs.Color;
+import toolbox.tree.NodeType;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.WindowManager;
@@ -57,27 +59,43 @@ public class Gui implements UserInputSubscriber {
     }
 
     public float slider(String path) {
-        return 3.14159f;
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.SLIDER_X);
+        return (float) WindowManager.treeWindow.getNodeValue(path);
     }
 
     public int sliderInt(String path) {
-        return 3;
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.SLIDER_INT_X);
+        return (int) WindowManager.treeWindow.getNodeValue(path);
+    }
+
+    public PVector plotXY(String path) {
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.PLOT_XY);
+        return (PVector) WindowManager.treeWindow.getNodeValue(path);
+    }
+
+    public PVector plotXYZ(String path) {
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.PLOT_XYZ);
+        return (PVector) WindowManager.treeWindow.getNodeValue(path);
     }
 
     public boolean button(String path) {
-        return false;
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.BUTTON);
+        return (boolean) WindowManager.treeWindow.getNodeValue(path);
     }
 
     public boolean toggle(String path) {
-        return false;
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.TOGGLE);
+        return (boolean) WindowManager.treeWindow.getNodeValue(path);
     }
 
     public Color picker(String path) {
-        return new Color();
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.COLOR_PICKER);
+        return (Color) WindowManager.treeWindow.getNodeValue(path);
     }
 
     public PGraphics gradient(String path) {
-        return null;
+        WindowManager.treeWindow.tryRegisterNode(path, NodeType.GRADIENT_PICKER);
+        return (PGraphics) WindowManager.treeWindow.getNodeValue(path);
     }
 
 }

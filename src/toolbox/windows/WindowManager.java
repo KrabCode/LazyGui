@@ -27,7 +27,7 @@ public class WindowManager {
     }
 
     public static void registerOrUncoverWindow(Window window) {
-        Window nullableWindow = singleton.findWindowByPath(window.path);
+        Window nullableWindow = singleton.findWindowByPath(window.node.path);
         if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
         } else {
@@ -42,17 +42,17 @@ public class WindowManager {
     }
 
     public boolean windowExists(Window window) {
-        return findWindowByPath(window.path) != null;
+        return findWindowByPath(window.node.path) != null;
     }
 
     public Window findWindowByPath(String path) {
         for (Window w : windows) {
-            if (w.path.equals(path)) {
+            if (w.node.path.equals(path)) {
                 return w;
             }
         }
         for (Window w : windowsToAdd) {
-            if (w.path.equals(path)) {
+            if (w.node.path.equals(path)) {
                 return w;
             }
         }
@@ -61,7 +61,7 @@ public class WindowManager {
 
     public static void updateAndDrawWindows(PGraphics pg) {
         for (Window win : singleton.windows) {
-            if(focusedWindow != null && win.path.equals(focusedWindow.path)){
+            if(focusedWindow != null && win.node.path.equals(focusedWindow.node.path)){
                 continue;
             }
             win.drawWindow(pg);

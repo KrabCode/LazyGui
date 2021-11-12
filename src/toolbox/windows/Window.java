@@ -8,6 +8,7 @@ import toolbox.Gui;
 import toolbox.ToolboxMath;
 import toolbox.GlobalState;
 import toolbox.Palette;
+import toolbox.tree.Node;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
@@ -15,18 +16,16 @@ import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
     protected float cell = GlobalState.cell;
-    protected final String path; // Window UID and also a path in the main gui tree structure
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
     protected boolean hidden = false;
-    private final String title;
+    protected final Node node;
     private final boolean closeable;
     private PGraphics g;
     protected boolean isDraggedAround;
 
-    public Window(String path, String title, PVector pos, PVector size) {
-        this.path = path;
-        this.title = title;
+    public Window(Node node, PVector pos, PVector size) {
+        this.node = node;
         this.windowPos = pos;
         this.windowSize = size;
         this.closeable = true; // default is closeable, only the main tree window cannot be closed
@@ -34,9 +33,8 @@ public abstract class Window implements UserInputSubscriber {
         initialize();
     }
 
-    public Window(String path, String title, PVector pos, PVector size, boolean closeable) {
-        this.path = path;
-        this.title = title;
+    public Window(Node node, PVector pos, PVector size, boolean closeable) {
+        this.node = node;
         this.windowPos = pos;
         this.windowSize = size;
         this.closeable = closeable;
@@ -108,7 +106,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
         pg.rect(0, 0, pg.width - 1, cell);
-        if(WindowManager.isFocused(this)){
+        if(isThisFocused()){
             pg.fill(Palette.selectedTextFill);
         }else{
             pg.fill(Palette.standardTextFill);
@@ -116,7 +114,11 @@ public abstract class Window implements UserInputSubscriber {
         pg.textAlign(LEFT);
         int textMarginX = 4;
         float textOffsetY = GlobalState.textOffsetY;
-        pg.text(title, textMarginX, cell - textMarginX + textOffsetY);
+        pg.text(node.name, textMarginX, cell - textMarginX + textOffsetY);
+    }
+
+    protected boolean isThisFocused() {
+        return WindowManager.isFocused(this);
     }
 
     private void drawCloseButton(PGraphics pg) {
@@ -143,7 +145,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void setBorderStrokeBasedOnFocus(PGraphics pg) {
-        if (WindowManager.isFocused(this)) {
+        if (isThisFocused()) {
             pg.stroke(Palette.windowBorderStrokeFocused);
         } else {
             pg.stroke(Palette.windowBorderStroke);

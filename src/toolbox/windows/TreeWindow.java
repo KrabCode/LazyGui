@@ -4,9 +4,13 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.GlobalState;
 import toolbox.ToolboxMath;
 import toolbox.tree.Node;
 import toolbox.Palette;
+import toolbox.tree.NodeType;
+
+import java.util.Objects;
 
 import static processing.core.PConstants.*;
 import static toolbox.tree.NodeType.*;
@@ -15,16 +19,20 @@ public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
     PVector contentTranslate = contentTranslateOrigin.copy();
     PVector treeDrawingOrigin = new PVector(cell, cell);
-
     private boolean isDraggedInside = false;
-    public Node root = new Node("/", "root", FOLDER);
+    Node root;
 
-    public TreeWindow(String path, String title, PVector pos, PVector size, boolean closeable) {
-        super(path, title, pos, size, closeable);
+    public TreeWindow(Node node, PVector pos, PVector size, boolean closeable) {
+        super(node, pos, size, closeable);
+        root = node; // I could just use the node variable but root is clearer, it's a special node
+
         // TODO make more than 1 recursive level translation work
 //        Node hello = new Node(app, "/hello/", "hello");
 //        hello.children.add(new Node(app, "/hello/world/", "world"));
 //        root.children.add(hello);
+
+/*
+*
         root.children.add(new Node("/button/", "test", BUTTON));
         root.children.add(new Node("/toggle/", "test", TOGGLE));
         root.children.add(new Node("/stroke/", "stroke", COLOR));
@@ -35,6 +43,20 @@ public class TreeWindow extends Window {
         root.children.add(new Node("/background gradient/", "background gradient", GRADIENT));
 
 
+* */
+    }
+
+    public void tryRegisterNode(String path, NodeType type) {
+        if (findNodeByPath(root, path) != null) {
+            return;
+        }
+        // TODO add to lower levels when path indicates it
+        String name = path.replaceAll("/", "");
+        root.children.add(new Node(path, name, type));
+    }
+
+    public Object getNodeValue(String path) {
+        return Objects.requireNonNull(findNodeByPath(root, path)).getValue();
     }
 
     protected void drawContent(PGraphics pg) {
@@ -61,14 +83,14 @@ public class TreeWindow extends Window {
         pg.strokeWeight(1);
         updateDrawNodeHitbox(pg, parent, true);
 
-        if(WindowManager.isHidden(parent.path) || parent.path.equals(WindowManager.treeWindow.path)){
+        if (WindowManager.isHidden(parent.path) || parent.path.equals(WindowManager.treeWindow.node.path)) {
             pg.fill(Palette.standardTextFill);
-        }else{
+        } else {
             pg.fill(Palette.selectedTextFill);
         }
         pg.textAlign(LEFT, TOP);
         pg.noStroke();
-        pg.text(parent.name, 0, 0);
+        pg.text(parent.name, 5, GlobalState.textOffsetY);
 
         if (parent.children.size() > 0) {
             pg.pushMatrix();
@@ -110,9 +132,8 @@ public class TreeWindow extends Window {
     private void tryInteractWithTree(float x, float y) {
         Node hitboxMatch = tryFindHitboxUnderPointRecursively(root, x, y);
         if (hitboxMatch != null) {
-            WindowManager.registerOrUncoverWindow(
-                    WindowFactory.createWindowFromNode(hitboxMatch, x, y)
-            );
+            //noinspection ConstantConditions
+            WindowManager.registerOrUncoverWindow(WindowFactory.createWindowFromNode(hitboxMatch));
         }
     }
 
@@ -124,6 +145,19 @@ public class TreeWindow extends Window {
             Node potentialHit = tryFindHitboxUnderPointRecursively(child, x, y);
             if (potentialHit != null) {
                 return potentialHit;
+            }
+        }
+        return null;
+    }
+
+    private Node findNodeByPath(Node parent, String pathQuery) {
+        if (parent.path.equals(pathQuery)) {
+            return parent;
+        }
+        for (Node child : parent.children) {
+            Node potentialMatch = findNodeByPath(child, pathQuery);
+            if (potentialMatch != null) {
+                return child;
             }
         }
         return null;
