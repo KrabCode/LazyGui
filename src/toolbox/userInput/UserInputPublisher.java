@@ -49,6 +49,8 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         singleton.focused = subscriber;
     }
 
+    // TODO reuse code using callbacks instead of duplicated code below this
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (focused != null) {
@@ -160,9 +162,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
             if (subscriber.equals(focused)) {
                 continue;
             }
-            subscriber.mouseDragged(e, e.getX(), e.getY(),
-                    px, py
-            );
+            subscriber.mouseDragged(e, e.getX(), e.getY(), px, py);
             if (e.isConsumed()) {
                 break;
             }

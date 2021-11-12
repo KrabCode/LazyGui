@@ -25,6 +25,7 @@ public class WindowManager {
         if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
         } else {
+            // throw away the parameter window, use existing instead
             nullableWindow.uncover();
         }
     }

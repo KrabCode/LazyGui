@@ -5,18 +5,20 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.font.FontProvider;
-import toolbox.tree.TreeWindow;
+import toolbox.windows.TreeWindow;
 import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.window.Window;
 import toolbox.window.WindowManager;
 
+import static processing.core.PConstants.HSB;
+
 public class Gui implements UserInputSubscriber {
     PApplet app;
     public PGraphics pg;
     public static boolean isGuiHidden = false;
-    Window treeWindow = null;
+    TreeWindow treeWindow = null;
 
     public Gui(PApplet p, boolean isGuiVisibleByDefault) {
         isGuiHidden = !isGuiVisibleByDefault;
@@ -31,7 +33,7 @@ public class Gui implements UserInputSubscriber {
         FontProvider.createSingleton(app);
         lazyResetDisplay();
         treeWindow = new TreeWindow(app, "/", "main",
-                new PVector(Window.cell, Window.cell),
+                new PVector(0,0), // new PVector(Window.cell, Window.cell),
                 new PVector(Window.cell * 10, Window.cell * 21),
                 false);
         WindowManager.createOrUncoverWindow(treeWindow);
@@ -46,10 +48,12 @@ public class Gui implements UserInputSubscriber {
     public void update() {
         lazyResetDisplay();
         pg.beginDraw();
+        pg.colorMode(HSB,1,1,1,1);
         pg.clear();
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
+//        treeWindow.debugHitboxes(pg, treeWindow.root);
         pg.endDraw();
     }
 

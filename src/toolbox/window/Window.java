@@ -15,7 +15,6 @@ import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
     public static float cell = 20;
-    public static float cellTextSize = 16;
     protected final String path; // Window UID and also a path in the main gui tree structure
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
@@ -33,7 +32,7 @@ public abstract class Window implements UserInputSubscriber {
         this.windowPos = pos;
         this.windowSize = size;
         this.closeable = true; // default is closeable, only the main tree window cannot be closed
-        initialize(size);
+        initialize();
     }
 
     public Window(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
@@ -43,13 +42,12 @@ public abstract class Window implements UserInputSubscriber {
         this.windowPos = pos;
         this.windowSize = size;
         this.closeable = closeable;
-        initialize(size);
+        initialize();
     }
 
-    private void initialize(PVector size) {
-        g = app.createGraphics(floor(size.x), floor(size.y), P2D);
-        g.beginDraw();
-        g.endDraw();
+    private void initialize() {
+        g = app.createGraphics(floor(windowSize.x), floor(windowSize.y), P2D);
+        // do not g.beginDraw here, it's called from a user input thread, processing doesn't like it
         UserInputPublisher.subscribe(this);
     }
 
@@ -115,7 +113,6 @@ public abstract class Window implements UserInputSubscriber {
         pg.fill(Palette.windowTitleTextFill);
         int textMargin = 4;
         pg.textAlign(LEFT);
-        pg.textSize(cellTextSize);
         pg.text(title, textMargin, cell - textMargin);
     }
 

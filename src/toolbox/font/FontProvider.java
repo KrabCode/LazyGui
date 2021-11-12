@@ -10,7 +10,8 @@ public class FontProvider {
     private static PFont font = null;
 
     private FontProvider(PApplet app){
-        font = app.createFont("Comic Sans MS", Window.cellTextSize);
+
+        font = app.createFont("Calibri", 18);
     }
 
     public static void createSingleton(PApplet app){

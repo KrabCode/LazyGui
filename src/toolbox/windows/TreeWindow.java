@@ -1,4 +1,4 @@
-package toolbox.tree;
+package toolbox.windows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -6,7 +6,8 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.ToolboxMath;
-import toolbox.list.TestWindow;
+import toolbox.tree.Node;
+import toolbox.windows.TestWindow;
 import toolbox.style.Palette;
 import toolbox.window.Window;
 import toolbox.window.WindowManager;
@@ -19,7 +20,7 @@ public class TreeWindow extends Window {
     PVector treeDrawingOrigin = new PVector(cell, cell);
 
     private boolean isDraggedInside = false;
-    Node root = new Node(app, "/", "root");
+    public Node root = new Node(app, "/", "root");
 
     public TreeWindow(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
         super(app, path, title, pos, size, closeable);
@@ -54,10 +55,9 @@ public class TreeWindow extends Window {
             pg.line(cell / 2f, cell * 1.5f, cell / 2f, cell * 0.5f + parent.children.size() * cell);
         }
         pg.strokeWeight(1);
-        updateDrawNodeHitbox(pg, parent, false);
+        updateDrawNodeHitbox(pg, parent, true);
 
         pg.textAlign(LEFT, TOP);
-        pg.textSize(cellTextSize);
         pg.fill(Palette.windowTitleTextFill);
         pg.noStroke();
         pg.text(parent.name, 0, 0);
@@ -74,22 +74,28 @@ public class TreeWindow extends Window {
     }
 
     private void updateDrawNodeHitbox(PGraphics pg, Node parent, boolean hidden) {
-
         float paddingX = cell / 2f;
         float x = -paddingX / 2f;
         float y = 0;
         float w = pg.textWidth(parent.name) + paddingX;
         float h = cell;
-        // TODO make this reflect the actual position, debug by drawing a rectangle
-        parent.screenPos.x = pg.screenX(windowPos.x + contentTranslate.x + x, windowPos.y + contentTranslate.y + y);
-        parent.screenPos.y = pg.screenY(windowPos.x + contentTranslate.x + x, windowPos.y + contentTranslate.y + y);
+        parent.screenPos.x = windowPos.x + pg.screenX(x, y);
+        parent.screenPos.y = windowPos.y + pg.screenY(x, y);
         parent.screenSize.x = w;
         parent.screenSize.y = h;
-        pg.fill(Palette.windowContentFill);
-        pg.stroke(Palette.windowBorderStroke);
         if (!hidden) {
+            pg.fill(Palette.windowContentFill);
+            pg.stroke(Palette.windowBorderStroke);
             pg.rect(x,y,w,h);
+        }
+    }
 
+    public void debugHitboxes(PGraphics pg, Node parent) {
+        pg.noFill();
+        pg.stroke(0.6f,1,1);
+        pg.rect(parent.screenPos.x, parent.screenPos.y, parent.screenSize.x ,parent.screenSize.y);
+        for(Node child : parent.children){
+            debugHitboxes(pg, child);
         }
     }
 
@@ -105,14 +111,14 @@ public class TreeWindow extends Window {
     }
 
     private Node tryFindHitboxUnderPointRecursively(Node parent, float x, float y) {
-        if(ToolboxMath.isPointInRect(x, y,
-                parent.screenPos.x, parent.screenPos.y,
-                parent.screenSize.x, parent.screenSize.y
-                )){
+        if(ToolboxMath.isPointInRect(x, y, parent.screenPos.x, parent.screenPos.y, parent.screenSize.x, parent.screenSize.y)){
             return parent;
         }
         for(Node child : parent.children){
-            tryFindHitboxUnderPointRecursively(child, x, y);
+            Node potentialHit = tryFindHitboxUnderPointRecursively(child, x, y);
+            if(potentialHit != null){
+                return potentialHit;
+            }
         }
         return null;
     }
