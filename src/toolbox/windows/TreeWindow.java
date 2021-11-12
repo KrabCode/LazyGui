@@ -2,15 +2,11 @@ package toolbox.windows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.ToolboxMath;
 import toolbox.tree.Node;
-import toolbox.windows.TestWindow;
 import toolbox.style.Palette;
-import toolbox.window.Window;
-import toolbox.window.WindowManager;
 
 import static processing.core.PConstants.*;
 
@@ -20,17 +16,17 @@ public class TreeWindow extends Window {
     PVector treeDrawingOrigin = new PVector(cell, cell);
 
     private boolean isDraggedInside = false;
-    public Node root = new Node(app, "/", "root");
+    public Node root = new Node( "/", "root");
 
-    public TreeWindow(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
-        super(app, path, title, pos, size, closeable);
-        root.children.add(new Node(app, "/test/", "test"));
+    public TreeWindow(String path, String title, PVector pos, PVector size, boolean closeable) {
+        super(path, title, pos, size, closeable);
+        root.children.add(new Node( "/test/", "test"));
         // TODO make more than 1 recursive level translation work
 //        Node hello = new Node(app, "/hello/", "hello");
 //        hello.children.add(new Node(app, "/hello/world/", "world"));
 //        root.children.add(hello);
-        root.children.add(new Node(app, "/stroke/", "stroke"));
-        root.children.add(new Node(app, "/count/", "count"));
+        root.children.add(new Node("/stroke/", "stroke"));
+        root.children.add(new Node("/count/", "count"));
     }
 
     protected void drawContent(PGraphics pg) {
@@ -102,10 +98,8 @@ public class TreeWindow extends Window {
     private void tryInteractWithTree(float x, float y) {
         Node hitboxMatch = tryFindHitboxUnderPointRecursively(root, x, y);
         if(hitboxMatch != null){
-            WindowManager.createOrUncoverWindow(
-                    new TestWindow(app, hitboxMatch.path, hitboxMatch.name,
-                            new PVector(windowPos.x + windowSize.x + cell, windowPos.y),
-                            new PVector(cell * 6, cell * 6))
+            WindowManager.registerOrUncoverWindow(
+                    WindowFactory.createWindowFromNode(hitboxMatch, x + cell, y + cell)
             );
         }
     }

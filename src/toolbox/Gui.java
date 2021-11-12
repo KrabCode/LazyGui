@@ -3,14 +3,11 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
-import toolbox.font.FontProvider;
-import toolbox.windows.TreeWindow;
+import toolbox.font.GlobalState;
 import toolbox.types.Color;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.window.Window;
-import toolbox.window.WindowManager;
+import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
 
@@ -18,7 +15,6 @@ public class Gui implements UserInputSubscriber {
     PApplet app;
     public PGraphics pg;
     public static boolean isGuiHidden = false;
-    TreeWindow treeWindow = null;
 
     public Gui(PApplet p, boolean isGuiVisibleByDefault) {
         isGuiHidden = !isGuiVisibleByDefault;
@@ -27,16 +23,11 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
+        GlobalState.createSingleton(app);
         UserInputPublisher.createSingleton(app);
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        FontProvider.createSingleton(app);
         lazyResetDisplay();
-        treeWindow = new TreeWindow(app, "/", "main",
-                new PVector(0,0), // new PVector(Window.cell, Window.cell),
-                new PVector(Window.cell * 10, Window.cell * 21),
-                false);
-        WindowManager.createOrUncoverWindow(treeWindow);
     }
 
     void lazyResetDisplay() {

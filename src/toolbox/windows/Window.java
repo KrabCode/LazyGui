@@ -1,4 +1,4 @@
-package toolbox.window;
+package toolbox.windows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.ToolboxMath;
-import toolbox.font.FontProvider;
+import toolbox.font.GlobalState;
 import toolbox.style.Palette;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
@@ -14,7 +14,7 @@ import toolbox.userInput.UserInputSubscriber;
 import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
-    public static float cell = 20;
+    protected float cell = GlobalState.cell;
     protected final String path; // Window UID and also a path in the main gui tree structure
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
@@ -22,11 +22,9 @@ public abstract class Window implements UserInputSubscriber {
     private final String title;
     private final boolean closeable;
     private PGraphics g;
-    protected final PApplet app;
     protected boolean isDraggedAround;
 
-    public Window(PApplet app, String path, String title, PVector pos, PVector size) {
-        this.app = app;
+    public Window(String path, String title, PVector pos, PVector size) {
         this.path = path;
         this.title = title;
         this.windowPos = pos;
@@ -35,8 +33,7 @@ public abstract class Window implements UserInputSubscriber {
         initialize();
     }
 
-    public Window(PApplet app, String path, String title, PVector pos, PVector size, boolean closeable) {
-        this.app = app;
+    public Window(String path, String title, PVector pos, PVector size, boolean closeable) {
         this.path = path;
         this.title = title;
         this.windowPos = pos;
@@ -46,7 +43,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void initialize() {
-        g = app.createGraphics(floor(windowSize.x), floor(windowSize.y), P2D);
+        g = GlobalState.getInstance().getApp().createGraphics(floor(windowSize.x), floor(windowSize.y), P2D);
         // do not g.beginDraw here, it's called from a user input thread, processing doesn't like it
         UserInputPublisher.subscribe(this);
     }
@@ -54,7 +51,7 @@ public abstract class Window implements UserInputSubscriber {
     public void drawWindow(PGraphics gui) {
         g.beginDraw();
         g.colorMode(HSB, 1, 1, 1, 1);
-        g.textFont(FontProvider.getInstance().getFont());
+        g.textFont(GlobalState.getInstance().getFont());
         g.clear();
         if (hidden) {
             g.endDraw();
@@ -217,6 +214,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
+        PApplet app = GlobalState.getInstance().getApp();
         return ToolboxMath.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 

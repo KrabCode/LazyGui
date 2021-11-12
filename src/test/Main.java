@@ -50,7 +50,13 @@ public class Main extends PApplet {
         pg.rotate(radians(frameCount));
         float n = 150;
         pg.rectMode(CENTER);
-        pg.rect(0, 0, n, n);
+        for (int i = 0; i < 8; i++) {
+            float a = PApplet.map(i,0, 8, 0, HALF_PI);
+            pg.pushMatrix();
+            pg.rotate(a);
+            pg.rect(0, 0, n, n);
+            pg.popMatrix();
+        }
         pg.popMatrix();
         pg.endDraw();
         gui.update();

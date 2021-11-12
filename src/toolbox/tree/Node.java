@@ -1,8 +1,7 @@
 package toolbox.tree;
 
-import processing.core.PApplet;
 import processing.core.PVector;
-
+import toolbox.font.GlobalState;
 import java.util.ArrayList;
 
 // knows nothing about the window,
@@ -15,9 +14,9 @@ public class Node {
     public final long timeCreated;
     public final ArrayList<Node> children = new ArrayList<>();
 
-    public Node(PApplet app, String path, String name) {
+    public Node(String path, String name) {
         this.path = path;
         this.name = name;
-        timeCreated = app.millis();
+        timeCreated = GlobalState.getInstance().getApp().millis();
     }
 }

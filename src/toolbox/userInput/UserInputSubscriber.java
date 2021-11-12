@@ -4,6 +4,9 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 
 public interface UserInputSubscriber  {
+    // everything is default empty
+    // because I only want the implementing classes to
+    // use what methods they want and not mention the rest
 
     default void keyPressed(KeyEvent keyEvent) {
 

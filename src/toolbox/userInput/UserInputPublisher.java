@@ -6,6 +6,7 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import processing.core.PApplet;
 import processing.core.PSurface;
+import toolbox.font.GlobalState;
 
 import java.util.ArrayList;
 
@@ -19,12 +20,12 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     float previousMouseX = -1;
     float previousMouseY = -1;
 
-    private UserInputPublisher(PApplet app) {
-        registerListeners(app);
+    private UserInputPublisher() {
+        registerListeners();
     }
 
-    private void registerListeners(PApplet app) {
-        PSurface surface = app.getSurface();
+    private void registerListeners() {
+        PSurface surface = GlobalState.getInstance().getApp().getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {
             com.jogamp.newt.opengl.GLWindow window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
             window.addKeyListener(this);
@@ -36,7 +37,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     public static void createSingleton(PApplet app) {
         if (singleton == null) {
-            singleton = new UserInputPublisher(app);
+            singleton = new UserInputPublisher();
         }
     }
 

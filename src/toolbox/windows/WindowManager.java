@@ -1,12 +1,15 @@
-package toolbox.window;
+package toolbox.windows;
 
 import processing.core.PGraphics;
+import processing.core.PVector;
+import toolbox.font.GlobalState;
 
 import java.util.ArrayList;
 
 public class WindowManager {
     private static WindowManager singleton;
     private static Window focusedWindow = null;
+    private static TreeWindow treeWindow = null;
     private final ArrayList<Window> windows = new ArrayList<>();
     private final ArrayList<Window> windowsToAdd = new ArrayList<>();
 
@@ -17,10 +20,12 @@ public class WindowManager {
     public static void createSingleton() {
         if (singleton == null) {
             singleton = new WindowManager();
+            treeWindow = WindowFactory.createMainTreeWindow();
+            WindowManager.registerOrUncoverWindow(treeWindow);
         }
     }
 
-    public static void createOrUncoverWindow(Window window) {
+    public static void registerOrUncoverWindow(Window window) {
         Window nullableWindow = singleton.getWindow(window.path);
         if (nullableWindow == null) {
             singleton.windowsToAdd.add(window);
@@ -50,7 +55,7 @@ public class WindowManager {
 
     public static void updateAndDrawWindows(PGraphics pg) {
         for (Window win : singleton.windows) {
-            if(win.equals(focusedWindow)){
+            if(focusedWindow != null && win.path.equals(focusedWindow.path)){
                 continue;
             }
             win.drawWindow(pg);
