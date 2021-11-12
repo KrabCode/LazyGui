@@ -1,4 +1,4 @@
-package toolbox.types;
+package toolbox.structs;
 
 public class Color {
     float hue = 0;

@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.ToolboxMath;
 import toolbox.tree.Node;
-import toolbox.style.Palette;
+import toolbox.Palette;
 
 import static processing.core.PConstants.*;
 import static toolbox.tree.NodeType.*;

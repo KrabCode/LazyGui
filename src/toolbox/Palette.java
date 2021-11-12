@@ -1,4 +1,4 @@
-package toolbox.style;
+package toolbox;
 
 public class Palette {
     public static int windowBorderStroke = 0xFF787878;

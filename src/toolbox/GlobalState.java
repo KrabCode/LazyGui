@@ -1,4 +1,4 @@
-package toolbox.font;
+package toolbox;
 
 import processing.core.PApplet;
 import processing.core.PFont;

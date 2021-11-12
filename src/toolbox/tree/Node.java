@@ -1,7 +1,7 @@
 package toolbox.tree;
 
 import processing.core.PVector;
-import toolbox.font.GlobalState;
+import toolbox.GlobalState;
 import java.util.ArrayList;
 
 // knows nothing about the window,

@@ -1,8 +1,9 @@
-package toolbox.windows;
+package toolbox.windows.controls;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.windows.Window;
 
 public class TestWindow extends Window {
 

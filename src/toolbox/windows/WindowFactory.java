@@ -1,8 +1,9 @@
 package toolbox.windows;
 
 import processing.core.PVector;
-import toolbox.font.GlobalState;
+import toolbox.GlobalState;
 import toolbox.tree.Node;
+import toolbox.windows.controls.TestWindow;
 
 public class WindowFactory {
 

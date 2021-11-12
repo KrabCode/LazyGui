@@ -6,8 +6,8 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.ToolboxMath;
-import toolbox.font.GlobalState;
-import toolbox.style.Palette;
+import toolbox.GlobalState;
+import toolbox.Palette;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 

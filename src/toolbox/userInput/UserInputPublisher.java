@@ -6,7 +6,7 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import processing.core.PApplet;
 import processing.core.PSurface;
-import toolbox.font.GlobalState;
+import toolbox.GlobalState;
 
 import java.util.ArrayList;
 
