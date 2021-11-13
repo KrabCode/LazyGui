@@ -19,6 +19,7 @@ public abstract class Window implements UserInputSubscriber {
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
     protected boolean hidden = false;
+    protected boolean isDraggedInside = false;
     protected final Node node;
     private final boolean closeable;
     private PGraphics g;
@@ -157,13 +158,14 @@ public abstract class Window implements UserInputSubscriber {
         if (isHidden()) {
             return;
         }
-        if (isPointInsideTitleBar(x, y)) {
-            isDraggedAround = true;
+        if (isPointInsideWindow(x, y)) {
             setFocusOnThis();
             e.setConsumed(true);
-        } else if (isPointInsideWindow(x, y)) {
-            WindowManager.setFocus(this);
-            e.setConsumed(true);
+        }
+        if(isPointInsideTitleBar(x,y)){
+            isDraggedAround = true;
+        } else if(isPointInsideContent(x,y)){
+            isDraggedInside = true;
         }
     }
 
@@ -180,6 +182,9 @@ public abstract class Window implements UserInputSubscriber {
                 isDraggedAround = false;
             }
             e.setConsumed(true);
+        }else if (isDraggedInside) {
+            reactToMouseDraggedInsideWithoutDrawing(x,y, px, py);
+            e.setConsumed(true);
         }
     }
 
@@ -193,8 +198,22 @@ public abstract class Window implements UserInputSubscriber {
             e.setConsumed(true);
         } else if (isDraggedAround) {
             e.setConsumed(true);
+        } else {
+            if (isPointInsideContent(x,y)) {
+                reactToMouseReleasedInsideWithoutDrawing(x,y);
+            }
+            e.setConsumed(true);
         }
+        isDraggedInside = false;
         isDraggedAround = false;
+    }
+
+    protected void reactToMouseDraggedInsideWithoutDrawing(float x, float y, float px, float py) {
+//        println("dragged inside");
+    }
+
+    protected void reactToMouseReleasedInsideWithoutDrawing(float x, float y) {
+//        println("released inside");
     }
 
     private void hide() {

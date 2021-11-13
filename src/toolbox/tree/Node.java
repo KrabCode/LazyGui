@@ -34,7 +34,7 @@ public class Node {
 
 
     public Object getValue() {
-        switch(type){
+        switch (type) {
             case FOLDER:
                 return null;
             case SLIDER_X:
@@ -56,23 +56,29 @@ public class Node {
     }
 
     public void setValue(Object val) {
-        switch(type){
+        switch (type) {
             case FOLDER:
                 return;
             case SLIDER_X:
                 valueFloat = (float) val;
+                break;
             case SLIDER_INT_X:
                 valueInt = (int) val;
+                break;
             case PLOT_XY:
             case PLOT_XYZ:
                 valuePVector = (PVector) val;
+                break;
             case COLOR_PICKER:
                 valueColor = (Color) val;
+                break;
             case GRADIENT_PICKER:
                 valueGradient = (Gradient) val;
+                break;
             case BUTTON:
             case TOGGLE:
                 valueBoolean = (boolean) val;
+                break;
         }
     }
 }

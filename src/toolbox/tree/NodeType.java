@@ -10,4 +10,5 @@ public enum NodeType {
     GRADIENT_PICKER,
     BUTTON,
     TOGGLE
+    // TODO shader list
 }

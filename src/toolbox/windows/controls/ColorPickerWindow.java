@@ -6,7 +6,7 @@ import toolbox.GlobalState;
 import toolbox.tree.Node;
 import toolbox.windows.Window;
 
-public class ColorPickerWindow extends Window {
+public class ColorPickerWindow extends ControlWindow {
 
     public ColorPickerWindow(Node node, PVector pos) {
         super(node, pos, new PVector(GlobalState.cell * 8, GlobalState.cell * 4));

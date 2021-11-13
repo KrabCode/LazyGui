@@ -7,11 +7,10 @@ import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.Palette;
 import toolbox.tree.Node;
-import toolbox.windows.Window;
 
 import static processing.core.PConstants.CENTER;
 
-public class ToggleWindow extends Window {
+public class ToggleWindow extends ControlWindow {
 
     public ToggleWindow(Node node, PVector pos) {
         super(node, pos, new PVector(GlobalState.cell * 4, GlobalState.cell * 3));
@@ -34,19 +33,28 @@ public class ToggleWindow extends Window {
     }
 
     @Override
+    protected void reactToMouseReleasedInsideWithoutDrawing(float x, float y) {
+        super.reactToMouseReleasedInsideWithoutDrawing(x, y);
+        flipValue();
+    }
+
+    @Override
     public void keyReleased(KeyEvent keyEvent) {
         super.keyReleased(keyEvent);
+        if(hidden){
+            return;
+        }
         if (isThisFocused()) {
             if (keyEvent.getKeyChar() == ' ') {
-                node.setValue(!(boolean) node.getValue());
+                flipValue();
             }
         }
         keyEvent.setConsumed(true);
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e, float x, float y) {
-        super.mouseReleased(e, x, y);
-
+    private void flipValue() {
+        node.setValue(!(boolean) node.getValue());
     }
+
+
 }

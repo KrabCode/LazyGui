@@ -22,9 +22,9 @@ public class WindowFactory {
             case SLIDER_INT_X:
                 return new SliderIntWindow(node, pos);
             case PLOT_XY:
-                return new PlotXYWindow(node, pos);
+                return new PlotWindowXY(node, pos);
             case PLOT_XYZ:
-                return new PlotXYZWindow(node, pos);
+                return new PlotWindowXYZ(node, pos);
             case COLOR_PICKER:
                 return new ColorPickerWindow(node, pos);
             case GRADIENT_PICKER:

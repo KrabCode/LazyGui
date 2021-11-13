@@ -13,7 +13,6 @@ import toolbox.tree.NodeType;
 import java.util.Objects;
 
 import static processing.core.PConstants.*;
-import static toolbox.tree.NodeType.*;
 
 public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
@@ -27,6 +26,8 @@ public class TreeWindow extends Window {
         root = node; // I could just use the node variable but root is clearer, it's a special node
 
         // TODO make more than 1 recursive level translation work
+        // TODO FOLDERS!
+
 //        Node hello = new Node(app, "/hello/", "hello");
 //        hello.children.add(new Node(app, "/hello/world/", "world"));
 //        root.children.add(hello);
@@ -164,40 +165,16 @@ public class TreeWindow extends Window {
     }
 
     @Override
-    public void mousePressed(MouseEvent e, float x, float y) {
-        super.mousePressed(e, x, y);
+    protected void reactToMouseDraggedInsideWithoutDrawing(float x, float y, float px, float py) {
+        super.reactToMouseDraggedInsideWithoutDrawing(x, y, x, y);
+        contentTranslate.x += x - px;
+        contentTranslate.y += y - py;
     }
 
     @Override
-    public void mouseReleased(MouseEvent e, float x, float y) {
-        super.mouseReleased(e, x, y);
-        if (hidden) {
-            return;
-        }
-        if (!isDraggedInside && isPointInsideContent(x, y)) {
-            tryInteractWithTree(x, y);
-            e.setConsumed(true);
-        } else if (isDraggedInside) {
-            isDraggedInside = false;
-            e.setConsumed(true);
-        }
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragged(e, x, y, px, py);
-        if (hidden) {
-            return;
-        }
-        if (!isDraggedAround) {
-            if (isDraggedInside) {
-                contentTranslate.x += x - px;
-                contentTranslate.y += y - py;
-            } else if (isPointInsideContent(x, y)) {
-                isDraggedInside = true;
-            }
-            e.setConsumed(true);
-        }
+    protected void reactToMouseReleasedInsideWithoutDrawing(float x, float y) {
+        super.reactToMouseReleasedInsideWithoutDrawing(x, y);
+        tryInteractWithTree(x, y);
     }
 
     @Override
