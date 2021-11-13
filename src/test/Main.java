@@ -47,15 +47,16 @@ public class Main extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
-        pg.stroke(255);
-        pg.strokeWeight(gui.slider("/weight/"));
-        if(gui.toggle("/display/")){
-            rotation += radians(gui.slider("/rotation/"));
+        if(gui.toggle("/display", true)){
+            rotation += radians(gui.slider("/rotation"));
+            pg.stroke(gui.sliderInt("/stroke", 150, 0, 255, true));
+            pg.strokeWeight(gui.slider("/weight", 2));
             pg.rotate(rotation);
             float n = 150;
             pg.rectMode(CENTER);
-            for (int i = 0; i < 8; i++) {
-                float a = PApplet.map(i,0, 8, 0, HALF_PI);
+            int count = gui.sliderInt("/count", 8, 1, 100, true);
+            for (int i = 0; i < count; i++) {
+                float a = PApplet.map(i,0, count, 0, HALF_PI);
                 pg.pushMatrix();
                 pg.rotate(a);
                 pg.rect(0, 0, n, n);

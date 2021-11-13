@@ -3,8 +3,7 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
-import toolbox.structs.Color;
+import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
@@ -59,43 +58,68 @@ public class Gui implements UserInputSubscriber {
     }
 
     public float slider(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.SLIDER_X);
-        return (float) WindowManager.treeWindow.getNodeValue(path);
+        return slider(path, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+    }
+    public float slider(String path, float defaultValue) {
+        return slider(path, defaultValue, -Float.MAX_VALUE, Float.MAX_VALUE,  false);
+    }
+
+    float slider(String path, float defaultValue, float min, float max) {
+        return slider(path, defaultValue, min, max, true);
+    }
+
+    public float slider(String path, float defaultValue, float min, float max, boolean constrained) {
+        Node node = WindowManager.treeWindow.findNodeByPathInTree(path);
+        if(node == null){
+            node = new Node(path, path.replaceAll("/", ""), NodeType.SLIDER_X);
+            node.valueFloatDefault = defaultValue;
+            node.valueFloat = defaultValue;
+            node.valueFloatMin = min;
+            node.valueFloatMax = max;
+            node.valueFloatConstrained = constrained;
+            WindowManager.treeWindow.tryRegisterNode(node);
+        }
+        return node.valueFloat;
     }
 
     public int sliderInt(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.SLIDER_INT_X);
-        return (int) WindowManager.treeWindow.getNodeValue(path);
+        return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+    }
+    public int sliderInt(String path, int defaultValue) {
+        return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
-    public PVector plotXY(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.PLOT_XY);
-        return (PVector) WindowManager.treeWindow.getNodeValue(path);
+    int sliderInt(String path, int defaultValue, int min, int max) {
+        return sliderInt(path, defaultValue, min, max, true);
     }
 
-    public PVector plotXYZ(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.PLOT_XYZ);
-        return (PVector) WindowManager.treeWindow.getNodeValue(path);
+    public int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
+        Node node = WindowManager.treeWindow.findNodeByPathInTree(path);
+        if(node == null){
+            node = new Node(path, path.replaceAll("/", ""), NodeType.SLIDER_INT_X);
+            node.valueFloatDefault = defaultValue;
+            node.valueFloat = defaultValue;
+            node.valueFloatMin = min;
+            node.valueFloatMax = max;
+            node.valueFloatConstrained = constrained;
+            WindowManager.treeWindow.tryRegisterNode(node);
+        }
+        return PApplet.floor(node.valueFloat);
     }
 
-    public boolean button(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.BUTTON);
-        return (boolean) WindowManager.treeWindow.getNodeValue(path);
+    public boolean toggle(String path){
+        return toggle(path, false);
     }
 
-    public boolean toggle(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.TOGGLE);
-        return (boolean) WindowManager.treeWindow.getNodeValue(path);
-    }
-
-    public Color picker(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.COLOR_PICKER);
-        return (Color) WindowManager.treeWindow.getNodeValue(path);
-    }
-
-    public PGraphics gradient(String path) {
-        WindowManager.treeWindow.tryRegisterNode(path, NodeType.GRADIENT_PICKER);
-        return (PGraphics) WindowManager.treeWindow.getNodeValue(path);
+    public boolean toggle(String path, boolean defaultValue){
+        Node node = WindowManager.treeWindow.findNodeByPathInTree(path);
+        if(node == null){
+            node = new Node(path, path.replaceAll("/", ""), NodeType.TOGGLE);
+            node.valueBooleanDefault = defaultValue;
+            node.valueBoolean = defaultValue;
+            WindowManager.treeWindow.tryRegisterNode(node);
+        }
+        return node.valueBoolean;
     }
 
 }

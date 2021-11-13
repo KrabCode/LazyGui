@@ -1,16 +1,12 @@
 package toolbox.windows;
 
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
-import toolbox.ToolboxMath;
+import toolbox.MathUtils;
 import toolbox.tree.Node;
 import toolbox.Palette;
-import toolbox.tree.NodeType;
-
-import java.util.Objects;
 
 import static processing.core.PConstants.*;
 
@@ -47,17 +43,12 @@ public class TreeWindow extends Window {
 * */
     }
 
-    public void tryRegisterNode(String path, NodeType type) {
-        if (findNodeByPath(root, path) != null) {
+    public void tryRegisterNode(Node node) {
+        if (findNodeByPath(root, node.path) != null) {
             return;
         }
         // TODO add to lower levels when path indicates it
-        String name = path.replaceAll("/", "");
-        root.children.add(new Node(path, name, type));
-    }
-
-    public Object getNodeValue(String path) {
-        return Objects.requireNonNull(findNodeByPath(root, path)).getValue();
+        root.children.add(node);
     }
 
     protected void drawContent(PGraphics pg) {
@@ -139,7 +130,7 @@ public class TreeWindow extends Window {
     }
 
     private Node tryFindHitboxUnderPointRecursively(Node parent, float x, float y) {
-        if (ToolboxMath.isPointInRect(x, y, parent.screenPos.x, parent.screenPos.y, parent.screenSize.x, parent.screenSize.y)) {
+        if (MathUtils.isPointInRect(x, y, parent.screenPos.x, parent.screenPos.y, parent.screenSize.x, parent.screenSize.y)) {
             return parent;
         }
         for (Node child : parent.children) {
@@ -149,6 +140,10 @@ public class TreeWindow extends Window {
             }
         }
         return null;
+    }
+
+    public Node findNodeByPathInTree(String pathQuery){
+        return findNodeByPath(root, pathQuery);
     }
 
     private Node findNodeByPath(Node parent, String pathQuery) {

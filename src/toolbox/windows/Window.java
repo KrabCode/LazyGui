@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
-import toolbox.ToolboxMath;
+import toolbox.MathUtils;
 import toolbox.GlobalState;
 import toolbox.Palette;
 import toolbox.tree.Node;
@@ -15,17 +15,17 @@ import toolbox.userInput.UserInputSubscriber;
 import static processing.core.PApplet.*;
 
 public abstract class Window implements UserInputSubscriber {
+    private final boolean closeable;
+    private PGraphics g;
     protected float cell = GlobalState.cell;
     protected final PVector windowPos;  // position relative to sketch origin (top left)
     protected final PVector windowSize;
     protected boolean hidden = false;
     protected boolean isDraggedInside = false;
     protected final Node node;
-    private final boolean closeable;
-    private PGraphics g;
     protected boolean isDraggedAround;
-    PVector dragAroundStartedMousePos = new PVector();
-    PVector dragInsideStartedMousePos = new PVector();
+    protected PVector dragAroundStartedMousePos = new PVector();
+    protected PVector dragInsideStartedMousePos = new PVector();
 
     public Window(Node node, PVector pos, PVector size) {
         this.node = node;
@@ -241,27 +241,41 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideContent(float x, float y) {
-        return ToolboxMath.isPointInRect(x, y,
+        return MathUtils.isPointInRect(x, y,
                 windowPos.x, windowPos.y + cell,
                 windowSize.x, windowSize.y - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
         PApplet app = GlobalState.app;
-        return ToolboxMath.isPointInRect(x, y, 0, 0, app.width, app.height);
+        return MathUtils.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-        return ToolboxMath.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        return MathUtils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return ToolboxMath.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, cell);
+        return MathUtils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
-        return ToolboxMath.isPointInRect(x, y,
+        return MathUtils.isPointInRect(x, y,
                 windowPos.x + windowSize.x - cell, windowPos.y,
                 cell, cell);
+    }
+
+
+    protected void fillTextColorBasedOnFocus(PGraphics pg) {
+        if(isThisFocused()){
+            pg.fill(Palette.selectedTextFill);
+        }else{
+            pg.fill(Palette.standardTextFill);
+        }
+    }
+
+    protected float screenDistanceToValueDistance(float screenSpaceDelta, float precision) {
+        float valueToScreenRatio = precision / GlobalState.app.width;
+        return screenSpaceDelta * valueToScreenRatio;
     }
 }

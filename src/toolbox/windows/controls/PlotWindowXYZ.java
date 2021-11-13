@@ -6,7 +6,7 @@ import toolbox.GlobalState;
 import toolbox.tree.Node;
 import toolbox.windows.Window;
 
-public class PlotWindowXYZ extends ControlWindow {
+public class PlotWindowXYZ extends Window {
 
     public PlotWindowXYZ(Node node, PVector pos) {
         super(node, pos, new PVector(GlobalState.cell * 8, GlobalState.cell * 4));
