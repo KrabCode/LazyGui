@@ -24,6 +24,8 @@ public abstract class Window implements UserInputSubscriber {
     private final boolean closeable;
     private PGraphics g;
     protected boolean isDraggedAround;
+    PVector dragAroundStartedMousePos = new PVector();
+    PVector dragInsideStartedMousePos = new PVector();
 
     public Window(Node node, PVector pos, PVector size) {
         this.node = node;
@@ -164,8 +166,12 @@ public abstract class Window implements UserInputSubscriber {
         }
         if(isPointInsideTitleBar(x,y)){
             isDraggedAround = true;
+            dragAroundStartedMousePos.x = x;
+            dragAroundStartedMousePos.y = y;
         } else if(isPointInsideContent(x,y)){
             isDraggedInside = true;
+            dragInsideStartedMousePos.x = x;
+            dragInsideStartedMousePos.y = y;
         }
     }
 

@@ -79,7 +79,7 @@ public class TreeWindow extends Window {
         pg.stroke(Palette.treeWindowContentStroke);
         if (parent.children.size() > 0) {
             pg.strokeWeight(1);
-            pg.line(cell / 2f, cell * 1.5f, cell / 2f, cell * 0.5f + parent.children.size() * cell);
+            pg.line(cell / 2f, cell * 1.25f, cell / 2f, cell * 0.75f + parent.children.size() * cell);
         }
         pg.strokeWeight(1);
         updateDrawNodeHitbox(pg, parent, true);
