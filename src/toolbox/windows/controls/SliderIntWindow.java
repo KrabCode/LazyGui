@@ -18,8 +18,9 @@ import static processing.core.PConstants.LEFT;
 public class SliderIntWindow extends SliderFloatWindow {
 
     public SliderIntWindow(Node node, PVector pos) {
-        super(node, pos, new PVector(GlobalState.cell * 10, GlobalState.cell * 2));
-        node.precision = 100;
+        super(node, pos);
+        currentPrecisionIndex = 5;
+        savePrecision();
     }
 
     @Override

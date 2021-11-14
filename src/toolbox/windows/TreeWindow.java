@@ -82,7 +82,7 @@ public class TreeWindow extends Window {
         }
         pg.textAlign(LEFT, TOP);
         pg.noStroke();
-        pg.text(parent.name, 5, GlobalState.textOffsetY);
+        pg.text(parent.name, 5, 0);
 
         if (parent.children.size() > 0) {
             pg.pushMatrix();

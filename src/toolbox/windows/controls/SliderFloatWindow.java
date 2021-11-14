@@ -8,21 +8,29 @@ import toolbox.GlobalState;
 import toolbox.tree.Node;
 import toolbox.windows.Window;
 
-import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.println;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
+import java.util.ArrayList;
+
+import static processing.core.PApplet.*;
+import static processing.core.PConstants.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class SliderFloatWindow extends Window {
 
+    float[] precisionRange = new float[]{
+            0.001f,
+            0.01f,
+            0.1f,
+            1.0f,
+            10.0f,
+            100.0f,
+            1000.0f,
+            10000.0f,
+    };
+    int currentPrecisionIndex = 4;
+
     public SliderFloatWindow(Node node, PVector pos) {
         super(node, pos, new PVector(GlobalState.cell * 10, GlobalState.cell * 2));
-        node.precision = 10;
-    }
-
-    public SliderFloatWindow(Node node, PVector pos, PVector size) {
-        super(node, pos, size);
+        savePrecision();
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -31,14 +39,32 @@ public class SliderFloatWindow extends Window {
         String text = getValueToDisplay();
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
+        float textMarginX = 5;
         pg.text(text,
-                pg.width  * 0.5f - GlobalState.font.getSize() * 0.25f,
+                textMarginX,
+                pg.height * 0.5f + GlobalState.font.getSize() * 0.5f
+        );
+
+        if (!isThisFocused()) {
+            return;
+        }
+        pg.textAlign(RIGHT, CENTER);
+        pg.text(getPrecisionToDisplay(),
+                pg.width - textMarginX,
                 pg.height * 0.5f + GlobalState.font.getSize() * 0.5f
         );
     }
 
-    protected String getValueToDisplay(){
+    protected String getValueToDisplay() {
         return String.valueOf(node.valueFloat);
+    }
+
+    private String getPrecisionToDisplay() {
+        float p = node.precision;
+        if (p >= 1) {
+            p = floor(p);
+        }
+        return nf(p);
     }
 
     @Override
@@ -49,36 +75,38 @@ public class SliderFloatWindow extends Window {
     }
 
 
-    void validateValue(){
-        if(node.valueFloatConstrained){
+    void validateValue() {
+        if (node.valueFloatConstrained) {
             node.valueFloat = constrain(node.valueFloat, node.valueFloatMin, node.valueFloatMax);
         }
     }
 
     @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        super.keyPressed(keyEvent);
-        println(keyEvent.toString());
-        int keyCode = keyEvent.getKeyCode();
-        if(keyCode == 0x96 || keyCode == 0x10){
-            node.precision *= 10;
-        }
-        if(keyCode == 0x98 || keyCode == 0xb){
-            node.precision *= 0.1;
-        }
-        keyEvent.setConsumed(true);
-        println(node.precision);
-        println(keyEvent);
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseEvent e, int dir) {
-        super.mouseWheelMoved(e, dir);
-        if(dir > 0){
-            node.precision *= 10;
-        }else if(dir < 0){
-            node.precision *= 0.1;
+    public void mouseWheelMoved(MouseEvent e, int dir, float x, float y) {
+        super.mouseWheelMoved(e, dir, x, y);
+        if (isPointInsideWindow(x, y) || isDraggedInside) {
+            if (dir > 0) {
+                increasePrecision();
+            } else if (dir < 0) {
+                decreasePrecision();
+            }
         }
         e.setConsumed(true);
+    }
+
+    private void increasePrecision() {
+        currentPrecisionIndex++;
+        currentPrecisionIndex = min(precisionRange.length - 1, currentPrecisionIndex);
+        savePrecision();
+    }
+
+    private void decreasePrecision() {
+        currentPrecisionIndex--;
+        currentPrecisionIndex = max(0, currentPrecisionIndex);
+        savePrecision();
+    }
+
+    protected void savePrecision() {
+        node.precision = precisionRange[currentPrecisionIndex];
     }
 }

@@ -44,7 +44,7 @@ public interface UserInputSubscriber  {
 
     }
 
-    default void mouseWheelMoved(MouseEvent e,int dir) {
+    default void mouseWheelMoved(MouseEvent e,int dir, float x, float y) {
 
     }
 }

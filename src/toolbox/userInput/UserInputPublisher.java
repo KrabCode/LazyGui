@@ -176,13 +176,13 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     public void mouseWheelMoved(MouseEvent e) {
         int value = floor(e.getRotation()[1]);
         if (focused != null) {
-            focused.mouseWheelMoved(e, value);
+            focused.mouseWheelMoved(e, value, e.getX(), e.getY());
         }
         for (UserInputSubscriber subscriber : subscribers) {
             if (subscriber.equals(focused)) {
                 continue;
             }
-            subscriber.mouseWheelMoved(e, value);
+            subscriber.mouseWheelMoved(e, value, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
             }

@@ -116,8 +116,7 @@ public abstract class Window implements UserInputSubscriber {
         }
         pg.textAlign(LEFT);
         int textMarginX = 4;
-        float textOffsetY = GlobalState.textOffsetY;
-        pg.text(node.name, textMarginX, cell - textMarginX + textOffsetY);
+        pg.text(node.name, textMarginX, cell - textMarginX);
     }
 
     protected boolean isThisFocused() {
