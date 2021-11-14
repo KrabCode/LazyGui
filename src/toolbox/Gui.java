@@ -122,4 +122,12 @@ public class Gui implements UserInputSubscriber {
         return node.valueBoolean;
     }
 
+    public boolean button(String path) {
+        Node node = WindowManager.treeWindow.findNodeByPathInTree(path);
+        if(node == null){
+            node = new Node(path, path.replaceAll("/", ""), NodeType.BUTTON);
+            WindowManager.treeWindow.tryRegisterNode(node);
+        }
+        return node.valueBoolean;
+    }
 }

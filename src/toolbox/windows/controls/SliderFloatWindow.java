@@ -1,6 +1,5 @@
 package toolbox.windows.controls;
 
-import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -8,14 +7,12 @@ import toolbox.GlobalState;
 import toolbox.tree.Node;
 import toolbox.windows.Window;
 
-import java.util.ArrayList;
-
 import static processing.core.PApplet.*;
-import static processing.core.PConstants.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class SliderFloatWindow extends Window {
 
+    // TODO lock mouse in place when drag
     float[] precisionRange = new float[]{
             0.001f,
             0.01f,
@@ -26,11 +23,12 @@ public class SliderFloatWindow extends Window {
             1000.0f,
             10000.0f,
     };
-    int currentPrecisionIndex = 4;
+
+    int currentPrecisionIndex = 3;
 
     public SliderFloatWindow(Node node, PVector pos) {
         super(node, pos, new PVector(GlobalState.cell * 10, GlobalState.cell * 2));
-        savePrecision();
+        setPrecision();
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -70,7 +68,7 @@ public class SliderFloatWindow extends Window {
     @Override
     protected void reactToMouseDraggedInsideWithoutDrawing(float x, float y, float px, float py) {
         super.reactToMouseDraggedInsideWithoutDrawing(x, y, px, py);
-        node.valueFloat += screenDistanceToValueDistance(x - px, node.precision);
+        node.valueFloat += (x - px) * node.precision;
         validateValue();
     }
 
@@ -97,16 +95,16 @@ public class SliderFloatWindow extends Window {
     private void increasePrecision() {
         currentPrecisionIndex++;
         currentPrecisionIndex = min(precisionRange.length - 1, currentPrecisionIndex);
-        savePrecision();
+        setPrecision();
     }
 
     private void decreasePrecision() {
         currentPrecisionIndex--;
         currentPrecisionIndex = max(0, currentPrecisionIndex);
-        savePrecision();
+        setPrecision();
     }
 
-    protected void savePrecision() {
+    protected void setPrecision() {
         node.precision = precisionRange[currentPrecisionIndex];
     }
 }

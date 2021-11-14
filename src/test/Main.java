@@ -47,6 +47,9 @@ public class Main extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
+        if(gui.button("/print")){
+            println("button pressed!");
+        }
         if(gui.toggle("/display", true)){
             rotation += radians(gui.slider("/rotation"));
             pg.stroke(gui.sliderInt("/stroke", 150, 0, 255, true));
