@@ -91,7 +91,8 @@ public class SliderFloatWindow extends Window {
                 decreasePrecision();
             }
         }
-        e.setConsumed(true);
+        // don't want to consume the event because it needs to work on mouse over,
+        // so it should be handled in every window that cares
     }
 
     @Override
