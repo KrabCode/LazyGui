@@ -11,7 +11,6 @@ public class SliderIntWindow extends SliderFloatWindow {
 
     public SliderIntWindow(Node node, PVector pos) {
         super(node, pos);
-        setPrecision();
     }
 
     @Override

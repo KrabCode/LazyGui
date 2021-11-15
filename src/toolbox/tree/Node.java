@@ -23,7 +23,7 @@ public class Node {
     public float valueFloatDefault;
     public boolean valueFloatConstrained;
 
-    public float precision = 1;
+    public float valueFloatPrecision = 1;
 
     public boolean valueBooleanDefault = false;
     public boolean valueBoolean = false;

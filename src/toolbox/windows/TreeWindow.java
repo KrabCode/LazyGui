@@ -8,8 +8,7 @@ import toolbox.tree.Node;
 import toolbox.Palette;
 
 import static processing.core.PConstants.*;
-import static toolbox.GlobalState.lastCreatedWindowPos;
-import static toolbox.GlobalState.lastCreatedWindowSize;
+import static toolbox.GlobalState.*;
 
 public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
@@ -75,11 +74,14 @@ public class TreeWindow extends Window {
         }
         pg.strokeWeight(1);
         updateDrawNodeHitbox(pg, parent, true);
-
-        if (WindowManager.isHidden(parent.path) || parent.path.equals(WindowManager.getTree().root.path)) {
-            pg.fill(Palette.standardTextFill);
-        } else {
+        boolean isMouseOverHitbox = MathUtils.isPointInRect(app.mouseX, app.mouseY, parent.screenPos.x, parent.screenPos.y, parent.screenSize.x, parent.screenSize.y);
+        boolean isWindowOpen = !WindowManager.isHidden(parent.path) && !parent.path.equals(WindowManager.getTree().root.path);
+        if (isMouseOverHitbox) {
+            pg.fill(Palette.hoveringTextFill);
+        } else if(isWindowOpen) {
             pg.fill(Palette.selectedTextFill);
+        } else{
+            pg.fill(Palette.standardTextFill);
         }
         pg.textAlign(LEFT, TOP);
         pg.noStroke();

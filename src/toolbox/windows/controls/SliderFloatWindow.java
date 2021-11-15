@@ -5,8 +5,11 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
+import toolbox.Palette;
 import toolbox.tree.Node;
 import toolbox.windows.Window;
+
+import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 
@@ -14,28 +17,52 @@ import static processing.core.PApplet.*;
 public class SliderFloatWindow extends Window {
 
     // TODO lock mouse in place when drag
-    float[] precisionRange = new float[]{
-            0.001f,
-            0.01f,
-            0.1f,
-            1.0f,
-            10.0f,
-            100.0f,
-            1000.0f,
-            10000.0f,
-    };
+    ArrayList<Float> precisionRange;
 
-    int currentPrecisionIndex = 3;
+    int currentPrecisionIndex;
 
     public SliderFloatWindow(Node node, PVector pos) {
+
+//      TODO use long to represent value and precision for excellent in-built rounding for the cost of converting it to float
         super(node, pos, new PVector(GlobalState.cell * 10, GlobalState.cell * 2));
-        setPrecision();
+        precisionRange = new ArrayList<>() {{
+            add(0.001f);
+            add(0.01f);
+            add(0.1f);
+            add(1.0f);
+            add(10.0f);
+            add(100.0f);
+            add(1000.0f);
+        }};
+        currentPrecisionIndex = 3;
+        tryLoadPrecisionFromNode();
+    }
+
+    private void tryLoadPrecisionFromNode() {
+        for (int i = 0; i < precisionRange.size() - 1; i++) {
+            float thisValue = precisionRange.get(i);
+            float nextValue = precisionRange.get(i + 1);
+            if (thisValue == node.valueFloatPrecision) {
+                currentPrecisionIndex = i;
+                return;
+            } else if (
+                    thisValue < node.valueFloatPrecision &&
+                            nextValue > node.valueFloatPrecision) {
+                currentPrecisionIndex = i + 1;
+                precisionRange.add(i + 1, node.valueFloatPrecision);
+            }
+        }
     }
 
     @SuppressWarnings("DuplicatedCode")
     @Override
     protected void drawContent(PGraphics pg) {
         String text = getValueToDisplay();
+        if (isDraggedInside) {
+            pg.noStroke();
+            pg.fill(Palette.draggedContentFill);
+            pg.rect(0, cell, windowSize.x, windowSize.y - cell);
+        }
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         float textMarginX = 5;
@@ -60,7 +87,7 @@ public class SliderFloatWindow extends Window {
     }
 
     private String getPrecisionToDisplay() {
-        float p = node.precision;
+        float p = node.valueFloatPrecision;
         if (p >= 1) {
             p = floor(p);
         }
@@ -70,7 +97,7 @@ public class SliderFloatWindow extends Window {
     @Override
     protected void reactToMouseDraggedInsideWithoutDrawing(float x, float y, float px, float py) {
         super.reactToMouseDraggedInsideWithoutDrawing(x, y, px, py);
-        node.valueFloat += (x - px) * node.precision;
+        node.valueFloat += (x - px) * node.valueFloatPrecision;
         validateValue();
     }
 
@@ -98,24 +125,22 @@ public class SliderFloatWindow extends Window {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
-        if(keyEvent.getKeyChar() == 'r' && isThisFocused()){
+        if (keyEvent.getKeyChar() == 'r' && isThisFocused()) {
             node.valueFloat = node.valueFloatDefault;
         }
     }
 
     private void increasePrecision() {
-        currentPrecisionIndex++;
-        currentPrecisionIndex = min(precisionRange.length - 1, currentPrecisionIndex);
-        setPrecision();
+        currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
+        setPrecisionToNode();
     }
 
     private void decreasePrecision() {
-        currentPrecisionIndex--;
-        currentPrecisionIndex = max(0, currentPrecisionIndex);
-        setPrecision();
+        currentPrecisionIndex = max(currentPrecisionIndex - 1, 0);
+        setPrecisionToNode();
     }
 
-    protected void setPrecision() {
-        node.precision = precisionRange[currentPrecisionIndex];
+    protected void setPrecisionToNode() {
+        node.valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
     }
 }
