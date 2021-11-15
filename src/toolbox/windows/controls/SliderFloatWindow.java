@@ -1,5 +1,6 @@
 package toolbox.windows.controls;
 
+import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -43,7 +44,8 @@ public class SliderFloatWindow extends Window {
                 pg.height * 0.5f + GlobalState.font.getSize() * 0.5f
         );
 
-        if (!isThisFocused()) {
+        boolean isMouseInsideContent = isPointInsideContent(GlobalState.app.mouseX, GlobalState.app.mouseY);
+        if (!isThisFocused() && !isMouseInsideContent) {
             return;
         }
         pg.textAlign(RIGHT, CENTER);
@@ -90,6 +92,14 @@ public class SliderFloatWindow extends Window {
             }
         }
         e.setConsumed(true);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        super.keyPressed(keyEvent);
+        if(keyEvent.getKeyChar() == 'r' && isThisFocused()){
+            node.valueFloat = node.valueFloatDefault;
+        }
     }
 
     private void increasePrecision() {

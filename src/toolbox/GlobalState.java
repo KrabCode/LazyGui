@@ -2,6 +2,7 @@ package toolbox;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PVector;
 
 public class GlobalState {
     static GlobalState singleton;
@@ -9,6 +10,9 @@ public class GlobalState {
 
     public static PFont font = null;
     public static PApplet app = null;
+
+    public static PVector lastCreatedWindowPos  = null;
+    public static PVector lastCreatedWindowSize = null;
 
     public static void init(PApplet app){
         GlobalState.app = app;

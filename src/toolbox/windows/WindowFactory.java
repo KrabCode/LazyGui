@@ -4,15 +4,19 @@ import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.tree.Node;
 import toolbox.windows.controls.*;
+import toolbox.windows.controls.unfinished.ColorPickerWindow;
+import toolbox.windows.controls.unfinished.GradientPickerWindow;
+import toolbox.windows.controls.unfinished.PlotWindowXY;
+import toolbox.windows.controls.unfinished.PlotWindowXYZ;
 
 import static toolbox.tree.NodeType.FOLDER;
+import static toolbox.tree.NodeType.TREE;
 
 public class WindowFactory {
 
     private static final float cell = GlobalState.cell;
 
-    public static Window createWindowFromNode(Node node) {
-        PVector pos = new PVector(node.screenPos.x + cell * 10, node.screenPos.y);
+    public static Window createWindowFromNode(Node node, PVector pos) {
 
         switch(node.type){
             case FOLDER:
@@ -38,9 +42,9 @@ public class WindowFactory {
     }
 
     public static TreeWindow createMainTreeWindow(){
-        return new TreeWindow(new Node("/", ">", FOLDER),
+        return new TreeWindow(new Node("/", ">", TREE),
                 new PVector(cell,cell),
-                new PVector(cell * 10, cell * 15),
+                new PVector(cell * 8, cell * 10),
                 false
         );
     }

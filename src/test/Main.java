@@ -55,14 +55,14 @@ public class Main extends PApplet {
             pg.stroke(gui.sliderInt("/stroke", 150, 0, 255, true));
             pg.strokeWeight(gui.slider("/weight", 2));
             pg.rotate(rotation);
-            float n = 150;
+            float size = gui.slider("size", 150, 0, width);
             pg.rectMode(CENTER);
             int count = gui.sliderInt("/count", 8, 1, 100, true);
             for (int i = 0; i < count; i++) {
                 float a = PApplet.map(i,0, count, 0, HALF_PI);
                 pg.pushMatrix();
                 pg.rotate(a);
-                pg.rect(0, 0, n, n);
+                pg.rect(0, 0, size, size);
                 pg.popMatrix();
             }
         }

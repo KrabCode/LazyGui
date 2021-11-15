@@ -1,6 +1,7 @@
 package toolbox.windows;
 
 import processing.core.PGraphics;
+import toolbox.GlobalState;
 
 import java.util.ArrayList;
 
@@ -8,11 +9,10 @@ public class WindowManager {
     private static WindowManager singleton;
     private static Window focusedWindow = null;
 
-    @SuppressWarnings("FieldCanBeLocal") // no it can't, I want to be able to debug it globally
-    public static TreeWindow treeWindow = null;
-
     private final ArrayList<Window> windows = new ArrayList<>();
     private final ArrayList<Window> windowsToAdd = new ArrayList<>();
+    private TreeWindow treeWindow;
+
 
     private WindowManager() {
 
@@ -21,14 +21,16 @@ public class WindowManager {
     public static void createSingleton() {
         if (singleton == null) {
             singleton = new WindowManager();
-            treeWindow = WindowFactory.createMainTreeWindow();
-            WindowManager.registerOrUncoverWindow(treeWindow);
+
+            singleton.treeWindow = WindowFactory.createMainTreeWindow();
+            WindowManager.registerOrUncoverWindow(singleton.treeWindow);
         }
     }
 
     public static void registerOrUncoverWindow(Window window) {
         Window nullableWindow = singleton.findWindowByPath(window.node.path);
         if (nullableWindow == null) {
+            updateLastCreatedWindowPosAndSize(window);
             singleton.windowsToAdd.add(window);
         } else {
             // throw away the parameter window, use existing instead
@@ -36,9 +38,19 @@ public class WindowManager {
         }
     }
 
+    private static void updateLastCreatedWindowPosAndSize(Window window) {
+        // tree always gets created first and sets these to not null
+        GlobalState.lastCreatedWindowPos = window.windowPos.copy();
+        GlobalState.lastCreatedWindowSize = window.windowSize.copy();
+    }
+
     public static boolean isHidden(String path) {
         Window nullableWindow = singleton.findWindowByPath(path);
         return nullableWindow == null || nullableWindow.hidden;
+    }
+
+    public static TreeWindow getTree() {
+        return singleton.treeWindow;
     }
 
     public boolean windowExists(Window window) {
@@ -61,12 +73,12 @@ public class WindowManager {
 
     public static void updateAndDrawWindows(PGraphics pg) {
         for (Window win : singleton.windows) {
-            if(focusedWindow != null && win.node.path.equals(focusedWindow.node.path)){
+            if (focusedWindow != null && win.node.path.equals(focusedWindow.node.path)) {
                 continue;
             }
             win.drawWindow(pg);
         }
-        if(focusedWindow != null){
+        if (focusedWindow != null) {
             focusedWindow.drawWindow(pg);
         }
 

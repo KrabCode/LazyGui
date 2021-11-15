@@ -12,7 +12,7 @@ import static processing.core.PConstants.CENTER;
 public class ToggleWindow extends Window {
 
     public ToggleWindow(Node node, PVector pos) {
-        super(node, pos, new PVector(GlobalState.cell * 4, GlobalState.cell * 3));
+        super(node, pos, new PVector(GlobalState.cell * 4, GlobalState.cell * 2));
     }
 
     @Override

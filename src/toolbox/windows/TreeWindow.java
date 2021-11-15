@@ -3,12 +3,13 @@ package toolbox.windows;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.GlobalState;
 import toolbox.MathUtils;
 import toolbox.tree.Node;
 import toolbox.Palette;
 
 import static processing.core.PConstants.*;
+import static toolbox.GlobalState.lastCreatedWindowPos;
+import static toolbox.GlobalState.lastCreatedWindowSize;
 
 public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
@@ -75,7 +76,7 @@ public class TreeWindow extends Window {
         pg.strokeWeight(1);
         updateDrawNodeHitbox(pg, parent, true);
 
-        if (WindowManager.isHidden(parent.path) || parent.path.equals(WindowManager.treeWindow.node.path)) {
+        if (WindowManager.isHidden(parent.path) || parent.path.equals(WindowManager.getTree().root.path)) {
             pg.fill(Palette.standardTextFill);
         } else {
             pg.fill(Palette.selectedTextFill);
@@ -124,9 +125,15 @@ public class TreeWindow extends Window {
     private void tryInteractWithTree(float x, float y) {
         Node hitboxMatch = tryFindHitboxUnderPointRecursively(root, x, y);
         if (hitboxMatch != null) {
-            //noinspection ConstantConditions
-            WindowManager.registerOrUncoverWindow(WindowFactory.createWindowFromNode(hitboxMatch));
+            Window newWindow = WindowFactory.createWindowFromNode(hitboxMatch, getNewWindowPosition());
+            if (newWindow != null) { // TODO folder will be null here, collapse / reveal instead
+                WindowManager.registerOrUncoverWindow(newWindow);
+            }
         }
+    }
+
+    private PVector getNewWindowPosition() {
+        return new PVector(lastCreatedWindowPos.x, lastCreatedWindowPos.y + lastCreatedWindowSize.y + cell * 0.5f);
     }
 
     private Node tryFindHitboxUnderPointRecursively(Node parent, float x, float y) {
@@ -142,7 +149,7 @@ public class TreeWindow extends Window {
         return null;
     }
 
-    public Node findNodeByPathInTree(String pathQuery){
+    public Node findNodeByPathInTree(String pathQuery) {
         return findNodeByPath(root, pathQuery);
     }
 
