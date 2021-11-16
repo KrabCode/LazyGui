@@ -82,6 +82,7 @@ public class Gui implements UserInputSubscriber {
             node.valueFloatMin = min;
             node.valueFloatMax = max;
             node.valueFloatPrecision = defaultPrecision;
+            node.valueFloatPrecisionDefault = defaultPrecision;
             node.valueFloatConstrained = constrained;
             WindowManager.getTree().tryRegisterNode(node);
         }

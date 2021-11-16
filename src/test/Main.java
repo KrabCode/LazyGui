@@ -24,7 +24,7 @@ public class Main extends PApplet {
         int margin = 0;
         surface.setSize(1000, 1000);
         surface.setLocation(displayWidth - width - margin, margin);
-        surface.setAlwaysOnTop(true);
+//        surface.setAlwaysOnTop(true);
         pg = createGraphics(width, height, P2D);
 //        printAvailableFonts();
     }
@@ -50,21 +50,24 @@ public class Main extends PApplet {
         if(gui.button("/print")){
             println("button pressed!");
         }
-        if(gui.toggle("/display", true)){
-            rotation += radians(gui.slider("/rotation", 0, 0.01f));
-            pg.stroke(gui.sliderInt("/stroke", 255, 0, 255, true));
-            pg.strokeWeight(gui.slider("/weight", 2, 0.3f));
-            pg.rotate(rotation);
-            float size = gui.sliderConstrained("size", 150, 0, width);
-            pg.rectMode(CENTER);
-            int count = gui.sliderInt("/count", 8, 1, 100, true);
-            for (int i = 0; i < count; i++) {
-                float a = PApplet.map(i,0, count, 0, HALF_PI);
-                pg.pushMatrix();
-                pg.rotate(a);
-                pg.rect(0, 0, size, size);
-                pg.popMatrix();
-            }
+        float rotate = gui.slider("/rotation", 0, 0.01f);
+        if(gui.toggle("/print rotation", true)){
+
+            println(rotate);
+        }
+        rotation += radians(rotate);
+        pg.stroke(gui.sliderInt("/stroke", 255, 0, 255, true));
+        pg.strokeWeight(gui.slider("/weight", 2, 0.3f));
+        pg.rotate(rotation);
+        float size = gui.sliderConstrained("/size", 150, 0, width);
+        pg.rectMode(CENTER);
+        int count = gui.sliderInt("/count", 8, 1, 100, true);
+        for (int i = 0; i < count; i++) {
+            float a = PApplet.map(i,0, count, 0, HALF_PI);
+            pg.pushMatrix();
+            pg.rotate(a);
+            pg.rect(0, 0, size, size);
+            pg.popMatrix();
         }
         pg.popMatrix();
         pg.endDraw();

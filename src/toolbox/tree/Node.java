@@ -24,6 +24,7 @@ public class Node {
     public boolean valueFloatConstrained;
 
     public float valueFloatPrecision = 1;
+    public float valueFloatPrecisionDefault = 1;
 
     public boolean valueBooleanDefault = false;
     public boolean valueBoolean = false;

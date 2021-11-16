@@ -131,7 +131,7 @@ public abstract class Window implements UserInputSubscriber {
 
     protected void drawGrid(PGraphics pg) {
         pg.strokeWeight(1.5f);
-        pg.stroke(Palette.darkContentStroke);
+        pg.stroke(Palette.windowGridStroke);
         int count = 50;
         float rectSize = 20;
         float gridSize = rectSize * count;

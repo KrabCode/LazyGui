@@ -13,7 +13,7 @@ import static toolbox.GlobalState.*;
 public class TreeWindow extends Window {
     PVector contentTranslateOrigin = new PVector(0, cell);
     PVector contentTranslate = contentTranslateOrigin.copy();
-    PVector treeDrawingOrigin = new PVector(cell, cell);
+    PVector treeDrawingOrigin = new PVector(0,0);
     private boolean isDraggedInside = false;
     Node root;
 

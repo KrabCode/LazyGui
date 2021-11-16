@@ -14,8 +14,6 @@ public class MathUtils {
         return px >= rx && px <= rx + rw && py >= ry && py <= ry + rh;
     }
 
-
-
     /**
      * Takes any float and returns the positive fractional part of it, so the result is always between 0 and 1.
      * For example -0.1 becomes 0.1 and 1.5 becomes 0.5. Used with hue due to its cyclical

@@ -6,8 +6,7 @@ public class Palette {
     public static int windowTitleFill = 0x9F000000;
     public static int windowContentFill = 0xAF000000;
     public static int draggedContentFill = 0xFF5C0000;
-    public static int darkContentStroke = 0xFF2F2F2F;
-    public static int whiteContentFill = 0xFFFFFFFF;
+    public static int windowGridStroke = 0xFF2F2F2F;
     public static int hoveringTextFill = 0xFFFFFFFF;
     public static int selectedTextFill = 0xFFE2E2E2;
     public static int standardTextFill = 0xFFB0B0B0;
