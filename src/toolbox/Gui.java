@@ -5,13 +5,15 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
+import toolbox.tree.Tree;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
 
 public class Gui implements UserInputSubscriber {
+    private WindowManager windowManager;
+    private Tree tree;
     PApplet app;
     public PGraphics pg;
     public static boolean isGuiHidden = false;
@@ -26,7 +28,8 @@ public class Gui implements UserInputSubscriber {
         GlobalState.init(app);
         UserInputPublisher.createSingleton(app);
         UserInputPublisher.subscribe(this);
-        WindowManager.createSingleton();
+        windowManager = new WindowManager();
+        tree = new Tree();
         lazyResetDisplay();
     }
 
@@ -42,7 +45,7 @@ public class Gui implements UserInputSubscriber {
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
         if (!isGuiHidden) {
-            WindowManager.updateAndDrawWindows(pg);
+            windowManager.drawWindows(pg);
         }
         pg.endDraw();
     }
@@ -74,9 +77,9 @@ public class Gui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        Node node = WindowManager.getTree().findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path.replaceAll("/", ""), NodeType.SLIDER_X);
+            node = new Node(path, path, NodeType.SLIDER_X);
             node.valueFloatDefault = defaultValue;
             node.valueFloat = defaultValue;
             node.valueFloatMin = min;
@@ -84,7 +87,7 @@ public class Gui implements UserInputSubscriber {
             node.valueFloatPrecision = defaultPrecision;
             node.valueFloatPrecisionDefault = defaultPrecision;
             node.valueFloatConstrained = constrained;
-            WindowManager.getTree().tryRegisterNode(node);
+            tree.tryRegisterNode(node);
         }
         return node.valueFloat;
     }
@@ -102,15 +105,15 @@ public class Gui implements UserInputSubscriber {
     }
 
     public int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        Node node = WindowManager.getTree().findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path.replaceAll("/", ""), NodeType.SLIDER_INT_X);
+            node = new Node(path, path, NodeType.SLIDER_INT_X);
             node.valueFloatDefault = defaultValue;
             node.valueFloat = defaultValue;
             node.valueFloatMin = min;
             node.valueFloatMax = max;
             node.valueFloatConstrained = constrained;
-            WindowManager.getTree().tryRegisterNode(node);
+            tree.tryRegisterNode(node);
         }
         return PApplet.floor(node.valueFloat);
     }
@@ -120,21 +123,21 @@ public class Gui implements UserInputSubscriber {
     }
 
     public boolean toggle(String path, boolean defaultValue) {
-        Node node = WindowManager.getTree().findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path.replaceAll("/", ""), NodeType.TOGGLE);
+            node = new Node(path, path, NodeType.TOGGLE);
             node.valueBooleanDefault = defaultValue;
             node.valueBoolean = defaultValue;
-            WindowManager.getTree().tryRegisterNode(node);
+            tree.tryRegisterNode(node);
         }
         return node.valueBoolean;
     }
 
     public boolean button(String path) {
-        Node node = WindowManager.getTree().findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path.replaceAll("/", ""), NodeType.BUTTON);
-            WindowManager.getTree().tryRegisterNode(node);
+            node = new Node(path, path, NodeType.BUTTON);
+            tree.tryRegisterNode(node);
         }
         return node.valueBoolean;
     }

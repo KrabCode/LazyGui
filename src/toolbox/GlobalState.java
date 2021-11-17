@@ -11,9 +11,6 @@ public class GlobalState {
     public static PFont font = null;
     public static PApplet app = null;
 
-    public static PVector lastCreatedWindowPos  = null;
-    public static PVector lastCreatedWindowSize = null;
-
     public static void init(PApplet app){
         GlobalState.app = app;
         GlobalState.font = app.createFont("Calibri", 20);

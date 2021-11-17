@@ -47,21 +47,20 @@ public class Main extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
-        if(gui.button("/print")){
+        if(gui.button("log/button")){
             println("button pressed!");
         }
-        float rotate = gui.slider("/rotation", 0, 0.01f);
-        if(gui.toggle("/print rotation", true)){
-
+        float rotate = gui.slider("rotation", 0, 0.01f);
+        if(gui.toggle("log/rotation", false)){
             println(rotate);
         }
         rotation += radians(rotate);
-        pg.stroke(gui.sliderInt("/stroke", 255, 0, 255, true));
-        pg.strokeWeight(gui.slider("/weight", 2, 0.3f));
+        pg.stroke(gui.sliderInt("stroke", 255, 0, 255, true));
+        pg.strokeWeight(gui.slider("weight", 2, 0.3f));
         pg.rotate(rotation);
-        float size = gui.sliderConstrained("/size", 150, 0, width);
+        float size = gui.sliderConstrained("size", 150, 0, width);
         pg.rectMode(CENTER);
-        int count = gui.sliderInt("/count", 8, 1, 100, true);
+        int count = gui.sliderInt("count", 8, 1, 100, true);
         for (int i = 0; i < count; i++) {
             float a = PApplet.map(i,0, count, 0, HALF_PI);
             pg.pushMatrix();
