@@ -1,18 +1,17 @@
 package toolbox.tree;
 
-import processing.core.PVector;
-import toolbox.GlobalState;
-
 public class TreeNode {
     public final NodeType type;
+    public final TreeFolder parent;
     public final String path;
     public final String name;
     public final TreeNodeValue value = new TreeNodeValue();
 
-    public TreeNode(String path, NodeType type) {
+    public TreeNode(String path, NodeType type, TreeFolder parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
+        this.parent = parentFolder;
     }
 
     private String getNameFromPath(String path) {

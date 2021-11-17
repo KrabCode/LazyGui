@@ -6,14 +6,18 @@ import java.util.Queue;
 import static processing.core.PApplet.println;
 
 public class Tree {
+    public String name;
     TreeFolder rootFolder = new TreeFolder("", null);
 
-    public Tree() {
-        lazyCreateFolderPath("L1/L2/L3");
-        lazyCreateFolderPath("M1/M2/L3");
-        insertNodeAtPath(new TreeNode("R1/R2/R3/hello", NodeType.BUTTON));
-        insertNodeAtPath(new TreeNode("R1/R2/R3/hello", NodeType.BUTTON));
-        println(findNodeByPathInTree("R1/R2/R3/hello"));
+
+    public Tree(String name) {
+        this.name = name;
+    }
+
+    public TreeNode findParentFolderByNodePath(String nodePath){
+        String folderPath = getPathWithoutName(nodePath);
+        lazyCreateFolderPath(folderPath);
+        return findNodeByPathInTree(folderPath);
     }
 
     public TreeNode findNodeByPathInTree(String path) {

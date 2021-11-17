@@ -55,12 +55,12 @@ public class Main extends PApplet {
             println(rotate);
         }
         rotation += radians(rotate);
-        pg.stroke(gui.sliderInt("stroke", 255, 0, 255, true));
+        pg.stroke(gui.sliderIntConstrained("stroke", 255, 0, 255));
         pg.strokeWeight(gui.slider("weight", 2, 0.3f));
         pg.rotate(rotation);
         float size = gui.sliderConstrained("size", 150, 0, width);
         pg.rectMode(CENTER);
-        int count = gui.sliderInt("count", 8, 1, 100, true);
+        int count = gui.sliderIntConstrained("count", 8, 1, 100);
         for (int i = 0; i < count; i++) {
             float a = PApplet.map(i,0, count, 0, HALF_PI);
             pg.pushMatrix();
