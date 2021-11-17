@@ -50,7 +50,7 @@ public class Tree {
             }else if (n.type == NodeType.FOLDER) {
                 parentFolder = (TreeFolder) n;
             }else{
-                println("wtf");
+                println("expected folder based on path but got value node, wtf");
             }
             if(i < split.length - 1){
                 runningPath += "/" + split[i + 1];
@@ -72,11 +72,10 @@ public class Tree {
         String[] split = pathWithName.split("/");
         StringBuilder sum = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {
-            sum.append(split[i]).append("/");
-        }
-        if(sum.length() > 0){
-
-            sum.delete(sum.length() - 1, sum.length());
+            sum.append(split[i]);
+            if(i < split.length - 2){
+                sum.append("/");
+            }
         }
         return sum.toString();
     }

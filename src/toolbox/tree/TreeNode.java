@@ -9,7 +9,6 @@ public class TreeNode {
     public final String name;
     public final TreeNodeValue value = new TreeNodeValue();
 
-
     public TreeNode(String path, NodeType type) {
         this.path = path;
         this.name = getNameFromPath(path);
