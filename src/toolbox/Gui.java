@@ -3,7 +3,7 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.tree.Node;
+import toolbox.tree.TreeNode;
 import toolbox.tree.NodeType;
 import toolbox.tree.Tree;
 import toolbox.userInput.UserInputPublisher;
@@ -77,19 +77,19 @@ public class Gui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        Node node = tree.findNodeByPathInTree(path);
+        TreeNode node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path, NodeType.SLIDER_X);
-            node.valueFloatDefault = defaultValue;
-            node.valueFloat = defaultValue;
-            node.valueFloatMin = min;
-            node.valueFloatMax = max;
-            node.valueFloatPrecision = defaultPrecision;
-            node.valueFloatPrecisionDefault = defaultPrecision;
-            node.valueFloatConstrained = constrained;
-            tree.tryRegisterNode(node);
+            node = new TreeNode(path, NodeType.SLIDER_X);
+            node.value.valueFloatDefault = defaultValue;
+            node.value.valueFloat = defaultValue;
+            node.value.valueFloatMin = min;
+            node.value.valueFloatMax = max;
+            node.value.valueFloatPrecision = defaultPrecision;
+            node.value.valueFloatPrecisionDefault = defaultPrecision;
+            node.value.valueFloatConstrained = constrained;
+            tree.insertNodeAtPath(node);
         }
-        return node.valueFloat;
+        return node.value.valueFloat;
     }
 
     public int sliderInt(String path) {
@@ -105,17 +105,17 @@ public class Gui implements UserInputSubscriber {
     }
 
     public int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        Node node = tree.findNodeByPathInTree(path);
+        TreeNode node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path, NodeType.SLIDER_INT_X);
-            node.valueFloatDefault = defaultValue;
-            node.valueFloat = defaultValue;
-            node.valueFloatMin = min;
-            node.valueFloatMax = max;
-            node.valueFloatConstrained = constrained;
-            tree.tryRegisterNode(node);
+            node = new TreeNode(path, NodeType.SLIDER_INT_X);
+            node.value.valueFloatDefault = defaultValue;
+            node.value.valueFloat = defaultValue;
+            node.value.valueFloatMin = min;
+            node.value.valueFloatMax = max;
+            node.value.valueFloatConstrained = constrained;
+            tree.insertNodeAtPath(node);
         }
-        return PApplet.floor(node.valueFloat);
+        return PApplet.floor(node.value.valueFloat);
     }
 
     public boolean toggle(String path) {
@@ -123,22 +123,22 @@ public class Gui implements UserInputSubscriber {
     }
 
     public boolean toggle(String path, boolean defaultValue) {
-        Node node = tree.findNodeByPathInTree(path);
+        TreeNode node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path, NodeType.TOGGLE);
-            node.valueBooleanDefault = defaultValue;
-            node.valueBoolean = defaultValue;
-            tree.tryRegisterNode(node);
+            node = new TreeNode(path, NodeType.TOGGLE);
+            node.value.valueBooleanDefault = defaultValue;
+            node.value.valueBoolean = defaultValue;
+            tree.insertNodeAtPath(node);
         }
-        return node.valueBoolean;
+        return node.value.valueBoolean;
     }
 
     public boolean button(String path) {
-        Node node = tree.findNodeByPathInTree(path);
+        TreeNode node = tree.findNodeByPathInTree(path);
         if (node == null) {
-            node = new Node(path, path, NodeType.BUTTON);
-            tree.tryRegisterNode(node);
+            node = new TreeNode(path, NodeType.BUTTON);
+            tree.insertNodeAtPath(node);
         }
-        return node.valueBoolean;
+        return node.value.valueBoolean;
     }
 }
