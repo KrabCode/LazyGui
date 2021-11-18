@@ -38,7 +38,7 @@ public class FolderWindow extends Window {
 
     private void updateNodeCoordinates(Node node, PVector pos) {
         node.pos.x = pos.x;
-        node.pos.y = pos.y;
+        node.pos.y = pos.y - titleBarHeight;
         node.size.x = size.x;
         node.size.y = nodeHeight;
     }
@@ -56,6 +56,9 @@ public class FolderWindow extends Window {
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
         super.mousePressed(e, x, y);
+        if(isPointInsideTitleBar(x,y)){
+            return;
+        }
         if(MathUtils.isPointInRect(x,y,pos.x,pos.y + titleBarHeight,size.x, size.y - titleBarHeight)){
             Node clickedNode = tryFindChildNode(x,y);
             if(clickedNode!=null){

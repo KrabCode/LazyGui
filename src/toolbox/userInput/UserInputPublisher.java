@@ -15,7 +15,6 @@ import static processing.core.PApplet.floor;
 public class UserInputPublisher implements KeyListener, MouseListener {
     private static UserInputPublisher singleton;
     private final ArrayList<UserInputSubscriber> subscribers = new ArrayList<>();
-    private UserInputSubscriber focused = null;
 
     float previousMouseX = -1;
     float previousMouseY = -1;
@@ -35,7 +34,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         }
     }
 
-    public static void createSingleton(PApplet app) {
+    public static void createSingleton() {
         if (singleton == null) {
             singleton = new UserInputPublisher();
         }
@@ -43,24 +42,17 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     public static void subscribe(UserInputSubscriber subscriber) {
         singleton.subscribers.add(subscriber);
-        singleton.focused = subscriber;
     }
 
-    public static void setFocus(UserInputSubscriber subscriber) {
-        singleton.focused = subscriber;
+    public static void setFocus(UserInputSubscriber subscriber){
+        singleton.subscribers.remove(subscriber);
+        singleton.subscribers.add(0, subscriber);
     }
 
-    // TODO reuse code using callbacks instead of duplicated code below this
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (focused != null) {
-            focused.keyPressed(e);
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.keyPressed(e);
             if (e.isConsumed()) {
                 break;
@@ -70,13 +62,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (focused != null) {
-            focused.keyReleased(e);
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.keyReleased(e);
             if (e.isConsumed()) {
                 break;
@@ -86,13 +72,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (focused != null) {
-            focused.mouseClicked(e, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseClicked(e, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
@@ -102,13 +82,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (focused != null) {
-            focused.mousePressed(e, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mousePressed(e, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
@@ -118,13 +92,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (focused != null) {
-            focused.mouseReleased(e, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseReleased(e, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
@@ -136,13 +104,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     public void mouseMoved(MouseEvent e) {
         float px = previousMouseX == -1 ? e.getX() : previousMouseX;
         float py = previousMouseY == -1 ? e.getY() : previousMouseY;
-        if (focused != null) {
-            focused.mouseMoved(e, e.getX(), e.getY(), px, py);
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseMoved(e, e.getX(), e.getY(), px, py);
             if (e.isConsumed()) {
                 break;
@@ -156,13 +118,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     public void mouseDragged(MouseEvent e) {
         float px = previousMouseX == -1 ? e.getX() : previousMouseX;
         float py = previousMouseY == -1 ? e.getY() : previousMouseY;
-        if (focused != null) {
-            focused.mouseDragged(e, e.getX(), e.getY(), px, py);
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseDragged(e, e.getX(), e.getY(), px, py);
             if (e.isConsumed()) {
                 break;
@@ -175,13 +131,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     @Override
     public void mouseWheelMoved(MouseEvent e) {
         int value = floor(e.getRotation()[1]);
-        if (focused != null) {
-            focused.mouseWheelMoved(e, value, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseWheelMoved(e, value, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
@@ -191,13 +141,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (focused != null) {
-            focused.mouseEntered(e, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseEntered(e, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;
@@ -207,13 +151,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (focused != null) {
-            focused.mouseExited(e, e.getX(), e.getY());
-        }
         for (UserInputSubscriber subscriber : subscribers) {
-            if (subscriber.equals(focused)) {
-                continue;
-            }
             subscriber.mouseExited(e, e.getX(), e.getY());
             if (e.isConsumed()) {
                 break;

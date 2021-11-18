@@ -29,7 +29,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         GlobalState.init(app);
-        UserInputPublisher.createSingleton(app);
+        UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
 

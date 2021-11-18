@@ -14,7 +14,6 @@ import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
-    int focus = 0;
     protected boolean closeable;
     protected Node node;
     protected PVector pos;
@@ -147,12 +146,8 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isDraggedAround) {
-            if (isPointInsideSketchWindow(x, y)) {
-                pos.x += x - px;
-                pos.y += y - py;
-            } else {
-                isDraggedAround = false;
-            }
+            pos.x += x - px;
+            pos.y += y - py;
             e.setConsumed(true);
         }
     }

@@ -5,8 +5,7 @@ import processing.core.PFont;
 import processing.core.PVector;
 
 public class GlobalState {
-    static GlobalState singleton;
-    public static float cell = 22;
+    public static float cell = 30;
 
     public static PFont font = null;
     public static PApplet app = null;
