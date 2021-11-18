@@ -95,19 +95,20 @@ public class Gui implements UserInputSubscriber {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
             tree.insertNodeAtPath(node);
         }
-        return node.value.valueFloat;
+        return node.valueFloat;
     }
 
     public Node createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
         Folder folder = (Folder) tree.findParentFolderByNodePath(path);
         Node node = new Node(path, NodeType.SLIDER_X, folder);
-        node.value.valueFloatDefault = defaultValue;
-        node.value.valueFloat = defaultValue;
-        node.value.valueFloatMin = min;
-        node.value.valueFloatMax = max;
-        node.value.valueFloatPrecision = defaultPrecision;
-        node.value.valueFloatPrecisionDefault = defaultPrecision;
-        node.value.valueFloatConstrained = constrained;
+        node.valueFloatDefault = defaultValue;
+        node.valueFloat = defaultValue;
+        node.valueFloatMin = min;
+        node.valueFloatMax = max;
+        node.valueFloatPrecision = defaultPrecision;
+        node.valueFloatPrecisionDefault = defaultPrecision;
+        node.valueFloatConstrained = constrained;
+        node.init();
         return node;
     }
 
@@ -129,17 +130,18 @@ public class Gui implements UserInputSubscriber {
             node = createSliderIntNode(path, defaultValue, min, max, constrained);
             tree.insertNodeAtPath(node);
         }
-        return PApplet.floor(node.value.valueFloat);
+        return PApplet.floor(node.valueFloat);
     }
 
     private Node createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         Folder folder = (Folder) tree.findParentFolderByNodePath(path);
         Node node = new Node(path, NodeType.SLIDER_INT_X, folder);
-        node.value.valueFloatDefault = defaultValue;
-        node.value.valueFloat = defaultValue;
-        node.value.valueFloatMin = min;
-        node.value.valueFloatMax = max;
-        node.value.valueFloatConstrained = constrained;
+        node.valueFloatDefault = defaultValue;
+        node.valueFloat = defaultValue;
+        node.valueFloatMin = min;
+        node.valueFloatMax = max;
+        node.valueFloatConstrained = constrained;
+        node.init();
         return node;
     }
 
@@ -153,14 +155,14 @@ public class Gui implements UserInputSubscriber {
             node = createToggleNode(path, defaultValue);
             tree.insertNodeAtPath(node);
         }
-        return node.value.valueBoolean;
+        return node.valueBoolean;
     }
 
     private Node createToggleNode(String path, boolean defaultValue) {
         Folder folder = (Folder) tree.findParentFolderByNodePath(path);
         Node node = new Node(path, NodeType.TOGGLE, folder);
-        node.value.valueBooleanDefault = defaultValue;
-        node.value.valueBoolean = defaultValue;
+        node.valueBooleanDefault = defaultValue;
+        node.valueBoolean = defaultValue;
         return node;
     }
 
@@ -170,7 +172,7 @@ public class Gui implements UserInputSubscriber {
             node = createButtonNode(path);
             tree.insertNodeAtPath(node);
         }
-        return node.value.valueBoolean;
+        return node.valueBoolean;
     }
 
     private Node createButtonNode(String path) {
