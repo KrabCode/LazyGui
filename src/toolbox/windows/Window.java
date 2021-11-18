@@ -1,10 +1,11 @@
-package toolbox.window;
+package toolbox.windows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.*;
+import toolbox.tree.Node;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
@@ -13,19 +14,21 @@ import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
+    int focus = 0;
     protected boolean closeable;
-    protected String name;
+    protected Node node;
     protected PVector pos;
     protected PVector size;
     float cell = GlobalState.cell;
+    float titleBarHeight = cell;
     private boolean hidden = false;
     private boolean isDraggedAround;
     private PVector dragAroundStartedMousePos = new PVector();
 
-    public Window(PVector pos, PVector size, String name, boolean closeable){
+    public Window(PVector pos, PVector size, Node node, boolean closeable){
         this.pos = pos;
         this.size = size;
-        this.name = name;
+        this.node = node;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
     }
@@ -46,7 +49,12 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         drawBackground(pg);
+        pg.popMatrix();
+        pg.pushMatrix();
         drawContent(pg);
+        pg.popMatrix();
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
         drawBorder(pg);
         drawTitleBar(pg);
         if (closeable) {
@@ -78,7 +86,7 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
-        pg.rect(0, 0, size.x, cell);
+        pg.rect(0, 0, size.x, titleBarHeight);
         if(isThisFocused()){
             pg.fill(Palette.selectedTextFill);
         }else{
@@ -86,7 +94,7 @@ public abstract class Window implements UserInputSubscriber {
         }
         pg.textAlign(LEFT);
         int textMarginX = 4;
-        pg.text(name, textMarginX, cell - textMarginX);
+        pg.text(node.name, textMarginX, titleBarHeight - textMarginX);
     }
 
     private void setBorderStrokeBasedOnFocus(PGraphics pg) {

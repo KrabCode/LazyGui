@@ -7,30 +7,30 @@ import static processing.core.PApplet.println;
 
 public class Tree {
     public String name;
-    TreeFolder rootFolder = new TreeFolder("", null);
+    public Folder root = new Folder("", null);
 
 
     public Tree(String name) {
         this.name = name;
     }
 
-    public TreeNode findParentFolderByNodePath(String nodePath){
+    public Node findParentFolderByNodePath(String nodePath){
         String folderPath = getPathWithoutName(nodePath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
     }
 
-    public TreeNode findNodeByPathInTree(String path) {
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(rootFolder);
+    public Node findNodeByPathInTree(String path) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
         while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
+            Node node = queue.poll();
             if (node.path.equals(path)) {
                 return node;
             }
             if (node.type == NodeType.FOLDER) {
-                TreeFolder folder = (TreeFolder) node;
-                for (TreeNode child : folder.children) {
+                Folder folder = (Folder) node;
+                for (Node child : folder.children) {
                     queue.offer(child);
                 }
             }
@@ -41,18 +41,18 @@ public class Tree {
     public void lazyCreateFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
-        TreeFolder parentFolder = null;
+        Folder parentFolder = null;
         for (int i = 0; i < split.length; i++) {
-            TreeNode n = findNodeByPathInTree(runningPath);
+            Node n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
-                    parentFolder = rootFolder;
+                    parentFolder = root;
                 }
-                n = new TreeFolder(runningPath, parentFolder);
+                n = new Folder(runningPath, parentFolder);
                 parentFolder.children.add(n);
-                parentFolder = (TreeFolder) n;
+                parentFolder = (Folder) n;
             }else if (n.type == NodeType.FOLDER) {
-                parentFolder = (TreeFolder) n;
+                parentFolder = (Folder) n;
             }else{
                 println("expected folder based on path but got value node, wtf");
             }
@@ -62,13 +62,13 @@ public class Tree {
         }
     }
 
-    public void insertNodeAtPath(TreeNode node) {
+    public void insertNodeAtPath(Node node) {
         if(findNodeByPathInTree(node.path) != null){
             return;
         }
         String folderPath = getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
-        TreeFolder folder = (TreeFolder) findNodeByPathInTree(folderPath);
+        Folder folder = (Folder) findNodeByPathInTree(folderPath);
         folder.children.add(node);
     }
 

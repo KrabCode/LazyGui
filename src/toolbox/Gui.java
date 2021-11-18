@@ -4,13 +4,14 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.tree.TreeFolder;
-import toolbox.tree.TreeNode;
+import toolbox.tree.Folder;
+import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 import toolbox.tree.Tree;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.window.TreeExplorer;
+import toolbox.windows.FolderWindow;
+import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
 
@@ -34,12 +35,13 @@ public class Gui implements UserInputSubscriber {
 
         tree = new Tree("main tree");
         float cell = GlobalState.cell;
-        TreeExplorer explorer = new TreeExplorer(
+        FolderWindow explorer = new FolderWindow(
                 new PVector(cell, cell),
-                new PVector(cell * 8, cell * 8),
-                tree
+                new PVector(cell * 8, cell * 10),
+                tree.root,
+                false
         );
-        WindowManager.addWindow(explorer);
+        WindowManager.uncoverOrAddWindow(explorer);
 
         lazyResetDisplay();
     }
@@ -88,7 +90,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        TreeNode node = tree.findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
             tree.insertNodeAtPath(node);
@@ -96,9 +98,9 @@ public class Gui implements UserInputSubscriber {
         return node.value.valueFloat;
     }
 
-    public TreeNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        TreeFolder folder = (TreeFolder) tree.findParentFolderByNodePath(path);
-        TreeNode node = new TreeNode(path, NodeType.SLIDER_X, folder);
+    public Node createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
+        Folder folder = (Folder) tree.findParentFolderByNodePath(path);
+        Node node = new Node(path, NodeType.SLIDER_X, folder);
         node.value.valueFloatDefault = defaultValue;
         node.value.valueFloat = defaultValue;
         node.value.valueFloatMin = min;
@@ -122,7 +124,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        TreeNode node = tree.findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderIntNode(path, defaultValue, min, max, constrained);
             tree.insertNodeAtPath(node);
@@ -130,9 +132,9 @@ public class Gui implements UserInputSubscriber {
         return PApplet.floor(node.value.valueFloat);
     }
 
-    private TreeNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        TreeFolder folder = (TreeFolder) tree.findParentFolderByNodePath(path);
-        TreeNode node = new TreeNode(path, NodeType.SLIDER_INT_X, folder);
+    private Node createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
+        Folder folder = (Folder) tree.findParentFolderByNodePath(path);
+        Node node = new Node(path, NodeType.SLIDER_INT_X, folder);
         node.value.valueFloatDefault = defaultValue;
         node.value.valueFloat = defaultValue;
         node.value.valueFloatMin = min;
@@ -146,7 +148,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     public boolean toggle(String path, boolean defaultValue) {
-        TreeNode node = tree.findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createToggleNode(path, defaultValue);
             tree.insertNodeAtPath(node);
@@ -154,16 +156,16 @@ public class Gui implements UserInputSubscriber {
         return node.value.valueBoolean;
     }
 
-    private TreeNode createToggleNode(String path, boolean defaultValue) {
-        TreeFolder folder = (TreeFolder) tree.findParentFolderByNodePath(path);
-        TreeNode node = new TreeNode(path, NodeType.TOGGLE, folder);
+    private Node createToggleNode(String path, boolean defaultValue) {
+        Folder folder = (Folder) tree.findParentFolderByNodePath(path);
+        Node node = new Node(path, NodeType.TOGGLE, folder);
         node.value.valueBooleanDefault = defaultValue;
         node.value.valueBoolean = defaultValue;
         return node;
     }
 
     public boolean button(String path) {
-        TreeNode node = tree.findNodeByPathInTree(path);
+        Node node = tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createButtonNode(path);
             tree.insertNodeAtPath(node);
@@ -171,8 +173,8 @@ public class Gui implements UserInputSubscriber {
         return node.value.valueBoolean;
     }
 
-    private TreeNode createButtonNode(String path) {
-        TreeFolder folder = (TreeFolder) tree.findParentFolderByNodePath(path);
-        return new TreeNode(path, NodeType.BUTTON, folder);
+    private Node createButtonNode(String path) {
+        Folder folder = (Folder) tree.findParentFolderByNodePath(path);
+        return new Node(path, NodeType.BUTTON, folder);
     }
 }
