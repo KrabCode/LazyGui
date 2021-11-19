@@ -34,7 +34,7 @@ public class FolderNode extends Node {
     @Override
     public void nodePressed(float x, float y) {
         super.nodePressed(x, y);
-        WindowManager.uncoverOrAddWindow(new FolderWindow(new PVector(pos.x + size.x + cell, pos.x + cell), new PVector(cell * 8, cell * 8), this, true));
+        WindowManager.uncoverOrAddWindow(new FolderWindow(new PVector(pos.x + size.x + cell, pos.x + cell), new PVector(cell * 8, cell * 3), this, true));
     }
 
 }

@@ -35,7 +35,7 @@ public class Gui implements UserInputSubscriber {
         float cell = GlobalState.cell;
         FolderWindow explorer = new FolderWindow(
                 new PVector(cell, cell),
-                new PVector(cell * 8, cell * 10),
+                new PVector(cell * 8, cell*8),// + tree.root.children.size() * cell),
                 tree.root,
                 false
         );

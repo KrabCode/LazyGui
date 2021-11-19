@@ -9,7 +9,6 @@ public class WindowManager {
     private static WindowManager s;
     private final ArrayList<Window> windows = new ArrayList<>();
     private Window windowToSetFocusOn = null;
-    private final ArrayList<Window> windowsToAdd = new ArrayList<>();
 
     public WindowManager() {
 
@@ -31,13 +30,11 @@ public class WindowManager {
             }
         }
         if(!windowFound){
-            s.windowsToAdd.add(window);
+            s.windows.add(window);
         }
     }
 
     public static void updateAndDrawWindows(PGraphics pg) {
-        s.windows.addAll(s.windowsToAdd);
-        s.windowsToAdd.clear();
         if(s.windowToSetFocusOn != null){
             s.windows.remove(s.windowToSetFocusOn);
             s.windows.add(s.windowToSetFocusOn);

@@ -8,6 +8,7 @@ import processing.core.PApplet;
 public class Main extends PApplet {
     Gui gui;
     PGraphics pg;
+    private boolean record = false;
 
     public static void main(String[] args) {
         PApplet.main("test.Main");
@@ -22,7 +23,7 @@ public class Main extends PApplet {
     public void setup() {
         gui = new Gui(this);
         int margin = 0;
-        surface.setSize(1000, 1000);
+        surface.setSize(800,800);
         surface.setLocation(displayWidth - width - margin, margin);
 //        surface.setAlwaysOnTop(true);
         pg = createGraphics(width, height, P2D);
@@ -37,7 +38,9 @@ public class Main extends PApplet {
         }
     }
 
+    int i = 0;
     float rotation = 0;
+
     public void draw() {
         pg.beginDraw();
         pg.fill(0xFF36393E);
@@ -47,6 +50,7 @@ public class Main extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
+        boolean recordMode = gui.toggle("record", false);
         if(gui.button("log/button")){
             println("button pressed!");
         }
@@ -74,12 +78,30 @@ public class Main extends PApplet {
         clear();
         image(pg, 0, 0);
         image(gui.pg, 0, 0);
+
+        if(recordMode){
+            noCursor();
+            if(mousePressed){
+                stroke(255,0,0);
+            }else{
+                stroke(255);
+            }
+            strokeWeight(10);
+            point(mouseX, mouseY);
+            if(record){
+                save("out/1/" + ++i +".jpg");
+            }
+        }else{
+            cursor();
+        }
+
     }
 
     @Override
     public void keyPressed() {
-        if (key == 'c') {
-            clear();
+        if (key == 'k') {
+            record = !record;
+            println("recording: " + record);
         }
     }
 }

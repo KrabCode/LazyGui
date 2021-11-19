@@ -82,10 +82,8 @@ public class SliderNode extends Node {
         String text = getValueToDisplay().replaceAll(",", ".");
         if (isDragged) {
             updateValue();
-            tryConstrainValue();
-            pg.noStroke();
-            pg.fill(Palette.draggedContentFill);
-            pg.rect(0, 0, size.x, cell);
+            boolean constrainedThisFrame = tryConstrainValue();
+            drawBackgroundScroller(pg, constrainedThisFrame);
         }
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(CENTER, CENTER);
@@ -104,9 +102,28 @@ public class SliderNode extends Node {
         }
     }
 
+    float backgroundScrollX = 0;
+    private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
+        int count = 20;
+        pg.stroke(Palette.draggedContentStroke);
+        pg.strokeWeight(1.99f);
+        if(!constrainedThisFrame){
+            backgroundScrollX += GlobalState.app.mouseX - GlobalState.app.pmouseX;
+        }
+        for (int xi = 0; xi < count; xi++) {
+            float x = map(xi, 0, count, 0, size.x) + backgroundScrollX;
+            while(x < 0){
+                x += size.x;
+            }
+            x = x%size.x;
+            pg.line(x, 0, x, cell);
+        }
+
+    }
+
     public String getValueToDisplay() {
         int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
-        if (abs(valueFloat) > 1000) {
+        if (fractionPadding == 0) {
             return String.valueOf(floor(valueFloat));
         }
         return nf(valueFloat, 0, fractionPadding);
@@ -128,7 +145,6 @@ public class SliderNode extends Node {
         }
         return nf(p);
     }
-
 
     private void increasePrecision() {
         currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
@@ -161,13 +177,26 @@ public class SliderNode extends Node {
     }
 
     private void updateValue() {
-        valueFloat += (GlobalState.app.mouseX - GlobalState.app.pmouseX) * precisionRange.get(currentPrecisionIndex);
+        float delta = (GlobalState.app.mouseX - GlobalState.app.pmouseX) * precisionRange.get(currentPrecisionIndex);
+        valueFloat += delta;
     }
 
-    protected void tryConstrainValue() {
+    protected boolean tryConstrainValue() {
+        boolean constrained = false;
         if (valueFloatConstrained) {
+            if(valueFloat > valueFloatMax || valueFloat < valueFloatMin){
+                constrained = true;
+            }
             valueFloat = constrain(valueFloat, valueFloatMin, valueFloatMax);
         }
+        return constrained;
     }
 
+    @Override
+    public void keyPressedInsideNode(KeyEvent e, float x, float y) {
+        super.keyPressedInsideNode(e, x, y);
+        if(e.getKeyChar() == 'r'){
+            valueFloat = valueFloatDefault;
+        }
+    }
 }

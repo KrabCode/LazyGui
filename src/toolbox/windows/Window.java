@@ -10,19 +10,17 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
 import static processing.core.PApplet.lerp;
-import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
     protected Node node;
     protected PVector pos;
-    protected PVector size;
+    protected PVector size; // TODO resize dynamically to fit contents, (maybe scroll bar?)
     float cell = GlobalState.cell;
     float titleBarHeight = cell;
     private boolean hidden = false;
     private boolean isDraggedAround;
-    private PVector dragAroundStartedMousePos = new PVector();
 
     public Window(PVector pos, PVector size, Node node, boolean closeable){
         this.pos = pos;
@@ -109,11 +107,9 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-//        windowPos.x = constrain(windowPos.x, 0, );
-//        windowPos.y = constrain(windowPos.y, 0, );
         float rightEdge = pg.width - size.x - 1;
         float bottomEdge = pg.height - size.y - 1;
-        float lerpAmt = 0.1f;
+        float lerpAmt = 0.3f;
         if (pos.x < 0) {
             pos.x = lerp(pos.x, 0, lerpAmt);
         }
@@ -139,8 +135,6 @@ public abstract class Window implements UserInputSubscriber {
         }
         if(isPointInsideTitleBar(x,y)){
             isDraggedAround = true;
-            dragAroundStartedMousePos.x = x;
-            dragAroundStartedMousePos.y = y;
         }
     }
 
