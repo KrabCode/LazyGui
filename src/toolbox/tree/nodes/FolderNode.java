@@ -9,6 +9,9 @@ import toolbox.windows.WindowManager;
 
 import java.util.ArrayList;
 
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.RIGHT;
+
 public class FolderNode extends Node {
     public ArrayList<Node> children = new ArrayList<>();
     public FolderWindow window;
@@ -19,7 +22,13 @@ public class FolderNode extends Node {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-
+        fillTextColorBasedOnFocus(pg);
+        pg.textAlign(CENTER,CENTER);
+        pg.text("folder", size.x * 0.5f, size.y * 0.5f);
+        if(mouseOver){
+            pg.textAlign(RIGHT, CENTER);
+            pg.text("open", size.x * 0.95f, size.y * 0.5f);
+        }
     }
 
     @Override

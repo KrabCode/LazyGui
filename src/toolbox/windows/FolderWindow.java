@@ -1,8 +1,10 @@
 package toolbox.windows;
 
+import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.GlobalState;
 import toolbox.MathUtils;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.Node;
@@ -75,6 +77,12 @@ public class FolderWindow extends Window {
         for (Node node : folder.children) {
             node.mouseReleased(x, y);
         }
+        if (isPointInsideContent(x, y)) {
+            Node clickedNode = tryFindChildNode(x, y);
+            if (clickedNode != null) {
+                clickedNode.nodeReleased(x, y);
+            }
+        }
     }
 
     @Override
@@ -86,7 +94,20 @@ public class FolderWindow extends Window {
         if (isPointInsideContent(x, y)) {
             Node clickedNode = tryFindChildNode(x, y);
             if (clickedNode != null) {
-                clickedNode.wheelMovedInsideNode(clickedNode, x, y, dir);
+                clickedNode.mouseWheelMovedInsideNode(x, y, dir);
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        super.keyPressed(keyEvent);
+        float x = GlobalState.app.mouseX;
+        float y = GlobalState.app.mouseY;
+        if (isPointInsideContent(x, y)) {
+            Node clickedNode = tryFindChildNode(x, y);
+            if (clickedNode != null) {
+                clickedNode.keyPressedInsideNode(keyEvent, x, y);
             }
         }
     }

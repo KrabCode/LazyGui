@@ -148,7 +148,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     public boolean toggle(String path, boolean defaultValue) {
-        Node node = tree.findNodeByPathInTree(path);
+        ToggleNode node = (ToggleNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createToggleNode(path, defaultValue);
             tree.insertNodeAtPath(node);
@@ -156,16 +156,16 @@ public class Gui implements UserInputSubscriber {
         return node.valueBoolean;
     }
 
-    private Node createToggleNode(String path, boolean defaultValue) {
+    private ToggleNode createToggleNode(String path, boolean defaultValue) {
         FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
-        Node node = new ToggleNode(path, NodeType.TOGGLE, folder);
+        ToggleNode node = new ToggleNode(path, NodeType.TOGGLE, folder);
         node.valueBooleanDefault = defaultValue;
         node.valueBoolean = defaultValue;
         return node;
     }
 
     public boolean button(String path) {
-        Node node = tree.findNodeByPathInTree(path);
+        ButtonNode node = (ButtonNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createButtonNode(path);
             tree.insertNodeAtPath(node);
@@ -173,7 +173,7 @@ public class Gui implements UserInputSubscriber {
         return node.valueBoolean;
     }
 
-    private Node createButtonNode(String path) {
+    private ButtonNode createButtonNode(String path) {
         FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
         return new ButtonNode(path, NodeType.BUTTON, folder);
     }

@@ -1,5 +1,6 @@
 package toolbox.tree;
 
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
@@ -14,8 +15,6 @@ public abstract class Node {
     public final String path;
     public final String name;
     public final float cell = GlobalState.cell;
-    public boolean valueBooleanDefault = false;
-    public boolean valueBoolean = false;
     public PVector pos = new PVector();
     public PVector size = new PVector();
     public boolean isDragged = false;
@@ -51,14 +50,7 @@ public abstract class Node {
 
     public void drawNode(PGraphics pg) {
         pg.pushMatrix();
-        switch (type) {
-            case SLIDER_X:
-            case SLIDER_INT_X:
-                updateDrawInlineNode(pg);
-                break;
-            default:
-                break;
-        }
+        updateDrawInlineNode(pg);
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         pg.text(name, textX, size.y * 0.5f);
@@ -90,7 +82,15 @@ public abstract class Node {
         isDragged = false;
     }
 
-    public void wheelMovedInsideNode(Node clickedNode, float x, float y, int dir) {
+    public void keyPressedInsideNode(KeyEvent e, float x, float y) {
+
+    }
+
+    public void nodeReleased(float x, float y) {
+
+    }
+
+    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
 
     }
 }

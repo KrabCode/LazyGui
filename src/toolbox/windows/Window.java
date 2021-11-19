@@ -38,22 +38,14 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public void drawWindow(PGraphics pg) {
-        pg.colorMode(HSB, 1, 1, 1, 1);
         pg.textFont(GlobalState.font);
         if (hidden) {
-            pg.endDraw();
             return;
         }
         constrainPosition(pg);
         pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
         drawBackground(pg);
-        pg.popMatrix();
-        pg.pushMatrix();
         drawContent(pg);
-        pg.popMatrix();
-        pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
         drawBorder(pg);
         drawTitleBar(pg);
         if (closeable) {
@@ -63,26 +55,37 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void drawCloseButton(PGraphics pg) {
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
         setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
         pg.rect(size.x - cell, 0, cell, cell);
+        pg.popMatrix();
     }
 
     private void drawBackground(PGraphics pg) {
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
         pg.noStroke();
         pg.fill(Palette.windowContentFill);
         pg.rect(0, cell, size.x, size.y - cell);
+        pg.popMatrix();
     }
 
     protected abstract void drawContent(PGraphics pg);
 
     protected void drawBorder(PGraphics pg) {
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
         setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
         pg.rect(0, cell, size.x, size.y - cell - 1);
+        pg.popMatrix();
     }
 
     protected void drawTitleBar(PGraphics pg) {
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
         pg.rect(0, 0, size.x, titleBarHeight);
@@ -94,6 +97,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.textAlign(LEFT);
         int textMarginX = 4;
         pg.text(node.name, textMarginX, titleBarHeight - textMarginX);
+        pg.popMatrix();
     }
 
     private void setBorderStrokeBasedOnFocus(PGraphics pg) {

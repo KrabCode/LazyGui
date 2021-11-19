@@ -1,5 +1,6 @@
 package toolbox.tree.nodes;
 
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.GlobalState;
 import toolbox.Palette;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
-import static toolbox.GlobalState.cell;
 
 public class SliderNode extends Node {
     public SliderNode(String path, NodeType type, FolderNode parentFolder) {
@@ -70,8 +70,7 @@ public class SliderNode extends Node {
                 currentPrecisionIndex = i;
                 return;
             } else if (
-                    thisValue < p &&
-                            nextValue > p) {
+                    thisValue < p && nextValue > p) {
                 currentPrecisionIndex = i + 1;
                 precisionRange.add(i + 1, p);
                 precisionRangeDigitsAfterDot.put(p, String.valueOf(p).length() - 2);
@@ -152,7 +151,8 @@ public class SliderNode extends Node {
     }
 
     @Override
-    public void wheelMovedInsideNode(Node clickedNode, float x, float y, int dir) {
+    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
+        super.mouseWheelMovedInsideNode(x,y, dir);
         if(dir > 0){
             decreasePrecision();
         }else if(dir < 0){
