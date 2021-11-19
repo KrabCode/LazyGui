@@ -57,9 +57,6 @@ public class FolderWindow extends Window {
     @Override
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
-        if (isPointInsideTitleBar(x, y)) {
-            return;
-        }
         for (Node node : folder.children) {
             node.mouseOver = false;
         }

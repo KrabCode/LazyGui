@@ -54,9 +54,9 @@ public abstract class Node {
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         pg.text(name, textX, size.y * 0.5f);
-        pg.stroke(0.3f);
+        pg.stroke(Palette.standardContentStroke);
+        pg.strokeWeight(1);
         pg.line(0, size.y, size.x, size.y);
-//        pg.line(0, size.y, size.x, 0);
         pg.popMatrix();
     }
 
@@ -67,11 +67,35 @@ public abstract class Node {
     }
 
     protected void fillTextColorBasedOnFocus(PGraphics pg) {
-        if (parent.window.isFocused() && mouseOver) {
+        if (isFocusedAndMouseOver()) {
             pg.fill(Palette.selectedTextFill);
         } else {
             pg.fill(Palette.standardTextFill);
         }
+    }
+
+    protected void strokeContentBasedOnFocus(PGraphics pg) {
+        if (isFocusedAndMouseOver()) {
+            pg.stroke(Palette.selectedContentStroke);
+        } else {
+            pg.stroke(Palette.standardContentStroke);
+        }
+    }
+
+    protected void fillContentBasedOnFocus(PGraphics pg) {
+        if (isFocusedAndMouseOver()) {
+            pg.fill(Palette.selectedContentFill);
+        } else {
+            pg.fill(Palette.standardContentFill);
+        }
+    }
+
+    private boolean isFocused(){
+        return parent.window.isFocused();
+    }
+
+    private boolean isFocusedAndMouseOver() {
+        return parent.window.isFocused() && mouseOver;
     }
 
     public void nodePressed(float x, float y) {

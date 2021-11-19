@@ -39,7 +39,7 @@ public class Gui implements UserInputSubscriber {
                 tree.root,
                 false
         );
-        WindowManager.uncoverOrAddWindow(explorer);
+        WindowManager.addWindow(explorer);
 
         lazyResetDisplay();
     }

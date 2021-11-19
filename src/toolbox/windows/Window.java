@@ -63,9 +63,11 @@ public abstract class Window implements UserInputSubscriber {
 
     private void drawBackground(PGraphics pg) {
         pg.pushMatrix();
+
         pg.translate(pos.x, pos.y);
+
         pg.noStroke();
-        pg.fill(Palette.windowContentFill);
+        pg.fill(Palette.windowContentBackgroundFill);
         pg.rect(0, cell, size.x, size.y - cell);
         pg.popMatrix();
     }
@@ -77,6 +79,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.translate(pos.x, pos.y);
         setBorderStrokeBasedOnFocus(pg);
         pg.noFill();
+        pg.strokeWeight(1);
         pg.rect(0, cell, size.x, size.y - cell - 1);
         pg.popMatrix();
     }
@@ -84,7 +87,7 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.fill(Palette.windowTitleFill);
+        fillWindowBasedOnDragged(pg);
         setBorderStrokeBasedOnFocus(pg);
         pg.rect(0, 0, size.x, titleBarHeight);
         if(isFocused()){
@@ -96,6 +99,14 @@ public abstract class Window implements UserInputSubscriber {
         int textMarginX = 4;
         pg.text(node.name, textMarginX, titleBarHeight - textMarginX);
         pg.popMatrix();
+    }
+
+    private void fillWindowBasedOnDragged(PGraphics pg) {
+        if(isDraggedAround){
+            pg.fill(Palette.draggedWindowTitleFill);
+        }else{
+            pg.fill(Palette.standardWindowTitleFill);
+        }
     }
 
     private void setBorderStrokeBasedOnFocus(PGraphics pg) {
@@ -198,7 +209,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x - cell, titleBarHeight);
+        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {

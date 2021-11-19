@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
+import static toolbox.GlobalState.cell;
 
 public class FolderNode extends Node {
     public ArrayList<Node> children = new ArrayList<>();
@@ -34,7 +35,7 @@ public class FolderNode extends Node {
     @Override
     public void nodePressed(float x, float y) {
         super.nodePressed(x, y);
-        WindowManager.uncoverOrAddWindow(new FolderWindow(new PVector(pos.x + size.x + cell, pos.x + cell), new PVector(cell * 8, cell * 3), this, true));
+        WindowManager.uncoverOrCreateWindow(this, new PVector(pos.x + size.x + cell, pos.x + cell));
     }
 
 }
