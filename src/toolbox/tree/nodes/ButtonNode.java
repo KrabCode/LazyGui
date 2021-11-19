@@ -1,12 +1,11 @@
-package toolbox.tree.valueNodes;
+package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
-import toolbox.tree.Folder;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 
 public class ButtonNode extends Node {
-    public ButtonNode(String path, NodeType button, Folder folder) {
+    public ButtonNode(String path, NodeType button, FolderNode folder) {
         super(path,button,folder);
     }
 

@@ -1,9 +1,8 @@
-package toolbox.tree.valueNodes;
+package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
 import toolbox.GlobalState;
 import toolbox.Palette;
-import toolbox.tree.Folder;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 
@@ -14,7 +13,7 @@ import static processing.core.PApplet.*;
 import static toolbox.GlobalState.cell;
 
 public class SliderNode extends Node {
-    public SliderNode(String path, NodeType type, Folder parentFolder) {
+    public SliderNode(String path, NodeType type, FolderNode parentFolder) {
         super(path, type, parentFolder);
     }
 
@@ -28,11 +27,11 @@ public class SliderNode extends Node {
     public float valueFloatPrecisionDefault = 1;
 
     ArrayList<Float> precisionRange = new ArrayList<>();
-    HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<Float, Integer>();
+    HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     int currentPrecisionIndex;
     int minimumIntPrecisionIndex;
 
-    public void init() {
+    public void initSliderPrecision() {
         initPrecision();
         loadPrecisionFromNode();
     }
@@ -77,6 +76,32 @@ public class SliderNode extends Node {
                 precisionRange.add(i + 1, p);
                 precisionRangeDigitsAfterDot.put(p, String.valueOf(p).length() - 2);
             }
+        }
+    }
+
+    void updateDrawSliderNode(PGraphics pg) {
+        String text = getValueToDisplay().replaceAll(",", ".");
+        if (isDragged) {
+            updateValue();
+            tryConstrainValue();
+            pg.noStroke();
+            pg.fill(Palette.draggedContentFill);
+            pg.rect(0, 0, size.x, cell);
+        }
+        fillTextColorBasedOnFocus(pg);
+        pg.textAlign(CENTER, CENTER);
+        float textMarginX = 5;
+        pg.text(text,
+                size.x * 0.5f,
+                size.y * 0.5f
+        );
+
+        if(mouseOver){
+            pg.textAlign(RIGHT, CENTER);
+            pg.text(getPrecisionToDisplay(),
+                    size.x - textMarginX,
+                    size.y * 0.5f
+            );
         }
     }
 
@@ -126,32 +151,13 @@ public class SliderNode extends Node {
         updateDrawSliderNode(pg);
     }
 
-    void updateDrawSliderNode(PGraphics pg) {
-        String text = getValueToDisplay();
-        if (isDragged) {
-            updateValue();
-            tryConstrainValue();
-            pg.noStroke();
-            pg.fill(Palette.draggedContentFill);
-            pg.rect(0, 0, size.x, cell);
+    @Override
+    public void wheelMovedInsideNode(Node clickedNode, float x, float y, int dir) {
+        if(dir > 0){
+            decreasePrecision();
+        }else if(dir < 0){
+            increasePrecision();
         }
-        fillTextColorBasedOnFocus(pg);
-        pg.textAlign(CENTER, CENTER);
-        float textMarginX = 5;
-        pg.text(text,
-                size.x * 0.5f,
-                size.y * 0.5f
-        );
-
-        boolean isMouseInsideContent = parent.window.isPointInsideContent(GlobalState.app.mouseX, GlobalState.app.mouseY);
-        if (!parent.window.isThisFocused() && !isMouseInsideContent) {
-            return;
-        }
-        pg.textAlign(RIGHT, CENTER);
-        pg.text(getPrecisionToDisplay(),
-                size.x - textMarginX,
-                size.y * 0.5f
-        );
     }
 
     private void updateValue() {

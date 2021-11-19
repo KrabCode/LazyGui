@@ -1,5 +1,7 @@
 package toolbox.tree;
 
+import toolbox.tree.nodes.FolderNode;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,7 +9,7 @@ import static processing.core.PApplet.println;
 
 public class Tree {
     public String name;
-    public Folder root = new Folder("", null);
+    public FolderNode root = new FolderNode("", null);
 
 
     public Tree(String name) {
@@ -29,7 +31,7 @@ public class Tree {
                 return node;
             }
             if (node.type == NodeType.FOLDER) {
-                Folder folder = (Folder) node;
+                FolderNode folder = (FolderNode) node;
                 for (Node child : folder.children) {
                     queue.offer(child);
                 }
@@ -41,18 +43,18 @@ public class Tree {
     public void lazyCreateFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
-        Folder parentFolder = null;
+        FolderNode parentFolder = null;
         for (int i = 0; i < split.length; i++) {
             Node n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
                     parentFolder = root;
                 }
-                n = new Folder(runningPath, parentFolder);
+                n = new FolderNode(runningPath, parentFolder);
                 parentFolder.children.add(n);
-                parentFolder = (Folder) n;
+                parentFolder = (FolderNode) n;
             }else if (n.type == NodeType.FOLDER) {
-                parentFolder = (Folder) n;
+                parentFolder = (FolderNode) n;
             }else{
                 println("expected folder based on path but got value node, wtf");
             }
@@ -68,7 +70,7 @@ public class Tree {
         }
         String folderPath = getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
-        Folder folder = (Folder) findNodeByPathInTree(folderPath);
+        FolderNode folder = (FolderNode) findNodeByPathInTree(folderPath);
         folder.children.add(node);
     }
 

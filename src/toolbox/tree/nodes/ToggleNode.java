@@ -1,12 +1,11 @@
-package toolbox.tree.valueNodes;
+package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
-import toolbox.tree.Folder;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 
 public class ToggleNode extends Node {
-    public ToggleNode(String path, NodeType toggle, Folder folder) {
+    public ToggleNode(String path, NodeType toggle, FolderNode folder) {
         super(path,toggle,folder);
     }
 

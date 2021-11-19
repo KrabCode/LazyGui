@@ -4,27 +4,24 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.Palette;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import toolbox.tree.nodes.FolderNode;
 
 import static processing.core.PApplet.*;
-import static toolbox.tree.NodeType.SLIDER_INT_X;
-import static toolbox.tree.NodeType.SLIDER_X;
 
 public abstract class Node {
     public final NodeType type;
-    public final Folder parent;
+    public final FolderNode parent;
     public final String path;
     public final String name;
-
+    public final float cell = GlobalState.cell;
     public boolean valueBooleanDefault = false;
     public boolean valueBoolean = false;
     public PVector pos = new PVector();
     public PVector size = new PVector();
     public boolean isDragged = false;
+    public boolean mouseOver = false;
 
-    public Node(String path, NodeType type, Folder parentFolder) {
+    public Node(String path, NodeType type, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
@@ -32,7 +29,7 @@ public abstract class Node {
     }
 
     private String getNameFromPath(String path) {
-        if("".equals(path)){
+        if ("".equals(path)) {
             return "root";
         }
         String[] split = path.split("/");
@@ -54,7 +51,7 @@ public abstract class Node {
 
     public void drawNode(PGraphics pg) {
         pg.pushMatrix();
-        switch(type){
+        switch (type) {
             case SLIDER_X:
             case SLIDER_INT_X:
                 updateDrawInlineNode(pg);
@@ -64,7 +61,7 @@ public abstract class Node {
         }
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
-        pg.text(name, textX,  size.y * 0.5f);
+        pg.text(name, textX, size.y * 0.5f);
         pg.stroke(0.3f);
         pg.line(0, size.y, size.x, size.y);
 //        pg.line(0, size.y, size.x, 0);
@@ -78,10 +75,22 @@ public abstract class Node {
     }
 
     protected void fillTextColorBasedOnFocus(PGraphics pg) {
-        if(parent.window.isThisFocused()){
+        if (parent.window.isFocused() && mouseOver) {
             pg.fill(Palette.selectedTextFill);
-        }else{
+        } else {
             pg.fill(Palette.standardTextFill);
         }
+    }
+
+    public void nodePressed(float x, float y) {
+        isDragged = true;
+    }
+
+    public void mouseReleased(float x, float y) {
+        isDragged = false;
+    }
+
+    public void wheelMovedInsideNode(Node clickedNode, float x, float y, int dir) {
+
     }
 }

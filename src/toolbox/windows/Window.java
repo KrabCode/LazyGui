@@ -33,7 +33,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
 
-    public boolean isThisFocused() {
+    public boolean isFocused() {
         return WindowManager.isFocused(this);
     }
 
@@ -86,7 +86,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.fill(Palette.windowTitleFill);
         setBorderStrokeBasedOnFocus(pg);
         pg.rect(0, 0, size.x, titleBarHeight);
-        if(isThisFocused()){
+        if(isFocused()){
             pg.fill(Palette.selectedTextFill);
         }else{
             pg.fill(Palette.standardTextFill);
@@ -97,7 +97,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void setBorderStrokeBasedOnFocus(PGraphics pg) {
-        if (isThisFocused()) {
+        if (isFocused()) {
             pg.stroke(Palette.windowBorderStrokeFocused);
         } else {
             pg.stroke(Palette.windowBorderStroke);
