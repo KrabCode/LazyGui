@@ -33,7 +33,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
 
-    protected boolean isThisFocused() {
+    public boolean isThisFocused() {
         return WindowManager.isFocused(this);
     }
 
@@ -200,7 +200,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x - cell, cell);
+        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x - cell, titleBarHeight);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
@@ -210,11 +210,4 @@ public abstract class Window implements UserInputSubscriber {
     }
 
 
-    protected void fillTextColorBasedOnFocus(PGraphics pg) {
-        if(isThisFocused()){
-            pg.fill(Palette.selectedTextFill);
-        }else{
-            pg.fill(Palette.standardTextFill);
-        }
-    }
 }

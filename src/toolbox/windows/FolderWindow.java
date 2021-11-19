@@ -23,6 +23,7 @@ public class FolderWindow extends Window {
     public FolderWindow(PVector pos, PVector size, Folder folder, boolean closeable) {
         super(pos, size, folder, closeable);
         this.folder = folder;
+        folder.window = this;
     }
 
     float nodeHeight = cell;
@@ -35,67 +36,16 @@ public class FolderWindow extends Window {
     public void drawFolder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.translate(0, cell); // translate under title bar
+//        pg.translate(0, cell); // translate under title bar
         for (int i = 0; i < folder.children.size(); i++) {
             Node node = folder.children.get(i);
             pg.translate(0, nodeHeight);
-            updateNodeCoordinates(node, pg.screenX(0,0), pg.screenY(0,0));
-            drawNode(pg, node);
+            node.updateNodeCoordinates(pg.screenX(0,0), pg.screenY(0,0), size.x, nodeHeight);
+            node.drawNode(pg);
         }
         pg.popMatrix();
     }
 
-    private void updateNodeCoordinates(Node node, float x, float y) {
-        node.pos.x = x;
-        node.pos.y = y;
-        node.size.x = size.x;
-        node.size.y = nodeHeight;
-    }
-
-    float textX = 5;
-    float textY = -3;
-
-    private void drawNode(PGraphics pg, Node node) {
-        fillTextColorBasedOnFocus(pg);
-        pg.textAlign(LEFT, BOTTOM);
-        pg.text(node.name, textX,  textY);
-        pg.stroke(0.3f);
-        pg.line(0,0, size.x, 0);
-        switch(node.type){
-            case SLIDER_X:
-            case SLIDER_INT_X:
-                updateDrawSliderNode(pg, node);
-                break;
-            default:
-                break;
-        }
-    }
-
-    void updateDrawSliderNode(PGraphics pg, Node node){
-        String text = node.getFloatValueToDisplay();
-        pg.text(text, 0 + node.size.x * 0.5f, 0 + textY);
-        if (node.isDragged) {
-            float x = GlobalState.app.mouseX;
-            float px = GlobalState.app.pmouseX;
-            node.valueFloat += (x - px) * node.valueFloatPrecision;
-            pg.noStroke();
-            pg.fill(Palette.draggedContentFill);
-            pg.rect(0, 0, node.size.x, node.size.y);
-            pg.fill(Palette.selectedTextFill);
-//            pg.textAlign(RIGHT, BOTTOM);
-            pg.text(node.getPrecisionToDisplay(), 0 + node.size.x * 0.9f, 0 + textY);
-        }
-    }
-
-    protected void validateValue() {
-        if (node.valueFloatConstrained) {
-            node.valueFloat = constrain(node.valueFloat, node.valueFloatMin, node.valueFloatMax);
-        }
-    }
-
-    protected void validatePrecision() {
-
-    }
 
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
@@ -103,7 +53,7 @@ public class FolderWindow extends Window {
         if(isPointInsideTitleBar(x,y)){
             return;
         }
-        if(MathUtils.isPointInRect(x,y,pos.x,pos.y + titleBarHeight,size.x, size.y - titleBarHeight)){
+        if(isPointInsideContent(x,y)){
             Node clickedNode = tryFindChildNode(x,y);
             if(clickedNode!=null){
                 nodePressed(clickedNode);
