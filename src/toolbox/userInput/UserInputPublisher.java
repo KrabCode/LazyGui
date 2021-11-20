@@ -27,6 +27,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         PSurface surface = GlobalState.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {
             com.jogamp.newt.opengl.GLWindow window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
+
             window.addKeyListener(this);
             window.addMouseListener(this);
         } else {

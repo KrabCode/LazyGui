@@ -24,32 +24,28 @@ public class ToggleNode extends Node {
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         drawToggleHandle(pg);
-        fillTextColorBasedOnFocus(pg);
-        String status = "off";
-        if(valueBoolean){
-            status = "on";
-        }
-        pg.textAlign(RIGHT, CENTER);
-        pg.text(status, size.x * 0.95f, size.y * 0.5f);
     }
 
     private void drawToggleHandle(PGraphics pg) {
         strokeContentBasedOnFocus(pg);
         fillContentBasedOnFocus(pg);
         float handleWidth = size.x * 0.1f;
-        float handleXLeft = size.x * 0.5f - handleWidth * 0.5f;
-        float handleXRight = size.x * 0.5f + handleWidth * 0.5f;
+        float handleXCenter = size.x * 0.9f;
+        float handleXLeft = handleXCenter - handleWidth * 0.5f;
+        float handleXRight = handleXCenter + handleWidth * 0.5f;
+        float lerpAmt = 0.3f;
         if(valueBoolean){
-            handlePosNorm = lerp(handlePosNorm,1, 0.1f);
+            handlePosNorm = lerp(handlePosNorm,1, lerpAmt);
         }else{
             pg.fill(Palette.standardContentFill);
             pg.stroke(Palette.standardContentStroke);
-            handlePosNorm = lerp(handlePosNorm,0, 0.1f);
+            handlePosNorm = lerp(handlePosNorm,0, lerpAmt);
         }
         float handleX = map(handlePosNorm, 0, 1, handleXLeft, handleXRight);
-        float handleY = size.y * 0.5f;
+        float handleY = size.y * 0.52f;
         float handleDiameter = size.y * 0.5f;
-        pg.strokeWeight(5);
+        float handleWeight = 8;
+        pg.strokeWeight(handleWeight);
         pg.line(handleXLeft, handleY, handleXRight, handleY);
         pg.noStroke();
         pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);

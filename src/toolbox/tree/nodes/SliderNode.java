@@ -4,12 +4,13 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import processing.opengl.PShader;
 import toolbox.GlobalState;
 import toolbox.Palette;
+import toolbox.ShaderStore;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +22,8 @@ public class SliderNode extends Node {
     }
 
 
+    private PShader backgroundShader;
+
     public float valueFloat;
     public float valueFloatMin;
     public float valueFloatMax;
@@ -28,16 +31,19 @@ public class SliderNode extends Node {
     public boolean valueFloatConstrained;
     public float valueFloatPrecision = 1;
     public float valueFloatPrecisionDefault = 1;
+    float backgroundScrollX = 0;
 
     PVector mouseDelta = new PVector();
     ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     int currentPrecisionIndex;
     int minimumIntPrecisionIndex;
+    String shaderPath = "sliderBackground.glsl";
 
     public void initSlider() {
         initPrecision();
         loadPrecisionFromNode();
+        ShaderStore.getShader(shaderPath);
     }
 
     private void initPrecision() {
@@ -107,23 +113,18 @@ public class SliderNode extends Node {
         }
     }
 
-    float backgroundScrollX = 0;
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
-        int count = 20;
-        float columnWidth = 2;
-        pg.stroke(Palette.draggedContentStroke);
         if(!constrainedThisFrame){
             backgroundScrollX += mouseDelta.x;
         }
-        for (int xi = 0; xi < count; xi++) {
-            float x = map(xi, 0, count, 0, size.x) + backgroundScrollX;
-            while(x < 2.5f){
-                x += size.x;
-            }
-            x = x% size.x;
-            pg.rect(x, 0, columnWidth, cell);
-        }
-
+        ShaderStore.getShader(shaderPath).set("scrollX", backgroundScrollX);
+        ShaderStore.getShader(shaderPath).set("quadPos", pos.x, pos.y);
+        ShaderStore.getShader(shaderPath).set("quadSize", size.x, size.y);
+        ShaderStore.hotShader(shaderPath, pg);
+        pg.fill(Palette.windowContentBackgroundFill);
+        pg.noStroke();
+        pg.rect(0,1, size.x, size.y);
+        pg.resetShader();
     }
 
     public String getValueToDisplay() {
@@ -208,8 +209,13 @@ public class SliderNode extends Node {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        mouseDelta.x = px - x;
-        mouseDelta.y = py - y;
-        GlobalState.robot.mouseMove(floor(dragStartPos.x), floor(dragStartPos.y));
+        if(isDragged){
+            mouseDelta.x = px - x;
+            mouseDelta.y = py - y;
+        }
+        GlobalState.robot.mouseMove(
+                GlobalState.window.getX() + floor(dragStartPos.x),
+                GlobalState.window.getY() + floor(dragStartPos.y)
+        );
     }
 }

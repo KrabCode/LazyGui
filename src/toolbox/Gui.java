@@ -3,6 +3,7 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PSurface;
 import processing.core.PVector;
 import toolbox.tree.*;
 import toolbox.tree.nodes.*;
@@ -30,7 +31,7 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-
+        ShaderStore.createSingleton();
         tree = new Tree("main tree");
         float cell = GlobalState.cell;
         FolderWindow explorer = new FolderWindow(

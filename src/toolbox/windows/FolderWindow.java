@@ -5,7 +5,7 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
-import toolbox.MathUtils;
+import toolbox.Utils;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.Node;
 
@@ -112,7 +112,7 @@ public class FolderWindow extends Window {
 
     private Node tryFindChildNode(float x, float y) {
         for (Node node : folder.children) {
-            if (MathUtils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
+            if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
                 return node;
             }
         }

@@ -61,11 +61,9 @@ public abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    private void drawBackground(PGraphics pg) {
+    protected void drawBackground(PGraphics pg) {
         pg.pushMatrix();
-
         pg.translate(pos.x, pos.y);
-
         pg.noStroke();
         pg.fill(Palette.windowContentBackgroundFill);
         pg.rect(0, cell, size.x, size.y - cell);
@@ -194,26 +192,26 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideContent(float x, float y) {
-        return MathUtils.isPointInRect(x, y,
+        return Utils.isPointInRect(x, y,
                 pos.x, pos.y + cell,
                 size.x, size.y - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
         PApplet app = GlobalState.app;
-        return MathUtils.isPointInRect(x, y, 0, 0, app.width, app.height);
+        return Utils.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x, size.y);
+        return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, size.y);
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        return MathUtils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
+        return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
-        return MathUtils.isPointInRect(x, y,
+        return Utils.isPointInRect(x, y,
                 pos.x + size.x - cell, pos.y,
                 cell, cell);
     }

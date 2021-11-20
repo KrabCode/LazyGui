@@ -6,6 +6,7 @@ import toolbox.tree.nodes.FolderNode;
 
 import java.util.ArrayList;
 
+import static processing.core.PConstants.CENTER;
 import static toolbox.GlobalState.cell;
 
 public class WindowManager {

@@ -17,16 +17,15 @@ public class Lissajous extends PApplet {
     }
 
     public void settings() {
-        fullScreen(P2D);
+//        fullScreen(P2D);
         smooth(8);
-//        size(600,1000, P2D);
+        size(800,800, P2D);
     }
 
     public void setup() {
         gui = new Gui(this);
         int margin = 0;
-//        surface.setSize(800, 800);
-//        surface.setLocation(displayWidth - width - margin, margin);
+        surface.setLocation(displayWidth - width - margin, margin);
 //        surface.setAlwaysOnTop(true);
         pg = createGraphics(width, height, P2D);
 //        printAvailableFonts();
@@ -45,6 +44,7 @@ public class Lissajous extends PApplet {
 
     public void draw() {
         pg.beginDraw();
+        pg.blendMode(BLEND);
         pg.fill(0xFF36393E);
         pg.noStroke();
         pg.rectMode(CORNER);
@@ -52,23 +52,27 @@ public class Lissajous extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
-        boolean recordMode = gui.toggle("record", false);
-
+        boolean recordMode = gui.toggle("record/record mode", false);
+        boolean customCursor = gui.toggle("record/custom cursor", false);
+        int folderNumber = gui.sliderInt("record/number", 1);
+        int count = gui.sliderIntConstrained("lissajous/count", 800, 1, 10000);
+        float maxAngle = gui.slider("lissajous/max angle", 10, 0.1f);
+        float xMag = gui.slider("lissajous/dist mag", 300);
+        float yMag = gui.slider("lissajous/rot mag", TAU);
+        float xFreq = gui.slider("lissajous/dist freq", TAU);
+        float yFreq = gui.slider("lissajous/rot freq", TAU);
+        float timeDelta = gui.slider("lissajous/time", 0.03f);
         pg.stroke(gui.sliderIntConstrained("stroke", 255, 0, 255));
         pg.strokeWeight(gui.slider("weight", 2, 0.1f));
-
-        int count = gui.sliderIntConstrained("lissajous/count", 800, 1, 1000);
-        float maxAngle = gui.slider("lissajous/max angle", 10, 0.1f);
-        float xMag = gui.slider("lissajous/x mag", 300);
-        float yMag = gui.slider("lissajous/y mag", 300);
-        float xFreq = gui.slider("lissajous/x freq", TAU);
-        float yFreq = gui.slider("lissajous/y freq", TAU);
-        float timeDelta = gui.slider("lissajous/time", 1);
         time += radians(timeDelta);
+        pg.blendMode(ADD);
         for (int i = 0; i < count; i++) {
             float a = map(i, 0, count, 0, maxAngle);
             pg.pushMatrix();
-            pg.translate(xMag * cos(a * xFreq + time), yMag * sin(a * yFreq + time));
+            float x = xMag * cos(a * xFreq + time);
+            float y = yMag * sin(a * yFreq + time);
+            pg.rotate(y);
+            pg.translate(x,0);
             pg.point(0, 0);
             pg.popMatrix();
         }
@@ -79,7 +83,7 @@ public class Lissajous extends PApplet {
         image(pg, 0, 0);
         image(gui.pg, 0, 0);
 
-        if (recordMode) {
+        if(customCursor){
             noCursor();
             if (mousePressed) {
                 stroke(255, 0, 0);
@@ -88,11 +92,13 @@ public class Lissajous extends PApplet {
             }
             strokeWeight(10);
             point(mouseX, mouseY);
-            if (record) {
-                save("out/1/" + ++i + ".jpg");
-            }
-        } else {
+        }else {
             cursor();
+        }
+        if (recordMode) {
+            if (record) {
+                save("out/" + folderNumber + "/" + ++i + ".jpg");
+            }
         }
 
     }
