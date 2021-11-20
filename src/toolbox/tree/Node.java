@@ -52,13 +52,16 @@ public abstract class Node {
 
     public void drawNode(PGraphics pg) {
         pg.pushMatrix();
+        if(mouseOver){
+            pg.noStroke();
+            pg.fill(Palette.contentBackgroundFocusedFill);
+            pg.rect(0,0,size.x,size.y);
+        }
         updateDrawInlineNode(pg);
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         pg.text(name, textX, size.y * 0.5f);
-        pg.stroke(Palette.standardContentStroke);
-        pg.strokeWeight(1);
-        pg.line(0, size.y, size.x, size.y);
+
         pg.popMatrix();
     }
 

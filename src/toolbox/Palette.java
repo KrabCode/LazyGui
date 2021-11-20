@@ -2,10 +2,12 @@ package toolbox;
 
 public class Palette {
     public static int windowBorderStroke = 0xFF787878;
-    public static int windowBorderStrokeFocused = 0xFFFFFFFF;
+    public static int windowBorderStrokeFocused = 0xFF787878;
     public static int standardWindowTitleFill = 0x80000000;
-    public static int draggedWindowTitleFill = 0xFF808080;
-    public static int windowContentBackgroundFill = 0x80000000;
+    public static int draggedWindowTitleFill = 0xFF2F2F2F;
+
+    public static int contentBackgroundFill = 0x80000000;
+    public static int contentBackgroundFocusedFill = 0xFF2F2F2F;
 
     public static int draggedContentStroke = 0xFF606060;
     public static int standardTextFill = 0xFFB0B0B0;

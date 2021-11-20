@@ -56,7 +56,6 @@ public class SliderNode extends Node {
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
         precisionRange.add(1000.0f);
-        precisionRange.add(10000.0f);
         currentPrecisionIndex = 4;
         minimumIntPrecisionIndex = 4;
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
@@ -68,7 +67,6 @@ public class SliderNode extends Node {
         precisionRangeDigitsAfterDot.put(10f, 0);
         precisionRangeDigitsAfterDot.put(100f, 0);
         precisionRangeDigitsAfterDot.put(1000f, 0);
-        precisionRangeDigitsAfterDot.put(10000f, 0);
     }
 
     private void loadPrecisionFromNode() {
@@ -90,7 +88,7 @@ public class SliderNode extends Node {
 
     void updateDrawSliderNode(PGraphics pg) {
         String text = getValueToDisplay().replaceAll(",", ".");
-        if (isDragged) {
+        if (isDragged || mouseOver) {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
@@ -117,13 +115,16 @@ public class SliderNode extends Node {
         if(!constrainedThisFrame){
             backgroundScrollX += mouseDelta.x;
         }
-        ShaderStore.getShader(shaderPath).set("scrollX", backgroundScrollX);
-        ShaderStore.getShader(shaderPath).set("quadPos", pos.x, pos.y);
-        ShaderStore.getShader(shaderPath).set("quadSize", size.x, size.y);
+        PShader shader = ShaderStore.getShader(shaderPath);
+        shader.set("scrollX", backgroundScrollX);
+        shader.set("quadPos", pos.x, pos.y);
+        shader.set("quadPos", pos.x, pos.y);
+        shader.set("quadSize", size.x, size.y);
+        shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         ShaderStore.hotShader(shaderPath, pg);
-        pg.fill(Palette.windowContentBackgroundFill);
+        pg.fill(Palette.contentBackgroundFill);
         pg.noStroke();
-        pg.rect(0,1, size.x, size.y);
+        pg.rect(0,1, size.x, size.y-1);
         pg.resetShader();
     }
 

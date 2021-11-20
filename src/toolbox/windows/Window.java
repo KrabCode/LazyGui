@@ -65,7 +65,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.noStroke();
-        pg.fill(Palette.windowContentBackgroundFill);
+        pg.fill(Palette.contentBackgroundFill);
         pg.rect(0, cell, size.x, size.y - cell);
         pg.popMatrix();
     }

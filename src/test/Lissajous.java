@@ -10,6 +10,9 @@ import toolbox.Gui;
 public class Lissajous extends PApplet {
     Gui gui;
     PGraphics pg;
+    int i = 0;
+    float time = 0;
+
     private boolean record = false;
 
     public static void main(String[] args) {
@@ -17,16 +20,16 @@ public class Lissajous extends PApplet {
     }
 
     public void settings() {
-//        fullScreen(P2D);
+        fullScreen(P2D);
         smooth(8);
-        size(800,800, P2D);
     }
 
     public void setup() {
         gui = new Gui(this);
         int margin = 0;
+        surface.setSize(1000,1000);
         surface.setLocation(displayWidth - width - margin, margin);
-//        surface.setAlwaysOnTop(true);
+        surface.setAlwaysOnTop(true);
         pg = createGraphics(width, height, P2D);
 //        printAvailableFonts();
     }
@@ -39,9 +42,6 @@ public class Lissajous extends PApplet {
         }
     }
 
-    int i = 0;
-    float time = 0;
-
     public void draw() {
         pg.beginDraw();
         pg.blendMode(BLEND);
@@ -52,6 +52,7 @@ public class Lissajous extends PApplet {
         pg.pushMatrix();
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
+
         boolean recordMode = gui.toggle("record/record mode", false);
         boolean customCursor = gui.toggle("record/custom cursor", false);
         int folderNumber = gui.sliderInt("record/number", 1);
