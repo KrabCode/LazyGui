@@ -83,7 +83,7 @@ public class Gui implements UserInputSubscriber {
         return slider(path, defaultValue, 0.1f, min, max, true);
     }
 
-    public float slider(String path, int defaultValue, float defaultPrecision) {
+    public float slider(String path, float defaultValue, float defaultPrecision) {
         return slider(path, defaultValue, defaultPrecision, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
@@ -106,7 +106,7 @@ public class Gui implements UserInputSubscriber {
         node.valueFloatPrecision = defaultPrecision;
         node.valueFloatPrecisionDefault = defaultPrecision;
         node.valueFloatConstrained = constrained;
-        node.initSliderPrecision();
+        node.initSlider();
         return node;
     }
 
@@ -139,7 +139,7 @@ public class Gui implements UserInputSubscriber {
         node.valueFloatMin = min;
         node.valueFloatMax = max;
         node.valueFloatConstrained = constrained;
-        node.initSliderPrecision();
+        node.initSlider();
         return node;
     }
 

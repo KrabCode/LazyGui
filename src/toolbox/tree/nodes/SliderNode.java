@@ -1,12 +1,15 @@
 package toolbox.tree.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.Palette;
 import toolbox.tree.Node;
 import toolbox.tree.NodeType;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,12 +29,13 @@ public class SliderNode extends Node {
     public float valueFloatPrecision = 1;
     public float valueFloatPrecisionDefault = 1;
 
+    PVector mouseDelta = new PVector();
     ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     int currentPrecisionIndex;
     int minimumIntPrecisionIndex;
 
-    public void initSliderPrecision() {
+    public void initSlider() {
         initPrecision();
         loadPrecisionFromNode();
     }
@@ -84,6 +88,7 @@ public class SliderNode extends Node {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
+            mouseDelta.setMag(0);
         }
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(CENTER, CENTER);
@@ -105,18 +110,18 @@ public class SliderNode extends Node {
     float backgroundScrollX = 0;
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
         int count = 20;
+        float columnWidth = 2;
         pg.stroke(Palette.draggedContentStroke);
-        pg.strokeWeight(1.99f);
         if(!constrainedThisFrame){
-            backgroundScrollX += GlobalState.app.mouseX - GlobalState.app.pmouseX;
+            backgroundScrollX += mouseDelta.x;
         }
         for (int xi = 0; xi < count; xi++) {
             float x = map(xi, 0, count, 0, size.x) + backgroundScrollX;
-            while(x < 0){
+            while(x < 2.5f){
                 x += size.x;
             }
-            x = x%size.x;
-            pg.line(x, 0, x, cell);
+            x = x% size.x;
+            pg.rect(x, 0, columnWidth, cell);
         }
 
     }
@@ -177,7 +182,7 @@ public class SliderNode extends Node {
     }
 
     private void updateValue() {
-        float delta = (GlobalState.app.mouseX - GlobalState.app.pmouseX) * precisionRange.get(currentPrecisionIndex);
+        float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
         valueFloat += delta;
     }
 
@@ -198,5 +203,13 @@ public class SliderNode extends Node {
         if(e.getKeyChar() == 'r'){
             valueFloat = valueFloatDefault;
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragged(e, x, y, px, py);
+        mouseDelta.x = px - x;
+        mouseDelta.y = py - y;
+        GlobalState.robot.mouseMove(floor(dragStartPos.x), floor(dragStartPos.y));
     }
 }

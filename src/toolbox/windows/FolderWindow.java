@@ -27,6 +27,7 @@ public class FolderWindow extends Window {
     }
 
     public void drawFolder(PGraphics pg) {
+        size.y = cell + cell * folder.children.size();
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.translate(0, titleBarHeight);
@@ -116,5 +117,15 @@ public class FolderWindow extends Window {
             }
         }
         return null;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragged(e, x, y, px, py);
+        for(Node child : folder.children){
+            if(child.isDragged){
+                child.mouseDragged(e, x, y, px, py);
+            }
+        }
     }
 }

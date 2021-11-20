@@ -1,6 +1,7 @@
 package toolbox.tree;
 
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
@@ -17,6 +18,7 @@ public abstract class Node {
     public final float cell = GlobalState.cell;
     public PVector pos = new PVector();
     public PVector size = new PVector();
+    protected PVector dragStartPos = new PVector();
     public boolean isDragged = false;
     public boolean mouseOver = false;
 
@@ -100,6 +102,8 @@ public abstract class Node {
 
     public void nodePressed(float x, float y) {
         isDragged = true;
+        dragStartPos.x = x;
+        dragStartPos.y = y;
     }
 
     public void mouseReleased(float x, float y) {
@@ -115,6 +119,10 @@ public abstract class Node {
     }
 
     public void mouseWheelMovedInsideNode(float x, float y, int dir) {
+
+    }
+
+    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

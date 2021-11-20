@@ -39,7 +39,7 @@ public class WindowManager {
         if(!windowFound){
             singleton.windows.add(new FolderWindow(
                     pos,
-                    new PVector(cell * 8, cell * 3), // TODO find by counting nodes
+                    new PVector(cell * 8, cell * 1),
                     folderNode, true));
         }
     }
