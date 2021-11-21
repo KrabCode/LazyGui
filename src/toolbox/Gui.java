@@ -7,7 +7,11 @@ import processing.core.PVector;
 import toolbox.tree.*;
 import toolbox.tree.nodes.*;
 import toolbox.tree.nodes.color.Color;
-import toolbox.tree.nodes.color.ColorPickerNode;
+import toolbox.tree.nodes.color.ColorPickerFolderNode;
+import toolbox.tree.nodes.simple_clickables.ButtonNode;
+import toolbox.tree.nodes.simple_clickables.ToggleNode;
+import toolbox.tree.nodes.sliders.SliderIntNode;
+import toolbox.tree.nodes.sliders.SliderNode;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
@@ -29,7 +33,7 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
-        GlobalState.init(app);
+        GlobalState.init(this, app);
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
@@ -186,7 +190,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm) {
-        ColorPickerNode node = (ColorPickerNode) tree.findNodeByPathInTree(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
         if(node == null){
             node = createColorPickerNode(path, redNorm,greenNorm,blueNorm);
             tree.insertNodeAtItsPath(node);
@@ -194,14 +198,14 @@ public class Gui implements UserInputSubscriber {
         return node.getColor();
     }
 
-    private ColorPickerNode createColorPickerNode(String path, float r, float g, float b) {
-        ColorPickerNode node = createColorPickerNode(path);
+    private ColorPickerFolderNode createColorPickerNode(String path, float r, float g, float b) {
+        ColorPickerFolderNode node = createColorPickerNode(path);
         node.initWithRGB(r,g,b);
         return node;
     }
 
-    private ColorPickerNode createColorPickerNode(String path){
+    private ColorPickerFolderNode createColorPickerNode(String path){
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        return new ColorPickerNode(path, folder);
+        return new ColorPickerFolderNode(path, folder);
     }
 }

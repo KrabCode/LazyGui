@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.*;
-import toolbox.tree.Node;
+import toolbox.tree.nodes.Node;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 

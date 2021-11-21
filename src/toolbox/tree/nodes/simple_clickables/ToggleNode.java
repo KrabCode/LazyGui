@@ -1,18 +1,18 @@
-package toolbox.tree.nodes;
+package toolbox.tree.nodes.simple_clickables;
 
 import processing.core.PGraphics;
 import toolbox.Palette;
-import toolbox.tree.Node;
-import toolbox.tree.NodeType;
+import toolbox.tree.nodes.FolderNode;
+import toolbox.tree.nodes.ValueNode;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
 
-public class ToggleNode extends Node {
+public class ToggleNode extends ValueNode {
 
 
     public ToggleNode(String path, FolderNode folder) {
-        super(NodeType.VALUE, path, folder);
+        super(path, folder);
     }
 
     public boolean valueBooleanDefault = false;

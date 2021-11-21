@@ -1,4 +1,4 @@
-package toolbox.tree;
+package toolbox.tree.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -6,7 +6,6 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.Palette;
-import toolbox.tree.nodes.FolderNode;
 
 import static processing.core.PApplet.*;
 

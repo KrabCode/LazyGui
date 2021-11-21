@@ -2,8 +2,6 @@ package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.tree.Node;
-import toolbox.tree.NodeType;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
@@ -15,8 +13,8 @@ public class FolderNode extends Node {
     public ArrayList<Node> children = new ArrayList<>();
     public FolderWindow window;
 
-    public FolderNode(NodeType type, String path, FolderNode parent) {
-        super(type, path, parent);
+    public FolderNode(String path, FolderNode parent) {
+        super(NodeType.FOLDER, path, parent);
     }
 
     @Override

@@ -16,12 +16,14 @@ public class GlobalState {
 
     public static PFont font = null;
     public static PApplet app = null;
+    public static Gui gui;
     public static Robot robot;
     public static GLWindow window;
     public static String libraryPath;
     public static PGraphics colorProvider;
 
-    public static void init(PApplet app){
+    public static void init(Gui gui, PApplet app){
+        GlobalState.gui = gui;
         GlobalState.app = app;
         GlobalState.font = app.createFont("Calibri", 20);
 

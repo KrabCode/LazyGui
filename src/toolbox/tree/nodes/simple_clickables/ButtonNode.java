@@ -1,15 +1,15 @@
-package toolbox.tree.nodes;
+package toolbox.tree.nodes.simple_clickables;
 
 import processing.core.PGraphics;
-import toolbox.tree.Node;
-import toolbox.tree.NodeType;
+import toolbox.tree.nodes.FolderNode;
+import toolbox.tree.nodes.ValueNode;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 
-public class ButtonNode extends Node {
+public class ButtonNode extends ValueNode {
     public ButtonNode(String path, FolderNode folder) {
-        super(NodeType.VALUE, path, folder);
+        super(path, folder);
     }
 
     public boolean valueBoolean = false;

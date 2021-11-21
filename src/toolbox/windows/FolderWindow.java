@@ -7,9 +7,7 @@ import processing.core.PVector;
 import toolbox.GlobalState;
 import toolbox.Utils;
 import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.Node;
-
-import static processing.core.PConstants.CORNER;
+import toolbox.tree.nodes.Node;
 
 /**
  * A FolderWindow is the only visible GUI element

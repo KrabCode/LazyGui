@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.nodes.sliders;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -8,21 +8,18 @@ import processing.opengl.PShader;
 import toolbox.GlobalState;
 import toolbox.Palette;
 import toolbox.ShaderStore;
-import toolbox.tree.Node;
-import toolbox.tree.NodeType;
+import toolbox.tree.nodes.FolderNode;
+import toolbox.tree.nodes.ValueNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
 
-public class SliderNode extends Node {
+public class SliderNode extends ValueNode {
     public SliderNode(String path, FolderNode parentFolder) {
-        super(NodeType.VALUE, path, parentFolder);
+        super(path, parentFolder);
     }
-
-
-    private PShader backgroundShader;
 
     public float valueFloat;
     public float valueFloatMin;

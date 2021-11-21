@@ -4,8 +4,9 @@ import processing.core.PGraphics;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.nodes.ValueNode;
 
-public class HueNode extends ValueNode {
-    public HueNode(String path, FolderNode parentFolder) {
+public class BrightnessNode extends ValueNode {
+
+    public BrightnessNode(String path, FolderNode parentFolder) {
         super(path, parentFolder);
     }
 
