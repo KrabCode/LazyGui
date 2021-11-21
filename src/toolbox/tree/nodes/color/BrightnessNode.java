@@ -4,14 +4,18 @@ import processing.core.PGraphics;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.nodes.ValueNode;
 
-public class BrightnessNode extends ValueNode {
+import static processing.core.PApplet.nf;
 
-    public BrightnessNode(String path, FolderNode parentFolder) {
+public class BrightnessNode extends ColorValueNode {
+
+
+
+    public BrightnessNode(String path, ColorPickerFolderNode parentFolder) {
         super(path, parentFolder);
     }
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-
+        drawRightText(pg, nf(parentColorPickerFolder.color.br, 0, colorValueDigitsAfterDot));
     }
 }

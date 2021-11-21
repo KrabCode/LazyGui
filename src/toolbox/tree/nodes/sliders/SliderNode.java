@@ -93,13 +93,7 @@ public class SliderNode extends ValueNode {
             mouseDelta.x = 0;
             mouseDelta.y = 0;
         }
-        fillTextColorBasedOnFocus(pg);
-        pg.textAlign(RIGHT, CENTER);
-        float textMarginX = 5;
-        pg.text(valueText,
-                size.x - textMarginX,
-                size.y * 0.5f
-        );
+        drawRightText(pg, valueText);
 /*
         if(mouseOver){
             pg.textAlign(RIGHT, CENTER);
@@ -109,6 +103,7 @@ public class SliderNode extends ValueNode {
             );
         }*/
     }
+
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
         if(!constrainedThisFrame){

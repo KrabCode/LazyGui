@@ -22,16 +22,18 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder) {
         super(path, parentFolder);
-
+        // I want more freedom to draw this than just identical rows,
+        // consider setting a node height
+        // or draw preview without using nodes and translate further down for the automatic node traversal
         previewNode = new ColorPreviewNode(path + "/preview", this);
         hexNode = new HexNode(path + "/hex", this);
         hueNode = new HueNode(path + "/hue", this);
         satNode = new SaturationNode(path + "/sat", this);
         brNode = new BrightnessNode(path + "/br", this);
         alphaNode = new AlphaNode(path + "/alpha", this);
-        redNode = new PrimaryColorNode(path + "/red", this, PrimaryColor.RED);
-        greenNode = new PrimaryColorNode(path + "/green", this, PrimaryColor.GREEN);
-        blueNode = new PrimaryColorNode(path + "/blue", this, PrimaryColor.BLUE);
+        redNode = new PrimaryColorNode(path + "/red", this, PrimaryColorType.RED);
+        greenNode = new PrimaryColorNode(path + "/green", this, PrimaryColorType.GREEN);
+        blueNode = new PrimaryColorNode(path + "/blue", this, PrimaryColorType.BLUE);
         children.add(previewNode);
         children.add(hexNode);
         children.add(hueNode);

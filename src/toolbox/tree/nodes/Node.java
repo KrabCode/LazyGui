@@ -90,7 +90,7 @@ public abstract class Node {
 
     }
 
-    protected void fillTextColorBasedOnFocus(PGraphics pg) {
+    public void fillTextColorBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
             pg.fill(Palette.selectedTextFill);
         } else {
@@ -112,6 +112,16 @@ public abstract class Node {
         } else {
             pg.fill(Palette.standardContentFill);
         }
+    }
+
+    public void drawRightText(PGraphics pg, String text) {
+        fillTextColorBasedOnFocus(pg);
+        pg.textAlign(RIGHT, CENTER);
+        float textMarginX = 5;
+        pg.text(text,
+                size.x - textMarginX,
+                size.y * 0.5f
+        );
     }
 
     private boolean isFocused(){

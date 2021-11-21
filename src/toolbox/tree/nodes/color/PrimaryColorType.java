@@ -1,6 +1,6 @@
 package toolbox.tree.nodes.color;
 
-public enum PrimaryColor {
+public enum PrimaryColorType {
     RED,
     GREEN,
     BLUE
