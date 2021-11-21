@@ -26,7 +26,7 @@ public abstract class Node {
     public boolean isDragged = false;
     public boolean mouseOver = false;
 
-    public Node(String path, NodeType type, FolderNode parentFolder) {
+    public Node(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
@@ -66,17 +66,23 @@ public abstract class Node {
      * @param pg PGraphics to draw to
      */
     public void drawNode(PGraphics pg) {
+        pg.pushStyle();
         pg.pushMatrix();
         if(mouseOver){
             pg.noStroke();
             pg.fill(Palette.contentBackgroundFocusedFill);
             pg.rect(0,0,size.x,size.y);
         }
+        pg.pushMatrix();
+        pg.pushStyle();
         updateDrawInlineNode(pg);
+        pg.popMatrix();
+        pg.popStyle();
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         pg.text(name, textX, size.y * 0.5f);
         pg.popMatrix();
+        pg.popStyle();
     }
 
     protected abstract void updateDrawInlineNode(PGraphics pg);

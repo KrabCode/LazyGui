@@ -17,8 +17,8 @@ import java.util.HashMap;
 import static processing.core.PApplet.*;
 
 public class SliderNode extends Node {
-    public SliderNode(String path, NodeType type, FolderNode parentFolder) {
-        super(path, type, parentFolder);
+    public SliderNode(String path, FolderNode parentFolder) {
+        super(NodeType.VALUE, path, parentFolder);
     }
 
 
@@ -82,6 +82,11 @@ public class SliderNode extends Node {
         }
     }
 
+    @Override
+    protected void updateDrawInlineNode(PGraphics pg) {
+        updateDrawSliderNode(pg);
+    }
+
     void updateDrawSliderNode(PGraphics pg) {
         String valueText = getValueToDisplay().replaceAll(",", ".");
         if (isDragged || mouseOver) {
@@ -117,7 +122,7 @@ public class SliderNode extends Node {
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);
-        shader.set("windowSize", (float) GlobalState.app.width, (float) GlobalState.app.height);
+//        shader.set("windowSize", (float) GlobalState.app.width, (float) GlobalState.app.height);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         ShaderStore.hotShader(shaderPath, pg);
         pg.fill(Palette.contentBackgroundFill);
@@ -151,6 +156,16 @@ public class SliderNode extends Node {
         return nf(p);
     }
 
+    @Override
+    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
+        super.mouseWheelMovedInsideNode(x,y, dir);
+        if(dir > 0){
+            decreasePrecision();
+        }else if(dir < 0){
+            increasePrecision();
+        }
+    }
+
     private void increasePrecision() {
         currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
         setPrecisionToNode();
@@ -164,21 +179,6 @@ public class SliderNode extends Node {
     protected void setPrecisionToNode() {
         valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
         validatePrecision();
-    }
-
-    @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
-        updateDrawSliderNode(pg);
-    }
-
-    @Override
-    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
-        super.mouseWheelMovedInsideNode(x,y, dir);
-        if(dir > 0){
-            decreasePrecision();
-        }else if(dir < 0){
-            increasePrecision();
-        }
     }
 
     private void updateValue() {

@@ -16,7 +16,7 @@ public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
     protected Node node;
     protected PVector pos;
-    protected PVector size; // TODO resize dynamically to fit contents, (maybe scroll bar?)
+    protected PVector size;
     float cell = GlobalState.cell;
     float titleBarHeight = cell;
     private boolean hidden = false;

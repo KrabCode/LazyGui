@@ -10,30 +10,27 @@ import toolbox.windows.WindowManager;
 import java.util.ArrayList;
 
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.RIGHT;
-import static toolbox.GlobalState.cell;
 
 public class FolderNode extends Node {
     public ArrayList<Node> children = new ArrayList<>();
     public FolderWindow window;
 
-    public FolderNode(String path, FolderNode parent) {
-        super(path, NodeType.FOLDER, parent);
+    public FolderNode(NodeType type, String path, FolderNode parent) {
+        super(type, path, parent);
     }
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         strokeContentBasedOnFocus(pg);
+        pg.fill(0);
+        pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
+        float rectSize = cell * 0.5f;
+        pg.translate(1,1);
+        pg.rectMode(CENTER);
+        pg.rect(0,0,rectSize, rectSize);
+        pg.translate(-2,-2);
         pg.noFill();
-
-        pg.pushMatrix();
-        pg.translate(size.x * 0.95f, size.y * 0.5f);
-        float rectSize = size.y * 0.25f;
-        pg.translate(-1,-1);
-        pg.rect(-rectSize*0.5f,-rectSize*0.5f,rectSize, rectSize);
-        pg.translate(2,2);
-        pg.rect(-rectSize*0.5f,-rectSize*0.5f,rectSize, rectSize);
-        pg.popMatrix();
+        pg.rect(0,0,rectSize, rectSize);
     }
 
     @Override

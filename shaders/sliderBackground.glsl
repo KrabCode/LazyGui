@@ -1,7 +1,7 @@
 
 uniform vec2 quadPos;
 uniform vec2 quadSize;
-uniform vec2 windowSize;
+//uniform vec2 windowSize;
 uniform float time;
 uniform float scrollX;
 uniform float precisionNormalized;

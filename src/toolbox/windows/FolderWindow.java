@@ -9,7 +9,13 @@ import toolbox.Utils;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.Node;
 
-// GUI element that lets the user see nodes incl. folders to click on and alter
+import static processing.core.PConstants.CORNER;
+
+/**
+ * A FolderWindow is the only visible GUI element
+ * lets the user see its child nodes including folders and interact with them
+ * to either change a node value or open a new FolderWindow
+*/
 public class FolderWindow extends Window {
     public final FolderNode folder;
 
@@ -34,7 +40,11 @@ public class FolderWindow extends Window {
         for (int i = 0; i < folder.children.size(); i++) {
             Node node = folder.children.get(i);
             node.updateNodeCoordinates(pg.screenX(0, 0), pg.screenY(0, 0), size.x, nodeHeight);
+            pg.pushMatrix();
+            pg.pushStyle();
             node.drawNode(pg);
+            pg.popMatrix();
+            pg.popStyle();
             pg.translate(0, nodeHeight);
         }
         pg.popMatrix();

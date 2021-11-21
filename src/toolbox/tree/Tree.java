@@ -9,14 +9,13 @@ import static processing.core.PApplet.println;
 
 public class Tree {
     public String name;
-    public FolderNode root = new FolderNode("", null);
-
+    public FolderNode root = new FolderNode(NodeType.FOLDER, "", null);
 
     public Tree(String name) {
         this.name = name;
     }
 
-    public Node findParentFolderByNodePath(String nodePath){
+    public Node getLazyInitParentFolderByPath(String nodePath){
         String folderPath = getPathWithoutName(nodePath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
@@ -50,7 +49,7 @@ public class Tree {
                 if (parentFolder == null) {
                     parentFolder = root;
                 }
-                n = new FolderNode(runningPath, parentFolder);
+                n = new FolderNode(NodeType.FOLDER, runningPath, parentFolder);
                 parentFolder.children.add(n);
                 parentFolder = (FolderNode) n;
             }else if (n.type == NodeType.FOLDER) {
@@ -64,7 +63,7 @@ public class Tree {
         }
     }
 
-    public void insertNodeAtPath(Node node) {
+    public void insertNodeAtItsPath(Node node) {
         if(findNodeByPathInTree(node.path) != null){
             return;
         }

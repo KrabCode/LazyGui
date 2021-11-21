@@ -3,9 +3,12 @@ package toolbox;
 import com.jogamp.newt.opengl.GLWindow;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PGraphics;
 import processing.core.PSurface;
 
 import java.awt.*;
+
+import static processing.core.PConstants.P2D;
 
 
 public class GlobalState {
@@ -16,12 +19,13 @@ public class GlobalState {
     public static Robot robot;
     public static GLWindow window;
     public static String libraryPath;
-
+    public static PGraphics colorProvider;
 
     public static void init(PApplet app){
         GlobalState.app = app;
         GlobalState.font = app.createFont("Calibri", 20);
 
+        colorProvider = app.createGraphics(256,256, P2D);
 
         PSurface surface = GlobalState.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {

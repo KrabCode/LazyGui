@@ -7,14 +7,12 @@ import toolbox.tree.NodeType;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.RIGHT;
 
 public class ToggleNode extends Node {
 
 
-    public ToggleNode(String path, NodeType toggle, FolderNode folder) {
-        super(path,toggle,folder);
+    public ToggleNode(String path, FolderNode folder) {
+        super(NodeType.VALUE, path, folder);
     }
 
     public boolean valueBooleanDefault = false;

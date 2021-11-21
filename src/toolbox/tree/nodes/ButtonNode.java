@@ -8,8 +8,8 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.RIGHT;
 
 public class ButtonNode extends Node {
-    public ButtonNode(String path, NodeType button, FolderNode folder) {
-        super(path,button,folder);
+    public ButtonNode(String path, FolderNode folder) {
+        super(NodeType.VALUE, path, folder);
     }
 
     public boolean valueBoolean = false;

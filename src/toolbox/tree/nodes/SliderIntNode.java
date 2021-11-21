@@ -7,8 +7,8 @@ public class SliderIntNode extends SliderNode {
 
     float minimumIntPrecision = 0.1f;
 
-    public SliderIntNode(String path, NodeType type, FolderNode parentFolder) {
-        super(path, type, parentFolder);
+    public SliderIntNode(String path, FolderNode parentFolder) {
+        super(path, parentFolder);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Lissajous extends PApplet {
 
     public void settings() {
         fullScreen(P2D);
-        smooth(8);
+//        smooth(8);
     }
 
     public void setup() {
@@ -63,10 +63,16 @@ public class Lissajous extends PApplet {
         float xFreq = gui.slider("lissajous/dist freq", TAU);
         float yFreq = gui.slider("lissajous/rot freq", TAU);
         float timeDelta = gui.slider("lissajous/time", 0.03f);
-        pg.stroke(gui.sliderIntConstrained("stroke", 255, 0, 255));
-        pg.strokeWeight(gui.slider("weight", 2, 0.1f));
+        pg.fill(gui.colorPicker("stroke", 0.3f, 1, 0.5f).hex);
+//        pg.strokeWeight(gui.slider("weight", 2, 0.1f));
+        pg.noStroke();
         time += radians(timeDelta);
-        pg.blendMode(ADD);
+        if(gui.toggle("blend mode: add")){
+            pg.blendMode(ADD);
+        }else{
+            pg.blendMode(BLEND);
+        }
+        float ellipseSize = gui.slider("lissajous/ellipse size", 30);
         for (int i = 0; i < count; i++) {
             float a = map(i, 0, count, 0, maxAngle);
             pg.pushMatrix();
@@ -74,7 +80,7 @@ public class Lissajous extends PApplet {
             float y = yMag * sin(a * yFreq + time);
             pg.rotate(y);
             pg.translate(x,0);
-            pg.point(0, 0);
+            pg.ellipse(0, 0, ellipseSize, ellipseSize);
             pg.popMatrix();
         }
         pg.popMatrix();

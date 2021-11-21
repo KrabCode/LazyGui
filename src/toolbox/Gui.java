@@ -3,10 +3,11 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PSurface;
 import processing.core.PVector;
 import toolbox.tree.*;
 import toolbox.tree.nodes.*;
+import toolbox.tree.nodes.color.Color;
+import toolbox.tree.nodes.color.ColorPickerNode;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
@@ -14,6 +15,7 @@ import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
 
+@SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
     private Tree tree;
     PApplet app;
@@ -92,14 +94,14 @@ public class Gui implements UserInputSubscriber {
         SliderNode node = (SliderNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
-            tree.insertNodeAtPath(node);
+            tree.insertNodeAtItsPath(node);
         }
         return node.valueFloat;
     }
 
     public SliderNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
-        SliderNode node = new SliderNode(path, NodeType.SLIDER_X, folder);
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        SliderNode node = new SliderNode(path, folder);
         node.valueFloatDefault = defaultValue;
         node.valueFloat = defaultValue;
         node.valueFloatMin = min;
@@ -127,14 +129,14 @@ public class Gui implements UserInputSubscriber {
         SliderIntNode node = (SliderIntNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderIntNode(path, defaultValue, min, max, constrained);
-            tree.insertNodeAtPath(node);
+            tree.insertNodeAtItsPath(node);
         }
         return PApplet.floor(node.valueFloat);
     }
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
-        SliderIntNode node = new SliderIntNode(path, NodeType.SLIDER_INT_X, folder);
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        SliderIntNode node = new SliderIntNode(path, folder);
         node.valueFloatDefault = defaultValue;
         node.valueFloat = defaultValue;
         node.valueFloatMin = min;
@@ -152,14 +154,14 @@ public class Gui implements UserInputSubscriber {
         ToggleNode node = (ToggleNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createToggleNode(path, defaultValue);
-            tree.insertNodeAtPath(node);
+            tree.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
-        FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
-        ToggleNode node = new ToggleNode(path, NodeType.TOGGLE, folder);
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        ToggleNode node = new ToggleNode(path, folder);
         node.valueBooleanDefault = defaultValue;
         node.valueBoolean = defaultValue;
         return node;
@@ -169,13 +171,37 @@ public class Gui implements UserInputSubscriber {
         ButtonNode node = (ButtonNode) tree.findNodeByPathInTree(path);
         if (node == null) {
             node = createButtonNode(path);
-            tree.insertNodeAtPath(node);
+            tree.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
 
     private ButtonNode createButtonNode(String path) {
-        FolderNode folder = (FolderNode) tree.findParentFolderByNodePath(path);
-        return new ButtonNode(path, NodeType.BUTTON, folder);
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        return new ButtonNode(path, folder);
+    }
+
+    public Color colorPicker(String path, float grayNorm) {
+        return colorPicker(path, grayNorm, grayNorm, grayNorm);
+    }
+
+    public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm) {
+        ColorPickerNode node = (ColorPickerNode) tree.findNodeByPathInTree(path);
+        if(node == null){
+            node = createColorPickerNode(path, redNorm,greenNorm,blueNorm);
+            tree.insertNodeAtItsPath(node);
+        }
+        return node.getColor();
+    }
+
+    private ColorPickerNode createColorPickerNode(String path, float r, float g, float b) {
+        ColorPickerNode node = createColorPickerNode(path);
+        node.initWithRGB(r,g,b);
+        return node;
+    }
+
+    private ColorPickerNode createColorPickerNode(String path){
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        return new ColorPickerNode(path, folder);
     }
 }
