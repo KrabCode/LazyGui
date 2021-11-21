@@ -76,8 +76,9 @@ mat2 rotate2D(float angle){
 }
 
 void main(){
-    vec2 uv = (gl_FragCoord.xy + scrollX - quadPos.xy) / quadSize.xy;
+    vec2 uv = (gl_FragCoord.xy - quadPos.xy) / quadSize.xy;
     uv *= rotate2D(PI * 0.1);
+    uv.x -= scrollX / quadSize.x; // TODO fix - not completely precise
     float freq =  pow(30.,precisionNormalized);
     float x = uv.x * freq * PI;
     x = 0.5+0.5*sin(x);

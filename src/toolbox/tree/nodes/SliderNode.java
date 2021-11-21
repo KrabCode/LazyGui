@@ -122,7 +122,7 @@ public class SliderNode extends Node {
         ShaderStore.hotShader(shaderPath, pg);
         pg.fill(Palette.contentBackgroundFill);
         pg.noStroke();
-        pg.rect(0,1, size.x, size.y-1);
+        pg.rect(0,0, size.x, size.y);
         pg.resetShader();
     }
 
