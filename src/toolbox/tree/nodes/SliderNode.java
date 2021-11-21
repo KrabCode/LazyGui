@@ -37,7 +37,6 @@ public class SliderNode extends Node {
     ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     int currentPrecisionIndex;
-    int minimumIntPrecisionIndex;
     String shaderPath = "sliderBackground.glsl";
 
     public void initSlider() {
@@ -55,9 +54,7 @@ public class SliderNode extends Node {
         precisionRange.add(1.0f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        precisionRange.add(1000.0f);
         currentPrecisionIndex = 4;
-        minimumIntPrecisionIndex = 4;
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
@@ -66,7 +63,6 @@ public class SliderNode extends Node {
         precisionRangeDigitsAfterDot.put(1f, 0);
         precisionRangeDigitsAfterDot.put(10f, 0);
         precisionRangeDigitsAfterDot.put(100f, 0);
-        precisionRangeDigitsAfterDot.put(1000f, 0);
     }
 
     private void loadPrecisionFromNode() {
@@ -87,28 +83,29 @@ public class SliderNode extends Node {
     }
 
     void updateDrawSliderNode(PGraphics pg) {
-        String text = getValueToDisplay().replaceAll(",", ".");
+        String valueText = getValueToDisplay().replaceAll(",", ".");
         if (isDragged || mouseOver) {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
-            mouseDelta.setMag(0);
+            mouseDelta.x = 0;
+            mouseDelta.y = 0;
         }
         fillTextColorBasedOnFocus(pg);
-        pg.textAlign(CENTER, CENTER);
+        pg.textAlign(RIGHT, CENTER);
         float textMarginX = 5;
-        pg.text(text,
-                size.x * 0.5f,
+        pg.text(valueText,
+                size.x - textMarginX,
                 size.y * 0.5f
         );
-
+/*
         if(mouseOver){
             pg.textAlign(RIGHT, CENTER);
             pg.text(getPrecisionToDisplay(),
                     size.x - textMarginX,
                     size.y * 0.5f
             );
-        }
+        }*/
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
@@ -120,6 +117,7 @@ public class SliderNode extends Node {
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);
+        shader.set("windowSize", (float) GlobalState.app.width, (float) GlobalState.app.height);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         ShaderStore.hotShader(shaderPath, pg);
         pg.fill(Palette.contentBackgroundFill);
@@ -204,19 +202,54 @@ public class SliderNode extends Node {
         super.keyPressedInsideNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             valueFloat = valueFloatDefault;
+            valueFloatPrecision = valueFloatPrecisionDefault;
+            currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         }
     }
+
+    int mouseTeleportCooldown = 30;
+    int lastMouseTeleportFrame = -mouseTeleportCooldown;
 
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
         if(isDragged){
-            mouseDelta.x = px - x;
-            mouseDelta.y = py - y;
+            mouseDelta.x = getTeleportSafeDelta(x - px);
+            mouseDelta.y = y - py;
         }
-        GlobalState.robot.mouseMove(
-                GlobalState.window.getX() + floor(dragStartPos.x),
-                GlobalState.window.getY() + floor(dragStartPos.y)
-        );
+        tryMouseTeleport(e.getX(), e.getY());
+    }
+
+    private float getTeleportSafeDelta(float delta){
+        if(abs(delta) > GlobalState.app.width * 0.75f){
+            float sign = delta > 0 ? 1 : -1;
+            float teleportSafeDelta = abs(delta) - GlobalState.app.width;
+            delta = sign * teleportSafeDelta;
+        }
+        return delta;
+    }
+
+    private void tryMouseTeleport(int x, int y) {
+        if(GlobalState.app.frameCount < lastMouseTeleportFrame + mouseTeleportCooldown){
+            return;
+        }
+        boolean teleported = false;
+        if(x <= 3){
+            GlobalState.robot.mouseMove(
+                    GlobalState.window.getX() + GlobalState.app.width,
+                    GlobalState.window.getY() + y
+            );
+            teleported = true;
+        }
+        if(x >= GlobalState.app.width - 3){
+            GlobalState.robot.mouseMove(
+                    GlobalState.window.getX() + 1,
+                    GlobalState.window.getY() + y
+            );
+            teleported = true;
+        }
+        if(teleported){
+            lastMouseTeleportFrame = GlobalState.app.frameCount;
+        }
     }
 }

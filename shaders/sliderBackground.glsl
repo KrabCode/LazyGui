@@ -1,6 +1,7 @@
 
 uniform vec2 quadPos;
 uniform vec2 quadSize;
+uniform vec2 windowSize;
 uniform float time;
 uniform float scrollX;
 uniform float precisionNormalized;
@@ -70,21 +71,24 @@ vec4 gammaCorrection(vec4 rgba){
     return vec4(gammaCorrection(rgba.rgb), 1.);
 }
 
+mat2 rotate2D(float angle){
+    return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+}
+
 void main(){
-    vec3 edge = hexToRgb(0x282828);
-    vec3 center = hexToRgb(0x383838);
+    vec2 uv = (gl_FragCoord.xy + scrollX - quadPos.xy) / quadSize.xy;
+    uv *= rotate2D(PI * 0.1);
+    float freq =  pow(30.,precisionNormalized);
+    float x = uv.x * freq * PI;
+    x = 0.5+0.5*sin(x);
+
+    vec3 edge = hexToRgb(0x2F2F2F);
+    vec3 center = hexToRgb(0x4F4F4F);
     colorPoint[colorsPerGradient] gradient = colorPoint[](
         colorPoint(0.,  edge),
         colorPoint(0.5, center),
         colorPoint(1.,  edge)
     );
-
-    vec2 uv = (gl_FragCoord.xy - quadPos.xy) / quadSize.xy;
-    float freq = 0.2 + 2. * precisionNormalized;
-    freq *= PI;
-    float x = uv.x * freq + scrollX * 0.008;
-    float y = - uv.y * freq + uv.x * freq;
-    x = 0.5+0.45*sin(x + y ) ;
     vec4 color = vec4(gradientColorAt(x, gradient), 1.);
     gl_FragColor = color;
 }

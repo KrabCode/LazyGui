@@ -86,13 +86,24 @@ public class Lissajous extends PApplet {
 
         if(customCursor){
             noCursor();
+            pushMatrix();
+            stroke(0);
+            strokeWeight(1);
             if (mousePressed) {
-                stroke(255, 0, 0);
+                fill(255, 0, 0);
             } else {
-                stroke(255);
+                fill(255);
             }
-            strokeWeight(10);
-            point(mouseX, mouseY);
+            translate(mouseX, mouseY);
+            beginShape();
+            float size = 8;
+            vertex(0,0);
+            vertex(2*size,2*size);
+            vertex(1*size, 2*size);
+            vertex(0, 3*size);
+            endShape(CLOSE);
+            fill(255);
+            popMatrix();
         }else {
             cursor();
         }

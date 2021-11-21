@@ -27,8 +27,9 @@ public class FolderNode extends Node {
         pg.noFill();
 
         pg.pushMatrix();
-        pg.translate(size.x * 0.9f, size.y * 0.5f);
+        pg.translate(size.x * 0.95f, size.y * 0.5f);
         float rectSize = size.y * 0.25f;
+        pg.translate(-1,-1);
         pg.rect(-rectSize*0.5f,-rectSize*0.5f,rectSize, rectSize);
         pg.translate(2,2);
         pg.rect(-rectSize*0.5f,-rectSize*0.5f,rectSize, rectSize);

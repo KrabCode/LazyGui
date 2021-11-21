@@ -4,15 +4,12 @@ import com.jogamp.newt.opengl.GLWindow;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PSurface;
-import processing.opengl.PShader;
 
 import java.awt.*;
-import java.util.HashMap;
 
-import static processing.core.PApplet.println;
 
 public class GlobalState {
-    public static float cell = 30;
+    public static float cell = 24;
 
     public static PFont font = null;
     public static PApplet app = null;

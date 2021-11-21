@@ -10,6 +10,10 @@ import toolbox.tree.nodes.FolderNode;
 
 import static processing.core.PApplet.*;
 
+/**
+ *
+ * A node in the GUI Tree representing either a folder of nodes or a user-queryable value
+ */
 public abstract class Node {
     public final NodeType type;
     public final FolderNode parent;
@@ -40,6 +44,13 @@ public abstract class Node {
         return split[split.length - 1];
     }
 
+    /**
+     * The node must know its absolute position and size, so it can respond to user input events
+     * @param x absolute screen x
+     * @param y absolute screen y
+     * @param w absolute screen width
+     * @param h absolute screen height
+     */
     public void updateNodeCoordinates(float x, float y, float w, float h) {
         pos.x = x;
         pos.y = y;
@@ -50,6 +61,10 @@ public abstract class Node {
     float textX = 5;
     protected float textY = -3;
 
+    /**
+     * The node knows its absolute position but here it is already translated to it for more readable relative drawing code
+     * @param pg PGraphics to draw to
+     */
     public void drawNode(PGraphics pg) {
         pg.pushMatrix();
         if(mouseOver){
@@ -61,7 +76,6 @@ public abstract class Node {
         fillTextColorBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
         pg.text(name, textX, size.y * 0.5f);
-
         pg.popMatrix();
     }
 
