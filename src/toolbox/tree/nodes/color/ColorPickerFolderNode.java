@@ -68,10 +68,6 @@ public class ColorPickerFolderNode extends FolderNode {
         color.r = r;
         color.g = g;
         color.b = b;
-        buildColorFromRGB();
-    }
-
-    void buildColorFromRGB(){
         PGraphics colorProvider = GlobalState.colorProvider;
         colorProvider.colorMode(RGB,1,1,1,1);
         int hex = colorProvider.color(color.r, color.g, color.b);
@@ -81,4 +77,19 @@ public class ColorPickerFolderNode extends FolderNode {
         color.br = colorProvider.brightness(hex);
         color.alpha = 1;
     }
+/*
+    public void initWithHex(String hexString) {
+        PGraphics colorProvider = GlobalState.colorProvider;
+        colorProvider.colorMode(RGB,1,1,1,1);
+        String parsedHexInput = String.valueOf(Integer.parseInt("0xFF"+hexString.toUpperCase(), 16));
+        int hex = colorProvider.color(parsedHexInput);
+        color.hex = hex;
+        color.hue = colorProvider.hue(hex);
+        color.sat = colorProvider.saturation(hex);
+        color.br = colorProvider.brightness(hex);
+        color.alpha = colorProvider.alpha(hex);
+        color.r = r;
+        color.g = g;
+        color.b = b;
+    }*/
 }

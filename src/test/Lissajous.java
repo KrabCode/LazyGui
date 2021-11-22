@@ -63,7 +63,8 @@ public class Lissajous extends PApplet {
         float xFreq = gui.slider("lissajous/dist freq", TAU);
         float yFreq = gui.slider("lissajous/rot freq", TAU);
         float timeDelta = gui.slider("lissajous/time", 0.03f);
-        pg.fill(gui.colorPicker("stroke", 0.8f, 0.2f, 0.5f).hex);
+        pg.fill(gui.colorPicker("stroke",
+                255/255f, 160/255f, 87/255f).hex);
 //        pg.strokeWeight(gui.slider("weight", 2, 0.1f));
         pg.noStroke();
         time += radians(timeDelta);
