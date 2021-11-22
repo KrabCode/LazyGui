@@ -195,21 +195,25 @@ public class Gui implements UserInputSubscriber {
     }
 */
     public Color colorPicker(String path, float grayNorm) {
-        return colorPicker(path, grayNorm, grayNorm, grayNorm);
+        return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }
 
     public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm) {
+        return colorPicker(path, redNorm,greenNorm,blueNorm, 1);
+    }
+
+    public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
         if(node == null){
-            node = createColorPickerNode(path, redNorm,greenNorm,blueNorm);
+            node = createColorPickerNode(path, redNorm,greenNorm,blueNorm, alphaNorm);
             tree.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
-    private ColorPickerFolderNode createColorPickerNode(String path, float r, float g, float b) {
+    private ColorPickerFolderNode createColorPickerNode(String path, float r, float g, float b, float a) {
         ColorPickerFolderNode node = createColorPickerNode(path);
-        node.initWithRGB(r,g,b);
+        node.initWithRGBA(r,g,b,a);
         return node;
     }
 /*
@@ -223,4 +227,5 @@ public class Gui implements UserInputSubscriber {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
         return new ColorPickerFolderNode(path, folder);
     }
+
 }

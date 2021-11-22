@@ -56,24 +56,26 @@ public class Lissajous extends PApplet {
         boolean recordMode = gui.toggle("record/record mode", false);
         boolean customCursor = gui.toggle("record/custom cursor", false);
         int folderNumber = gui.sliderInt("record/number", 1);
-        int count = gui.sliderIntConstrained("lissajous/count", 800, 1, 10000);
-        float maxAngle = gui.slider("lissajous/max angle", 10, 0.1f);
-        float xMag = gui.slider("lissajous/dist mag", 300);
-        float yMag = gui.slider("lissajous/rot mag", TAU);
-        float xFreq = gui.slider("lissajous/dist freq", TAU);
-        float yFreq = gui.slider("lissajous/rot freq", TAU);
-        float timeDelta = gui.slider("lissajous/time", 0.03f);
+        int count = gui.sliderIntConstrained("lissajous/count", 5000, 1, 10000);
+        float maxAngle = gui.slider("lissajous/max angle", 182.1f, 0.1f);
+        float xMag = gui.slider("lissajous/dist mag", 370);
+        float yMag = gui.slider("lissajous/rot mag", 165);
+        float xFreq = gui.slider("lissajous/dist freq", 0.0743f);
+        float yFreq = gui.slider("lissajous/rot freq", 0.154f);
+        float timeDelta = gui.slider("lissajous/time", 0.002f);
+        float ellipseSize = gui.slider("lissajous/ellipse size", 15);
+        float colorMult = 0.3f;
+        //noinspection PointlessArithmeticExpression
         pg.fill(gui.colorPicker("stroke",
-                255/255f, 160/255f, 87/255f).hex);
+                (255/255f)*colorMult, (160/255f)*colorMult, (87/255f*colorMult), 0.3f).hex);
 //        pg.strokeWeight(gui.slider("weight", 2, 0.1f));
         pg.noStroke();
         time += radians(timeDelta);
-        if(gui.toggle("blend mode: add")){
+        if(gui.toggle("blend mode: add", true)){
             pg.blendMode(ADD);
         }else{
             pg.blendMode(BLEND);
         }
-        float ellipseSize = gui.slider("lissajous/ellipse size", 30);
         for (int i = 0; i < count; i++) {
             float a = map(i, 0, count, 0, maxAngle);
             pg.pushMatrix();

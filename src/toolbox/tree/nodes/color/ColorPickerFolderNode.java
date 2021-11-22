@@ -64,18 +64,18 @@ public class ColorPickerFolderNode extends FolderNode {
         return color;
     }
 
-    public void initWithRGB(float r, float g, float b) {
+    public void initWithRGBA(float r, float g, float b, float a) {
         color.r = r;
         color.g = g;
         color.b = b;
+        color.alpha = a;
         PGraphics colorProvider = GlobalState.colorProvider;
         colorProvider.colorMode(RGB,1,1,1,1);
-        int hex = colorProvider.color(color.r, color.g, color.b);
+        int hex = colorProvider.color(color.r, color.g, color.b, color.alpha);
         color.hex = hex;
         color.hue = colorProvider.hue(hex);
         color.sat = colorProvider.saturation(hex);
         color.br = colorProvider.brightness(hex);
-        color.alpha = 1;
     }
 /*
     public void initWithHex(String hexString) {

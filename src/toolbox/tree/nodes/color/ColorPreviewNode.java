@@ -13,7 +13,7 @@ public class ColorPreviewNode extends ColorValueNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        pg.fill(parentColorPickerFolder.color.hex);
+        pg.fill(parentColorPickerFolder.color.hue, parentColorPickerFolder.color.sat, parentColorPickerFolder.color.br);
         strokeContentBasedOnFocus(pg);
         float rectSize = size.y * 0.5f;
         float margin = cell * 0.3f;
