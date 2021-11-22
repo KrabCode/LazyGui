@@ -81,12 +81,12 @@ public class FolderWindow extends Window {
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
         for (Node node : folder.children) {
-            node.mouseReleased(x, y);
+            node.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
             Node clickedNode = tryFindChildNode(x, y);
             if (clickedNode != null) {
-                clickedNode.nodeReleased(x, y);
+                clickedNode.mouseReleasedOverNode(x, y);
             }
         }
     }
@@ -100,7 +100,7 @@ public class FolderWindow extends Window {
         if (isPointInsideContent(x, y)) {
             Node clickedNode = tryFindChildNode(x, y);
             if (clickedNode != null) {
-                clickedNode.mouseWheelMovedInsideNode(x, y, dir);
+                clickedNode.mouseWheelMovedOverNode(x, y, dir);
             }
         }
     }
@@ -113,7 +113,7 @@ public class FolderWindow extends Window {
         if (isPointInsideContent(x, y)) {
             Node clickedNode = tryFindChildNode(x, y);
             if (clickedNode != null) {
-                clickedNode.keyPressedInsideNode(keyEvent, x, y);
+                clickedNode.keyPressedOverNode(keyEvent, x, y);
             }
         }
     }
@@ -132,7 +132,7 @@ public class FolderWindow extends Window {
         super.mouseDragged(e, x, y, px, py);
         for(Node child : folder.children){
             if(child.isDragged){
-                child.mouseDragged(e, x, y, px, py);
+                child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }
     }

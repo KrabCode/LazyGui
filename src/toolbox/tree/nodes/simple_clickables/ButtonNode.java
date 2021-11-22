@@ -40,8 +40,8 @@ public class ButtonNode extends ValueNode {
         armed = true;
     }
 
-    public void nodeReleased(float x, float y){
-        super.nodeReleased(x,y);
+    public void mouseReleasedOverNode(float x, float y){
+        super.mouseReleasedOverNode(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
         }

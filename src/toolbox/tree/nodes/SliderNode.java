@@ -1,4 +1,4 @@
-package toolbox.tree.nodes.sliders;
+package toolbox.tree.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -8,8 +8,6 @@ import processing.opengl.PShader;
 import toolbox.GlobalState;
 import toolbox.Palette;
 import toolbox.ShaderStore;
-import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.nodes.ValueNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,14 +29,17 @@ public class SliderNode extends ValueNode {
     float backgroundScrollX = 0;
 
     PVector mouseDelta = new PVector();
-    ArrayList<Float> precisionRange = new ArrayList<>();
+    protected ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
-    int currentPrecisionIndex;
+    protected int currentPrecisionIndex;
     String shaderPath = "sliderBackground.glsl";
 
-    public void initSlider() {
+    public void initSliderPrecisionArrays() {
         initPrecision();
         loadPrecisionFromNode();
+    }
+
+    public void initSliderBackgroundShader(){
         ShaderStore.getShader(shaderPath);
     }
 
@@ -149,8 +150,8 @@ public class SliderNode extends ValueNode {
     }
 
     @Override
-    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
-        super.mouseWheelMovedInsideNode(x,y, dir);
+    public void mouseWheelMovedOverNode(float x, float y, int dir) {
+        super.mouseWheelMovedOverNode(x,y, dir);
         if(dir > 0){
             decreasePrecision();
         }else if(dir < 0){
@@ -190,8 +191,8 @@ public class SliderNode extends ValueNode {
     }
 
     @Override
-    public void keyPressedInsideNode(KeyEvent e, float x, float y) {
-        super.keyPressedInsideNode(e, x, y);
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             valueFloat = valueFloatDefault;
             valueFloatPrecision = valueFloatPrecisionDefault;
@@ -203,8 +204,8 @@ public class SliderNode extends ValueNode {
     int lastMouseTeleportFrame = -mouseTeleportCooldown;
 
     @Override
-    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragged(e, x, y, px, py);
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragNodeContinue(e, x, y, px, py);
         if(isDragged){
             mouseDelta.x = getTeleportSafeDelta(x - px);
             mouseDelta.y = y - py;

@@ -1,7 +1,6 @@
-package toolbox.tree.nodes.sliders;
+package toolbox.tree.nodes;
 
 import processing.core.PApplet;
-import toolbox.tree.nodes.FolderNode;
 
 public class SliderIntNode extends SliderNode {
 

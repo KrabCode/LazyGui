@@ -5,10 +5,10 @@ public class Color {
 
     // [0,1]
     public float hue;
-    public float sat;
-    public float br;
+    public float saturation;
+    public float brightness;
     public float alpha;
-    public float r;
-    public float g;
-    public float b;
+    public float red;
+    public float green;
+    public float blue;
 }

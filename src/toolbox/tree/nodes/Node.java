@@ -138,23 +138,23 @@ public abstract class Node {
         dragStartPos.y = y;
     }
 
-    public void mouseReleased(float x, float y) {
+    public void mouseReleasedAnywhere(float x, float y) {
         isDragged = false;
     }
 
-    public void keyPressedInsideNode(KeyEvent e, float x, float y) {
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
 
     }
 
-    public void nodeReleased(float x, float y) {
+    public void mouseReleasedOverNode(float x, float y) {
 
     }
 
-    public void mouseWheelMovedInsideNode(float x, float y, int dir) {
+    public void mouseWheelMovedOverNode(float x, float y, int dir) {
 
     }
 
-    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

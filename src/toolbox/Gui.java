@@ -10,14 +10,15 @@ import toolbox.tree.nodes.color.Color;
 import toolbox.tree.nodes.color.ColorPickerFolderNode;
 import toolbox.tree.nodes.simple_clickables.ButtonNode;
 import toolbox.tree.nodes.simple_clickables.ToggleNode;
-import toolbox.tree.nodes.sliders.SliderIntNode;
-import toolbox.tree.nodes.sliders.SliderNode;
+import toolbox.tree.nodes.SliderIntNode;
+import toolbox.tree.nodes.SliderNode;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
+import static processing.core.PConstants.RGB;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
@@ -37,7 +38,6 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        ShaderStore.createSingleton();
         tree = new Tree("main tree");
         float cell = GlobalState.cell;
         FolderWindow explorer = new FolderWindow(
@@ -113,7 +113,8 @@ public class Gui implements UserInputSubscriber {
         node.valueFloatPrecision = defaultPrecision;
         node.valueFloatPrecisionDefault = defaultPrecision;
         node.valueFloatConstrained = constrained;
-        node.initSlider();
+        node.initSliderPrecisionArrays();
+        node.initSliderBackgroundShader();
         return node;
     }
 
@@ -146,7 +147,8 @@ public class Gui implements UserInputSubscriber {
         node.valueFloatMin = min;
         node.valueFloatMax = max;
         node.valueFloatConstrained = constrained;
-        node.initSlider();
+        node.initSliderPrecisionArrays();
+        node.initSliderBackgroundShader();
         return node;
     }
 
@@ -212,20 +214,18 @@ public class Gui implements UserInputSubscriber {
     }
 
     private ColorPickerFolderNode createColorPickerNode(String path, float r, float g, float b, float a) {
-        ColorPickerFolderNode node = createColorPickerNode(path);
-        node.initWithRGBA(r,g,b,a);
-        return node;
-    }
-/*
-    private ColorPickerFolderNode createColorPickerNode(String path, String hex) {
-        ColorPickerFolderNode node = createColorPickerNode(path);
-        node.initWithHex(hex);
-        return node;
-    }
-*/
-    private ColorPickerFolderNode createColorPickerNode(String path){
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        return new ColorPickerFolderNode(path, folder);
+        GlobalState.colorProvider.colorMode(RGB, 1, 1, 1, 1);
+        int hex = GlobalState.colorProvider.color(r, g, b, a);
+        return new ColorPickerFolderNode(path, folder, hex);
     }
+
+    private ColorPickerFolderNode createColorPickerNode(String path, float h, float s, float b) {
+        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+        GlobalState.colorProvider.colorMode(HSB, 1, 1, 1, 1);
+        int hex = GlobalState.colorProvider.color(h,s,b,1);
+        return new ColorPickerFolderNode(path, folder, hex);
+    }
+
 
 }

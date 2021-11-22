@@ -13,18 +13,11 @@ import static java.lang.System.currentTimeMillis;
 import static processing.core.PApplet.println;
 
 public class ShaderStore {
-    private static ShaderStore singleton;
     private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
 
     private ShaderStore() {
 
-    }
-
-    public static void createSingleton() {
-        if (singleton == null) {
-            singleton = new ShaderStore();
-        }
     }
 
     public static PShader getShader(String fragPath) {
@@ -98,9 +91,7 @@ public class ShaderStore {
         long lastKnownUncompilable = -shaderRefreshRateInMillis;
 
 
-        @SuppressWarnings("ConstantConditions")
         ShaderSnapshot(String fragPath, String vertPath) {
-            println("initialized " + fragPath);
             if (vertPath != null) {
                 compiledShader = GlobalState.app.loadShader(getFullPath(fragPath), getFullPath(vertPath));
                 vertFile = GlobalState.app.dataFile(getFullPath(vertPath));
@@ -177,7 +168,7 @@ public class ShaderStore {
             } catch (Exception ex) {
                 lastKnownUncompilable = lastModified;
                 println((fragPath != null ? " " + fragFile.getName() : ""),
-                        (vertPath != null ? " or " + vertFile.getName() : "") + ":");
+                        (vertPath != null ? " or " + (vertFile != null ? vertFile.getName() : null) : "") + ":");
                 println(ex.getMessage());
             }
         }

@@ -1,21 +1,13 @@
 package toolbox.tree.nodes.color;
 
-import processing.core.PGraphics;
-import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.nodes.ValueNode;
+public class BrightnessNode extends ColorSliderNode {
 
-import static processing.core.PApplet.nf;
-
-public class BrightnessNode extends ColorValueNode {
-
-
-
-    public BrightnessNode(String path, ColorPickerFolderNode parentFolder) {
-        super(path, parentFolder);
+    public BrightnessNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+        super(path, parentFolder, defaultValue);
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
-        drawRightText(pg, nf(parentColorPickerFolder.color.br, 0, colorValueDigitsAfterDot));
+    void updateColorInParentFolder() {
+        parentColorPickerFolder.loadValuesFromHSBA();
     }
 }

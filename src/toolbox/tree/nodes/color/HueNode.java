@@ -1,18 +1,13 @@
 package toolbox.tree.nodes.color;
 
-import processing.core.PGraphics;
-import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.nodes.ValueNode;
+public class HueNode extends ColorSliderNode {
 
-import static processing.core.PApplet.nf;
-
-public class HueNode extends ColorValueNode {
-    public HueNode(String path, ColorPickerFolderNode parentFolder) {
-        super(path, parentFolder);
+    public HueNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+        super(path, parentFolder, defaultValue);
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
-        drawRightText(pg, nf(parentColorPickerFolder.color.hue, 0, colorValueDigitsAfterDot));
+    void updateColorInParentFolder() {
+        parentColorPickerFolder.loadValuesFromHSBA();
     }
 }
