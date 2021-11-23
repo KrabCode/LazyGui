@@ -25,6 +25,8 @@ public abstract class Node {
     public boolean isDragged = false;
     public boolean mouseOver = false;
 
+    protected boolean displayInlineName = true;
+
     public Node(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
@@ -58,7 +60,6 @@ public abstract class Node {
     }
 
     float textX = 5;
-    protected float textY = -3;
 
     /**
      * The node knows its absolute position but here it is already translated to it for more readable relative drawing code
@@ -77,9 +78,9 @@ public abstract class Node {
         updateDrawInlineNode(pg);
         pg.popMatrix();
         pg.popStyle();
-        fillTextColorBasedOnFocus(pg);
-        pg.textAlign(LEFT, CENTER);
-        pg.text(name, textX, size.y * 0.5f);
+        if(displayInlineName){
+            drawLeftText(pg, name);
+        }
         pg.popMatrix();
         pg.popStyle();
     }
@@ -112,6 +113,12 @@ public abstract class Node {
         } else {
             pg.fill(Palette.standardContentFill);
         }
+    }
+
+    public void drawLeftText(PGraphics pg, String text) {
+        fillTextColorBasedOnFocus(pg);
+        pg.textAlign(LEFT, CENTER);
+        pg.text(text, textX, size.y * 0.5f);
     }
 
     public void drawRightText(PGraphics pg, String text) {

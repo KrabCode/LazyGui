@@ -40,7 +40,7 @@ public class SliderNode extends ValueNode {
     }
 
     public void initSliderBackgroundShader(){
-        ShaderStore.getShader(shaderPath);
+        ShaderStore.lazyInitGetShader(shaderPath);
     }
 
     private void initPrecision() {
@@ -95,14 +95,6 @@ public class SliderNode extends ValueNode {
             mouseDelta.y = 0;
         }
         drawRightText(pg, valueText);
-/*
-        if(mouseOver){
-            pg.textAlign(RIGHT, CENTER);
-            pg.text(getPrecisionToDisplay(),
-                    size.x - textMarginX,
-                    size.y * 0.5f
-            );
-        }*/
     }
 
 
@@ -110,18 +102,20 @@ public class SliderNode extends ValueNode {
         if(!constrainedThisFrame){
             backgroundScrollX += mouseDelta.x;
         }
-        PShader shader = ShaderStore.getShader(shaderPath);
-        shader.set("scrollX", backgroundScrollX);
-        shader.set("quadPos", pos.x, pos.y);
-        shader.set("quadPos", pos.x, pos.y);
-        shader.set("quadSize", size.x, size.y);
-//        shader.set("windowSize", (float) GlobalState.app.width, (float) GlobalState.app.height);
-        shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
-        ShaderStore.hotShader(shaderPath, pg);
+        updateDrawBackgroundShader(pg);
         pg.fill(Palette.contentBackgroundFill);
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();
+    }
+
+    protected void updateDrawBackgroundShader(PGraphics pg) {
+        PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
+        shader.set("scrollX", backgroundScrollX);
+        shader.set("quadPos", pos.x, pos.y);
+        shader.set("quadSize", size.x, size.y);
+        shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
+        ShaderStore.hotShader(shaderPath, pg);
     }
 
     public String getValueToDisplay() {

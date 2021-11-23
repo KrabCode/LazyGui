@@ -167,9 +167,7 @@ public class Gui implements UserInputSubscriber {
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        ToggleNode node = new ToggleNode(path, folder);
-        node.valueBooleanDefault = defaultValue;
-        node.valueBoolean = defaultValue;
+        ToggleNode node = new ToggleNode(path, folder, defaultValue);
         return node;
     }
 
@@ -207,18 +205,22 @@ public class Gui implements UserInputSubscriber {
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
         if(node == null){
-            node = createColorPickerNode(path, hueNorm,saturationNorm,brightnessNorm, alphaNorm);
+            GlobalState.colorProvider.colorMode(HSB, 1, 1, 1, 1);
+            int hex = GlobalState.colorProvider.color(hueNorm,saturationNorm,brightnessNorm,1);
+            FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+            node = new ColorPickerFolderNode(path, folder, hex);
             tree.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
-    private ColorPickerFolderNode createColorPickerNode(String path, float h, float s, float b, float a) {
-        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        GlobalState.colorProvider.colorMode(HSB, 1, 1, 1, 1);
-        int hex = GlobalState.colorProvider.color(h,s,b,1);
-        return new ColorPickerFolderNode(path, folder, hex);
+    public Color colorPicker(String path, int hex) {
+        ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
+        if(node == null){
+            FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
+            node = new ColorPickerFolderNode(path, folder, hex);
+            tree.insertNodeAtItsPath(node);
+        }
+        return node.getColor();
     }
-
-
 }

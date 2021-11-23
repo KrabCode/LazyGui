@@ -20,13 +20,13 @@ public class ShaderStore {
 
     }
 
-    public static PShader getShader(String fragPath) {
+    public static PShader lazyInitGetShader(String fragPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath);
         snapshot = initIfNull(snapshot, fragPath, null);
         return snapshot.compiledShader;
     }
 
-    public static PShader getShader(String fragPath, String vertPath) {
+    public static PShader lazyInitGetShader(String fragPath, String vertPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
         return snapshot.compiledShader;

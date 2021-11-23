@@ -10,14 +10,17 @@ import static processing.core.PApplet.map;
 
 public class ToggleNode extends ValueNode {
 
+    public boolean valueBooleanDefault;
+    public boolean valueBoolean;
+    boolean armed = false;
+    public float handlePosNorm;
 
-    public ToggleNode(String path, FolderNode folder) {
+    public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(path, folder);
+        valueBooleanDefault = defaultValue;
+        valueBoolean = defaultValue;
+        handlePosNorm = valueBoolean ? 1 : 0;
     }
-
-    public boolean valueBooleanDefault = false;
-    public boolean valueBoolean = false;
-    float handlePosNorm = 0;
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
@@ -49,7 +52,6 @@ public class ToggleNode extends ValueNode {
         pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);
     }
 
-    boolean armed = false;
 
     @Override
     public void nodePressed(float x, float y) {
