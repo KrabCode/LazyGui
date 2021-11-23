@@ -200,27 +200,20 @@ public class Gui implements UserInputSubscriber {
         return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }
 
-    public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm) {
-        return colorPicker(path, redNorm,greenNorm,blueNorm, 1);
+    public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
+        return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
     }
 
-    public Color colorPicker(String path, float redNorm, float greenNorm, float blueNorm, float alphaNorm) {
+    public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
         if(node == null){
-            node = createColorPickerNode(path, redNorm,greenNorm,blueNorm, alphaNorm);
+            node = createColorPickerNode(path, hueNorm,saturationNorm,brightnessNorm, alphaNorm);
             tree.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
-    private ColorPickerFolderNode createColorPickerNode(String path, float r, float g, float b, float a) {
-        FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        GlobalState.colorProvider.colorMode(RGB, 1, 1, 1, 1);
-        int hex = GlobalState.colorProvider.color(r, g, b, a);
-        return new ColorPickerFolderNode(path, folder, hex);
-    }
-
-    private ColorPickerFolderNode createColorPickerNode(String path, float h, float s, float b) {
+    private ColorPickerFolderNode createColorPickerNode(String path, float h, float s, float b, float a) {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
         GlobalState.colorProvider.colorMode(HSB, 1, 1, 1, 1);
         int hex = GlobalState.colorProvider.color(h,s,b,1);

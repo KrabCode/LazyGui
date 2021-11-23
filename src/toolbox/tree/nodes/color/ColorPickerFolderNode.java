@@ -14,10 +14,7 @@ public class ColorPickerFolderNode extends FolderNode {
     HueNode hueNode;
     SaturationNode saturationNode;
     BrightnessNode brightnessNode;
-    AlphaNode        alphaNode;
-    PrimaryColorNode redNode;
-    PrimaryColorNode greenNode;
-    PrimaryColorNode blueNode;
+    AlphaNode alphaNode;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
@@ -29,18 +26,12 @@ public class ColorPickerFolderNode extends FolderNode {
         saturationNode = new SaturationNode(path + "/sat", this, colorProvider.saturation(hex));
         brightnessNode = new BrightnessNode(path + "/br", this, colorProvider.brightness(hex));
         alphaNode = new AlphaNode(path + "/alpha", this, colorProvider.alpha(hex));
-        redNode = new PrimaryColorNode(path + "/red", this, colorProvider.red(hex));
-        greenNode = new PrimaryColorNode(path + "/green", this, colorProvider.green(hex));
-        blueNode = new PrimaryColorNode(path + "/blue", this, colorProvider.blue(hex));
         children.add(previewNode);
         children.add(hexNode);
         children.add(hueNode);
         children.add(saturationNode);
         children.add(brightnessNode);
         children.add(alphaNode);
-        children.add(redNode);
-        children.add(greenNode);
-        children.add(blueNode);
     }
 
     @Override
@@ -57,26 +48,10 @@ public class ColorPickerFolderNode extends FolderNode {
         pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 
-    public void loadSliders(int hex){
-
-    }
-
-    public void loadValuesFromRGBA() {
-        PGraphics colorProvider = GlobalState.colorProvider;
-        colorProvider.colorMode(RGB,1,1,1,1);
-        hex = colorProvider.color(redNode.valueFloat,greenNode.valueFloat,blueNode.valueFloat,alphaNode.valueFloat);
-        hueNode.valueFloat = colorProvider.hue(hex);
-        saturationNode.valueFloat = colorProvider.saturation(hex);
-        brightnessNode.valueFloat = colorProvider.brightness(hex);
-    }
-
     public void loadValuesFromHSBA(){
         PGraphics colorProvider = GlobalState.colorProvider;
         colorProvider.colorMode(HSB,1,1,1,1);
         hex = colorProvider.color(hueNode.valueFloat, saturationNode.valueFloat, brightnessNode.valueFloat,alphaNode.valueFloat);
-        redNode.valueFloat = colorProvider.red(hex);
-        greenNode.valueFloat = colorProvider.red(hex);
-        blueNode.valueFloat = colorProvider.red(hex);
     }
 
     Color outputColor = new Color();

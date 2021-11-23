@@ -67,7 +67,7 @@ public class Tree {
 
     public void insertNodeAtItsPath(Node node) {
         if(findNodeByPathInTree(node.path) != null){
-            return;
+//            return;
         }
         String folderPath = getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
