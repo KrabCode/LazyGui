@@ -71,8 +71,7 @@ public class SliderNode extends ValueNode {
             if (thisValue == p) {
                 currentPrecisionIndex = i;
                 return;
-            } else if (
-                    thisValue < p && nextValue > p) {
+            } else if (thisValue < p && nextValue > p) {
                 currentPrecisionIndex = i + 1;
                 precisionRange.add(i + 1, p);
                 precisionRangeDigitsAfterDot.put(p, String.valueOf(p).length() - 2);
@@ -82,10 +81,10 @@ public class SliderNode extends ValueNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        updateDrawSliderNode(pg);
+        updateDrawSliderNodeValue(pg);
     }
 
-    void updateDrawSliderNode(PGraphics pg) {
+    void updateDrawSliderNodeValue(PGraphics pg) {
         String valueText = getValueToDisplay().replaceAll(",", ".");
         if (isDragged || mouseOver) {
             updateValue();

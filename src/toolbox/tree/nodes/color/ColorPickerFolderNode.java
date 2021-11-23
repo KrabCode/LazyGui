@@ -20,10 +20,10 @@ public class ColorPickerFolderNode extends FolderNode {
         this.hex = hex;
         previewNode = new ColorPreviewNode(path + "/preview", this);
         PGraphics colorProvider = GlobalState.colorProvider;
-        hueNode = new HueNode(path + "/hue", this, colorProvider.hue(hex));
-        saturationNode = new SaturationNode(path + "/sat", this, colorProvider.saturation(hex));
-        brightnessNode = new BrightnessNode(path + "/br", this, colorProvider.brightness(hex));
-        alphaNode = new AlphaNode(path + "/alpha", this, colorProvider.alpha(hex));
+        hueNode = new HueNode(path + "/h", this, colorProvider.hue(hex));
+        saturationNode = new SaturationNode(path + "/s", this, colorProvider.saturation(hex));
+        brightnessNode = new BrightnessNode(path + "/b", this, colorProvider.brightness(hex));
+        alphaNode = new AlphaNode(path + "/a", this, colorProvider.alpha(hex));
         children.add(previewNode);
         children.add(hueNode);
         children.add(saturationNode);
