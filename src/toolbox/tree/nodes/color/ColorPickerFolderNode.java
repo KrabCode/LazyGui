@@ -34,14 +34,10 @@ public class ColorPickerFolderNode extends FolderNode {
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         strokeContentBasedOnFocus(pg);
-        float previewRectSize = cell * 0.5f;
+        float previewRectSize = cell * 0.65f;
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         pg.rectMode(CENTER);
-        pg.noFill();
-        pg.translate(1, 1);
-        pg.rect(0, 0, previewRectSize, previewRectSize);
         pg.fill(hex);
-        pg.translate(-2, -2);
         pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 

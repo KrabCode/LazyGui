@@ -99,10 +99,13 @@ void main(){
         float aVarying = clamp(map(uv.x, 0, 1, aRangeMin, aRangeMax), 0., 1.);
         clr = vec4(hsv2rgb(vec3(hueValue, saturationValue, brightnessValue)), aVarying);
     }
-    float checkerboardColumns = 14;
-    float checkerboardRows = 2;
-    vec3 checkerboard = vec3(
-        sign(sin(uv.x * checkerboardColumns * PI) * sin(uv.y * checkerboardRows * PI))
-    ) * 0.3;
+    float checkerboardColumns = 20.;
+    float checkerboardRows = 4.001;
+    vec3 checkerboard = vec3(0);
+    vec2 rep = vec2(10.);
+    vec2 id = floor(gl_FragCoord.xy/rep);
+    if(mod(id.x + id.y,2.) == 0.){
+        checkerboard += 1.;
+    }
     gl_FragColor = vec4(mix(checkerboard, clr.rgb, clr.w), 1);
 }
