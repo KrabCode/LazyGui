@@ -193,49 +193,12 @@ public class SliderNode extends ValueNode {
         }
     }
 
-    int mouseTeleportCooldown = 30;
-    int lastMouseTeleportFrame = -mouseTeleportCooldown;
-
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragNodeContinue(e, x, y, px, py);
         if(isDragged){
-            mouseDelta.x = getTeleportSafeDelta(x - px);
-            mouseDelta.y = y - py;
-        }
-        tryMouseTeleport(e.getX(), e.getY());
-    }
-
-    private float getTeleportSafeDelta(float delta){
-        if(abs(delta) > GlobalState.app.width * 0.75f){
-            float sign = delta > 0 ? 1 : -1;
-            float teleportSafeDelta = abs(delta) - GlobalState.app.width;
-            delta = sign * teleportSafeDelta;
-        }
-        return delta;
-    }
-
-    private void tryMouseTeleport(int x, int y) {
-        if(GlobalState.app.frameCount < lastMouseTeleportFrame + mouseTeleportCooldown){
-            return;
-        }
-        boolean teleported = false;
-        if(x <= 3){
-            GlobalState.robot.mouseMove(
-                    GlobalState.window.getX() + GlobalState.app.width,
-                    GlobalState.window.getY() + y
-            );
-            teleported = true;
-        }
-        if(x >= GlobalState.app.width - 3){
-            GlobalState.robot.mouseMove(
-                    GlobalState.window.getX() + 1,
-                    GlobalState.window.getY() + y
-            );
-            teleported = true;
-        }
-        if(teleported){
-            lastMouseTeleportFrame = GlobalState.app.frameCount;
+            mouseDelta.x = px - x;
+            mouseDelta.y = py - y;
         }
     }
 }

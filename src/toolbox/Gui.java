@@ -194,6 +194,10 @@ public class Gui implements UserInputSubscriber {
         return node.getColor();
     }
 */
+    public Color colorPicker(String path) {
+        return colorPicker(path, 1, 1, 0, 1);
+    }
+
     public Color colorPicker(String path, float grayNorm) {
         return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }

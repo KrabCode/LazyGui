@@ -147,6 +147,7 @@ public abstract class Node {
 
     public void mouseReleasedAnywhere(float x, float y) {
         isDragged = false;
+        GlobalState.app.cursor();
     }
 
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
@@ -162,6 +163,7 @@ public abstract class Node {
     }
 
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-
+        GlobalState.app.noCursor();
+        GlobalState.robot.mouseMove(floor(dragStartPos.x), floor(dragStartPos.y));
     }
 }

@@ -107,5 +107,6 @@ void main(){
     if(mod(id.x + id.y,2.) == 0.){
         checkerboard += 1.;
     }
+    checkerboard *= 0.3;
     gl_FragColor = vec4(mix(checkerboard, clr.rgb, clr.w), 1);
 }
