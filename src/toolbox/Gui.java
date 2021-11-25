@@ -182,16 +182,7 @@ public class Gui implements UserInputSubscriber {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
         return new ButtonNode(path, folder);
     }
-/*
-    public Color colorPicker(String path, String hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
-        if(node == null){
-            node = createColorPickerNode(path, hex);
-            tree.insertNodeAtItsPath(node);
-        }
-        return node.getColor();
-    }
-*/
+
     public Color colorPicker(String path) {
         return colorPicker(path, 1, 1, 0, 1);
     }
