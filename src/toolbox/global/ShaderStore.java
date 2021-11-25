@@ -1,12 +1,10 @@
-package toolbox;
+package toolbox.global;
 
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
@@ -37,7 +35,7 @@ public class ShaderStore {
     }
 
     public static  void hotFilter(String path) {
-        hotShader(path, null, true, GlobalState.app.g);
+        hotShader(path, null, true, State.app.g);
     }
 
     public static void hotShader(String fragPath, String vertPath, PGraphics canvas) {
@@ -45,7 +43,7 @@ public class ShaderStore {
     }
 
     public static void hotShader(String fragPath, String vertPath) {
-        hotShader(fragPath, vertPath, false, GlobalState.app.g);
+        hotShader(fragPath, vertPath, false, State.app.g);
     }
 
     public static void hotShader(String fragPath, PGraphics canvas) {
@@ -53,7 +51,7 @@ public class ShaderStore {
     }
 
     public static void hotShader(String fragPath) {
-        hotShader(fragPath, null, false, GlobalState.app.g);
+        hotShader(fragPath, null, false, State.app.g);
     }
 
     private static void hotShader(String fragPath, String vertPath, boolean filter, PGraphics canvas) {
@@ -93,16 +91,16 @@ public class ShaderStore {
 
         ShaderSnapshot(String fragPath, String vertPath) {
             if (vertPath != null) {
-                compiledShader = GlobalState.app.loadShader(getFullPath(fragPath), getFullPath(vertPath));
-                vertFile = GlobalState.app.dataFile(getFullPath(vertPath));
+                compiledShader = State.app.loadShader(getFullPath(fragPath), getFullPath(vertPath));
+                vertFile = State.app.dataFile(getFullPath(vertPath));
                 vertLastKnownModified = vertFile.lastModified();
                 if (!vertFile.isFile()) {
                     println("Could not find shader at " + vertFile.getPath());
                 }
             } else {
-                compiledShader = GlobalState.app.loadShader(fragPath);
+                compiledShader = State.app.loadShader(getFullPath(fragPath));
             }
-            fragFile = GlobalState.app.dataFile(getFullPath(fragPath));
+            fragFile = State.app.dataFile(getFullPath(fragPath));
             if (!fragFile.isFile()) {
                 println("Could not find shader at " + fragFile.getPath());
             }
@@ -113,8 +111,11 @@ public class ShaderStore {
             lastChecked = currentTimeMillis();
         }
 
+        @SuppressWarnings("UnnecessaryLocalVariable")
         private String getFullPath(String fragPath) {
-            return (GlobalState.libraryPath + "\\shaders\\" + fragPath).replaceAll("\\\\", "/");
+            String path = (State.libraryPath + "\\shaders\\" + fragPath).replaceAll("\\\\", "/");
+//            println(path);
+            return path;
         }
 
         void update(boolean shaderMode, PGraphics pg) {
@@ -155,9 +156,9 @@ public class ShaderStore {
             try {
                 PShader candidate;
                 if (vertFile == null) {
-                    candidate = GlobalState.app.loadShader(getFullPath(fragPath));
+                    candidate = State.app.loadShader(getFullPath(fragPath));
                 } else {
-                    candidate = GlobalState.app.loadShader(getFullPath(fragPath), getFullPath(vertPath));
+                    candidate = State.app.loadShader(getFullPath(fragPath), getFullPath(vertPath));
                 }
                 candidate.init();
                 compiledShader = candidate;

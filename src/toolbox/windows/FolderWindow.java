@@ -4,10 +4,12 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.GlobalState;
-import toolbox.Utils;
+import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.nodes.Node;
+
+import java.awt.*;
 
 /**
  * A FolderWindow is the only visible GUI element
@@ -17,8 +19,8 @@ import toolbox.tree.nodes.Node;
 public class FolderWindow extends Window {
     public final FolderNode folder;
 
-    public FolderWindow(PVector pos, PVector size, FolderNode folder, boolean closeable) {
-        super(pos, size, folder, closeable);
+    public FolderWindow(PVector pos, FolderNode folder, boolean closeable) {
+        super(pos, folder, closeable);
         this.folder = folder;
         folder.window = this;
     }
@@ -108,8 +110,8 @@ public class FolderWindow extends Window {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
-        float x = GlobalState.app.mouseX;
-        float y = GlobalState.app.mouseY;
+        float x = State.app.mouseX;
+        float y = State.app.mouseY;
         if (isPointInsideContent(x, y)) {
             Node clickedNode = tryFindChildNode(x, y);
             if (clickedNode != null) {

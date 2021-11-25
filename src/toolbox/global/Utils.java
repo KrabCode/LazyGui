@@ -1,4 +1,4 @@
-package toolbox;
+package toolbox.global;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -99,18 +99,18 @@ public class Utils {
 
 
     public static String getLibraryPath() {
-        URL url = GlobalState.app.getClass().getResource(GlobalState.class.getSimpleName() + ".class");
+        URL url = State.app.getClass().getResource(State.class.getSimpleName() + ".class");
         if (url != null) {
             // Convert URL to string, taking care of spaces represented by the "%20"
             // string.
             String path = url.toString().replace("%20", " ");
 
             if (!path.contains(".jar"))
-                return GlobalState.app.sketchPath();
+                return State.app.sketchPath();
 
             int n0 = path.indexOf('/');
 
-            int n1 = -1;
+            int n1;
 
             // read jar file name
             String fullJarPath = Utils.class.getProtectionDomain()
@@ -135,10 +135,10 @@ public class Utils {
             if ((-1 < n0) && (-1 < n1)) {
                 return path.substring(n0, n1);
             } else {
-                return GlobalState.app.sketchPath();
+                return State.app.sketchPath();
             }
         }
-        return GlobalState.app.sketchPath();
+        return State.app.sketchPath();
     }
 
 }

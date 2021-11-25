@@ -5,9 +5,8 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import toolbox.GlobalState;
-import toolbox.Palette;
-import toolbox.ShaderStore;
+import toolbox.global.Palette;
+import toolbox.global.ShaderStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;

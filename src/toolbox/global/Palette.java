@@ -1,4 +1,4 @@
-package toolbox;
+package toolbox.global;
 
 public class Palette {
     public static int windowBorderStroke = 0xFF787878;

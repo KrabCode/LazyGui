@@ -7,7 +7,7 @@ import toolbox.Gui;
 
 public class RectangleFeedback extends PApplet {
     private PGraphics pg;
-    Gui gui;
+    private Gui gui;
     private float rotateBase;
     private float rotateRelative;
 
@@ -16,12 +16,12 @@ public class RectangleFeedback extends PApplet {
     }
 
     public void settings() {
-        fullScreen(P3D);
+//        fullScreen(P3D);
+        size(800,800,P3D);
     }
 
     public void setup() {
         surface.setAlwaysOnTop(true);
-
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
         pg.smooth(16);

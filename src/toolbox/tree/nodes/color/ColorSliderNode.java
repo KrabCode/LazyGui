@@ -3,7 +3,7 @@ package toolbox.tree.nodes.color;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.ShaderStore;
+import toolbox.global.ShaderStore;
 import toolbox.tree.nodes.SliderNode;
 
 import static processing.core.PApplet.norm;

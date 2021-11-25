@@ -4,9 +4,8 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
-import processing.core.PApplet;
 import processing.core.PSurface;
-import toolbox.GlobalState;
+import toolbox.global.State;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
     }
 
     private void registerListeners() {
-        PSurface surface = GlobalState.app.getSurface();
+        PSurface surface = State.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {
             com.jogamp.newt.opengl.GLWindow window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
 

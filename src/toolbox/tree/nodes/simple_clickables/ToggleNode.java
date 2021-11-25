@@ -1,7 +1,7 @@
 package toolbox.tree.nodes.simple_clickables;
 
 import processing.core.PGraphics;
-import toolbox.Palette;
+import toolbox.global.Palette;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.nodes.ValueNode;
 

@@ -4,6 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.State;
 import toolbox.tree.*;
 import toolbox.tree.nodes.*;
 import toolbox.tree.nodes.color.Color;
@@ -18,7 +19,6 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
 import static processing.core.PConstants.HSB;
-import static processing.core.PConstants.RGB;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
@@ -34,15 +34,14 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
-        GlobalState.init(this, app);
+        State.init(this, app);
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
         tree = new Tree("main tree");
-        float cell = GlobalState.cell;
+        float cell = State.cell;
         FolderWindow explorer = new FolderWindow(
                 new PVector(cell, cell),
-                new PVector(cell * 8, cell*8),// + tree.root.children.size() * cell),
                 tree.root,
                 false
         );
@@ -167,8 +166,7 @@ public class Gui implements UserInputSubscriber {
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
-        ToggleNode node = new ToggleNode(path, folder, defaultValue);
-        return node;
+        return new ToggleNode(path, folder, defaultValue);
     }
 
     public boolean button(String path) {
@@ -209,8 +207,8 @@ public class Gui implements UserInputSubscriber {
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
         if(node == null){
-            GlobalState.colorProvider.colorMode(HSB, 1, 1, 1, 1);
-            int hex = GlobalState.colorProvider.color(hueNorm,saturationNorm,brightnessNorm,1);
+            State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
+            int hex = State.colorProvider.color(hueNorm,saturationNorm,brightnessNorm,1);
             FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             tree.insertNodeAtItsPath(node);

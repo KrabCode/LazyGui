@@ -5,26 +5,30 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.*;
+import toolbox.global.State;
+import toolbox.global.Palette;
+import toolbox.global.Utils;
 import toolbox.tree.nodes.Node;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.LEFT;
+import static toolbox.global.State.cell;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
     protected Node node;
     protected PVector pos;
     protected PVector size;
-    float cell = GlobalState.cell;
+    float cell = State.cell;
     float titleBarHeight = cell;
     private boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, PVector size, Node node, boolean closeable){
+    public Window(PVector pos, Node node, boolean closeable){
         this.pos = pos;
-        this.size = size;
+        this.size = new PVector(cell * 6, cell * 1);
         this.node = node;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
@@ -36,7 +40,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public void drawWindow(PGraphics pg) {
-        pg.textFont(GlobalState.font);
+        pg.textFont(State.font);
         if (hidden) {
             return;
         }
@@ -198,7 +202,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
-        PApplet app = GlobalState.app;
+        PApplet app = State.app;
         return Utils.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 

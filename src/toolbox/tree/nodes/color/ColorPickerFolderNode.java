@@ -1,7 +1,7 @@
 package toolbox.tree.nodes.color;
 
 import processing.core.PGraphics;
-import toolbox.GlobalState;
+import toolbox.global.State;
 import toolbox.tree.nodes.FolderNode;
 
 import static processing.core.PConstants.*;
@@ -19,7 +19,7 @@ public class ColorPickerFolderNode extends FolderNode {
         super(path, parentFolder);
         this.hex = hex;
         previewNode = new ColorPreviewNode(path + "/preview", this);
-        PGraphics colorProvider = GlobalState.colorProvider;
+        PGraphics colorProvider = State.colorProvider;
         hueNode = new HueNode(path + "/h", this, colorProvider.hue(hex));
         saturationNode = new SaturationNode(path + "/s", this, colorProvider.saturation(hex));
         brightnessNode = new BrightnessNode(path + "/b", this, colorProvider.brightness(hex));
@@ -42,7 +42,7 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public void loadValuesFromHSBA(){
-        PGraphics colorProvider = GlobalState.colorProvider;
+        PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1,1);
         hex = colorProvider.color(hueNode.valueFloat, saturationNode.valueFloat, brightnessNode.valueFloat,alphaNode.valueFloat);
     }

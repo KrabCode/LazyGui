@@ -6,8 +6,7 @@ import toolbox.tree.nodes.FolderNode;
 
 import java.util.ArrayList;
 
-import static processing.core.PConstants.CENTER;
-import static toolbox.GlobalState.cell;
+import static toolbox.global.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;
@@ -40,7 +39,6 @@ public class WindowManager {
         if(!windowFound){
             singleton.windows.add(new FolderWindow(
                     pos,
-                    new PVector(cell * 8, cell * 1),
                     folderNode, true));
         }
     }
