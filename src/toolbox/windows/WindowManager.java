@@ -23,11 +23,11 @@ public class WindowManager {
         }
     }
 
-    public static void addWindow(FolderWindow explorer) {
+    public synchronized static void addWindow(FolderWindow explorer) {
         singleton.windows.add(explorer);
     }
 
-    public static void uncoverOrCreateWindow(FolderNode folderNode, PVector pos) {
+    public synchronized static void uncoverOrCreateWindow(FolderNode folderNode, PVector pos) {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.node.path.equals(folderNode.path)){
@@ -44,7 +44,7 @@ public class WindowManager {
 
     }
 
-    public static void updateAndDrawWindows(PGraphics pg) {
+    public synchronized static void updateAndDrawWindows(PGraphics pg) {
         if(singleton.windowToSetFocusOn != null){
             singleton.windows.remove(singleton.windowToSetFocusOn);
             singleton.windows.add(singleton.windowToSetFocusOn);
@@ -56,11 +56,11 @@ public class WindowManager {
         }
     }
 
-    public static boolean isFocused(Window window) {
+    public synchronized static boolean isFocused(Window window) {
         return singleton.windows.get(singleton.windows.size()-1).equals(window);
     }
 
-    public static void setFocus(Window window) {
+    public synchronized static void setFocus(Window window) {
         singleton.windowToSetFocusOn = window;
     }
 }

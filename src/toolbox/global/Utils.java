@@ -15,7 +15,7 @@ public class Utils {
     }
 
     public static boolean isPointInRect(float px, float py, float rx, float ry, float rw, float rh) {
-        return px >= rx && px <= rx + rw && py >= ry && py <= ry + rh;
+        return px > rx && px < rx + rw && py > ry && py < ry + rh;
     }
 
     /**

@@ -15,8 +15,8 @@ public class PaletteEditor extends PApplet {
 
     @Override
     public void settings() {
-        size(1600,800,P2D);
-
+//        size(1600,800,P2D);
+        size(600, 600, P2D);
     }
 
     @Override
@@ -33,5 +33,6 @@ public class PaletteEditor extends PApplet {
         Palette.normalForeground = gui.colorPicker("palette/normal foreground", Palette.normalForeground).hex;
         Palette.focusForeground = gui.colorPicker("palette/focus foreground", Palette.focusForeground).hex;
         gui.update();
+        gui.recorder();
     }
 }

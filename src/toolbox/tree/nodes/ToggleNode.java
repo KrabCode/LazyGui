@@ -1,5 +1,6 @@
 package toolbox.tree.nodes;
 
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.Palette;
 import toolbox.tree.nodes.FolderNode;
@@ -70,5 +71,10 @@ public class ToggleNode extends ValueNode {
             valueBoolean = !valueBoolean;
         }
         armed = false;
+    }
+
+    @Override
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+
     }
 }

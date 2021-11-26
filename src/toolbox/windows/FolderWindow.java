@@ -8,8 +8,12 @@ import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.tree.nodes.FolderNode;
 import toolbox.tree.nodes.Node;
+import toolbox.tree.nodes.NodeType;
+import toolbox.tree.nodes.ToolbarNode;
 
 import java.awt.*;
+
+import static processing.core.PApplet.println;
 
 /**
  * A FolderWindow is the only visible GUI element
@@ -35,17 +39,18 @@ public class FolderWindow extends Window {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.translate(0, titleBarHeight);
-
+        float y = titleBarHeight;
         for (int i = 0; i < folder.children.size(); i++) {
             Node node = folder.children.get(i);
             float nodeHeight = cell * node.rowCount;
-            node.updateNodeCoordinates(pg.screenX(0, 0), pg.screenY(0, 0), size.x, nodeHeight);
+            node.updateNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.drawNode(pg);
             pg.popMatrix();
             pg.popStyle();
-            pg.translate(0, nodeHeight );
+            y += nodeHeight;
+            pg.translate(0, nodeHeight);
         }
         pg.popMatrix();
     }
@@ -145,5 +150,10 @@ public class FolderWindow extends Window {
                 child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }
+    }
+
+    public void createToolbar() {
+        ToolbarNode node = new ToolbarNode(folder.path + "/toolbar", folder);
+        folder.children.add(node);
     }
 }

@@ -1,5 +1,6 @@
 package toolbox.tree.nodes;
 
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.windows.FolderWindow;
@@ -36,7 +37,11 @@ public class FolderNode extends Node {
     @Override
     public void nodePressed(float x, float y) {
         super.nodePressed(x, y);
-        WindowManager.uncoverOrCreateWindow(this, new PVector(pos.x + size.x + cell, pos.x + cell));
+        WindowManager.uncoverOrCreateWindow(this, new PVector(x - cell * 0.5f, y-cell * 0.5f));
     }
 
+    @Override
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+
+    }
 }

@@ -92,12 +92,11 @@ public abstract class Window implements UserInputSubscriber {
         fillWindowBasedOnDragged(pg);
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
-        if(isFocused()){
+        if(isPointInsideTitleBar(State.app.mouseX, State.app.mouseY)){
             pg.fill(Palette.focusForeground);
         }else{
             pg.fill(Palette.normalForeground);
         }
-
         pg.textAlign(LEFT, CENTER);
         pg.text(node.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(Palette.windowBorder);
@@ -137,11 +136,11 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isPointInsideWindow(x, y)) {
-            setFocusOnThis();
             e.setConsumed(true);
         }
         if(isPointInsideTitleBar(x,y)){
             isDraggedAround = true;
+            setFocusOnThis();
         }
     }
 
@@ -205,6 +204,9 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
+        if(closeable){
+            return Utils.isPointInRect(x, y, pos.x, pos.y, size.x-cell, titleBarHeight);
+        }
         return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
     }
 

@@ -17,7 +17,7 @@ public abstract class Node {
     public final NodeType type;
     public final FolderNode parent;
     public final String path;
-    public final String name;
+    public String name;
     public final float cell = State.cell;
     public PVector pos = new PVector();
     public PVector size = new PVector();
@@ -66,9 +66,7 @@ public abstract class Node {
         pg.pushStyle();
         pg.pushMatrix();
         if(mouseOver){
-            pg.noStroke();
-            pg.fill(Palette.focusBackground);
-            pg.rect(0,0,size.x,size.y);
+            highlightNodeRowOnMouseOver(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
@@ -80,6 +78,12 @@ public abstract class Node {
         }
         pg.popMatrix();
         pg.popStyle();
+    }
+
+    protected void highlightNodeRowOnMouseOver(PGraphics pg) {
+        pg.noStroke();
+        pg.fill(Palette.focusBackground);
+        pg.rect(0,0,size.x,size.y);
     }
 
     protected abstract void updateDrawInlineNode(PGraphics pg);

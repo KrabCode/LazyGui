@@ -48,6 +48,7 @@ public class Gui implements UserInputSubscriber {
                 tree.root,
                 false
         );
+        explorer.createToolbar();
         WindowManager.addWindow(explorer);
 
         lazyResetDisplay();
@@ -87,21 +88,28 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
+    public void recorder() {
+        recorder(State.app.g);
+    }
+
+    boolean isRecording = false;
+
     public void recorder(PGraphics pg) {
-        int framesToRecord = sliderInt("rec/frames", 600, 0, Integer.MAX_VALUE);
         boolean screenshot = button("rec/screenshot");
-        boolean recordNow = toggle("rec/record");
+        int framesToRecord = sliderInt("rec/frames", 600, 0, Integer.MAX_VALUE);
+        boolean recordNow = button("rec/recording");
 //        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
         if (!lastRecordNow && recordNow) {
             recordingFolderName = generateRecordingFolderName();
             recordingFrame = 1;
+            isRecording = true;
         }
         lastRecordNow = recordNow;
-        if (recordNow) {
+        if (isRecording) {
             println("recording " + recordingFrame + " / " + framesToRecord);
             pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".png");
-            if (recordingFrame == framesToRecord) {
-                toggleSet("rec/record", false);
+            if (recordingFrame >= framesToRecord) {
+                isRecording = false;
 //                if (useFfmpeg) {
 //                    runFFMPEG(); // TODO
 //                }
@@ -219,14 +227,6 @@ public class Gui implements UserInputSubscriber {
             tree.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
-    }
-
-    public void toggleSet(String path, boolean valueToSet) {
-        ToggleNode node = (ToggleNode) tree.findNodeByPathInTree(path);
-        if (node == null) {
-            return;
-        }
-        node.valueBoolean = valueToSet;
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
