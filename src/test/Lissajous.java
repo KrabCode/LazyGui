@@ -10,7 +10,7 @@ import toolbox.Gui;
 public class Lissajous extends PApplet {
     Gui gui;
     PGraphics pg;
-    int i = 0;
+    int recordingIndex = 0;
     float time = 0;
 
     private boolean record = false;
@@ -88,10 +88,9 @@ public class Lissajous extends PApplet {
         }
         pg.popMatrix();
         pg.endDraw();
-        gui.update();
         clear();
         image(pg, 0, 0);
-        image(gui.pg, 0, 0);
+        gui.update();
 
         if(customCursor){
             noCursor();
@@ -118,7 +117,7 @@ public class Lissajous extends PApplet {
         }
         if (recordMode) {
             if (record) {
-                save("out/" + folderNumber + "/" + ++i + ".jpg");
+                save("out/" + folderNumber + "/" + ++recordingIndex + ".jpg");
             }
         }
 
@@ -129,6 +128,9 @@ public class Lissajous extends PApplet {
         if (key == 'k') {
             record = !record;
             println("recording: " + record);
+        }
+        if(key == 'i'){
+            save("out/screenshots/" + year() + month() + day() + "_" + hour() + minute() + second() + ".jpg");
         }
     }
 }

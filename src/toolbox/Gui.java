@@ -18,6 +18,7 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
+import static processing.core.PConstants.BLEND;
 import static processing.core.PConstants.HSB;
 
 @SuppressWarnings("unused")
@@ -56,15 +57,21 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void update() {
+    public void update(){
+        update(State.app.g);
+    }
+
+    public void update(PGraphics canvas) {
         lazyResetDisplay();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
+        pg.blendMode(BLEND);
         pg.clear();
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
+        canvas.image(pg, 0, 0, canvas.width, canvas.height);
     }
 
     @Override

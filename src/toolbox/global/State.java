@@ -26,8 +26,14 @@ public class State {
     public static void init(Gui gui, PApplet app){
         State.gui = gui;
         State.app = app;
-        State.font = app.createFont("Calibri", 20);
+        try {
+            State.font = app.createFont("Calibri", 20);
+        }catch(RuntimeException ex){
+            if(ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")){
+                throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
+            }
 
+        }
         colorProvider = app.createGraphics(256,256, P2D);
 
         PSurface surface = State.app.getSurface();

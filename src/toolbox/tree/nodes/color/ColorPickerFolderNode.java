@@ -23,7 +23,7 @@ public class ColorPickerFolderNode extends FolderNode {
         hueNode = new HueNode(path + "/h", this, colorProvider.hue(hex));
         saturationNode = new SaturationNode(path + "/s", this, colorProvider.saturation(hex));
         brightnessNode = new BrightnessNode(path + "/b", this, colorProvider.brightness(hex));
-        alphaNode = new AlphaNode(path + "/a", this, colorProvider.alpha(hex));
+        alphaNode = new AlphaNode(path + "/a", this, 1);
         children.add(previewNode);
         children.add(hueNode);
         children.add(saturationNode);
