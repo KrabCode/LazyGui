@@ -42,8 +42,8 @@ public abstract class ColorSliderNode extends SliderNode {
 
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        updateColorInParentFolder();
         super.mouseDragNodeContinue(e, x, y, px, py);
+        updateColorInParentFolder();
         e.setConsumed(true);
     }
 

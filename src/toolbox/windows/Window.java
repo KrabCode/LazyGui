@@ -55,16 +55,6 @@ public abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    private void drawCloseButton(PGraphics pg) {
-        pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
-        pg.stroke(Palette.windowBorder);
-        pg.line(size.x-cell, 1, size.x-cell, cell-1);
-        pg.popMatrix();
-    }
-
-    protected abstract void drawContent(PGraphics pg);
-
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
@@ -74,6 +64,16 @@ public abstract class Window implements UserInputSubscriber {
         pg.rect(-1,-1,size.x+1, size.y+1);
         pg.popMatrix();
     }
+
+    private void drawCloseButton(PGraphics pg) {
+        pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
+        pg.stroke(Palette.windowBorder);
+        pg.line(size.x-cell, 0, size.x-cell, cell-1);
+        pg.popMatrix();
+    }
+
+    protected abstract void drawContent(PGraphics pg);
 
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();

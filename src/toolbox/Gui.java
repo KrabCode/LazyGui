@@ -9,8 +9,8 @@ import toolbox.tree.*;
 import toolbox.tree.nodes.*;
 import toolbox.tree.nodes.color.Color;
 import toolbox.tree.nodes.color.ColorPickerFolderNode;
-import toolbox.tree.nodes.simple_clickables.ButtonNode;
-import toolbox.tree.nodes.simple_clickables.ToggleNode;
+import toolbox.tree.nodes.ButtonNode;
+import toolbox.tree.nodes.ToggleNode;
 import toolbox.tree.nodes.SliderIntNode;
 import toolbox.tree.nodes.SliderNode;
 import toolbox.userInput.UserInputPublisher;
@@ -18,7 +18,10 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
-import static processing.core.PConstants.*;
+import java.io.IOException;
+import java.util.Scanner;
+
+import static processing.core.PApplet.*;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
@@ -26,6 +29,9 @@ public class Gui implements UserInputSubscriber {
     PApplet app;
     public PGraphics pg;
     public static boolean isGuiHidden = false;
+    boolean lastRecordNow = false;
+    String recordingFolderName = "";
+    private int recordingFrame = 1;
 
     public Gui(PApplet p, boolean isGuiVisibleByDefault) {
         isGuiHidden = !isGuiVisibleByDefault;
@@ -57,7 +63,7 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void update(){
+    public void update() {
         update(State.app.g);
     }
 
@@ -85,8 +91,50 @@ public class Gui implements UserInputSubscriber {
     }
 
     public void recorder(PGraphics pg) {
-        int frameCount = sliderInt("rec/frame count", 600);
+        int framesToRecord = sliderInt("rec/frames", 600, 0, Integer.MAX_VALUE);
+        boolean screenshot = button("rec/screenshot");
         boolean recordNow = toggle("rec/record");
+//        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
+        if (!lastRecordNow && recordNow) {
+            recordingFolderName = generateRecordingFolderName();
+            recordingFrame = 1;
+        }
+        lastRecordNow = recordNow;
+        if (recordNow) {
+            println("recording " + recordingFrame + " / " + framesToRecord);
+            pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".png");
+            if (recordingFrame == framesToRecord) {
+                toggleSet("rec/record", false);
+//                if (useFfmpeg) {
+//                    runFFMPEG(); // TODO
+//                }
+            }
+            recordingFrame++;
+        }
+        if (screenshot) {
+            String filename = "out/screenshots/" + timestamp() + ".png";
+            println("saved screenshot: " + filename);
+            pg.save(filename);
+        }
+    }
+
+    private String timestamp() {
+        return year()
+                + nf(month(), 2)
+                + nf(day(), 2)
+                + "-"
+                + nf(hour(), 2)
+                + nf(minute(), 2)
+                + nf(second(), 2);
+    }
+
+    private String generateRecordingFolderName() {
+        return year() + nf(month(), 2) + nf(day(), 2) + "-" + nf(hour(), 2) + nf(minute(), 2) + nf(second(),
+                2);
+    }
+
+    private void runFFMPEG() {
+        // TODO
     }
 
     public float slider(String path) {
@@ -137,7 +185,7 @@ public class Gui implements UserInputSubscriber {
         return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
-    public int sliderIntConstrained(String path, int defaultValue, int min, int max) {
+    public int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
     }
 
@@ -176,6 +224,14 @@ public class Gui implements UserInputSubscriber {
         return node.valueBoolean;
     }
 
+    public void toggleSet(String path, boolean valueToSet) {
+        ToggleNode node = (ToggleNode) tree.findNodeByPathInTree(path);
+        if (node == null) {
+            return;
+        }
+        node.valueBoolean = valueToSet;
+    }
+
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
         FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
         return new ToggleNode(path, folder, defaultValue);
@@ -209,9 +265,9 @@ public class Gui implements UserInputSubscriber {
 
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
-        if(node == null){
+        if (node == null) {
             State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
-            int hex = State.colorProvider.color(hueNorm,saturationNorm,brightnessNorm,1);
+            int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
             FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             tree.insertNodeAtItsPath(node);
@@ -221,7 +277,7 @@ public class Gui implements UserInputSubscriber {
 
     public Color colorPicker(String path, int hex) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) tree.findNodeByPathInTree(path);
-        if(node == null){
+        if (node == null) {
             FolderNode folder = (FolderNode) tree.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             tree.insertNodeAtItsPath(node);

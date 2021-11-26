@@ -1,11 +1,9 @@
-package toolbox.tree.nodes.simple_clickables;
+package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
-import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.nodes.ValueNode;
+import toolbox.global.Palette;
 
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.RIGHT;
 
 public class ButtonNode extends ValueNode {
     public ButtonNode(String path, FolderNode folder) {
@@ -16,17 +14,18 @@ public class ButtonNode extends ValueNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        fillForegroundBasedOnMouseOver(pg);
-        pg.textAlign(CENTER,CENTER);
-        pg.text("button", size.x * 0.5f, size.y * 0.5f);
+        pg.noFill();
+        pg.translate(size.x * 0.9f, size.y * 0.5f);
         if(mouseOver){
-            String status = "ready";
-            if(armed){
-                status = "pressed";
+            if (armed){
+                pg.fill(Palette.focusForeground);
+            }else{
+                pg.fill(Palette.normalForeground);
             }
-            pg.textAlign(RIGHT, CENTER);
-            pg.text(status, size.x * 0.95f, size.y * 0.5f);
         }
+        pg.stroke(Palette.normalForeground);
+        pg.rectMode(CENTER);
+        pg.rect(0,0, cell * 0.75f, cell * 0.5f);
         if(valueBoolean){
             valueBoolean = false;
         }

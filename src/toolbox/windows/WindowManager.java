@@ -41,6 +41,7 @@ public class WindowManager {
                     pos,
                     folderNode, true));
         }
+
     }
 
     public static void updateAndDrawWindows(PGraphics pg) {

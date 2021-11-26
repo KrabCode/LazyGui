@@ -1,4 +1,4 @@
-package toolbox.tree.nodes.simple_clickables;
+package toolbox.tree.nodes;
 
 import processing.core.PGraphics;
 import toolbox.global.Palette;
@@ -40,7 +40,7 @@ public class ToggleNode extends ValueNode {
             handlePosNorm = lerp(handlePosNorm,0, lerpAmt);
         }
         float handleX = map(handlePosNorm, 0, 1, handleXLeft, handleXRight);
-        float handleY = size.y * 0.52f;
+        float handleY = size.y * 0.5f;
         float handleDiameter = cell * 0.4f;
         float handleHeight = 5;
         pg.fill(valueBoolean ? Palette.windowBorder : Palette.focusBackground);
@@ -48,7 +48,7 @@ public class ToggleNode extends ValueNode {
             pg.fill(Palette.normalForeground);
         }
         pg.rectMode(CORNER);
-        pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 12);
+        pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 8);
         pg.noStroke();
         pg.fill(valueBoolean ? Palette.normalForeground : Palette.windowBorder);
         if(mouseOver && valueBoolean){

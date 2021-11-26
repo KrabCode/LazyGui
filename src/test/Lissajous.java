@@ -53,10 +53,7 @@ public class Lissajous extends PApplet {
         pg.translate(width / 2f, height / 2f);
         pg.noFill();
 
-        boolean recordMode = gui.toggle("record/record mode", false);
-        boolean customCursor = gui.toggle("record/custom cursor", false);
-        int folderNumber = gui.sliderInt("record/number", 1);
-        int count = gui.sliderIntConstrained("lissajous/count", 5000, 1, 10000);
+        int count = gui.sliderInt("lissajous/count", 5000, 1, 10000);
         float maxAngle = gui.slider("lissajous/max angle", 182.1f, 0.1f);
         float xMag = gui.slider("lissajous/dist mag", 370);
         float yMag = gui.slider("lissajous/rot mag", 165);
@@ -91,36 +88,6 @@ public class Lissajous extends PApplet {
         clear();
         image(pg, 0, 0);
         gui.update();
-
-        if(customCursor){
-            noCursor();
-            pushMatrix();
-            stroke(0);
-            strokeWeight(1);
-            if (mousePressed) {
-                fill(255, 0, 0);
-            } else {
-                fill(255);
-            }
-            translate(mouseX, mouseY);
-            beginShape();
-            float size = 8;
-            vertex(0,0);
-            vertex(2*size,2*size);
-            vertex(1*size, 2*size);
-            vertex(0, 3*size);
-            endShape(CLOSE);
-            fill(255);
-            popMatrix();
-        }else {
-            cursor();
-        }
-        if (recordMode) {
-            if (record) {
-                save("out/" + folderNumber + "/" + ++recordingIndex + ".jpg");
-            }
-        }
-
     }
 
     @Override

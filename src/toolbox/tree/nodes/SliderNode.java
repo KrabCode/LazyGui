@@ -194,10 +194,11 @@ public class SliderNode extends ValueNode {
 
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragNodeContinue(e, x, y, px, py);
         if(isDragged){
             mouseDelta.x = px - x;
             mouseDelta.y = py - y;
         }
-        super.mouseDragNodeContinue(e, x, y, px, py);
+
     }
 }
