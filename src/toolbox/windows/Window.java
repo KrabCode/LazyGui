@@ -69,7 +69,18 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.stroke(Palette.windowBorder);
+        pg.strokeWeight(1);
         pg.line(size.x-cell, 0, size.x-cell, cell-1);
+        if(isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)){
+            pg.stroke(Palette.normalForeground);
+            pg.strokeWeight(1.99f);
+            pg.pushMatrix();
+            pg.translate(size.x - cell * 0.5f, cell * 0.5f);
+            float n = cell * 0.2f;
+            pg.line(-n, -n, n, n);
+            pg.line(-n, n, n, -n);
+            pg.popMatrix();
+        }
         pg.popMatrix();
     }
 

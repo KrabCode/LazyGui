@@ -18,9 +18,6 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import static processing.core.PApplet.*;
 
 @SuppressWarnings("unused")

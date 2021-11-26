@@ -61,11 +61,8 @@ public abstract class Node {
     }
 
 
-    /**
-     * The node knows its absolute position but here it is already translated to it for more readable relative drawing code
-     * @param pg PGraphics to draw to
-     */
     public void drawNode(PGraphics pg) {
+        // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         pg.pushStyle();
         pg.pushMatrix();
         if(mouseOver){
