@@ -107,7 +107,7 @@ public class Gui implements UserInputSubscriber {
         lastRecordNow = recordNow;
         if (isRecording) {
             println("recording " + recordingFrame + " / " + framesToRecord);
-            pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".png");
+            pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".jpg");
             if (recordingFrame >= framesToRecord) {
                 isRecording = false;
 //                if (useFfmpeg) {
