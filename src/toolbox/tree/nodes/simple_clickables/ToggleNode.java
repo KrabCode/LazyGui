@@ -38,8 +38,8 @@ public class ToggleNode extends ValueNode {
         if(valueBoolean){
             handlePosNorm = lerp(handlePosNorm,1, lerpAmt);
         }else{
-            pg.fill(Palette.standardContentFill);
-            pg.stroke(Palette.standardContentStroke);
+            pg.fill(Palette.normalBackground);
+            pg.stroke(Palette.normalForeground);
             handlePosNorm = lerp(handlePosNorm,0, lerpAmt);
         }
         float handleX = map(handlePosNorm, 0, 1, handleXLeft, handleXRight);

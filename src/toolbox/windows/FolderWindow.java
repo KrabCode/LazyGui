@@ -25,29 +25,37 @@ public class FolderWindow extends Window {
         folder.window = this;
     }
 
-    float nodeHeight = cell;
-
     @Override
     protected void drawContent(PGraphics pg) {
         drawFolder(pg);
     }
 
     public void drawFolder(PGraphics pg) {
-        size.y = cell + cell * folder.children.size();
+        size.y = cell + heightSumOfChildNodes();
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.translate(0, titleBarHeight);
+
         for (int i = 0; i < folder.children.size(); i++) {
             Node node = folder.children.get(i);
+            float nodeHeight = cell * node.rowCount;
             node.updateNodeCoordinates(pg.screenX(0, 0), pg.screenY(0, 0), size.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.drawNode(pg);
             pg.popMatrix();
             pg.popStyle();
-            pg.translate(0, nodeHeight);
+            pg.translate(0, nodeHeight );
         }
         pg.popMatrix();
+    }
+
+    private float heightSumOfChildNodes() {
+        float sum = 0;
+        for(Node child : folder.children){
+            sum += child.rowCount * cell;
+        }
+        return sum;
     }
 
 

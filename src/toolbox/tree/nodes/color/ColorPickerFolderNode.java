@@ -14,21 +14,24 @@ public class ColorPickerFolderNode extends FolderNode {
     SaturationNode saturationNode;
     BrightnessNode brightnessNode;
     AlphaNode alphaNode;
+    HexNode hexNode;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
         this.hex = hex;
         previewNode = new ColorPreviewNode(path + "/preview", this);
         PGraphics colorProvider = State.colorProvider;
-        hueNode = new HueNode(path + "/h", this, colorProvider.hue(hex));
-        saturationNode = new SaturationNode(path + "/s", this, colorProvider.saturation(hex));
-        brightnessNode = new BrightnessNode(path + "/b", this, colorProvider.brightness(hex));
-        alphaNode = new AlphaNode(path + "/a", this, 1);
+        hueNode = new HueNode(path + "/hue", this, colorProvider.hue(hex));
+        saturationNode = new SaturationNode(path + "/sat", this, colorProvider.saturation(hex));
+        brightnessNode = new BrightnessNode(path + "/br", this, colorProvider.brightness(hex));
+        alphaNode = new AlphaNode(path + "/alpha", this, 1);
+        hexNode = new HexNode(path + "/hex", this);
         children.add(previewNode);
         children.add(hueNode);
         children.add(saturationNode);
         children.add(brightnessNode);
         children.add(alphaNode);
+        children.add(hexNode);
     }
 
     @Override

@@ -14,7 +14,6 @@ import toolbox.userInput.UserInputSubscriber;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.LEFT;
-import static toolbox.global.State.cell;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
@@ -28,7 +27,7 @@ public abstract class Window implements UserInputSubscriber {
 
     public Window(PVector pos, Node node, boolean closeable){
         this.pos = pos;
-        this.size = new PVector(cell * 12, cell * 1);
+        this.size = new PVector(cell * 8, cell * 1);
         this.node = node;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
@@ -59,7 +58,7 @@ public abstract class Window implements UserInputSubscriber {
     private void drawCloseButton(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        setBorderStrokeBasedOnFocus(pg);
+        pg.stroke(Palette.windowBorder);
         pg.noFill();
         pg.rect(size.x - cell, 0, cell, cell);
         pg.popMatrix();
@@ -69,7 +68,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.noStroke();
-        pg.fill(Palette.contentBackgroundFill);
+        pg.fill(Palette.normalBackground);
         pg.rect(0, cell, size.x, size.y - cell);
         pg.popMatrix();
     }
@@ -79,7 +78,7 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawBorder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        setBorderStrokeBasedOnFocus(pg);
+        pg.stroke(Palette.windowBorder);
         pg.noFill();
         pg.strokeWeight(1);
         pg.rect(0, cell, size.x, size.y - cell - 1);
@@ -90,12 +89,12 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         fillWindowBasedOnDragged(pg);
-        setBorderStrokeBasedOnFocus(pg);
+        pg.stroke(Palette.windowBorder);
         pg.rect(0, 0, size.x, titleBarHeight);
         if(isFocused()){
-            pg.fill(Palette.selectedTextFill);
+            pg.fill(Palette.focusForeground);
         }else{
-            pg.fill(Palette.standardTextFill);
+            pg.fill(Palette.normalForeground);
         }
         pg.textAlign(LEFT);
         int textMarginX = 4;
@@ -105,17 +104,9 @@ public abstract class Window implements UserInputSubscriber {
 
     private void fillWindowBasedOnDragged(PGraphics pg) {
         if(isDraggedAround){
-            pg.fill(Palette.draggedWindowTitleFill);
+            pg.fill(Palette.focusBackground);
         }else{
-            pg.fill(Palette.standardWindowTitleFill);
-        }
-    }
-
-    private void setBorderStrokeBasedOnFocus(PGraphics pg) {
-        if (isFocused()) {
-            pg.stroke(Palette.windowBorderStrokeFocused);
-        } else {
-            pg.stroke(Palette.windowBorderStroke);
+            pg.fill(Palette.normalBackground);
         }
     }
 

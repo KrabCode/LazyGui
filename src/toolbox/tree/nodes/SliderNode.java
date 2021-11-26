@@ -101,7 +101,7 @@ public class SliderNode extends ValueNode {
             backgroundScrollX += mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(Palette.contentBackgroundFill);
+        pg.fill(Palette.normalBackground);
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

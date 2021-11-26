@@ -21,6 +21,7 @@ public abstract class Node {
     public final float cell = State.cell;
     public PVector pos = new PVector();
     public PVector size = new PVector();
+    public int rowCount = 1;
     protected PVector dragStartPos = new PVector();
     public boolean isDragged = false;
     public boolean mouseOver = false;
@@ -70,7 +71,7 @@ public abstract class Node {
         pg.pushMatrix();
         if(mouseOver){
             pg.noStroke();
-            pg.fill(Palette.contentBackgroundFocusedFill);
+            pg.fill(Palette.focusBackground);
             pg.rect(0,0,size.x,size.y);
         }
         pg.pushMatrix();
@@ -93,25 +94,25 @@ public abstract class Node {
 
     public void fillTextColorBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
-            pg.fill(Palette.selectedTextFill);
+            pg.fill(Palette.focusForeground);
         } else {
-            pg.fill(Palette.standardTextFill);
+            pg.fill(Palette.normalForeground);
         }
     }
 
     protected void strokeContentBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
-            pg.stroke(Palette.selectedContentStroke);
+            pg.stroke(Palette.focusForeground);
         } else {
-            pg.stroke(Palette.standardContentStroke);
+            pg.stroke(Palette.normalForeground);
         }
     }
 
     protected void fillContentBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
-            pg.fill(Palette.selectedContentFill);
+            pg.fill(Palette.focusBackground);
         } else {
-            pg.fill(Palette.standardContentFill);
+            pg.fill(Palette.normalBackground);
         }
     }
 
