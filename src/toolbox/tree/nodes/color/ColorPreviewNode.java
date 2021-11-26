@@ -1,7 +1,6 @@
 package toolbox.tree.nodes.color;
 
 import processing.core.PGraphics;
-import processing.opengl.PShader;
 import toolbox.global.ShaderStore;
 import toolbox.tree.nodes.ValueNode;
 

@@ -59,8 +59,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.stroke(Palette.windowBorder);
-        pg.noFill();
-        pg.rect(size.x - cell, 0, cell, cell);
+        pg.line(size.x-cell, 1, size.x-cell, cell-1);
         pg.popMatrix();
     }
 
@@ -81,7 +80,11 @@ public abstract class Window implements UserInputSubscriber {
         pg.stroke(Palette.windowBorder);
         pg.noFill();
         pg.strokeWeight(1);
-        pg.rect(0, cell, size.x, size.y - cell - 1);
+        float topY = cell-1;
+        float leftX = 0;
+        float rightX = size.x;
+        pg.line(leftX, topY, rightX, topY);
+        pg.rect(0,0,size.x, size.y);
         pg.popMatrix();
     }
 
@@ -89,7 +92,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         fillWindowBasedOnDragged(pg);
-        pg.stroke(Palette.windowBorder);
+        pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
         if(isFocused()){
             pg.fill(Palette.focusForeground);

@@ -16,7 +16,7 @@ public class ButtonNode extends ValueNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        fillTextColorBasedOnFocus(pg);
+        fillForegroundBasedOnFocus(pg);
         pg.textAlign(CENTER,CENTER);
         pg.text("button", size.x * 0.5f, size.y * 0.5f);
         if(mouseOver){

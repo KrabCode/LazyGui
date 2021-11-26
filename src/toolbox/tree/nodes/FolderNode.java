@@ -19,7 +19,7 @@ public class FolderNode extends Node {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        strokeContentBasedOnFocus(pg);
+        strokeForegroundBasedOnFocus(pg);
         pg.fill(0);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         float rectSize = cell * 0.5f;

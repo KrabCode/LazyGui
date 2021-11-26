@@ -92,7 +92,7 @@ public abstract class Node {
 
     }
 
-    public void fillTextColorBasedOnFocus(PGraphics pg) {
+    public void fillForegroundBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
             pg.fill(Palette.focusForeground);
         } else {
@@ -100,7 +100,7 @@ public abstract class Node {
         }
     }
 
-    protected void strokeContentBasedOnFocus(PGraphics pg) {
+    protected void strokeForegroundBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
             pg.stroke(Palette.focusForeground);
         } else {
@@ -108,7 +108,7 @@ public abstract class Node {
         }
     }
 
-    protected void fillContentBasedOnFocus(PGraphics pg) {
+    protected void fillBackgroundBasedOnFocus(PGraphics pg) {
         if (isFocusedAndMouseOver()) {
             pg.fill(Palette.focusBackground);
         } else {
@@ -117,13 +117,13 @@ public abstract class Node {
     }
 
     public void drawLeftText(PGraphics pg, String text) {
-        fillTextColorBasedOnFocus(pg);
+        fillForegroundBasedOnFocus(pg);
         pg.textAlign(LEFT, CENTER);
-        pg.text(text, textX, size.y * 0.5f);
+        pg.text(text, textX, size.y - State.font.getSize() * 0.6f);
     }
 
     public void drawRightText(PGraphics pg, String text) {
-        fillTextColorBasedOnFocus(pg);
+        fillForegroundBasedOnFocus(pg);
         pg.textAlign(RIGHT, CENTER);
         float textMarginX = 5;
         pg.text(text,

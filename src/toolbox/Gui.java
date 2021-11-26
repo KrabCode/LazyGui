@@ -54,6 +54,7 @@ public class Gui implements UserInputSubscriber {
     void lazyResetDisplay() {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
             pg = app.createGraphics(app.width, app.height, app.sketchRenderer());
+            pg.noSmooth();
         }
     }
 
@@ -82,6 +83,11 @@ public class Gui implements UserInputSubscriber {
         if (keyEvent.getKeyChar() == 'h') {
             isGuiHidden = !isGuiHidden;
         }
+    }
+
+    public void recorder(PGraphics pg) {
+        int frameCount = sliderInt("rec/frame count", 600);
+        boolean recordNow = toggle("rec/record");
     }
 
     public float slider(String path) {

@@ -7,6 +7,7 @@ import toolbox.tree.nodes.ValueNode;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
+import static processing.core.PConstants.CORNER;
 
 public class ToggleNode extends ValueNode {
 
@@ -28,27 +29,31 @@ public class ToggleNode extends ValueNode {
     }
 
     private void drawToggleHandle(PGraphics pg) {
-        strokeContentBasedOnFocus(pg);
-        fillContentBasedOnFocus(pg);
-        float handleWidth = size.x * 0.1f;
-        float handleXCenter = size.x * 0.9f;
+        float handleWidth = cell * 0.75f;
+        float handleXCenter = size.x - cell * 0.8f;
         float handleXLeft = handleXCenter - handleWidth * 0.5f;
         float handleXRight = handleXCenter + handleWidth * 0.5f;
         float lerpAmt = 0.3f;
         if(valueBoolean){
             handlePosNorm = lerp(handlePosNorm,1, lerpAmt);
         }else{
-            pg.fill(Palette.normalBackground);
-            pg.stroke(Palette.normalForeground);
             handlePosNorm = lerp(handlePosNorm,0, lerpAmt);
         }
         float handleX = map(handlePosNorm, 0, 1, handleXLeft, handleXRight);
         float handleY = size.y * 0.52f;
-        float handleDiameter = size.y * 0.5f;
-        float handleWeight = 8;
-        pg.strokeWeight(handleWeight);
-        pg.line(handleXLeft, handleY, handleXRight, handleY);
+        float handleDiameter = cell * 0.4f;
+        float handleHeight = 5;
+        pg.fill(valueBoolean ? Palette.windowBorder : Palette.focusBackground);
+        if(mouseOver){
+            pg.fill(Palette.normalForeground);
+        }
+        pg.rectMode(CORNER);
+        pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 12);
         pg.noStroke();
+        pg.fill(valueBoolean ? Palette.normalForeground : Palette.windowBorder);
+        if(mouseOver && valueBoolean){
+            pg.fill(Palette.focusForeground);
+        }
         pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);
     }
 
