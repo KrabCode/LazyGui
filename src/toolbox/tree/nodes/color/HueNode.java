@@ -13,4 +13,12 @@ public class HueNode extends ColorSliderNode {
         parentColorPickerFolder.loadValuesFromHSBA();
     }
 
+    @Override
+    protected boolean tryConstrainValue() {
+        while(valueFloat < 0){
+            valueFloat += 1;
+        }
+        valueFloat %= 1;
+        return false;
+    }
 }

@@ -60,7 +60,6 @@ public abstract class Node {
         size.y = h;
     }
 
-    float textX = 5;
 
     /**
      * The node knows its absolute position but here it is already translated to it for more readable relative drawing code
@@ -92,38 +91,31 @@ public abstract class Node {
 
     }
 
-    public void fillForegroundBasedOnFocus(PGraphics pg) {
-        if (isFocusedAndMouseOver()) {
-            pg.fill(Palette.focusForeground);
-        } else {
-            pg.fill(Palette.normalForeground);
-        }
-    }
-
-    protected void strokeForegroundBasedOnFocus(PGraphics pg) {
-        if (isFocusedAndMouseOver()) {
+    protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
+        if (mouseOver) {
             pg.stroke(Palette.focusForeground);
         } else {
             pg.stroke(Palette.normalForeground);
         }
     }
 
-    protected void fillBackgroundBasedOnFocus(PGraphics pg) {
-        if (isFocusedAndMouseOver()) {
-            pg.fill(Palette.focusBackground);
+    protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
+        if(mouseOver){
+            pg.fill(Palette.focusForeground);
         } else {
-            pg.fill(Palette.normalBackground);
+            pg.fill(Palette.normalForeground);
         }
     }
 
     public void drawLeftText(PGraphics pg, String text) {
-        fillForegroundBasedOnFocus(pg);
+        fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(LEFT, CENTER);
-        pg.text(text, textX, size.y - State.font.getSize() * 0.6f);
+        pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);
+
     }
 
     public void drawRightText(PGraphics pg, String text) {
-        fillForegroundBasedOnFocus(pg);
+        fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(RIGHT, CENTER);
         float textMarginX = 5;
         pg.text(text,

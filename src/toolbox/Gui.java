@@ -18,8 +18,7 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
-import static processing.core.PConstants.BLEND;
-import static processing.core.PConstants.HSB;
+import static processing.core.PConstants.*;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
@@ -53,7 +52,7 @@ public class Gui implements UserInputSubscriber {
 
     void lazyResetDisplay() {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
-            pg = app.createGraphics(app.width, app.height, app.sketchRenderer());
+            pg = app.createGraphics(app.width, app.height, P2D);
             pg.noSmooth();
         }
     }
@@ -66,7 +65,7 @@ public class Gui implements UserInputSubscriber {
         lazyResetDisplay();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
-        pg.blendMode(BLEND);
+
         pg.clear();
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);

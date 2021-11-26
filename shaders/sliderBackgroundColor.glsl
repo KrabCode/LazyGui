@@ -72,13 +72,21 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+float hueModulo(float hue){
+    while(hue < 0.){
+        hue += 1.;
+    }
+    hue = mod(hue, 1.);
+    return hue;
+}
+
 void main(){
     vec2 uv = (gl_FragCoord.xy - quadPos.xy) / quadSize.xy;
     vec4 clr;
     if(mode == 0){
         float hueRangeMin = hueValue - precisionNormalized;
         float hueRangeMax = hueValue + precisionNormalized;
-        float hueVarying = clamp(map(uv.x, 0, 1, hueRangeMin, hueRangeMax), 0., 1.);
+        float hueVarying = clamp(map(uv.x, 0, 1, hueRangeMin, hueRangeMax), 0., 1.); // TODO hue modulo
         clr = vec4(hsv2rgb(vec3(hueVarying, saturationValue, brightnessValue)), 1.);
     }
     if(mode == 1){

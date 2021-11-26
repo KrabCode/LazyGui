@@ -17,9 +17,11 @@ public class FolderNode extends Node {
         super(NodeType.FOLDER, path, parent);
     }
 
+
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        strokeForegroundBasedOnFocus(pg);
+        strokeForegroundBasedOnMouseOver(pg);
+
         pg.fill(0);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         float rectSize = cell * 0.5f;

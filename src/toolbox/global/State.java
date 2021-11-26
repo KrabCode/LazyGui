@@ -22,6 +22,7 @@ public class State {
     public static GLWindow window;
     public static String libraryPath;
     public static PGraphics colorProvider;
+    public static float textMarginX = 5;
 
     public static void init(Gui gui, PApplet app){
         State.gui = gui;

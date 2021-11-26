@@ -13,6 +13,7 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
 import static processing.core.PApplet.lerp;
+import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
@@ -45,9 +46,8 @@ public abstract class Window implements UserInputSubscriber {
         }
         constrainPosition(pg);
         pg.pushMatrix();
-        drawBackground(pg);
+        drawBackgroundWithWindowBorder(pg);
         drawContent(pg);
-        drawBorder(pg);
         drawTitleBar(pg);
         if (closeable) {
             drawCloseButton(pg);
@@ -63,28 +63,15 @@ public abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    protected void drawBackground(PGraphics pg) {
-        pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
-        pg.noStroke();
-        pg.fill(Palette.normalBackground);
-        pg.rect(0, cell, size.x, size.y - cell);
-        pg.popMatrix();
-    }
-
     protected abstract void drawContent(PGraphics pg);
 
-    protected void drawBorder(PGraphics pg) {
+    protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.stroke(Palette.windowBorder);
-        pg.noFill();
         pg.strokeWeight(1);
-        float topY = cell-1;
-        float leftX = 0;
-        float rightX = size.x;
-        pg.line(leftX, topY, rightX, topY);
-        pg.rect(0,0,size.x, size.y);
+        pg.fill(Palette.normalBackground);
+        pg.rect(-1,-1,size.x+1, size.y+1);
         pg.popMatrix();
     }
 
@@ -99,9 +86,11 @@ public abstract class Window implements UserInputSubscriber {
         }else{
             pg.fill(Palette.normalForeground);
         }
-        pg.textAlign(LEFT);
-        int textMarginX = 4;
-        pg.text(node.name, textMarginX, titleBarHeight - textMarginX);
+
+        pg.textAlign(LEFT, CENTER);
+        pg.text(node.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
+        pg.stroke(Palette.windowBorder);
+        pg.line(0, cell, size.x, cell);
         pg.popMatrix();
     }
 
