@@ -1,4 +1,4 @@
-package toolbox.global.themes;
+package toolbox.global.palettes;
 
 public abstract class GuiPalette {
     public int windowBorder = 0xFF787878;

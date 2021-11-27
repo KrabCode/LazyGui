@@ -1,4 +1,4 @@
-package toolbox.global.themes;
+package toolbox.global.palettes;
 
 public class GuiPalettePink extends GuiPalette {
     public GuiPalettePink(){

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
-import static toolbox.global.themes.GuiPaletteColorType.normalBackground;
+import static toolbox.global.palettes.GuiPaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderRow extends Row {
     public SliderRow(String path, FolderRow parentFolder) {
@@ -102,7 +102,7 @@ public class SliderRow extends Row {
             backgroundScrollX += mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(GuiPaletteStore.get(normalBackground));
+        pg.fill(GuiPaletteStore.get(NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

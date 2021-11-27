@@ -7,7 +7,7 @@ import toolbox.global.GuiPaletteStore;
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNER;
-import static toolbox.global.themes.GuiPaletteColorType.*;
+import static toolbox.global.palettes.GuiPaletteColorType.*;
 
 public class ToggleRow extends Row {
 
@@ -43,16 +43,16 @@ public class ToggleRow extends Row {
         float handleY = size.y * 0.5f;
         float handleDiameter = cell * 0.4f;
         float handleHeight = 5;
-        pg.fill(valueBoolean ? GuiPaletteStore.get(windowBorder) : GuiPaletteStore.get(focusBackground));
+        pg.fill(valueBoolean ? GuiPaletteStore.get(WINDOW_BORDER) : GuiPaletteStore.get(FOCUS_BACKGROUND));
         if(mouseOver){
-            pg.fill(GuiPaletteStore.get(normalForeground));
+            pg.fill(GuiPaletteStore.get(NORMAL_FOREGROUND));
         }
         pg.rectMode(CORNER);
         pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 8);
         pg.noStroke();
-        pg.fill(valueBoolean ? GuiPaletteStore.get(normalForeground) : GuiPaletteStore.get(windowBorder));
+        pg.fill(valueBoolean ? GuiPaletteStore.get(NORMAL_FOREGROUND) : GuiPaletteStore.get(WINDOW_BORDER));
         if(mouseOver && valueBoolean){
-            pg.fill(GuiPaletteStore.get(focusForeground));
+            pg.fill(GuiPaletteStore.get(FOCUS_FOREGROUND));
         }
         pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);
     }

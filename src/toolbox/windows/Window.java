@@ -15,7 +15,7 @@ import toolbox.userInput.UserInputSubscriber;
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
-import static toolbox.global.themes.GuiPaletteColorType.*;
+import static toolbox.global.palettes.GuiPaletteColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
@@ -59,9 +59,9 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.stroke(GuiPaletteStore.get(windowBorder));
+        pg.stroke(GuiPaletteStore.get(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.fill(GuiPaletteStore.get(normalBackground));
+        pg.fill(GuiPaletteStore.get(NORMAL_BACKGROUND));
         pg.rect(-1,-1,size.x+1, size.y+1);
         pg.popMatrix();
     }
@@ -69,11 +69,11 @@ public abstract class Window implements UserInputSubscriber {
     private void drawCloseButton(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.stroke(GuiPaletteStore.get(windowBorder));
+        pg.stroke(GuiPaletteStore.get(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.line(size.x-cell, 0, size.x-cell, cell-1);
         if(isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)){
-            pg.stroke(GuiPaletteStore.get(normalForeground));
+            pg.stroke(GuiPaletteStore.get(NORMAL_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
             pg.translate(size.x - cell * 0.5f, cell * 0.5f);
@@ -94,22 +94,22 @@ public abstract class Window implements UserInputSubscriber {
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
         if(isDraggedAround){
-            pg.fill(GuiPaletteStore.get(focusForeground));
+            pg.fill(GuiPaletteStore.get(FOCUS_FOREGROUND));
         }else{
-            pg.fill(GuiPaletteStore.get(normalForeground));
+            pg.fill(GuiPaletteStore.get(NORMAL_FOREGROUND));
         }
         pg.textAlign(LEFT, CENTER);
         pg.text(parentRow.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
-        pg.stroke(GuiPaletteStore.get(windowBorder));
+        pg.stroke(GuiPaletteStore.get(WINDOW_BORDER));
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();
     }
 
     private void fillWindowBasedOnDragged(PGraphics pg) {
         if(isDraggedAround){
-            pg.fill(GuiPaletteStore.get(focusBackground));
+            pg.fill(GuiPaletteStore.get(FOCUS_BACKGROUND));
         }else{
-            pg.fill(GuiPaletteStore.get(normalBackground));
+            pg.fill(GuiPaletteStore.get(NORMAL_BACKGROUND));
         }
     }
 
