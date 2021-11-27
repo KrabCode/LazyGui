@@ -30,12 +30,13 @@ public class PaletteEditor extends PApplet {
     @Override
     public void draw() {
         background(gui.colorPicker("sketch background", 0xFF000000).hex);
+        boolean switchPalette = gui.button("switch palette");
         GuiPaletteStore.set(windowBorder, gui.colorPicker    ("palette/window border"       , GuiPaletteStore.get(windowBorder)).hex);
         GuiPaletteStore.set(normalBackground, gui.colorPicker("palette/normal background"   , GuiPaletteStore.get(normalBackground )).hex);
         GuiPaletteStore.set(focusBackground, gui.colorPicker( "palette/focus background"    , GuiPaletteStore.get(focusBackground)).hex);
         GuiPaletteStore.set(normalForeground, gui.colorPicker("palette/normal foreground"   , GuiPaletteStore.get(normalForeground)).hex);
         GuiPaletteStore.set(focusForeground, gui.colorPicker( "palette/focus foreground"    , GuiPaletteStore.get(focusForeground)).hex);
-        if(gui.button("switch palette")){
+        if(switchPalette){
             GuiPaletteStore.nextPalette();
             gui.colorPickerSet("palette/window border"    ,  GuiPaletteStore.get(windowBorder));
             gui.colorPickerSet("palette/normal background",  GuiPaletteStore.get(normalBackground ));
