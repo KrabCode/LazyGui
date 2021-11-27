@@ -36,8 +36,11 @@ public class FolderRow extends Row {
 
     @Override
     public void rowPressed(float x, float y) {
+
         super.rowPressed(x, y);
         WindowManager.uncoverOrCreateWindow(this, new PVector(x - cell * 0.5f, y-cell * 0.5f));
+        this.isDragged = false;
+
     }
 
     @Override

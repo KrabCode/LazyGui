@@ -23,7 +23,7 @@ public abstract class Window implements UserInputSubscriber {
     protected PVector size;
     float cell = State.cell;
     float titleBarHeight = cell;
-    private boolean hidden = false;
+    public boolean hidden = false;
     private boolean isDraggedAround;
 
     public Window(PVector pos, Row row, boolean closeable){
@@ -172,18 +172,19 @@ public abstract class Window implements UserInputSubscriber {
 
     private void hide() {
         hidden = true;
+        isDraggedAround = false;
     }
 
     public void uncover() {
         hidden = false;
-        setFocusOnThis();
+        isDraggedAround = true;
     }
 
     private boolean isHidden() {
         return hidden || Gui.isGuiHidden;
     }
 
-    private void setFocusOnThis() {
+    void setFocusOnThis() {
         WindowManager.setFocus(this);
         UserInputPublisher.setFocus(this);
     }

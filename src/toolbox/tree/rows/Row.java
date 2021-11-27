@@ -4,14 +4,16 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.Gui;
 import toolbox.global.State;
 import toolbox.global.Palette;
+import toolbox.windows.WindowManager;
 
 import static processing.core.PApplet.*;
 
 /**
  *
- * A node in the GUI Tree representing either a folder of nodes or a value
+ * A row in the GUI Tree representing either a folder of other rows or a more primitive value
  */
 public abstract class Row {
     public final RowType type;
@@ -47,7 +49,7 @@ public abstract class Row {
     }
 
     /**
-     * The node must know its absolute position and size, so it can respond to user input events
+     * The row must know its absolute position and size, so it can respond to user input events
      * @param x absolute screen x
      * @param y absolute screen y
      * @param w absolute screen width
@@ -62,7 +64,7 @@ public abstract class Row {
 
 
     public void drawNode(PGraphics pg) {
-        // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
+        // the row knows its absolute position but here it is already translated to it for more readable relative drawing code
         pg.pushStyle();
         pg.pushMatrix();
         if(mouseOver){
@@ -159,5 +161,12 @@ public abstract class Row {
     public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
         State.app.noCursor();
         State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
+    }
+
+    public boolean isParentWindowHidden(){
+        if(parent == null || parent.window == null){
+            return Gui.isGuiHidden;
+        }
+        return parent.window.hidden;
     }
 }

@@ -14,8 +14,8 @@ import static processing.core.PApplet.println;
 
 /**
  * A FolderWindow is the only visible GUI element
- * lets the user see its child nodes including folders and interact with them
- * to either change a node value or open a new FolderWindow
+ * lets the user see its child rows including folders and interact with them
+ * to either change a row value or open a new FolderWindow
 */
 public class FolderWindow extends Window {
     public final FolderRow folder;
@@ -39,15 +39,15 @@ public class FolderWindow extends Window {
         float y = titleBarHeight;
         for (int i = 0; i < folder.children.size(); i++) {
             Row row = folder.children.get(i);
-            float nodeHeight = cell * row.rowCount;
-            row.updateNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
+            float rowHeight = cell * row.rowCount;
+            row.updateNodeCoordinates(pos.x, pos.y + y, size.x, rowHeight);
             pg.pushMatrix();
             pg.pushStyle();
             row.drawNode(pg);
             pg.popMatrix();
             pg.popStyle();
-            y += nodeHeight;
-            pg.translate(0, nodeHeight);
+            y += rowHeight;
+            pg.translate(0, rowHeight);
         }
         pg.popMatrix();
     }
@@ -68,9 +68,9 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null) {
-                clickedRow.rowPressed(x, y);
+            Row row = tryFindChildNode(x, y);
+            if (row != null && !row.isParentWindowHidden()) {
+                row.rowPressed(x, y);
             }
         }
     }
@@ -83,7 +83,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             Row row = tryFindChildNode(x, y);
-            if (row != null) {
+            if (row != null && !row.isParentWindowHidden()) {
                 row.mouseOver = true;
             }
         }
@@ -97,7 +97,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null) {
+            if (clickedRow != null && !row.isParentWindowHidden()) {
                 clickedRow.mouseReleasedOverRow(x, y);
             }
         }
@@ -111,7 +111,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null) {
+            if (clickedRow != null  && !row.isParentWindowHidden()) {
                 clickedRow.mouseWheelMovedOverRow(x, y, dir);
             }
         }
@@ -124,7 +124,7 @@ public class FolderWindow extends Window {
         float y = State.app.mouseY;
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null) {
+            if (clickedRow != null && !row.isParentWindowHidden()) {
                 clickedRow.keyPressedOverRow(keyEvent, x, y);
             }
         }
@@ -143,14 +143,14 @@ public class FolderWindow extends Window {
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
         for(Row child : folder.children){
-            if(child.isDragged){
+            if(child.isDragged && !child.isParentWindowHidden()){
                 child.mouseDragRowContinue(e, x, y, px, py);
             }
         }
     }
 
     public void createToolbar() {
-        ToolbarRow node = new ToolbarRow(folder.path + "/toolbar", folder);
-        folder.children.add(node);
+        ToolbarRow row = new ToolbarRow(folder.path + "/toolbar", folder);
+        folder.children.add(row);
     }
 }

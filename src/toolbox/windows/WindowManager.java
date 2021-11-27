@@ -4,11 +4,11 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.tree.rows.FolderRow;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WindowManager {
     private static WindowManager singleton;
-    private final ArrayList<Window> windows = new ArrayList<>();
+    private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<Window>();
     private Window windowToSetFocusOn = null;
 
     public WindowManager() {
@@ -21,28 +21,29 @@ public class WindowManager {
         }
     }
 
-    public synchronized static void addWindow(FolderWindow explorer) {
+    public static void addWindow(FolderWindow explorer) {
         singleton.windows.add(explorer);
     }
 
-    public synchronized static void uncoverOrCreateWindow(FolderRow folderNode, PVector pos) {
+    public static void uncoverOrCreateWindow(FolderRow folderNode, PVector pos) {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.row.path.equals(folderNode.path)){
                 w.uncover();
+                w.setFocusOnThis();
                 windowFound = true;
                 break;
             }
         }
         if(!windowFound){
-            singleton.windows.add(new FolderWindow(
-                    pos,
-                    folderNode, true));
+            Window window = new FolderWindow(pos,folderNode, true);
+            singleton.windows.add(window);
+            window.uncover();
         }
 
     }
 
-    public synchronized static void updateAndDrawWindows(PGraphics pg) {
+    public static void updateAndDrawWindows(PGraphics pg) {
         if(singleton.windowToSetFocusOn != null){
             singleton.windows.remove(singleton.windowToSetFocusOn);
             singleton.windows.add(singleton.windowToSetFocusOn);
@@ -54,11 +55,11 @@ public class WindowManager {
         }
     }
 
-    public synchronized static boolean isFocused(Window window) {
+    public static boolean isFocused(Window window) {
         return singleton.windows.get(singleton.windows.size()-1).equals(window);
     }
 
-    public synchronized static void setFocus(Window window) {
+    public static void setFocus(Window window) {
         singleton.windowToSetFocusOn = window;
     }
 }

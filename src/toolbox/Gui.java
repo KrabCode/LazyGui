@@ -97,6 +97,7 @@ public class Gui implements UserInputSubscriber {
     public void recorder(PGraphics pg) {
         boolean screenshot = button("recorder/screenshot");
         boolean recordNow = button("recorder/recording");
+        boolean stopRecording = button("recorder/stop recording");
         int framesToRecord = sliderInt("recorder/frames", 600, 0, Integer.MAX_VALUE);
 //        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
         if (!lastRecordNow && recordNow) {
@@ -108,7 +109,7 @@ public class Gui implements UserInputSubscriber {
         if (isRecording) {
             println("recording " + recordingFrame + " / " + framesToRecord);
             pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".jpg");
-            if (recordingFrame >= framesToRecord) {
+            if (stopRecording || recordingFrame >= framesToRecord) {
                 isRecording = false;
 //                if (useFfmpeg) {
 //                    runFFMPEG(); // TODO
