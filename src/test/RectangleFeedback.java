@@ -16,8 +16,8 @@ public class RectangleFeedback extends PApplet {
     }
 
     public void settings() {
-//        fullScreen(P3D);
-        size(800,800,P3D);
+        fullScreen(P3D);
+//        size(800,800,P3D);
     }
 
     public void setup() {

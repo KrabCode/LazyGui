@@ -10,7 +10,7 @@ public class ColorPickerFolderRow extends FolderRow {
 
     public int hex;
     ColorPreviewRow previewRow;
-    private int hueRowIndex = 0, saturationRowIndex = 1, brightnessRowIndex = 2, alphaRowIndex = 3;
+    private int hueRowIndex = 1, saturationRowIndex = 2, brightnessRowIndex = 3, alphaRowIndex = 4;
 
     public ColorPickerFolderRow(String path, FolderRow parentFolder, int hex) {
         super(path, parentFolder);
@@ -23,6 +23,7 @@ public class ColorPickerFolderRow extends FolderRow {
     private void initRows() {
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1, 1);
+        children.add(new ColorPreviewRow(path + "/preview", this));
         children.add(new HueRow(path + "/hue", this, colorProvider.hue(hex)));
         children.add(new SaturationRow(path + "/sat", this, colorProvider.saturation(hex)));
         children.add(new BrightnessRow(path + "/br", this, colorProvider.brightness(hex)));
