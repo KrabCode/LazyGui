@@ -1,13 +1,14 @@
 package toolbox.tree.rows;
 
 import processing.core.PGraphics;
-import toolbox.global.Palette;
+import toolbox.global.GuiPaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.TAU;
+import static toolbox.global.themes.GuiPaletteColorType.*;
 
 public class ToolbarRow extends Row {
     int buttonCount = 8;
@@ -33,14 +34,14 @@ public class ToolbarRow extends Row {
             updateDrawButton(pg, i);
             pg.popMatrix();
             if(i > 0){
-                pg.stroke(Palette.windowBorder);
+                pg.stroke(GuiPaletteStore.get(windowBorder));
                 pg.strokeWeight(1);
                 pg.line(0,0,0,cell-1);
             }
             pg.popStyle();
             pg.popMatrix();
         }
-        pg.stroke(Palette.windowBorder);
+        pg.stroke(GuiPaletteStore.get(windowBorder));
         pg.line(0,cell-1,size.x, cell-1);
     }
 
@@ -54,11 +55,11 @@ public class ToolbarRow extends Row {
         pg.translate(cell * 0.5f, cell * 0.5f);
         pg.rotate(rotation);
         if (isMouseOverButton(buttonIndex)) {
-            pg.stroke(Palette.focusForeground);
-            pg.fill(Palette.focusBackground);
+            pg.stroke(GuiPaletteStore.get(focusForeground));
+            pg.fill(GuiPaletteStore.get(focusBackground));
             buttonRotations.set(buttonIndex, rotation + radians(2));
         } else {
-            pg.stroke(Palette.normalForeground);
+            pg.stroke(GuiPaletteStore.get(normalForeground));
         }
         pg.beginShape();
         if(buttonIndex == 0){
@@ -76,6 +77,20 @@ public class ToolbarRow extends Row {
     @Override
     protected void highlightNodeRowOnMouseOver(PGraphics pg) {
         // skip the full row highlight and instead highlight each button separately
+    }
+
+    @Override
+    public void mouseReleasedAnywhere(float x, float y) {
+        if(isParentWindowHidden()){
+            return;
+        }
+        super.mouseReleasedAnywhere(x, y);
+        for(int i = 0; i < buttonCount; i++){
+            if(isMouseOverButton(i)){
+                // TODO
+                return;
+            }
+        }
     }
 
     private boolean isMouseOverButton(int buttonIndex){

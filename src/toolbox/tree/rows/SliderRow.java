@@ -5,13 +5,14 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import toolbox.global.Palette;
+import toolbox.global.GuiPaletteStore;
 import toolbox.global.ShaderStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
+import static toolbox.global.themes.GuiPaletteColorType.normalBackground;
 
 public class SliderRow extends Row {
     public SliderRow(String path, FolderRow parentFolder) {
@@ -101,7 +102,7 @@ public class SliderRow extends Row {
             backgroundScrollX += mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(Palette.normalBackground);
+        pg.fill(GuiPaletteStore.get(normalBackground));
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

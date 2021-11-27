@@ -4,6 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.GuiPaletteStore;
 import toolbox.global.State;
 import toolbox.tree.*;
 import toolbox.tree.rows.*;
@@ -38,6 +39,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
+        GuiPaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
@@ -96,7 +98,7 @@ public class Gui implements UserInputSubscriber {
 
     public void recorder(PGraphics pg) {
         boolean screenshot = button("recorder/screenshot");
-        boolean recordNow = button("recorder/recording");
+        boolean recordNow = button("recorder/start recording");
         boolean stopRecording = button("recorder/stop recording");
         int framesToRecord = sliderInt("recorder/frames", 600, 0, Integer.MAX_VALUE);
 //        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
@@ -108,7 +110,7 @@ public class Gui implements UserInputSubscriber {
         lastRecordNow = recordNow;
         if (isRecording) {
             println("recording " + recordingFrame + " / " + framesToRecord);
-            pg.save("out/capture/" + recordingFolderName + "/" + recordingFrame + ".jpg");
+            pg.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
             if (stopRecording || recordingFrame >= framesToRecord) {
                 isRecording = false;
 //                if (useFfmpeg) {
@@ -281,5 +283,18 @@ public class Gui implements UserInputSubscriber {
             tree.insertNodeAtItsPath(row);
         }
         return row.getColor();
+    }
+
+    public void colorPickerSet(String path, int hex) {
+        ColorPickerFolderRow row = (ColorPickerFolderRow) tree.findNodeByPathInTree(path);
+        if (row == null) {
+            FolderRow folder = (FolderRow) tree.getLazyInitParentFolderByPath(path);
+            row = new ColorPickerFolderRow(path, folder, hex);
+            tree.insertNodeAtItsPath(row);
+        }else{
+
+            row.hex = hex;
+            row.loadValuesFromHex();
+        }
     }
 }

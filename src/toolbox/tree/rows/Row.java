@@ -6,10 +6,10 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
-import toolbox.global.Palette;
-import toolbox.windows.WindowManager;
+import toolbox.global.GuiPaletteStore;
 
 import static processing.core.PApplet.*;
+import static toolbox.global.themes.GuiPaletteColorType.*;
 
 /**
  *
@@ -84,7 +84,7 @@ public abstract class Row {
 
     protected void highlightNodeRowOnMouseOver(PGraphics pg) {
         pg.noStroke();
-        pg.fill(Palette.focusBackground);
+        pg.fill(GuiPaletteStore.get(focusBackground));
         pg.rect(0,0,size.x,size.y);
     }
 
@@ -96,17 +96,17 @@ public abstract class Row {
 
     protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
         if (mouseOver) {
-            pg.stroke(Palette.focusForeground);
+            pg.stroke(GuiPaletteStore.get(focusForeground));
         } else {
-            pg.stroke(Palette.normalForeground);
+            pg.stroke(GuiPaletteStore.get(normalForeground));
         }
     }
 
     protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
         if(mouseOver){
-            pg.fill(Palette.focusForeground);
+            pg.fill(GuiPaletteStore.get(focusForeground));
         } else {
-            pg.fill(Palette.normalForeground);
+            pg.fill(GuiPaletteStore.get(normalForeground));
         }
     }
 

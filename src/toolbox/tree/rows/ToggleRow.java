@@ -2,11 +2,12 @@ package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.Palette;
+import toolbox.global.GuiPaletteStore;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNER;
+import static toolbox.global.themes.GuiPaletteColorType.*;
 
 public class ToggleRow extends Row {
 
@@ -42,16 +43,16 @@ public class ToggleRow extends Row {
         float handleY = size.y * 0.5f;
         float handleDiameter = cell * 0.4f;
         float handleHeight = 5;
-        pg.fill(valueBoolean ? Palette.windowBorder : Palette.focusBackground);
+        pg.fill(valueBoolean ? GuiPaletteStore.get(windowBorder) : GuiPaletteStore.get(focusBackground));
         if(mouseOver){
-            pg.fill(Palette.normalForeground);
+            pg.fill(GuiPaletteStore.get(normalForeground));
         }
         pg.rectMode(CORNER);
         pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 8);
         pg.noStroke();
-        pg.fill(valueBoolean ? Palette.normalForeground : Palette.windowBorder);
+        pg.fill(valueBoolean ? GuiPaletteStore.get(normalForeground) : GuiPaletteStore.get(windowBorder));
         if(mouseOver && valueBoolean){
-            pg.fill(Palette.focusForeground);
+            pg.fill(GuiPaletteStore.get(focusForeground));
         }
         pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);
     }

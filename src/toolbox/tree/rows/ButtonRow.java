@@ -2,10 +2,12 @@ package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.Palette;
+import toolbox.global.GuiPaletteStore;
 import toolbox.global.State;
 
 import static processing.core.PConstants.CENTER;
+import static toolbox.global.themes.GuiPaletteColorType.focusForeground;
+import static toolbox.global.themes.GuiPaletteColorType.normalForeground;
 
 public class ButtonRow extends Row {
     public ButtonRow(String path, FolderRow folder) {
@@ -21,13 +23,13 @@ public class ButtonRow extends Row {
         pg.translate(size.x * 0.9f, size.y * 0.5f);
         if(mouseOver){
             if (isDragged){
-                pg.fill(Palette.focusForeground);
+                pg.fill(GuiPaletteStore.get(focusForeground));
             }else{
-                pg.fill(Palette.normalForeground);
+                pg.fill(GuiPaletteStore.get(normalForeground));
             }
 
         }
-        pg.stroke(Palette.normalForeground);
+        pg.stroke(GuiPaletteStore.get(normalForeground));
         pg.rectMode(CENTER);
         pg.rect(0,0, cell * 0.75f, cell * 0.5f);
         boolean mousePressed = State.app.mousePressed;
