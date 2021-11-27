@@ -28,7 +28,7 @@ public class WindowManager {
     public static void uncoverOrCreateWindow(FolderRow folderNode, PVector pos) {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.row.path.equals(folderNode.path)){
+            if(w.parentRow.path.equals(folderNode.path)){
                 w.uncover();
                 w.setFocusOnThis();
                 windowFound = true;

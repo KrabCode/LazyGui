@@ -18,7 +18,7 @@ import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
-    protected Row row;
+    protected Row parentRow;
     protected PVector pos;
     protected PVector size;
     float cell = State.cell;
@@ -26,10 +26,10 @@ public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, Row row, boolean closeable){
+    public Window(PVector pos, Row parentRow, boolean closeable){
         this.pos = pos;
         this.size = new PVector(cell * 8, cell * 1);
-        this.row = row;
+        this.parentRow = parentRow;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
     }
@@ -92,13 +92,13 @@ public abstract class Window implements UserInputSubscriber {
         fillWindowBasedOnDragged(pg);
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
-        if(isPointInsideTitleBar(State.app.mouseX, State.app.mouseY)){
+        if(isDraggedAround){
             pg.fill(Palette.focusForeground);
         }else{
             pg.fill(Palette.normalForeground);
         }
         pg.textAlign(LEFT, CENTER);
-        pg.text(row.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
+        pg.text(parentRow.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(Palette.windowBorder);
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();

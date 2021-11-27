@@ -18,12 +18,12 @@ import static processing.core.PApplet.println;
  * to either change a row value or open a new FolderWindow
 */
 public class FolderWindow extends Window {
-    public final FolderRow folder;
+    public final FolderRow parentFolder;
 
-    public FolderWindow(PVector pos, FolderRow folder, boolean closeable) {
-        super(pos, folder, closeable);
-        this.folder = folder;
-        folder.window = this;
+    public FolderWindow(PVector pos, FolderRow parentFolder, boolean closeable) {
+        super(pos, parentFolder, closeable);
+        this.parentFolder = parentFolder;
+        parentFolder.window = this;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class FolderWindow extends Window {
         pg.translate(pos.x, pos.y);
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
-        for (int i = 0; i < folder.children.size(); i++) {
-            Row row = folder.children.get(i);
+        for (int i = 0; i < parentFolder.children.size(); i++) {
+            Row row = parentFolder.children.get(i);
             float rowHeight = cell * row.rowCount;
             row.updateNodeCoordinates(pos.x, pos.y + y, size.x, rowHeight);
             pg.pushMatrix();
@@ -54,7 +54,7 @@ public class FolderWindow extends Window {
 
     private float heightSumOfChildNodes() {
         float sum = 0;
-        for(Row child : folder.children){
+        for(Row child : parentFolder.children){
             sum += child.rowCount * cell;
         }
         return sum;
@@ -78,7 +78,7 @@ public class FolderWindow extends Window {
     @Override
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
-        for (Row row : folder.children) {
+        for (Row row : parentFolder.children) {
             row.mouseOver = false;
         }
         if (isPointInsideContent(x, y)) {
@@ -92,12 +92,12 @@ public class FolderWindow extends Window {
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
-        for (Row row : folder.children) {
+        for (Row row : parentFolder.children) {
             row.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null && !row.isParentWindowHidden()) {
+            if (clickedRow != null && !parentRow.isParentWindowHidden()) {
                 clickedRow.mouseReleasedOverRow(x, y);
             }
         }
@@ -111,7 +111,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null  && !row.isParentWindowHidden()) {
+            if (clickedRow != null  && !parentRow.isParentWindowHidden()) {
                 clickedRow.mouseWheelMovedOverRow(x, y, dir);
             }
         }
@@ -124,14 +124,14 @@ public class FolderWindow extends Window {
         float y = State.app.mouseY;
         if (isPointInsideContent(x, y)) {
             Row clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null && !row.isParentWindowHidden()) {
+            if (clickedRow != null && !parentRow.isParentWindowHidden()) {
                 clickedRow.keyPressedOverRow(keyEvent, x, y);
             }
         }
     }
 
     private Row tryFindChildNode(float x, float y) {
-        for (Row row : folder.children) {
+        for (Row row : parentFolder.children) {
             if (Utils.isPointInRect(x, y, row.pos.x, row.pos.y, row.size.x, row.size.y)) {
                 return row;
             }
@@ -142,7 +142,7 @@ public class FolderWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        for(Row child : folder.children){
+        for(Row child : parentFolder.children){
             if(child.isDragged && !child.isParentWindowHidden()){
                 child.mouseDragRowContinue(e, x, y, px, py);
             }
@@ -150,7 +150,7 @@ public class FolderWindow extends Window {
     }
 
     public void createToolbar() {
-        ToolbarRow row = new ToolbarRow(folder.path + "/toolbar", folder);
-        folder.children.add(row);
+        ToolbarRow row = new ToolbarRow(parentFolder.path + "/toolbar", parentFolder);
+        parentFolder.children.add(row);
     }
 }

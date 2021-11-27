@@ -9,30 +9,30 @@ import static processing.core.PConstants.*;
 public class ColorPickerFolderRow extends FolderRow {
 
     public int hex;
-    ColorPreviewRow previewNode;
-    HueRow hueNode;
-    SaturationRow saturationNode;
-    BrightnessRow brightnessNode;
-    AlphaRow alphaNode;
-    HexRow hexNode;
+    ColorPreviewRow previewRow;
+    HueRow hueRow;
+    SaturationRow saturationRow;
+    BrightnessRow brightnessRow;
+    AlphaRow alphaRow;
+    HexRow hexRow;
 
     public ColorPickerFolderRow(String path, FolderRow parentFolder, int hex) {
         super(path, parentFolder);
         this.hex = hex;
-        previewNode = new ColorPreviewRow(path + "/preview", this);
+        previewRow = new ColorPreviewRow(path + "/preview", this);
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1, 1);
-        hueNode = new HueRow(path + "/hue", this, colorProvider.hue(hex));
-        saturationNode = new SaturationRow(path + "/sat", this, colorProvider.saturation(hex));
-        brightnessNode = new BrightnessRow(path + "/br", this, colorProvider.brightness(hex));
-        alphaNode = new AlphaRow(path + "/alpha", this, 1);
-        hexNode = new HexRow(path + "/hex", this);
-        children.add(previewNode);
-        children.add(hueNode);
-        children.add(saturationNode);
-        children.add(brightnessNode);
-        children.add(alphaNode);
-        children.add(hexNode);
+        hueRow = new HueRow(path + "/hue", this, colorProvider.hue(hex));
+        saturationRow = new SaturationRow(path + "/sat", this, colorProvider.saturation(hex));
+        brightnessRow = new BrightnessRow(path + "/br", this, colorProvider.brightness(hex));
+        alphaRow = new AlphaRow(path + "/alpha", this, 1);
+        hexRow = new HexRow(path + "/hex", this);
+        children.add(previewRow);
+        children.add(hueRow);
+        children.add(saturationRow);
+        children.add(brightnessRow);
+        children.add(alphaRow);
+        children.add(hexRow);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ColorPickerFolderRow extends FolderRow {
     public void loadValuesFromHSBA(){
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1,1);
-        hex = colorProvider.color(hueNode.valueFloat, saturationNode.valueFloat, brightnessNode.valueFloat,alphaNode.valueFloat);
+        hex = colorProvider.color(hueRow.valueFloat, saturationRow.valueFloat, brightnessRow.valueFloat,alphaRow.valueFloat);
     }
 
     Color outputColor = new Color();
@@ -58,17 +58,17 @@ public class ColorPickerFolderRow extends FolderRow {
     }
 
     public float hue() {
-        return hueNode.valueFloat;
+        return hueRow.valueFloat;
     }
 
     public float saturation() {
-        return saturationNode.valueFloat;
+        return saturationRow.valueFloat;
     }
 
     public float brightness() {
-        return brightnessNode.valueFloat;
+        return brightnessRow.valueFloat;
     }
     public float alpha() {
-        return alphaNode.valueFloat;
+        return alphaRow.valueFloat;
     }
 }
