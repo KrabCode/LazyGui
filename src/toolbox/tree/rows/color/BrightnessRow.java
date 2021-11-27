@@ -1,8 +1,8 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
-public class BrightnessNode extends ColorSliderNode {
+public class BrightnessRow extends ColorSliderRow {
 
-    public BrightnessNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+    public BrightnessRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder, defaultValue);
         shaderColorMode = 2;
     }

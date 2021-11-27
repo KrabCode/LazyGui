@@ -1,32 +1,32 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.tree.nodes.FolderNode;
+import toolbox.tree.rows.FolderRow;
 
 import static processing.core.PConstants.*;
 
-public class ColorPickerFolderNode extends FolderNode {
+public class ColorPickerFolderRow extends FolderRow {
 
     public int hex;
-    ColorPreviewNode previewNode;
-    HueNode hueNode;
-    SaturationNode saturationNode;
-    BrightnessNode brightnessNode;
-    AlphaNode alphaNode;
-    HexNode hexNode;
+    ColorPreviewRow previewNode;
+    HueRow hueNode;
+    SaturationRow saturationNode;
+    BrightnessRow brightnessNode;
+    AlphaRow alphaNode;
+    HexRow hexNode;
 
-    public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
+    public ColorPickerFolderRow(String path, FolderRow parentFolder, int hex) {
         super(path, parentFolder);
         this.hex = hex;
-        previewNode = new ColorPreviewNode(path + "/preview", this);
+        previewNode = new ColorPreviewRow(path + "/preview", this);
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1, 1);
-        hueNode = new HueNode(path + "/hue", this, colorProvider.hue(hex));
-        saturationNode = new SaturationNode(path + "/sat", this, colorProvider.saturation(hex));
-        brightnessNode = new BrightnessNode(path + "/br", this, colorProvider.brightness(hex));
-        alphaNode = new AlphaNode(path + "/alpha", this, 1);
-        hexNode = new HexNode(path + "/hex", this);
+        hueNode = new HueRow(path + "/hue", this, colorProvider.hue(hex));
+        saturationNode = new SaturationRow(path + "/sat", this, colorProvider.saturation(hex));
+        brightnessNode = new BrightnessRow(path + "/br", this, colorProvider.brightness(hex));
+        alphaNode = new AlphaRow(path + "/alpha", this, 1);
+        hexNode = new HexRow(path + "/hex", this);
         children.add(previewNode);
         children.add(hueNode);
         children.add(saturationNode);

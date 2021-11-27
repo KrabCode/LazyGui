@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -13,9 +13,9 @@ import java.util.HashMap;
 
 import static processing.core.PApplet.*;
 
-public class SliderNode extends ValueNode {
-    public SliderNode(String path, FolderNode parentFolder) {
-        super(path, parentFolder);
+public class SliderRow extends Row {
+    public SliderRow(String path, FolderRow parentFolder) {
+        super(RowType.CONTROL, path, parentFolder);
     }
 
     public float valueFloat;
@@ -142,8 +142,8 @@ public class SliderNode extends ValueNode {
     }
 
     @Override
-    public void mouseWheelMovedOverNode(float x, float y, int dir) {
-        super.mouseWheelMovedOverNode(x,y, dir);
+    public void mouseWheelMovedOverRow(float x, float y, int dir) {
+        super.mouseWheelMovedOverRow(x,y, dir);
         if(dir > 0){
             decreasePrecision();
         }else if(dir < 0){
@@ -183,8 +183,8 @@ public class SliderNode extends ValueNode {
     }
 
     @Override
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
-        super.keyPressedOverNode(e, x, y);
+    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+        super.keyPressedOverRow(e, x, y);
         if(e.getKeyChar() == 'r'){
             valueFloat = valueFloatDefault;
             valueFloatPrecision = valueFloatPrecisionDefault;
@@ -193,8 +193,8 @@ public class SliderNode extends ValueNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragNodeContinue(e, x, y, px, py);
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragRowContinue(e, x, y, px, py);
         if(isDragged){
             mouseDelta.x = px - x;
             mouseDelta.y = py - y;

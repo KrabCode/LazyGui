@@ -1,21 +1,21 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.ShaderStore;
-import toolbox.tree.nodes.SliderNode;
+import toolbox.tree.rows.SliderRow;
 
 import static processing.core.PApplet.norm;
 
-public abstract class ColorSliderNode extends SliderNode {
+public abstract class ColorSliderRow extends SliderRow {
 
-    public final ColorPickerFolderNode parentColorPickerFolder;
+    public final ColorPickerFolderRow parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    public ColorSliderNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+    public ColorSliderRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
         this.valueFloatDefault = 0;
@@ -41,15 +41,15 @@ public abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragNodeContinue(e, x, y, px, py);
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragRowContinue(e, x, y, px, py);
         updateColorInParentFolder();
         e.setConsumed(true);
     }
 
     @Override
-    public void mouseReleasedOverNode(float x, float y) {
-        super.mouseReleasedOverNode(x, y);
+    public void mouseReleasedOverRow(float x, float y) {
+        super.mouseReleasedOverRow(x, y);
         updateColorInParentFolder();
     }
 

@@ -1,12 +1,12 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import processing.core.PApplet;
 
-public class SliderIntNode extends SliderNode {
+public class SliderIntRow extends SliderRow {
 
     float minimumIntPrecision = 0.1f;
 
-    public SliderIntNode(String path, FolderNode parentFolder) {
+    public SliderIntRow(String path, FolderRow parentFolder) {
         super(path, parentFolder);
     }
 

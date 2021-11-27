@@ -1,4 +1,4 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 public class Color {
     public int hex = 0xFF000000;

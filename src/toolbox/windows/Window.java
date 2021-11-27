@@ -8,7 +8,7 @@ import toolbox.*;
 import toolbox.global.State;
 import toolbox.global.Palette;
 import toolbox.global.Utils;
-import toolbox.tree.nodes.Node;
+import toolbox.tree.rows.Row;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
@@ -18,7 +18,7 @@ import static processing.core.PConstants.LEFT;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
-    protected Node node;
+    protected Row row;
     protected PVector pos;
     protected PVector size;
     float cell = State.cell;
@@ -26,10 +26,10 @@ public abstract class Window implements UserInputSubscriber {
     private boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, Node node, boolean closeable){
+    public Window(PVector pos, Row row, boolean closeable){
         this.pos = pos;
         this.size = new PVector(cell * 8, cell * 1);
-        this.node = node;
+        this.row = row;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
     }
@@ -98,7 +98,7 @@ public abstract class Window implements UserInputSubscriber {
             pg.fill(Palette.normalForeground);
         }
         pg.textAlign(LEFT, CENTER);
-        pg.text(node.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
+        pg.text(row.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(Palette.windowBorder);
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();

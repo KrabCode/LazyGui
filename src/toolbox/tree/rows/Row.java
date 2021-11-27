@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -11,11 +11,11 @@ import static processing.core.PApplet.*;
 
 /**
  *
- * A node in the GUI Tree representing either a folder of nodes or a user-queryable value
+ * A node in the GUI Tree representing either a folder of nodes or a value
  */
-public abstract class Node {
-    public final NodeType type;
-    public final FolderNode parent;
+public abstract class Row {
+    public final RowType type;
+    public final FolderRow parent;
     public final String path;
     public String name;
     public final float cell = State.cell;
@@ -28,7 +28,7 @@ public abstract class Node {
 
     protected boolean displayInlineName = true;
 
-    public Node(NodeType type, String path, FolderNode parentFolder) {
+    public Row(RowType type, String path, FolderRow parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
@@ -133,7 +133,7 @@ public abstract class Node {
         return parent.window.isFocused() && mouseOver;
     }
 
-    public void nodePressed(float x, float y) {
+    public void rowPressed(float x, float y) {
         isDragged = true;
         dragStartPos.x = x;
         dragStartPos.y = y;
@@ -144,19 +144,19 @@ public abstract class Node {
         State.app.cursor();
     }
 
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    public void keyPressedOverRow(KeyEvent e, float x, float y) {
 
     }
 
-    public void mouseReleasedOverNode(float x, float y) {
+    public void mouseReleasedOverRow(float x, float y) {
 
     }
 
-    public void mouseWheelMovedOverNode(float x, float y, int dir) {
+    public void mouseWheelMovedOverRow(float x, float y, int dir) {
 
     }
 
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
         State.app.noCursor();
         State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }

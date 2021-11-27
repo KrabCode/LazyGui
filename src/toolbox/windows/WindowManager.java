@@ -2,11 +2,9 @@ package toolbox.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.tree.nodes.FolderNode;
+import toolbox.tree.rows.FolderRow;
 
 import java.util.ArrayList;
-
-import static toolbox.global.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;
@@ -27,10 +25,10 @@ public class WindowManager {
         singleton.windows.add(explorer);
     }
 
-    public synchronized static void uncoverOrCreateWindow(FolderNode folderNode, PVector pos) {
+    public synchronized static void uncoverOrCreateWindow(FolderRow folderNode, PVector pos) {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.node.path.equals(folderNode.path)){
+            if(w.row.path.equals(folderNode.path)){
                 w.uncover();
                 windowFound = true;
                 break;

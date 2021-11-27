@@ -1,9 +1,9 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 
-public class HueNode extends ColorSliderNode {
+public class HueRow extends ColorSliderRow {
 
-    public HueNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+    public HueRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder, defaultValue);
         shaderColorMode = 0;
     }

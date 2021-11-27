@@ -1,15 +1,15 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 import processing.core.PGraphics;
-import toolbox.tree.nodes.Node;
-import toolbox.tree.nodes.NodeType;
+import toolbox.tree.rows.Row;
+import toolbox.tree.rows.RowType;
 
-public class HexNode extends Node {
+public class HexRow extends Row {
 
-    ColorPickerFolderNode parentColorPickerFolder;
+    ColorPickerFolderRow parentColorPickerFolder;
 
-    public HexNode(String path, ColorPickerFolderNode parentFolder) {
-        super(NodeType.DISPLAY, path, parentFolder);
+    public HexRow(String path, ColorPickerFolderRow parentFolder) {
+        super(RowType.DISPLAY, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }
 

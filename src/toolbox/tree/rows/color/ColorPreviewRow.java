@@ -1,19 +1,19 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
 import processing.core.PGraphics;
 import toolbox.global.ShaderStore;
-import toolbox.tree.nodes.Node;
-import toolbox.tree.nodes.NodeType;
+import toolbox.tree.rows.Row;
+import toolbox.tree.rows.RowType;
 
 import static processing.core.PConstants.CORNER;
 
-public class ColorPreviewNode extends Node {
+public class ColorPreviewRow extends Row {
 
-    ColorPickerFolderNode parentColorPickerFolder;
+    ColorPickerFolderRow parentColorPickerFolder;
     String checkerboardShader = "checkerboard.glsl";
 
-    public ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
-        super(NodeType.DISPLAY, path, parentColorPickerFolder);
+    public ColorPreviewRow(String path, ColorPickerFolderRow parentColorPickerFolder) {
+        super(RowType.DISPLAY, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
         rowCount = 2;

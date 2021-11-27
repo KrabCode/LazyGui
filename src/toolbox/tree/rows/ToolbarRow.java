@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import processing.core.PGraphics;
 import toolbox.global.Palette;
@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.TAU;
 
-public class ToolbarNode extends Node {
+public class ToolbarRow extends Row {
     int buttonCount = 8;
     ArrayList<Float> buttonRotations = new ArrayList<>();
 
 
-    public ToolbarNode(String path, FolderNode parentFolder) {
-        super(NodeType.DISPLAY, path, parentFolder);
+    public ToolbarRow(String path, FolderRow parentFolder) {
+        super(RowType.DISPLAY, path, parentFolder);
         this.name = "";
         for (int i = 0; i < buttonCount; i++) {
             buttonRotations.add(0f);

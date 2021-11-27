@@ -1,9 +1,9 @@
-package toolbox.tree.nodes.color;
+package toolbox.tree.rows.color;
 
-public class SaturationNode extends ColorSliderNode {
+public class SaturationRow extends ColorSliderRow {
 
 
-    public SaturationNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+    public SaturationRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder, defaultValue);
         shaderColorMode = 1;
     }

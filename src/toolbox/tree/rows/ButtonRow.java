@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -7,9 +7,9 @@ import toolbox.global.State;
 
 import static processing.core.PConstants.CENTER;
 
-public class ButtonNode extends ValueNode {
-    public ButtonNode(String path, FolderNode folder) {
-        super(path, folder);
+public class ButtonRow extends Row {
+    public ButtonRow(String path, FolderRow folder) {
+        super(RowType.CONTROL, path, folder);
     }
 
     public boolean valueBoolean = false;
@@ -36,7 +36,7 @@ public class ButtonNode extends ValueNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

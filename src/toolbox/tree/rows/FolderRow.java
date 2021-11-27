@@ -1,4 +1,4 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 import static processing.core.PConstants.CENTER;
 
-public class FolderNode extends Node {
-    public ArrayList<Node> children = new ArrayList<>();
+public class FolderRow extends Row {
+    public ArrayList<Row> children = new ArrayList<>();
     public FolderWindow window;
 
-    public FolderNode(String path, FolderNode parent) {
-        super(NodeType.FOLDER, path, parent);
+    public FolderRow(String path, FolderRow parent) {
+        super(RowType.FOLDER, path, parent);
     }
 
 
@@ -35,13 +35,13 @@ public class FolderNode extends Node {
     }
 
     @Override
-    public void nodePressed(float x, float y) {
-        super.nodePressed(x, y);
+    public void rowPressed(float x, float y) {
+        super.rowPressed(x, y);
         WindowManager.uncoverOrCreateWindow(this, new PVector(x - cell * 0.5f, y-cell * 0.5f));
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

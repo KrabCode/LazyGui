@@ -1,24 +1,22 @@
-package toolbox.tree.nodes;
+package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.Palette;
-import toolbox.tree.nodes.FolderNode;
-import toolbox.tree.nodes.ValueNode;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNER;
 
-public class ToggleNode extends ValueNode {
+public class ToggleRow extends Row {
 
     public boolean valueBooleanDefault;
     public boolean valueBoolean;
     boolean armed = false;
     public float handlePosNorm;
 
-    public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
-        super(path, folder);
+    public ToggleRow(String path, FolderRow folder, boolean defaultValue) {
+        super(RowType.CONTROL, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
         handlePosNorm = valueBoolean ? 1 : 0;
@@ -60,13 +58,13 @@ public class ToggleNode extends ValueNode {
 
 
     @Override
-    public void nodePressed(float x, float y) {
-        super.nodePressed(x, y);
+    public void rowPressed(float x, float y) {
+        super.rowPressed(x, y);
         armed = true;
     }
 
-    public void mouseReleasedOverNode(float x, float y){
-        super.mouseReleasedOverNode(x,y);
+    public void mouseReleasedOverRow(float x, float y){
+        super.mouseReleasedOverRow(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
         }
@@ -74,7 +72,7 @@ public class ToggleNode extends ValueNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }
