@@ -95,9 +95,9 @@ public class Gui implements UserInputSubscriber {
     boolean isRecording = false;
 
     public void recorder(PGraphics pg) {
-        boolean screenshot = button("rec/screenshot");
-        int framesToRecord = sliderInt("rec/frames", 600, 0, Integer.MAX_VALUE);
-        boolean recordNow = button("rec/recording");
+        boolean screenshot = button("recorder/screenshot");
+        boolean recordNow = button("recorder/recording");
+        int framesToRecord = sliderInt("recorder/frames", 600, 0, Integer.MAX_VALUE);
 //        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
         if (!lastRecordNow && recordNow) {
             recordingFolderName = generateRecordingFolderName();

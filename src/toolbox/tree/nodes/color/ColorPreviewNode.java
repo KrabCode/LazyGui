@@ -27,6 +27,7 @@ public class ColorPreviewNode extends Node {
     }
 
     private void drawCheckerboard(PGraphics pg) {
+        ShaderStore.lazyInitGetShader(checkerboardShader).set("quadPos", pos.x, pos.y);
         ShaderStore.hotShader(checkerboardShader, pg);
         pg.rectMode(CORNER);
         pg.fill(1);
