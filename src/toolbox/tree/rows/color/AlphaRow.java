@@ -12,4 +12,9 @@ public class AlphaRow extends ColorSliderRow {
     void updateColorInParentFolder() {
         parentColorPickerFolder.loadValuesFromHSBA();
     }
+    @Override
+    protected void onValueResetToDefault() {
+        super.onValueResetToDefault();
+        parentColorPickerFolder.loadValuesFromHSBA();
+    }
 }

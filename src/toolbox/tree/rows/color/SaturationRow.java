@@ -13,4 +13,9 @@ public class SaturationRow extends ColorSliderRow {
         parentColorPickerFolder.loadValuesFromHSBA();
     }
 
+    @Override
+    protected void onValueResetToDefault() {
+        super.onValueResetToDefault();
+        parentColorPickerFolder.loadValuesFromHSBA();
+    }
 }

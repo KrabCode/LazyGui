@@ -190,7 +190,12 @@ public class SliderRow extends Row {
             valueFloat = valueFloatDefault;
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
+            onValueResetToDefault();
         }
+    }
+
+    protected void onValueResetToDefault() {
+
     }
 
     @Override

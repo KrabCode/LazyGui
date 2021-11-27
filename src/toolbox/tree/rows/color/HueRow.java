@@ -21,4 +21,10 @@ public class HueRow extends ColorSliderRow {
         valueFloat %= 1;
         return false;
     }
+
+    @Override
+    protected void onValueResetToDefault() {
+        super.onValueResetToDefault();
+        parentColorPickerFolder.loadValuesFromHSBA();
+    }
 }
