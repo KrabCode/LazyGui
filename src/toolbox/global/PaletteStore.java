@@ -2,7 +2,7 @@ package toolbox.global;
 
 
 import toolbox.global.palettes.GuiPalette;
-import toolbox.global.palettes.GuiPaletteColorType;
+import toolbox.global.palettes.PaletteColorType;
 import toolbox.global.palettes.GuiPaletteDark;
 import toolbox.global.palettes.GuiPalettePink;
 
@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 
-public class GuiPaletteStore extends GuiPalette {
+public class PaletteStore extends GuiPalette {
     private static ArrayList<GuiPalette> palettes = new ArrayList<>();
     private static int currentPaletteIndex = 0;
 
-    private GuiPaletteStore(){
+    private PaletteStore(){
 
     }
 
@@ -34,7 +34,7 @@ public class GuiPaletteStore extends GuiPalette {
         return palettes.size();
     }
 
-    public static int get(GuiPaletteColorType type){
+    public static int get(PaletteColorType type){
         switch(type) {
             case WINDOW_BORDER:
                 return palettes.get(currentPaletteIndex).windowBorder;
@@ -50,7 +50,7 @@ public class GuiPaletteStore extends GuiPalette {
         return 0xFFFF0000;
     }
 
-    public static void set(GuiPaletteColorType type, int val) {
+    public static void set(PaletteColorType type, int val) {
         switch(type) {
             case WINDOW_BORDER:
                 palettes.get(currentPaletteIndex).windowBorder = val;

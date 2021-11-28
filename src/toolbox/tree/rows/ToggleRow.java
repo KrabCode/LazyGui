@@ -2,12 +2,10 @@ package toolbox.tree.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.GuiPaletteStore;
+import toolbox.global.PaletteStore;
 
-import static processing.core.PApplet.lerp;
-import static processing.core.PApplet.map;
-import static processing.core.PConstants.CORNER;
-import static toolbox.global.palettes.GuiPaletteColorType.*;
+import static processing.core.PConstants.CENTER;
+import static toolbox.global.palettes.PaletteColorType.*;
 
 public class ToggleRow extends Row {
 
@@ -29,32 +27,28 @@ public class ToggleRow extends Row {
     }
 
     private void drawToggleHandle(PGraphics pg) {
-        float handleWidth = cell * 0.75f;
-        float handleXCenter = size.x - cell * 0.8f;
-        float handleXLeft = handleXCenter - handleWidth * 0.5f;
-        float handleXRight = handleXCenter + handleWidth * 0.5f;
-        float lerpAmt = 0.3f;
-        if(valueBoolean){
-            handlePosNorm = lerp(handlePosNorm,1, lerpAmt);
+        float rectWidth = cell * 0.3f;
+        float rectHeight = cell * 0.3f;
+
+
+        pg.rectMode(CENTER);
+        pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
+        if(isMouseOverRow){
+            pg.stroke(PaletteStore.get(FOCUS_FOREGROUND));
         }else{
-            handlePosNorm = lerp(handlePosNorm,0, lerpAmt);
+            pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
         }
-        float handleX = map(handlePosNorm, 0, 1, handleXLeft, handleXRight);
-        float handleY = size.y * 0.5f;
-        float handleDiameter = cell * 0.4f;
-        float handleHeight = 5;
-        pg.fill(valueBoolean ? GuiPaletteStore.get(WINDOW_BORDER) : GuiPaletteStore.get(FOCUS_BACKGROUND));
-        if(mouseOver){
-            pg.fill(GuiPaletteStore.get(NORMAL_FOREGROUND));
+        if(valueBoolean){
+            pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
+            pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
+            pg.fill(PaletteStore.get(FOCUS_FOREGROUND));
+            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
+        }else{
+            pg.fill(PaletteStore.get(NORMAL_FOREGROUND));
+            pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
+            pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
+            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }
-        pg.rectMode(CORNER);
-        pg.rect(handleXLeft, handleY-handleHeight / 2f, handleWidth, handleHeight, 8);
-        pg.noStroke();
-        pg.fill(valueBoolean ? GuiPaletteStore.get(NORMAL_FOREGROUND) : GuiPaletteStore.get(WINDOW_BORDER));
-        if(mouseOver && valueBoolean){
-            pg.fill(GuiPaletteStore.get(FOCUS_FOREGROUND));
-        }
-        pg.ellipse(handleX, handleY, handleDiameter, handleDiameter);
     }
 
 

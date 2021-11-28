@@ -79,12 +79,12 @@ public class FolderWindow extends Window {
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
         for (Row row : parentFolder.children) {
-            row.mouseOver = false;
+            row.isMouseOverRow = false;
         }
         if (isPointInsideContent(x, y)) {
             Row row = tryFindChildNode(x, y);
             if (row != null && !row.isParentWindowHidden()) {
-                row.mouseOver = true;
+                row.isMouseOverRow = true;
             }
         }
     }

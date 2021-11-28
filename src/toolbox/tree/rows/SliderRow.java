@@ -3,18 +3,16 @@ package toolbox.tree.rows;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import processing.core.PMatrix;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import toolbox.global.GuiPaletteStore;
+import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
-import toolbox.global.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
-import static toolbox.global.palettes.GuiPaletteColorType.NORMAL_BACKGROUND;
+import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderRow extends Row {
 
@@ -89,13 +87,14 @@ public class SliderRow extends Row {
 
     void updateDrawSliderNodeValue(PGraphics pg) {
         String valueText = getValueToDisplay().replaceAll(",", ".");
-        if (isDragged || mouseOver) {
+        if (isDragged || isMouseOverRow) {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
             mouseDelta.x = 0;
             mouseDelta.y = 0;
         }
+        fillForegroundBasedOnMouseOver(pg);
         drawRightText(pg, valueText);
     }
 
@@ -105,7 +104,7 @@ public class SliderRow extends Row {
             backgroundScrollX -= mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(GuiPaletteStore.get(NORMAL_BACKGROUND));
+        pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

@@ -1,6 +1,6 @@
 package toolbox.global.palettes;
 
-public enum GuiPaletteColorType {
+public enum PaletteColorType {
     WINDOW_BORDER,
     NORMAL_BACKGROUND,
     FOCUS_BACKGROUND,

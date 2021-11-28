@@ -15,6 +15,7 @@ public class HexRow extends Row {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
+        fillForegroundBasedOnMouseOver(pg);
         drawRightText(pg, prettifyHexString(parentColorPickerFolder.hex));
     }
 

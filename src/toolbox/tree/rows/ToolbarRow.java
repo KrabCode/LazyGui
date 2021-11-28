@@ -1,14 +1,14 @@
 package toolbox.tree.rows;
 
 import processing.core.PGraphics;
-import toolbox.global.GuiPaletteStore;
+import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.TAU;
-import static toolbox.global.palettes.GuiPaletteColorType.*;
+import static toolbox.global.palettes.PaletteColorType.*;
 
 public class ToolbarRow extends Row {
     int buttonCount = 8;
@@ -34,14 +34,14 @@ public class ToolbarRow extends Row {
             updateDrawButton(pg, i);
             pg.popMatrix();
             if(i > 0){
-                pg.stroke(GuiPaletteStore.get(WINDOW_BORDER));
+                pg.stroke(PaletteStore.get(WINDOW_BORDER));
                 pg.strokeWeight(1);
                 pg.line(0,0,0,cell-1);
             }
             pg.popStyle();
             pg.popMatrix();
         }
-        pg.stroke(GuiPaletteStore.get(WINDOW_BORDER));
+        pg.stroke(PaletteStore.get(WINDOW_BORDER));
         pg.line(0,cell-1,size.x, cell-1);
     }
 
@@ -55,11 +55,11 @@ public class ToolbarRow extends Row {
         pg.translate(cell * 0.5f, cell * 0.5f);
         pg.rotate(rotation);
         if (isMouseOverButton(buttonIndex)) {
-            pg.stroke(GuiPaletteStore.get(FOCUS_FOREGROUND));
-            pg.fill(GuiPaletteStore.get(FOCUS_BACKGROUND));
+            pg.stroke(PaletteStore.get(FOCUS_FOREGROUND));
+            pg.fill(PaletteStore.get(FOCUS_BACKGROUND));
             buttonRotations.set(buttonIndex, rotation + radians(2));
         } else {
-            pg.stroke(GuiPaletteStore.get(NORMAL_FOREGROUND));
+            pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
         }
         pg.beginShape();
         if(buttonIndex == 0){

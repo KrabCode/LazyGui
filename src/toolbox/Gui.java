@@ -4,7 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.global.GuiPaletteStore;
+import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.tree.*;
 import toolbox.tree.rows.*;
@@ -39,7 +39,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
-        GuiPaletteStore.initSingleton();
+        PaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();

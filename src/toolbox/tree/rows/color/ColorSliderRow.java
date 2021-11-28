@@ -3,10 +3,13 @@ package toolbox.tree.rows.color;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
+import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
+import toolbox.global.palettes.PaletteColorType;
 import toolbox.tree.rows.SliderRow;
 
 import static processing.core.PApplet.norm;
+import static processing.core.PConstants.*;
 
 public abstract class ColorSliderRow extends SliderRow {
 
@@ -14,7 +17,6 @@ public abstract class ColorSliderRow extends SliderRow {
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
-
 
     public ColorSliderRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder);
@@ -56,6 +58,15 @@ public abstract class ColorSliderRow extends SliderRow {
 
     abstract void updateColorInParentFolder();
 
+    @Override
+    protected void updateDrawInlineNode(PGraphics pg) {
+        super.updateDrawInlineNode(pg);
+        if(isDragged){
+            pg.stroke(foregroundMouseOverBrightnessAware());
+            pg.strokeWeight(1);
+            pg.line(size.x / 2f, 0f, size.x / 2f, size.y-1f);
+        }
+    }
 
     @Override
     protected void updateDrawBackgroundShader(PGraphics pg) {
@@ -69,5 +80,31 @@ public abstract class ColorSliderRow extends SliderRow {
         shader.set("mode", shaderColorMode);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         ShaderStore.hotShader(colorShaderPath, pg);
+    }
+
+    @Override
+    public void drawLeftText(PGraphics pg, String text) {
+        pg.fill(foregroundMouseOverBrightnessAware());
+        super.drawLeftText(pg, text);
+    }
+
+    @Override
+    public void drawRightText(PGraphics pg, String text) {
+        pg.fill(foregroundMouseOverBrightnessAware());
+        float textMarginX = 5;
+        pg.textAlign(RIGHT, CENTER);
+        pg.text(text,size.x - textMarginX, size.y * 0.5f);
+    }
+
+    protected int foregroundMouseOverBrightnessAware(){
+        if(isMouseOverRow){
+            if(parentColorPickerFolder.brightness() > 0.7f){
+                return 0;
+            }else{
+                return 1;
+            }
+        }else{
+            return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+        }
     }
 }

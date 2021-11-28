@@ -34,7 +34,7 @@ public class ColorPickerFolderRow extends FolderRow {
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         strokeForegroundBasedOnMouseOver(pg);
-        float previewRectSize = cell * 0.65f;
+        float previewRectSize = cell * 0.6f;
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         pg.rectMode(CENTER);
         pg.fill(hex);
@@ -66,7 +66,7 @@ public class ColorPickerFolderRow extends FolderRow {
         return outputColor;
     }
 
-    public float getValue(int index){
+    private float getValue(int index){
         return ((ColorSliderRow)children.get(index)).valueFloat;
     }
 
