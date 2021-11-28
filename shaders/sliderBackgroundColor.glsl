@@ -86,7 +86,7 @@ void main(){
     if(mode == 0){
         float hueRangeMin = hueValue - precisionNormalized;
         float hueRangeMax = hueValue + precisionNormalized;
-        float hueVarying = clamp(map(uv.x, 0, 1, hueRangeMin, hueRangeMax), 0., 1.); // TODO hue modulo
+        float hueVarying = mod(map(uv.x, 0, 1, hueRangeMin, hueRangeMax), 1.); // hue repeats so mod() instead of clamp()
         clr = vec4(hsv2rgb(vec3(hueVarying, saturationValue, brightnessValue)), 1.);
     }
     if(mode == 1){

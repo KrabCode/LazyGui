@@ -71,13 +71,12 @@ public class Gui implements UserInputSubscriber {
         lazyResetDisplay();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
-
         pg.clear();
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
-        canvas.image(pg, 0, 0, canvas.width, canvas.height);
+        canvas.image(pg, 0, 0);
     }
 
     @Override

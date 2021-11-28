@@ -30,20 +30,29 @@ public class PaletteEditor extends PApplet {
     @Override
     public void draw() {
         background(gui.colorPicker("sketch background", 0xFF000000).hex);
-        boolean switchPalette = gui.button("switch palette");
-        GuiPaletteStore.set(WINDOW_BORDER, gui.colorPicker    ("palette/window border"       , GuiPaletteStore.get(WINDOW_BORDER)).hex);
-        GuiPaletteStore.set(NORMAL_BACKGROUND, gui.colorPicker("palette/normal background"   , GuiPaletteStore.get(NORMAL_BACKGROUND)).hex);
-        GuiPaletteStore.set(FOCUS_BACKGROUND, gui.colorPicker( "palette/focus background"    , GuiPaletteStore.get(FOCUS_BACKGROUND)).hex);
-        GuiPaletteStore.set(NORMAL_FOREGROUND, gui.colorPicker("palette/normal foreground"   , GuiPaletteStore.get(NORMAL_FOREGROUND)).hex);
-        GuiPaletteStore.set(FOCUS_FOREGROUND, gui.colorPicker( "palette/focus foreground"    , GuiPaletteStore.get(FOCUS_FOREGROUND)).hex);
+        boolean switchPalette = false;
+        if(gui.button("palette/> dark")){
+            GuiPaletteStore.setPaletteIndex(0);
+            switchPalette = true;
+        }else if(gui.button("palette/> pink")){
+            GuiPaletteStore.setPaletteIndex(1);
+            switchPalette = true;
+        }else if(gui.button("palette/> new")){
+            GuiPaletteStore.setPaletteIndex(2);
+            switchPalette = true;
+        }
         if(switchPalette){
-            GuiPaletteStore.nextPalette();
             gui.colorPickerSet("palette/window border"    ,  GuiPaletteStore.get(WINDOW_BORDER));
             gui.colorPickerSet("palette/normal background",  GuiPaletteStore.get(NORMAL_BACKGROUND));
             gui.colorPickerSet("palette/focus background" ,  GuiPaletteStore.get(FOCUS_BACKGROUND));
             gui.colorPickerSet("palette/normal foreground",  GuiPaletteStore.get(NORMAL_FOREGROUND));
             gui.colorPickerSet("palette/focus foreground" ,  GuiPaletteStore.get(FOCUS_FOREGROUND));
         }
+        GuiPaletteStore.set(WINDOW_BORDER, gui.colorPicker    ("palette/window border"       , GuiPaletteStore.get(WINDOW_BORDER)).hex);
+        GuiPaletteStore.set(NORMAL_BACKGROUND, gui.colorPicker("palette/normal background"   , GuiPaletteStore.get(NORMAL_BACKGROUND)).hex);
+        GuiPaletteStore.set(FOCUS_BACKGROUND, gui.colorPicker( "palette/focus background"    , GuiPaletteStore.get(FOCUS_BACKGROUND)).hex);
+        GuiPaletteStore.set(NORMAL_FOREGROUND, gui.colorPicker("palette/normal foreground"   , GuiPaletteStore.get(NORMAL_FOREGROUND)).hex);
+        GuiPaletteStore.set(FOCUS_FOREGROUND, gui.colorPicker( "palette/focus foreground"    , GuiPaletteStore.get(FOCUS_FOREGROUND)).hex);
         gui.update();
         gui.recorder();
     }

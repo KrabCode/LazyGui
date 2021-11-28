@@ -7,6 +7,7 @@ import processing.core.PVector;
 import processing.opengl.PShader;
 import toolbox.global.GuiPaletteStore;
 import toolbox.global.ShaderStore;
+import toolbox.global.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,8 +93,12 @@ public class SliderRow extends Row {
             drawBackgroundScroller(pg, constrainedThisFrame);
             mouseDelta.x = 0;
             mouseDelta.y = 0;
+//            ShaderStore.hotShader("invert.glsl", pg); // TODO invert value text color
+            drawRightText(pg, valueText);
+//            pg.resetShader();
+        }else{
+            drawRightText(pg, valueText);
         }
-        drawRightText(pg, valueText);
     }
 
 

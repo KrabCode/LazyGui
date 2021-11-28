@@ -90,6 +90,6 @@ void main(){
         colorPoint(0.5, center),
         colorPoint(1.,  edge)
     );
-    vec4 color = vec4(gradientColorAt(x, gradient), 1.);
-    gl_FragColor = color;
+    vec3 color = gradientColorAt(x, gradient);
+    gl_FragColor = vec4(color, 1.);
 }

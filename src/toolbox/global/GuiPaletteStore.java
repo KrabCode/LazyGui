@@ -8,25 +8,30 @@ import toolbox.global.palettes.GuiPalettePink;
 
 import java.util.ArrayList;
 
+import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.max;
+
 public class GuiPaletteStore extends GuiPalette {
     private static ArrayList<GuiPalette> palettes = new ArrayList<>();
-
-    static int currentPaletteIndex = 0;
-    private static GuiPalette singleton;
+    private static int currentPaletteIndex = 0;
 
     private GuiPaletteStore(){
 
     }
 
     public static void initSingleton(){
-        singleton = new GuiPaletteStore();
         palettes.add(new GuiPaletteDark());
         palettes.add(new GuiPalettePink());
+        palettes.add(new GuiPaletteDark());
     }
 
-    public static void nextPalette(){
-        currentPaletteIndex++;
-        currentPaletteIndex %= palettes.size();
+    public static void setPaletteIndex(int index){
+        currentPaletteIndex = index;
+        currentPaletteIndex = constrain(currentPaletteIndex, 0, palettes.size()-1);
+    }
+
+    public static int paletteCount(){
+        return palettes.size();
     }
 
     public static int get(GuiPaletteColorType type){
