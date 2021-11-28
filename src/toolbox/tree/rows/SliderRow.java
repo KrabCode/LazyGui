@@ -3,6 +3,7 @@ package toolbox.tree.rows;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
+import processing.core.PMatrix;
 import processing.core.PVector;
 import processing.opengl.PShader;
 import toolbox.global.GuiPaletteStore;
@@ -16,6 +17,7 @@ import static processing.core.PApplet.*;
 import static toolbox.global.palettes.GuiPaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderRow extends Row {
+
     public SliderRow(String path, FolderRow parentFolder) {
         super(RowType.CONTROL, path, parentFolder);
     }
@@ -93,18 +95,14 @@ public class SliderRow extends Row {
             drawBackgroundScroller(pg, constrainedThisFrame);
             mouseDelta.x = 0;
             mouseDelta.y = 0;
-//            ShaderStore.hotShader("invert.glsl", pg); // TODO invert value text color
-            drawRightText(pg, valueText);
-//            pg.resetShader();
-        }else{
-            drawRightText(pg, valueText);
         }
+        drawRightText(pg, valueText);
     }
 
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
         if(!constrainedThisFrame){
-            backgroundScrollX += mouseDelta.x;
+            backgroundScrollX -= mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
         pg.fill(GuiPaletteStore.get(NORMAL_BACKGROUND));

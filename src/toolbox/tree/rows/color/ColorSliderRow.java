@@ -15,6 +15,7 @@ public abstract class ColorSliderRow extends SliderRow {
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
+
     public ColorSliderRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
         super(path, parentFolder);
         this.parentColorPickerFolder = parentFolder;

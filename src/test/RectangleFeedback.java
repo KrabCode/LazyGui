@@ -21,7 +21,6 @@ public class RectangleFeedback extends PApplet {
     }
 
     public void setup() {
-        surface.setAlwaysOnTop(true);
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
         pg.smooth(16);

@@ -29,7 +29,6 @@ public class Lissajous extends PApplet {
         int margin = 0;
         surface.setSize(1000,1000);
         surface.setLocation(displayWidth - width - margin, margin);
-        surface.setAlwaysOnTop(true);
         pg = createGraphics(width, height, P2D);
 //        printAvailableFonts();
     }
