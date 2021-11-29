@@ -1,7 +1,10 @@
 package toolbox.tree.rows.color;
 
+import com.jogamp.newt.event.KeyEvent;
 import toolbox.global.PaletteStore;
 import toolbox.global.palettes.PaletteColorType;
+
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
 public class AlphaRow extends ColorSliderRow {
 
@@ -31,6 +34,13 @@ public class AlphaRow extends ColorSliderRow {
             }
         }else{
             return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+        }
+    }
+    @Override
+    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+        super.keyPressedOverRow(e,x,y);
+        if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+            parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
 }

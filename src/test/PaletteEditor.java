@@ -37,7 +37,7 @@ public class PaletteEditor extends PApplet {
         }else if(gui.button("palette/> pink")){
             PaletteStore.setPaletteIndex(1);
             switchPalette = true;
-        }else if(gui.button("palette/> new")){
+        }else if(gui.button("palette/> blue")){
             PaletteStore.setPaletteIndex(2);
             switchPalette = true;
         }

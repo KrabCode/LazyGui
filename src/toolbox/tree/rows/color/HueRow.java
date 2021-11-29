@@ -1,6 +1,11 @@
 package toolbox.tree.rows.color;
 
 
+import com.jogamp.newt.event.KeyEvent;
+import toolbox.global.State;
+
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
+
 public class HueRow extends ColorSliderRow {
 
     public HueRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
@@ -15,7 +20,7 @@ public class HueRow extends ColorSliderRow {
 
     @Override
     protected boolean tryConstrainValue() {
-        while(valueFloat < 0){
+        while (valueFloat < 0) {
             valueFloat += 1;
         }
         valueFloat %= 1;
@@ -26,5 +31,14 @@ public class HueRow extends ColorSliderRow {
     protected void onValueResetToDefault() {
         super.onValueResetToDefault();
         parentColorPickerFolder.loadValuesFromHSBA();
+    }
+
+
+    @Override
+    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+        super.keyPressedOverRow(e, x, y);
+        if (e.getKeyCode() == KEY_CODE_CTRL_V) {
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
     }
 }

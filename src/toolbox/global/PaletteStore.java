@@ -1,15 +1,11 @@
 package toolbox.global;
 
 
-import toolbox.global.palettes.GuiPalette;
-import toolbox.global.palettes.PaletteColorType;
-import toolbox.global.palettes.GuiPaletteDark;
-import toolbox.global.palettes.GuiPalettePink;
+import toolbox.global.palettes.*;
 
 import java.util.ArrayList;
 
 import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.max;
 
 public class PaletteStore extends GuiPalette {
     private static ArrayList<GuiPalette> palettes = new ArrayList<>();
@@ -22,7 +18,7 @@ public class PaletteStore extends GuiPalette {
     public static void initSingleton(){
         palettes.add(new GuiPaletteDark());
         palettes.add(new GuiPalettePink());
-        palettes.add(new GuiPaletteDark());
+        palettes.add(new GuiPaletteBlue());
     }
 
     public static void setPaletteIndex(int index){

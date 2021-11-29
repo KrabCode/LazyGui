@@ -1,8 +1,14 @@
 package toolbox.tree.rows.color;
 
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
+import toolbox.global.State;
 import toolbox.tree.rows.Row;
 import toolbox.tree.rows.RowType;
+
+import static processing.core.PApplet.println;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
 public class HexRow extends Row {
 
@@ -32,5 +38,17 @@ public class HexRow extends Row {
                 sb.substring(4, 6) +
                 " " +
                 sb.substring(6, 8);
+    }
+
+    @Override
+    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+        if(e.getKeyCode() == KEY_CODE_CTRL_C) {
+            State.clipboardHex = parentColorPickerFolder.hex;
+        }
+
+        if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+            parentColorPickerFolder.hex = State.clipboardHex;
+            parentColorPickerFolder.loadValuesFromHex(false);
+        }
     }
 }

@@ -17,7 +17,7 @@ public class ColorPickerFolderRow extends FolderRow {
         this.hex = hex;
         previewRow = new ColorPreviewRow(path + "/preview", this);
         initRows();
-        loadValuesFromHex();
+        loadValuesFromHex(true);
     }
 
     private void initRows() {
@@ -41,17 +41,19 @@ public class ColorPickerFolderRow extends FolderRow {
         pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 
-    public void loadValuesFromHex() {
+    public void loadValuesFromHex(boolean setDefaults) {
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1, 1);
         ((ColorSliderRow) children.get(hueRowIndex)).valueFloat = colorProvider.hue(hex);
-        ((ColorSliderRow) children.get(hueRowIndex)).valueFloatDefault = colorProvider.hue(hex);
         ((ColorSliderRow) children.get(saturationRowIndex)).valueFloat = colorProvider.saturation(hex);
-        ((ColorSliderRow) children.get(saturationRowIndex)).valueFloatDefault = colorProvider.saturation(hex);
         ((ColorSliderRow) children.get(brightnessRowIndex)).valueFloat = colorProvider.brightness(hex);
-        ((ColorSliderRow) children.get(brightnessRowIndex)).valueFloatDefault = colorProvider.brightness(hex);
         ((ColorSliderRow) children.get(alphaRowIndex)).valueFloat = colorProvider.alpha(hex);
-        ((ColorSliderRow) children.get(alphaRowIndex)).valueFloatDefault = colorProvider.alpha(hex);
+        if(setDefaults){
+            ((ColorSliderRow) children.get(hueRowIndex)).valueFloatDefault = colorProvider.hue(hex);
+            ((ColorSliderRow) children.get(saturationRowIndex)).valueFloatDefault = colorProvider.saturation(hex);
+            ((ColorSliderRow) children.get(brightnessRowIndex)).valueFloatDefault = colorProvider.brightness(hex);
+            ((ColorSliderRow) children.get(alphaRowIndex)).valueFloatDefault = colorProvider.alpha(hex);
+        }
     }
 
     public void loadValuesFromHSBA(){

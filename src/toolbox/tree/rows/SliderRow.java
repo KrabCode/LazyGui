@@ -7,11 +7,14 @@ import processing.core.PVector;
 import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
+import toolbox.global.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static processing.core.PApplet.*;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderRow extends Row {
@@ -154,6 +157,8 @@ public class SliderRow extends Row {
         }
     }
 
+
+
     private void increasePrecision() {
         currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
         setPrecisionToNode();
@@ -193,6 +198,13 @@ public class SliderRow extends Row {
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
             onValueResetToDefault();
+        }
+        if(e.getKeyCode() == KEY_CODE_CTRL_C) {
+            State.clipboardFloat = valueFloat;
+        }
+
+        if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+            valueFloat = State.clipboardFloat;
         }
     }
 

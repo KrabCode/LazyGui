@@ -293,7 +293,7 @@ public class Gui implements UserInputSubscriber {
         }else{
 
             row.hex = hex;
-            row.loadValuesFromHex();
+            row.loadValuesFromHex(false);
         }
     }
 }

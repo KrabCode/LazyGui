@@ -23,6 +23,8 @@ public class State {
     public static String libraryPath;
     public static PGraphics colorProvider;
     public static float textMarginX = 5;
+    public static int clipboardHex = 0;
+    public static float clipboardFloat = 0;
 
     public static void init(Gui gui, PApplet app){
         State.gui = gui;
