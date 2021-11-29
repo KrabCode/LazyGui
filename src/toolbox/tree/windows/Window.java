@@ -1,4 +1,4 @@
-package toolbox.windows;
+package toolbox.tree.windows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;

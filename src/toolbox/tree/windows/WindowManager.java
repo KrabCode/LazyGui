@@ -1,4 +1,4 @@
-package toolbox.windows;
+package toolbox.tree.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;

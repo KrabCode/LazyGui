@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import static processing.core.PApplet.constrain;
 
-public class PaletteStore extends GuiPalette {
-    private static ArrayList<GuiPalette> palettes = new ArrayList<>();
+public class PaletteStore extends Palette {
+    private static final ArrayList<Palette> palettes = new ArrayList<>();
     private static int currentPaletteIndex = 0;
 
     private PaletteStore(){
@@ -16,9 +16,9 @@ public class PaletteStore extends GuiPalette {
     }
 
     public static void initSingleton(){
-        palettes.add(new GuiPaletteDark());
-        palettes.add(new GuiPalettePink());
-        palettes.add(new GuiPaletteBlue());
+        palettes.add(new PaletteDark());
+        palettes.add(new PalettePink());
+        palettes.add(new PaletteBlue());
     }
 
     public static void setPaletteIndex(int index){

@@ -1,7 +1,7 @@
 package toolbox.global.palettes;
 
-public class GuiPaletteDark extends GuiPalette {
-    public GuiPaletteDark() {
+public class PaletteDark extends Palette {
+    public PaletteDark() {
         windowBorder = 0xFF787878;
         normalBackground = 0xFF0B0B0B;
         focusBackground = 0xFF2F2F2F;

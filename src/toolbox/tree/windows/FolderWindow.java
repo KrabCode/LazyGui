@@ -1,4 +1,4 @@
-package toolbox.windows;
+package toolbox.tree.windows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;

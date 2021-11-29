@@ -16,8 +16,8 @@ import toolbox.tree.rows.SliderIntRow;
 import toolbox.tree.rows.SliderRow;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.windows.FolderWindow;
-import toolbox.windows.WindowManager;
+import toolbox.tree.windows.FolderWindow;
+import toolbox.tree.windows.WindowManager;
 
 import static processing.core.PApplet.*;
 

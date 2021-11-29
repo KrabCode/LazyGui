@@ -1,6 +1,6 @@
 package toolbox.global.palettes;
 
-public abstract class GuiPalette {
+public abstract class Palette {
     public int windowBorder = 0xFF787878;
     public int normalBackground = 0xFF0B0B0B;
     public int focusBackground = 0xFF2F2F2F;
