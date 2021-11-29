@@ -10,7 +10,7 @@ import static processing.core.PApplet.*;
 import static processing.core.PConstants.TAU;
 import static toolbox.global.palettes.PaletteColorType.*;
 
-public class ToolbarRow extends Row {
+public class ToolbarRow extends AbstractRow {
     int buttonCount = 8;
     ArrayList<Float> buttonRotations = new ArrayList<>();
 

@@ -8,7 +8,7 @@ import toolbox.*;
 import toolbox.global.State;
 import toolbox.global.PaletteStore;
 import toolbox.global.Utils;
-import toolbox.tree.rows.Row;
+import toolbox.tree.rows.AbstractRow;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
@@ -19,7 +19,7 @@ import static toolbox.global.palettes.PaletteColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
-    protected Row parentRow;
+    protected AbstractRow parentRow;
     protected PVector pos;
     protected PVector size;
     float cell = State.cell;
@@ -27,7 +27,7 @@ public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, Row parentRow, boolean closeable){
+    public Window(PVector pos, AbstractRow parentRow, boolean closeable){
         this.pos = pos;
         this.size = new PVector(cell * 8, cell * 1);
         this.parentRow = parentRow;

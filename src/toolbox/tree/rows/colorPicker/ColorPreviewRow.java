@@ -1,13 +1,13 @@
-package toolbox.tree.rows.color;
+package toolbox.tree.rows.colorPicker;
 
 import processing.core.PGraphics;
 import toolbox.global.ShaderStore;
-import toolbox.tree.rows.Row;
+import toolbox.tree.rows.AbstractRow;
 import toolbox.tree.rows.RowType;
 
 import static processing.core.PConstants.CORNER;
 
-public class ColorPreviewRow extends Row {
+public class ColorPreviewRow extends AbstractRow {
 
     ColorPickerFolderRow parentColorPickerFolder;
     String checkerboardShader = "checkerboard.glsl";

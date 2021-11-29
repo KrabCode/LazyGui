@@ -1,4 +1,4 @@
-package toolbox.tree.rows.color;
+package toolbox.tree.rows.colorPicker;
 
 public class Color {
     public int hex = 0xFF000000;

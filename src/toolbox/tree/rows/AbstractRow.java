@@ -15,7 +15,7 @@ import static toolbox.global.palettes.PaletteColorType.*;
  *
  * A row in the GUI Tree representing either a folder of other rows or a more primitive value
  */
-public abstract class Row {
+public abstract class AbstractRow {
     public final RowType type;
     public final FolderRow parent;
     public final String path;
@@ -30,7 +30,7 @@ public abstract class Row {
 
     protected boolean displayInlineName = true;
 
-    public Row(RowType type, String path, FolderRow parentFolder) {
+    public AbstractRow(RowType type, String path, FolderRow parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;

@@ -1,4 +1,4 @@
-package toolbox.tree.rows.color;
+package toolbox.tree.rows.colorPicker;
 
 import processing.core.PGraphics;
 import toolbox.global.State;

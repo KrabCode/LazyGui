@@ -1,7 +1,7 @@
 package toolbox.tree;
 
 import toolbox.tree.rows.FolderRow;
-import toolbox.tree.rows.Row;
+import toolbox.tree.rows.AbstractRow;
 import toolbox.tree.rows.RowType;
 
 import java.util.LinkedList;
@@ -17,23 +17,23 @@ public class Tree {
         this.name = name;
     }
 
-    public Row getLazyInitParentFolderByPath(String rowPath){
+    public AbstractRow getLazyInitParentFolderByPath(String rowPath){
         String folderPath = getPathWithoutName(rowPath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
     }
 
-    public Row findNodeByPathInTree(String path) {
-        Queue<Row> queue = new LinkedList<>();
+    public AbstractRow findNodeByPathInTree(String path) {
+        Queue<AbstractRow> queue = new LinkedList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
-            Row row = queue.poll();
+            AbstractRow row = queue.poll();
             if (row.path.equals(path)) {
                 return row;
             }
             if (row.type == RowType.FOLDER) {
                 FolderRow folder = (FolderRow) row;
-                for (Row child : folder.children) {
+                for (AbstractRow child : folder.children) {
                     queue.offer(child);
                 }
             }
@@ -46,7 +46,7 @@ public class Tree {
         String runningPath = split[0];
         FolderRow parentFolder = null;
         for (int i = 0; i < split.length; i++) {
-            Row n = findNodeByPathInTree(runningPath);
+            AbstractRow n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
                     parentFolder = root;
@@ -65,7 +65,7 @@ public class Tree {
         }
     }
 
-    public void insertNodeAtItsPath(Row row) {
+    public void insertNodeAtItsPath(AbstractRow row) {
         if(findNodeByPathInTree(row.path) != null){
             return;
         }

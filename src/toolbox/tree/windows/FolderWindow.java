@@ -7,7 +7,7 @@ import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.tree.rows.*;
-import toolbox.tree.rows.Row;
+import toolbox.tree.rows.AbstractRow;
 import toolbox.tree.rows.ToolbarRow;
 
 import static processing.core.PApplet.println;
@@ -38,7 +38,7 @@ public class FolderWindow extends Window {
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
         for (int i = 0; i < parentFolder.children.size(); i++) {
-            Row row = parentFolder.children.get(i);
+            AbstractRow row = parentFolder.children.get(i);
             float rowHeight = cell * row.rowCount;
             row.updateNodeCoordinates(pos.x, pos.y + y, size.x, rowHeight);
             pg.pushMatrix();
@@ -54,7 +54,7 @@ public class FolderWindow extends Window {
 
     private float heightSumOfChildNodes() {
         float sum = 0;
-        for(Row child : parentFolder.children){
+        for(AbstractRow child : parentFolder.children){
             sum += child.rowCount * cell;
         }
         return sum;
@@ -68,7 +68,7 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            Row row = tryFindChildNode(x, y);
+            AbstractRow row = tryFindChildNode(x, y);
             if (row != null && !row.isParentWindowHidden()) {
                 row.rowPressed(x, y);
             }
@@ -78,11 +78,11 @@ public class FolderWindow extends Window {
     @Override
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
-        for (Row row : parentFolder.children) {
+        for (AbstractRow row : parentFolder.children) {
             row.isMouseOverRow = false;
         }
         if (isPointInsideContent(x, y)) {
-            Row row = tryFindChildNode(x, y);
+            AbstractRow row = tryFindChildNode(x, y);
             if (row != null && !row.isParentWindowHidden()) {
                 row.isMouseOverRow = true;
             }
@@ -92,11 +92,11 @@ public class FolderWindow extends Window {
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
-        for (Row row : parentFolder.children) {
+        for (AbstractRow row : parentFolder.children) {
             row.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
-            Row clickedRow = tryFindChildNode(x, y);
+            AbstractRow clickedRow = tryFindChildNode(x, y);
             if (clickedRow != null && !parentRow.isParentWindowHidden()) {
                 clickedRow.mouseReleasedOverRow(x, y);
             }
@@ -110,7 +110,7 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            Row clickedRow = tryFindChildNode(x, y);
+            AbstractRow clickedRow = tryFindChildNode(x, y);
             if (clickedRow != null  && !parentRow.isParentWindowHidden()) {
                 clickedRow.mouseWheelMovedOverRow(x, y, dir);
             }
@@ -123,15 +123,15 @@ public class FolderWindow extends Window {
         float x = State.app.mouseX;
         float y = State.app.mouseY;
         if (isPointInsideContent(x, y)) {
-            Row clickedRow = tryFindChildNode(x, y);
+            AbstractRow clickedRow = tryFindChildNode(x, y);
             if (clickedRow != null && !parentRow.isParentWindowHidden()) {
                 clickedRow.keyPressedOverRow(keyEvent, x, y);
             }
         }
     }
 
-    private Row tryFindChildNode(float x, float y) {
-        for (Row row : parentFolder.children) {
+    private AbstractRow tryFindChildNode(float x, float y) {
+        for (AbstractRow row : parentFolder.children) {
             if (Utils.isPointInRect(x, y, row.pos.x, row.pos.y, row.size.x, row.size.y)) {
                 return row;
             }
@@ -142,7 +142,7 @@ public class FolderWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        for(Row child : parentFolder.children){
+        for(AbstractRow child : parentFolder.children){
             if(child.isDragged && !child.isParentWindowHidden()){
                 child.mouseDragRowContinue(e, x, y, px, py);
             }

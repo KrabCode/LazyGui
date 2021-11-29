@@ -1,16 +1,16 @@
-package toolbox.tree.rows.color;
+package toolbox.tree.rows.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.tree.rows.Row;
+import toolbox.tree.rows.AbstractRow;
 import toolbox.tree.rows.RowType;
 
 import static processing.core.PApplet.println;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
-public class HexRow extends Row {
+public class HexRow extends AbstractRow {
 
     ColorPickerFolderRow parentColorPickerFolder;
 

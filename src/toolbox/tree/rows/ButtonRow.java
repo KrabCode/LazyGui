@@ -9,7 +9,7 @@ import static processing.core.PConstants.CENTER;
 import static toolbox.global.palettes.PaletteColorType.FOCUS_FOREGROUND;
 import static toolbox.global.palettes.PaletteColorType.NORMAL_FOREGROUND;
 
-public class ButtonRow extends Row {
+public class ButtonRow extends AbstractRow {
     public ButtonRow(String path, FolderRow folder) {
         super(RowType.CONTROL, path, folder);
     }

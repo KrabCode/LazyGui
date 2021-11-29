@@ -17,7 +17,7 @@ import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
-public class SliderRow extends Row {
+public class SliderRow extends AbstractRow {
 
     public SliderRow(String path, FolderRow parentFolder) {
         super(RowType.CONTROL, path, parentFolder);

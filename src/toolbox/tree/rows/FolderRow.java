@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 import static processing.core.PConstants.CENTER;
 
-public class FolderRow extends Row {
-    public ArrayList<Row> children = new ArrayList<>();
+public class FolderRow extends AbstractRow {
+    public ArrayList<AbstractRow> children = new ArrayList<>();
     public FolderWindow window;
 
     public FolderRow(String path, FolderRow parent) {

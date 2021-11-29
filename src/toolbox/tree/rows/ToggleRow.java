@@ -7,7 +7,7 @@ import toolbox.global.PaletteStore;
 import static processing.core.PConstants.CENTER;
 import static toolbox.global.palettes.PaletteColorType.*;
 
-public class ToggleRow extends Row {
+public class ToggleRow extends AbstractRow {
 
     public boolean valueBooleanDefault;
     public boolean valueBoolean;
