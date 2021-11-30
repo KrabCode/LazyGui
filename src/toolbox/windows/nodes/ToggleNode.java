@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.PaletteStore;
@@ -9,13 +10,14 @@ import static toolbox.global.palettes.PaletteColorType.*;
 
 public class ToggleNode extends AbstractNode {
 
-    public boolean valueBooleanDefault;
+    @Expose
     public boolean valueBoolean;
+    public boolean valueBooleanDefault;
     boolean armed = false;
     public float handlePosNorm;
 
     public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
-        super(NodeType.NODE, path, folder);
+        super(NodeType.VALUE_ROW, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
         handlePosNorm = valueBoolean ? 1 : 0;

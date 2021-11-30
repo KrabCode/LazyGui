@@ -1,6 +1,6 @@
 package toolbox.windows.nodes;
 
 public enum NodeType {
-    NODE,
-    FOLDER
+    VALUE_ROW,
+    FOLDER_ROW
 }

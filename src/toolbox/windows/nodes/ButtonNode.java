@@ -11,7 +11,7 @@ import static toolbox.global.palettes.PaletteColorType.NORMAL_FOREGROUND;
 
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, FolderNode folder) {
-        super(NodeType.NODE, path, folder);
+        super(NodeType.VALUE_ROW, path, folder);
     }
 
     public boolean valueBoolean = false;

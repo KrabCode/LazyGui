@@ -1,5 +1,7 @@
 package toolbox.global;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jogamp.newt.opengl.GLWindow;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -9,6 +11,7 @@ import toolbox.Gui;
 
 import java.awt.*;
 
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.P2D;
 
 
@@ -52,4 +55,10 @@ public class State {
         libraryPath = Utils.getLibraryPath();
     }
 
+    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+
+    public static void saveToJson() {
+        println(gson.toJson(NodeStore.getTreeRoot()));
+
+    }
 }

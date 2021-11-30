@@ -12,7 +12,6 @@ public class PaletteStore extends Palette {
     private static int currentPaletteIndex = 0;
 
     private PaletteStore(){
-
     }
 
     public static void initSingleton(){

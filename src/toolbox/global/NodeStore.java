@@ -1,5 +1,6 @@
 package toolbox.global;
 
+import org.w3c.dom.Node;
 import toolbox.windows.nodes.FolderNode;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
@@ -11,20 +12,24 @@ import java.util.Queue;
 import static processing.core.PApplet.println;
 
 public class NodeStore {
-    public FolderNode treeRoot = new FolderNode("", null);
-    private final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
+    private static final FolderNode treeRoot = new FolderNode("", null);
+    private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
 
-    public NodeStore() {
+    private NodeStore() {
 
     }
 
-    public AbstractNode getLazyInitParentFolderByPath(String nodePath){
+    public static FolderNode getTreeRoot(){
+        return treeRoot;
+    }
+
+    public static AbstractNode getLazyInitParentFolderByPath(String nodePath){
         String folderPath = getPathWithoutName(nodePath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
     }
 
-    public AbstractNode findNodeByPathInTree(String path) {
+    public static AbstractNode findNodeByPathInTree(String path) {
         if(nodesByPath.containsKey(path)){
             return nodesByPath.get(path);
         }
@@ -36,7 +41,7 @@ public class NodeStore {
                 nodesByPath.put(path, node);
                 return node;
             }
-            if (node.type == NodeType.FOLDER) {
+            if (node.type == NodeType.FOLDER_ROW) {
                 FolderNode folder = (FolderNode) node;
                 for (AbstractNode child : folder.children) {
                     queue.offer(child);
@@ -46,7 +51,7 @@ public class NodeStore {
         return null;
     }
 
-    public void lazyCreateFolderPath(String path) {
+    public static void lazyCreateFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
         FolderNode parentFolder = null;
@@ -59,7 +64,7 @@ public class NodeStore {
                 n = new FolderNode(runningPath, parentFolder);
                 parentFolder.children.add(n);
                 parentFolder = (FolderNode) n;
-            }else if (n.type == NodeType.FOLDER) {
+            }else if (n.type == NodeType.FOLDER_ROW) {
                 parentFolder = (FolderNode) n;
             }else{
                 println("expected folder based on path but got value node");
@@ -70,7 +75,7 @@ public class NodeStore {
         }
     }
 
-    public void insertNodeAtItsPath(AbstractNode node) {
+    public static void insertNodeAtItsPath(AbstractNode node) {
         if(findNodeByPathInTree(node.path) != null){
             return;
         }
@@ -80,7 +85,7 @@ public class NodeStore {
         folder.children.add(node);
     }
 
-    public String getPathWithoutName(String pathWithName) {
+    public static String getPathWithoutName(String pathWithName) {
         String[] split = pathWithName.split("/");
         StringBuilder sum = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {

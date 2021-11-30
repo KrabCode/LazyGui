@@ -1,20 +1,27 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
+import static processing.core.PApplet.hex;
 import static processing.core.PConstants.*;
 
 public class ColorPickerFolderNode extends FolderNode {
 
-    public int hex;
+    @Expose
+    public String hexString;
+    private int hex;
     ColorPreviewNode previewNode;
-    private int hueNodeIndex = 1, saturationNodeIndex = 2, brightnessNodeIndex = 3, alphaNodeIndex = 4;
+    private final int hueNodeIndex = 1;
+    private final int saturationNodeIndex = 2;
+    private final int brightnessNodeIndex = 3;
+    private final int alphaNodeIndex = 4;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
-        this.hex = hex;
+        setHex(hex);
         previewNode = new ColorPreviewNode(path + "/preview", this);
         initNodes();
         loadValuesFromHex(true);
@@ -59,7 +66,11 @@ public class ColorPickerFolderNode extends FolderNode {
     public void loadValuesFromHSBA(){
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1,1);
-        hex = colorProvider.color(getValue(hueNodeIndex), getValue(saturationNodeIndex), getValue(brightnessNodeIndex),getValue(alphaNodeIndex));
+        setHex(colorProvider.color(
+                getValue(hueNodeIndex),
+                getValue(saturationNodeIndex),
+                getValue(brightnessNodeIndex),
+                getValue(alphaNodeIndex)));
     }
 
     Color outputColor = new Color();
@@ -85,5 +96,14 @@ public class ColorPickerFolderNode extends FolderNode {
     }
     public float alpha() {
         return getValue(alphaNodeIndex);
+    }
+
+    public int getHex() {
+        return hex;
+    }
+
+    public void setHex(int hex) {
+        this.hex = hex;
+        hexString = hex(hex);
     }
 }

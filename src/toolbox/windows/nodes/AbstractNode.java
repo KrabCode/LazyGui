@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -17,14 +18,19 @@ import static toolbox.global.palettes.PaletteColorType.*;
  */
 public abstract class AbstractNode {
     public final NodeType type;
-    public final FolderNode parent;
+    @Expose
+    public String className = this.getClass().getSimpleName();
+    @Expose
     public final String path;
-    public String name;
-    public final float cell = State.cell;
+    public final FolderNode parent;
     public PVector pos = new PVector();
     public PVector size = new PVector();
+
+    public String name;
+    public final float cell = State.cell;
     public int nodeCount = 1;
-    protected PVector dragStartPos = new PVector();
+
+    protected  PVector dragStartPos = new PVector();
     public boolean isDragged = false;
     public boolean isMouseOverNode = false;
 

@@ -19,13 +19,10 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
-import java.util.ArrayList;
-
 import static processing.core.PApplet.*;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
-    private NodeStore nodeStore;
     PApplet app;
     public PGraphics pg;
     public static boolean isGuiHidden = false;
@@ -45,11 +42,10 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        nodeStore = new NodeStore();
         float cell = State.cell;
         FolderWindow explorer = new FolderWindow(
                 new PVector(cell, cell),
-                nodeStore.treeRoot,
+                NodeStore.getTreeRoot(),
                 false
         );
         explorer.createToolbar();
@@ -163,16 +159,16 @@ public class Gui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        SliderNode node = (SliderNode) nodeStore.findNodeByPathInTree(path);
+        SliderNode node = (SliderNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return node.valueFloat;
     }
 
     public SliderNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+        FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
         SliderNode node = new SliderNode(path, folder);
         node.valueFloatDefault = defaultValue;
         node.valueFloat = defaultValue;
@@ -199,16 +195,16 @@ public class Gui implements UserInputSubscriber {
     }
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        SliderIntNode node = (SliderIntNode) nodeStore.findNodeByPathInTree(path);
+        SliderIntNode node = (SliderIntNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderIntNode(path, defaultValue, min, max, constrained);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return PApplet.floor(node.valueFloat);
     }
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+        FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
         SliderIntNode node = new SliderIntNode(path, folder);
         node.valueFloatDefault = defaultValue;
         node.valueFloat = defaultValue;
@@ -225,30 +221,30 @@ public class Gui implements UserInputSubscriber {
     }
 
     public boolean toggle(String path, boolean defaultValue) {
-        ToggleNode node = (ToggleNode) nodeStore.findNodeByPathInTree(path);
+        ToggleNode node = (ToggleNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
             node = createToggleNode(path, defaultValue);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
-        FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+        FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
         return new ToggleNode(path, folder, defaultValue);
     }
 
     public boolean button(String path) {
-        ButtonNode node = (ButtonNode) nodeStore.findNodeByPathInTree(path);
+        ButtonNode node = (ButtonNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
             node = createButtonNode(path);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
 
     private ButtonNode createButtonNode(String path) {
-        FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+        FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
         return new ButtonNode(path, folder);
     }
 
@@ -265,36 +261,36 @@ public class Gui implements UserInputSubscriber {
     }
 
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) nodeStore.findNodeByPathInTree(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
             State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
             int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
-            FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+            FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
     public Color colorPicker(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) nodeStore.findNodeByPathInTree(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+            FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
     public void colorPickerSet(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) nodeStore.findNodeByPathInTree(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode folder = (FolderNode) nodeStore.getLazyInitParentFolderByPath(path);
+            FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
-            nodeStore.insertNodeAtItsPath(node);
+            NodeStore.insertNodeAtItsPath(node);
         }else{
 
-            node.hex = hex;
+            node.setHex(hex);
             node.loadValuesFromHex(false);
         }
     }

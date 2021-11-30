@@ -15,39 +15,24 @@ public class HexNode extends AbstractNode {
     ColorPickerFolderNode parentColorPickerFolder;
 
     public HexNode(String path, ColorPickerFolderNode parentFolder) {
-        super(NodeType.NODE, path, parentFolder);
+        super(NodeType.VALUE_ROW, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, prettifyHexString(parentColorPickerFolder.hex));
-    }
-
-
-    String prettifyHexString(int hexCode){
-        StringBuilder sb = new StringBuilder(Integer.toHexString(hexCode));
-        while(sb.length() < 8){
-            sb.append("0");
-        }
-        return sb.substring(0, 2) +
-                " " +
-                sb.substring(2, 4) +
-                " " +
-                sb.substring(4, 6) +
-                " " +
-                sb.substring(6, 8);
+        drawRightText(pg, parentColorPickerFolder.hexString);
     }
 
     @Override
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         if(e.getKeyCode() == KEY_CODE_CTRL_C) {
-            State.clipboardHex = parentColorPickerFolder.hex;
+            State.clipboardHex = parentColorPickerFolder.getHex();
         }
 
         if(e.getKeyCode() == KEY_CODE_CTRL_V) {
-            parentColorPickerFolder.hex = State.clipboardHex;
+            parentColorPickerFolder.setHex(State.clipboardHex);
             parentColorPickerFolder.loadValuesFromHex(false);
         }
     }

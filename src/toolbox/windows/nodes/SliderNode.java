@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -20,9 +21,10 @@ import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 public class SliderNode extends AbstractNode {
 
     public SliderNode(String path, FolderNode parentFolder) {
-        super(NodeType.NODE, path, parentFolder);
+        super(NodeType.VALUE_ROW, path, parentFolder);
     }
 
+    @Expose
     public float valueFloat;
     public float valueFloatMin;
     public float valueFloatMax;

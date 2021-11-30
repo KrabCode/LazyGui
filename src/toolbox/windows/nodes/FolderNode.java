@@ -1,10 +1,9 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.global.PaletteStore;
-import toolbox.global.palettes.PaletteColorType;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
@@ -14,11 +13,14 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
 public class FolderNode extends AbstractNode {
+
+    @Expose
     public ArrayList<AbstractNode> children = new ArrayList<>();
+
     public FolderWindow window;
 
     public FolderNode(String path, FolderNode parent) {
-        super(NodeType.FOLDER, path, parent);
+        super(NodeType.FOLDER_ROW, path, parent);
     }
 
 
@@ -43,7 +45,6 @@ public class FolderNode extends AbstractNode {
 
     @Override
     public void nodePressed(float x, float y) {
-
         super.nodePressed(x, y);
         WindowManager.uncoverOrCreateWindow(this, new PVector(x - cell * 0.5f, y-cell * 0.5f));
         this.isDragged = false;

@@ -16,7 +16,7 @@ public class ToolbarNode extends AbstractNode {
 
 
     public ToolbarNode(String path, FolderNode parentFolder) {
-        super(NodeType.NODE, path, parentFolder);
+        super(NodeType.VALUE_ROW, path, parentFolder);
         this.name = "";
         for (int i = 0; i < buttonCount; i++) {
             buttonRotations.add(0f);
@@ -87,7 +87,9 @@ public class ToolbarNode extends AbstractNode {
         super.mouseReleasedAnywhere(x, y);
         for(int i = 0; i < buttonCount; i++){
             if(isMouseOverButton(i)){
-                // TODO
+                if(i == 0){
+                    State.saveToJson();
+                }
                 return;
             }
         }
