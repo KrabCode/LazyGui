@@ -1,4 +1,4 @@
-package toolbox.windows.rows;
+package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -7,15 +7,15 @@ import toolbox.global.PaletteStore;
 import static processing.core.PConstants.CENTER;
 import static toolbox.global.palettes.PaletteColorType.*;
 
-public class ToggleRow extends AbstractRow {
+public class ToggleNode extends AbstractNode {
 
     public boolean valueBooleanDefault;
     public boolean valueBoolean;
     boolean armed = false;
     public float handlePosNorm;
 
-    public ToggleRow(String path, FolderRow folder, boolean defaultValue) {
-        super(RowType.CONTROL, path, folder);
+    public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
+        super(NodeType.NODE, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
         handlePosNorm = valueBoolean ? 1 : 0;
@@ -33,7 +33,7 @@ public class ToggleRow extends AbstractRow {
 
         pg.rectMode(CENTER);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             pg.stroke(PaletteStore.get(FOCUS_FOREGROUND));
         }else{
             pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
@@ -53,13 +53,13 @@ public class ToggleRow extends AbstractRow {
 
 
     @Override
-    public void rowPressed(float x, float y) {
-        super.rowPressed(x, y);
+    public void nodePressed(float x, float y) {
+        super.nodePressed(x, y);
         armed = true;
     }
 
-    public void mouseReleasedOverRow(float x, float y){
-        super.mouseReleasedOverRow(x,y);
+    public void mouseReleasedOverNode(float x, float y){
+        super.mouseReleasedOverNode(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
         }
@@ -67,7 +67,7 @@ public class ToggleRow extends AbstractRow {
     }
 
     @Override
-    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

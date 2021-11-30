@@ -1,4 +1,4 @@
-package toolbox.windows.rows;
+package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -13,24 +13,24 @@ import static toolbox.global.palettes.PaletteColorType.*;
 
 /**
  *
- * A row in the GUI Tree representing either a folder of other rows or a more primitive value
+ * A node in the GUI Tree representing either a folder of other nodes or a more primitive value
  */
-public abstract class AbstractRow {
-    public final RowType type;
-    public final FolderRow parent;
+public abstract class AbstractNode {
+    public final NodeType type;
+    public final FolderNode parent;
     public final String path;
     public String name;
     public final float cell = State.cell;
     public PVector pos = new PVector();
     public PVector size = new PVector();
-    public int rowCount = 1;
+    public int nodeCount = 1;
     protected PVector dragStartPos = new PVector();
     public boolean isDragged = false;
-    public boolean isMouseOverRow = false;
+    public boolean isMouseOverNode = false;
 
     protected boolean displayInlineName = true;
 
-    public AbstractRow(RowType type, String path, FolderRow parentFolder) {
+    public AbstractNode(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
@@ -49,7 +49,7 @@ public abstract class AbstractRow {
     }
 
     /**
-     * The row must know its absolute position and size, so it can respond to user input events
+     * The node must know its absolute position and size, so it can respond to user input events
      * @param x absolute screen x
      * @param y absolute screen y
      * @param w absolute screen width
@@ -64,11 +64,11 @@ public abstract class AbstractRow {
 
 
     public void drawNode(PGraphics pg) {
-        // the row knows its absolute position but here it is already translated to it for more readable relative drawing code
+        // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         pg.pushStyle();
         pg.pushMatrix();
-        if(isMouseOverRow){
-            highlightNodeRowOnMouseOver(pg);
+        if(isMouseOverNode){
+            highlightNodeNodeOnMouseOver(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
@@ -83,7 +83,7 @@ public abstract class AbstractRow {
         pg.popStyle();
     }
 
-    protected void highlightNodeRowOnMouseOver(PGraphics pg) {
+    protected void highlightNodeNodeOnMouseOver(PGraphics pg) {
         pg.noStroke();
         pg.fill(PaletteStore.get(FOCUS_BACKGROUND));
         pg.rect(0,0,size.x,size.y);
@@ -96,7 +96,7 @@ public abstract class AbstractRow {
     }
 
     protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
-        if (isMouseOverRow) {
+        if (isMouseOverNode) {
             pg.stroke(PaletteStore.get(FOCUS_FOREGROUND));
         } else {
             pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
@@ -104,7 +104,7 @@ public abstract class AbstractRow {
     }
 
     protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             pg.fill(PaletteStore.get(FOCUS_FOREGROUND));
         } else {
             pg.fill(PaletteStore.get(NORMAL_FOREGROUND));
@@ -112,7 +112,7 @@ public abstract class AbstractRow {
     }
 
     protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
-        if (isMouseOverRow) {
+        if (isMouseOverNode) {
             pg.stroke(PaletteStore.get(FOCUS_BACKGROUND));
         } else {
             pg.stroke(PaletteStore.get(NORMAL_BACKGROUND));
@@ -120,7 +120,7 @@ public abstract class AbstractRow {
     }
 
     protected void fillBackgroundBasedOnMouseOver(PGraphics pg) {
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             pg.fill(PaletteStore.get(FOCUS_BACKGROUND));
         } else {
             pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
@@ -148,10 +148,10 @@ public abstract class AbstractRow {
     }
 
     private boolean isFocusedAndMouseOver() {
-        return parent.window.isFocused() && isMouseOverRow;
+        return parent.window.isFocused() && isMouseOverNode;
     }
 
-    public void rowPressed(float x, float y) {
+    public void nodePressed(float x, float y) {
         isDragged = true;
         dragStartPos.x = x;
         dragStartPos.y = y;
@@ -162,19 +162,19 @@ public abstract class AbstractRow {
         State.app.cursor();
     }
 
-    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
 
     }
 
-    public void mouseReleasedOverRow(float x, float y) {
+    public void mouseReleasedOverNode(float x, float y) {
 
     }
 
-    public void mouseWheelMovedOverRow(float x, float y, int dir) {
+    public void mouseWheelMovedOverNode(float x, float y, int dir) {
 
     }
 
-    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
         State.app.noCursor();
         State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }

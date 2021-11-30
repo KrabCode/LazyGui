@@ -1,4 +1,4 @@
-package toolbox.windows.rows;
+package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -17,10 +17,10 @@ import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
-public class SliderRow extends AbstractRow {
+public class SliderNode extends AbstractNode {
 
-    public SliderRow(String path, FolderRow parentFolder) {
-        super(RowType.CONTROL, path, parentFolder);
+    public SliderNode(String path, FolderNode parentFolder) {
+        super(NodeType.NODE, path, parentFolder);
     }
 
     public float valueFloat;
@@ -90,7 +90,7 @@ public class SliderRow extends AbstractRow {
 
     void updateDrawSliderNodeValue(PGraphics pg) {
         String valueText = getValueToDisplay().replaceAll(",", ".");
-        if (isDragged || isMouseOverRow) {
+        if (isDragged || isMouseOverNode) {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
@@ -148,8 +148,8 @@ public class SliderRow extends AbstractRow {
     }
 
     @Override
-    public void mouseWheelMovedOverRow(float x, float y, int dir) {
-        super.mouseWheelMovedOverRow(x,y, dir);
+    public void mouseWheelMovedOverNode(float x, float y, int dir) {
+        super.mouseWheelMovedOverNode(x,y, dir);
         if(dir > 0){
             decreasePrecision();
         }else if(dir < 0){
@@ -191,8 +191,8 @@ public class SliderRow extends AbstractRow {
     }
 
     @Override
-    public void keyPressedOverRow(KeyEvent e, float x, float y) {
-        super.keyPressedOverRow(e, x, y);
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             valueFloat = valueFloatDefault;
             valueFloatPrecision = valueFloatPrecisionDefault;
@@ -213,8 +213,8 @@ public class SliderRow extends AbstractRow {
     }
 
     @Override
-    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragRowContinue(e, x, y, px, py);
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragNodeContinue(e, x, y, px, py);
         if(isDragged){
             mouseDelta.x = px - x;
             mouseDelta.y = py - y;

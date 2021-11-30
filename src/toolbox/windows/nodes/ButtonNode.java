@@ -1,4 +1,4 @@
-package toolbox.windows.rows;
+package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -9,9 +9,9 @@ import static processing.core.PConstants.CENTER;
 import static toolbox.global.palettes.PaletteColorType.FOCUS_FOREGROUND;
 import static toolbox.global.palettes.PaletteColorType.NORMAL_FOREGROUND;
 
-public class ButtonRow extends AbstractRow {
-    public ButtonRow(String path, FolderRow folder) {
-        super(RowType.CONTROL, path, folder);
+public class ButtonNode extends AbstractNode {
+    public ButtonNode(String path, FolderNode folder) {
+        super(NodeType.NODE, path, folder);
     }
 
     public boolean valueBoolean = false;
@@ -21,14 +21,14 @@ public class ButtonRow extends AbstractRow {
     protected void updateDrawInlineNode(PGraphics pg) {
         drawButton(pg);
         boolean mousePressed = State.app.mousePressed;
-        valueBoolean = isMouseOverRow && mousePressedLastFrame && !mousePressed;
+        valueBoolean = isMouseOverNode && mousePressedLastFrame && !mousePressed;
         mousePressedLastFrame = mousePressed;
     }
 
     private void drawButton(PGraphics pg) {
         pg.noFill();
         pg.translate(size.x - cell *0.5f, cell * 0.5f);
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             if (isDragged){
                 pg.fill(PaletteStore.get(FOCUS_FOREGROUND));
             }else{
@@ -42,7 +42,7 @@ public class ButtonRow extends AbstractRow {
     }
 
     @Override
-    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

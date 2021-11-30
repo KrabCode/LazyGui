@@ -1,4 +1,4 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import toolbox.global.PaletteStore;
@@ -6,10 +6,10 @@ import toolbox.global.palettes.PaletteColorType;
 
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
-public class AlphaRow extends ColorSliderRow {
+public class AlphaNode extends ColorSliderNode {
 
 
-    public AlphaRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
+    public AlphaNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
         super(path, parentFolder, defaultValue);
         shaderColorMode = 3;
     }
@@ -26,7 +26,7 @@ public class AlphaRow extends ColorSliderRow {
 
 
     protected int foregroundMouseOverBrightnessAware(){
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f && valueFloat > 0.3f){
                 return 0;
             }else{
@@ -37,8 +37,8 @@ public class AlphaRow extends ColorSliderRow {
         }
     }
     @Override
-    public void keyPressedOverRow(KeyEvent e, float x, float y) {
-        super.keyPressedOverRow(e,x,y);
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e,x,y);
         if(e.getKeyCode() == KEY_CODE_CTRL_V) {
             parentColorPickerFolder.loadValuesFromHSBA();
         }

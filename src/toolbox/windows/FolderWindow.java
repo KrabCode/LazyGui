@@ -6,21 +6,21 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
-import toolbox.windows.rows.*;
-import toolbox.windows.rows.AbstractRow;
-import toolbox.windows.rows.ToolbarRow;
+import toolbox.windows.nodes.*;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.ToolbarNode;
 
 import static processing.core.PApplet.println;
 
 /**
  * A FolderWindow is the only visible GUI element
- * lets the user see its child rows including folders and interact with them
- * to either change a row value or open a new FolderWindow
+ * lets the user see its child nodes including folders and interact with them
+ * to either change a node value or open a new FolderWindow
 */
 public class FolderWindow extends Window {
-    public final FolderRow parentFolder;
+    public final FolderNode parentFolder;
 
-    public FolderWindow(PVector pos, FolderRow parentFolder, boolean closeable) {
+    public FolderWindow(PVector pos, FolderNode parentFolder, boolean closeable) {
         super(pos, parentFolder, closeable);
         this.parentFolder = parentFolder;
         parentFolder.window = this;
@@ -38,24 +38,24 @@ public class FolderWindow extends Window {
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
         for (int i = 0; i < parentFolder.children.size(); i++) {
-            AbstractRow row = parentFolder.children.get(i);
-            float rowHeight = cell * row.rowCount;
-            row.updateNodeCoordinates(pos.x, pos.y + y, size.x, rowHeight);
+            AbstractNode node = parentFolder.children.get(i);
+            float nodeHeight = cell * node.nodeCount;
+            node.updateNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
-            row.drawNode(pg);
+            node.drawNode(pg);
             pg.popMatrix();
             pg.popStyle();
-            y += rowHeight;
-            pg.translate(0, rowHeight);
+            y += nodeHeight;
+            pg.translate(0, nodeHeight);
         }
         pg.popMatrix();
     }
 
     private float heightSumOfChildNodes() {
         float sum = 0;
-        for(AbstractRow child : parentFolder.children){
-            sum += child.rowCount * cell;
+        for(AbstractNode child : parentFolder.children){
+            sum += child.nodeCount * cell;
         }
         return sum;
     }
@@ -68,9 +68,9 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractRow row = tryFindChildNode(x, y);
-            if (row != null && !row.isParentWindowHidden()) {
-                row.rowPressed(x, y);
+            AbstractNode node = tryFindChildNode(x, y);
+            if (node != null && !node.isParentWindowHidden()) {
+                node.nodePressed(x, y);
             }
         }
     }
@@ -78,13 +78,13 @@ public class FolderWindow extends Window {
     @Override
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
-        for (AbstractRow row : parentFolder.children) {
-            row.isMouseOverRow = false;
+        for (AbstractNode node : parentFolder.children) {
+            node.isMouseOverNode = false;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractRow row = tryFindChildNode(x, y);
-            if (row != null && !row.isParentWindowHidden()) {
-                row.isMouseOverRow = true;
+            AbstractNode node = tryFindChildNode(x, y);
+            if (node != null && !node.isParentWindowHidden()) {
+                node.isMouseOverNode = true;
             }
         }
     }
@@ -92,13 +92,13 @@ public class FolderWindow extends Window {
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
-        for (AbstractRow row : parentFolder.children) {
-            row.mouseReleasedAnywhere(x, y);
+        for (AbstractNode node : parentFolder.children) {
+            node.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
-            AbstractRow clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null && !parentRow.isParentWindowHidden()) {
-                clickedRow.mouseReleasedOverRow(x, y);
+            AbstractNode clickedNode = tryFindChildNode(x, y);
+            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
+                clickedNode.mouseReleasedOverNode(x, y);
             }
         }
     }
@@ -110,9 +110,9 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractRow clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null  && !parentRow.isParentWindowHidden()) {
-                clickedRow.mouseWheelMovedOverRow(x, y, dir);
+            AbstractNode clickedNode = tryFindChildNode(x, y);
+            if (clickedNode != null  && !parentNode.isParentWindowHidden()) {
+                clickedNode.mouseWheelMovedOverNode(x, y, dir);
             }
         }
     }
@@ -123,17 +123,17 @@ public class FolderWindow extends Window {
         float x = State.app.mouseX;
         float y = State.app.mouseY;
         if (isPointInsideContent(x, y)) {
-            AbstractRow clickedRow = tryFindChildNode(x, y);
-            if (clickedRow != null && !parentRow.isParentWindowHidden()) {
-                clickedRow.keyPressedOverRow(keyEvent, x, y);
+            AbstractNode clickedNode = tryFindChildNode(x, y);
+            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
+                clickedNode.keyPressedOverNode(keyEvent, x, y);
             }
         }
     }
 
-    private AbstractRow tryFindChildNode(float x, float y) {
-        for (AbstractRow row : parentFolder.children) {
-            if (Utils.isPointInRect(x, y, row.pos.x, row.pos.y, row.size.x, row.size.y)) {
-                return row;
+    private AbstractNode tryFindChildNode(float x, float y) {
+        for (AbstractNode node : parentFolder.children) {
+            if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
+                return node;
             }
         }
         return null;
@@ -142,15 +142,15 @@ public class FolderWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        for(AbstractRow child : parentFolder.children){
+        for(AbstractNode child : parentFolder.children){
             if(child.isDragged && !child.isParentWindowHidden()){
-                child.mouseDragRowContinue(e, x, y, px, py);
+                child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }
     }
 
     public void createToolbar() {
-        ToolbarRow row = new ToolbarRow(parentFolder.path + "/toolbar", parentFolder);
-        parentFolder.children.add(row);
+        ToolbarNode node = new ToolbarNode(parentFolder.path + "/toolbar", parentFolder);
+        parentFolder.children.add(node);
     }
 }

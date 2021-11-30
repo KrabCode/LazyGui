@@ -8,7 +8,7 @@ import toolbox.*;
 import toolbox.global.State;
 import toolbox.global.PaletteStore;
 import toolbox.global.Utils;
-import toolbox.windows.rows.AbstractRow;
+import toolbox.windows.nodes.AbstractNode;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 
@@ -19,7 +19,7 @@ import static toolbox.global.palettes.PaletteColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
-    protected AbstractRow parentRow;
+    protected AbstractNode parentNode;
     protected PVector pos;
     protected PVector size;
     float cell = State.cell;
@@ -27,10 +27,10 @@ public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, AbstractRow parentRow, boolean closeable){
+    public Window(PVector pos, AbstractNode parentNode, boolean closeable){
         this.pos = pos;
         this.size = new PVector(cell * 8, cell * 1);
-        this.parentRow = parentRow;
+        this.parentNode = parentNode;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
     }
@@ -99,7 +99,7 @@ public abstract class Window implements UserInputSubscriber {
             pg.fill(PaletteStore.get(NORMAL_FOREGROUND));
         }
         pg.textAlign(LEFT, CENTER);
-        pg.text(parentRow.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
+        pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(PaletteStore.get(WINDOW_BORDER));
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();

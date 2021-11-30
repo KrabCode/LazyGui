@@ -1,22 +1,22 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 import processing.core.PGraphics;
 import toolbox.global.ShaderStore;
-import toolbox.windows.rows.AbstractRow;
-import toolbox.windows.rows.RowType;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.NodeType;
 
 import static processing.core.PConstants.CORNER;
 
-public class ColorPreviewRow extends AbstractRow {
+public class ColorPreviewNode extends AbstractNode {
 
-    ColorPickerFolderRow parentColorPickerFolder;
+    ColorPickerFolderNode parentColorPickerFolder;
     String checkerboardShader = "checkerboard.glsl";
 
-    public ColorPreviewRow(String path, ColorPickerFolderRow parentColorPickerFolder) {
-        super(RowType.DISPLAY, path, parentColorPickerFolder);
+    public ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
+        super(NodeType.NODE, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
-        rowCount = 2;
+        nodeCount = 2;
         ShaderStore.lazyInitGetShader(checkerboardShader);
     }
 

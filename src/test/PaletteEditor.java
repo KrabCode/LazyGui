@@ -4,6 +4,8 @@ import processing.core.PApplet;
 import toolbox.Gui;
 import toolbox.global.PaletteStore;
 
+import java.util.ArrayList;
+
 import static toolbox.global.palettes.PaletteColorType.*;
 
 public class PaletteEditor extends PApplet {
@@ -31,6 +33,7 @@ public class PaletteEditor extends PApplet {
     public void draw() {
         background(gui.colorPicker("sketch background", 0xFF000000).hex);
         boolean switchPalette = false;
+
         if(gui.button("palette/> dark")){
             PaletteStore.setPaletteIndex(0);
             switchPalette = true;

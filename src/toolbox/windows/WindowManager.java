@@ -2,7 +2,7 @@ package toolbox.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.windows.rows.FolderRow;
+import toolbox.windows.nodes.FolderNode;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -25,10 +25,10 @@ public class WindowManager {
         singleton.windows.add(explorer);
     }
 
-    public static void uncoverOrCreateWindow(FolderRow folderNode, PVector pos) {
+    public static void uncoverOrCreateWindow(FolderNode folderNode, PVector pos) {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.parentRow.path.equals(folderNode.path)){
+            if(w.parentNode.path.equals(folderNode.path)){
                 w.uncover();
                 w.setFocusOnThis();
                 windowFound = true;

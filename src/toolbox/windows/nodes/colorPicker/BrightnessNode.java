@@ -1,15 +1,14 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
-public class SaturationRow extends ColorSliderRow {
+public class BrightnessNode extends ColorSliderNode {
 
-
-    public SaturationRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
+    public BrightnessNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
         super(path, parentFolder, defaultValue);
-        shaderColorMode = 1;
+        shaderColorMode = 2;
     }
 
     @Override
@@ -22,10 +21,12 @@ public class SaturationRow extends ColorSliderRow {
         super.onValueResetToDefault();
         parentColorPickerFolder.loadValuesFromHSBA();
     }
+
     @Override
-    public void keyPressedOverRow(KeyEvent e, float x, float y) {
-        super.keyPressedOverRow(e,x,y);
-        if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y);
+
+        if (e.getKeyCode() == KEY_CODE_CTRL_V) {
             parentColorPickerFolder.loadValuesFromHSBA();
         }
     }

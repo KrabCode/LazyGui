@@ -1,4 +1,4 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -6,19 +6,19 @@ import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.palettes.PaletteColorType;
-import toolbox.windows.rows.SliderRow;
+import toolbox.windows.nodes.SliderNode;
 
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;
 
-public abstract class ColorSliderRow extends SliderRow {
+public abstract class ColorSliderNode extends SliderNode {
 
-    public final ColorPickerFolderRow parentColorPickerFolder;
+    public final ColorPickerFolderNode parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    public ColorSliderRow(String path, ColorPickerFolderRow parentFolder, float defaultValue) {
+    public ColorSliderNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
         super(path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
         this.valueFloatDefault = 0;
@@ -44,15 +44,15 @@ public abstract class ColorSliderRow extends SliderRow {
     }
 
     @Override
-    public void mouseDragRowContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragRowContinue(e, x, y, px, py);
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+        super.mouseDragNodeContinue(e, x, y, px, py);
         updateColorInParentFolder();
         e.setConsumed(true);
     }
 
     @Override
-    public void mouseReleasedOverRow(float x, float y) {
-        super.mouseReleasedOverRow(x, y);
+    public void mouseReleasedOverNode(float x, float y) {
+        super.mouseReleasedOverNode(x, y);
         updateColorInParentFolder();
     }
 
@@ -97,7 +97,7 @@ public abstract class ColorSliderRow extends SliderRow {
     }
 
     protected int foregroundMouseOverBrightnessAware(){
-        if(isMouseOverRow){
+        if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f){
                 return 0;
             }else{

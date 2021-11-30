@@ -1,4 +1,4 @@
-package toolbox.windows.rows;
+package toolbox.windows.nodes;
 
 import processing.core.PGraphics;
 import toolbox.global.PaletteStore;
@@ -10,13 +10,13 @@ import static processing.core.PApplet.*;
 import static processing.core.PConstants.TAU;
 import static toolbox.global.palettes.PaletteColorType.*;
 
-public class ToolbarRow extends AbstractRow {
+public class ToolbarNode extends AbstractNode {
     int buttonCount = 8;
     ArrayList<Float> buttonRotations = new ArrayList<>();
 
 
-    public ToolbarRow(String path, FolderRow parentFolder) {
-        super(RowType.DISPLAY, path, parentFolder);
+    public ToolbarNode(String path, FolderNode parentFolder) {
+        super(NodeType.NODE, path, parentFolder);
         this.name = "";
         for (int i = 0; i < buttonCount; i++) {
             buttonRotations.add(0f);
@@ -75,8 +75,8 @@ public class ToolbarRow extends AbstractRow {
     }
 
     @Override
-    protected void highlightNodeRowOnMouseOver(PGraphics pg) {
-        // skip the full row highlight and instead highlight each button separately
+    protected void highlightNodeNodeOnMouseOver(PGraphics pg) {
+        // skip the full node highlight and instead highlight each button separately
     }
 
     @Override

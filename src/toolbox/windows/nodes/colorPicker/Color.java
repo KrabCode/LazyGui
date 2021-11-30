@@ -1,4 +1,4 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 public class Color {
     public int hex = 0xFF000000;

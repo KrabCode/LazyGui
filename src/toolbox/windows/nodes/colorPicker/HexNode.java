@@ -1,21 +1,21 @@
-package toolbox.windows.rows.colorPicker;
+package toolbox.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.windows.rows.AbstractRow;
-import toolbox.windows.rows.RowType;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.NodeType;
 
 import static processing.core.PApplet.println;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
-public class HexRow extends AbstractRow {
+public class HexNode extends AbstractNode {
 
-    ColorPickerFolderRow parentColorPickerFolder;
+    ColorPickerFolderNode parentColorPickerFolder;
 
-    public HexRow(String path, ColorPickerFolderRow parentFolder) {
-        super(RowType.DISPLAY, path, parentFolder);
+    public HexNode(String path, ColorPickerFolderNode parentFolder) {
+        super(NodeType.NODE, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }
 
@@ -41,7 +41,7 @@ public class HexRow extends AbstractRow {
     }
 
     @Override
-    public void keyPressedOverRow(KeyEvent e, float x, float y) {
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
         if(e.getKeyCode() == KEY_CODE_CTRL_C) {
             State.clipboardHex = parentColorPickerFolder.hex;
         }
