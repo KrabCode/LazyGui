@@ -43,7 +43,7 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        tree = new Tree("main tree");
+        tree = new Tree();
         float cell = State.cell;
         FolderWindow explorer = new FolderWindow(
                 new PVector(cell, cell),

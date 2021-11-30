@@ -11,12 +11,11 @@ import java.util.Queue;
 import static processing.core.PApplet.println;
 
 public class Tree {
-    public String name;
     public FolderRow root = new FolderRow("", null);
     private final HashMap<String, AbstractRow> nodesByPath = new HashMap<>();
 
-    public Tree(String name) {
-        this.name = name;
+    public Tree() {
+
     }
 
     public AbstractRow getLazyInitParentFolderByPath(String rowPath){
