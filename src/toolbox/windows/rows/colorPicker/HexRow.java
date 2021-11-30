@@ -1,10 +1,10 @@
-package toolbox.tree.rows.colorPicker;
+package toolbox.windows.rows.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.tree.rows.AbstractRow;
-import toolbox.tree.rows.RowType;
+import toolbox.windows.rows.AbstractRow;
+import toolbox.windows.rows.RowType;
 
 import static processing.core.PApplet.println;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;

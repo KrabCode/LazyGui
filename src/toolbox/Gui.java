@@ -6,18 +6,18 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
-import toolbox.tree.*;
-import toolbox.tree.rows.*;
-import toolbox.tree.rows.colorPicker.Color;
-import toolbox.tree.rows.colorPicker.ColorPickerFolderRow;
-import toolbox.tree.rows.ButtonRow;
-import toolbox.tree.rows.ToggleRow;
-import toolbox.tree.rows.SliderIntRow;
-import toolbox.tree.rows.SliderRow;
+import toolbox.global.Tree;
+import toolbox.windows.rows.*;
+import toolbox.windows.rows.colorPicker.Color;
+import toolbox.windows.rows.colorPicker.ColorPickerFolderRow;
+import toolbox.windows.rows.ButtonRow;
+import toolbox.windows.rows.ToggleRow;
+import toolbox.windows.rows.SliderIntRow;
+import toolbox.windows.rows.SliderRow;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.tree.windows.FolderWindow;
-import toolbox.tree.windows.WindowManager;
+import toolbox.windows.FolderWindow;
+import toolbox.windows.WindowManager;
 
 import static processing.core.PApplet.*;
 

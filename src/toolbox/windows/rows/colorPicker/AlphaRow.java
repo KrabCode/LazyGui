@@ -1,4 +1,4 @@
-package toolbox.tree.rows.colorPicker;
+package toolbox.windows.rows.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import toolbox.global.PaletteStore;

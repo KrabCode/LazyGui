@@ -1,4 +1,4 @@
-package toolbox.tree.rows;
+package toolbox.windows.rows;
 
 public enum RowType {
     CONTROL,

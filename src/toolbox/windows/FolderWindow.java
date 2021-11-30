@@ -1,4 +1,4 @@
-package toolbox.tree.windows;
+package toolbox.windows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -6,9 +6,9 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
-import toolbox.tree.rows.*;
-import toolbox.tree.rows.AbstractRow;
-import toolbox.tree.rows.ToolbarRow;
+import toolbox.windows.rows.*;
+import toolbox.windows.rows.AbstractRow;
+import toolbox.windows.rows.ToolbarRow;
 
 import static processing.core.PApplet.println;
 

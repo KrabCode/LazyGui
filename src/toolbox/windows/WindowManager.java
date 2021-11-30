@@ -1,8 +1,8 @@
-package toolbox.tree.windows;
+package toolbox.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.tree.rows.FolderRow;
+import toolbox.windows.rows.FolderRow;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

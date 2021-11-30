@@ -1,4 +1,4 @@
-package toolbox.tree.rows.colorPicker;
+package toolbox.windows.rows.colorPicker;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -6,7 +6,7 @@ import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.palettes.PaletteColorType;
-import toolbox.tree.rows.SliderRow;
+import toolbox.windows.rows.SliderRow;
 
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;

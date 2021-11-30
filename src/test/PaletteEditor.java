@@ -17,8 +17,8 @@ public class PaletteEditor extends PApplet {
 
     @Override
     public void settings() {
-//        size(1600,800,P2D);
-        size(600, 600, P2D);
+        size(1000,1000,P2D);
+//        size(600, 600, P2D);
 //        fullScreen(P2D);
     }
 

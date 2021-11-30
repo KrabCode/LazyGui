@@ -1,8 +1,8 @@
-package toolbox.tree.rows.colorPicker;
+package toolbox.windows.rows.colorPicker;
 
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.tree.rows.FolderRow;
+import toolbox.windows.rows.FolderRow;
 
 import static processing.core.PConstants.*;
 

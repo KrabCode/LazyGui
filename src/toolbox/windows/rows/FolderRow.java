@@ -1,10 +1,10 @@
-package toolbox.tree.rows;
+package toolbox.windows.rows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.tree.windows.FolderWindow;
-import toolbox.tree.windows.WindowManager;
+import toolbox.windows.FolderWindow;
+import toolbox.windows.WindowManager;
 
 import java.util.ArrayList;
 

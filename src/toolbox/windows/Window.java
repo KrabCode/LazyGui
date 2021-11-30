@@ -1,4 +1,4 @@
-package toolbox.tree.windows;
+package toolbox.windows;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
@@ -8,7 +8,7 @@ import toolbox.*;
 import toolbox.global.State;
 import toolbox.global.PaletteStore;
 import toolbox.global.Utils;
-import toolbox.tree.rows.AbstractRow;
+import toolbox.windows.rows.AbstractRow;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 

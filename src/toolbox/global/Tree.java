@@ -1,8 +1,8 @@
-package toolbox.tree;
+package toolbox.global;
 
-import toolbox.tree.rows.FolderRow;
-import toolbox.tree.rows.AbstractRow;
-import toolbox.tree.rows.RowType;
+import toolbox.windows.rows.FolderRow;
+import toolbox.windows.rows.AbstractRow;
+import toolbox.windows.rows.RowType;
 
 import java.util.LinkedList;
 import java.util.Queue;

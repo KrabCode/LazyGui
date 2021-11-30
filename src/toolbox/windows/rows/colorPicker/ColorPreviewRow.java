@@ -1,9 +1,9 @@
-package toolbox.tree.rows.colorPicker;
+package toolbox.windows.rows.colorPicker;
 
 import processing.core.PGraphics;
 import toolbox.global.ShaderStore;
-import toolbox.tree.rows.AbstractRow;
-import toolbox.tree.rows.RowType;
+import toolbox.windows.rows.AbstractRow;
+import toolbox.windows.rows.RowType;
 
 import static processing.core.PConstants.CORNER;
 

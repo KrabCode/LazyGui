@@ -1,4 +1,4 @@
-package toolbox.tree.rows;
+package toolbox.windows.rows;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
