@@ -111,6 +111,23 @@ public abstract class AbstractRow {
         }
     }
 
+    protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
+        if (isMouseOverRow) {
+            pg.stroke(PaletteStore.get(FOCUS_BACKGROUND));
+        } else {
+            pg.stroke(PaletteStore.get(NORMAL_BACKGROUND));
+        }
+    }
+
+    protected void fillBackgroundBasedOnMouseOver(PGraphics pg) {
+        if(isMouseOverRow){
+            pg.fill(PaletteStore.get(FOCUS_BACKGROUND));
+        } else {
+            pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
+        }
+    }
+
+
     public void drawLeftText(PGraphics pg, String text) {
         pg.textAlign(LEFT, CENTER);
         pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);

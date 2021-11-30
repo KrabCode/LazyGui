@@ -19,6 +19,13 @@ public class ButtonRow extends AbstractRow {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
+        drawButton(pg);
+        boolean mousePressed = State.app.mousePressed;
+        valueBoolean = isMouseOverRow && mousePressedLastFrame && !mousePressed;
+        mousePressedLastFrame = mousePressed;
+    }
+
+    private void drawButton(PGraphics pg) {
         pg.noFill();
         pg.translate(size.x - cell *0.5f, cell * 0.5f);
         if(isMouseOverRow){
@@ -32,9 +39,6 @@ public class ButtonRow extends AbstractRow {
         pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
         pg.rectMode(CENTER);
         pg.rect(0,0, cell * 0.25f, cell*0.15f);
-        boolean mousePressed = State.app.mousePressed;
-        valueBoolean = isMouseOverRow && mousePressedLastFrame && !mousePressed;
-        mousePressedLastFrame = mousePressed;
     }
 
     @Override

@@ -4,6 +4,7 @@ import toolbox.windows.rows.FolderRow;
 import toolbox.windows.rows.AbstractRow;
 import toolbox.windows.rows.RowType;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -12,6 +13,7 @@ import static processing.core.PApplet.println;
 public class Tree {
     public String name;
     public FolderRow root = new FolderRow("", null);
+    private final HashMap<String, AbstractRow> nodesByPath = new HashMap<>();
 
     public Tree(String name) {
         this.name = name;
@@ -24,11 +26,15 @@ public class Tree {
     }
 
     public AbstractRow findNodeByPathInTree(String path) {
+        if(nodesByPath.containsKey(path)){
+            return nodesByPath.get(path);
+        }
         Queue<AbstractRow> queue = new LinkedList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
             AbstractRow row = queue.poll();
             if (row.path.equals(path)) {
+                nodesByPath.put(path, row);
                 return row;
             }
             if (row.type == RowType.FOLDER) {
