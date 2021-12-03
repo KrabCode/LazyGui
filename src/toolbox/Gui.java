@@ -18,6 +18,7 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
+import toolbox.windows.nodes.shaderList.ShaderListFolderNode;
 
 import static processing.core.PApplet.*;
 
@@ -61,11 +62,11 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void update() {
-        update(State.app.g);
+    public void draw() {
+        draw(State.app.g);
     }
 
-    public void update(PGraphics canvas) {
+    public void draw(PGraphics canvas) {
         lazyResetDisplay();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
@@ -87,18 +88,17 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void recorder() {
-        recorder(State.app.g);
+    public void record() {
+        record(State.app.g);
     }
 
     boolean isRecording = false;
 
-    public void recorder(PGraphics pg) {
+    public void record(PGraphics pg) {
         boolean screenshot = button("recorder/screenshot");
         boolean recordNow = button("recorder/start recording");
         boolean stopRecording = button("recorder/stop recording");
-        int framesToRecord = sliderInt("recorder/frames", 600, 0, Integer.MAX_VALUE);
-//        boolean useFfmpeg = toggle("rec/make .mp4", true); // TODO
+        int framesToRecord = sliderInt("recorder/frames", 360, 0, Integer.MAX_VALUE);
         if (!lastRecordNow && recordNow) {
             recordingFolderName = generateRecordingFolderName();
             recordingFrame = 1;
@@ -110,9 +110,6 @@ public class Gui implements UserInputSubscriber {
             pg.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
             if (stopRecording || recordingFrame >= framesToRecord) {
                 isRecording = false;
-//                if (useFfmpeg) {
-//                    runFFMPEG(); // TODO
-//                }
             }
             recordingFrame++;
         }
@@ -293,5 +290,15 @@ public class Gui implements UserInputSubscriber {
             node.setHex(hex);
             node.loadValuesFromHex(false);
         }
+    }
+
+    public void filter(String path, PGraphics pg) {
+        ShaderListFolderNode node = (ShaderListFolderNode) NodeStore.findNodeByPathInTree(path);
+        if(node == null){
+            FolderNode parentFolder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
+            node = new ShaderListFolderNode(path, parentFolder);
+            NodeStore.insertNodeAtItsPath(node);
+        }
+        node.filter(pg);
     }
 }

@@ -15,8 +15,8 @@ public class ColorPickerFolderNode extends FolderNode {
     private int hex;
     ColorPreviewNode previewNode;
     private final int hueNodeIndex = 1;
-    private final int saturationNodeIndex = 2;
-    private final int brightnessNodeIndex = 3;
+    private final int satNodeIndex = 2;
+    private final int brNodeIndex = 3;
     private final int alphaNodeIndex = 4;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
@@ -52,13 +52,13 @@ public class ColorPickerFolderNode extends FolderNode {
         PGraphics colorProvider = State.colorProvider;
         colorProvider.colorMode(HSB,1,1,1, 1);
         ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
-        ((ColorSliderNode) children.get(saturationNodeIndex)).valueFloat = colorProvider.saturation(hex);
-        ((ColorSliderNode) children.get(brightnessNodeIndex)).valueFloat = colorProvider.brightness(hex);
+        ((ColorSliderNode) children.get(satNodeIndex)).valueFloat = colorProvider.saturation(hex);
+        ((ColorSliderNode) children.get(brNodeIndex)).valueFloat = colorProvider.brightness(hex);
         ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloat = colorProvider.alpha(hex);
         if(setDefaults){
             ((ColorSliderNode) children.get(hueNodeIndex)).valueFloatDefault = colorProvider.hue(hex);
-            ((ColorSliderNode) children.get(saturationNodeIndex)).valueFloatDefault = colorProvider.saturation(hex);
-            ((ColorSliderNode) children.get(brightnessNodeIndex)).valueFloatDefault = colorProvider.brightness(hex);
+            ((ColorSliderNode) children.get(satNodeIndex)).valueFloatDefault = colorProvider.saturation(hex);
+            ((ColorSliderNode) children.get(brNodeIndex)).valueFloatDefault = colorProvider.brightness(hex);
             ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloatDefault = colorProvider.alpha(hex);
         }
     }
@@ -68,14 +68,18 @@ public class ColorPickerFolderNode extends FolderNode {
         colorProvider.colorMode(HSB,1,1,1,1);
         setHex(colorProvider.color(
                 getValue(hueNodeIndex),
-                getValue(saturationNodeIndex),
-                getValue(brightnessNodeIndex),
+                getValue(satNodeIndex),
+                getValue(brNodeIndex),
                 getValue(alphaNodeIndex)));
     }
 
     Color outputColor = new Color();
     public Color getColor() {
         outputColor.hex = hex;
+        outputColor.hue = hue();
+        outputColor.saturation = saturation();
+        outputColor.brightness = brightness();
+        outputColor.alpha = alpha();
         return outputColor;
     }
 
@@ -88,11 +92,11 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public float saturation() {
-        return getValue(saturationNodeIndex);
+        return getValue(satNodeIndex);
     }
 
     public float brightness() {
-        return getValue(brightnessNodeIndex);
+        return getValue(brNodeIndex);
     }
     public float alpha() {
         return getValue(alphaNodeIndex);
