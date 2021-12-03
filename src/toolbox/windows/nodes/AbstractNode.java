@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -17,12 +18,13 @@ import static toolbox.global.palettes.PaletteColorType.*;
  * A node in the GUI Tree representing either a folder of other nodes or a more primitive value
  */
 public abstract class AbstractNode {
-    public final NodeType type;
     @Expose
     public String className = this.getClass().getSimpleName();
     @Expose
-    public final String path;
-    public final FolderNode parent;
+    public String path;
+    @Expose
+    public NodeType type;
+    public FolderNode parent;
     public PVector pos = new PVector();
     public PVector size = new PVector();
 
@@ -190,5 +192,10 @@ public abstract class AbstractNode {
             return Gui.isGuiHidden;
         }
         return parent.window.hidden;
+    }
+
+    // used by value nodes to load state from json
+    public void overwriteState(JsonElement loadedNode){
+
     }
 }

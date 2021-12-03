@@ -8,6 +8,7 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
@@ -15,7 +16,7 @@ import static processing.core.PConstants.CORNER;
 public class FolderNode extends AbstractNode {
 
     @Expose
-    public ArrayList<AbstractNode> children = new ArrayList<>();
+    public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     public FolderWindow window;
 

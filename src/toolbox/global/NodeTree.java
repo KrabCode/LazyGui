@@ -1,40 +1,48 @@
 package toolbox.global;
 
-import org.w3c.dom.Node;
+import com.google.gson.*;
 import toolbox.windows.nodes.FolderNode;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
 
+import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
-public class NodeStore {
-    private static final FolderNode treeRoot = new FolderNode("", null);
+public class NodeTree {
+    private static final FolderNode mainRoot = new FolderNode("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
+    private static String jsonState;
+    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
-    private NodeStore() {
+    private NodeTree() {
 
     }
 
-    public static FolderNode getTreeRoot(){
-        return treeRoot;
+    public static FolderNode getMainRoot() {
+        return mainRoot;
     }
 
-    public static AbstractNode getLazyInitParentFolderByPath(String nodePath){
+    public static AbstractNode getLazyInitParentFolderByPath(String nodePath) {
         String folderPath = getPathWithoutName(nodePath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
     }
 
     public static AbstractNode findNodeByPathInTree(String path) {
-        if(nodesByPath.containsKey(path)){
+        return findNodeByPathInTree(path, NodeTree.mainRoot);
+    }
+
+    public static AbstractNode findNodeByPathInTree(String path, FolderNode root) {
+        if (nodesByPath.containsKey(path)) {
             return nodesByPath.get(path);
         }
         Queue<AbstractNode> queue = new LinkedList<>();
-        queue.offer(treeRoot);
+        queue.offer(root);
         while (!queue.isEmpty()) {
             AbstractNode node = queue.poll();
             if (node.path.equals(path)) {
@@ -59,29 +67,30 @@ public class NodeStore {
             AbstractNode n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
-                    parentFolder = treeRoot;
+                    parentFolder = mainRoot;
                 }
                 n = new FolderNode(runningPath, parentFolder);
                 parentFolder.children.add(n);
                 parentFolder = (FolderNode) n;
-            }else if (n.type == NodeType.FOLDER_ROW) {
+            } else if (n.type == NodeType.FOLDER_ROW) {
                 parentFolder = (FolderNode) n;
-            }else{
+            } else {
                 println("expected folder based on path but got value node");
             }
-            if(i < split.length - 1){
+            if (i < split.length - 1) {
                 runningPath += "/" + split[i + 1];
             }
         }
     }
 
     public static void insertNodeAtItsPath(AbstractNode node) {
-        if(findNodeByPathInTree(node.path) != null){
+        if (findNodeByPathInTree(node.path) != null) {
             return;
         }
         String folderPath = getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
         FolderNode folder = (FolderNode) findNodeByPathInTree(folderPath);
+        assert folder != null;
         folder.children.add(node);
     }
 
@@ -90,10 +99,40 @@ public class NodeStore {
         StringBuilder sum = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {
             sum.append(split[i]);
-            if(i < split.length - 2){
+            if (i < split.length - 2) {
                 sum.append("/");
             }
         }
         return sum.toString();
     }
+
+    public static void saveToJson() {
+        String json = gson.toJson(mainRoot);
+        println(json);
+        jsonState = json;
+    }
+
+    public static void loadFromJson() {
+        println(jsonState);
+        // don't delete or do anything to the existing nodes, just overwrite their values
+        JsonElement loadedRoot = gson.fromJson(jsonState, JsonElement.class);
+
+        Queue<JsonElement> queue = new LinkedList<>();
+        queue.offer(loadedRoot);
+        while (!queue.isEmpty()) {
+            JsonElement loadedNode = queue.poll();
+            String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
+            AbstractNode mainNode = findNodeByPathInTree(loadedPath);
+            mainNode.overwriteState(loadedNode);
+            String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
+            if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
+                JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
+                for (JsonElement child : loadedChildren) {
+                    queue.offer(child);
+                }
+            }
+        }
+    }
+
 }
+

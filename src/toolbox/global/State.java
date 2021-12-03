@@ -10,6 +10,7 @@ import processing.core.PSurface;
 import toolbox.Gui;
 
 import java.awt.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.P2D;
@@ -17,15 +18,15 @@ import static processing.core.PConstants.P2D;
 
 public class State {
     public static float cell = 24;
-
     public static PFont font = null;
     public static PApplet app = null;
-    public static Gui gui;
-    public static Robot robot;
-    public static GLWindow window;
-    public static String libraryPath;
-    public static PGraphics colorProvider;
+    public static Gui gui = null;
+    public static Robot robot = null;
+    public static GLWindow window = null;
+    public static String libraryPath = null;
+    public static PGraphics colorProvider = null;
     public static float textMarginX = 5;
+
     public static int clipboardHex = 0;
     public static float clipboardFloat = 0;
 
@@ -53,12 +54,5 @@ public class State {
             e.printStackTrace();
         }
         libraryPath = Utils.getLibraryPath();
-    }
-
-    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-
-    public static void saveToJson() {
-        println(gson.toJson(NodeStore.getTreeRoot()));
-
     }
 }

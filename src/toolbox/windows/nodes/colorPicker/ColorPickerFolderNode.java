@@ -1,11 +1,13 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
 import static processing.core.PApplet.hex;
+import static processing.core.PApplet.unhex;
 import static processing.core.PConstants.*;
 
 public class ColorPickerFolderNode extends FolderNode {
@@ -109,5 +111,9 @@ public class ColorPickerFolderNode extends FolderNode {
     public void setHex(int hex) {
         this.hex = hex;
         hexString = hex(hex);
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
     }
 }
