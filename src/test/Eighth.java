@@ -46,8 +46,8 @@ public class Eighth extends PApplet {
         drawNoiseLines();
         strip.endDraw();
         image(strip, width - strip.width, height - strip.height);
-        gui.update();
-        gui.recorder(strip);
+        gui.draw();
+        gui.record(strip);
     }
 
     private void drawNoiseLines() {
