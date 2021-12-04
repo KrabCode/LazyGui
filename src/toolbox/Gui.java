@@ -263,7 +263,6 @@ public class Gui implements UserInputSubscriber {
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeStore.findNodeByPathInTree(path);
         if (node == null) {
-            State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
             int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
             FolderNode folder = (FolderNode) NodeStore.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);

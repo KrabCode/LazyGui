@@ -12,6 +12,7 @@ import toolbox.Gui;
 import java.awt.*;
 
 import static processing.core.PApplet.println;
+import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
 
 
@@ -41,6 +42,7 @@ public class State {
 
         }
         colorProvider = app.createGraphics(256,256, P2D);
+        State.colorProvider.colorMode(HSB,1,1,1,1);
 
         PSurface surface = State.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {

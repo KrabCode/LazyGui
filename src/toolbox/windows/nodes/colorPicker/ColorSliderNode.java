@@ -18,11 +18,10 @@ public abstract class ColorSliderNode extends SliderNode {
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    public ColorSliderNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
+    public ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
         super(path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
         this.valueFloatDefault = 0;
-        this.valueFloat = defaultValue;
         valueFloatPrecisionDefault = 0.01f;
         valueFloatPrecision = valueFloatPrecisionDefault;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);

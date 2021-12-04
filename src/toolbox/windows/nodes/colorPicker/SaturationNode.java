@@ -7,8 +7,8 @@ import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 public class SaturationNode extends ColorSliderNode {
 
 
-    public SaturationNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
-        super(path, parentFolder, defaultValue);
+    public SaturationNode(String path, ColorPickerFolderNode parentFolder) {
+        super(path, parentFolder);
         shaderColorMode = 1;
     }
 

@@ -51,7 +51,7 @@ public class Utils {
      * @param seed seed to use
      * @return hash value between 0 and 1
      */
-    protected static  float hash(float seed) {
+    public static  float hash(float seed) {
         return (float) (Math.abs(Math.sin(seed * 323.121f) * 454.123f) % 1);
     }
 

@@ -7,8 +7,8 @@ import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
 public class HueNode extends ColorSliderNode {
 
-    public HueNode(String path, ColorPickerFolderNode parentFolder, float defaultValue) {
-        super(path, parentFolder, defaultValue);
+    public HueNode(String path, ColorPickerFolderNode parentFolder) {
+        super(path, parentFolder);
         shaderColorMode = 0;
     }
 

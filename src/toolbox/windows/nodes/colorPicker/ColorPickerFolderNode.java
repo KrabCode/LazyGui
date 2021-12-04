@@ -21,6 +21,9 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
+        if(hex >= 0 && hex <= 1){
+            hex = State.colorProvider.color(hex);
+        }
         setHex(hex);
         previewNode = new ColorPreviewNode(path + "/preview", this);
         initNodes();
@@ -29,12 +32,11 @@ public class ColorPickerFolderNode extends FolderNode {
 
     private void initNodes() {
         PGraphics colorProvider = State.colorProvider;
-        colorProvider.colorMode(HSB,1,1,1, 1);
         children.add(new ColorPreviewNode(path + "/preview", this));
-        children.add(new HueNode(path + "/hue", this, colorProvider.hue(hex)));
-        children.add(new SaturationNode(path + "/sat", this, colorProvider.saturation(hex)));
-        children.add(new BrightnessNode(path + "/br", this, colorProvider.brightness(hex)));
-        children.add(new AlphaNode(path + "/alpha", this, 1));
+        children.add(new HueNode(path + "/hue", this));
+        children.add(new SaturationNode(path + "/sat", this));
+        children.add(new BrightnessNode(path + "/br", this));
+        children.add(new AlphaNode(path + "/alpha", this));
         children.add(new HexNode(path + "/hex", this));
     }
 
@@ -50,7 +52,6 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public void loadValuesFromHex(boolean setDefaults) {
         PGraphics colorProvider = State.colorProvider;
-        colorProvider.colorMode(HSB,1,1,1, 1);
         ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
         ((ColorSliderNode) children.get(saturationNodeIndex)).valueFloat = colorProvider.saturation(hex);
         ((ColorSliderNode) children.get(brightnessNodeIndex)).valueFloat = colorProvider.brightness(hex);
@@ -65,7 +66,6 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public void loadValuesFromHSBA(){
         PGraphics colorProvider = State.colorProvider;
-        colorProvider.colorMode(HSB,1,1,1,1);
         setHex(colorProvider.color(
                 getValue(hueNodeIndex),
                 getValue(saturationNodeIndex),
