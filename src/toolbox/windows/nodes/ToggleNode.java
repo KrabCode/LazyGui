@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -71,5 +72,9 @@ public class ToggleNode extends AbstractNode {
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        this.valueBoolean = loadedNode.getAsJsonObject().get("valueBoolean").getAsBoolean();
     }
 }

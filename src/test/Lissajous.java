@@ -86,8 +86,8 @@ public class Lissajous extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.update();
-        gui.recorder();
+        gui.draw();
+        gui.record();
     }
 
     @Override

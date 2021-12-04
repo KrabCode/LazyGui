@@ -1,6 +1,7 @@
 package toolbox.windows.nodes;
 
 import processing.core.PGraphics;
+import toolbox.global.NodeTree;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
@@ -88,7 +89,9 @@ public class ToolbarNode extends AbstractNode {
         for(int i = 0; i < buttonCount; i++){
             if(isMouseOverButton(i)){
                 if(i == 0){
-                    State.saveToJson();
+                    NodeTree.saveToJson();
+                }else if(i == 1){
+                    NodeTree.loadFromJson();
                 }
                 return;
             }

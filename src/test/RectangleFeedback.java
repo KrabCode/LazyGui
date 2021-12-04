@@ -56,8 +56,8 @@ public class RectangleFeedback extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.recorder(pg);
-        gui.update(g);
+        gui.record(pg);
+        gui.draw(g);
     }
 }
 

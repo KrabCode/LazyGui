@@ -8,7 +8,4 @@ public class Color {
     public float saturation;
     public float brightness;
     public float alpha;
-    public float red;
-    public float green;
-    public float blue;
 }

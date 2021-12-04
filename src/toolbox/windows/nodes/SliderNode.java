@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -222,5 +223,9 @@ public class SliderNode extends AbstractNode {
             mouseDelta.y = py - y;
         }
 
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        this.valueFloat = loadedNode.getAsJsonObject().get("valueFloat").getAsFloat();
     }
 }

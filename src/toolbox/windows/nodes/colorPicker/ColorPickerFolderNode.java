@@ -1,11 +1,13 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
 import static processing.core.PApplet.hex;
+import static processing.core.PApplet.unhex;
 import static processing.core.PConstants.*;
 
 public class ColorPickerFolderNode extends FolderNode {
@@ -15,8 +17,8 @@ public class ColorPickerFolderNode extends FolderNode {
     private int hex;
     ColorPreviewNode previewNode;
     private final int hueNodeIndex = 1;
-    private final int saturationNodeIndex = 2;
-    private final int brightnessNodeIndex = 3;
+    private final int satNodeIndex = 2;
+    private final int brNodeIndex = 3;
     private final int alphaNodeIndex = 4;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
@@ -53,13 +55,13 @@ public class ColorPickerFolderNode extends FolderNode {
     public void loadValuesFromHex(boolean setDefaults) {
         PGraphics colorProvider = State.colorProvider;
         ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
-        ((ColorSliderNode) children.get(saturationNodeIndex)).valueFloat = colorProvider.saturation(hex);
-        ((ColorSliderNode) children.get(brightnessNodeIndex)).valueFloat = colorProvider.brightness(hex);
+        ((ColorSliderNode) children.get(satNodeIndex)).valueFloat = colorProvider.saturation(hex);
+        ((ColorSliderNode) children.get(brNodeIndex)).valueFloat = colorProvider.brightness(hex);
         ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloat = colorProvider.alpha(hex);
         if(setDefaults){
             ((ColorSliderNode) children.get(hueNodeIndex)).valueFloatDefault = colorProvider.hue(hex);
-            ((ColorSliderNode) children.get(saturationNodeIndex)).valueFloatDefault = colorProvider.saturation(hex);
-            ((ColorSliderNode) children.get(brightnessNodeIndex)).valueFloatDefault = colorProvider.brightness(hex);
+            ((ColorSliderNode) children.get(satNodeIndex)).valueFloatDefault = colorProvider.saturation(hex);
+            ((ColorSliderNode) children.get(brNodeIndex)).valueFloatDefault = colorProvider.brightness(hex);
             ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloatDefault = colorProvider.alpha(hex);
         }
     }
@@ -68,14 +70,18 @@ public class ColorPickerFolderNode extends FolderNode {
         PGraphics colorProvider = State.colorProvider;
         setHex(colorProvider.color(
                 getValue(hueNodeIndex),
-                getValue(saturationNodeIndex),
-                getValue(brightnessNodeIndex),
+                getValue(satNodeIndex),
+                getValue(brNodeIndex),
                 getValue(alphaNodeIndex)));
     }
 
     Color outputColor = new Color();
     public Color getColor() {
         outputColor.hex = hex;
+        outputColor.hue = hue();
+        outputColor.saturation = saturation();
+        outputColor.brightness = brightness();
+        outputColor.alpha = alpha();
         return outputColor;
     }
 
@@ -88,11 +94,11 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public float saturation() {
-        return getValue(saturationNodeIndex);
+        return getValue(satNodeIndex);
     }
 
     public float brightness() {
-        return getValue(brightnessNodeIndex);
+        return getValue(brNodeIndex);
     }
     public float alpha() {
         return getValue(alphaNodeIndex);
@@ -105,5 +111,9 @@ public class ColorPickerFolderNode extends FolderNode {
     public void setHex(int hex) {
         this.hex = hex;
         hexString = hex(hex);
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
     }
 }

@@ -4,8 +4,6 @@ import processing.core.PApplet;
 import toolbox.Gui;
 import toolbox.global.PaletteStore;
 
-import java.util.ArrayList;
-
 import static toolbox.global.palettes.PaletteColorType.*;
 
 public class PaletteEditor extends PApplet {
@@ -56,7 +54,7 @@ public class PaletteEditor extends PApplet {
         PaletteStore.set(FOCUS_BACKGROUND, gui.colorPicker( "palette/focus background"    , PaletteStore.get(FOCUS_BACKGROUND)).hex);
         PaletteStore.set(NORMAL_FOREGROUND, gui.colorPicker("palette/normal foreground"   , PaletteStore.get(NORMAL_FOREGROUND)).hex);
         PaletteStore.set(FOCUS_FOREGROUND, gui.colorPicker( "palette/focus foreground"    , PaletteStore.get(FOCUS_FOREGROUND)).hex);
-        gui.update();
-        gui.recorder();
+        gui.draw();
+        gui.record();
     }
 }
