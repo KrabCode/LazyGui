@@ -20,8 +20,8 @@ public class Eighth extends PApplet {
 
     @Override
     public void settings() {
-//        size(800, 800, P2D);
-        fullScreen(P2D);
+        size(800, 800, P2D);
+//        fullScreen(P2D);
 
     }
 
@@ -43,7 +43,14 @@ public class Eighth extends PApplet {
         strip.beginDraw();
         strip.background(background.hex);
         time += radians(gui.slider("time", 1));
+        strip.translate(gui.slider("lines/x"), gui.slider("lines/y"));
+        if(gui.toggle("blend mode")){
+            strip.blendMode(ADD);
+        }else{
+            strip.blendMode(BLEND);
+        }
         drawNoiseLines();
+        gui.filterList("strip shaders", strip);
         strip.endDraw();
         image(strip, width - strip.width, height - strip.height);
         gui.draw();

@@ -16,7 +16,7 @@ public class ColorPreviewNode extends AbstractNode {
         super(NodeType.VALUE_ROW, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
-        nodeCount = 2;
+        heightMultiplier = 2;
         ShaderStore.lazyInitGetShader(checkerboardShader);
     }
 
@@ -32,13 +32,13 @@ public class ColorPreviewNode extends AbstractNode {
         pg.rectMode(CORNER);
         pg.fill(1);
         pg.noStroke();
-        pg.rect(0,0,size.x-1,size.y);
+        pg.rect(0, 0, size.x - 1, size.y);
         pg.resetShader();
     }
 
     private void drawColorPreview(PGraphics pg) {
         pg.fill(parentColorPickerFolder.getColor().hex);
         pg.noStroke();
-        pg.rect(0,0,size.x,size.y);
+        pg.rect(0, 0, size.x, size.y);
     }
 }

@@ -10,6 +10,7 @@ import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.State;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +22,16 @@ import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderNode extends AbstractNode {
 
-    public SliderNode(String path, FolderNode parentFolder) {
+    public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE_ROW, path, parentFolder);
+        this.valueFloatDefault = defaultValue;
+        this.valueFloat = defaultValue;
+        this.valueFloatMin = min;
+        this.valueFloatMax = max;
+        this.valueFloatPrecision = defaultPrecision;
+        this.valueFloatPrecisionDefault = defaultPrecision;
+        this.valueFloatConstrained = constrained;
+        initSliderPrecisionArrays();
     }
 
     @Expose
@@ -41,7 +50,12 @@ public class SliderNode extends AbstractNode {
     protected int currentPrecisionIndex;
     String shaderPath = "sliderBackground.glsl";
 
-    public void initSliderPrecisionArrays() {
+    public SliderNode(String path, ColorPickerFolderNode parentFolder) {
+        super(NodeType.VALUE_ROW, path, parentFolder);
+        initSliderPrecisionArrays();
+    }
+
+    private void initSliderPrecisionArrays() {
         initPrecision();
         loadPrecisionFromNode();
     }

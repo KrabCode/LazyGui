@@ -18,7 +18,7 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
-import toolbox.windows.nodes.shaderList.ShaderListFolderNode;
+import toolbox.windows.nodes.shaderList.ShaderListFolder;
 
 import static processing.core.PApplet.*;
 
@@ -166,15 +166,7 @@ public class Gui implements UserInputSubscriber {
 
     public SliderNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
         FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-        SliderNode node = new SliderNode(path, folder);
-        node.valueFloatDefault = defaultValue;
-        node.valueFloat = defaultValue;
-        node.valueFloatMin = min;
-        node.valueFloatMax = max;
-        node.valueFloatPrecision = defaultPrecision;
-        node.valueFloatPrecisionDefault = defaultPrecision;
-        node.valueFloatConstrained = constrained;
-        node.initSliderPrecisionArrays();
+        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, defaultPrecision, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -202,13 +194,7 @@ public class Gui implements UserInputSubscriber {
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder);
-        node.valueFloatDefault = defaultValue;
-        node.valueFloat = defaultValue;
-        node.valueFloatMin = min;
-        node.valueFloatMax = max;
-        node.valueFloatConstrained = constrained;
-        node.initSliderPrecisionArrays();
+        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -291,11 +277,11 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void filter(String path, PGraphics pg) {
-        ShaderListFolderNode node = (ShaderListFolderNode) NodeTree.findNodeByPathInTree(path);
+    public void filterList(String path, PGraphics pg) {
+        ShaderListFolder node = (ShaderListFolder) NodeTree.findNodeByPathInTree(path);
         if(node == null){
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ShaderListFolderNode(path, parentFolder);
+            node = new ShaderListFolder(path, parentFolder);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.filter(pg);

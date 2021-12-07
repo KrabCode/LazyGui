@@ -30,7 +30,7 @@ public abstract class AbstractNode {
 
     public String name;
     public final float cell = State.cell;
-    public int nodeCount = 1;
+    public int heightMultiplier = 1;
 
     protected  PVector dragStartPos = new PVector();
     public boolean isDragged = false;

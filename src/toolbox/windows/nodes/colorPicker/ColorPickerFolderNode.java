@@ -33,12 +33,11 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     private void initNodes() {
-        PGraphics colorProvider = State.colorProvider;
         children.add(new ColorPreviewNode(path + "/preview", this));
-        children.add(new HueNode(path + "/hue", this));
-        children.add(new SaturationNode(path + "/sat", this));
-        children.add(new BrightnessNode(path + "/br", this));
-        children.add(new AlphaNode(path + "/alpha", this));
+        children.add(new ColorSliderNode.HueNode(path + "/hue", this));
+        children.add(new ColorSliderNode.SaturationNode(path + "/sat", this));
+        children.add(new ColorSliderNode.BrightnessNode(path + "/br", this));
+        children.add(new ColorSliderNode.AlphaNode(path + "/alpha", this));
         children.add(new HexNode(path + "/hex", this));
     }
 

@@ -39,7 +39,7 @@ public class FolderWindow extends Window {
         float y = titleBarHeight;
         for (int i = 0; i < parentFolder.children.size(); i++) {
             AbstractNode node = parentFolder.children.get(i);
-            float nodeHeight = cell * node.nodeCount;
+            float nodeHeight = cell * node.heightMultiplier;
             node.updateNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
@@ -55,7 +55,7 @@ public class FolderWindow extends Window {
     private float heightSumOfChildNodes() {
         float sum = 0;
         for(AbstractNode child : parentFolder.children){
-            sum += child.nodeCount * cell;
+            sum += child.heightMultiplier * cell;
         }
         return sum;
     }

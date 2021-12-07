@@ -1,15 +1,19 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.palettes.PaletteColorType;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.NodeType;
 import toolbox.windows.nodes.SliderNode;
 
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
 public abstract class ColorSliderNode extends SliderNode {
 
@@ -21,14 +25,12 @@ public abstract class ColorSliderNode extends SliderNode {
     public ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
         super(path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
-        this.valueFloatDefault = 0;
         valueFloatPrecisionDefault = 0.01f;
         valueFloatPrecision = valueFloatPrecisionDefault;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         valueFloatConstrained = true;
         valueFloatMin = 0;
         valueFloatMax = 1;
-        initSliderPrecisionArrays();
         initSliderBackgroundShader();
         ShaderStore.lazyInitGetShader(colorShaderPath);
     }
@@ -104,6 +106,137 @@ public abstract class ColorSliderNode extends SliderNode {
             }
         }else{
             return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+        }
+    }
+
+    public static class HueNode extends ColorSliderNode {
+
+        public HueNode(String path, ColorPickerFolderNode parentFolder) {
+            super(path, parentFolder);
+            shaderColorMode = 0;
+        }
+
+        @Override
+        void updateColorInParentFolder() {
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+        @Override
+        protected boolean tryConstrainValue() {
+            while (valueFloat < 0) {
+                valueFloat += 1;
+            }
+            valueFloat %= 1;
+            return false;
+        }
+
+        @Override
+        protected void onValueResetToDefault() {
+            super.onValueResetToDefault();
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+
+        @Override
+        public void keyPressedOverNode(KeyEvent e, float x, float y) {
+            super.keyPressedOverNode(e, x, y);
+            if (e.getKeyCode() == KEY_CODE_CTRL_V) {
+                parentColorPickerFolder.loadValuesFromHSBA();
+            }
+        }
+    }
+
+    public static class SaturationNode extends ColorSliderNode {
+
+
+        public SaturationNode(String path, ColorPickerFolderNode parentFolder) {
+            super(path, parentFolder);
+            shaderColorMode = 1;
+        }
+
+        @Override
+        void updateColorInParentFolder() {
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+        @Override
+        protected void onValueResetToDefault() {
+            super.onValueResetToDefault();
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+        @Override
+        public void keyPressedOverNode(KeyEvent e, float x, float y) {
+            super.keyPressedOverNode(e,x,y);
+            if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+                parentColorPickerFolder.loadValuesFromHSBA();
+            }
+        }
+    }
+
+    public static class BrightnessNode extends ColorSliderNode {
+
+        public BrightnessNode(String path, ColorPickerFolderNode parentFolder) {
+            super(path, parentFolder);
+            shaderColorMode = 2;
+        }
+
+        @Override
+        void updateColorInParentFolder() {
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+        @Override
+        protected void onValueResetToDefault() {
+            super.onValueResetToDefault();
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+        @Override
+        public void keyPressedOverNode(KeyEvent e, float x, float y) {
+            super.keyPressedOverNode(e, x, y);
+
+            if (e.getKeyCode() == KEY_CODE_CTRL_V) {
+                parentColorPickerFolder.loadValuesFromHSBA();
+            }
+        }
+    }
+
+    public static class AlphaNode extends ColorSliderNode {
+
+
+        public AlphaNode(String path, ColorPickerFolderNode parentFolder) {
+            super(path, parentFolder);
+            shaderColorMode = 3;
+        }
+
+        @Override
+        void updateColorInParentFolder() {
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+        @Override
+        protected void onValueResetToDefault() {
+            super.onValueResetToDefault();
+            parentColorPickerFolder.loadValuesFromHSBA();
+        }
+
+
+        protected int foregroundMouseOverBrightnessAware(){
+            if(isMouseOverNode){
+                if(parentColorPickerFolder.brightness() > 0.7f && valueFloat > 0.3f){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }else{
+                return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+            }
+        }
+        @Override
+        public void keyPressedOverNode(KeyEvent e, float x, float y) {
+            super.keyPressedOverNode(e,x,y);
+            if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+                parentColorPickerFolder.loadValuesFromHSBA();
+            }
         }
     }
 }
