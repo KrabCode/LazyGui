@@ -10,17 +10,24 @@ import static processing.core.PApplet.floor;
 public class ShaderListItem extends FolderNode {
 
     public final String shaderPath;
-    ToggleNode skipNode;
+    ToggleNode activeNode;
 
     public ShaderListItem(String path, FolderNode parent, String shaderPath) {
         super(path, parent);
         this.shaderPath = shaderPath;
-        skipNode = new ToggleNode(path + "/skip", this, false);
-        children.add(skipNode);
+        activeNode = new ToggleNode(path + "/active", this, false);
+        children.add(activeNode);
+    }
+
+    @Override
+    protected void updateDrawInlineNode(PGraphics pg) {
+        pg.pushMatrix();
+        drawToggleHandle(pg, activeNode.valueBoolean);
+        pg.popMatrix();
     }
 
     public void filter(PGraphics pg) {
-        if(skipNode.valueBoolean){
+        if(!activeNode.valueBoolean){
             return;
         }
         PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
@@ -31,7 +38,7 @@ public class ShaderListItem extends FolderNode {
                 shader.set(node.name, floor(sliderNode.valueFloat));
             }else if(className.contains("slider")){
                 SliderNode sliderNode = (SliderNode) node;
-                shader.set(node.name, floor(sliderNode.valueFloat));
+                shader.set(node.name, sliderNode.valueFloat);
             }
         }
         ShaderStore.hotFilter(shaderPath, pg);

@@ -26,32 +26,7 @@ public class ToggleNode extends AbstractNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        drawToggleHandle(pg);
-    }
-
-    private void drawToggleHandle(PGraphics pg) {
-        float rectWidth = cell * 0.3f;
-        float rectHeight = cell * 0.3f;
-
-
-        pg.rectMode(CENTER);
-        pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
-        if(isMouseOverNode){
-            pg.stroke(PaletteStore.get(FOCUS_FOREGROUND));
-        }else{
-            pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
-        }
-        if(valueBoolean){
-            pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
-            pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
-            pg.fill(PaletteStore.get(FOCUS_FOREGROUND));
-            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
-        }else{
-            pg.fill(PaletteStore.get(NORMAL_FOREGROUND));
-            pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
-            pg.fill(PaletteStore.get(NORMAL_BACKGROUND));
-            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
-        }
+        drawToggleHandle(pg, valueBoolean);
     }
 
 

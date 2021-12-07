@@ -194,7 +194,7 @@ public class Gui implements UserInputSubscriber {
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, constrained);
+        SliderIntNode node = new SliderIntNode(path, folder, defaultValue,  min, max,0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
