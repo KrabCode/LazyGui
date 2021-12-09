@@ -199,6 +199,10 @@ public abstract class AbstractNode {
 
     }
 
+    public void keyPressedOutOfNode(KeyEvent keyEvent, float x, float y) {
+
+    }
+
     public void mouseReleasedOverNode(float x, float y) {
 
     }
@@ -218,8 +222,8 @@ public abstract class AbstractNode {
         }
         return parent.window.hidden;
     }
-
     // used by value nodes to load state from json
+
     public void overwriteState(JsonElement loadedNode){
 
     }

@@ -16,7 +16,7 @@ import static processing.core.PApplet.println;
  * A FolderWindow is the only visible GUI element
  * lets the user see its child nodes including folders and interact with them
  * to either change a node value or open a new FolderWindow
-*/
+ */
 public class FolderWindow extends Window {
     public final FolderNode parentFolder;
 
@@ -54,7 +54,7 @@ public class FolderWindow extends Window {
 
     private float heightSumOfChildNodes() {
         float sum = 0;
-        for(AbstractNode child : parentFolder.children){
+        for (AbstractNode child : parentFolder.children) {
             sum += child.heightMultiplier * cell;
         }
         return sum;
@@ -111,7 +111,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null  && !parentNode.isParentWindowHidden()) {
+            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
                 clickedNode.mouseWheelMovedOverNode(x, y, dir);
             }
         }
@@ -122,11 +122,14 @@ public class FolderWindow extends Window {
         super.keyPressed(keyEvent);
         float x = State.app.mouseX;
         float y = State.app.mouseY;
-        if (isPointInsideContent(x, y)) {
-            AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
-                clickedNode.keyPressedOverNode(keyEvent, x, y);
+        AbstractNode nodeUnderMouse = tryFindChildNode(x, y);
+        if (nodeUnderMouse != null && !parentNode.isParentWindowHidden()) {
+            if (isPointInsideContent(x, y)) {
+                nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
+        }
+        for(AbstractNode anyNode : parentFolder.children){
+            anyNode.keyPressedOutOfNode(keyEvent, x, y);
         }
     }
 
@@ -142,8 +145,8 @@ public class FolderWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        for(AbstractNode child : parentFolder.children){
-            if(child.isDragged && !child.isParentWindowHidden()){
+        for (AbstractNode child : parentFolder.children) {
+            if (child.isDragged && !child.isParentWindowHidden()) {
                 child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }

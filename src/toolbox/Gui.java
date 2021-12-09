@@ -67,6 +67,9 @@ public class Gui implements UserInputSubscriber {
     }
 
     public void draw(PGraphics canvas) {
+        if(State.app.frameCount == 2){
+            State.loadMostRecentTreeSave();
+        }
         lazyResetDisplay();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
@@ -114,20 +117,10 @@ public class Gui implements UserInputSubscriber {
             recordingFrame++;
         }
         if (screenshot) {
-            String filename = "out/screenshots/" + timestamp() + ".png";
+            String filename = "out/screenshots/" + State.timestamp() + ".png";
             println("saved screenshot: " + filename);
             pg.save(filename);
         }
-    }
-
-    private String timestamp() {
-        return year()
-                + nf(month(), 2)
-                + nf(day(), 2)
-                + "-"
-                + nf(hour(), 2)
-                + nf(minute(), 2)
-                + nf(second(), 2);
     }
 
     private String generateRecordingFolderName() {

@@ -14,10 +14,8 @@ import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
 public class NodeTree {
-    private static final FolderNode mainRoot = new FolderNode("", null);
+    static final FolderNode mainRoot = new FolderNode("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
-    private static String jsonState;
-    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
     private NodeTree() {
 
@@ -106,33 +104,6 @@ public class NodeTree {
         return sum.toString();
     }
 
-    public static void saveToJson() {
-        String json = gson.toJson(mainRoot);
-        println(json);
-        jsonState = json;
-    }
-
-    public static void loadFromJson() {
-        println(jsonState);
-        // don't delete or do anything to the existing nodes, just overwrite their values
-        JsonElement loadedRoot = gson.fromJson(jsonState, JsonElement.class);
-
-        Queue<JsonElement> queue = new LinkedList<>();
-        queue.offer(loadedRoot);
-        while (!queue.isEmpty()) {
-            JsonElement loadedNode = queue.poll();
-            String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
-            AbstractNode mainNode = findNodeByPathInTree(loadedPath);
-            mainNode.overwriteState(loadedNode);
-            String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
-            if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
-                JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
-                for (JsonElement child : loadedChildren) {
-                    queue.offer(child);
-                }
-            }
-        }
-    }
 
 }
 

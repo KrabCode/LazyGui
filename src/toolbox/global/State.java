@@ -2,19 +2,29 @@ package toolbox.global;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.jogamp.newt.opengl.GLWindow;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PSurface;
 import toolbox.Gui;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.NodeType;
 
 import java.awt.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.List;
+import java.util.function.Predicate;
 
-import static processing.core.PApplet.println;
+import static processing.core.PApplet.*;
+import static processing.core.PApplet.second;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
+import static toolbox.global.NodeTree.findNodeByPathInTree;
 
 
 public class State {
@@ -27,9 +37,14 @@ public class State {
     public static String libraryPath = null;
     public static PGraphics colorProvider = null;
     public static float textMarginX = 5;
+    public static String sketchName = null;
+    public static File dir;
 
     public static int clipboardHex = 0;
     public static float clipboardFloat = 0;
+
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+
 
     public static void init(Gui gui, PApplet app){
         State.gui = gui;
@@ -42,6 +57,16 @@ public class State {
             }
 
         }
+
+
+        sketchName = app.getClass().getSimpleName();
+        libraryPath = Utils.getLibraryPath();
+        dir = new File(libraryPath + "/saves/" + sketchName);
+        if(!dir.exists()){
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+
         colorProvider = app.createGraphics(256,256, P2D);
         State.colorProvider.colorMode(HSB,1,1,1,1);
 
@@ -55,6 +80,100 @@ public class State {
         } catch (AWTException e) {
             e.printStackTrace();
         }
-        libraryPath = Utils.getLibraryPath();
+    }
+
+    public static String timestamp() {
+        return year()
+                + nf(month(), 2)
+                + nf(day(), 2)
+                + "-"
+                + nf(hour(), 2)
+                + nf(minute(), 2)
+                + nf(second(), 2);
+    }
+
+    public static void createTreeSaveFile(){
+        String json = gson.toJson(NodeTree.mainRoot);
+        BufferedWriter writer;
+        String timestamp = timestamp();
+        try {
+            writer = new BufferedWriter(new FileWriter(dir.getAbsolutePath() + "/" + timestamp + ".json"));
+            writer.write(json);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadMostRecentTreeSave(){
+        // TODO
+        //  get save list from current sketch save folder
+        //  load most recent one
+        File[] saveFiles = dir.listFiles();
+        assert saveFiles != null;
+        ArrayList<File> saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
+        saveFilesSorted.removeIf(new Predicate<File>() {
+            @Override
+            public boolean test(File file) {
+                return !file.isFile();
+            }
+        });
+        if(saveFilesSorted.size() == 0){
+            return;
+        }
+        saveFilesSorted.sort(new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                if(o1.lastModified() > o2.lastModified()){
+                    return -1;
+                }
+                if(o1.lastModified() < o2.lastModified()){
+                    return 1;
+                }
+                return 0;
+            }
+        });
+        String lastStateJson = readFile(saveFilesSorted.get(0));
+        loadFromJson(lastStateJson);
+    }
+
+    private static String readFile(File file) {
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StringBuilder sb = new StringBuilder();
+        assert lines != null;
+        for(String line : lines){
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+
+    public static void loadFromJson(String json) {
+        // don't delete or do anything to the existing nodes, just overwrite their values
+        JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
+
+        Queue<JsonElement> queue = new LinkedList<>();
+        queue.offer(loadedRoot);
+        while (!queue.isEmpty()) {
+            JsonElement loadedNode = queue.poll();
+            String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
+            AbstractNode mainNode = findNodeByPathInTree(loadedPath);
+            mainNode.overwriteState(loadedNode);
+            String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
+            if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
+                JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
+                for (JsonElement child : loadedChildren) {
+                    queue.offer(child);
+                }
+            }
+        }
+    }
+
+    class TreeSave{
+
     }
 }

@@ -1,7 +1,7 @@
 package toolbox.windows.nodes;
 
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
-import toolbox.global.NodeTree;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
@@ -29,23 +29,22 @@ public class ToolbarNode extends AbstractNode {
         for (int i = 0; i < buttonCount; i++) {
             pg.pushMatrix();
             pg.pushStyle();
-            float x =  i * cell;
+            float x = i * cell;
             pg.translate(x, 0);
             pg.pushMatrix();
             updateDrawButton(pg, i);
             pg.popMatrix();
-            if(i > 0){
+            if (i > 0) {
                 pg.stroke(PaletteStore.get(WINDOW_BORDER));
                 pg.strokeWeight(1);
-                pg.line(0,0,0,cell-1);
+                pg.line(0, 0, 0, cell - 1);
             }
             pg.popStyle();
             pg.popMatrix();
         }
         pg.stroke(PaletteStore.get(WINDOW_BORDER));
-        pg.line(0,cell-1,size.x, cell-1);
+        pg.line(0, cell - 1, size.x, cell - 1);
     }
-
 
 
     private void updateDrawButton(PGraphics pg, int buttonIndex) {
@@ -63,14 +62,14 @@ public class ToolbarNode extends AbstractNode {
             pg.stroke(PaletteStore.get(NORMAL_FOREGROUND));
         }
         pg.beginShape();
-        if(buttonIndex == 0){
-            pg.circle(0,0,n);
+        if (buttonIndex == 0) {
+            pg.circle(0, 0, n);
             return;
         }
         buttonIndex += 2;
         for (int i = 0; i < buttonIndex; i++) {
-            float theta = map(i, 0, buttonIndex-1, 0, TAU);
-            pg.vertex(n*cos(theta), n*sin(theta));
+            float theta = map(i, 0, buttonIndex - 1, 0, TAU);
+            pg.vertex(n * cos(theta), n * sin(theta));
         }
         pg.endShape();
     }
@@ -82,25 +81,40 @@ public class ToolbarNode extends AbstractNode {
 
     @Override
     public void mouseReleasedAnywhere(float x, float y) {
-        if(isParentWindowHidden()){
+        if (isParentWindowHidden()) {
             return;
         }
         super.mouseReleasedAnywhere(x, y);
-        for(int i = 0; i < buttonCount; i++){
-            if(isMouseOverButton(i)){
-                if(i == 0){
-                    NodeTree.saveToJson();
-                }else if(i == 1){
-                    NodeTree.loadFromJson();
+        for (int i = 0; i < buttonCount; i++) {
+            if (isMouseOverButton(i)) {
+                if (i == 0) {
+                    State.createTreeSaveFile();
+                } else if (i == 1) {
+                    State.loadMostRecentTreeSave();
                 }
                 return;
             }
         }
     }
 
-    private boolean isMouseOverButton(int buttonIndex){
+    private boolean isMouseOverButton(int buttonIndex) {
         return Utils.isPointInRect(State.app.mouseX, State.app.mouseY,
                 pos.x + buttonIndex * cell, pos.y,
                 cell, cell);
+    }
+
+    public static final int KEY_CODE_S = 83;
+    public static final int KEY_CODE_L = 76;
+
+    @Override
+    public void keyPressedOutOfNode(KeyEvent e, float x, float y) {
+        super.keyPressedOutOfNode(e, x, y);
+        int code = e.getKeyCode();
+        println(code);
+        if(e.isControlDown() && code == KEY_CODE_S){
+            State.createTreeSaveFile();
+        }else if(e.isControlDown() && code == KEY_CODE_L){
+            State.loadMostRecentTreeSave();
+        }
     }
 }
