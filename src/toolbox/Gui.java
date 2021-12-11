@@ -39,6 +39,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
+        State.loadMostRecentTreeSave();
         PaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
@@ -51,7 +52,6 @@ public class Gui implements UserInputSubscriber {
         );
         explorer.createToolbar();
         WindowManager.addWindow(explorer);
-
         lazyResetDisplay();
     }
 
@@ -69,7 +69,7 @@ public class Gui implements UserInputSubscriber {
     public void draw(PGraphics canvas) {
         if(State.app.frameCount == 2){
             // TODO save this state and check if values exist there for newly created nodes instead of this frame 2 value overwrite
-            State.loadMostRecentTreeSave();
+
         }
         lazyResetDisplay();
         pg.beginDraw();

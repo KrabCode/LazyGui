@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.PaletteStore;
+import toolbox.global.State;
 
 import static processing.core.PConstants.CENTER;
 import static toolbox.global.palettes.PaletteColorType.*;
@@ -22,6 +23,7 @@ public class ToggleNode extends AbstractNode {
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
         handlePosNorm = valueBoolean ? 1 : 0;
+        State.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

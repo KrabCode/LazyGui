@@ -28,10 +28,13 @@ public class ShaderTest extends PApplet {
 
     public void draw() {
         pg.beginDraw();
-        pg.noStroke();
-        pg.fill(gui.colorPicker("background").hex);
-        pg.rectMode(CORNER);
-        pg.rect(0, 0, pg.width, pg.height);
+        if(frameCount > 30){
+
+            pg.noStroke();
+            pg.fill(gui.colorPicker("background").hex);
+            pg.rectMode(CORNER);
+            pg.rect(0, 0, pg.width, pg.height);
+        }
         gui.filterList("shaders", pg);
         pg.endDraw();
         clear();
@@ -40,6 +43,6 @@ public class ShaderTest extends PApplet {
             ShaderStore.hotFilter("filters/invert.glsl", g);
         }
         gui.draw();
-        gui.record(pg);
+        gui.record();
     }
 }

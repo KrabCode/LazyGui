@@ -28,6 +28,7 @@ public class ColorPickerFolderNode extends FolderNode {
         setHex(hex);
         previewNode = new ColorPreviewNode(path + "/preview", this);
         initNodes();
+        State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
 

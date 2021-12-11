@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.State;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
@@ -22,6 +23,7 @@ public class FolderNode extends AbstractNode {
 
     public FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER_ROW, path, parent);
+        State.overwriteWithLoadedStateIfAny(this);
     }
 
 

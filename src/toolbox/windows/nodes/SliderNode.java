@@ -32,6 +32,7 @@ public class SliderNode extends AbstractNode {
         this.valueFloatPrecisionDefault = defaultPrecision;
         this.valueFloatConstrained = constrained;
         initSliderPrecisionArrays();
+        State.overwriteWithLoadedStateIfAny(this);
     }
 
     @Expose

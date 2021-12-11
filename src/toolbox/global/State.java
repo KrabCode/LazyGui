@@ -10,8 +10,8 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PSurface;
 import toolbox.Gui;
-import toolbox.windows.nodes.AbstractNode;
-import toolbox.windows.nodes.NodeType;
+import toolbox.windows.nodes.*;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 import java.awt.*;
 import java.io.*;
@@ -152,10 +152,12 @@ public class State {
         return sb.toString();
     }
 
+    static Map<String, JsonElement> loadedState = new HashMap<>();
+
     public static void loadFromJson(String json) {
         // don't delete or do anything to the existing nodes, just overwrite their values
         JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
-
+        loadedState.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(loadedRoot);
         while (!queue.isEmpty()) {
@@ -165,6 +167,7 @@ public class State {
             if(nodeToEdit != null){
                 nodeToEdit.overwriteState(loadedNode);
             }
+            loadedState.put(loadedPath, loadedNode);
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
             if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
@@ -172,6 +175,23 @@ public class State {
                     queue.offer(child);
                 }
             }
+        }
+    }
+
+    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode) {
+        JsonElement loadedNodeState = loadedState.get(abstractNode.path);
+        if(loadedNodeState == null){
+            return;
+        }
+        String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
+        if(className.contains("sliderint")){
+            ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+        }else if (className.contains("slider")){
+            ((SliderNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+        }else if(className.contains("toggle")){
+            ((ToggleNode) abstractNode).valueBoolean = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
+        }else if(className.contains("colorpicker")){
+            ((ColorPickerFolderNode) abstractNode).setHex(unhex(loadedNodeState.getAsJsonObject().get("hexString").getAsString()));
         }
     }
 
