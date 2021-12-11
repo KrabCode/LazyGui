@@ -7,11 +7,43 @@ public class ShaderListFolder extends FolderNode {
 
     public ShaderListFolder(String path, FolderNode parent) {
         super(path, parent);
-        ShaderListItem darken = new ShaderListItem(path + "/darken", this, "filters/darken.glsl");
-        children.add(darken);
-        darken.children.add(new SliderNode(darken.path+"/delta", darken, 0.1f, 0, 1, 0.01f, false));
 
-        ShaderListItem chromab = new ShaderListItem(path + "/chromab", this, "filters/chromab.glsl");
+        ShaderListItem tvStatic = new ShaderListItem(path + "/tv static", this, "filters/tvStatic.glsl",  true);
+        children.add(tvStatic);
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/alpha", tvStatic, 0.9f, 0, 1, 0.01f, true));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/pixelate", tvStatic, 1, 0, 1, 0.01f, true));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/speed", tvStatic, 0.1f, 0, 1, 0.01f, false));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/freqX", tvStatic, 0.1f, 0, 1, 0.01f, false));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/freqY", tvStatic, 0.1f, 0, 1, 0.01f, false));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/offset", tvStatic, 0.1f, 0, 1, 0.01f, false));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/blackPoint", tvStatic, 0.0f, 0, 1, 0.01f, false));
+        tvStatic.children.add(new SliderNode(tvStatic.path + "/whitePoint", tvStatic, 0.9f, 0, 1, 0.01f, false));
+
+
+        ShaderListItem noise = new ShaderListItem(path + "/noise", this, "filters/noise.glsl",  true);
+        noise.children.add(new SliderNode(noise.path + "/alpha", noise, 0.9f, 0, 1, 0.01f, true));
+        noise.children.add(new SliderNode(noise.path + "/speed", noise, 0.1f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/baseValue", noise, 0.5f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/baseAmp", noise, 0.5f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/freqX", noise, 0.1f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/freqY", noise, 0.1f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/fbmFreqMult", noise, 2.0f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderNode(noise.path + "/fbmAmpMult", noise, 0.5f, 0, 1, 0.01f, false));
+        noise.children.add(new SliderIntNode(noise.path + "/octaves", noise,4, 0, 1, 0.01f, false));
+        children.add(noise);
+
+        ShaderListItem add = new ShaderListItem(path + "/add", this, "filters/addRGB.glsl", false);
+        children.add(add);
+        add.children.add(new SliderNode(add.path+"/deltaRGB", add, 0.0f, -1, 1, 0.01f, true));
+        add.children.add(new SliderNode(add.path+"/deltaR", add, 0.0f, -1, 1, 0.01f, true));
+        add.children.add(new SliderNode(add.path+"/deltaG", add, 0.0f, -1, 1, 0.01f, true));
+        add.children.add(new SliderNode(add.path+"/deltaB", add, 0.0f, -1, 1, 0.01f, true));
+
+        ShaderListItem flow = new ShaderListItem(path + "/flow", this, "filters/flowFromCenter.glsl", false);
+        children.add(flow);
+        flow.children.add(new SliderNode(flow.path+"/delta", flow, 0.1f, 0, 1, 0.01f, false));
+
+        ShaderListItem chromab = new ShaderListItem(path + "/chromab", this, "filters/chromab.glsl", false);
         children.add(chromab);
         chromab.children.add(new SliderNode(chromab.path+"/innerEdge", chromab, 0.0f, 0, 1, 0.01f, false));
         chromab.children.add(new SliderNode(chromab.path+"/outerEdge", chromab, 2.5f, 0, 1, 0.01f, false));

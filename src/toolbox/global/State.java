@@ -161,8 +161,10 @@ public class State {
         while (!queue.isEmpty()) {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
-            AbstractNode mainNode = findNodeByPathInTree(loadedPath);
-            mainNode.overwriteState(loadedNode);
+            AbstractNode nodeToEdit = findNodeByPathInTree(loadedPath);
+            if(nodeToEdit != null){
+                nodeToEdit.overwriteState(loadedNode);
+            }
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
             if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();

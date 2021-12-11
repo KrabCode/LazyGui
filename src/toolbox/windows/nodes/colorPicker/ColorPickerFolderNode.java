@@ -6,8 +6,7 @@ import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
-import static processing.core.PApplet.hex;
-import static processing.core.PApplet.unhex;
+import static processing.core.PApplet.*;
 import static processing.core.PConstants.*;
 
 public class ColorPickerFolderNode extends FolderNode {
@@ -108,6 +107,9 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public void setHex(int hex) {
+        if(hex == 0){
+            hex = unhex("00010101");
+        }
         this.hex = hex;
         hexString = hex(hex);
     }

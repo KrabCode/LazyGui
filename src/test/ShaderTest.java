@@ -4,6 +4,8 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toolbox.Gui;
+import toolbox.global.ShaderStore;
+import toolbox.windows.nodes.shaderList.ShaderListItem;
 
 public class ShaderTest extends PApplet {
 
@@ -15,12 +17,13 @@ public class ShaderTest extends PApplet {
     }
 
     public void settings() {
-        size(800, 800, P2D);
+//        size(800, 800, P2D);
+        fullScreen(P2D);
     }
 
     public void setup() {
         gui = new Gui(this);
-        pg = createGraphics(width, height, P2D);
+        pg = createGraphics(width,height, P2D);
     }
 
     public void draw() {
@@ -29,17 +32,14 @@ public class ShaderTest extends PApplet {
         pg.fill(gui.colorPicker("background").hex);
         pg.rectMode(CORNER);
         pg.rect(0, 0, pg.width, pg.height);
-        pg.fill(gui.colorPicker("fill").hex);
-        pg.stroke(gui.colorPicker("stroke", 1).hex);
-        pg.rectMode(CENTER);
-        pg.strokeWeight(gui.slider("weight", 1.9f));
-        float size = gui.slider("size", 60);
-        pg.translate(pg.width * 0.5f, pg.height * 0.5f);
-        pg.rect(0,0,size,size);
         gui.filterList("shaders", pg);
         pg.endDraw();
+        clear();
         image(pg, 0, 0);
+        if(gui.toggle("shaders/invert")){
+            ShaderStore.hotFilter("filters/invert.glsl", g);
+        }
         gui.draw();
-        gui.record();
+        gui.record(pg);
     }
 }

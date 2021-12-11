@@ -110,7 +110,7 @@ public class ToolbarNode extends AbstractNode {
     public void keyPressedOutOfNode(KeyEvent e, float x, float y) {
         super.keyPressedOutOfNode(e, x, y);
         int code = e.getKeyCode();
-        println(code);
+//        println(code);
         if(e.isControlDown() && code == KEY_CODE_S){
             State.createTreeSaveFile();
         }else if(e.isControlDown() && code == KEY_CODE_L){

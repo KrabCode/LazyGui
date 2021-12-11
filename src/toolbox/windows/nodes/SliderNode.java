@@ -50,7 +50,7 @@ public class SliderNode extends AbstractNode {
     protected int currentPrecisionIndex;
     String shaderPath = "sliderBackground.glsl";
 
-    public SliderNode(String path, ColorPickerFolderNode parentFolder) {
+    public SliderNode(String path, FolderNode parentFolder) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         initSliderPrecisionArrays();
     }
