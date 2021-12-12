@@ -32,11 +32,11 @@ public class ShaderTest extends PApplet {
         pg.fill(gui.colorPicker("background").hex);
         pg.rectMode(CORNER);
         pg.rect(0, 0, pg.width, pg.height);
-        gui.filterList("shaders", pg);
+        gui.filterList("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        if (gui.toggle("shaders/invert")) {
+        if (gui.toggle("invert")) {
             ShaderStore.hotFilter("filters/invert.glsl", g);
         }
         gui.draw();

@@ -3,6 +3,7 @@ package toolbox;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
@@ -52,10 +53,10 @@ public class Gui implements UserInputSubscriber {
         );
         explorer.createToolbar();
         WindowManager.addWindow(explorer);
-        lazyResetDisplay();
+        lazyFollowSketchResolution();
     }
 
-    void lazyResetDisplay() {
+    void lazyFollowSketchResolution() {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
             pg = app.createGraphics(app.width, app.height, P2D);
             pg.noSmooth();
@@ -67,11 +68,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     public void draw(PGraphics canvas) {
-        if(State.app.frameCount == 2){
-            // TODO save this state and check if values exist there for newly created nodes instead of this frame 2 value overwrite
-
-        }
-        lazyResetDisplay();
+        lazyFollowSketchResolution();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
@@ -79,7 +76,10 @@ public class Gui implements UserInputSubscriber {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
+        canvas.pushStyle();
+        canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
+        canvas.popStyle();
     }
 
     @Override
@@ -97,30 +97,70 @@ public class Gui implements UserInputSubscriber {
     }
 
     boolean isRecording = false;
+    PVector recordingPosInput = new PVector(0, 0);
+    PVector recordingSizeInput = new PVector(1000, 1000);
 
     public void record(PGraphics pg) {
         boolean screenshot = button("recorder/screenshot");
         boolean recordNow = button("recorder/start recording");
-        boolean stopRecording = button("recorder/stop recording");
+        boolean stopRecording = toggle("recorder/stop recording");
         int framesToRecord = sliderInt("recorder/frames", 360, 0, Integer.MAX_VALUE);
+        boolean useCropRectangle = toggle("recorder/crop/active");
+        recordingPosInput.x = sliderInt("recorder/crop/x");
+        recordingPosInput.y = sliderInt("recorder/crop/y");
+        int defaultSize = 1000;
+        recordingSizeInput.x = sliderInt("recorder/crop/width", defaultSize);
+        recordingSizeInput.y = sliderInt("recorder/crop/height", defaultSize);
+
+        int rectX = floor(pg.width  / 2f + recordingPosInput.x - recordingSizeInput.x / 2f);
+        int rectY = floor(pg.height / 2f + recordingPosInput.y - recordingSizeInput.y / 2f);
+        int rectW = floor(recordingSizeInput.x);
+        int rectH = floor(recordingSizeInput.y);
+
+        // ffmpeg doesn't like resolutions not divisible by 2
+        if(rectW %2 != 0){
+            rectW += 1;
+        }
+        if(rectH %2 != 0){
+            rectH += 1;
+        }
+
         if (!lastRecordNow && recordNow) {
             recordingFolderName = generateRecordingFolderName();
             recordingFrame = 1;
             isRecording = true;
         }
         lastRecordNow = recordNow;
+
         if (isRecording) {
-            println("recording " + recordingFrame + " / " + framesToRecord);
-            pg.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
+            PImage img = pg;
+            if(useCropRectangle){
+                img = pg.get(rectX, rectY, rectW, rectH);
+            }
+            img.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
             if (stopRecording || recordingFrame >= framesToRecord) {
                 isRecording = false;
             }
+            println("recording " + recordingFrame + " / " + framesToRecord);
             recordingFrame++;
         }
         if (screenshot) {
+            PImage img = pg;
+            if(useCropRectangle){
+                img = pg.get(rectX, rectY, rectW, rectH);
+            }
             String filename = "out/screenshots/" + State.timestamp() + ".png";
+            img.save(filename);
             println("saved screenshot: " + filename);
-            pg.save(filename);
+        }
+
+        if (useCropRectangle) {
+            pg.pushStyle();
+            pg.noFill();
+            pg.strokeWeight(1);
+            pg.stroke(0xFFFFFFFF);
+            pg.rect(rectX, rectY, recordingSizeInput.x, recordingSizeInput.y);
+            pg.popStyle();
         }
     }
 
@@ -188,7 +228,7 @@ public class Gui implements UserInputSubscriber {
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder, defaultValue,  min, max,0.1f, constrained);
+        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -264,7 +304,7 @@ public class Gui implements UserInputSubscriber {
             FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
-        }else{
+        } else {
 
             node.setHex(hex);
             node.loadValuesFromHex(false);
@@ -273,7 +313,7 @@ public class Gui implements UserInputSubscriber {
 
     public void filterList(String path, PGraphics pg) {
         ShaderListFolder node = (ShaderListFolder) NodeTree.findNodeByPathInTree(path);
-        if(node == null){
+        if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
             node = new ShaderListFolder(path, parentFolder);
             NodeTree.insertNodeAtItsPath(node);

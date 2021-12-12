@@ -183,15 +183,21 @@ public class State {
         if(loadedNodeState == null){
             return;
         }
-        String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
-        if(className.contains("sliderint")){
-            ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
-        }else if (className.contains("slider")){
-            ((SliderNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
-        }else if(className.contains("toggle")){
-            ((ToggleNode) abstractNode).valueBoolean = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
-        }else if(className.contains("colorpicker")){
-            ((ColorPickerFolderNode) abstractNode).setHex(unhex(loadedNodeState.getAsJsonObject().get("hexString").getAsString()));
+        try{
+
+            String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
+            if(className.contains("sliderint")){
+                ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+            }else if (className.contains("slider")){
+                ((SliderNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+            }else if(className.contains("toggle")){
+                ((ToggleNode) abstractNode).valueBoolean = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
+            }else if(className.contains("colorpicker")){
+                ((ColorPickerFolderNode) abstractNode).setHex(unhex(loadedNodeState.getAsJsonObject().get("hexString").getAsString()));
+            }
+        }catch(Exception ex){
+            println("tree structure changed and old state no longer applies to new nodes, probably nothing to worry about, just save the new state to stop seeing this warning");
+            println(ex.getMessage());
         }
     }
 
