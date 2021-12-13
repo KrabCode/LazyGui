@@ -1,11 +1,9 @@
 package test;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 import toolbox.Gui;
 import toolbox.global.ShaderStore;
-import toolbox.windows.nodes.shaderList.ShaderListItem;
 
 public class ShaderTest extends PApplet {
 
@@ -17,8 +15,8 @@ public class ShaderTest extends PApplet {
     }
 
     public void settings() {
-//        size(800, 800, P2D);
-        fullScreen(P2D);
+        size(800, 800, P2D);
+//        fullScreen(P2D);
     }
 
     public void setup() {

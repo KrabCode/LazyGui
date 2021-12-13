@@ -26,7 +26,7 @@ public class NodeTree {
     }
 
     public static AbstractNode getLazyInitParentFolderByPath(String nodePath) {
-        String folderPath = getPathWithoutName(nodePath);
+        String folderPath = Utils.getPathWithoutName(nodePath);
         lazyCreateFolderPath(folderPath);
         return findNodeByPathInTree(folderPath);
     }
@@ -85,25 +85,12 @@ public class NodeTree {
         if (findNodeByPathInTree(node.path) != null) {
             return;
         }
-        String folderPath = getPathWithoutName(node.path);
+        String folderPath = Utils.getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
         FolderNode folder = (FolderNode) findNodeByPathInTree(folderPath);
         assert folder != null;
         folder.children.add(node);
     }
-
-    public static String getPathWithoutName(String pathWithName) {
-        String[] split = pathWithName.split("/");
-        StringBuilder sum = new StringBuilder();
-        for (int i = 0; i < split.length - 1; i++) {
-            sum.append(split[i]);
-            if (i < split.length - 2) {
-                sum.append("/");
-            }
-        }
-        return sum.toString();
-    }
-
 
 }
 

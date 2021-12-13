@@ -70,7 +70,7 @@ public class FolderWindow extends Window {
         if (isPointInsideContent(x, y)) {
             AbstractNode node = tryFindChildNode(x, y);
             if (node != null && !node.isParentWindowHidden()) {
-                node.nodePressed(x, y);
+                node.nodeClicked(x, y);
             }
         }
     }

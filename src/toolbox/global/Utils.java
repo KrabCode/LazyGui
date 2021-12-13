@@ -141,4 +141,17 @@ public class Utils {
         return State.app.sketchPath();
     }
 
+    public static String getPathWithoutName(String pathWithName) {
+        String[] split = pathWithName.split("/");
+        StringBuilder sum = new StringBuilder();
+        for (int i = 0; i < split.length - 1; i++) {
+            sum.append(split[i]);
+            if (i < split.length - 2) {
+                sum.append("/");
+            }
+        }
+        return sum.toString();
+    }
+
+
 }

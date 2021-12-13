@@ -184,7 +184,7 @@ public abstract class AbstractNode {
         return parent.window.isFocused() && isMouseOverNode;
     }
 
-    public void nodePressed(float x, float y) {
+    public void nodeClicked(float x, float y) {
         isDragged = true;
         dragStartPos.x = x;
         dragStartPos.y = y;
@@ -227,4 +227,5 @@ public abstract class AbstractNode {
     public void overwriteState(JsonElement loadedNode){
 
     }
+
 }

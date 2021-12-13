@@ -18,7 +18,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.second;
@@ -44,6 +43,9 @@ public class State {
     public static float clipboardFloat = 0;
 
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    private static ArrayList<File> saveFilesSorted;
+    static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
+
 
 
     public static void init(Gui gui, PApplet app){
@@ -83,12 +85,11 @@ public class State {
     }
 
     public static String timestamp() {
-        return year()
-                + nf(month(), 2)
-                + nf(day(), 2)
-                + "-"
-                + nf(hour(), 2)
-                + nf(minute(), 2)
+        return year() + "-"
+                + nf(month(), 2) + "-"
+                + nf(day(), 2)+ "_"
+                + nf(hour(), 2)+ "."
+                + nf(minute(), 2)+ "."
                 + nf(second(), 2);
     }
 
@@ -96,45 +97,40 @@ public class State {
         String json = gson.toJson(NodeTree.mainRoot);
         BufferedWriter writer;
         String timestamp = timestamp();
+        String filePath = dir.getAbsolutePath() + "/" + timestamp + ".json";
         try {
-            writer = new BufferedWriter(new FileWriter(dir.getAbsolutePath() + "/" + timestamp + ".json"));
+            writer = new BufferedWriter(new FileWriter(filePath));
             writer.write(json);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // TODO fix
+        saveFilesSorted.add(0, new File(filePath));
     }
 
-    public static void loadMostRecentTreeSave(){
+    public static void loadMostRecentSave(){
         // TODO
         //  get save list from current sketch save folder
         //  load most recent one
         File[] saveFiles = dir.listFiles();
         assert saveFiles != null;
-        ArrayList<File> saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
-        saveFilesSorted.removeIf(new Predicate<File>() {
-            @Override
-            public boolean test(File file) {
-                return !file.isFile();
-            }
-        });
+        saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
+        saveFilesSorted.removeIf(file -> !file.isFile());
         if(saveFilesSorted.size() == 0){
             return;
         }
-        saveFilesSorted.sort(new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                if(o1.lastModified() > o2.lastModified()){
-                    return -1;
-                }
-                if(o1.lastModified() < o2.lastModified()){
-                    return 1;
-                }
-                return 0;
+        saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
+        loadFromJson(saveFilesSorted.get(0));
+    }
+
+    public static void loadSave(String filename){
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().equals(filename)) {
+                loadFromJson(saveFile);
+                return;
             }
-        });
-        String lastStateJson = readFile(saveFilesSorted.get(0));
-        loadFromJson(lastStateJson);
+        }
     }
 
     private static String readFile(File file) {
@@ -151,13 +147,15 @@ public class State {
         }
         return sb.toString();
     }
+    public static ArrayList<File> getSaveFileList(){
+        return saveFilesSorted;
+    }
 
-    static Map<String, JsonElement> loadedState = new HashMap<>();
-
-    public static void loadFromJson(String json) {
+    public static void loadFromJson(File jsonToLoad) {
+        String json = readFile(jsonToLoad);
         // don't delete or do anything to the existing nodes, just overwrite their values
         JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
-        loadedState.clear();
+        lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(loadedRoot);
         while (!queue.isEmpty()) {
@@ -165,9 +163,9 @@ public class State {
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
             AbstractNode nodeToEdit = findNodeByPathInTree(loadedPath);
             if(nodeToEdit != null){
-                nodeToEdit.overwriteState(loadedNode);
+                lastLoadedStateMap.put(loadedPath, loadedNode);
+                overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
             }
-            loadedState.put(loadedPath, loadedNode);
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
             if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
@@ -178,13 +176,15 @@ public class State {
         }
     }
 
-    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode) {
-        JsonElement loadedNodeState = loadedState.get(abstractNode.path);
+    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode){
+        overwriteWithLoadedStateIfAny(abstractNode, lastLoadedStateMap.get(abstractNode.path));
+    }
+
+    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode, JsonElement loadedNodeState) {
         if(loadedNodeState == null){
             return;
         }
         try{
-
             String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
             if(className.contains("sliderint")){
                 ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
@@ -199,9 +199,5 @@ public class State {
             println("tree structure changed and old state no longer applies to new nodes, probably nothing to worry about, just save the new state to stop seeing this warning");
             println(ex.getMessage());
         }
-    }
-
-    class TreeSave{
-
     }
 }

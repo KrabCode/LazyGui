@@ -2,9 +2,12 @@ package toolbox.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static toolbox.global.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;
@@ -25,7 +28,10 @@ public class WindowManager {
         singleton.windows.add(explorer);
     }
 
-    public static void uncoverOrCreateWindow(FolderNode folderNode, PVector pos) {
+    public static void uncoverOrCreateWindow(FolderNode folderNode) {
+        float mouseX = State.app.mouseX;
+        float mouseY = State.app.mouseY;
+        PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.parentNode.path.equals(folderNode.path)){

@@ -4,11 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.PaletteStore;
 import toolbox.global.State;
-
-import static processing.core.PConstants.CENTER;
-import static toolbox.global.palettes.PaletteColorType.*;
 
 public class ToggleNode extends AbstractNode {
 
@@ -33,8 +29,8 @@ public class ToggleNode extends AbstractNode {
 
 
     @Override
-    public void nodePressed(float x, float y) {
-        super.nodePressed(x, y);
+    public void nodeClicked(float x, float y) {
+        super.nodeClicked(x, y);
         armed = true;
     }
 

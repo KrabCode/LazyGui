@@ -5,6 +5,8 @@ import processing.core.PGraphics;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
+import toolbox.windows.WindowManager;
+
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
@@ -90,7 +92,7 @@ public class ToolbarNode extends AbstractNode {
                 if (i == 0) {
                     State.createTreeSaveFile();
                 } else if (i == 1) {
-                    State.loadMostRecentTreeSave();
+                    WindowManager.uncoverOrCreateWindow(new StateListFolderNode("/load", parent));
                 }
                 return;
             }
@@ -114,7 +116,7 @@ public class ToolbarNode extends AbstractNode {
         if(e.isControlDown() && code == KEY_CODE_S){
             State.createTreeSaveFile();
         }else if(e.isControlDown() && code == KEY_CODE_L){
-            State.loadMostRecentTreeSave();
+            State.loadMostRecentSave();
         }
     }
 }

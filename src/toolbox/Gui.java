@@ -40,7 +40,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
-        State.loadMostRecentTreeSave();
+        State.loadMostRecentSave();
         PaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);

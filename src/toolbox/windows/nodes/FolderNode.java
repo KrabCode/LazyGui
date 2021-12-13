@@ -3,12 +3,10 @@ package toolbox.windows.nodes;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PConstants.CENTER;
@@ -47,9 +45,9 @@ public class FolderNode extends AbstractNode {
     }
 
     @Override
-    public void nodePressed(float x, float y) {
-        super.nodePressed(x, y);
-        WindowManager.uncoverOrCreateWindow(this, new PVector(x - cell * 0.5f, y-cell * 0.5f));
+    public void nodeClicked(float x, float y) {
+        super.nodeClicked(x, y);
+        WindowManager.uncoverOrCreateWindow(this);
         this.isDragged = false;
 
     }
