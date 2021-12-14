@@ -114,8 +114,4 @@ public class ColorPickerFolderNode extends FolderNode {
         this.hex = hex;
         hexString = hex(hex);
     }
-
-    public void overwriteState(JsonElement loadedNode) {
-        setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
-    }
 }

@@ -21,7 +21,7 @@ vec4 hash44(vec4 p4)
 void main(){
     vec2 uv = (gl_FragCoord.xy-.5*resolution) / resolution.y;
     uv += offset;
-    uv = floor(uv * pixelate * resolution);
+    uv = floor(uv * pixelate * 1000);
     float t = time * speed;
     float tr = 2.5;
     vec4 p = vec4(uv*vec2(freqX ,freqY), t, 0.);

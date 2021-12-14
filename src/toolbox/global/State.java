@@ -47,14 +47,13 @@ public class State {
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
 
 
-
-    public static void init(Gui gui, PApplet app){
+    public static void init(Gui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
         try {
             State.font = app.createFont("Calibri", 20);
-        }catch(RuntimeException ex){
-            if(ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")){
+        } catch (RuntimeException ex) {
+            if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
             }
 
@@ -64,13 +63,13 @@ public class State {
         sketchName = app.getClass().getSimpleName();
         libraryPath = Utils.getLibraryPath();
         dir = new File(libraryPath + "/saves/" + sketchName);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
         }
 
-        colorProvider = app.createGraphics(256,256, P2D);
-        State.colorProvider.colorMode(HSB,1,1,1,1);
+        colorProvider = app.createGraphics(256, 256, P2D);
+        State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
 
         PSurface surface = State.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {
@@ -87,13 +86,13 @@ public class State {
     public static String timestamp() {
         return year() + ""
                 + nf(month(), 2) + ""
-                + nf(day(), 2)+ "T"
-                + nf(hour(), 2)+ ""
-                + nf(minute(), 2)+ ""
+                + nf(day(), 2) + "T"
+                + nf(hour(), 2) + ""
+                + nf(minute(), 2) + ""
                 + nf(second(), 2);
     }
 
-    public static void createTreeSaveFile(){
+    public static void createTreeSaveFile() {
         String json = gson.toJson(NodeTree.mainRoot);
         BufferedWriter writer;
         String timestamp = timestamp();
@@ -108,19 +107,19 @@ public class State {
         saveFilesSorted.add(0, new File(filePath));
     }
 
-    public static void loadMostRecentSave(){
+    public static void loadMostRecentSave() {
         File[] saveFiles = dir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
         saveFilesSorted.removeIf(file -> !file.isFile());
-        if(saveFilesSorted.size() == 0){
+        if (saveFilesSorted.size() == 0) {
             return;
         }
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
         loadFromJson(saveFilesSorted.get(0));
     }
 
-    public static void loadSave(String filename){
+    public static void loadSave(String filename) {
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename)) {
                 loadFromJson(saveFile);
@@ -138,13 +137,13 @@ public class State {
         }
         StringBuilder sb = new StringBuilder();
         assert lines != null;
-        for(String line : lines){
+        for (String line : lines) {
             sb.append(line);
         }
         return sb.toString();
     }
 
-    public static ArrayList<File> getSaveFileList(){
+    public static ArrayList<File> getSaveFileList() {
         return saveFilesSorted;
     }
 
@@ -159,7 +158,7 @@ public class State {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
             AbstractNode nodeToEdit = findNodeByPathInTree(loadedPath);
-            if(nodeToEdit != null){
+            if (nodeToEdit != null) {
                 lastLoadedStateMap.put(loadedPath, loadedNode);
                 overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
             }
@@ -173,26 +172,27 @@ public class State {
         }
     }
 
-    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode){
+    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode) {
         overwriteWithLoadedStateIfAny(abstractNode, lastLoadedStateMap.get(abstractNode.path));
     }
 
     public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode, JsonElement loadedNodeState) {
-        if(loadedNodeState == null){
+        if (loadedNodeState == null) {
             return;
         }
-        try{
+        try {
             String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
-            if(className.contains("sliderint")){
+            if (className.contains("sliderint")) {
                 ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
-            }else if (className.contains("slider")){
+            } else if (className.contains("slider")) {
                 ((SliderNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
-            }else if(className.contains("toggle")){
+            } else if (className.contains("toggle")) {
                 ((ToggleNode) abstractNode).valueBoolean = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
-            }else if(className.contains("colorpicker")){
+            } else if (className.contains("colorpicker")) {
                 ((ColorPickerFolderNode) abstractNode).setHex(unhex(loadedNodeState.getAsJsonObject().get("hexString").getAsString()));
+                ((ColorPickerFolderNode) abstractNode).loadValuesFromHex(true);
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             println("tree structure changed and old state no longer applies to new nodes, probably nothing to worry about, just save the new state to stop seeing this warning");
             println(ex.getMessage());
         }

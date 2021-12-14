@@ -1,5 +1,6 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.google.gson.JsonElement;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -27,7 +28,6 @@ public abstract class ColorSliderNode extends SliderNode {
         initSliderBackgroundShader();
         ShaderStore.lazyInitGetShader(colorShaderPath);
     }
-
 
     @Override
     public void validatePrecision() {
