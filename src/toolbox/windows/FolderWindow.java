@@ -156,4 +156,9 @@ public class FolderWindow extends Window {
         ToolbarNode node = new ToolbarNode(parentFolder.path + "/toolbar", parentFolder);
         parentFolder.children.add(node);
     }
+
+    public void createStateListFolderNode() {
+        StateListFolderNode stateListFolderNode = new StateListFolderNode(parentFolder.path + "/load", parentFolder);
+        parentFolder.children.add(stateListFolderNode);
+    }
 }

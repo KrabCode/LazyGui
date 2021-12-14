@@ -1,0 +1,174 @@
+{
+  "children": [
+    {
+      "className": "ToolbarNode",
+      "path": "/toolbar",
+      "type": "VALUE_ROW"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 5000.0,
+          "className": "SliderIntNode",
+          "path": "lissajous/count",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 182.1,
+          "className": "SliderNode",
+          "path": "lissajous/max angle",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 370.0,
+          "className": "SliderNode",
+          "path": "lissajous/dist mag",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 165.0,
+          "className": "SliderNode",
+          "path": "lissajous/rot mag",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.0743,
+          "className": "SliderNode",
+          "path": "lissajous/dist freq",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.154,
+          "className": "SliderNode",
+          "path": "lissajous/rot freq",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.002,
+          "className": "SliderNode",
+          "path": "lissajous/time",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 15.0,
+          "className": "SliderNode",
+          "path": "lissajous/ellipse size",
+          "type": "VALUE_ROW"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "lissajous",
+      "type": "FOLDER_ROW"
+    },
+    {
+      "hexString": "FF161A15",
+      "children": [
+        {
+          "className": "ColorPreviewNode",
+          "path": "stroke/preview",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.29999998,
+          "className": "HueNode",
+          "path": "stroke/hue",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.1923077,
+          "className": "SaturationNode",
+          "path": "stroke/sat",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.101960786,
+          "className": "BrightnessNode",
+          "path": "stroke/br",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 1.0,
+          "className": "AlphaNode",
+          "path": "stroke/alpha",
+          "type": "VALUE_ROW"
+        },
+        {
+          "className": "HexNode",
+          "path": "stroke/hex",
+          "type": "VALUE_ROW"
+        }
+      ],
+      "className": "ColorPickerFolderNode",
+      "path": "stroke",
+      "type": "FOLDER_ROW"
+    },
+    {
+      "valueBoolean": true,
+      "className": "ToggleNode",
+      "path": "blend mode: add",
+      "type": "VALUE_ROW"
+    },
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "recorder/screenshot",
+          "type": "VALUE_ROW"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "recorder/start recording",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueBoolean": false,
+          "className": "ToggleNode",
+          "path": "recorder/stop recording",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 360.0,
+          "className": "SliderIntNode",
+          "path": "recorder/frames",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueBoolean": true,
+          "className": "ToggleNode",
+          "path": "recorder/crop",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 8.400001,
+          "className": "SliderNode",
+          "path": "recorder/x",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 14.400002,
+          "className": "SliderNode",
+          "path": "recorder/y",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 300.09998,
+          "className": "SliderNode",
+          "path": "recorder/width",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 300.19998,
+          "className": "SliderNode",
+          "path": "recorder/height",
+          "type": "VALUE_ROW"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "recorder",
+      "type": "FOLDER_ROW"
+    }
+  ],
+  "className": "FolderNode",
+  "path": "",
+  "type": "FOLDER_ROW"
+}

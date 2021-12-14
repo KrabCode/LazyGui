@@ -1,6 +1,8 @@
 package toolbox.windows.nodes;
 
 import processing.core.PGraphics;
+import toolbox.Gui;
+import toolbox.global.NodeTree;
 import toolbox.global.State;
 
 import java.io.File;
@@ -10,28 +12,35 @@ public class StateListFolderNode extends FolderNode{
 
     public StateListFolderNode(String path, FolderNode parent) {
         super(path, parent);
+        children.add(new ButtonNode(path + "/save", this));
+        size.x += parent.cell * 2;
         updateStateList();
     }
 
     public void updateStateList() {
-        children.clear();
         List<File> filenames = State.getSaveFileList();
-        for (int i = 0; i < filenames.size(); i++) {
-            String filename = filenames.get(i).getName();
-            if(!filename.contains(".json")){
+        for (File file : filenames) {
+            String filename = file.getName();
+            if (!filename.contains(".json")) {
                 continue;
             }
             String shortenedName = filename.substring(0, filename.indexOf(".json"));
-            children.add(new LoadStateItemNode(path + "/" + shortenedName, this, filename));
+            String treePath = path + "/" + shortenedName;
+            if(NodeTree.findNodeByPathInTree(treePath) == null){
+                children.add(1, new LoadStateItemNode(treePath, this, filename));
+            }
         }
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
+        if(State.gui.button(path + "/save")){
+            State.createTreeSaveFile();
+        }
         updateStateList();
     }
 
-    class LoadStateItemNode extends AbstractNode {
+    static class LoadStateItemNode extends AbstractNode {
         String filename;
         public LoadStateItemNode(String path, FolderNode parent, String filename) {
             super(NodeType.VALUE_ROW, path, parent);

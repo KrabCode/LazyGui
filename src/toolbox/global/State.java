@@ -85,11 +85,11 @@ public class State {
     }
 
     public static String timestamp() {
-        return year() + "-"
-                + nf(month(), 2) + "-"
-                + nf(day(), 2)+ "_"
-                + nf(hour(), 2)+ "."
-                + nf(minute(), 2)+ "."
+        return year() + ""
+                + nf(month(), 2) + ""
+                + nf(day(), 2)+ "T"
+                + nf(hour(), 2)+ ""
+                + nf(minute(), 2)+ ""
                 + nf(second(), 2);
     }
 
@@ -105,14 +105,10 @@ public class State {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // TODO fix
         saveFilesSorted.add(0, new File(filePath));
     }
 
     public static void loadMostRecentSave(){
-        // TODO
-        //  get save list from current sketch save folder
-        //  load most recent one
         File[] saveFiles = dir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
@@ -147,6 +143,7 @@ public class State {
         }
         return sb.toString();
     }
+
     public static ArrayList<File> getSaveFileList(){
         return saveFilesSorted;
     }
