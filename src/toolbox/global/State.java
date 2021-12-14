@@ -184,10 +184,13 @@ public class State {
             String className = loadedNodeState.getAsJsonObject().get("className").getAsString().toLowerCase();
             if (className.contains("sliderint")) {
                 ((SliderIntNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+                ((SliderIntNode) abstractNode).valueFloatDefault = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
             } else if (className.contains("slider")) {
                 ((SliderNode) abstractNode).valueFloat = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
+                ((SliderIntNode) abstractNode).valueFloatDefault = loadedNodeState.getAsJsonObject().get("valueFloat").getAsFloat();
             } else if (className.contains("toggle")) {
                 ((ToggleNode) abstractNode).valueBoolean = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
+                ((ToggleNode) abstractNode).valueBooleanDefault = loadedNodeState.getAsJsonObject().get("valueBoolean").getAsBoolean();
             } else if (className.contains("colorpicker")) {
                 ((ColorPickerFolderNode) abstractNode).setHex(unhex(loadedNodeState.getAsJsonObject().get("hexString").getAsString()));
                 ((ColorPickerFolderNode) abstractNode).loadValuesFromHex(true);
