@@ -152,7 +152,7 @@ public class FolderWindow extends Window {
         }
     }
 
-    public void createToolbar() {
+    public void createToolbarNode() {
         ToolbarNode node = new ToolbarNode(parentFolder.path + "/toolbar", parentFolder);
         parentFolder.children.add(node);
     }

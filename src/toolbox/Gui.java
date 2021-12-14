@@ -51,7 +51,7 @@ public class Gui implements UserInputSubscriber {
                 NodeTree.getMainRoot(),
                 false
         );
-//        explorer.createToolbar();
+        explorer.createToolbarNode();
         explorer.createStateListFolderNode();
         WindowManager.addWindow(explorer);
         lazyFollowSketchResolution();

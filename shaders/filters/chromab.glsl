@@ -16,7 +16,7 @@ void main(){
 
     const float amount =  (intensity / resolution.x) * smoothstep(innerEdge, outerEdge, length(cv));
 
-    const vec2 direction = normalize(uv) * rotate2d(rotation);
+    const vec2 direction = normalize(cv) * rotate2d(rotation);
 
     vec2 offs = vec2(0);
     vec3 col = vec3(0);
