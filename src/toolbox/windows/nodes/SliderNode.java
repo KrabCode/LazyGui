@@ -11,6 +11,7 @@ import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
+import toolbox.windows.nodes.shaderList.ShaderListFolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,15 +23,27 @@ import static toolbox.global.palettes.PaletteColorType.NORMAL_BACKGROUND;
 
 public class SliderNode extends AbstractNode {
 
+    public SliderNode(String path, FolderNode parentFolder, float defaultValue) {
+        super(NodeType.VALUE_ROW, path, parentFolder);
+        valueFloatDefault = defaultValue;
+        valueFloat = valueFloatDefault;
+        valueFloatMin = -Float.MAX_VALUE;
+        valueFloatMax =  Float.MAX_VALUE;
+        valueFloatPrecisionDefault = 0.1f;
+        valueFloatPrecision = valueFloatPrecisionDefault;
+        valueFloatConstrained = false;
+        initSliderPrecisionArrays();
+    }
+
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE_ROW, path, parentFolder);
-        this.valueFloatDefault = defaultValue;
-        this.valueFloat = defaultValue;
-        this.valueFloatMin = min;
-        this.valueFloatMax = max;
-        this.valueFloatPrecision = defaultPrecision;
-        this.valueFloatPrecisionDefault = defaultPrecision;
-        this.valueFloatConstrained = constrained;
+        valueFloatDefault = defaultValue;
+        valueFloat = defaultValue;
+        valueFloatMin = min;
+        valueFloatMax = max;
+        valueFloatPrecision = defaultPrecision;
+        valueFloatPrecisionDefault = defaultPrecision;
+        valueFloatConstrained = constrained;
         initSliderPrecisionArrays();
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -45,16 +58,13 @@ public class SliderNode extends AbstractNode {
     public float valueFloatPrecisionDefault = 1;
     float backgroundScrollX = 0;
 
+
     PVector mouseDelta = new PVector();
     protected ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     protected int currentPrecisionIndex;
-    String shaderPath = "sliderBackground.glsl";
 
-    public SliderNode(String path, FolderNode parentFolder) {
-        super(NodeType.VALUE_ROW, path, parentFolder);
-        initSliderPrecisionArrays();
-    }
+    String shaderPath = "sliderBackground.glsl";
 
     private void initSliderPrecisionArrays() {
         initPrecision();

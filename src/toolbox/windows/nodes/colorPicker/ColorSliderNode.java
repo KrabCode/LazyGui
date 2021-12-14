@@ -21,14 +21,9 @@ public abstract class ColorSliderNode extends SliderNode {
     protected int shaderColorMode = -1;
 
     public ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
-        super(path, parentFolder);
+        super(path, parentFolder, 0, 0, 1, 0.01f, true);
         this.parentColorPickerFolder = parentFolder;
-        valueFloatPrecisionDefault = 0.01f;
-        valueFloatPrecision = valueFloatPrecisionDefault;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
-        valueFloatConstrained = true;
-        valueFloatMin = 0;
-        valueFloatMax = 1;
         initSliderBackgroundShader();
         ShaderStore.lazyInitGetShader(colorShaderPath);
     }
