@@ -9,6 +9,7 @@ import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
 import toolbox.global.PaletteStore;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 import static processing.core.PApplet.*;
 import static toolbox.global.palettes.PaletteColorType.*;

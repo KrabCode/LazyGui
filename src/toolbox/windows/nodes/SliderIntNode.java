@@ -1,5 +1,6 @@
 package toolbox.windows.nodes;
 
+import com.google.gson.JsonElement;
 import processing.core.PApplet;
 
 public class SliderIntNode extends SliderNode {

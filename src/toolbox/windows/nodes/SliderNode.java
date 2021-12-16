@@ -54,6 +54,7 @@ public class SliderNode extends AbstractNode {
     public float valueFloatMax;
     public float valueFloatDefault;
     public boolean valueFloatConstrained;
+    @Expose
     public float valueFloatPrecision = 1;
     public float valueFloatPrecisionDefault = 1;
     float backgroundScrollX = 0;
@@ -250,7 +251,13 @@ public class SliderNode extends AbstractNode {
 
     }
 
+
+    @Override
     public void overwriteState(JsonElement loadedNode) {
-        this.valueFloat = loadedNode.getAsJsonObject().get("valueFloat").getAsFloat();
+        valueFloatDefault = loadedNode.getAsJsonObject().get("valueFloat").getAsFloat();
+        if(loadedNode.getAsJsonObject().has("valueFloatPrecision")){
+            valueFloatPrecision = loadedNode.getAsJsonObject().get("valueFloatPrecision").getAsFloat();
+        }
+        valueFloat = valueFloatDefault;
     }
 }

@@ -7,7 +7,6 @@ import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
 import static processing.core.PApplet.*;
-import static processing.core.PConstants.*;
 
 public class ColorPickerFolderNode extends FolderNode {
 
@@ -113,5 +112,11 @@ public class ColorPickerFolderNode extends FolderNode {
         }
         this.hex = hex;
         hexString = hex(hex);
+    }
+
+    @Override
+    public void overwriteState(JsonElement loadedNode) {
+        setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
+        loadValuesFromHex(true);
     }
 }

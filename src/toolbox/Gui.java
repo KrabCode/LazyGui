@@ -156,12 +156,12 @@ public class Gui implements UserInputSubscriber {
         }
 
         if (useCropRectangle) {
-            pg.pushStyle();
-            pg.noFill();
-            pg.strokeWeight(1);
-            pg.stroke(0xFFFFFFFF);
-            pg.rect(rectX, rectY, recordingSizeInput.x, recordingSizeInput.y);
-            pg.popStyle();
+            State.app.g.pushStyle();
+            State.app.g.noFill();
+            State.app.g.strokeWeight(1);
+            State.app.g.stroke(0xFFFFFFFF);
+            State.app.g.rect(rectX, rectY, recordingSizeInput.x, recordingSizeInput.y);
+            State.app.g.popStyle();
         }
     }
 
