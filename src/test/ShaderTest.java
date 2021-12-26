@@ -27,10 +27,10 @@ public class ShaderTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.fill(gui.colorPicker("background").hex);
+        pg.image(gui.gradient("background"), 0, 0);
         pg.rectMode(CORNER);
         pg.rect(0, 0, pg.width, pg.height);
-        gui.filterList("filters", pg);
+        gui.shaderFilterList("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);

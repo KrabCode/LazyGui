@@ -228,5 +228,4 @@ public abstract class AbstractNode {
     public void overwriteState(JsonElement loadedNode){
 
     }
-
 }

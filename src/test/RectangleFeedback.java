@@ -54,7 +54,7 @@ public class RectangleFeedback extends PApplet {
             pg.rect(0,0,size,size);
         }
         pg.endDraw();
-        gui.filterList("shaders", pg);
+        gui.shaderFilterList("shaders", pg);
         clear();
         image(pg, 0, 0);
         gui.record(pg);

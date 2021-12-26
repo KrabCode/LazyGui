@@ -19,6 +19,7 @@ import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
+import toolbox.windows.nodes.gradient.GradientFolderNode;
 import toolbox.windows.nodes.shaderList.ShaderListFolder;
 
 import static processing.core.PApplet.*;
@@ -190,7 +191,7 @@ public class Gui implements UserInputSubscriber {
         return slider(path, defaultValue, defaultPrecision, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-    private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
+    public float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
@@ -312,7 +313,7 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void filterList(String path, PGraphics pg) {
+    public void shaderFilterList(String path, PGraphics pg) {
         ShaderListFolder node = (ShaderListFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
@@ -320,5 +321,15 @@ public class Gui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         node.filter(pg);
+    }
+
+    public PGraphics gradient(String path) {
+        GradientFolderNode node = (GradientFolderNode) NodeTree.findNodeByPathInTree(path);
+        if(node == null){
+            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new GradientFolderNode(path, parentFolder);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getOutputGraphics();
     }
 }

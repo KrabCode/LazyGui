@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.Gui;
 import toolbox.global.State;
-import toolbox.global.Utils;
 import toolbox.global.noise.OpenSimplexNoise;
 import toolbox.windows.nodes.colorPicker.Color;
 
@@ -50,7 +49,7 @@ public class Eighth extends PApplet {
             strip.blendMode(BLEND);
         }
         drawNoiseLines();
-        gui.filterList("strip shaders", strip);
+        gui.shaderFilterList("strip shaders", strip);
         strip.endDraw();
         image(strip, width - strip.width, height - strip.height);
         gui.draw();

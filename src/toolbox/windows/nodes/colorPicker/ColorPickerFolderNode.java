@@ -31,7 +31,7 @@ public class ColorPickerFolderNode extends FolderNode {
         loadValuesFromHex(true);
     }
 
-    private void initNodes() {
+    protected void initNodes() {
         children.add(new ColorPreviewNode(path + "/preview", this));
         children.add(new ColorSliderNode.HueNode(path + "/hue", this));
         children.add(new ColorSliderNode.SaturationNode(path + "/sat", this));

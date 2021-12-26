@@ -2,10 +2,10 @@ package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import toolbox.global.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
-import toolbox.windows.WindowManager;
 
 import java.util.ArrayList;
 
@@ -14,13 +14,15 @@ import static processing.core.PConstants.TAU;
 import static toolbox.global.palettes.PaletteColorType.*;
 
 public class ToolbarNode extends AbstractNode {
-    int buttonCount = 8;
+    final int buttonCount;
     ArrayList<Float> buttonRotations = new ArrayList<>();
+    protected PVector buttonSize;
 
 
-    public ToolbarNode(String path, FolderNode parentFolder) {
+    public ToolbarNode(String path, FolderNode parentFolder, int buttonCount) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         this.name = "";
+        this.buttonCount = buttonCount;
         for (int i = 0; i < buttonCount; i++) {
             buttonRotations.add(0f);
         }
@@ -28,10 +30,11 @@ public class ToolbarNode extends AbstractNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
+        buttonSize = new PVector(size.x/buttonCount, size.y);
         for (int i = 0; i < buttonCount; i++) {
             pg.pushMatrix();
             pg.pushStyle();
-            float x = i * cell;
+            float x = map(i, 0, buttonCount, 0, size.x);
             pg.translate(x, 0);
             pg.pushMatrix();
             updateDrawButton(pg, i);
@@ -49,7 +52,7 @@ public class ToolbarNode extends AbstractNode {
     }
 
 
-    private void updateDrawButton(PGraphics pg, int buttonIndex) {
+    protected void updateDrawButton(PGraphics pg, int buttonIndex) {
         float n = cell * 0.28f;
         float rotation = buttonRotations.get(buttonIndex);
         pg.strokeWeight(1.2f);
@@ -89,20 +92,20 @@ public class ToolbarNode extends AbstractNode {
         super.mouseReleasedAnywhere(x, y);
         for (int i = 0; i < buttonCount; i++) {
             if (isMouseOverButton(i)) {
-                if (i == 0) {
-
-                } else if (i == 1) {
-
-                }
+                buttonPressed(i);
                 return;
             }
         }
     }
 
-    private boolean isMouseOverButton(int buttonIndex) {
+    protected void buttonPressed(int buttonIndex) {
+
+    }
+
+    protected boolean isMouseOverButton(int buttonIndex) {
         return Utils.isPointInRect(State.app.mouseX, State.app.mouseY,
-                pos.x + buttonIndex * cell, pos.y,
-                cell, cell);
+                pos.x + buttonSize.x * buttonIndex, pos.y,
+                buttonSize.x, buttonSize.y);
     }
 
     public static final int KEY_CODE_S = 83;
