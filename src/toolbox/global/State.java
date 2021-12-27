@@ -86,7 +86,7 @@ public class State {
     public static String timestamp() {
         return year() + ""
                 + nf(month(), 2) + ""
-                + nf(day(), 2) + "T"
+                + nf(day(), 2) + "-"
                 + nf(hour(), 2) + ""
                 + nf(minute(), 2) + ""
                 + nf(second(), 2);

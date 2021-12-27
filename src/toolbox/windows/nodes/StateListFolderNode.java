@@ -6,6 +6,7 @@ import toolbox.global.NodeTree;
 import toolbox.global.State;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 
 public class StateListFolderNode extends FolderNode{
@@ -30,6 +31,12 @@ public class StateListFolderNode extends FolderNode{
                 children.add(1, new LoadStateItemNode(treePath, this, filename));
             }
         }
+        children.sort(new Comparator<AbstractNode>() {
+            @Override
+            public int compare(AbstractNode o1, AbstractNode o2) {
+                return o2.name.compareTo(o1.name);
+            }
+        });
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {

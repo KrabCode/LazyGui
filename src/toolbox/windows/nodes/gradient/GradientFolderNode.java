@@ -156,22 +156,27 @@ public class GradientFolderNode extends FolderNode {
     }
 
     public static class GradientColorPickerFolderNode extends ColorPickerFolderNode {
-        private SliderNode gradientPos;
+        @Expose
+        private float gradientPosDefault;
 
-        public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float pos) {
+        public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos) {
             super(path, parentFolder, hex);
-            gradientPos = new SliderNode(path + "/pos", this, pos, 0, 1, 0.01f, true);
-            children.add(gradientPos);
+            gradientPosDefault = gradientPos;
         }
 
         public float getGradientPos() {
-            return gradientPos.valueFloat;
+            return State.gui.slider(path + "/pos", gradientPosDefault, 0.01f,0,1, true);
         }
 
         @Override
         public void overwriteState(JsonElement loadedNode) {
             super.overwriteState(loadedNode);
-            // TODO
+            JsonElement gradientPosLoaded = loadedNode.getAsJsonObject().get("gradientPosDefault");
+            if(gradientPosLoaded != null){
+                this.gradientPosDefault = gradientPosLoaded.getAsFloat();
+                ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos")).valueFloat = gradientPosDefault;
+                ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos")).valueFloatDefault = gradientPosDefault;
+            }
         }
     }
 }
