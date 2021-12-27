@@ -149,7 +149,7 @@ public class State {
 
     public static void loadFromJson(File jsonToLoad) {
         String json = readFile(jsonToLoad);
-        // don't delete or do anything to the existing nodes, just overwrite their values
+        // don't delete or do anything to the existing nodes, just overwrite their values if they exist
         JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();

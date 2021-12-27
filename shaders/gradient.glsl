@@ -1,8 +1,8 @@
 uniform sampler2D texture;
 uniform vec2 resolution;
 
-const int gradientType = 0;
-const int blendType = 0;
+uniform int directionType;
+uniform int blendType;
 uniform int colorCount;
 uniform vec4[100] colorValues;
 uniform float[100] colorPositions;
@@ -211,14 +211,14 @@ vec4 lerpByBlendType(vec4 colorA, vec4 colorB, float amt){
     return vec4(0,0,0,1);
 }
 
-float getPosByGradientType(vec2 uv, vec2 cv){
-    if(gradientType == 0){
-        return uv.y; // VERTICAL
+float getPosByDirectionType(vec2 uv, vec2 cv){
+    if(directionType == 0){
+        return 1.-uv.y; // VERTICAL
     }
-    if (gradientType == 1) {
+    if (directionType == 1) {
         return uv.x; // HORIZONTAL
     }
-    if (gradientType == 2) {
+    if (directionType == 2) {
         float maxLength = length(vec2(0.5));
         return map(length(cv), 0., maxLength, 0., 1.); // CIRCULAR
     }
@@ -241,7 +241,7 @@ int findClosestLeftNeighbourIndex(float pos){
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec2 cv = (gl_FragCoord.xy-.5*resolution.xy) / resolution.y;
-    float pos = clamp(getPosByGradientType(uv, cv), 0., 1.);
+    float pos = clamp(getPosByDirectionType(uv, cv), 0., 1.);
     int leftIndex = findClosestLeftNeighbourIndex(pos);
     int rightIndex = leftIndex+1;
     vec4 colorA = vec4(hsb2rgb(colorValues[leftIndex].xyz), colorValues[leftIndex].a);

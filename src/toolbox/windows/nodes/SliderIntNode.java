@@ -11,6 +11,10 @@ public class SliderIntNode extends SliderNode {
         super(path, parentFolder, defaultValue, min, max, defaultPrecision, constrained);
     }
 
+    public int getIntValue(){
+        return PApplet.round(valueFloat);
+    }
+
     @Override
     public String getValueToDisplay() {
         return String.valueOf(PApplet.round(valueFloat));

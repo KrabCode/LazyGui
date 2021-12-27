@@ -15,8 +15,8 @@ public class ShaderTest extends PApplet {
     }
 
     public void settings() {
-//        size(800, 800, P2D);
-        fullScreen(P2D);
+        size(800, 800, P2D);
+//        fullScreen(P2D);
     }
 
     public void setup() {
@@ -28,8 +28,6 @@ public class ShaderTest extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
-        pg.rectMode(CORNER);
-        pg.rect(0, 0, pg.width, pg.height);
         gui.shaderFilterList("filters", pg);
         pg.endDraw();
         clear();
