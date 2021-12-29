@@ -19,44 +19,37 @@ import static processing.core.PConstants.P2D;
 
 public class GradientFolderNode extends FolderNode {
     PGraphics out;
-    SliderIntNode colorPickerCountSlider;
     SliderIntNode directionTypeSlider;
     SliderIntNode blendTypeSlider;
     String gradientShader = "gradient.glsl";
-
-    @Expose
-    private int colorCount = 4;
+    private int colorCount;
 
     public GradientFolderNode(String path, FolderNode parent) {
         super(path, parent);
-        children.add(new GradientPreviewNode(path + "/preview", this));
-        colorPickerCountSlider = new SliderIntNode(path + "/count", this, colorCount, 2, 26, 0.1f,true);
         directionTypeSlider = new SliderIntNode(path + "/direction", this, 0, 0, 2, 0.1f, true);
         blendTypeSlider = new SliderIntNode(path + "/blend type", this, 0, 0, 3, 0.1f, true);
-        children.add(colorPickerCountSlider);
+        children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionTypeSlider);
         children.add(blendTypeSlider);
-        updateOutGraphics();
+        colorCount = 5;
+        for (int i = 0; i < colorCount; i++) {
+            float iNorm = norm(i, 0, colorCount-1);
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, 1, iNorm));
+        }
+
+        // TODO maybe State.overwriteWithLoadedStateIfAny(this); instead of the loadMostRecentSave on frame 2 inside Gui.draw()
     }
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        super.updateDrawInlineNode(pg);
-        int previousColorCount = colorCount;
-        colorCount = colorPickerCountSlider.getIntValue();
-        while(colorCount > getAllGradientColorPickerChildrenInPositionOrder().size()){
-            int i = getAllGradientColorPickerChildrenInPositionOrder().size();
-            float iNorm = norm(i, 0, colorCount-1);
-            gradientColorPicker(path + "/" + getColorNameByIndex(i), 0,0,iNorm, 1, iNorm);
-        }
-        if(previousColorCount != colorCount){
-            updateOutGraphics();
-        }
+        pg.translate(size.x - cell * 0.5f, cell * 0.5f);
+        pg.imageMode(CENTER);
+        pg.image(out,0,0,previewRectSize,previewRectSize);
+        updateOutGraphics();
     }
 
-    String names = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String getColorNameByIndex(int index){
-        return String.valueOf(names.charAt(index));
+        return String.valueOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(index));
     }
 
     private void updateOutGraphics(){
@@ -66,6 +59,9 @@ public class GradientFolderNode extends FolderNode {
         }
 
         children.sort((o1, o2) -> {
+            if(o1 == null || o2 == null){
+                int i = 1;
+            }
             if(o1.className.equals("GradientColorPickerFolderNode") && o2.className.equals("GradientColorPickerFolderNode")){
                 return Float.compare(((GradientColorPickerFolderNode) o1).getGradientPos(), ((GradientColorPickerFolderNode) o2).getGradientPos());
             }
@@ -120,18 +116,12 @@ public class GradientFolderNode extends FolderNode {
                 result.add((GradientColorPickerFolderNode) node);
             }
         }
-        result.sort((o1, o2) -> Float.compare(o1.getGradientPos(), o2.getGradientPos()));
         return result;
     }
 
-    GradientColorPickerFolderNode gradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm, float pos){
-        GradientColorPickerFolderNode node = (GradientColorPickerFolderNode) NodeTree.findNodeByPathInTree(path);
-        if (node == null) {
-            int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
-            node = new GradientColorPickerFolderNode(path, this, hex, pos);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node;
+    GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm, float pos){
+        int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+        return new GradientColorPickerFolderNode(path, this, hex, pos);
     }
 
     private static class GradientPreviewNode extends AbstractNode {
@@ -141,7 +131,7 @@ public class GradientFolderNode extends FolderNode {
         public GradientPreviewNode(String path, GradientFolderNode parent) {
             super(NodeType.VALUE_ROW, path, parent);
             this.parent = parent;
-            heightMultiplier = 2;
+            heightMultiplier = 4;
         }
 
         @Override
@@ -161,6 +151,7 @@ public class GradientFolderNode extends FolderNode {
 
         public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos) {
             super(path, parentFolder, hex);
+            this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
             gradientPosDefault = gradientPos;
         }
 

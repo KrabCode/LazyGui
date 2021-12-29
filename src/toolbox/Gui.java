@@ -41,7 +41,6 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
-        State.loadMostRecentSave();
         PaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
@@ -71,6 +70,10 @@ public class Gui implements UserInputSubscriber {
 
     public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
+        if(State.app.frameCount == 2){
+            State.loadMostRecentSave();
+            // TODO fix gradient loading
+        }
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();

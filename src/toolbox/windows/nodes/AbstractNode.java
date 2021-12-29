@@ -25,6 +25,7 @@ public abstract class AbstractNode {
     public String path;
     @Expose
     public NodeType type;
+
     public FolderNode parent;
     public PVector pos = new PVector();
     public PVector size = new PVector();

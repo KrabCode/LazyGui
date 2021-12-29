@@ -20,6 +20,9 @@ public class StateListFolderNode extends FolderNode{
 
     public void updateStateList() {
         List<File> filenames = State.getSaveFileList();
+        if(filenames == null){
+            return;
+        }
         for (File file : filenames) {
             String filename = file.getName();
             if (!filename.contains(".json")) {

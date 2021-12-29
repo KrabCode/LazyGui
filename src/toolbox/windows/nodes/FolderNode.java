@@ -19,6 +19,8 @@ public class FolderNode extends AbstractNode {
 
     public FolderWindow window;
 
+    protected final float previewRectSize = cell * 0.6f;
+
     public FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER_ROW, path, parent);
         State.overwriteWithLoadedStateIfAny(this);
