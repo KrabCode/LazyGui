@@ -159,9 +159,9 @@ public class State {
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
             AbstractNode nodeToEdit = findNodeByPathInTree(loadedPath);
             if (nodeToEdit != null) {
-                lastLoadedStateMap.put(loadedPath, loadedNode);
                 overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
             }
+            lastLoadedStateMap.put(loadedPath, loadedNode);
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
             if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();

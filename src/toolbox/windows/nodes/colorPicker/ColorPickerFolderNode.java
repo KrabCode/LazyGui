@@ -25,8 +25,9 @@ public class ColorPickerFolderNode extends FolderNode {
             hex = State.colorProvider.color(hex);
         }
         setHex(hex);
-        previewNode = new ColorPreviewNode(path + "/preview", this);
-        initNodes();
+        if(children.size() == 0){
+            initNodes();
+        }
         State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
@@ -51,6 +52,9 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public void loadValuesFromHex(boolean setDefaults) {
+        if(children.size() == 0){
+            initNodes();
+        }
         PGraphics colorProvider = State.colorProvider;
         ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
         ((ColorSliderNode) children.get(satNodeIndex)).valueFloat = colorProvider.saturation(hex);

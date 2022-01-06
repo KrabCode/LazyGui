@@ -26,7 +26,6 @@ public class FolderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         drawMiniatureWindowIcon(pg);

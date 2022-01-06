@@ -41,6 +41,7 @@ public class Gui implements UserInputSubscriber {
     public Gui(PApplet p) {
         this.app = p;
         State.init(this, app);
+        State.loadMostRecentSave();
         PaletteStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
@@ -70,10 +71,6 @@ public class Gui implements UserInputSubscriber {
 
     public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
-        if(State.app.frameCount == 2){
-            State.loadMostRecentSave();
-            // TODO fix gradient loading
-        }
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
@@ -327,10 +324,14 @@ public class Gui implements UserInputSubscriber {
     }
 
     public PGraphics gradient(String path) {
+        return gradient(path, 1);
+    }
+
+    public PGraphics gradient(String path, float alpha) {
         GradientFolderNode node = (GradientFolderNode) NodeTree.findNodeByPathInTree(path);
         if(node == null){
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new GradientFolderNode(path, parentFolder);
+            node = new GradientFolderNode(path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();

@@ -22,9 +22,9 @@ public class GradientFolderNode extends FolderNode {
     SliderIntNode directionTypeSlider;
     SliderIntNode blendTypeSlider;
     String gradientShader = "gradient.glsl";
-    private int colorCount;
+    private final int colorCount;
 
-    public GradientFolderNode(String path, FolderNode parent) {
+    public GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);
         directionTypeSlider = new SliderIntNode(path + "/direction", this, 0, 0, 2, 0.1f, true);
         blendTypeSlider = new SliderIntNode(path + "/blend type", this, 0, 0, 3, 0.1f, true);
@@ -34,10 +34,10 @@ public class GradientFolderNode extends FolderNode {
         colorCount = 5;
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount-1);
-            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, 1, iNorm));
+            // default A alpha is 1 for some reason even though I set 0 here
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm));
         }
-
-        // TODO maybe State.overwriteWithLoadedStateIfAny(this); instead of the loadMostRecentSave on frame 2 inside Gui.draw()
+        State.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override
@@ -59,10 +59,9 @@ public class GradientFolderNode extends FolderNode {
         }
 
         children.sort((o1, o2) -> {
-            if(o1 == null || o2 == null){
-                int i = 1;
-            }
-            if(o1.className.equals("GradientColorPickerFolderNode") && o2.className.equals("GradientColorPickerFolderNode")){
+            assert o1 != null;
+            assert o2 != null;
+            if (o1.className.equals("GradientColorPickerFolderNode") && o2.className.equals("GradientColorPickerFolderNode")) {
                 return Float.compare(((GradientColorPickerFolderNode) o1).getGradientPos(), ((GradientColorPickerFolderNode) o2).getGradientPos());
             }
             return 0;
@@ -119,6 +118,10 @@ public class GradientFolderNode extends FolderNode {
         return result;
     }
 
+    public void overwriteState(JsonElement loadedNode) {
+        super.overwriteState(loadedNode);
+    }
+
     GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm, float pos){
         int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos);
@@ -165,8 +168,11 @@ public class GradientFolderNode extends FolderNode {
             JsonElement gradientPosLoaded = loadedNode.getAsJsonObject().get("gradientPosDefault");
             if(gradientPosLoaded != null){
                 this.gradientPosDefault = gradientPosLoaded.getAsFloat();
-                ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos")).valueFloat = gradientPosDefault;
-                ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos")).valueFloatDefault = gradientPosDefault;
+                SliderNode pos = ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos"));
+                if(pos != null){
+                    pos.valueFloat = gradientPosDefault;
+                    pos.valueFloatDefault = gradientPosDefault;
+                }
             }
         }
     }
