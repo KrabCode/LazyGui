@@ -2,18 +2,20 @@ package toolbox.windows.nodes.colorPicker;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
+import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
 
 import static processing.core.PApplet.*;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
+import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 
 public class ColorPickerFolderNode extends FolderNode {
 
     @Expose
     public String hexString;
     private int hex;
-    ColorPreviewNode previewNode;
     private final int hueNodeIndex = 1;
     private final int satNodeIndex = 2;
     private final int brNodeIndex = 3;
@@ -25,14 +27,15 @@ public class ColorPickerFolderNode extends FolderNode {
             hex = State.colorProvider.color(hex);
         }
         setHex(hex);
-        if(children.size() == 0){
-            initNodes();
-        }
+        lazyInitNodes();
         State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
 
-    protected void initNodes() {
+    protected void lazyInitNodes() {
+        if(children.size() > 0){
+            return;
+        }
         children.add(new ColorPreviewNode(path + "/preview", this));
         children.add(new ColorSliderNode.HueNode(path + "/hue", this));
         children.add(new ColorSliderNode.SaturationNode(path + "/sat", this));
@@ -52,9 +55,7 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     public void loadValuesFromHex(boolean setDefaults) {
-        if(children.size() == 0){
-            initNodes();
-        }
+        lazyInitNodes();
         PGraphics colorProvider = State.colorProvider;
         ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
         ((ColorSliderNode) children.get(satNodeIndex)).valueFloat = colorProvider.saturation(hex);
@@ -122,5 +123,16 @@ public class ColorPickerFolderNode extends FolderNode {
     public void overwriteState(JsonElement loadedNode) {
         setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
         loadValuesFromHex(true);
+    }
+
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y);
+        if(e.getKeyCode() == KEY_CODE_CTRL_C) {
+            State.clipboardHex = hex;
+        }
+        if(e.getKeyCode() == KEY_CODE_CTRL_V) {
+            hex = State.clipboardHex;
+            loadValuesFromHex(false);
+        }
     }
 }
