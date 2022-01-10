@@ -35,7 +35,7 @@ public class GradientFolderNode extends FolderNode {
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount-1);
             // default A alpha is 1 for some reason even though I set 0 here
-            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm));
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm, i % 2 == 0));
         }
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -67,9 +67,10 @@ public class GradientFolderNode extends FolderNode {
             return 0;
         });
         PShader shader = ShaderStore.lazyInitGetShader(gradientShader);
-        shader.set("colorCount", colorCount);
-        shader.set("colorValues", getColorValues(), 4);
-        shader.set("colorPositions", getColorPositions(), 1);
+        int activeColorCount = getColorCount();
+        shader.set("colorCount", activeColorCount);
+        shader.set("colorValues", getColorValues(activeColorCount), 4);
+        shader.set("colorPositions", getColorPositions(activeColorCount), 1);
         shader.set("directionType", directionTypeSlider.getIntValue());
         shader.set("blendType", blendTypeSlider.getIntValue());
         out.beginDraw();
@@ -78,11 +79,25 @@ public class GradientFolderNode extends FolderNode {
         out.endDraw();
     }
 
-    private float[] getColorValues() {
+    private int getColorCount(){
+        int activeColorCount = colorCount;
         ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
-        float[] result = new float[colorPickers.size() * 4];
+        for (GradientColorPickerFolderNode colorPicker : colorPickers) {
+            if (colorPicker.isInactive()) {
+                activeColorCount--;
+            }
+        }
+        return activeColorCount;
+    }
+
+    private float[] getColorValues(int activeCount) {
+        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        float[] result = new float[activeCount * 4];
         int i = 0;
         for(GradientColorPickerFolderNode colorPicker : colorPickers){
+            if(colorPicker.isInactive()){
+                continue;
+            }
             Color color = colorPicker.getColor();
             result[i] = color.hue;
             result[i+1] = color.saturation;
@@ -93,11 +108,14 @@ public class GradientFolderNode extends FolderNode {
         return result;
     }
 
-    private float[] getColorPositions() {
+    private float[] getColorPositions(int activeCount) {
         ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
-        float[] result = new float[colorPickers.size()];
+        float[] result = new float[activeCount];
         int i = 0;
         for(GradientColorPickerFolderNode colorPicker : colorPickers){
+            if(colorPicker.isInactive()){
+                continue;
+            }
             result[i++] = colorPicker.getGradientPos();
         }
         return result;
@@ -122,9 +140,10 @@ public class GradientFolderNode extends FolderNode {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm, float pos){
+    GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
+                                                            float pos, boolean active){
         int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
-        return new GradientColorPickerFolderNode(path, this, hex, pos);
+        return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 
     private static class GradientPreviewNode extends AbstractNode {
@@ -144,34 +163,62 @@ public class GradientFolderNode extends FolderNode {
 
         @Override
         public void drawLeftText(PGraphics pg, String text) {
-            // I skip drawing the "preview" left text by not calling super.drawLeftText() here
+            // skip drawing the "preview" left text by not calling super.drawLeftText() here
         }
     }
 
     public static class GradientColorPickerFolderNode extends ColorPickerFolderNode {
         @Expose
         private float gradientPosDefault;
+        @Expose
+        private boolean activeDefault;
 
-        public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos) {
+        public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
             super(path, parentFolder, hex);
             this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
+            this.children.add(new ToggleNode(path + "/active", parentFolder, active));
             gradientPosDefault = gradientPos;
+            activeDefault = active;
+        }
+
+        protected void updateDrawInlineNode(PGraphics pg) {
+            super.updateDrawInlineNode(pg);
+            if(isInactive()){
+                pg.strokeCap(ROUND);
+                float n = previewRectSize * 0.25f;
+                pg.line(-n,-n,n,n);
+                pg.line(n,-n,-n,n);
+            }
         }
 
         public float getGradientPos() {
             return State.gui.slider(path + "/pos", gradientPosDefault, 0.01f,0,1, true);
         }
 
+        public boolean isInactive(){
+            return !State.gui.toggle(path + "/active", activeDefault);
+        }
+
         @Override
         public void overwriteState(JsonElement loadedNode) {
             super.overwriteState(loadedNode);
+            // TODO in theory none of this is needed, sliders and toggles can know and save and load the data themselves
             JsonElement gradientPosLoaded = loadedNode.getAsJsonObject().get("gradientPosDefault");
+            JsonElement gradientActiveLoaded = loadedNode.getAsJsonObject().get("active");
             if(gradientPosLoaded != null){
-                this.gradientPosDefault = gradientPosLoaded.getAsFloat();
+                gradientPosDefault = gradientPosLoaded.getAsFloat();
                 SliderNode pos = ((SliderNode)NodeTree.findNodeByPathInTree(path + "/pos"));
                 if(pos != null){
                     pos.valueFloat = gradientPosDefault;
                     pos.valueFloatDefault = gradientPosDefault;
+                }
+            }
+            if(gradientActiveLoaded != null){
+                activeDefault = gradientActiveLoaded.getAsBoolean();
+                ToggleNode active = ((ToggleNode)NodeTree.findNodeByPathInTree(path + "/active"));
+                if(active != null){
+                    active.valueBoolean = activeDefault;
+                    active.valueBooleanDefault = activeDefault;
                 }
             }
         }
