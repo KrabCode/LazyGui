@@ -50,15 +50,15 @@ public class State {
     public static void init(Gui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
+        printAvailableFonts();
         try {
-            State.font = app.createFont("Calibri", 20);
+            State.font = app.createFont("DejaVu Sans", 18);
         } catch (RuntimeException ex) {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
             }
 
         }
-
 
         sketchName = app.getClass().getSimpleName();
         libraryPath = Utils.getLibraryPath();
@@ -80,6 +80,15 @@ public class State {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private static void printAvailableFonts() {
+        String[] fontList = PFont.list();
+        for (String s :
+                fontList) {
+            println(s);
         }
     }
 

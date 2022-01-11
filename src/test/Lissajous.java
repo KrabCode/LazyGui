@@ -30,15 +30,6 @@ public class Lissajous extends PApplet {
         surface.setSize(1000,1000);
         surface.setLocation(displayWidth - width - margin, margin);
         pg = createGraphics(width, height, P2D);
-//        printAvailableFonts();
-    }
-
-    private void printAvailableFonts() {
-        String[] fontList = PFont.list();
-        for (String s :
-                fontList) {
-            println(s);
-        }
     }
 
     public void draw() {
