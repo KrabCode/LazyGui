@@ -3,10 +3,8 @@ package test;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.Gui;
-import toolbox.global.ShaderStore;
 
-@SuppressWarnings("DuplicatedCode")
-public class Template extends PApplet {
+public class Mandala extends PApplet {
     Gui gui;
     PGraphics pg;
 
@@ -15,8 +13,8 @@ public class Template extends PApplet {
     }
 
     public void settings() {
-//        size(800, 800, P2D);
-        fullScreen(P2D);
+        size(800, 800, P2D);
+//        fullScreen(P2D);
     }
 
     public void setup() {
@@ -39,6 +37,6 @@ public class Template extends PApplet {
     }
 
     private void drawScene() {
-
+        
     }
 }

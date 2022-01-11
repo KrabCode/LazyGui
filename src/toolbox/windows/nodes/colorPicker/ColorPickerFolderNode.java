@@ -23,9 +23,6 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
-        if(hex >= 0 && hex <= 1){
-            hex = State.colorProvider.color(hex);
-        }
         setHex(hex);
         lazyInitNodes();
         State.overwriteWithLoadedStateIfAny(this);

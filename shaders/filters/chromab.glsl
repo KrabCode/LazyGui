@@ -6,6 +6,8 @@ uniform float intensity;
 uniform float rotation  ;
 uniform int steps     ;
 
+// TODO lerp between fromCenter and purely uniform direction
+
 mat2 rotate2d(float angle){
     return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
 }
@@ -16,7 +18,7 @@ void main(){
 
     const float amount =  (intensity / resolution.x) * smoothstep(innerEdge, outerEdge, length(cv));
 
-    const vec2 direction = normalize(cv) * rotate2d(rotation);
+    const vec2 direction = vec2(1,0)*rotate2d(rotation);
 
     vec2 offs = vec2(0);
     vec3 col = vec3(0);

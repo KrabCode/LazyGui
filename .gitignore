@@ -3,3 +3,5 @@
 /out/
 /libs/
 *.iml
+
+src/test/Camera.java
