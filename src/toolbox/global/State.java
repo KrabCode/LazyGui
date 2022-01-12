@@ -50,9 +50,9 @@ public class State {
     public static void init(Gui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
-        printAvailableFonts();
+//        printAvailableFonts();
         try {
-            State.font = app.createFont("DejaVu Sans", 18);
+            State.font = app.createFont("Calibri", 20);
         } catch (RuntimeException ex) {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
