@@ -15,7 +15,7 @@ public class Apollonian extends PApplet {
     }
 
     public void settings() {
-        size(800, 800, P2D);
+        size(1000, 1000, P2D);
 //        fullScreen(P2D);
     }
 
