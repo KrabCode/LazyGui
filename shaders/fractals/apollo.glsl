@@ -5,7 +5,6 @@ uniform bool customGradient;
 uniform sampler2D gradient;
 uniform vec2 resolution;
 uniform float time;
-
 uniform float scaling;
 uniform float range;
 uniform int   iterations;

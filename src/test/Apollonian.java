@@ -16,12 +16,10 @@ public class Apollonian extends PApplet {
     }
 
     public void settings() {
-//        size(1000, 1000, P2D);
         fullScreen(P2D);
     }
 
     public void setup() {
-//        surface.setAlwaysOnTop(true);
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
     }
@@ -40,7 +38,7 @@ public class Apollonian extends PApplet {
     }
 
     private void drawScene() {
-        String shaderPath = "wip/apollo.glsl";
+        String shaderPath = "fractals/apollo.glsl";
         PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
         shader.set("time", radians(frameCount));
         shader.set("customGradient", gui.toggle("apollo/custom gradient"));
