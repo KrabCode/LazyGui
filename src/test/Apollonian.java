@@ -2,6 +2,7 @@ package test;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.global.ShaderStore;
 
@@ -15,12 +16,12 @@ public class Apollonian extends PApplet {
     }
 
     public void settings() {
-        size(1000, 1000, P2D);
-//        fullScreen(P2D);
+//        size(1000, 1000, P2D);
+        fullScreen(P2D);
     }
 
     public void setup() {
-        surface.setAlwaysOnTop(true);
+//        surface.setAlwaysOnTop(true);
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
     }
@@ -28,7 +29,7 @@ public class Apollonian extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.image(gui.gradient("background", 0), 0, 0);
+        pg.clear();
         drawScene();
         gui.shaderFilterList("filters", pg);
         pg.endDraw();
@@ -40,7 +41,17 @@ public class Apollonian extends PApplet {
 
     private void drawScene() {
         String shaderPath = "wip/apollo.glsl";
-        ShaderStore.lazyInitGetShader(shaderPath).set("time", radians(frameCount));
+        PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
+        shader.set("time", radians(frameCount));
+        shader.set("customGradient", gui.toggle("apollo/custom gradient"));
+        shader.set("gradient", gui.gradient("apollo/gradient"));
+        shader.set("iterations", gui.sliderInt("apollo/iterations", 5));
+        shader.set("scaling", gui.slider("apollo/scale", 2f));
+        shader.set("range", gui.slider("apollo/range", 5f));
+        shader.set("ampBase", gui.slider("apollo/ampBase", 1));
+        shader.set("ampMult", gui.slider("apollo/ampMult", 0.5f));
+        shader.set("offsetX", gui.slider("apollo/offsetX", 0.5f));
+        shader.set("offsetY", gui.slider("apollo/offsetY", 0.5f));
         ShaderStore.hotFilter(shaderPath, pg);
     }
 }
