@@ -336,4 +336,14 @@ public class Gui implements UserInputSubscriber {
         }
         return node.getOutputGraphics();
     }
+
+    public PImage imagePicker(String path) {
+        ImagePickerNode node = (ImagePickerNode) NodeTree.findNodeByPathInTree(path);
+        if(node == null){
+            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new ImagePickerNode(path, parentFolder);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getOutputImage();
+    }
 }

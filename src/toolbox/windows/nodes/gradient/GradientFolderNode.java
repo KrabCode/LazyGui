@@ -22,7 +22,7 @@ public class GradientFolderNode extends FolderNode {
     SliderIntNode directionTypeSlider;
     SliderIntNode blendTypeSlider;
     String gradientShader = "gradient.glsl";
-    private final int colorCount;
+    private final int colorCount; // TODO make this default and set value with buttons at runtime
 
     public GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);

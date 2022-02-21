@@ -3,10 +3,8 @@ package test;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.Gui;
-import toolbox.global.ShaderStore;
 
-@SuppressWarnings("DuplicatedCode")
-public class Template extends PApplet {
+public class Image extends PApplet {
     Gui gui;
     PGraphics pg;
 
@@ -27,8 +25,8 @@ public class Template extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.image(gui.gradient("background"), 0, 0);
-        drawScene();
+        pg.background(0);
+        pg.image(gui.imagePicker("img"), 0, 0);
         gui.shaderFilterList("filters", pg);
         pg.image(gui.gradient("overlay", 0), 0, 0);
         pg.endDraw();
@@ -38,7 +36,4 @@ public class Template extends PApplet {
         gui.record(pg);
     }
 
-    private void drawScene() {
-
-    }
 }
