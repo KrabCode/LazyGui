@@ -26,11 +26,14 @@ import static processing.core.PApplet.*;
 
 @SuppressWarnings("unused")
 public class Gui implements UserInputSubscriber {
-    PApplet app;
-    public PGraphics pg;
     public static boolean isGuiHidden = false;
+    public PGraphics pg;
+    PApplet app;
     boolean lastRecordNow = false;
     String recordingFolderName = "";
+    boolean isRecording = false;
+    PVector recordingPosInput = new PVector(0, 0);
+    PVector recordingSizeInput = new PVector(1000, 1000);
     private int recordingFrame = 1;
 
     public Gui(PApplet p, boolean isGuiVisibleByDefault) {
@@ -98,10 +101,6 @@ public class Gui implements UserInputSubscriber {
         record(State.app.g);
     }
 
-    boolean isRecording = false;
-    PVector recordingPosInput = new PVector(0, 0);
-    PVector recordingSizeInput = new PVector(1000, 1000);
-
     public void record(PGraphics pg) {
         boolean screenshot = button("recorder/screenshot");
         boolean recordNow = button("recorder/start recording");
@@ -114,16 +113,16 @@ public class Gui implements UserInputSubscriber {
         recordingSizeInput.x = sliderInt("recorder/crop/width", defaultSize);
         recordingSizeInput.y = sliderInt("recorder/crop/height", defaultSize);
 
-        int rectX = floor(pg.width  / 2f + recordingPosInput.x - recordingSizeInput.x / 2f);
+        int rectX = floor(pg.width / 2f + recordingPosInput.x - recordingSizeInput.x / 2f);
         int rectY = floor(pg.height / 2f + recordingPosInput.y - recordingSizeInput.y / 2f);
         int rectW = floor(recordingSizeInput.x);
         int rectH = floor(recordingSizeInput.y);
 
         // ffmpeg doesn't like resolutions not divisible by 2
-        if(rectW %2 != 0){
+        if (rectW % 2 != 0) {
             rectW += 1;
         }
-        if(rectH %2 != 0){
+        if (rectH % 2 != 0) {
             rectH += 1;
         }
 
@@ -136,7 +135,7 @@ public class Gui implements UserInputSubscriber {
 
         if (isRecording) {
             PImage img = pg;
-            if(useCropRectangle){
+            if (useCropRectangle) {
                 img = pg.get(rectX, rectY, rectW, rectH);
             }
             img.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
@@ -148,7 +147,7 @@ public class Gui implements UserInputSubscriber {
         }
         if (screenshot) {
             PImage img = pg;
-            if(useCropRectangle){
+            if (useCropRectangle) {
                 img = pg.get(rectX, rectY, rectW, rectH);
             }
             String filename = "out/screenshots/" + State.timestamp() + ".png";
@@ -282,7 +281,7 @@ public class Gui implements UserInputSubscriber {
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            int hex = State.colorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
+            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
             FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
@@ -329,7 +328,7 @@ public class Gui implements UserInputSubscriber {
 
     public PGraphics gradient(String path, float alpha) {
         GradientFolderNode node = (GradientFolderNode) NodeTree.findNodeByPathInTree(path);
-        if(node == null){
+        if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
             node = new GradientFolderNode(path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
@@ -338,10 +337,15 @@ public class Gui implements UserInputSubscriber {
     }
 
     public PImage imagePicker(String path) {
+        return imagePicker(path, "");
+    }
+
+
+    public PImage imagePicker(String path, String defaultFilePath) {
         ImagePickerNode node = (ImagePickerNode) NodeTree.findNodeByPathInTree(path);
-        if(node == null){
+        if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ImagePickerNode(path, parentFolder);
+            node = new ImagePickerNode(path, parentFolder, defaultFilePath);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputImage();

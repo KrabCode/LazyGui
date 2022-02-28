@@ -71,8 +71,8 @@ public class Eighth extends PApplet {
     private void drawNoiseLine(float x, float y) {
         float weightStart = gui.slider("points/weight start", 1.99f);
         float weightEnd = gui.slider("points/weight end", 1.99f);
-        Color strokeStart = gui.colorPicker("points/stroke start", State.colorProvider.color(1,1,0.5f)); //WHITE
-        Color strokeEnd = gui.colorPicker("points/stroke end", State.colorProvider.color(1, 1, 1)); // RED
+        Color strokeStart = gui.colorPicker("points/stroke start", State.normalizedColorProvider.color(1,1,0.5f)); //WHITE
+        Color strokeEnd = gui.colorPicker("points/stroke end", State.normalizedColorProvider.color(1, 1, 1)); // RED
         int vertexCount = gui.sliderInt("points/count", 50);
         float pointDistance = gui.slider("points/distance", 1);
         float freq = gui.slider("points/angle frequency");

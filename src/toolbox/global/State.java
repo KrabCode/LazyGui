@@ -11,7 +11,6 @@ import processing.core.PGraphics;
 import processing.core.PSurface;
 import toolbox.Gui;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 import java.awt.*;
 import java.io.*;
@@ -34,7 +33,7 @@ public class State {
     public static Robot robot = null;
     public static GLWindow window = null;
     public static String libraryPath = null;
-    public static PGraphics colorProvider = null;
+    public static PGraphics normalizedColorProvider = null;
     public static float textMarginX = 5;
     public static String sketchName = null;
     public static File dir;
@@ -68,8 +67,8 @@ public class State {
             dir.mkdirs();
         }
 
-        colorProvider = app.createGraphics(256, 256, P2D);
-        State.colorProvider.colorMode(HSB, 1, 1, 1, 1);
+        normalizedColorProvider = app.createGraphics(256, 256, P2D);
+        State.normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
 
         PSurface surface = State.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {

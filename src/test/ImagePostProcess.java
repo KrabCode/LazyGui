@@ -2,7 +2,10 @@ package test;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.opengl.PShader;
 import toolbox.Gui;
+import toolbox.global.ShaderStore;
+import toolbox.global.State;
 
 public class ImagePostProcess extends PApplet {
     Gui gui;
@@ -26,8 +29,22 @@ public class ImagePostProcess extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
-        pg.image(gui.imagePicker("img"), 0, 0);
-        drawScene();
+        String chromaKeyPath = "chromaKey.glsl";
+        int hex = gui.colorPicker("chroma/targetColor").hex;
+
+        PShader chromaKey = ShaderStore.lazyInitGetShader(chromaKeyPath);
+        chromaKey.set("targetColor", new float[]{
+                State.normalizedColorProvider.red(hex),
+                State.normalizedColorProvider.green(hex),
+                State.normalizedColorProvider.blue(hex)
+        }, 3);
+        chromaKey.set("thresholdA", gui.slider("chroma/A", 0));
+        chromaKey.set("thresholdB", gui.slider("chroma/B", 1));
+        ShaderStore.hotShader(chromaKeyPath, pg);
+
+        pg.image(gui.imagePicker("chroma/img", "C:\\Projects\\Toolbox\\src\\test\\assets\\umbrella.jpg"), 0, 0);
+        pg.resetShader();
+
         gui.shaderFilterList("filters", pg);
         pg.image(gui.gradient("overlay", 0), 0, 0);
         pg.endDraw();
@@ -35,9 +52,5 @@ public class ImagePostProcess extends PApplet {
         image(pg, 0, 0);
         gui.draw();
         gui.record(pg);
-    }
-
-    private void drawScene() {
-
     }
 }
