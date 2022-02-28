@@ -25,12 +25,13 @@ public class ImagePostProcess extends PApplet {
         pg = createGraphics(width, height, P2D);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
         String chromaKeyPath = "chromaKey.glsl";
-        int hex = gui.colorPicker("chroma/targetColor").hex;
+        int hex = gui.colorPicker("chroma/targetColor", 1).hex;
 
         PShader chromaKey = ShaderStore.lazyInitGetShader(chromaKeyPath);
         chromaKey.set("targetColor", new float[]{
@@ -38,11 +39,11 @@ public class ImagePostProcess extends PApplet {
                 State.normalizedColorProvider.green(hex),
                 State.normalizedColorProvider.blue(hex)
         }, 3);
-        chromaKey.set("thresholdA", gui.slider("chroma/A", 0));
-        chromaKey.set("thresholdB", gui.slider("chroma/B", 1));
+        chromaKey.set("base", gui.slider("chroma/base", 0));
+        chromaKey.set("ramp", gui.slider("chroma/ramp", 1));
         ShaderStore.hotShader(chromaKeyPath, pg);
 
-        pg.image(gui.imagePicker("chroma/img", "C:\\Projects\\Toolbox\\src\\test\\assets\\umbrella.jpg"), 0, 0);
+        pg.image(gui.imagePicker("chroma/img", "..\\src\\test\\assets\\umbrella.jpg"), 0, 0);
         pg.resetShader();
 
         gui.shaderFilterList("filters", pg);

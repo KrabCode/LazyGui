@@ -132,16 +132,15 @@ public class Gui implements UserInputSubscriber {
             isRecording = true;
         }
         lastRecordNow = recordNow;
-
+        if (isRecording && (stopRecording || recordingFrame > framesToRecord)) {
+            isRecording = false;
+        }
         if (isRecording) {
             PImage img = pg;
             if (useCropRectangle) {
                 img = pg.get(rectX, rectY, rectW, rectH);
             }
             img.save("out/recorded/" + recordingFolderName + "/" + recordingFrame + ".jpg");
-            if (stopRecording || recordingFrame >= framesToRecord) {
-                isRecording = false;
-            }
             println("recording " + recordingFrame + " / " + framesToRecord);
             recordingFrame++;
         }

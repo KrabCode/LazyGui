@@ -36,25 +36,31 @@ float sdLine(float x){
     return abs(x);
 }
 
-mat2 rotate2D(float angle){
-    return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
-}
-
 void main() {
     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution.xy) / resolution.y;
+    float accumulatingSDF = 1000.;
     vec3 p = vec3(uv.xy, 1.);
+    float amp = ampBase;
+    float t = time *0.15;
     float scale = scaleBase;
-    float t = time;
-//    p.xy *= rotate2D(-length(sin(p*2.)) + time);
+    float r = radius;
     p /= dot(p.xy, p.xy);
-    p *= scale;
-    p.xy /= dot(p.xy, p.xy);
-    p.xy *= rotate2D(length(0.1*sin(p.xy*2. + t)));
-    p = fract(p) - 0.5;
+    for(int i = 0; i < iterations; i++){
+        p /= dot(p.xy, p.xy);
+        p *= scale;
+        p.xy = fract(p.xy - 0.5) - 0.5;
+        accumulatingSDF = min(accumulatingSDF, sdCircle(p.xy, r));
+        scale *= scaleMult;
+    }
+
+    float n;
+
     p.xy /= p.z;
-    float lineGrid = min(sdLine(p.x), sdLine(p.y));
-    float n = smoothstep(radius, 0.0, lineGrid);
+    n += length(p.xy) * range;
+    n += smoothstep(0.1, 0.0, accumulatingSDF);
+    //    gl_FragColor = vec4(vec3(col), 1.);
     vec3 col = palette(pow(n, power), a,b,c,d);
+//    vec3 col = vec3(1.-n);
     gl_FragColor = vec4(col, 1.);
 }
 

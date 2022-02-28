@@ -12,7 +12,6 @@ uniform float ampMult;
 uniform float offsetX;
 uniform float offsetY;
 uniform float radius;
-uniform float power;
 
 const float pi = 3.14159;
 
@@ -28,34 +27,34 @@ vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
     return a + b*cos( 6.28318*(c*t+d) );
 }
 
-float sdCircle(vec2 uv, float r){
-    return length(uv.xy) - r;
+float sdCircle(vec2 uv){
+    return length(uv.xy) - radius;
 }
 
 float sdLine(float x){
     return abs(x);
 }
 
-mat2 rotate2D(float angle){
-    return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
-}
-
 void main() {
     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution.xy) / resolution.y;
+    float accumulatingSDF = 1000.;
     vec3 p = vec3(uv.xy, 1.);
-    float scale = scaleBase;
-    float t = time;
-//    p.xy *= rotate2D(-length(sin(p*2.)) + time);
-    p /= dot(p.xy, p.xy);
-    p *= scale;
-    p.xy /= dot(p.xy, p.xy);
-    p.xy *= rotate2D(length(0.1*sin(p.xy*2. + t)));
-    p = fract(p) - 0.5;
+    for(int i = 0; i < iterations; i++){
+        p /= dot(p.xy, p.xy);
+        p *= scaleBase;
+        p.xy = fract(p.xy - 0.5) - 0.5;
+        accumulatingSDF = min(accumulatingSDF, sdCircle(p.xy / p.z));
+    }
+    vec3 col;
+    // accumulated sdf
+
+    // sdfs at end
     p.xy /= p.z;
-    float lineGrid = min(sdLine(p.x), sdLine(p.y));
-    float n = smoothstep(radius, 0.0, lineGrid);
-    vec3 col = palette(pow(n, power), a,b,c,d);
-    gl_FragColor = vec4(col, 1.);
+//    col += smoothstep(0.001,0.,sdCircle(p.xy));
+//    col += ;
+
+//    gl_FragColor = vec4(vec3(col), 1.);
+    gl_FragColor = vec4(palette(length(p.xy) * range, a,b,c,d), 1.);
 }
 
 

@@ -31,17 +31,13 @@ public class ImagePickerNode extends FolderNode {
         errorGraphics.endDraw();
     }
 
-    protected void updateDrawInlineNode(PGraphics pg) {
-        super.updateDrawInlineNode(pg);
+    public PImage getOutputImage() {
         String currentImagePath = ((FilePathNode) children.get(0)).filePath;
         if(!knownImagePath.equals(currentImagePath)){
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);
         }
         knownImagePath = currentImagePath;
-    }
-
-    public PImage getOutputImage() {
         if(img == null){
             return errorGraphics;
         }

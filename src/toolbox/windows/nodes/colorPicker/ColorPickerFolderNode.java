@@ -118,8 +118,11 @@ public class ColorPickerFolderNode extends FolderNode {
 
     @Override
     public void overwriteState(JsonElement loadedNode) {
-        setHex(unhex(loadedNode.getAsJsonObject().get("hexString").getAsString()));
-        loadValuesFromHex(true);
+        JsonElement loadedString = loadedNode.getAsJsonObject().get("hexString");
+        if(loadedString != null){
+            setHex(unhex(loadedString.getAsString()));
+            loadValuesFromHex(true);
+        }
     }
 
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
