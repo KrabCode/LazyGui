@@ -158,7 +158,7 @@ public class FolderWindow extends Window {
     }
 
     public void createStateListFolderNode() {
-        StateListFolderNode stateListFolderNode = new StateListFolderNode(parentFolder.path + "/load", parentFolder);
+        StateListFolderNode stateListFolderNode = new StateListFolderNode(parentFolder.path + "/saved", parentFolder);
         parentFolder.children.add(stateListFolderNode);
     }
 }
