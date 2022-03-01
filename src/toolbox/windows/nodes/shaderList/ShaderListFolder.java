@@ -67,6 +67,11 @@ public class ShaderListFolder extends FolderNode {
         fbmFlow.children.add(new SliderNode(fbmFlow.path + "/amp3", fbmFlow, 0.25f));
         children.add(fbmFlow);
 
+        ShaderListItem blur = new ShaderListItem(path + "/blur", this, "filters/blur.glsl", false, true);
+        blur.children.add(new SliderNode(blur.path + "/scale", blur, 1));
+        children.add(blur);
+
+        // TODO make a separate folder for ready-made filters
         ShaderListItem chromaKey = new ShaderListItem(path + "/chromakey", this, "filters/chromaKey.glsl", false, false);
         chromaKey.children.add(new ColorPickerFolderNode(chromaKey.path + "/color", chromaKey, State.normalizedColorProvider.color(0.75f,0.5f,1)));
         chromaKey.children.add(new SliderNode(chromaKey.path  + "/base", chromaKey,  0.9f, -1, 1,0.01f, true));
@@ -82,4 +87,5 @@ public class ShaderListFolder extends FolderNode {
             }
         }
     }
+
 }

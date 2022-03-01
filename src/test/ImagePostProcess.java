@@ -29,8 +29,12 @@ public class ImagePostProcess extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.image(gui.imagePicker("chroma/img", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
+        pg.fill(gui.colorPicker("background", 0.1f).hex);
+        pg.rect(0,0,width,height);
+
         gui.shaderFilterList("filters", pg);
+        pg.image(gui.imagePicker("chroma/img", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
+        pg.resetShader();
         pg.endDraw();
         clear();
         image(pg, 0, 0);
