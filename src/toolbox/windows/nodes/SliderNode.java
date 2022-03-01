@@ -68,7 +68,7 @@ public class SliderNode extends AbstractNode {
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
     protected int currentPrecisionIndex;
 
-    String shaderPath = "sliderBackground.glsl";
+    String shaderPath = "gui/sliderBackground.glsl";
 
     private void initSliderPrecisionArrays() {
         initPrecision();

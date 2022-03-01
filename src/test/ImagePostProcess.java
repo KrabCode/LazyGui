@@ -16,8 +16,8 @@ public class ImagePostProcess extends PApplet {
     }
 
     public void settings() {
-        size(800, 800, P2D);
-//        fullScreen(P2D);
+//        size(1000,1000, P2D);
+        fullScreen(P2D);
     }
 
     public void setup() {
@@ -29,29 +29,12 @@ public class ImagePostProcess extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.image(gui.gradient("background"), 0, 0);
-        String chromaKeyPath = "chromaKey.glsl";
-        int hex = gui.colorPicker("chroma/targetColor", 1).hex;
-
-        PShader chromaKey = ShaderStore.lazyInitGetShader(chromaKeyPath);
-        chromaKey.set("targetColor", new float[]{
-                State.normalizedColorProvider.red(hex),
-                State.normalizedColorProvider.green(hex),
-                State.normalizedColorProvider.blue(hex)
-        }, 3);
-        chromaKey.set("base", gui.slider("chroma/base", 0));
-        chromaKey.set("ramp", gui.slider("chroma/ramp", 1));
-        ShaderStore.hotShader(chromaKeyPath, pg);
-
-        pg.image(gui.imagePicker("chroma/img", "..\\src\\test\\assets\\umbrella.jpg"), 0, 0);
-        pg.resetShader();
-
+        pg.image(gui.imagePicker("chroma/img", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
         gui.shaderFilterList("filters", pg);
-        pg.image(gui.gradient("overlay", 0), 0, 0);
         pg.endDraw();
         clear();
         image(pg, 0, 0);
         gui.draw();
-        gui.record(pg);
+        gui.record();
     }
 }

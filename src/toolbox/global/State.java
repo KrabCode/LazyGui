@@ -92,11 +92,11 @@ public class State {
     }
 
     public static String timestamp() {
-        return year() + ""
-                + nf(month(), 2) + ""
-                + nf(day(), 2) + "-"
-                + nf(hour(), 2) + ""
-                + nf(minute(), 2) + ""
+        return year() + "-"
+                + nf(month(), 2) + "-"
+                + nf(day(), 2) + "_"
+                + nf(hour(), 2) + "."
+                + nf(minute(), 2) + "."
                 + nf(second(), 2);
     }
 
@@ -124,13 +124,13 @@ public class State {
             return;
         }
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
-        loadFromJson(saveFilesSorted.get(0));
+        loadStateFromJson(saveFilesSorted.get(0));
     }
 
-    public static void loadSave(String filename) {
+    public static void loadStateFromFile(String filename) {
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename)) {
-                loadFromJson(saveFile);
+                loadStateFromJson(saveFile);
                 return;
             }
         }
@@ -155,7 +155,7 @@ public class State {
         return saveFilesSorted;
     }
 
-    public static void loadFromJson(File jsonToLoad) {
+    public static void loadStateFromJson(File jsonToLoad) {
         String json = readFile(jsonToLoad);
         // don't delete or do anything to the existing nodes, just overwrite their values if they exist
         JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);

@@ -18,7 +18,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
     public final ColorPickerFolderNode parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
-    private final String colorShaderPath = "sliderBackgroundColor.glsl";
+    private final String colorShaderPath = "gui/sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
     public ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {

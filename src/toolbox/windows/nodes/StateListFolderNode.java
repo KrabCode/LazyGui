@@ -1,7 +1,6 @@
 package toolbox.windows.nodes;
 
 import processing.core.PGraphics;
-import toolbox.Gui;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
 
@@ -62,7 +61,7 @@ public class StateListFolderNode extends FolderNode{
         }
 
         public void nodeClicked(float x, float y) {
-            State.loadSave(filename);
+            State.loadStateFromFile(filename);
         }
     }
 

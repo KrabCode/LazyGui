@@ -192,7 +192,7 @@ public class GradientFolderNode extends FolderNode {
         }
 
         public float getGradientPos() {
-            return State.gui.slider(path + "/pos", gradientPosDefault, 0.01f,0,1, true);
+            return State.gui.slider(path + "/pos", gradientPosDefault, 0.01f,0,1);
         }
 
         public boolean isInactive(){

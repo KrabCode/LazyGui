@@ -189,7 +189,11 @@ public class Gui implements UserInputSubscriber {
         return slider(path, defaultValue, defaultPrecision, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-    public float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
+    public float slider(String path, float defaultValue, float defaultPrecision, float min, float max){
+        return slider(path, defaultValue, defaultPrecision, min, max, true);
+    }
+
+    private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);

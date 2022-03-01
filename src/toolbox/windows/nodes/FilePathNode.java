@@ -60,7 +60,7 @@ public class FilePathNode extends AbstractNode {
     }
 
     public void overwriteState(JsonElement loadedNode) {
-        JsonElement textElement = loadedNode.getAsJsonObject().get("text");
+        JsonElement textElement = loadedNode.getAsJsonObject().get("filePath");
         if(textElement != null){
             this.filePath = textElement.getAsString();
         }

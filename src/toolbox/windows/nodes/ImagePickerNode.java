@@ -26,6 +26,7 @@ public class ImagePickerNode extends FolderNode {
         errorGraphics.beginDraw();
         errorGraphics.background(0,0,0, 30);
         errorGraphics.stroke(255);
+        errorGraphics.strokeWeight(4);
         errorGraphics.line(0,0,errorGraphics.width, errorGraphics.height);
         errorGraphics.line(errorGraphics.width,0,0, errorGraphics.height);
         errorGraphics.endDraw();
@@ -41,16 +42,12 @@ public class ImagePickerNode extends FolderNode {
         if(img == null){
             return errorGraphics;
         }
-        updateOutput();
-        return imageGraphics;
-    }
-
-    private void updateOutput() {
         imageGraphics.beginDraw();
         imageGraphics.clear();
         imageGraphics.translate(State.gui.slider(this.path + "/x"), State.gui.slider(this.path + "/y"));
         imageGraphics.scale(State.gui.slider(this.path + "/scale", 1));
         imageGraphics.image(img, 0, 0);
         imageGraphics.endDraw();
+        return imageGraphics;
     }
 }

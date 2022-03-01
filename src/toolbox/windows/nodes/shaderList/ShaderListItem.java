@@ -5,6 +5,7 @@ import processing.opengl.PShader;
 import toolbox.global.ShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.*;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 import static processing.core.PApplet.floor;
 import static processing.core.PApplet.radians;
@@ -15,11 +16,13 @@ public class ShaderListItem extends FolderNode {
     ToggleNode activeNode;
     ShaderListFolder parentShaderList;
     boolean setTime;
+    boolean isFilter;
 
-    public ShaderListItem(String path, ShaderListFolder parent, String shaderPath, boolean setTime) {
+    public ShaderListItem(String path, ShaderListFolder parent, String shaderPath, boolean setTime, boolean isFilter) {
         super(path, parent);
         this.shaderPath = shaderPath;
         this.setTime = setTime;
+        this.isFilter = isFilter;
         parentShaderList = parent;
         activeNode = new ToggleNode(path + "/active", this, false);
         children.add(activeNode);
@@ -48,8 +51,20 @@ public class ShaderListItem extends FolderNode {
             }else if(className.contains("slider")){
                 SliderNode sliderNode = (SliderNode) node;
                 shader.set(node.name, sliderNode.valueFloat);
+            }else if(className.contains("colorpickerfoldernode")){
+                ColorPickerFolderNode colorNode = (ColorPickerFolderNode) node;
+                int hex = colorNode.getColor().hex;
+                shader.set("targetColor", new float[]{
+                        State.normalizedColorProvider.red(hex),
+                        State.normalizedColorProvider.green(hex),
+                        State.normalizedColorProvider.blue(hex)
+                }, 3);
             }
         }
-        ShaderStore.hotFilter(shaderPath, pg);
+        if(isFilter){
+            ShaderStore.hotFilter(shaderPath, pg);
+        }else{
+            ShaderStore.hotShader(shaderPath, pg);
+        }
     }
 }
