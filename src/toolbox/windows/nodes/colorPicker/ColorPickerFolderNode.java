@@ -16,10 +16,7 @@ public class ColorPickerFolderNode extends FolderNode {
     @Expose
     public String hexString;
     private int hex;
-    private final int hueNodeIndex = 1;
-    private final int satNodeIndex = 2;
-    private final int brNodeIndex = 3;
-    private final int alphaNodeIndex = 4;
+    private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
 
     public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
@@ -33,11 +30,15 @@ public class ColorPickerFolderNode extends FolderNode {
         if(children.size() > 0){
             return;
         }
+        hueNodeName = "hue";
+        satNodeName = "sat";
+        brNodeName = "br";
+        alphaNodeName = "a";
         children.add(new ColorPreviewNode(path + "/preview", this));
-        children.add(new ColorSliderNode.HueNode(path + "/hue", this));
-        children.add(new ColorSliderNode.SaturationNode(path + "/sat", this));
-        children.add(new ColorSliderNode.BrightnessNode(path + "/br", this));
-        children.add(new ColorSliderNode.AlphaNode(path + "/alpha", this));
+        children.add(new ColorSliderNode.HueNode(path + "/" + hueNodeName, this));
+        children.add(new ColorSliderNode.SaturationNode(path + "/" + satNodeName, this));
+        children.add(new ColorSliderNode.BrightnessNode(path + "/" + brNodeName, this));
+        children.add(new ColorSliderNode.AlphaNode(path + "/" + alphaNodeName, this));
         children.add(new HexNode(path + "/hex", this));
     }
 
@@ -54,25 +55,25 @@ public class ColorPickerFolderNode extends FolderNode {
     public void loadValuesFromHex(boolean setDefaults) {
         lazyInitNodes();
         PGraphics colorProvider = State.normalizedColorProvider;
-        ((ColorSliderNode) children.get(hueNodeIndex)).valueFloat = colorProvider.hue(hex);
-        ((ColorSliderNode) children.get(satNodeIndex)).valueFloat = colorProvider.saturation(hex);
-        ((ColorSliderNode) children.get(brNodeIndex)).valueFloat = colorProvider.brightness(hex);
-        ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloat = colorProvider.alpha(hex);
+        ((ColorSliderNode) findChildByName(hueNodeName)).valueFloat = colorProvider.hue(hex);
+        ((ColorSliderNode) findChildByName(satNodeName)).valueFloat = colorProvider.saturation(hex);
+        ((ColorSliderNode) findChildByName(brNodeName)).valueFloat = colorProvider.brightness(hex);
+        ((ColorSliderNode) findChildByName(alphaNodeName)).valueFloat = colorProvider.alpha(hex);
         if(setDefaults){
-            ((ColorSliderNode) children.get(hueNodeIndex)).valueFloatDefault = colorProvider.hue(hex);
-            ((ColorSliderNode) children.get(satNodeIndex)).valueFloatDefault = colorProvider.saturation(hex);
-            ((ColorSliderNode) children.get(brNodeIndex)).valueFloatDefault = colorProvider.brightness(hex);
-            ((ColorSliderNode) children.get(alphaNodeIndex)).valueFloatDefault = colorProvider.alpha(hex);
+            ((ColorSliderNode) findChildByName(hueNodeName)).valueFloatDefault = colorProvider.hue(hex);
+            ((ColorSliderNode) findChildByName(satNodeName)).valueFloatDefault = colorProvider.saturation(hex);
+            ((ColorSliderNode) findChildByName(brNodeName)).valueFloatDefault = colorProvider.brightness(hex);
+            ((ColorSliderNode) findChildByName(alphaNodeName)).valueFloatDefault = colorProvider.alpha(hex);
         }
     }
 
     public void loadValuesFromHSBA(){
         PGraphics colorProvider = State.normalizedColorProvider;
         setHex(colorProvider.color(
-                getValue(hueNodeIndex),
-                getValue(satNodeIndex),
-                getValue(brNodeIndex),
-                getValue(alphaNodeIndex)));
+                getValue(hueNodeName),
+                getValue(satNodeName),
+                getValue(brNodeName),
+                getValue(alphaNodeName)));
     }
 
     Color outputColor = new Color();
@@ -85,23 +86,23 @@ public class ColorPickerFolderNode extends FolderNode {
         return outputColor;
     }
 
-    private float getValue(int index){
-        return ((ColorSliderNode)children.get(index)).valueFloat;
+    private float getValue(String nodeName){
+        return ((ColorSliderNode) findChildByName(nodeName)).valueFloat;
     }
 
     public float hue() {
-        return getValue(hueNodeIndex);
+        return getValue(hueNodeName);
     }
 
     public float saturation() {
-        return getValue(satNodeIndex);
+        return getValue(satNodeName);
     }
 
     public float brightness() {
-        return getValue(brNodeIndex);
+        return getValue(brNodeName);
     }
     public float alpha() {
-        return getValue(alphaNodeIndex);
+        return getValue(alphaNodeName);
     }
 
     public String getHexString() {

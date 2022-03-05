@@ -7,13 +7,6 @@ import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.global.Utils;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_C;
 import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 

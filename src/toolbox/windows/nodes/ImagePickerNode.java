@@ -33,7 +33,7 @@ public class ImagePickerNode extends FolderNode {
     }
 
     public PImage getOutputImage() {
-        String currentImagePath = ((FilePathNode) children.get(0)).filePath;
+        String currentImagePath = ((FilePathNode) findChildByName("imagePath")).filePath;
         if(!knownImagePath.equals(currentImagePath)){
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);

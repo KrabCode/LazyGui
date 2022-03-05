@@ -9,11 +9,16 @@ import toolbox.windows.WindowManager;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
 public class FolderNode extends AbstractNode {
 
+    /**
+     * CopyOnWriteArrayList is needed to avoid concurrent modification
+     * because the children get drawn by one thread and user input changes the list from another thread
+     */
     @Expose
     public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
@@ -56,5 +61,14 @@ public class FolderNode extends AbstractNode {
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
+    }
+
+    protected AbstractNode findChildByName(String name){
+        for(AbstractNode node : children){
+            if(node.name.equals(name)){
+                return node;
+            }
+        }
+        return null;
     }
 }
