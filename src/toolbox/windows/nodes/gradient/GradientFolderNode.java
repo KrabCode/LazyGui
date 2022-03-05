@@ -83,7 +83,7 @@ public class GradientFolderNode extends FolderNode {
         int activeColorCount = colorCount;
         ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         for (GradientColorPickerFolderNode colorPicker : colorPickers) {
-            if (colorPicker.isInactive()) {
+            if (colorPicker.isSkipped()) {
                 activeColorCount--;
             }
         }
@@ -95,7 +95,7 @@ public class GradientFolderNode extends FolderNode {
         float[] result = new float[activeCount * 4];
         int i = 0;
         for(GradientColorPickerFolderNode colorPicker : colorPickers){
-            if(colorPicker.isInactive()){
+            if(colorPicker.isSkipped()){
                 continue;
             }
             Color color = colorPicker.getColor();
@@ -113,7 +113,7 @@ public class GradientFolderNode extends FolderNode {
         float[] result = new float[activeCount];
         int i = 0;
         for(GradientColorPickerFolderNode colorPicker : colorPickers){
-            if(colorPicker.isInactive()){
+            if(colorPicker.isSkipped()){
                 continue;
             }
             result[i++] = colorPicker.getGradientPos();
@@ -183,7 +183,7 @@ public class GradientFolderNode extends FolderNode {
 
         protected void updateDrawInlineNode(PGraphics pg) {
             super.updateDrawInlineNode(pg);
-            if(isInactive()){
+            if(isSkipped()){
                 pg.strokeCap(ROUND);
                 float n = previewRectSize * 0.25f;
                 pg.line(-n,-n,n,n);
@@ -192,11 +192,11 @@ public class GradientFolderNode extends FolderNode {
         }
 
         public float getGradientPos() {
-            return State.gui.slider(path + "/pos", gradientPosDefault, 0.01f,0,1);
+            return ((SliderNode) findChildByName("pos")).valueFloat;
         }
 
-        public boolean isInactive(){
-            return !State.gui.toggle(path + "/active", activeDefault);
+        public boolean isSkipped(){
+            return !((ToggleNode) findChildByName("active")).valueBoolean;
         }
 
         @Override

@@ -17,8 +17,8 @@ public class FilePathNode extends AbstractNode {
 
     String defaultFilePath;
 
-    public FilePathNode(NodeType type, String path, FolderNode parentFolder, String defaultFilePath) {
-        super(type, path, parentFolder);
+    public FilePathNode(String path, FolderNode parentFolder, String defaultFilePath) {
+        super(NodeType.VALUE_ROW, path, parentFolder);
         this.defaultFilePath = defaultFilePath;
         this.filePath = this.defaultFilePath;
         displayInlineName = false;

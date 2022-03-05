@@ -26,17 +26,15 @@ public class MainTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.fill(gui.colorPicker("background", 0.1f).hex);
-        pg.rect(0,0,width,height);
-
+        pg.image(gui.gradient("bg"), 0,0);
         gui.applyPremadeShaders("shaders", pg);
-        pg.image(gui.imagePicker("image", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
+        pg.image(gui.imagePicker("image", "C:\\img\\doggo.jpg"), 0, 0);
         pg.resetShader();
         gui.applyPremadeFilters("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);
         gui.draw();
-        gui.record();
+        gui.record(pg);
     }
 }

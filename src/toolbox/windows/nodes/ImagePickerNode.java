@@ -12,15 +12,25 @@ public class ImagePickerNode extends FolderNode {
     String knownImagePath = "";
     PGraphics errorGraphics;
     PGraphics imageGraphics;
+    PGraphics emptyGraphics;
 
     public ImagePickerNode(String path, FolderNode parent, String defaultFilePath) {
         super(path, parent);
-        this.children.add(new FilePathNode(NodeType.VALUE_ROW, this.path + "/imagePath", this, defaultFilePath));
+        children.add(new FilePathNode(this.path + "/imagePath", this, defaultFilePath));
+        children.add(new ToggleNode(this.path + "/show", this, true));
+        children.add(new SliderNode(this.path + "/x", this, 0));
+        children.add(new SliderNode(this.path + "/y", this, 0));
+        children.add(new SliderNode(this.path + "/scale", this, 1));
 
         imageGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
         imageGraphics.beginDraw();
         imageGraphics.clear();
         imageGraphics.endDraw();
+
+        emptyGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
+        emptyGraphics.beginDraw();
+        emptyGraphics.clear();
+        emptyGraphics.endDraw();
 
         errorGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
         errorGraphics.beginDraw();
@@ -42,12 +52,23 @@ public class ImagePickerNode extends FolderNode {
         if(img == null){
             return errorGraphics;
         }
+        if (!shouldDraw()) {
+            return emptyGraphics;
+        }
         imageGraphics.beginDraw();
         imageGraphics.clear();
-        imageGraphics.translate(State.gui.slider(this.path + "/x"), State.gui.slider(this.path + "/y"));
-        imageGraphics.scale(State.gui.slider(this.path + "/scale", 1));
+        float x = ((SliderNode) findChildByName("x")).valueFloat;
+        float y = ((SliderNode) findChildByName("y")).valueFloat;
+        float scale = ((SliderNode) findChildByName("scale")).valueFloat;
+        imageGraphics.translate(x, y);
+        imageGraphics.scale(scale);
         imageGraphics.image(img, 0, 0);
         imageGraphics.endDraw();
         return imageGraphics;
     }
+
+    private boolean shouldDraw() {
+        return ((ToggleNode) findChildByName("show")).valueBoolean;
+    }
+
 }
