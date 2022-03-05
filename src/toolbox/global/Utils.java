@@ -4,12 +4,35 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 
 import static processing.core.PApplet.*;
 
 public class Utils {
+
+    public static void setClipboardString(String data){
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection selection = new StringSelection(data);
+        clipboard.setContents(selection, selection);
+    }
+
+    public static String getClipboardString(){
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        try {
+            return (String) clipboard.getData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException | IOException ex) {
+            ex.printStackTrace();
+        }
+        return "";
+    }
+
     public static boolean isPointInRect(float x, float y, PVector pos, PVector size) {
         return isPointInRect(x, y, pos.x, pos.y, size.x, size.y);
     }

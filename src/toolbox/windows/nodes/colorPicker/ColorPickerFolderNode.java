@@ -104,6 +104,10 @@ public class ColorPickerFolderNode extends FolderNode {
         return getValue(alphaNodeIndex);
     }
 
+    public String getHexString() {
+        return hexString;
+    }
+
     public int getHex() {
         return hex;
     }

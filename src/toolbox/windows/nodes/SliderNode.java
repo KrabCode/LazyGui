@@ -10,6 +10,7 @@ import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.State;
+import toolbox.global.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -230,11 +231,11 @@ public class SliderNode extends AbstractNode {
             onValueResetToDefault();
         }
         if(e.getKeyCode() == KEY_CODE_CTRL_C) {
-            State.clipboardFloat = valueFloat;
+            Utils.setClipboardString(Float.toString(valueFloat));
         }
 
         if(e.getKeyCode() == KEY_CODE_CTRL_V) {
-            valueFloat = State.clipboardFloat;
+            valueFloat = Float.parseFloat(Utils.getClipboardString());
         }
     }
 

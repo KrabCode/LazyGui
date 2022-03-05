@@ -21,7 +21,7 @@ public class PremadeFilterFolder extends FolderNode {
 
 
         ShaderListItem noise = new ShaderListItem(path + "/noise", this, "filters/noise.glsl", true);
-        noise.children.add(new SliderNode(noise.path + "/alpha", noise, 0.9f, 0, 1, 0.01f, true));
+        noise.children.add(new SliderNode(noise.path + "/alpha", noise, 0.05f, 0, 1, 0.01f, true));
         noise.children.add(new SliderNode(noise.path + "/speed", noise, 0.1f, 0, 1, 0.01f, false));
         noise.children.add(new SliderNode(noise.path + "/baseValue", noise, 0.5f, 0, 1, 0.01f, false));
         noise.children.add(new SliderNode(noise.path + "/baseAmp", noise, 0.5f, 0, 1, 0.01f, false));
@@ -39,7 +39,7 @@ public class PremadeFilterFolder extends FolderNode {
         add.children.add(new SliderNode(add.path + "/deltaG", add, 0.0f, -1, 1, 0.01f, true));
         add.children.add(new SliderNode(add.path + "/deltaB", add, 0.0f, -1, 1, 0.01f, true));
 
-        ShaderListItem flow = new ShaderListItem(path + "/flow", this, "filters/flowFromCenter.glsl", false);
+        ShaderListItem flow = new ShaderListItem(path + "/flowFromCenter", this, "filters/flowFromCenter.glsl", false);
         children.add(flow);
         flow.children.add(new SliderNode(flow.path+"/delta", flow, 0.1f, 0, 1, 0.01f, false));
 

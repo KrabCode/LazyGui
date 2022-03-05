@@ -37,11 +37,8 @@ public class State {
     public static float textMarginX = 5;
     public static String sketchName = null;
     public static File dir;
-
-    public static int clipboardHex = 0;
-    public static float clipboardFloat = 0;
-
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    public static int clipboardHex = 0;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
 

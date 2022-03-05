@@ -21,7 +21,7 @@ public class GradientFolderNode extends FolderNode {
     PGraphics out;
     SliderIntNode directionTypeSlider;
     SliderIntNode blendTypeSlider;
-    String gradientShader = "gradient.glsl";
+    String gradientShader = "gui/gradient.glsl";
     private final int colorCount; // TODO make this default and set value with buttons at runtime
 
     public GradientFolderNode(String path, FolderNode parent, float alpha) {

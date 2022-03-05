@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
+import toolbox.global.Utils;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -19,7 +20,9 @@ import static toolbox.global.KeyCodes.KEY_CODE_CTRL_V;
 public class FilePathNode extends AbstractNode {
 
     @Expose
-    String filePath, defaultFilePath;
+    String filePath;
+
+    String defaultFilePath;
 
     public FilePathNode(NodeType type, String path, FolderNode parentFolder, String defaultFilePath) {
         super(type, path, parentFolder);
@@ -42,17 +45,10 @@ public class FilePathNode extends AbstractNode {
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyCode() == KEY_CODE_CTRL_C) {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            StringSelection selection = new StringSelection(filePath);
-            clipboard.setContents(selection, selection);
+            Utils.setClipboardString(filePath);
         }
         if(e.getKeyCode() == KEY_CODE_CTRL_V) {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            try {
-                filePath = (String) clipboard.getData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException | IOException ex) {
-                ex.printStackTrace();
-            }
+            filePath = Utils.getClipboardString();
         }
         if(e.getKeyChar() == 'r'){
             filePath = defaultFilePath;

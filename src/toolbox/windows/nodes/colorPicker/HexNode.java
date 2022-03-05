@@ -3,6 +3,7 @@ package toolbox.windows.nodes.colorPicker;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
@@ -30,7 +31,6 @@ public class HexNode extends AbstractNode {
         if(e.getKeyCode() == KEY_CODE_CTRL_C) {
             State.clipboardHex = parentColorPickerFolder.getHex();
         }
-
         if(e.getKeyCode() == KEY_CODE_CTRL_V) {
             parentColorPickerFolder.setHex(State.clipboardHex);
             parentColorPickerFolder.loadValuesFromHex(false);
