@@ -33,7 +33,7 @@ public class Apollonian extends PApplet {
         pg.noStroke();
         pg.clear();
         drawScene();
-        gui.shaderFilterList("filters", pg);
+        gui.applyPremadeFilters("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);

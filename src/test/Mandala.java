@@ -27,7 +27,7 @@ public class Mandala extends PApplet {
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
         drawScene();
-        gui.shaderFilterList("filters", pg);
+        gui.applyPremadeFilters("filters", pg);
         pg.image(gui.gradient("overlay", 0), 0, 0);
         pg.endDraw();
         clear();

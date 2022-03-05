@@ -10,8 +10,6 @@ import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
 import toolbox.global.ShaderStore;
 import toolbox.global.State;
-import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
-import toolbox.windows.nodes.shaderList.ShaderListFolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;

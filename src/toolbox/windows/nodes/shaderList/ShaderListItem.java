@@ -14,16 +14,12 @@ public class ShaderListItem extends FolderNode {
 
     public final String shaderPath;
     ToggleNode activeNode;
-    ShaderListFolder parentShaderList;
     boolean setTime;
-    boolean isFilter;
 
-    public ShaderListItem(String path, ShaderListFolder parent, String shaderPath, boolean setTime, boolean isFilter) {
+    public ShaderListItem(String path, FolderNode parent, String shaderPath, boolean setTime) {
         super(path, parent);
         this.shaderPath = shaderPath;
         this.setTime = setTime;
-        this.isFilter = isFilter;
-        parentShaderList = parent;
         activeNode = new ToggleNode(path + "/active", this, false);
         children.add(activeNode);
     }
@@ -35,7 +31,7 @@ public class ShaderListItem extends FolderNode {
         pg.popMatrix();
     }
 
-    public void filter(PGraphics pg) {
+    public void applyShader(PGraphics pg, boolean filter) {
         if(!activeNode.valueBoolean){
             return;
         }
@@ -61,7 +57,7 @@ public class ShaderListItem extends FolderNode {
                 }, 3);
             }
         }
-        if(isFilter){
+        if(filter){
             ShaderStore.hotFilter(shaderPath, pg);
         }else{
             ShaderStore.hotShader(shaderPath, pg);

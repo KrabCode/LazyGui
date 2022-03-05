@@ -2,10 +2,7 @@ package test;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.opengl.PShader;
 import toolbox.Gui;
-import toolbox.global.ShaderStore;
-import toolbox.global.State;
 
 public class ImagePostProcess extends PApplet {
     Gui gui;
@@ -32,9 +29,10 @@ public class ImagePostProcess extends PApplet {
         pg.fill(gui.colorPicker("background", 0.1f).hex);
         pg.rect(0,0,width,height);
 
-        gui.shaderFilterList("filters", pg);
-        pg.image(gui.imagePicker("chroma/img", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
+        gui.applyPremadeShaders("shaders", pg);
+        pg.image(gui.imagePicker("image", "https://cdn.larryludwig.com/wp-content/uploads/2017/08/color-wheel-500x500.jpg"), 0, 0);
         pg.resetShader();
+        gui.applyPremadeFilters("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);

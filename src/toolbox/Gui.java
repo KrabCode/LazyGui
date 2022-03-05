@@ -20,7 +20,8 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolderNode;
-import toolbox.windows.nodes.shaderList.ShaderListFolder;
+import toolbox.windows.nodes.shaderList.PremadeFilterFolder;
+import toolbox.windows.nodes.shaderList.PremadeShaderFolder;
 
 import static processing.core.PApplet.*;
 
@@ -315,14 +316,24 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
-    public void shaderFilterList(String path, PGraphics pg) {
-        ShaderListFolder node = (ShaderListFolder) NodeTree.findNodeByPathInTree(path);
+    public void applyPremadeShaders(String path, PGraphics pg){
+        PremadeShaderFolder node = (PremadeShaderFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ShaderListFolder(path, parentFolder);
+            node = new PremadeShaderFolder(path, parentFolder);
             NodeTree.insertNodeAtItsPath(node);
         }
-        node.filter(pg);
+        node.applyShaders(pg);
+    }
+
+    public void applyPremadeFilters(String path, PGraphics pg) {
+        PremadeFilterFolder node = (PremadeFilterFolder) NodeTree.findNodeByPathInTree(path);
+        if (node == null) {
+            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new PremadeFilterFolder(path, parentFolder);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.applyFilters(pg);
     }
 
     public PGraphics gradient(String path) {
@@ -342,7 +353,6 @@ public class Gui implements UserInputSubscriber {
     public PImage imagePicker(String path) {
         return imagePicker(path, "");
     }
-
 
     public PImage imagePicker(String path, String defaultFilePath) {
         ImagePickerNode node = (ImagePickerNode) NodeTree.findNodeByPathInTree(path);

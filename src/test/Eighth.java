@@ -49,7 +49,7 @@ public class Eighth extends PApplet {
             strip.blendMode(BLEND);
         }
         drawNoiseLines();
-        gui.shaderFilterList("strip shaders", strip);
+        gui.applyPremadeFilters("strip shaders", strip);
         strip.endDraw();
         image(strip, width - strip.width, height - strip.height);
         gui.draw();

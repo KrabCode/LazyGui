@@ -3,7 +3,6 @@ package test;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.Gui;
-import toolbox.global.ShaderStore;
 
 @SuppressWarnings("DuplicatedCode")
 public class Template extends PApplet {
@@ -29,7 +28,7 @@ public class Template extends PApplet {
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
         drawScene();
-        gui.shaderFilterList("filters", pg);
+        gui.applyPremadeFilters("filters", pg);
         pg.image(gui.gradient("overlay", 0), 0, 0);
         pg.endDraw();
         clear();

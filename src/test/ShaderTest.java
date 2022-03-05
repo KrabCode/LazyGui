@@ -28,7 +28,7 @@ public class ShaderTest extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("background"), 0, 0);
-        gui.shaderFilterList("filters", pg);
+        gui.applyPremadeFilters("filters", pg);
         pg.endDraw();
         clear();
         image(pg, 0, 0);
