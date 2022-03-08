@@ -58,6 +58,7 @@ public class State {
 
         sketchName = app.getClass().getSimpleName();
         libraryPath = Utils.getLibraryPath();
+        println("libpath " + libraryPath);
         dir = new File(libraryPath + "/saves/" + sketchName);
         if (!dir.exists()) {
             //noinspection ResultOfMethodCallIgnored
@@ -65,7 +66,7 @@ public class State {
         }
 
         normalizedColorProvider = app.createGraphics(256, 256, P2D);
-        State.normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
+        normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
 
         PSurface surface = State.app.getSurface();
         if (surface instanceof processing.opengl.PSurfaceJOGL) {

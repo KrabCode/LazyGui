@@ -17,13 +17,13 @@ import static processing.core.PApplet.*;
 
 public class Utils {
 
-    public static void setClipboardString(String data){
+    public static void setClipboardString(String data) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(data);
         clipboard.setContents(selection, selection);
     }
 
-    public static String getClipboardString(){
+    public static String getClipboardString() {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         try {
             return (String) clipboard.getData(DataFlavor.stringFlavor);
@@ -74,7 +74,7 @@ public class Utils {
      * @param seed seed to use
      * @return hash value between 0 and 1
      */
-    public static  float hash(float seed) {
+    public static float hash(float seed) {
         return (float) (Math.abs(Math.sin(seed * 323.121f) * 454.123f) % 1);
     }
 

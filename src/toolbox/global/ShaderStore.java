@@ -113,7 +113,7 @@ public class ShaderStore {
 
         @SuppressWarnings("UnnecessaryLocalVariable")
         private String getFullPath(String fragPath) {
-            String path = (State.libraryPath + "\\shaders\\" + fragPath).replaceAll("\\\\", "/");
+            String path = (State.libraryPath + "\\resources\\shaders\\" + fragPath).replaceAll("\\\\", "/");
 //            println(path);
             return path;
         }
