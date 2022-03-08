@@ -23,7 +23,6 @@ import static processing.core.PApplet.*;
 import static processing.core.PApplet.second;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
-import static toolbox.global.NodeTree.findNodeByPathInTree;
 
 
 public class State {
@@ -102,7 +101,7 @@ public class State {
     }
 
     public static void createTreeSaveFile() {
-        String json = gson.toJson(NodeTree.mainRoot);
+        String json = gson.toJson(NodeTree.getRoot());
         BufferedWriter writer;
         String timestamp = timestamp();
         String filePath = dir.getAbsolutePath() + "/" + timestamp + ".json";

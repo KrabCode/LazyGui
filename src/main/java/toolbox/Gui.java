@@ -45,14 +45,13 @@ public class Gui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
         float cell = State.cell;
-        FolderWindow explorer = new FolderWindow(
+        FolderWindow rootFolder = new FolderWindow(
                 new PVector(cell, cell),
-                NodeTree.getMainRoot(),
+                NodeTree.getRoot(),
                 false
         );
-//        explorer.createToolbarNode();
-        explorer.createStateListFolderNode();
-        WindowManager.addWindow(explorer);
+        rootFolder.createStateListFolderNode();
+        WindowManager.addWindow(rootFolder);
         lazyFollowSketchResolution();
     }
 

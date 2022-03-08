@@ -12,15 +12,15 @@ import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
 public class NodeTree {
-    static final FolderNode mainRoot = new FolderNode("", null);
+    private static final FolderNode root = new FolderNode("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
 
     private NodeTree() {
 
     }
 
-    public static FolderNode getMainRoot() {
-        return mainRoot;
+    public static FolderNode getRoot() {
+        return root;
     }
 
     public static AbstractNode getLazyInitParentFolderByPath(String nodePath) {
@@ -30,10 +30,6 @@ public class NodeTree {
     }
 
     public static AbstractNode findNodeByPathInTree(String path) {
-        return findNodeByPathInTree(path, NodeTree.mainRoot);
-    }
-
-    public static AbstractNode findNodeByPathInTree(String path, FolderNode root) {
         if (nodesByPath.containsKey(path)) {
             return nodesByPath.get(path);
         }
@@ -63,7 +59,7 @@ public class NodeTree {
             AbstractNode n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
-                    parentFolder = mainRoot;
+                    parentFolder = root;
                 }
                 n = new FolderNode(runningPath, parentFolder);
                 parentFolder.children.add(n);

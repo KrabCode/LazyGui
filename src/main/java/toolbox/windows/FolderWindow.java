@@ -7,7 +7,6 @@ import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.ToolbarNode;
 
 import static processing.core.PApplet.println;
 
@@ -149,11 +148,6 @@ public class FolderWindow extends Window {
                 child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }
-    }
-
-    public void createToolbarNode() {
-        ToolbarNode node = new ToolbarNode(parentFolder.path + "/toolbar", parentFolder, 8);
-        parentFolder.children.add(node);
     }
 
     public void createStateListFolderNode() {
