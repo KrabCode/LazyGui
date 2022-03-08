@@ -2,7 +2,7 @@ package test;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import gui.Gui;
 
 @SuppressWarnings("DuplicatedCode")
 public class Template extends PApplet {
