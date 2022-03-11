@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import toolbox.global.PaletteStore;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
 import toolbox.windows.nodes.*;
@@ -307,27 +307,7 @@ public class Gui implements UserInputSubscriber {
             node.loadValuesFromHex(false);
         }
     }
-/*
-    public void applyPremadeShaders(String path, PGraphics pg){
-        PremadeShaderFolder node = (PremadeShaderFolder) NodeTree.findNodeByPathInTree(path);
-        if (node == null) {
-            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new PremadeShaderFolder(path, parentFolder);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.applyShaders(pg);
-    }
 
-    public void applyPremadeFilters(String path, PGraphics pg) {
-        PremadeFilterFolder node = (PremadeFilterFolder) NodeTree.findNodeByPathInTree(path);
-        if (node == null) {
-            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new PremadeFilterFolder(path, parentFolder);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.applyFilters(pg);
-    }
-*/
     public PGraphics gradient(String path) {
         return gradient(path, 1);
     }

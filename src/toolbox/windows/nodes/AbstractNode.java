@@ -8,7 +8,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
-import toolbox.global.PaletteStore;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.global.palettes.PaletteColorType;
 
 import static processing.core.PApplet.*;

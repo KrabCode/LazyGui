@@ -2,7 +2,7 @@ package toolbox.windows.nodes;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.PaletteStore;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.palettes.PaletteColorType;
 

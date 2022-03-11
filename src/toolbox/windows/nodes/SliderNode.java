@@ -7,7 +7,7 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import toolbox.global.PaletteStore;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.global.Utils;

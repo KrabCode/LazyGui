@@ -1,11 +1,7 @@
-package toolbox.global;
-
-
-import toolbox.global.palettes.*;
+package toolbox.global.palettes;
 
 import java.util.ArrayList;
 
-import static processing.core.PApplet.constrain;
 
 public class PaletteStore extends Palette {
     private static final ArrayList<Palette> palettes = new ArrayList<>();

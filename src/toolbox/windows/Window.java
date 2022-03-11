@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.State;
-import toolbox.global.PaletteStore;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.userInput.UserInputPublisher;
