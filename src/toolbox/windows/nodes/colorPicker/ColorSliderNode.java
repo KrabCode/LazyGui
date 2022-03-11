@@ -101,6 +101,16 @@ public abstract class ColorSliderNode extends SliderNode {
         }
     }
 
+
+    @Override
+    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y); // handle the value change
+        if (e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
+            // reflect the value change in the resulting color
+            updateColorInParentFolder();
+        }
+    }
+
     public static class HueNode extends ColorSliderNode {
 
         public HueNode(String path, ColorPickerFolderNode parentFolder) {
@@ -127,20 +137,9 @@ public abstract class ColorSliderNode extends SliderNode {
             super.onValueResetToDefault();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
-
-
-        @Override
-        public void keyPressedOverNode(KeyEvent e, float x, float y) {
-            super.keyPressedOverNode(e, x, y);
-            if (e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-                parentColorPickerFolder.loadValuesFromHSBA();
-            }
-        }
     }
 
     public static class SaturationNode extends ColorSliderNode {
-
-
         public SaturationNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 1;
@@ -155,13 +154,6 @@ public abstract class ColorSliderNode extends SliderNode {
         protected void onValueResetToDefault() {
             super.onValueResetToDefault();
             parentColorPickerFolder.loadValuesFromHSBA();
-        }
-        @Override
-        public void keyPressedOverNode(KeyEvent e, float x, float y) {
-            super.keyPressedOverNode(e,x,y);
-            if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-                parentColorPickerFolder.loadValuesFromHSBA();
-            }
         }
     }
 
@@ -182,19 +174,9 @@ public abstract class ColorSliderNode extends SliderNode {
             super.onValueResetToDefault();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
-
-        @Override
-        public void keyPressedOverNode(KeyEvent e, float x, float y) {
-            super.keyPressedOverNode(e, x, y);
-
-            if (e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-                parentColorPickerFolder.loadValuesFromHSBA();
-            }
-        }
     }
 
     public static class AlphaNode extends ColorSliderNode {
-
 
         public AlphaNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
@@ -221,13 +203,6 @@ public abstract class ColorSliderNode extends SliderNode {
                 }
             }else{
                 return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
-            }
-        }
-        @Override
-        public void keyPressedOverNode(KeyEvent e, float x, float y) {
-            super.keyPressedOverNode(e,x,y);
-            if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-                parentColorPickerFolder.loadValuesFromHSBA();
             }
         }
     }

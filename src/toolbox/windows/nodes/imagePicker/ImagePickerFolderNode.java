@@ -1,12 +1,15 @@
-package toolbox.windows.nodes;
+package toolbox.windows.nodes.imagePicker;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
 import toolbox.global.State;
+import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.SliderNode;
+import toolbox.windows.nodes.ToggleNode;
 
 import static processing.core.PConstants.P2D;
 
-public class ImagePickerNode extends FolderNode {
+public class ImagePickerFolderNode extends FolderNode {
 
     PImage img;
     String knownImagePath = "";
@@ -14,9 +17,9 @@ public class ImagePickerNode extends FolderNode {
     PGraphics imageGraphics;
     PGraphics emptyGraphics;
 
-    public ImagePickerNode(String path, FolderNode parent, String defaultFilePath) {
+    public ImagePickerFolderNode(String path, FolderNode parent, String defaultFilePath) {
         super(path, parent);
-        children.add(new FilePathNode(this.path + "/imagePath", this, defaultFilePath));
+        children.add(new ImagePickerFilePathNode(this.path + "/imagePath", this, defaultFilePath));
         children.add(new ToggleNode(this.path + "/show", this, true));
         children.add(new SliderNode(this.path + "/x", this, 0));
         children.add(new SliderNode(this.path + "/y", this, 0));
@@ -43,17 +46,17 @@ public class ImagePickerNode extends FolderNode {
     }
 
     public PImage getOutputImage() {
-        String currentImagePath = ((FilePathNode) findChildByName("imagePath")).filePath;
+        String currentImagePath = ((ImagePickerFilePathNode) findChildByName("imagePath")).filePath;
         if(!knownImagePath.equals(currentImagePath)){
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);
         }
         knownImagePath = currentImagePath;
-        if(img == null){
-            return errorGraphics;
-        }
         if (!shouldDraw()) {
             return emptyGraphics;
+        }
+        if(!isImageReady()){
+            return errorGraphics;
         }
         imageGraphics.beginDraw();
         imageGraphics.clear();
@@ -67,8 +70,13 @@ public class ImagePickerNode extends FolderNode {
         return imageGraphics;
     }
 
+    boolean isImageReady() {
+        return img != null && (img.width != -1 && img.height != -1);
+    }
+
     private boolean shouldDraw() {
         return ((ToggleNode) findChildByName("show")).valueBoolean;
     }
+
 
 }

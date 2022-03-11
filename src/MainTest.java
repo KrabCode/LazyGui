@@ -1,11 +1,13 @@
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.ShaderReloader;
 
 public class MainTest extends PApplet {
     Gui gui;
     PGraphics pg;
+    float shaderTime;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -26,10 +28,15 @@ public class MainTest extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("bg"), 0, 0);
-        pg.image(gui.imagePicker("image", "C:\\img\\doggo.jpg"), 0, 0);
-        String shaderPath = "C:\\Users\\Krab\\Documents\\GitHub\\Toolbox\\src\\test.glsl";
-        ShaderReloader.getShader(shaderPath).set("time", radians(frameCount));
-        ShaderReloader.filter(shaderPath, pg);
+        pg.image(gui.imagePicker("image", ""), 0, 0);
+        if (gui.toggle("shader/show")) {
+            shaderTime += radians(gui.slider("shader/time"));
+            String[] shaderPath = new String[]{"testFrag.glsl", "testVert.glsl"};
+            PShader shader = ShaderReloader.getShader(shaderPath[0], shaderPath[1]);
+            shader.set("time", shaderTime);
+            shader.set("alpha", gui.slider("shader/alpha", 0.5f, 0, 1));
+            ShaderReloader.filter(shaderPath[0], shaderPath[1], pg);
+        }
         pg.endDraw();
         clear();
         image(pg, 0, 0);

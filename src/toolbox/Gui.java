@@ -16,6 +16,7 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolderNode;
+import toolbox.windows.nodes.imagePicker.ImagePickerFolderNode;
 
 import static processing.core.PApplet.*;
 
@@ -38,6 +39,9 @@ public class Gui implements UserInputSubscriber {
 
     public Gui(PApplet p) {
         this.app = p;
+        if(!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)){
+            println("The Toolbox library requires the P2D or P3D renderer");
+        }
         State.init(this, app);
         State.loadMostRecentSave();
         PaletteStore.initSingleton();
@@ -75,10 +79,19 @@ public class Gui implements UserInputSubscriber {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
+        resetMatrixInAnyRenderer();
         canvas.pushStyle();
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
+    }
+
+    private void resetMatrixInAnyRenderer() {
+        if (State.app.sketchRenderer().equals(P3D)) {
+            State.app.camera();
+        } else {
+            State.app.resetMatrix();
+        }
     }
 
     @Override
@@ -167,29 +180,21 @@ public class Gui implements UserInputSubscriber {
     }
 
     public float slider(String path) {
-        return slider(path, 0, 0.1f, Float.MAX_VALUE, -Float.MAX_VALUE, false);
+        return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
     public float slider(String path, float defaultValue) {
-        return slider(path, defaultValue, 0.1f, Float.MAX_VALUE, -Float.MAX_VALUE, false);
+        return slider(path, defaultValue, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-    public float sliderConstrained(String path, float defaultValue, float min, float max) {
-        return slider(path, defaultValue, 0.1f, min, max, true);
+    public float slider(String path, float defaultValue, float min, float max){
+        return slider(path, defaultValue, min, max, true);
     }
 
-    public float slider(String path, float defaultValue, float defaultPrecision) {
-        return slider(path, defaultValue, defaultPrecision, Float.MAX_VALUE, -Float.MAX_VALUE, false);
-    }
-
-    public float slider(String path, float defaultValue, float defaultPrecision, float min, float max){
-        return slider(path, defaultValue, defaultPrecision, min, max, true);
-    }
-
-    private float slider(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
+    private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            node = createSliderNode(path, defaultValue, defaultPrecision, min, max, constrained);
+            node = createSliderNode(path, defaultValue, 0.1f, min, max, constrained);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueFloat;
@@ -327,10 +332,10 @@ public class Gui implements UserInputSubscriber {
     }
 
     public PImage imagePicker(String path, String defaultFilePath) {
-        ImagePickerNode node = (ImagePickerNode) NodeTree.findNodeByPathInTree(path);
+        ImagePickerFolderNode node = (ImagePickerFolderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ImagePickerNode(path, parentFolder, defaultFilePath);
+            node = new ImagePickerFolderNode(path, parentFolder, defaultFilePath);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputImage();

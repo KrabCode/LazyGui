@@ -8,12 +8,10 @@ import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
 
-import static processing.core.PApplet.println;
 
 /**
  * A FolderWindow is the only visible GUI element
- * lets the user see its child nodes including folders and interact with them
- * to either change a node value or open a new FolderWindow
+ * it lets the user see its child nodes including folders and interact with them
  */
 public class FolderWindow extends Window {
     public final FolderNode parentFolder;

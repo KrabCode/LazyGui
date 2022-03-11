@@ -1,4 +1,4 @@
-package toolbox.windows.nodes;
+package toolbox.windows.nodes.imagePicker;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
@@ -7,18 +7,23 @@ import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.global.KeyCodes;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.NodeType;
 
-public class FilePathNode extends AbstractNode {
+public class ImagePickerFilePathNode extends AbstractNode {
 
     @Expose
     String filePath;
 
     String defaultFilePath;
 
-    public FilePathNode(String path, FolderNode parentFolder, String defaultFilePath) {
+    ImagePickerFolderNode imagePickerParentFolder;
+
+    public ImagePickerFilePathNode(String path, ImagePickerFolderNode parentFolder, String defaultFilePath) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         this.defaultFilePath = defaultFilePath;
         this.filePath = this.defaultFilePath;
+        this.imagePickerParentFolder = parentFolder;
         displayInlineName = false;
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -29,7 +34,7 @@ public class FilePathNode extends AbstractNode {
     }
 
     public void drawLeftText(PGraphics pg, String text) {
-        String displayText = text.equals("") ? "<paste path here>" : "<path>";
+        String displayText = imagePickerParentFolder.isImageReady() ? "<image path>" : "<paste path here>";
         super.drawLeftText(pg, displayText);
     }
 

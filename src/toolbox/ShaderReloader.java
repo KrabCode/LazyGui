@@ -1,4 +1,5 @@
 package toolbox;
+
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.State;
@@ -19,23 +20,27 @@ public class ShaderReloader {
     }
 
     public static PShader getShader(String fragPath) {
-        ShaderSnapshot snapshot = findSnapshotByPath(fragPath);
+        ShaderSnapshot snapshot = findSnapshotByPath(fragPath, null);
         snapshot = initIfNull(snapshot, fragPath, null);
         return snapshot.compiledShader;
     }
 
     public static PShader getShader(String fragPath, String vertPath) {
-        ShaderSnapshot snapshot = findSnapshotByPath(fragPath);
+        ShaderSnapshot snapshot = findSnapshotByPath(fragPath, vertPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
         return snapshot.compiledShader;
     }
 
-    public static void filter(String path, PGraphics canvas) {
-        shader(path, null, true, canvas);
+    public static void filter(String fragPath) {
+        shader(fragPath, null, true, State.app.g);
     }
 
-    public static void filter(String path) {
-        shader(path, null, true, State.app.g);
+    public static void filter(String path, PGraphics pg) {
+        shader(path, null, true, pg);
+    }
+
+    public static void filter(String fragPath, String vertPath, PGraphics pg) {
+        shader(fragPath, vertPath, true, pg);
     }
 
     public static void shader(String fragPath, String vertPath, PGraphics canvas) {
@@ -55,7 +60,7 @@ public class ShaderReloader {
     }
 
     private static void shader(String fragPath, String vertPath, boolean filter, PGraphics canvas) {
-        ShaderSnapshot snapshot = findSnapshotByPath(fragPath);
+        ShaderSnapshot snapshot = findSnapshotByPath(fragPath, vertPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
         snapshot.update(filter, canvas);
     }
@@ -68,10 +73,16 @@ public class ShaderReloader {
         return snapshot;
     }
 
-    private static ShaderSnapshot findSnapshotByPath(String localPath) {
+    private static ShaderSnapshot findSnapshotByPath(String fragPathQuery, String vertPathQuery) {
         for (ShaderSnapshot snapshot : snapshots) {
-            if (snapshot.fragPath.equals(localPath)) {
-                return snapshot;
+            if (vertPathQuery != null) {
+                if (snapshot.vertPath.equals(vertPathQuery) && snapshot.fragPath.equals(fragPathQuery)) {
+                    return snapshot;
+                }
+            } else {
+                if (snapshot.fragPath.equals(fragPathQuery)) {
+                    return snapshot;
+                }
             }
         }
         return null;
@@ -155,7 +166,7 @@ public class ShaderReloader {
                 compiledShader = candidate;
                 compiledOk = true;
                 fragLastKnownModified = lastModified;
-                println("compiled", fragPath != null ? fragFile.getName() : "",
+                println("Compiled", fragPath != null ? fragFile.getName() : "",
                         vertPath != null ? vertFile.getName() : "");
             } catch (Exception ex) {
                 lastKnownUncompilable = lastModified;

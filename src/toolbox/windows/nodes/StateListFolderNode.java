@@ -5,7 +5,6 @@ import toolbox.global.NodeTree;
 import toolbox.global.State;
 
 import java.io.File;
-import java.util.Comparator;
 import java.util.List;
 
 public class StateListFolderNode extends FolderNode{
@@ -13,7 +12,6 @@ public class StateListFolderNode extends FolderNode{
     public StateListFolderNode(String path, FolderNode parent) {
         super(path, parent);
         children.add(new ButtonNode(path + "/save", this));
-        size.x += parent.cell * 2;
         updateStateList();
     }
 
@@ -28,9 +26,9 @@ public class StateListFolderNode extends FolderNode{
                 continue;
             }
             String shortenedName = filename.substring(0, filename.indexOf(".json"));
-            String treePath = path + "/" + shortenedName;
-            if(NodeTree.findNodeByPathInTree(treePath) == null){
-                children.add(1, new LoadStateItemNode(treePath, this, filename));
+            String nodePath = path + "/" + shortenedName;
+            if(NodeTree.findNodeByPathInTree(nodePath) == null){
+                children.add(1, new StateItemNode(nodePath, this, filename));
             }
         }
         children.sort((o1, o2) -> o2.name.compareTo(o1.name));
@@ -44,9 +42,9 @@ public class StateListFolderNode extends FolderNode{
         updateStateList();
     }
 
-    static class LoadStateItemNode extends AbstractNode {
+    static class StateItemNode extends AbstractNode {
         String filename;
-        public LoadStateItemNode(String path, FolderNode parent, String filename) {
+        public StateItemNode(String path, FolderNode parent, String filename) {
             super(NodeType.VALUE_ROW, path, parent);
             this.filename = filename;
         }
@@ -58,6 +56,7 @@ public class StateListFolderNode extends FolderNode{
         public void nodeClicked(float x, float y) {
             State.loadStateFromFile(filename);
         }
+
     }
 
 }

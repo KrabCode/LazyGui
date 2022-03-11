@@ -39,6 +39,7 @@ public class State {
     public static File dir;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static int clipboardHex = 0;
+    public static final float windowWidth = cell * 8;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
 

@@ -29,7 +29,7 @@ public abstract class Window implements UserInputSubscriber {
 
     public Window(PVector pos, AbstractNode parentNode, boolean closeable){
         this.pos = pos;
-        this.size = new PVector(cell * 8, cell * 1);
+        this.size = new PVector(State.windowWidth, cell * 1);
         this.parentNode = parentNode;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);

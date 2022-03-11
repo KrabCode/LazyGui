@@ -31,6 +31,7 @@ public class SliderNode extends AbstractNode {
         valueFloatPrecision = valueFloatPrecisionDefault;
         valueFloatConstrained = false;
         initSliderPrecisionArrays();
+        State.overwriteWithLoadedStateIfAny(this);
     }
 
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
@@ -234,7 +235,11 @@ public class SliderNode extends AbstractNode {
         }
 
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-            valueFloat = Float.parseFloat(Utils.getClipboardString());
+            try{
+                valueFloat = Float.parseFloat(Utils.getClipboardString());
+            }catch(NumberFormatException nfe){
+                println("Could not parse float from this clipboard string: " + Utils.getClipboardString());
+            }
         }
     }
 
