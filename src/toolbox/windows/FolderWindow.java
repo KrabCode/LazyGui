@@ -67,7 +67,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode node = tryFindChildNode(x, y);
-            if (node != null && !node.isParentWindowHidden()) {
+            if (node != null && node.isParentWindowVisible()) {
                 node.nodeClicked(x, y);
             }
         }
@@ -81,7 +81,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode node = tryFindChildNode(x, y);
-            if (node != null && !node.isParentWindowHidden()) {
+            if (node != null && node.isParentWindowVisible()) {
                 node.isMouseOverNode = true;
             }
         }
@@ -95,7 +95,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
+            if (clickedNode != null && parentNode.isParentWindowVisible()) {
                 clickedNode.mouseReleasedOverNode(x, y);
             }
         }
@@ -109,7 +109,7 @@ public class FolderWindow extends Window {
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null && !parentNode.isParentWindowHidden()) {
+            if (clickedNode != null && parentNode.isParentWindowVisible()) {
                 clickedNode.mouseWheelMovedOverNode(x, y, dir);
             }
         }
@@ -121,7 +121,7 @@ public class FolderWindow extends Window {
         float x = State.app.mouseX;
         float y = State.app.mouseY;
         AbstractNode nodeUnderMouse = tryFindChildNode(x, y);
-        if (nodeUnderMouse != null && !parentNode.isParentWindowHidden()) {
+        if (nodeUnderMouse != null && parentNode.isParentWindowVisible()) {
             if (isPointInsideContent(x, y)) {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
@@ -144,7 +144,7 @@ public class FolderWindow extends Window {
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
         for (AbstractNode child : parentFolder.children) {
-            if (child.isDragged && !child.isParentWindowHidden()) {
+            if (child.isDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e, x, y, px, py);
             }
         }

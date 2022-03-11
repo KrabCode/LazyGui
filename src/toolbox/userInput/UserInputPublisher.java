@@ -14,7 +14,7 @@ import static processing.core.PApplet.println;
 
 public class UserInputPublisher implements KeyListener, MouseListener {
     private static UserInputPublisher singleton;
-    private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<UserInputSubscriber>();
+    private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
 
     float previousMouseX = -1;
     float previousMouseY = -1;
@@ -93,15 +93,12 @@ public class UserInputPublisher implements KeyListener, MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        UserInputSubscriber hungrySubscriber = null;
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseReleased(e, e.getX(), e.getY());
             if (e.isConsumed()) {
-                hungrySubscriber = subscriber;
                 break;
             }
         }
-//        println(""+hungrySubscriber);
     }
 
     @Override

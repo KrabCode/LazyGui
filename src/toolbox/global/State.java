@@ -60,7 +60,7 @@ public class State {
         saveFileDirPath = System.getenv("APPDATA");
 
         dir = new File( saveFileDirPath + "/saves/" + sketchName);
-        println(dir.getAbsolutePath().toString());
+        println("Save folder path: " + dir.getAbsolutePath());
 
         if (!dir.exists()) {
             //noinspection ResultOfMethodCallIgnored

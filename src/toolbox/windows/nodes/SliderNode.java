@@ -8,7 +8,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
-import toolbox.global.ShaderStore;
+import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.global.KeyCodes;
@@ -51,13 +51,13 @@ public class SliderNode extends AbstractNode {
 
     @Expose
     public float valueFloat;
+    @Expose
+    public float valueFloatPrecision;
     public float valueFloatMin;
     public float valueFloatMax;
     public float valueFloatDefault;
     public boolean valueFloatConstrained;
-    @Expose
-    public float valueFloatPrecision = 1;
-    public float valueFloatPrecisionDefault = 1;
+    public float valueFloatPrecisionDefault;
     float backgroundScrollX = 0;
 
 
@@ -74,7 +74,7 @@ public class SliderNode extends AbstractNode {
     }
 
     public void initSliderBackgroundShader(){
-        ShaderStore.lazyInitGetShader(shaderPath);
+        InternalShaderStore.getShader(shaderPath);
     }
 
     private void initPrecision() {
@@ -144,12 +144,12 @@ public class SliderNode extends AbstractNode {
     }
 
     protected void updateDrawBackgroundShader(PGraphics pg) {
-        PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
+        PShader shader = InternalShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
-        ShaderStore.hotShader(shaderPath, pg);
+        InternalShaderStore.shader(shaderPath, pg);
     }
 
     public String getValueToDisplay() {

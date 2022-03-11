@@ -5,7 +5,7 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.PaletteStore;
-import toolbox.global.ShaderStore;
+import toolbox.global.InternalShaderStore;
 import toolbox.global.palettes.PaletteColorType;
 import toolbox.windows.nodes.SliderNode;
 import toolbox.global.KeyCodes;
@@ -25,7 +25,7 @@ public abstract class ColorSliderNode extends SliderNode {
         this.parentColorPickerFolder = parentFolder;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         initSliderBackgroundShader();
-        ShaderStore.lazyInitGetShader(colorShaderPath);
+        InternalShaderStore.getShader(colorShaderPath);
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
     @Override
     protected void updateDrawBackgroundShader(PGraphics pg) {
-        PShader shader = ShaderStore.lazyInitGetShader(colorShaderPath);
+        PShader shader = InternalShaderStore.getShader(colorShaderPath);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);
         shader.set("hueValue", parentColorPickerFolder.hue());
@@ -72,7 +72,7 @@ public abstract class ColorSliderNode extends SliderNode {
         shader.set("alphaValue", parentColorPickerFolder.alpha());
         shader.set("mode", shaderColorMode);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
-        ShaderStore.hotShader(colorShaderPath, pg);
+        InternalShaderStore.shader(colorShaderPath, pg);
     }
 
     @Override

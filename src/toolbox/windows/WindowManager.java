@@ -11,7 +11,7 @@ import static toolbox.global.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;
-    private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<Window>();
+    private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private Window windowToSetFocusOn = null;
 
     public WindowManager() {

@@ -33,12 +33,7 @@ public class StateListFolderNode extends FolderNode{
                 children.add(1, new LoadStateItemNode(treePath, this, filename));
             }
         }
-        children.sort(new Comparator<AbstractNode>() {
-            @Override
-            public int compare(AbstractNode o1, AbstractNode o2) {
-                return o2.name.compareTo(o1.name);
-            }
-        });
+        children.sort((o1, o2) -> o2.name.compareTo(o1.name));
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {

@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.NodeTree;
-import toolbox.global.ShaderStore;
+import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
@@ -66,7 +66,7 @@ public class GradientFolderNode extends FolderNode {
             }
             return 0;
         });
-        PShader shader = ShaderStore.lazyInitGetShader(gradientShader);
+        PShader shader = InternalShaderStore.getShader(gradientShader);
         int activeColorCount = getColorCount();
         shader.set("colorCount", activeColorCount);
         shader.set("colorValues", getColorValues(activeColorCount), 4);
@@ -75,7 +75,7 @@ public class GradientFolderNode extends FolderNode {
         shader.set("blendType", blendTypeSlider.getIntValue());
         out.beginDraw();
         out.clear();
-        ShaderStore.hotFilter(gradientShader, out);
+        InternalShaderStore.filter(gradientShader, out);
         out.endDraw();
     }
 

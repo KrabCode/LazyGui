@@ -2,7 +2,7 @@ package toolbox.windows.nodes.shaderList;
 
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.global.ShaderStore;
+import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 import toolbox.windows.nodes.*;
@@ -35,7 +35,7 @@ public class ShaderListItem extends FolderNode {
         if(!activeNode.valueBoolean){
             return;
         }
-        PShader shader = ShaderStore.lazyInitGetShader(shaderPath);
+        PShader shader = InternalShaderStore.getShader(shaderPath);
         if(setTime){
             shader.set("time", radians(State.app.frameCount));
         }
@@ -58,9 +58,9 @@ public class ShaderListItem extends FolderNode {
             }
         }
         if(filter){
-            ShaderStore.hotFilter(shaderPath, pg);
+            InternalShaderStore.filter(shaderPath, pg);
         }else{
-            ShaderStore.hotShader(shaderPath, pg);
+            InternalShaderStore.shader(shaderPath, pg);
         }
     }
 }

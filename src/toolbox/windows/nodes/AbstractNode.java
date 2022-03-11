@@ -217,14 +217,14 @@ public abstract class AbstractNode {
         State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }
 
-    public boolean isParentWindowHidden(){
+    public boolean isParentWindowVisible(){
         if(parent == null || parent.window == null){
-            return Gui.isGuiHidden;
+            return !Gui.isGuiHidden;
         }
-        return parent.window.hidden;
+        return !parent.window.hidden;
     }
-    // used by value nodes to load state from json
 
+    // used by value nodes to load state from json
     public void overwriteState(JsonElement loadedNode){
 
     }

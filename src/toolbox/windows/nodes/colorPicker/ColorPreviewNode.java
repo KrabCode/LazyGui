@@ -1,7 +1,7 @@
 package toolbox.windows.nodes.colorPicker;
 
 import processing.core.PGraphics;
-import toolbox.global.ShaderStore;
+import toolbox.global.InternalShaderStore;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
@@ -17,7 +17,7 @@ public class ColorPreviewNode extends AbstractNode {
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
         heightMultiplier = 2;
-        ShaderStore.lazyInitGetShader(checkerboardShader);
+        InternalShaderStore.getShader(checkerboardShader);
     }
 
     @Override
@@ -27,8 +27,8 @@ public class ColorPreviewNode extends AbstractNode {
     }
 
     private void drawCheckerboard(PGraphics pg) {
-        ShaderStore.lazyInitGetShader(checkerboardShader).set("quadPos", pos.x, pos.y);
-        ShaderStore.hotShader(checkerboardShader, pg);
+        InternalShaderStore.getShader(checkerboardShader).set("quadPos", pos.x, pos.y);
+        InternalShaderStore.shader(checkerboardShader, pg);
         pg.rectMode(CORNER);
         pg.fill(1);
         pg.noStroke();
