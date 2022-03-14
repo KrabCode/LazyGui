@@ -7,7 +7,6 @@ import toolbox.windows.nodes.FolderNode;
 import toolbox.windows.nodes.NodeType;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 
 public class OpenFolderNode extends AbstractNode {
@@ -22,10 +21,9 @@ public class OpenFolderNode extends AbstractNode {
 
     public void mouseReleasedOverNode(float x, float y) {
         super.mouseReleasedOverNode(x, y);
-        File file = new File (State.saveFileDirPath);
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(file);
+            desktop.open(State.saveDir);
         } catch (IOException e) {
             e.printStackTrace();
         }

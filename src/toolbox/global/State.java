@@ -32,16 +32,15 @@ public class State {
     public static Gui gui = null;
     public static Robot robot = null;
     public static GLWindow window = null;
-    public static String saveFileDirPath = null;
     public static PGraphics normalizedColorProvider = null;
     public static float textMarginX = 5;
     public static String sketchName = null;
-    public static File dir;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static int clipboardHex = 0;
     public static final float windowWidth = cell * 8;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
+    public static File saveDir;
 
 
     public static void init(Gui gui, PApplet app) {
@@ -57,13 +56,11 @@ public class State {
         }
 
         sketchName = app.getClass().getSimpleName();
-
-        dir = new File( State.app.sketchPath() + "/saves/" + sketchName);
-        println("Save folder path: " + dir.getAbsolutePath());
-
-        if (!dir.exists()) {
+        saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
+        println("Save folder path: " + saveDir.getAbsolutePath());
+        if (!saveDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            dir.mkdirs();
+            saveDir.mkdirs();
         }
 
         normalizedColorProvider = app.createGraphics(256, 256, P2D);
@@ -103,7 +100,7 @@ public class State {
         String json = gson.toJson(NodeTree.getRoot());
         BufferedWriter writer;
         String timestamp = timestamp();
-        String filePath = dir.getAbsolutePath() + "/" + timestamp + ".json";
+        String filePath = saveDir.getAbsolutePath() + "/" + timestamp + ".json";
         try {
             writer = new BufferedWriter(new FileWriter(filePath));
             writer.write(json);
@@ -115,7 +112,7 @@ public class State {
     }
 
     public static void loadMostRecentSave() {
-        File[] saveFiles = dir.listFiles();
+        File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
         saveFilesSorted.removeIf(file -> !file.isFile());
