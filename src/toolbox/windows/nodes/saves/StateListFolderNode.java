@@ -6,6 +6,7 @@ import toolbox.global.State;
 import toolbox.windows.nodes.ButtonNode;
 import toolbox.windows.nodes.FolderNode;
 
+import java.awt.*;
 import java.io.File;
 import java.util.List;
 
@@ -13,7 +14,9 @@ public class StateListFolderNode extends FolderNode {
 
     public StateListFolderNode(String path, FolderNode parent) {
         super(path, parent);
-        children.add(new OpenFolderNode(path + "/open folder", this));
+        if(Desktop.getDesktop().isSupported(Desktop.Action.OPEN)){
+            children.add(new OpenFolderNode(path + "/open folder", this));
+        }
         children.add(new ButtonNode(path + "/save", this));
         updateStateList();
     }
