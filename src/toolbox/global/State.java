@@ -54,13 +54,11 @@ public class State {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
             }
-
         }
 
         sketchName = app.getClass().getSimpleName();
-        saveFileDirPath = System.getenv("APPDATA");
 
-        dir = new File( saveFileDirPath + "/saves/" + sketchName);
+        dir = new File( State.app.sketchPath() + "/saves/" + sketchName);
         println("Save folder path: " + dir.getAbsolutePath());
 
         if (!dir.exists()) {
