@@ -23,31 +23,27 @@ public class ImagePickerFolderNode extends FolderNode {
         children.add(new ToggleNode(this.path + "/show", this, true));
         children.add(new SliderNode(this.path + "/x", this, 0));
         children.add(new SliderNode(this.path + "/y", this, 0));
-        children.add(new SliderNode(this.path + "/scale", this, 1));
+        children.add(new SliderNode(this.path + "/scale", this, 1, 0, Float.MAX_VALUE, 0.1f, true));
 
-        imageGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
+        imageGraphics = State.app.createGraphics(State.app.width, State.app.height, P2D);
         imageGraphics.beginDraw();
         imageGraphics.clear();
         imageGraphics.endDraw();
 
-        emptyGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
+        emptyGraphics = State.app.createGraphics(State.app.width, State.app.height, P2D);
         emptyGraphics.beginDraw();
         emptyGraphics.clear();
         emptyGraphics.endDraw();
 
-        errorGraphics = State.app.createGraphics(State.app.width,State.app.height, P2D);
-        errorGraphics.beginDraw();
-        errorGraphics.background(0,0,0, 30);
-        errorGraphics.stroke(255);
-        errorGraphics.strokeWeight(4);
-        errorGraphics.line(0,0,errorGraphics.width, errorGraphics.height);
-        errorGraphics.line(errorGraphics.width,0,0, errorGraphics.height);
-        errorGraphics.endDraw();
+        errorGraphics = State.app.createGraphics(State.app.width, State.app.height, P2D);
     }
 
     public PImage getOutputImage() {
         String currentImagePath = ((ImagePickerFilePathNode) findChildByName("imagePath")).filePath;
-        if(!knownImagePath.equals(currentImagePath)){
+        float x = ((SliderNode) findChildByName("x")).valueFloat;
+        float y = ((SliderNode) findChildByName("y")).valueFloat;
+        float scale = ((SliderNode) findChildByName("scale")).valueFloat;
+        if (!knownImagePath.equals(currentImagePath)) {
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);
         }
@@ -55,23 +51,36 @@ public class ImagePickerFolderNode extends FolderNode {
         if (!shouldDraw()) {
             return emptyGraphics;
         }
-        if(!isImageReady()){
+        if (!isImageReady()) {
+            updateErrorGraphics(x, y, scale);
             return errorGraphics;
         }
+        updateImageGraphics(x, y, scale);
+        return imageGraphics;
+    }
+
+    private void updateErrorGraphics(float x, float y, float scale) {
+        errorGraphics.beginDraw();
+        errorGraphics.clear();
+        errorGraphics.translate(x, y);
+        errorGraphics.scale(scale);
+        errorGraphics.fill(State.normalizedColorProvider.color(0.5f, 0.1f));
+        errorGraphics.noStroke();
+        errorGraphics.rect(0, 0, errorGraphics.width, errorGraphics.height);
+        errorGraphics.endDraw();
+    }
+
+    private void updateImageGraphics(float x, float y, float scale) {
         imageGraphics.beginDraw();
         imageGraphics.clear();
-        float x = ((SliderNode) findChildByName("x")).valueFloat;
-        float y = ((SliderNode) findChildByName("y")).valueFloat;
-        float scale = ((SliderNode) findChildByName("scale")).valueFloat;
         imageGraphics.translate(x, y);
         imageGraphics.scale(scale);
         imageGraphics.image(img, 0, 0);
         imageGraphics.endDraw();
-        return imageGraphics;
     }
 
     boolean isImageReady() {
-        return img != null && (img.width != -1 && img.height != -1);
+        return img != null && (img.width > 0 && img.height > 0);
     }
 
     private boolean shouldDraw() {
