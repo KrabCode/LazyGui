@@ -11,6 +11,8 @@ import toolbox.global.State;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
+import toolbox.windows.nodes.sliders.SliderIntNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 
 import java.util.ArrayList;
 

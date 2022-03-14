@@ -1,17 +1,22 @@
-package toolbox.windows.nodes;
+package toolbox.windows.nodes.saves;
 
 import processing.core.PGraphics;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.ButtonNode;
+import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeType;
 
 import java.io.File;
 import java.util.List;
 
-public class StateListFolderNode extends FolderNode{
+public class StateListFolderNode extends FolderNode {
 
     public StateListFolderNode(String path, FolderNode parent) {
         super(path, parent);
         children.add(new ButtonNode(path + "/save", this));
+        children.add(new OpenFolderNode(path + "/open folder", this));
         updateStateList();
     }
 

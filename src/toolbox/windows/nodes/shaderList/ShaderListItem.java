@@ -6,6 +6,8 @@ import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 import toolbox.windows.nodes.*;
+import toolbox.windows.nodes.sliders.SliderIntNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 
 import static processing.core.PApplet.floor;
 import static processing.core.PApplet.radians;

@@ -2,6 +2,8 @@ package toolbox.windows.nodes.shaderList;
 
 import processing.core.PGraphics;
 import toolbox.windows.nodes.*;
+import toolbox.windows.nodes.sliders.SliderIntNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 
 public class PremadeFilterFolder extends FolderNode {
 

@@ -7,7 +7,7 @@ import processing.opengl.PShader;
 import toolbox.global.palettes.PaletteStore;
 import toolbox.global.InternalShaderStore;
 import toolbox.global.palettes.PaletteColorType;
-import toolbox.windows.nodes.SliderNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.global.KeyCodes;
 
 import static processing.core.PApplet.norm;

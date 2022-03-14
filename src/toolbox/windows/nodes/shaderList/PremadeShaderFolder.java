@@ -5,7 +5,7 @@ import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.FolderNode;
 import toolbox.windows.nodes.NodeType;
-import toolbox.windows.nodes.SliderNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 
 public class PremadeShaderFolder extends FolderNode {

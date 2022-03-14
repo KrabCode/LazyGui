@@ -1,6 +1,7 @@
-package toolbox.windows.nodes;
+package toolbox.windows.nodes.sliders;
 
 import processing.core.PApplet;
+import toolbox.windows.nodes.FolderNode;
 
 public class SliderIntNode extends SliderNode {
 

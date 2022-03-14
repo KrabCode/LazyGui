@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import toolbox.global.State;
 import toolbox.windows.nodes.FolderNode;
-import toolbox.windows.nodes.SliderNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.windows.nodes.ToggleNode;
 
 import static processing.core.PConstants.P2D;

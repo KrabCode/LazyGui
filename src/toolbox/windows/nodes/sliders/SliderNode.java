@@ -1,4 +1,4 @@
-package toolbox.windows.nodes;
+package toolbox.windows.nodes.sliders;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
@@ -13,6 +13,9 @@ import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.global.KeyCodes;
 import toolbox.global.palettes.PaletteColorType;
+import toolbox.windows.nodes.AbstractNode;
+import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

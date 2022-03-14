@@ -17,6 +17,8 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolderNode;
 import toolbox.windows.nodes.imagePicker.ImagePickerFolderNode;
+import toolbox.windows.nodes.sliders.SliderIntNode;
+import toolbox.windows.nodes.sliders.SliderNode;
 
 import static processing.core.PApplet.*;
 
