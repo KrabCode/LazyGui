@@ -124,15 +124,15 @@ public class Gui implements UserInputSubscriber {
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            node = createSliderNode(path, defaultValue, 0.1f, min, max, constrained);
+            node = createSliderNode(path, defaultValue, min, max, constrained);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueFloat;
     }
 
-    public SliderNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
+    private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
         NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
-        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, defaultPrecision, constrained);
+        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
     }

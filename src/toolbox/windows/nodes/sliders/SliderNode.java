@@ -39,9 +39,6 @@ public class SliderNode extends AbstractNode {
 
     public SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE_NODE, path, parentFolder);
-        if(defaultPrecision == 0){
-            println("default precision for slider at path " + path + " should not be 0");
-        }
         valueFloatDefault = defaultValue;
         valueFloat = defaultValue;
         valueFloatMin = min;
