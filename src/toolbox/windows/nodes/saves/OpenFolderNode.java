@@ -3,7 +3,7 @@ package toolbox.windows.nodes.saves;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class OpenFolderNode extends AbstractNode {
 
-    public OpenFolderNode(String path, FolderNode parentFolder) {
+    public OpenFolderNode(String path, NodeFolder parentFolder) {
         super(NodeType.TRANSIENT_ROW, path, parentFolder);
     }
 

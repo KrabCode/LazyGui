@@ -4,15 +4,15 @@ import processing.core.PGraphics;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
 import toolbox.windows.nodes.ButtonNode;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 
 import java.awt.*;
 import java.io.File;
 import java.util.List;
 
-public class StateListFolderNode extends FolderNode {
+public class StateListFolder extends NodeFolder {
 
-    public StateListFolderNode(String path, FolderNode parent) {
+    public StateListFolder(String path, NodeFolder parent) {
         super(path, parent);
         if(Desktop.getDesktop().isSupported(Desktop.Action.OPEN)){
             children.add(new OpenFolderNode(path + "/open folder", this));

@@ -11,9 +11,9 @@ import static processing.core.PApplet.println;
 
 public class HexNode extends AbstractNode {
 
-    ColorPickerFolderNode parentColorPickerFolder;
+    ColorPickerFolder parentColorPickerFolder;
 
-    public HexNode(String path, ColorPickerFolderNode parentFolder) {
+    public HexNode(String path, ColorPickerFolder parentFolder) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }

@@ -1,13 +1,13 @@
 package toolbox.windows.nodes.sliders;
 
 import processing.core.PApplet;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 
 public class SliderIntNode extends SliderNode {
 
     float minimumIntPrecision = 0.1f;
 
-    public SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, float defaultPrecision, boolean constrained) {
+    public SliderIntNode(String path, NodeFolder parentFolder, int defaultValue, int min, int max, float defaultPrecision, boolean constrained) {
         super(path, parentFolder, defaultValue, min, max, defaultPrecision, constrained);
     }
 

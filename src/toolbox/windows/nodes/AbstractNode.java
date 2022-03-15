@@ -25,7 +25,7 @@ public abstract class AbstractNode {
     @Expose
     public NodeType type;
 
-    public FolderNode parent;
+    public NodeFolder parent;
     public PVector pos = new PVector();
     public PVector size = new PVector();
 
@@ -39,7 +39,7 @@ public abstract class AbstractNode {
 
     protected boolean displayInlineName = true;
 
-    public AbstractNode(NodeType type, String path, FolderNode parentFolder) {
+    public AbstractNode(NodeType type, String path, NodeFolder parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;

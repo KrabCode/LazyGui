@@ -7,7 +7,7 @@ import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.saves.StateListFolderNode;
+import toolbox.windows.nodes.saves.StateListFolder;
 
 
 /**
@@ -15,9 +15,9 @@ import toolbox.windows.nodes.saves.StateListFolderNode;
  * it lets the user see its child nodes including folders and interact with them
  */
 public class FolderWindow extends Window {
-    public final FolderNode parentFolder;
+    public final NodeFolder parentFolder;
 
-    public FolderWindow(PVector pos, FolderNode parentFolder, boolean closeable) {
+    public FolderWindow(PVector pos, NodeFolder parentFolder, boolean closeable) {
         super(pos, parentFolder, closeable);
         this.parentFolder = parentFolder;
         parentFolder.window = this;
@@ -150,7 +150,7 @@ public class FolderWindow extends Window {
     }
 
     public void createStateListFolderNode() {
-        StateListFolderNode stateListFolderNode = new StateListFolderNode(parentFolder.path + "/saved", parentFolder);
-        parentFolder.children.add(stateListFolderNode);
+        StateListFolder stateListFolder = new StateListFolder(parentFolder.path + "/saved", parentFolder);
+        parentFolder.children.add(stateListFolder);
     }
 }

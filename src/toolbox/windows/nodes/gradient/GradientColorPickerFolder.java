@@ -4,20 +4,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.NodeTree;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.ToggleNode;
-import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
 import toolbox.windows.nodes.sliders.SliderNode;
 
 import static processing.core.PConstants.ROUND;
 
-public class GradientColorPickerFolderNode extends ColorPickerFolderNode {
+public class GradientColorPickerFolder extends ColorPickerFolder {
     @Expose
     private float gradientPosDefault;
     @Expose
     private boolean activeDefault;
 
-    public GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
+    public GradientColorPickerFolder(String path, NodeFolder parentFolder, int hex, float gradientPos, boolean active) {
         super(path, parentFolder, hex);
         this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));

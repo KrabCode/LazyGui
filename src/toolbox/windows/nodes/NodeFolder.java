@@ -13,7 +13,7 @@ import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
-public class FolderNode extends AbstractNode {
+public class NodeFolder extends AbstractNode {
 
     /**
      * CopyOnWriteArrayList is needed to avoid concurrent modification
@@ -26,7 +26,7 @@ public class FolderNode extends AbstractNode {
 
     protected final float previewRectSize = cell * 0.6f;
 
-    public FolderNode(String path, FolderNode parent) {
+    public NodeFolder(String path, NodeFolder parent) {
         super(NodeType.FOLDER_ROW, path, parent);
         State.overwriteWithLoadedStateIfAny(this);
     }

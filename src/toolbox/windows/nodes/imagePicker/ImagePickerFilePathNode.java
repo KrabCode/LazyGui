@@ -17,9 +17,9 @@ public class ImagePickerFilePathNode extends AbstractNode {
 
     String defaultFilePath;
 
-    ImagePickerFolderNode imagePickerParentFolder;
+    ImagePickerFolder imagePickerParentFolder;
 
-    public ImagePickerFilePathNode(String path, ImagePickerFolderNode parentFolder, String defaultFilePath) {
+    public ImagePickerFilePathNode(String path, ImagePickerFolder parentFolder, String defaultFilePath) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         this.defaultFilePath = defaultFilePath;
         this.filePath = this.defaultFilePath;

@@ -15,12 +15,12 @@ import static processing.core.PConstants.*;
 
 public abstract class ColorSliderNode extends SliderNode {
 
-    public final ColorPickerFolderNode parentColorPickerFolder;
+    public final ColorPickerFolder parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    public ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
+    public ColorSliderNode(String path, ColorPickerFolder parentFolder) {
         super(path, parentFolder, 0, 0, 1, 0.01f, true);
         this.parentColorPickerFolder = parentFolder;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
@@ -113,7 +113,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
     public static class HueNode extends ColorSliderNode {
 
-        public HueNode(String path, ColorPickerFolderNode parentFolder) {
+        public HueNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 0;
         }
@@ -140,7 +140,7 @@ public abstract class ColorSliderNode extends SliderNode {
     }
 
     public static class SaturationNode extends ColorSliderNode {
-        public SaturationNode(String path, ColorPickerFolderNode parentFolder) {
+        public SaturationNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 1;
         }
@@ -159,7 +159,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
     public static class BrightnessNode extends ColorSliderNode {
 
-        public BrightnessNode(String path, ColorPickerFolderNode parentFolder) {
+        public BrightnessNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 2;
         }
@@ -178,7 +178,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
     public static class AlphaNode extends ColorSliderNode {
 
-        public AlphaNode(String path, ColorPickerFolderNode parentFolder) {
+        public AlphaNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 3;
         }

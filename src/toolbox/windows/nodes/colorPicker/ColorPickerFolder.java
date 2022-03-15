@@ -5,19 +5,19 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.global.KeyCodes;
 
 import static processing.core.PApplet.*;
 
-public class ColorPickerFolderNode extends FolderNode {
+public class ColorPickerFolder extends NodeFolder {
 
     @Expose
     public String hexString;
     private int hex;
     private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
 
-    public ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
+    public ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();

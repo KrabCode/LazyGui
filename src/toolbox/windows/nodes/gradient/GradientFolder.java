@@ -1,32 +1,28 @@
 package toolbox.windows.nodes.gradient;
 
 import com.google.gson.JsonElement;
-import com.google.gson.annotations.Expose;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.global.NodeTree;
 import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
-import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
 import toolbox.windows.nodes.sliders.SliderIntNode;
-import toolbox.windows.nodes.sliders.SliderNode;
 
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.P2D;
 
-public class GradientFolderNode extends FolderNode {
+public class GradientFolder extends NodeFolder {
     PGraphics out;
     SliderIntNode directionTypeSlider;
     SliderIntNode blendTypeSlider;
     String gradientShader = "gradient.glsl";
     private final int colorCount; // TODO make this default and set value with buttons at runtime
 
-    public GradientFolderNode(String path, FolderNode parent, float alpha) {
+    public GradientFolder(String path, NodeFolder parent, float alpha) {
         super(path, parent);
         directionTypeSlider = new SliderIntNode(path + "/direction", this, 0, 0, 2, 0.1f, true);
         blendTypeSlider = new SliderIntNode(path + "/blend type", this, 0, 0, 3, 0.1f, true);
@@ -63,8 +59,8 @@ public class GradientFolderNode extends FolderNode {
         children.sort((o1, o2) -> {
             assert o1 != null;
             assert o2 != null;
-            if (o1.className.equals("GradientColorPickerFolderNode") && o2.className.equals("GradientColorPickerFolderNode")) {
-                return Float.compare(((GradientColorPickerFolderNode) o1).getGradientPos(), ((GradientColorPickerFolderNode) o2).getGradientPos());
+            if (o1.className.equals("GradientColorPickerFolder") && o2.className.equals("GradientColorPickerFolder")) {
+                return Float.compare(((GradientColorPickerFolder) o1).getGradientPos(), ((GradientColorPickerFolder) o2).getGradientPos());
             }
             return 0;
         });
@@ -83,8 +79,8 @@ public class GradientFolderNode extends FolderNode {
 
     private int getColorCount(){
         int activeColorCount = colorCount;
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
-        for (GradientColorPickerFolderNode colorPicker : colorPickers) {
+        ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        for (GradientColorPickerFolder colorPicker : colorPickers) {
             if (colorPicker.isSkipped()) {
                 activeColorCount--;
             }
@@ -93,10 +89,10 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private float[] getColorValues(int activeCount) {
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount * 4];
         int i = 0;
-        for(GradientColorPickerFolderNode colorPicker : colorPickers){
+        for(GradientColorPickerFolder colorPicker : colorPickers){
             if(colorPicker.isSkipped()){
                 continue;
             }
@@ -111,10 +107,10 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private float[] getColorPositions(int activeCount) {
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount];
         int i = 0;
-        for(GradientColorPickerFolderNode colorPicker : colorPickers){
+        for(GradientColorPickerFolder colorPicker : colorPickers){
             if(colorPicker.isSkipped()){
                 continue;
             }
@@ -128,11 +124,11 @@ public class GradientFolderNode extends FolderNode {
         return out;
     }
 
-    public ArrayList<GradientColorPickerFolderNode> getAllGradientColorPickerChildrenInPositionOrder(){
-        ArrayList<GradientColorPickerFolderNode> result = new ArrayList<>();
+    public ArrayList<GradientColorPickerFolder> getAllGradientColorPickerChildrenInPositionOrder(){
+        ArrayList<GradientColorPickerFolder> result = new ArrayList<>();
         for(AbstractNode node : children){
-            if(node.className.contains("GradientColorPickerFolderNode")){
-                result.add((GradientColorPickerFolderNode) node);
+            if(node.className.contains("GradientColorPickerFolder")){
+                result.add((GradientColorPickerFolder) node);
             }
         }
         return result;
@@ -142,17 +138,17 @@ public class GradientFolderNode extends FolderNode {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
-                                                            float pos, boolean active){
+    GradientColorPickerFolder createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
+                                                        float pos, boolean active){
         int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
-        return new GradientColorPickerFolderNode(path, this, hex, pos, active);
+        return new GradientColorPickerFolder(path, this, hex, pos, active);
     }
 
     private static class GradientPreviewNode extends AbstractNode {
 
-        GradientFolderNode parent;
+        GradientFolder parent;
 
-        public GradientPreviewNode(String path, GradientFolderNode parent) {
+        public GradientPreviewNode(String path, GradientFolder parent) {
             super(NodeType.VALUE_ROW, path, parent);
             this.parent = parent;
             heightMultiplier = 4;

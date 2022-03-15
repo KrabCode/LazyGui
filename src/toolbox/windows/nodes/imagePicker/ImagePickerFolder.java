@@ -3,13 +3,13 @@ package toolbox.windows.nodes.imagePicker;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import toolbox.global.State;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.windows.nodes.ToggleNode;
 
 import static processing.core.PConstants.P2D;
 
-public class ImagePickerFolderNode extends FolderNode {
+public class ImagePickerFolder extends NodeFolder {
 
     PImage img;
     String knownImagePath = "";
@@ -17,7 +17,7 @@ public class ImagePickerFolderNode extends FolderNode {
     PGraphics imageGraphics;
     PGraphics emptyGraphics;
 
-    public ImagePickerFolderNode(String path, FolderNode parent, String defaultFilePath) {
+    public ImagePickerFolder(String path, NodeFolder parent, String defaultFilePath) {
         super(path, parent);
         children.add(new ImagePickerFilePathNode(this.path + "/imagePath", this, defaultFilePath));
         children.add(new ToggleNode(this.path + "/show", this, true));

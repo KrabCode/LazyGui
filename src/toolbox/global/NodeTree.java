@@ -1,6 +1,6 @@
 package toolbox.global;
 
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
@@ -12,14 +12,14 @@ import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
 public class NodeTree {
-    private static final FolderNode root = new FolderNode("", null);
+    private static final NodeFolder root = new NodeFolder("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
 
     private NodeTree() {
 
     }
 
-    public static FolderNode getRoot() {
+    public static NodeFolder getRoot() {
         return root;
     }
 
@@ -42,7 +42,7 @@ public class NodeTree {
                 return node;
             }
             if (node.type == NodeType.FOLDER_ROW) {
-                FolderNode folder = (FolderNode) node;
+                NodeFolder folder = (NodeFolder) node;
                 for (AbstractNode child : folder.children) {
                     queue.offer(child);
                 }
@@ -54,18 +54,18 @@ public class NodeTree {
     public static void lazyCreateFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
-        FolderNode parentFolder = null;
+        NodeFolder parentFolder = null;
         for (int i = 0; i < split.length; i++) {
             AbstractNode n = findNodeByPathInTree(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
                     parentFolder = root;
                 }
-                n = new FolderNode(runningPath, parentFolder);
+                n = new NodeFolder(runningPath, parentFolder);
                 parentFolder.children.add(n);
-                parentFolder = (FolderNode) n;
+                parentFolder = (NodeFolder) n;
             } else if (n.type == NodeType.FOLDER_ROW) {
-                parentFolder = (FolderNode) n;
+                parentFolder = (NodeFolder) n;
             } else {
                 println("expected folder based on path but got value node");
             }
@@ -81,7 +81,7 @@ public class NodeTree {
         }
         String folderPath = Utils.getPathWithoutName(node.path);
         lazyCreateFolderPath(folderPath);
-        FolderNode folder = (FolderNode) findNodeByPathInTree(folderPath);
+        NodeFolder folder = (NodeFolder) findNodeByPathInTree(folderPath);
         assert folder != null;
         folder.children.add(node);
     }

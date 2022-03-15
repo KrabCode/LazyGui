@@ -9,7 +9,7 @@ import toolbox.global.palettes.PaletteColorType;
 import static processing.core.PConstants.CENTER;
 
 public class ButtonNode extends AbstractNode {
-    public ButtonNode(String path, FolderNode folder) {
+    public ButtonNode(String path, NodeFolder folder) {
         super(NodeType.VALUE_ROW, path, folder);
     }
 

@@ -10,13 +10,13 @@ import toolbox.global.State;
 import toolbox.global.NodeTree;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
-import toolbox.windows.nodes.colorPicker.ColorPickerFolderNode;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
-import toolbox.windows.nodes.gradient.GradientFolderNode;
-import toolbox.windows.nodes.imagePicker.ImagePickerFolderNode;
+import toolbox.windows.nodes.gradient.GradientFolder;
+import toolbox.windows.nodes.imagePicker.ImagePickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
 
@@ -131,7 +131,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     public SliderNode createSliderNode(String path, float defaultValue, float defaultPrecision, float min, float max, boolean constrained) {
-        FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+        NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
         SliderNode node = new SliderNode(path, folder, defaultValue, min, max, defaultPrecision, constrained);
         node.initSliderBackgroundShader();
         return node;
@@ -159,7 +159,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+        NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
         SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
@@ -179,7 +179,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
-        FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+        NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
         return new ToggleNode(path, folder, defaultValue);
     }
 
@@ -193,7 +193,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     private ButtonNode createButtonNode(String path) {
-        FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
+        NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
         return new ButtonNode(path, folder);
     }
 
@@ -210,31 +210,31 @@ public class Gui implements UserInputSubscriber {
     }
 
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNodeByPathInTree(path);
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
             int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
-            FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
     public Color colorPicker(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNodeByPathInTree(path);
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
 
     public void colorPickerSet(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNodeByPathInTree(path);
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode folder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            NodeFolder folder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         } else {
 
@@ -248,10 +248,10 @@ public class Gui implements UserInputSubscriber {
     }
 
     public PGraphics gradient(String path, float alpha) {
-        GradientFolderNode node = (GradientFolderNode) NodeTree.findNodeByPathInTree(path);
+        GradientFolder node = (GradientFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new GradientFolderNode(path, parentFolder, alpha);
+            NodeFolder parentFolder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new GradientFolder(path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
@@ -262,10 +262,10 @@ public class Gui implements UserInputSubscriber {
     }
 
     public PImage imagePicker(String path, String defaultFilePath) {
-        ImagePickerFolderNode node = (ImagePickerFolderNode) NodeTree.findNodeByPathInTree(path);
+        ImagePickerFolder node = (ImagePickerFolder) NodeTree.findNodeByPathInTree(path);
         if (node == null) {
-            FolderNode parentFolder = (FolderNode) NodeTree.getLazyInitParentFolderByPath(path);
-            node = new ImagePickerFolderNode(path, parentFolder, defaultFilePath);
+            NodeFolder parentFolder = (NodeFolder) NodeTree.getLazyInitParentFolderByPath(path);
+            node = new ImagePickerFolder(path, parentFolder, defaultFilePath);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputImage();

@@ -14,7 +14,7 @@ import toolbox.global.Utils;
 import toolbox.global.KeyCodes;
 import toolbox.global.palettes.PaletteColorType;
 import toolbox.windows.nodes.AbstractNode;
-import toolbox.windows.nodes.FolderNode;
+import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import static processing.core.PApplet.*;
 
 public class SliderNode extends AbstractNode {
 
-    public SliderNode(String path, FolderNode parentFolder, float defaultValue) {
+    public SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloat = valueFloatDefault;
@@ -37,7 +37,7 @@ public class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
+    public SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE_ROW, path, parentFolder);
         if(defaultPrecision == 0){
             println("default precision for slider at path " + path + " should not be 0");
