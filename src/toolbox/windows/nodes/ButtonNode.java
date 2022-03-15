@@ -10,7 +10,7 @@ import static processing.core.PConstants.CENTER;
 
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, NodeFolder folder) {
-        super(NodeType.VALUE_ROW, path, folder);
+        super(NodeType.VALUE_NODE, path, folder);
     }
 
     public boolean valueBoolean = false;

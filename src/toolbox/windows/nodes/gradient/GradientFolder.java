@@ -149,7 +149,7 @@ public class GradientFolder extends NodeFolder {
         GradientFolder parent;
 
         public GradientPreviewNode(String path, GradientFolder parent) {
-            super(NodeType.VALUE_ROW, path, parent);
+            super(NodeType.VALUE_NODE, path, parent);
             this.parent = parent;
             heightMultiplier = 4;
         }

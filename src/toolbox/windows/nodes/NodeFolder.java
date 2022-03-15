@@ -27,7 +27,7 @@ public class NodeFolder extends AbstractNode {
     protected final float previewRectSize = cell * 0.6f;
 
     public NodeFolder(String path, NodeFolder parent) {
-        super(NodeType.FOLDER_ROW, path, parent);
+        super(NodeType.FOLDER, path, parent);
         State.overwriteWithLoadedStateIfAny(this);
     }
 

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class OpenFolderNode extends AbstractNode {
 
     public OpenFolderNode(String path, NodeFolder parentFolder) {
-        super(NodeType.TRANSIENT_ROW, path, parentFolder);
+        super(NodeType.TRANSIENT_NODE, path, parentFolder);
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {

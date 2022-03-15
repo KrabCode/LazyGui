@@ -9,7 +9,7 @@ import toolbox.windows.nodes.NodeType;
 class StateItemNode extends AbstractNode {
     String filename;
     public StateItemNode(String path, NodeFolder parent, String filename) {
-        super(NodeType.VALUE_ROW, path, parent);
+        super(NodeType.VALUE_NODE, path, parent);
         this.filename = filename;
     }
 

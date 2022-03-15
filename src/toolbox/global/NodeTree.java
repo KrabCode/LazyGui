@@ -41,7 +41,7 @@ public class NodeTree {
                 nodesByPath.put(path, node);
                 return node;
             }
-            if (node.type == NodeType.FOLDER_ROW) {
+            if (node.type == NodeType.FOLDER) {
                 NodeFolder folder = (NodeFolder) node;
                 for (AbstractNode child : folder.children) {
                     queue.offer(child);
@@ -64,7 +64,7 @@ public class NodeTree {
                 n = new NodeFolder(runningPath, parentFolder);
                 parentFolder.children.add(n);
                 parentFolder = (NodeFolder) n;
-            } else if (n.type == NodeType.FOLDER_ROW) {
+            } else if (n.type == NodeType.FOLDER) {
                 parentFolder = (NodeFolder) n;
             } else {
                 println("expected folder based on path but got value node");

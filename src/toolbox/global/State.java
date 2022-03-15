@@ -167,7 +167,7 @@ public class State {
             }
             lastLoadedStateMap.put(loadedPath, loadedNode);
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
-            if (Objects.equals(loadedType, NodeType.FOLDER_ROW.toString())) {
+            if (Objects.equals(loadedType, NodeType.FOLDER.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
                 for (JsonElement child : loadedChildren) {
                     queue.offer(child);
