@@ -140,7 +140,6 @@ public abstract class AbstractNode {
     public void drawLeftText(PGraphics pg, String text) {
         pg.textAlign(LEFT, CENTER);
         pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);
-
     }
 
     public void drawRightText(PGraphics pg, String text) {
@@ -152,7 +151,7 @@ public abstract class AbstractNode {
         );
     }
 
-    protected void drawToggleHandle(PGraphics pg, boolean valueBoolean) {
+    protected void drawRightToggleHandle(PGraphics pg, boolean valueBoolean) {
         float rectWidth = cell * 0.3f;
         float rectHeight = cell * 0.3f;
 
@@ -175,6 +174,22 @@ public abstract class AbstractNode {
             pg.fill(PaletteStore.get(PaletteColorType.NORMAL_BACKGROUND));
             pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }
+    }
+
+    protected void drawRightButton(PGraphics pg) {
+        pg.noFill();
+        pg.translate(size.x - cell *0.5f, cell * 0.5f);
+        if(isMouseOverNode){
+            if (isDragged){
+                pg.fill(PaletteStore.get(PaletteColorType.FOCUS_FOREGROUND));
+            }else{
+                pg.fill(PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND));
+            }
+
+        }
+        pg.stroke(PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND));
+        pg.rectMode(CENTER);
+        pg.rect(0,0, cell * 0.25f, cell*0.15f);
     }
 
     private boolean isFocused(){

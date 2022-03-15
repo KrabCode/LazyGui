@@ -23,13 +23,13 @@ public class NodeTree {
         return root;
     }
 
-    public static AbstractNode getLazyInitParentFolderByPath(String nodePath) {
+    public static NodeFolder findParentFolderLazyInitPath(String nodePath) {
         String folderPath = Utils.getPathWithoutName(nodePath);
-        lazyCreateFolderPath(folderPath);
-        return findNodeByPathInTree(folderPath);
+        lazyInitFolderPath(folderPath);
+        return (NodeFolder) findNode(folderPath);
     }
 
-    public static AbstractNode findNodeByPathInTree(String path) {
+    public static AbstractNode findNode(String path) {
         if (nodesByPath.containsKey(path)) {
             return nodesByPath.get(path);
         }
@@ -51,12 +51,12 @@ public class NodeTree {
         return null;
     }
 
-    public static void lazyCreateFolderPath(String path) {
+    public static void lazyInitFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
         NodeFolder parentFolder = null;
         for (int i = 0; i < split.length; i++) {
-            AbstractNode n = findNodeByPathInTree(runningPath);
+            AbstractNode n = findNode(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
                     parentFolder = root;
@@ -76,12 +76,12 @@ public class NodeTree {
     }
 
     public static void insertNodeAtItsPath(AbstractNode node) {
-        if (findNodeByPathInTree(node.path) != null) {
+        if (findNode(node.path) != null) {
             return;
         }
         String folderPath = Utils.getPathWithoutName(node.path);
-        lazyCreateFolderPath(folderPath);
-        NodeFolder folder = (NodeFolder) findNodeByPathInTree(folderPath);
+        lazyInitFolderPath(folderPath);
+        NodeFolder folder = (NodeFolder) findNode(folderPath);
         assert folder != null;
         folder.children.add(node);
     }

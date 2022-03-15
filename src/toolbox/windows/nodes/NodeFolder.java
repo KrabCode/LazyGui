@@ -26,6 +26,10 @@ public class NodeFolder extends AbstractNode {
 
     protected final float previewRectSize = cell * 0.6f;
 
+    // TODO don't allow children to be added to special folders that need the children to be well defined
+    //  OR use a second arraylist in children and allow anything to be added anywhere
+    public boolean allowAddingChildren = true;
+
     public NodeFolder(String path, NodeFolder parent) {
         super(NodeType.FOLDER, path, parent);
         State.overwriteWithLoadedStateIfAny(this);

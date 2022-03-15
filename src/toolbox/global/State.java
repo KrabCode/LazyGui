@@ -151,6 +151,7 @@ public class State {
         return saveFilesSorted;
     }
 
+    // TODO deleting a file and trying to load it results in an error, maybe remove the option to do that pre-emptively, watching the actual files on disk
     public static void loadStateFromJson(File jsonToLoad) {
         String json = readFile(jsonToLoad);
         // don't delete or do anything to the existing nodes, just overwrite their values if they exist
@@ -161,7 +162,7 @@ public class State {
         while (!queue.isEmpty()) {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
-            AbstractNode nodeToEdit = NodeTree.findNodeByPathInTree(loadedPath);
+            AbstractNode nodeToEdit = NodeTree.findNode(loadedPath);
             if (nodeToEdit != null) {
                 overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
             }

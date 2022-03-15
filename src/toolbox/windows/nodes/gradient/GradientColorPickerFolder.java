@@ -51,7 +51,7 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
         JsonElement gradientActiveLoaded = loadedNode.getAsJsonObject().get("active");
         if(gradientPosLoaded != null){
             gradientPosDefault = gradientPosLoaded.getAsFloat();
-            SliderNode pos = ((SliderNode) NodeTree.findNodeByPathInTree(path + "/pos"));
+            SliderNode pos = ((SliderNode) NodeTree.findNode(path + "/pos"));
             if(pos != null){
                 pos.valueFloat = gradientPosDefault;
                 pos.valueFloatDefault = gradientPosDefault;
@@ -59,7 +59,7 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
         }
         if(gradientActiveLoaded != null){
             activeDefault = gradientActiveLoaded.getAsBoolean();
-            ToggleNode active = ((ToggleNode)NodeTree.findNodeByPathInTree(path + "/active"));
+            ToggleNode active = ((ToggleNode)NodeTree.findNode(path + "/active"));
             if(active != null){
                 active.valueBoolean = activeDefault;
                 active.valueBooleanDefault = activeDefault;

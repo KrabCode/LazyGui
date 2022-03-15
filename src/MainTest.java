@@ -37,6 +37,10 @@ public class MainTest extends PApplet {
             shader.set("alpha", gui.slider("shader/alpha", 0.5f, 0, 1));
             ShaderReloader.filter(shaderPath[0], shaderPath[1], pg);
         }
+        pg.fill(gui.colorPicker("text/fill").hex);
+        pg.textAlign(CENTER);
+        pg.textSize(gui.slider("text/size", 36));
+        pg.text(gui.selectString("text/content", "hello", "world", "apples", "oranges", "123456789", "1234567890","12345678901"), width / 2f, height / 2f);
         pg.endDraw();
         clear();
         image(pg, 0, 0);

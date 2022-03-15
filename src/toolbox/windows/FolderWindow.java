@@ -65,7 +65,7 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractNode node = tryFindChildNode(x, y);
+            AbstractNode node = tryFindChildNodeAt(x, y);
             if (node != null && node.isParentWindowVisible()) {
                 node.nodeClicked(x, y);
             }
@@ -79,7 +79,7 @@ public class FolderWindow extends Window {
             node.isMouseOverNode = false;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractNode node = tryFindChildNode(x, y);
+            AbstractNode node = tryFindChildNodeAt(x, y);
             if (node != null && node.isParentWindowVisible()) {
                 node.isMouseOverNode = true;
             }
@@ -93,8 +93,8 @@ public class FolderWindow extends Window {
             node.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
-            AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null && parentNode.isParentWindowVisible()) {
+            AbstractNode clickedNode = tryFindChildNodeAt(x, y);
+            if (clickedNode != null && clickedNode.isParentWindowVisible()) {
                 clickedNode.mouseReleasedOverNode(x, y);
             }
         }
@@ -107,8 +107,8 @@ public class FolderWindow extends Window {
             return;
         }
         if (isPointInsideContent(x, y)) {
-            AbstractNode clickedNode = tryFindChildNode(x, y);
-            if (clickedNode != null && parentNode.isParentWindowVisible()) {
+            AbstractNode clickedNode = tryFindChildNodeAt(x, y);
+            if (clickedNode != null && clickedNode.isParentWindowVisible()) {
                 clickedNode.mouseWheelMovedOverNode(x, y, dir);
             }
         }
@@ -119,8 +119,8 @@ public class FolderWindow extends Window {
         super.keyPressed(keyEvent);
         float x = State.app.mouseX;
         float y = State.app.mouseY;
-        AbstractNode nodeUnderMouse = tryFindChildNode(x, y);
-        if (nodeUnderMouse != null && parentNode.isParentWindowVisible()) {
+        AbstractNode nodeUnderMouse = tryFindChildNodeAt(x, y);
+        if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
             if (isPointInsideContent(x, y)) {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
@@ -130,7 +130,7 @@ public class FolderWindow extends Window {
         }
     }
 
-    private AbstractNode tryFindChildNode(float x, float y) {
+    private AbstractNode tryFindChildNodeAt(float x, float y) {
         for (AbstractNode node : parentFolder.children) {
             if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
                 return node;

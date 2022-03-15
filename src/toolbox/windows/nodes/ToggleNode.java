@@ -11,7 +11,7 @@ public class ToggleNode extends AbstractNode {
     @Expose
     public boolean valueBoolean;
     public boolean valueBooleanDefault;
-    boolean armed = false;
+    protected boolean armed = false;
     public float handlePosNorm;
 
     public ToggleNode(String path, NodeFolder folder, boolean defaultValue) {
@@ -24,7 +24,7 @@ public class ToggleNode extends AbstractNode {
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
-        drawToggleHandle(pg, valueBoolean);
+        drawRightToggleHandle(pg, valueBoolean);
     }
 
 
@@ -34,6 +34,7 @@ public class ToggleNode extends AbstractNode {
         armed = true;
     }
 
+    @Override
     public void mouseReleasedOverNode(float x, float y){
         super.mouseReleasedOverNode(x,y);
         if(armed){

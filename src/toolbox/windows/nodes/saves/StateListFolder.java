@@ -33,7 +33,7 @@ public class StateListFolder extends NodeFolder {
             }
             String saveDisplayName = "- " + filename.substring(0, filename.indexOf(".json"));
             String nodePath = path + "/" + saveDisplayName;
-            if(NodeTree.findNodeByPathInTree(nodePath) == null){
+            if(NodeTree.findNode(nodePath) == null){
                 children.add(1, new StateItemNode(nodePath, this, filename));
             }
         }
