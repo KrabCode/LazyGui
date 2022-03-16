@@ -1,6 +1,8 @@
 package toolbox.windows.nodes.select;
 
+import com.google.gson.JsonElement;
 import processing.core.PGraphics;
+import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 
@@ -22,6 +24,9 @@ public class SelectStringFolder extends NodeFolder {
             children.add(new SelectStringItem(childPath, this, valueBoolean, option));
             oldValues.put(childPath, valueBoolean);
         }
+        State.overwriteWithLoadedStateIfAny(this);
+        reflectChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
+        rememberCurrentValues();
     }
 
     @Override

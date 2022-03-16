@@ -49,7 +49,10 @@ public class ToggleNode extends AbstractNode {
     }
 
     public void overwriteState(JsonElement loadedNode) {
-        valueBooleanDefault = loadedNode.getAsJsonObject().get("valueBoolean").getAsBoolean();
-        valueBoolean = valueBooleanDefault;
+        JsonElement booleanElement = loadedNode.getAsJsonObject().get("valueBoolean");
+        if(booleanElement != null){
+            valueBoolean = booleanElement.getAsBoolean();
+            valueBooleanDefault = valueBoolean;
+        }
     }
 }

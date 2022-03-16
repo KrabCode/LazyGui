@@ -7,8 +7,7 @@ import toolbox.global.palettes.PaletteStore;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.ToggleNode;
 
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.*;
 
 public class SelectStringItem extends ToggleNode {
 
@@ -37,8 +36,12 @@ public class SelectStringItem extends ToggleNode {
         if(valueBoolean){
             pg.noStroke();
             pg.fill(PaletteStore.get(PaletteColorType.FOCUS_BACKGROUND));
+            pg.rectMode(CORNER);
             pg.rect(0,0,size.x,size.y);
             pg.fill(PaletteStore.get(PaletteColorType.FOCUS_FOREGROUND));
+            float rectSize = cell * 0.25f;
+            pg.rectMode(CENTER);
+            pg.rect(size.x - cell*0.5f, size.y - cell*0.5f, rectSize, rectSize);
         }else{
             pg.fill(PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND));
         }
