@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.global.KeyCodes;
 
@@ -132,11 +133,17 @@ public class ColorPickerFolder extends NodeFolder {
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
-            State.clipboardHex = hex;
+            Utils.setClipboardString(getHexString());
         }
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
-            hex = State.clipboardHex;
-            loadValuesFromHex(false);
+            String pastedString = Utils.getClipboardString();
+            try{
+                int pastedHex = (int)Long.parseLong(pastedString, 16);
+                setHex(pastedHex);
+                loadValuesFromHex(false);
+            }catch(NumberFormatException nfe){
+                println("Could not parse hex color from input string: \"" + pastedString + "\"");
+            }
         }
     }
 }

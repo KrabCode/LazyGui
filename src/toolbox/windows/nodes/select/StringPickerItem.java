@@ -9,11 +9,11 @@ import toolbox.windows.nodes.ToggleNode;
 
 import static processing.core.PConstants.*;
 
-public class SelectStringItem extends ToggleNode {
+public class StringPickerItem extends ToggleNode {
 
     String valueString;
 
-    public SelectStringItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
+    public StringPickerItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
         super(path, folder, valueBoolean);
         this.valueString = valueString;
     }
@@ -35,15 +35,15 @@ public class SelectStringItem extends ToggleNode {
     public void drawLeftText(PGraphics pg, String text) {
         if(valueBoolean){
             pg.noStroke();
-            pg.fill(PaletteStore.get(PaletteColorType.FOCUS_BACKGROUND));
+            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND));
             pg.rectMode(CORNER);
             pg.rect(0,0,size.x,size.y);
-            pg.fill(PaletteStore.get(PaletteColorType.FOCUS_FOREGROUND));
+            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
             float rectSize = cell * 0.25f;
             pg.rectMode(CENTER);
             pg.rect(size.x - cell*0.5f, size.y - cell*0.5f, rectSize, rectSize);
         }else{
-            pg.fill(PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND));
+            fillForegroundBasedOnMouseOver(pg);
         }
         pg.textAlign(LEFT, CENTER);
         pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);

@@ -1,6 +1,5 @@
 package toolbox.windows.nodes.select;
 
-import com.google.gson.JsonElement;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
@@ -9,48 +8,48 @@ import toolbox.windows.nodes.NodeFolder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SelectStringFolder extends NodeFolder {
+public class StringPickerFolder extends NodeFolder {
 
     public String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
 
-    public SelectStringFolder(String path, NodeFolder parent, String[] options) {
+    public StringPickerFolder(String path, NodeFolder parent, String[] options) {
         super(path, parent);
         valueString = options[0];
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
             boolean valueBoolean = i == 0;
             String childPath = path + "/" + option;
-            children.add(new SelectStringItem(childPath, this, valueBoolean, option));
+            children.add(new StringPickerItem(childPath, this, valueBoolean, option));
             oldValues.put(childPath, valueBoolean);
         }
         State.overwriteWithLoadedStateIfAny(this);
-        reflectChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
+        checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
         rememberCurrentValues();
     }
 
     @Override
     protected void updateDrawInlineNode(PGraphics pg) {
         // don't draw folder icon
-        reflectChildValueChange();
+        checkForChildValueChange();
         rememberCurrentValues();
     }
 
-    private void reflectChildValueChange() {
+    private void checkForChildValueChange() {
         for (AbstractNode child : children) {
-            SelectStringItem option = (SelectStringItem) child;
+            StringPickerItem option = (StringPickerItem) child;
             boolean oldValue = oldValues.get(option.path);
             if (option.valueBoolean && !oldValue) {
-                setAllOtherOptionsToFalse(option);
                 valueString = option.valueString;
+                setAllOtherOptionsToFalse(option);
                 break;
             }
         }
     }
 
-    private void setAllOtherOptionsToFalse(SelectStringItem optionToKeepTrue) {
+    private void setAllOtherOptionsToFalse(StringPickerItem optionToKeepTrue) {
         for (AbstractNode child : children) {
-            SelectStringItem option = (SelectStringItem) child;
+            StringPickerItem option = (StringPickerItem) child;
             if(!option.path.equals(optionToKeepTrue.path)){
                 option.valueBoolean = false;
             }
@@ -59,7 +58,7 @@ public class SelectStringFolder extends NodeFolder {
 
     private void rememberCurrentValues(){
         for (AbstractNode child : children) {
-            SelectStringItem option = (SelectStringItem) child;
+            StringPickerItem option = (StringPickerItem) child;
             oldValues.put(option.path, option.valueBoolean);
         }
     }
@@ -67,11 +66,6 @@ public class SelectStringFolder extends NodeFolder {
     @Override
     public void drawLeftText(PGraphics pg, String text) {
         super.drawLeftText(pg, text);
-        String shortenedValue = valueString;
-        if(shortenedValue.length() > 9){
-            shortenedValue = valueString.substring(0, 9);
-        }
-        drawRightText(pg, shortenedValue);
+        drawRightText(pg, valueString);
     }
-
 }

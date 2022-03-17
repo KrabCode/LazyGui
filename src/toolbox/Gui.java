@@ -5,9 +5,11 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
+import toolbox.global.palettes.PaletteColorType;
 import toolbox.global.palettes.PaletteStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
+import toolbox.global.palettes.PaletteType;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
@@ -17,7 +19,7 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolder;
 import toolbox.windows.nodes.imagePicker.ImagePickerFolder;
-import toolbox.windows.nodes.select.SelectStringFolder;
+import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
 
@@ -30,14 +32,9 @@ public class Gui implements UserInputSubscriber {
     public PGraphics pg;
     PApplet app;
 
-    public Gui(PApplet p, boolean isGuiVisibleByDefault) {
-        isGuiHidden = !isGuiVisibleByDefault;
-        new Gui(p);
-    }
-
     public Gui(PApplet p) {
         this.app = p;
-        if(!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)){
+        if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The Toolbox library requires the P2D or P3D renderer");
         }
         State.init(this, app);
@@ -100,23 +97,24 @@ public class Gui implements UserInputSubscriber {
         if (keyEvent.getKeyChar() == 'h') {
             isGuiHidden = !isGuiHidden;
         }
-        if(keyEvent.getKeyChar() == 'p'){
-            PaletteStore.setNextPalette();
-        }
     }
 
+    @SuppressWarnings("unused")
     public float slider(String path) {
         return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
+    @SuppressWarnings("unused")
     public float slider(String path, float defaultValue) {
         return slider(path, defaultValue, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-    public float slider(String path, float defaultValue, float min, float max){
+    @SuppressWarnings("unused")
+    public float slider(String path, float defaultValue, float min, float max) {
         return slider(path, defaultValue, min, max, true);
     }
 
+    @SuppressWarnings("unused")
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNode(path);
         if (node == null) {
@@ -133,18 +131,22 @@ public class Gui implements UserInputSubscriber {
         return node;
     }
 
+    @SuppressWarnings("unused")
     public int sliderInt(String path) {
         return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
+    @SuppressWarnings("unused")
     public int sliderInt(String path, int defaultValue) {
         return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
+    @SuppressWarnings("unused")
     public int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
     }
 
+    @SuppressWarnings("unused")
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
         if (node == null) {
@@ -161,6 +163,7 @@ public class Gui implements UserInputSubscriber {
         return node;
     }
 
+    @SuppressWarnings("unused")
     public boolean toggle(String path) {
         return toggle(path, false);
     }
@@ -179,6 +182,7 @@ public class Gui implements UserInputSubscriber {
         return new ToggleNode(path, folder, defaultValue);
     }
 
+    @SuppressWarnings("unused")
     public boolean button(String path) {
         ButtonNode node = (ButtonNode) NodeTree.findNode(path);
         if (node == null) {
@@ -193,39 +197,67 @@ public class Gui implements UserInputSubscriber {
         return new ButtonNode(path, folder);
     }
 
-    private String selectString(String path, ArrayList<String> options){
-        return selectString(path, options.toArray(new String[0]));
+    @SuppressWarnings("unused")
+    private String stringPicker(String path, ArrayList<String> options) {
+        return stringPicker(path, options.toArray(new String[0]));
     }
 
-    public String selectString(String path, String... options){
-        if(options == null || options.length == 0){
+    public String stringPicker(String path, String[] options) {
+        if (options == null || options.length == 0) {
             throw new IllegalArgumentException("SelectString() options parameter must not be null and have length > 0");
         }
-        SelectStringFolder node = (SelectStringFolder) NodeTree.findNode(path);
-        if(node == null){
+        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        if (node == null) {
             NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new SelectStringFolder(path, parentFolder, options);
+            node = new StringPickerFolder(path, parentFolder, options);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
     }
 
-    public void guiPalettePicker(){
-        // TODO
+    public void setPalette(PaletteType type){
+        PaletteStore.currentSelection = type;
     }
 
+    public void guiPalettePicker() {
+        guiPalettePicker("/gui palette");
+    }
+
+    public void guiPalettePicker(String path) {
+        String userSelection = State.gui.stringPicker(path + "/type", PaletteType.getAllNames());
+        if (!userSelection.equals(PaletteType.getName(PaletteStore.currentSelection))) {
+            PaletteStore.currentSelection = PaletteType.getValue(userSelection);
+//            println("palette set to " + PaletteType.getName(PaletteStore.currentSelection));
+        }
+        String customDefinitionPath = path + "/custom definition";
+        PaletteStore.setCustomColor(PaletteColorType.FOCUS_FOREGROUND, State.gui.colorPicker(customDefinitionPath + "/focus foreground",
+                PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND)).hex);
+        PaletteStore.setCustomColor(PaletteColorType.FOCUS_BACKGROUND, State.gui.colorPicker(customDefinitionPath + "/focus background",
+                PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND)).hex);
+        PaletteStore.setCustomColor(PaletteColorType.NORMAL_FOREGROUND, State.gui.colorPicker(customDefinitionPath + "/normal foreground",
+                PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND)).hex);
+        PaletteStore.setCustomColor(PaletteColorType.NORMAL_BACKGROUND, State.gui.colorPicker(customDefinitionPath + "/normal background",
+                PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND)).hex);
+        PaletteStore.setCustomColor(PaletteColorType.WINDOW_BORDER, State.gui.colorPicker(customDefinitionPath + "/window border",
+                PaletteStore.getColor(PaletteColorType.WINDOW_BORDER)).hex);
+    }
+
+    @SuppressWarnings("unused")
     public Color colorPicker(String path) {
         return colorPicker(path, 1, 1, 0, 1);
     }
 
+    @SuppressWarnings("unused")
     public Color colorPicker(String path, float grayNorm) {
         return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }
 
+    @SuppressWarnings("unused")
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
         return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
     }
 
+    @SuppressWarnings("unused")
     public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -237,6 +269,7 @@ public class Gui implements UserInputSubscriber {
         return node.getColor();
     }
 
+    @SuppressWarnings("unused")
     public Color colorPicker(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -247,6 +280,7 @@ public class Gui implements UserInputSubscriber {
         return node.getColor();
     }
 
+    @SuppressWarnings("unused")
     public void colorPickerSet(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -260,6 +294,7 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
+    @SuppressWarnings("unused")
     public PGraphics gradient(String path) {
         return gradient(path, 1);
     }
@@ -274,6 +309,7 @@ public class Gui implements UserInputSubscriber {
         return node.getOutputGraphics();
     }
 
+    @SuppressWarnings("unused")
     public PImage imagePicker(String path) {
         return imagePicker(path, "");
     }

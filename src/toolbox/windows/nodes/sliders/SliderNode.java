@@ -138,7 +138,7 @@ public class SliderNode extends AbstractNode {
             backgroundScrollX -= mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(PaletteStore.get(PaletteColorType.NORMAL_BACKGROUND));
+        pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

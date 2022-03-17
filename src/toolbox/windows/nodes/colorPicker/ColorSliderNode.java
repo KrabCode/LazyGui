@@ -97,7 +97,7 @@ public abstract class ColorSliderNode extends SliderNode {
                 return 1;
             }
         }else{
-            return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+            return PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND);
         }
     }
 
@@ -202,7 +202,7 @@ public abstract class ColorSliderNode extends SliderNode {
                     return 1;
                 }
             }else{
-                return PaletteStore.get(PaletteColorType.NORMAL_FOREGROUND);
+                return PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND);
             }
         }
     }

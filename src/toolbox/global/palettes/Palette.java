@@ -1,10 +1,21 @@
 package toolbox.global.palettes;
 
-public abstract class Palette {
-    public int windowBorder = 0xFF787878;
-    public int normalBackground = 0xFF0B0B0B;
-    public int focusBackground = 0xFF2F2F2F;
-    public int normalForeground = 0xFFB0B0B0;
-    public int focusForeground = 0xFFFFFFFF;
+public class Palette {
+    public int windowBorder;
+    public int normalBackground;
+    public int focusBackground;
+    public int normalForeground;
+    public int focusForeground;
 
+    private Palette(){
+
+    }
+
+    Palette(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
+        this.windowBorder = windowBorder;
+        this.normalBackground = normalBackground;
+        this.focusBackground = focusBackground;
+        this.normalForeground = normalForeground;
+        this.focusForeground = focusForeground;
+    }
 }

@@ -13,6 +13,9 @@ import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
+/**
+ * A node that opens a new window with child nodes when clicked.
+ */
 public class NodeFolder extends AbstractNode {
 
     /**

@@ -1,57 +1,53 @@
 package toolbox.global.palettes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class PaletteStore extends Palette {
-    private static final ArrayList<Palette> palettes = new ArrayList<>();
-    private static int currentPaletteIndex = 0;
+public class PaletteStore {
 
-    private PaletteStore(){
+    private static final Map<PaletteType, Palette> paletteMap = new HashMap<>();
+    public static PaletteType currentSelection = PaletteType.DARK;
+
+    public static void initSingleton() {
+        PaletteType[] allTypes = PaletteType.getAllValues();
+        for (PaletteType type : allTypes) {
+            paletteMap.put(type, PaletteType.getPalette(type));
+        }
     }
 
-    public static void initSingleton(){
-        palettes.add(new PaletteDark());
-        palettes.add(new PalettePink());
-        palettes.add(new PaletteBlue());
-    }
-
-    public static void setNextPalette(){
-        currentPaletteIndex = (currentPaletteIndex + 1) % palettes.size();
-    }
-
-    public static int get(PaletteColorType type){
-        switch(type) {
+    public static int getColor(PaletteColorType type) {
+        switch (type) {
             case WINDOW_BORDER:
-                return palettes.get(currentPaletteIndex).windowBorder;
+                return paletteMap.get(currentSelection).windowBorder;
             case NORMAL_BACKGROUND:
-                return palettes.get(currentPaletteIndex).normalBackground;
+                return paletteMap.get(currentSelection).normalBackground;
             case FOCUS_BACKGROUND:
-                return palettes.get(currentPaletteIndex).focusBackground;
+                return paletteMap.get(currentSelection).focusBackground;
             case NORMAL_FOREGROUND:
-                return palettes.get(currentPaletteIndex).normalForeground;
+                return paletteMap.get(currentSelection).normalForeground;
             case FOCUS_FOREGROUND:
-                return palettes.get(currentPaletteIndex).focusForeground;
+                return paletteMap.get(currentSelection).focusForeground;
         }
         return 0xFFFF0000;
     }
 
-    public static void set(PaletteColorType type, int val) {
-        switch(type) {
+    public static void setCustomColor(PaletteColorType type, int val) {
+        switch (type) {
             case WINDOW_BORDER:
-                palettes.get(currentPaletteIndex).windowBorder = val;
+                paletteMap.get(PaletteType.CUSTOM).windowBorder = val;
                 break;
             case NORMAL_BACKGROUND:
-                palettes.get(currentPaletteIndex).normalBackground = val;
+                paletteMap.get(PaletteType.CUSTOM).normalBackground = val;
                 break;
             case FOCUS_BACKGROUND:
-                palettes.get(currentPaletteIndex).focusBackground = val;
+                paletteMap.get(PaletteType.CUSTOM).focusBackground = val;
                 break;
             case NORMAL_FOREGROUND:
-                palettes.get(currentPaletteIndex).normalForeground = val;
+                paletteMap.get(PaletteType.CUSTOM).normalForeground = val;
                 break;
             case FOCUS_FOREGROUND:
-                palettes.get(currentPaletteIndex).focusForeground = val;
+                paletteMap.get(PaletteType.CUSTOM).focusForeground = val;
                 break;
         }
     }

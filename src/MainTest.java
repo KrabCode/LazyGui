@@ -3,6 +3,7 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.ShaderReloader;
+import toolbox.global.palettes.PaletteType;
 
 public class MainTest extends PApplet {
     Gui gui;
@@ -23,11 +24,14 @@ public class MainTest extends PApplet {
         pg = createGraphics(width, height, P2D);
     }
 
+    int i = 1;
+
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("bg"), 0, 0);
+        /*
         pg.image(gui.imagePicker("image", ""), 0, 0);
         if (gui.toggle("shader/show")) {
             shaderTime += radians(gui.slider("shader/time"));
@@ -40,10 +44,19 @@ public class MainTest extends PApplet {
         pg.fill(gui.colorPicker("text/fill").hex);
         pg.textAlign(CENTER);
         pg.textSize(gui.slider("text/size", 36));
-        pg.text(gui.selectString("text/content", "hello", "world", "apples", "oranges", "123456789", "1234567890","12345678901"), width / 2f, height / 2f);
+        pg.text(gui.stringPicker("text/content", new String[]{"hello", "world", "apples", "oranges"}), width / 2f,height / 2f);
+        */
         pg.endDraw();
         clear();
         image(pg, 0, 0);
+
+        gui.guiPalettePicker();
         gui.draw();
+
+        /*
+        if(gui.toggle("record")){
+            saveFrame("rec5/" + i++ + ".jpg");
+        }
+        */
     }
 }

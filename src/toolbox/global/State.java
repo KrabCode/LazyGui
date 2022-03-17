@@ -26,7 +26,7 @@ import static processing.core.PConstants.P2D;
 
 
 public class State {
-    public static float cell = 24;
+    public static float cell = 22;
     public static PFont font = null;
     public static PApplet app = null;
     public static Gui gui = null;
@@ -36,8 +36,7 @@ public class State {
     public static float textMarginX = 5;
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    public static int clipboardHex = 0;
-    public static final float windowWidth = cell * 8;
+    public static final float windowWidth = cell * 9;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
@@ -78,7 +77,7 @@ public class State {
         }
     }
 
-
+    @SuppressWarnings("unused")
     private static void printAvailableFonts() {
         String[] fontList = PFont.list();
         for (String s :
