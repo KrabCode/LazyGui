@@ -13,15 +13,24 @@ public class StringPickerFolder extends NodeFolder {
     public String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
 
-    public StringPickerFolder(String path, NodeFolder parent, String[] options) {
+    public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
+        //TODO throw error if default option is not contained in the options
         valueString = options[0];
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
-            boolean valueBoolean = i == 0;
+            boolean valueBoolean;
+            if(defaultOption == null){
+                valueBoolean = i == 0;
+            }else{
+                valueBoolean = option.equals(defaultOption);
+            }
             String childPath = path + "/" + option;
             children.add(new StringPickerItem(childPath, this, valueBoolean, option));
             oldValues.put(childPath, valueBoolean);
+        }
+        if(defaultOption != null){
+            valueString = defaultOption;
         }
         State.overwriteWithLoadedStateIfAny(this);
         checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues

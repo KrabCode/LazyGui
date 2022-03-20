@@ -3,6 +3,7 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.ShaderReloader;
+import toolbox.global.palettes.Palette;
 import toolbox.global.palettes.PaletteType;
 
 public class MainTest extends PApplet {
@@ -50,7 +51,13 @@ public class MainTest extends PApplet {
         clear();
         image(pg, 0, 0);
 
-        gui.guiPalettePicker();
+        gui.guiPalettePicker(new Palette(
+                0xFFfcd3e7,
+                0xFF916b99,
+                0xFF532e6a,
+                0xFFFFFFFF,
+                0xFFFFFFFF
+        ));
         gui.draw();
 
         /*

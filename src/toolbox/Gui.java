@@ -5,6 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
+import toolbox.global.palettes.Palette;
 import toolbox.global.palettes.PaletteColorType;
 import toolbox.global.palettes.PaletteStore;
 import toolbox.global.State;
@@ -197,49 +198,61 @@ public class Gui implements UserInputSubscriber {
         return new ButtonNode(path, folder);
     }
 
-    @SuppressWarnings("unused")
-    private String stringPicker(String path, ArrayList<String> options) {
-        return stringPicker(path, options.toArray(new String[0]));
+    public String stringPicker(String path, ArrayList<String> options) {
+        return stringPicker(path, options.toArray(new String[0]), null);
+    }
+
+    public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
+        return stringPicker(path, options.toArray(new String[0]), defaultOption);
     }
 
     public String stringPicker(String path, String[] options) {
+        return stringPicker(path, options, null);
+    }
+
+    public String stringPicker(String path, String[] options, String defaultOption) {
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("SelectString() options parameter must not be null and have length > 0");
         }
         StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
         if (node == null) {
             NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringPickerFolder(path, parentFolder, options);
+            node = new StringPickerFolder(path, parentFolder, options, defaultOption);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
     }
 
-    public void setPalette(PaletteType type){
+    public void setPalette(PaletteType type) {
         PaletteStore.currentSelection = type;
     }
 
     public void guiPalettePicker() {
-        guiPalettePicker("/gui palette");
+        guiPalettePicker(PaletteType.getPalette(PaletteStore.currentSelection), null);
     }
 
-    public void guiPalettePicker(String path) {
-        String userSelection = State.gui.stringPicker(path + "/type", PaletteType.getAllNames());
+    public void guiPalettePicker(Palette defaultPalette) {
+        guiPalettePicker(defaultPalette, PaletteType.getName(PaletteType.CUSTOM));
+    }
+
+    private void guiPalettePicker(Palette defaultPalette, String defaultPaletteName) {
+        String basePath = "/palette picker";
+        String userSelection = State.gui.stringPicker(basePath + "/type", PaletteType.getAllNames(), defaultPaletteName);
+
         if (!userSelection.equals(PaletteType.getName(PaletteStore.currentSelection))) {
             PaletteStore.currentSelection = PaletteType.getValue(userSelection);
-//            println("palette set to " + PaletteType.getName(PaletteStore.currentSelection));
         }
-        String customDefinitionPath = path + "/custom definition";
-        PaletteStore.setCustomColor(PaletteColorType.FOCUS_FOREGROUND, State.gui.colorPicker(customDefinitionPath + "/focus foreground",
-                PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND)).hex);
-        PaletteStore.setCustomColor(PaletteColorType.FOCUS_BACKGROUND, State.gui.colorPicker(customDefinitionPath + "/focus background",
-                PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND)).hex);
-        PaletteStore.setCustomColor(PaletteColorType.NORMAL_FOREGROUND, State.gui.colorPicker(customDefinitionPath + "/normal foreground",
-                PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND)).hex);
-        PaletteStore.setCustomColor(PaletteColorType.NORMAL_BACKGROUND, State.gui.colorPicker(customDefinitionPath + "/normal background",
-                PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND)).hex);
-        PaletteStore.setCustomColor(PaletteColorType.WINDOW_BORDER, State.gui.colorPicker(customDefinitionPath + "/window border",
-                PaletteStore.getColor(PaletteColorType.WINDOW_BORDER)).hex);
+        String customDefinitionPath = basePath + "/custom definition";
+        PaletteStore.setCustomColor(PaletteColorType.FOCUS_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultPalette.focusForeground).hex);
+        PaletteStore.setCustomColor(PaletteColorType.FOCUS_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultPalette.focusBackground).hex);
+        PaletteStore.setCustomColor(PaletteColorType.NORMAL_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultPalette.normalForeground).hex);
+        PaletteStore.setCustomColor(PaletteColorType.NORMAL_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultPalette.normalBackground).hex);
+        PaletteStore.setCustomColor(PaletteColorType.WINDOW_BORDER,
+                State.gui.colorPicker(customDefinitionPath + "/window border", defaultPalette.windowBorder).hex);
     }
 
     @SuppressWarnings("unused")

@@ -11,6 +11,10 @@ public enum PaletteType {
         return new String[]{"dark", "light", "pink", "blue", "custom"};
     }
 
+    public static String[] getAllNamesStartingWithCustom() {
+        return new String[]{"custom", "dark", "light", "pink", "blue"};
+    }
+
     public static PaletteType[] getAllValues() {
         return new PaletteType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
     }

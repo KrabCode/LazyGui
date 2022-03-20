@@ -11,7 +11,7 @@ public class Palette {
 
     }
 
-    Palette(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
+    public Palette(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
         this.windowBorder = windowBorder;
         this.normalBackground = normalBackground;
         this.focusBackground = focusBackground;
