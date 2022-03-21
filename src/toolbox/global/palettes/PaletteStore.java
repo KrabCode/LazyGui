@@ -51,4 +51,8 @@ public class PaletteStore {
                 break;
         }
     }
+
+    public static void setCustomPalette(Palette palette) {
+        paletteMap.put(PaletteType.CUSTOM, palette);
+    }
 }

@@ -223,19 +223,20 @@ public class Gui implements UserInputSubscriber {
         return node.valueString;
     }
 
-    public void setPalette(PaletteType type) {
-        PaletteStore.currentSelection = type;
+    public void setPalette(Palette palette){
+        PaletteStore.currentSelection = PaletteType.CUSTOM;
+        PaletteStore.setCustomPalette(palette);
     }
 
-    public void guiPalettePicker() {
-        guiPalettePicker(PaletteType.getPalette(PaletteStore.currentSelection), null);
+    public void palettePicker() {
+        palettePicker(PaletteType.getPalette(PaletteStore.currentSelection), null);
     }
 
-    public void guiPalettePicker(Palette defaultPalette) {
-        guiPalettePicker(defaultPalette, PaletteType.getName(PaletteType.CUSTOM));
+    public void palettePicker(Palette defaultPalette) {
+        palettePicker(defaultPalette, PaletteType.getName(PaletteType.CUSTOM));
     }
 
-    private void guiPalettePicker(Palette defaultPalette, String defaultPaletteName) {
+    private void palettePicker(Palette defaultPalette, String defaultPaletteName) {
         String basePath = "/palette picker";
         String userSelection = State.gui.stringPicker(basePath + "/type", PaletteType.getAllNames(), defaultPaletteName);
 

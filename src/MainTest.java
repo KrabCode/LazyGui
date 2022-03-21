@@ -4,7 +4,6 @@ import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.ShaderReloader;
 import toolbox.global.palettes.Palette;
-import toolbox.global.palettes.PaletteType;
 
 public class MainTest extends PApplet {
     Gui gui;
@@ -23,6 +22,14 @@ public class MainTest extends PApplet {
     public void setup() {
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
+
+        gui.setPalette(new Palette(
+                0x00010101,
+                0x0F916b99,
+                0x0F532e6a,
+                0xFFFFFFFF,
+                0xFFFFFFFF
+        ));
     }
 
     int i = 1;
@@ -32,7 +39,7 @@ public class MainTest extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("bg"), 0, 0);
-        /*
+
         pg.image(gui.imagePicker("image", ""), 0, 0);
         if (gui.toggle("shader/show")) {
             shaderTime += radians(gui.slider("shader/time"));
@@ -45,19 +52,12 @@ public class MainTest extends PApplet {
         pg.fill(gui.colorPicker("text/fill").hex);
         pg.textAlign(CENTER);
         pg.textSize(gui.slider("text/size", 36));
-        pg.text(gui.stringPicker("text/content", new String[]{"hello", "world", "apples", "oranges"}), width / 2f,height / 2f);
-        */
+        pg.text(gui.stringPicker("text/content", new String[]{"hello", "world", "apples", "oranges"}, "hello"), width / 2f,height / 2f);
+
         pg.endDraw();
         clear();
         image(pg, 0, 0);
 
-        gui.guiPalettePicker(new Palette(
-                0xFFfcd3e7,
-                0xFF916b99,
-                0xFF532e6a,
-                0xFFFFFFFF,
-                0xFFFFFFFF
-        ));
         gui.draw();
 
         /*

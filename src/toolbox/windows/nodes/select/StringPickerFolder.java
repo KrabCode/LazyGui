@@ -5,8 +5,11 @@ import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static processing.core.PApplet.println;
 
 public class StringPickerFolder extends NodeFolder {
 
@@ -16,6 +19,11 @@ public class StringPickerFolder extends NodeFolder {
     public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
         //TODO throw error if default option is not contained in the options
+        if(!arrayContainsDefault(options, defaultOption)){
+           println("String Picker at path \"" + path + "\" ignored default option \"" + defaultOption + "\" because it does not appear in the options: "
+                   + Arrays.toString(options));
+           defaultOption = null;
+        }
         valueString = options[0];
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
@@ -35,6 +43,15 @@ public class StringPickerFolder extends NodeFolder {
         State.overwriteWithLoadedStateIfAny(this);
         checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
         rememberCurrentValues();
+    }
+
+    private boolean arrayContainsDefault(String[] options, String defaultOption) {
+        for(String option : options){
+            if(option.equals(defaultOption)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
