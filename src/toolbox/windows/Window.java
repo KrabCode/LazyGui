@@ -18,16 +18,16 @@ import static processing.core.PConstants.LEFT;
 import static toolbox.global.palettes.PaletteColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
+    public boolean hidden = false;
     protected boolean closeable;
     protected AbstractNode parentNode;
     protected PVector pos;
     protected PVector size;
     float cell = State.cell;
     float titleBarHeight = cell;
-    public boolean hidden = false;
     private boolean isDraggedAround;
 
-    public Window(PVector pos, AbstractNode parentNode, boolean closeable){
+    public Window(PVector pos, AbstractNode parentNode, boolean closeable) {
         this.pos = pos;
         this.size = new PVector(State.windowWidth, cell * 1);
         this.parentNode = parentNode;
@@ -62,7 +62,7 @@ public abstract class Window implements UserInputSubscriber {
         pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(PaletteStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(-1,-1,size.x+1, size.y+1);
+        pg.rect(-1, -1, size.x + 1, size.y + 1);
         pg.popMatrix();
     }
 
@@ -71,8 +71,8 @@ public abstract class Window implements UserInputSubscriber {
         pg.translate(pos.x, pos.y);
         pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(size.x-cell, 0, size.x-cell, cell-1);
-        if(isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)){
+        pg.line(size.x - cell, 0, size.x - cell, cell - 1);
+        if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             pg.stroke(PaletteStore.getColor(NORMAL_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
@@ -90,27 +90,15 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        fillWindowBasedOnDragged(pg);
+        pg.fill(isDraggedAround ? PaletteStore.getColor(FOCUS_BACKGROUND) : PaletteStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
-        if(isDraggedAround){
-            pg.fill(PaletteStore.getColor(FOCUS_FOREGROUND));
-        }else{
-            pg.fill(PaletteStore.getColor(NORMAL_FOREGROUND));
-        }
+        pg.fill(isDraggedAround ? PaletteStore.getColor(FOCUS_FOREGROUND) : PaletteStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();
-    }
-
-    private void fillWindowBasedOnDragged(PGraphics pg) {
-        if(isDraggedAround){
-            pg.fill(PaletteStore.getColor(FOCUS_BACKGROUND));
-        }else{
-            pg.fill(PaletteStore.getColor(NORMAL_BACKGROUND));
-        }
     }
 
     private void constrainPosition(PGraphics pg) {
@@ -139,7 +127,7 @@ public abstract class Window implements UserInputSubscriber {
         if (isPointInsideWindow(x, y)) {
             e.setConsumed(true);
         }
-        if(isPointInsideTitleBar(x,y)){
+        if (isPointInsideTitleBar(x, y)) {
             isDraggedAround = true;
             setFocusOnThis();
         }
@@ -147,7 +135,7 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
-        if(isHidden()){
+        if (isHidden()) {
             return;
         }
         if (isDraggedAround) {
@@ -159,7 +147,7 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
-        if(isHidden()){
+        if (isHidden()) {
             return;
         }
         if (closeable && isPointInsideCloseButton(x, y)) {
@@ -206,8 +194,8 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        if(closeable){
-            return Utils.isPointInRect(x, y, pos.x, pos.y, size.x-cell, titleBarHeight);
+        if (closeable) {
+            return Utils.isPointInRect(x, y, pos.x, pos.y, size.x - cell, titleBarHeight);
         }
         return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
     }

@@ -22,17 +22,7 @@ public class MainTest extends PApplet {
     public void setup() {
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
-
-        gui.setPalette(new Palette(
-                0x00010101,
-                0x0F916b99,
-                0x0F532e6a,
-                0xFFFFFFFF,
-                0xFFFFFFFF
-        ));
     }
-
-    int i = 1;
 
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
@@ -57,7 +47,7 @@ public class MainTest extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-
+        gui.palettePicker();
         gui.draw();
 
         /*

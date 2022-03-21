@@ -1,6 +1,7 @@
 package toolbox.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.global.Utils;
@@ -29,5 +30,11 @@ public class HexNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         parentColorPickerFolder.keyPressedOverNode(e, x, y);
+    }
+
+
+    @Override
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+
     }
 }

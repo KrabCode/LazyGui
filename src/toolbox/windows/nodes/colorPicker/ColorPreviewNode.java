@@ -1,5 +1,6 @@
 package toolbox.windows.nodes.colorPicker;
 
+import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.InternalShaderStore;
 import toolbox.windows.nodes.AbstractNode;
@@ -40,5 +41,10 @@ public class ColorPreviewNode extends AbstractNode {
         pg.fill(parentColorPickerFolder.getColor().hex);
         pg.noStroke();
         pg.rect(0, 0, size.x, size.y);
+    }
+
+    @Override
+    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+
     }
 }

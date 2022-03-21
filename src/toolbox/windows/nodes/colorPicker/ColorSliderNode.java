@@ -55,7 +55,7 @@ public abstract class ColorSliderNode extends SliderNode {
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
         if(isDragged){
-            pg.stroke(foregroundMouseOverBrightnessAware());
+            pg.stroke(foregroundMouseOverBrightnessAwareColor());
             pg.strokeWeight(1);
             pg.line(size.x / 2f, 0f, size.x / 2f, size.y-1f);
         }
@@ -77,19 +77,19 @@ public abstract class ColorSliderNode extends SliderNode {
 
     @Override
     public void drawLeftText(PGraphics pg, String text) {
-        pg.fill(foregroundMouseOverBrightnessAware());
+        pg.fill(foregroundMouseOverBrightnessAwareColor());
         super.drawLeftText(pg, text);
     }
 
     @Override
     public void drawRightText(PGraphics pg, String text) {
-        pg.fill(foregroundMouseOverBrightnessAware());
+        pg.fill(foregroundMouseOverBrightnessAwareColor());
         float textMarginX = 5;
         pg.textAlign(RIGHT, CENTER);
         pg.text(text,size.x - textMarginX, size.y * 0.5f);
     }
 
-    protected int foregroundMouseOverBrightnessAware(){
+    protected int foregroundMouseOverBrightnessAwareColor(){
         if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f){
                 return 0;
@@ -194,7 +194,7 @@ public abstract class ColorSliderNode extends SliderNode {
         }
 
 
-        protected int foregroundMouseOverBrightnessAware(){
+        protected int foregroundMouseOverBrightnessAwareColor(){
             if(isMouseOverNode){
                 if(parentColorPickerFolder.brightness() > 0.7f && valueFloat > 0.3f){
                     return 0;
