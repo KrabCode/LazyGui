@@ -29,8 +29,6 @@ public class MainTest extends PApplet {
         pg.beginDraw();
         pg.noStroke();
         pg.image(gui.gradient("bg"), 0, 0);
-
-        pg.image(gui.imagePicker("image", ""), 0, 0);
         if (gui.toggle("shader/show")) {
             shaderTime += radians(gui.slider("shader/time"));
             String[] shaderPath = new String[]{"testFrag.glsl", "testVert.glsl"};

@@ -3,6 +3,7 @@ package toolbox.global;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
+import toolbox.windows.nodes.AbstractNode;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -38,7 +39,7 @@ public class Utils {
     }
 
     public static boolean isPointInRect(float px, float py, float rx, float ry, float rw, float rh) {
-        return px > rx && px < rx + rw && py > ry && py < ry + rh;
+        return px > rx && px < rx + rw && py >= ry && py <= ry + rh;
     }
 
     /**

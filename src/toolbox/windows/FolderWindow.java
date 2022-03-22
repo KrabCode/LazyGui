@@ -4,6 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.NodeTree;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
@@ -75,13 +76,17 @@ public class FolderWindow extends Window {
     @Override
     public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
         super.mouseMoved(e, x, y, px, py);
-        for (AbstractNode node : parentFolder.children) {
-            node.isMouseOverNode = false;
+        if(isPointInsideTitleBar(x,y)){
+            e.setConsumed(true);
+            NodeTree.setAllOtherNodesMouseOver(null, false);
+            return;
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode node = tryFindChildNodeAt(x, y);
             if (node != null && node.isParentWindowVisible()) {
                 node.isMouseOverNode = true;
+                NodeTree.setAllOtherNodesMouseOver(node, false);
+                e.setConsumed(true);
             }
         }
     }

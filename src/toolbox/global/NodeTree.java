@@ -4,9 +4,7 @@ import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
@@ -86,5 +84,29 @@ public class NodeTree {
         folder.children.add(node);
     }
 
+    public static List<AbstractNode> getAllNodesAsList(){
+        List<AbstractNode> result = new ArrayList<>();
+        Queue<AbstractNode> queue = new LinkedList();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            AbstractNode node = queue.poll();
+            result.add(node);
+            if (node.type == NodeType.FOLDER) {
+                NodeFolder folder = (NodeFolder) node;
+                for (AbstractNode child : folder.children) {
+                    queue.offer(child);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void setAllOtherNodesMouseOver(AbstractNode nodeToKeep, boolean newValue){
+        List<AbstractNode> allNodes = getAllNodesAsList();
+        allNodes.remove(nodeToKeep);
+        for(AbstractNode node : allNodes){
+            node.isMouseOverNode = newValue;
+        }
+    }
 }
 

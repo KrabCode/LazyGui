@@ -4,6 +4,7 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import toolbox.global.NodeTree;
 import toolbox.global.State;
 import toolbox.global.palettes.PaletteStore;
 import toolbox.global.Utils;
@@ -13,8 +14,7 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.Gui;
 
 import static processing.core.PApplet.lerp;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.*;
 import static toolbox.global.palettes.PaletteColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
@@ -73,10 +73,15 @@ public abstract class Window implements UserInputSubscriber {
         pg.strokeWeight(1);
         pg.line(size.x - cell, 0, size.x - cell, cell - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
-            pg.stroke(PaletteStore.getColor(NORMAL_FOREGROUND));
+            NodeTree.setAllOtherNodesMouseOver(null, false);
+            pg.fill(PaletteStore.getColor(FOCUS_BACKGROUND));
+            pg.noStroke();
+            pg.rectMode(CORNER);
+            pg.rect(size.x - cell + 1, 0, cell - 1, cell);
+            pg.stroke(PaletteStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
-            pg.translate(size.x - cell * 0.5f, cell * 0.5f);
+            pg.translate(size.x - cell * 0.5f + 0.5f, cell * 0.5f);
             float n = cell * 0.2f;
             pg.line(-n, -n, n, n);
             pg.line(-n, n, n, -n);
@@ -90,15 +95,20 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.fill(isDraggedAround ? PaletteStore.getColor(FOCUS_BACKGROUND) : PaletteStore.getColor(NORMAL_BACKGROUND));
+        boolean highlight = shouldHighlightTitleBar();
+        pg.fill(highlight ? PaletteStore.getColor(FOCUS_BACKGROUND) : PaletteStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
-        pg.fill(isDraggedAround ? PaletteStore.getColor(FOCUS_FOREGROUND) : PaletteStore.getColor(NORMAL_FOREGROUND));
+        pg.fill(highlight ? PaletteStore.getColor(FOCUS_FOREGROUND) : PaletteStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();
+    }
+
+    protected boolean shouldHighlightTitleBar(){
+        return isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround;
     }
 
     private void constrainPosition(PGraphics pg) {
@@ -202,9 +212,7 @@ public abstract class Window implements UserInputSubscriber {
 
     protected boolean isPointInsideCloseButton(float x, float y) {
         return Utils.isPointInRect(x, y,
-                pos.x + size.x - cell, pos.y,
-                cell, cell);
+                pos.x + size.x - cell - 1, pos.y,
+                cell + 1, cell - 1);
     }
-
-
 }
