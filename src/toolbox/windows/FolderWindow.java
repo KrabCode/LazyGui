@@ -16,12 +16,12 @@ import toolbox.windows.nodes.saves.StateListFolder;
  * it lets the user see its child nodes including folders and interact with them
  */
 public class FolderWindow extends Window {
-    public final NodeFolder parentFolder;
+    public final NodeFolder folder;
 
-    public FolderWindow(PVector pos, NodeFolder parentFolder, boolean closeable) {
-        super(pos, parentFolder, closeable);
-        this.parentFolder = parentFolder;
-        parentFolder.window = this;
+    public FolderWindow(PVector pos, NodeFolder folder, boolean closeable) {
+        super(pos, folder, closeable);
+        this.folder = folder;
+        folder.window = this;
     }
 
     @Override
@@ -35,8 +35,8 @@ public class FolderWindow extends Window {
         pg.translate(pos.x, pos.y);
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
-        for (int i = 0; i < parentFolder.children.size(); i++) {
-            AbstractNode node = parentFolder.children.get(i);
+        for (int i = 0; i < folder.children.size(); i++) {
+            AbstractNode node = folder.children.get(i);
             float nodeHeight = cell * node.heightMultiplier;
             node.updateNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
             pg.pushMatrix();
@@ -52,7 +52,7 @@ public class FolderWindow extends Window {
 
     private float heightSumOfChildNodes() {
         float sum = 0;
-        for (AbstractNode child : parentFolder.children) {
+        for (AbstractNode child : folder.children) {
             sum += child.heightMultiplier * cell;
         }
         return sum;
@@ -88,13 +88,17 @@ public class FolderWindow extends Window {
                 NodeTree.setAllOtherNodesMouseOver(node, false);
                 e.setConsumed(true);
             }
+        } else {
+            for(AbstractNode child : folder.children){
+                child.isMouseOverNode = false;
+            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
-        for (AbstractNode node : parentFolder.children) {
+        for (AbstractNode node : folder.children) {
             node.mouseReleasedAnywhere(x, y);
         }
         if (isPointInsideContent(x, y)) {
@@ -130,13 +134,13 @@ public class FolderWindow extends Window {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
         }
-        for(AbstractNode anyNode : parentFolder.children){
+        for(AbstractNode anyNode : folder.children){
             anyNode.keyPressedOutOfNode(keyEvent, x, y);
         }
     }
 
     private AbstractNode tryFindChildNodeAt(float x, float y) {
-        for (AbstractNode node : parentFolder.children) {
+        for (AbstractNode node : folder.children) {
             if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
                 return node;
             }
@@ -147,7 +151,7 @@ public class FolderWindow extends Window {
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragged(e, x, y, px, py);
-        for (AbstractNode child : parentFolder.children) {
+        for (AbstractNode child : folder.children) {
             if (child.isDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e, x, y, px, py);
             }
@@ -155,7 +159,7 @@ public class FolderWindow extends Window {
     }
 
     public void createStateListFolderNode() {
-        StateListFolder stateListFolder = new StateListFolder(parentFolder.path + "/saved", parentFolder);
-        parentFolder.children.add(stateListFolder);
+        StateListFolder stateListFolder = new StateListFolder(folder.path + "/saved", folder);
+        folder.children.add(stateListFolder);
     }
 }

@@ -18,7 +18,6 @@ public class StringPickerFolder extends NodeFolder {
 
     public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
-        //TODO throw error if default option is not contained in the options
         if(!arrayContainsDefault(options, defaultOption)){
            println("String Picker at path \"" + path + "\" ignored default option \"" + defaultOption + "\" because it does not appear in the options: "
                    + Arrays.toString(options));

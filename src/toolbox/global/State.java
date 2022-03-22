@@ -23,6 +23,7 @@ import static processing.core.PApplet.*;
 import static processing.core.PApplet.second;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
+import static toolbox.global.Utils.timestamp;
 
 
 public class State {
@@ -77,23 +78,6 @@ public class State {
         }
     }
 
-    @SuppressWarnings("unused")
-    private static void printAvailableFonts() {
-        String[] fontList = PFont.list();
-        for (String s :
-                fontList) {
-            println(s);
-        }
-    }
-
-    public static String timestamp() {
-        return year() + "-"
-                + nf(month(), 2) + "-"
-                + nf(day(), 2) + "_"
-                + nf(hour(), 2) + "."
-                + nf(minute(), 2) + "."
-                + nf(second(), 2);
-    }
 
     public static void createTreeSaveFile() {
         String json = gson.toJson(NodeTree.getRoot());
@@ -131,15 +115,9 @@ public class State {
         }
     }
 
-    private static String readFile(File file) {
-        List<String> lines = null;
-        try {
-            lines = Files.readAllLines(file.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static String readFile(File file) throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath());
         StringBuilder sb = new StringBuilder();
-        assert lines != null;
         for (String line : lines) {
             sb.append(line);
         }
@@ -152,7 +130,15 @@ public class State {
 
     // TODO deleting a file and trying to load it results in an error, maybe remove the option to do that pre-emptively, watching the actual files on disk
     public static void loadStateFromJson(File jsonToLoad) {
-        String json = readFile(jsonToLoad);
+        if(jsonToLoad.exists()){
+        }
+        String json = null;
+        try {
+            json = readFile(jsonToLoad);
+        } catch (IOException e) {
+            println("Error loading state from file", e.getMessage());
+            return;
+        }
         // don't delete or do anything to the existing nodes, just overwrite their values if they exist
         JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
         lastLoadedStateMap.clear();
