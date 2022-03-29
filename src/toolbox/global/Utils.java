@@ -2,6 +2,7 @@ package toolbox.global;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PVector;
 import toolbox.windows.nodes.AbstractNode;
 
@@ -181,5 +182,22 @@ public class Utils {
         return sum.toString();
     }
 
+    @SuppressWarnings("unused")
+    private static void printAvailableFonts() {
+        String[] fontList = PFont.list();
+        for (String s :
+                fontList) {
+            println(s);
+        }
+    }
+
+    public static String timestamp() {
+        return year() + "-"
+                + nf(month(), 2) + "-"
+                + nf(day(), 2) + "_"
+                + nf(hour(), 2) + "."
+                + nf(minute(), 2) + "."
+                + nf(second(), 2);
+    }
 
 }
