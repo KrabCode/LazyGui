@@ -231,8 +231,8 @@ public abstract class AbstractNode {
     }
 
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        State.app.noCursor();
-        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
+//        State.app.noCursor();
+//        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }
 
     public boolean isParentWindowVisible(){
