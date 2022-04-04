@@ -4,6 +4,8 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import toolbox.global.State;
 import toolbox.windows.nodes.NodeFolder;
+import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
 import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.windows.nodes.ToggleNode;
 
@@ -23,6 +25,7 @@ public class ImagePickerFolder extends NodeFolder {
         children.add(new ToggleNode(this.path + "/show", this, true));
         children.add(new SliderNode(this.path + "/x", this, 0));
         children.add(new SliderNode(this.path + "/y", this, 0));
+        children.add(new ColorPickerFolder(this.path + "/tint", this, State.normalizedColorProvider.color(1)));
         children.add(new SliderNode(this.path + "/scale", this, 1, 0, Float.MAX_VALUE, 0.1f, true));
 
         imageGraphics = State.app.createGraphics(State.app.width, State.app.height, P2D);
@@ -43,6 +46,7 @@ public class ImagePickerFolder extends NodeFolder {
         float x = ((SliderNode) findChildByName("x")).valueFloat;
         float y = ((SliderNode) findChildByName("y")).valueFloat;
         float scale = ((SliderNode) findChildByName("scale")).valueFloat;
+        Color tint = ((ColorPickerFolder) findChildByName("tint")).getColor();
         if (!knownImagePath.equals(currentImagePath)) {
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);
@@ -55,7 +59,7 @@ public class ImagePickerFolder extends NodeFolder {
             updateErrorGraphics(x, y, scale);
             return errorGraphics;
         }
-        updateImageGraphics(x, y, scale);
+        updateImageGraphics(x, y, scale, tint);
         return imageGraphics;
     }
 
@@ -70,11 +74,12 @@ public class ImagePickerFolder extends NodeFolder {
         errorGraphics.endDraw();
     }
 
-    private void updateImageGraphics(float x, float y, float scale) {
+    private void updateImageGraphics(float x, float y, float scale, Color tint) {
         imageGraphics.beginDraw();
         imageGraphics.clear();
         imageGraphics.translate(x, y);
         imageGraphics.scale(scale);
+        imageGraphics.tint(tint.hex);
         imageGraphics.image(img, 0, 0);
         imageGraphics.endDraw();
     }

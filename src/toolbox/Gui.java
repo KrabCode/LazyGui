@@ -33,6 +33,8 @@ public class Gui implements UserInputSubscriber {
     public PGraphics pg;
     PApplet app;
 
+    //TODO class cast exception explanation when e.g. a control path collides with an existing folder
+
     public Gui(PApplet p) {
         this.app = p;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
