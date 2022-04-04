@@ -207,7 +207,7 @@ public class SliderNode extends AbstractNode {
 
     private void updateValue() {
         float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
-        valueFloat += delta;
+        valueFloat -= delta;
     }
 
     protected boolean tryConstrainValue() {
