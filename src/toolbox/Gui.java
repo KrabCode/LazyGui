@@ -33,10 +33,10 @@ public class Gui implements UserInputSubscriber {
     public PGraphics pg;
     PApplet app;
 
-    //TODO class cast exception explanation when e.g. a control path collides with an existing folder
+    // TODO class cast exception explanation when e.g. a slider path collides with an existing folder
 
-    public Gui(PApplet p) {
-        this.app = p;
+    public Gui(PApplet sketch) {
+        this.app = sketch;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The Toolbox library requires the P2D or P3D renderer");
         }
