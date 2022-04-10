@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
+import toolbox.global.palettes.PaletteColorType;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 
@@ -53,7 +55,15 @@ public class NodeFolder extends AbstractNode {
         pg.rect(0, 0, previewRectSize, previewRectSize); // window border
         pg.rectMode(CORNER);
         pg.translate(-previewRectSize*0.5f, -previewRectSize*0.5f);
+        pg.pushStyle();
+        AbstractNode enabledNode = findChildByName("enabled");
+        if(enabledNode != null &&
+                enabledNode.className.contains("ToggleNode") &&
+                ((ToggleNode) enabledNode).valueBoolean){
+            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+        }
         pg.rect(0,0,previewRectSize, miniCell); // handle
+        pg.popStyle();
         pg.rect(previewRectSize-miniCell, 0, miniCell, miniCell); // close button
     }
 

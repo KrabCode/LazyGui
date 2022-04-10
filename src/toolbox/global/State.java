@@ -97,7 +97,7 @@ public class State {
     public static void loadMostRecentSave() {
         File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
-        saveFilesSorted = new ArrayList<>(java.util.List.of(saveFiles));
+        saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));
         saveFilesSorted.removeIf(file -> !file.isFile());
         if (saveFilesSorted.size() == 0) {
             return;
