@@ -22,8 +22,6 @@ import java.util.List;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
-import static toolbox.global.Utils.timestamp;
-
 
 public class State {
     public static float cell = 22;
@@ -36,7 +34,7 @@ public class State {
     public static float textMarginX = 5;
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    public static final float windowWidth = cell * 9;
+    public static final float windowWidth = cell * 10;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;

@@ -4,12 +4,12 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
+import toolbox.global.palettes.PaletteColorType;
+import toolbox.global.palettes.PaletteStore;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
-
-import javax.swing.*;
 
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
@@ -30,21 +30,26 @@ class StateListItemNode extends AbstractNode {
     private void drawControlButtons(PGraphics pg) {
         pg.rectMode(CENTER);
         PVector buttonCenterPos;
-        for (int i = 0; i < 3; i++) {
-            float buttonSize = cell * 0.9f;
+        for (int i = 0; i < 4; i++) {
+            boolean isMouseOverButton = i == mouseOverButtonIndex(State.app.mouseX, State.app.mouseY);
+            float buttonSize = cell;
             buttonCenterPos = new PVector(size.x - cell * i - cell * 0.5f, cell * 0.5f);
-            strokeForegroundBasedOnMouseOver(pg);
-            pg.noFill();
+            pg.noStroke();
+            pg.fill(isMouseOverButton?PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND) : PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
             pg.rect(buttonCenterPos.x, buttonCenterPos.y, buttonSize, buttonSize);
             pg.textAlign(CENTER,CENTER);
-            fillForegroundBasedOnMouseOver(pg);
+            pg.fill(isMouseOverButton?PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND) : PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            String textContent = "";
             if(i == 0){
-                pg.text("s", buttonCenterPos.x, buttonCenterPos.y);
+                textContent = "S";
             }else if(i == 1){
-                pg.text("r", buttonCenterPos.x, buttonCenterPos.y);
+                textContent = "R";
             }else if(i == 2){
-                pg.text("d", buttonCenterPos.x, buttonCenterPos.y);
+                textContent = "D";
+            }else {
+                textContent = "L";
             }
+            pg.text(textContent, buttonCenterPos.x, buttonCenterPos.y);
         }
     }
 
@@ -54,42 +59,38 @@ class StateListItemNode extends AbstractNode {
             println("saved");
         } else
         if(renameButtonClicked(x,y)) {
-            JFrame frame = new JFrame();
-            frame.setAlwaysOnTop(true);
-            String newName = JOptionPane.showInputDialog(frame, "rename file:");
+            String newName = Utils.dialogInput("Rename save to:", "Input new save name");
             if(newName != null){
                 State.renameFile(fileName, newName);
             }
         } else
         if(deleteButtonClicked(x,y)){
-            JFrame frame = new JFrame();
-            frame.setAlwaysOnTop(true);
-            int dialogResult = JOptionPane.showConfirmDialog(frame, "really truly delete file?", "deleting file", JOptionPane.YES_NO_OPTION);
-            if(dialogResult == 0){
+            if(Utils.dialogConfirm("Do you really want to delete \"" + name + "\"?", "Delete confirmation")){
                 State.deleteFile(fileName);
             }
-        } else{
+        } else if(loadButtonClicked(x,y)){
             State.loadStateFromFile(fileName);
         }
     }
 
-    public void rename(){
-    }
-
     private boolean saveButtonClicked(float x, float y) {
-        return buttonClickIndex(x,y) == 0;
+        return mouseOverButtonIndex(x,y) == 0;
     }
 
     private boolean renameButtonClicked(float x, float y) {
-        return  buttonClickIndex(x,y) == 1;
+        return  mouseOverButtonIndex(x,y) == 1;
     }
 
     private boolean deleteButtonClicked(float x, float y) {
-        return buttonClickIndex(x,y) == 2;
+        return mouseOverButtonIndex(x,y) == 2;
     }
 
-    int buttonClickIndex(float x, float y){
-        for (int i = 0; i < 3; i++) {
+    private boolean loadButtonClicked(float x, float y) {
+        return mouseOverButtonIndex(x,y) == 3;
+    }
+
+    int mouseOverButtonIndex(float x, float y){
+        for (int i = 0; i < 4; i++) {
             if(Utils.isPointInRect(x,y,pos.x + size.x - cell - cell * i, pos.y, cell, cell)){
                 return i;
             }

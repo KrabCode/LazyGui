@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PVector;
-import toolbox.windows.nodes.AbstractNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -192,19 +191,18 @@ public class Utils {
         }
     }
 
-    public static String timestamp() {
-        return year() + "-"
-                + nf(month(), 2) + "-"
-                + nf(day(), 2) + "_"
-                + nf(hour(), 2) + "."
-                + nf(minute(), 2) + "."
-                + nf(second(), 2);
-    }
-
-    public static String inputDialog(String msg) {
+    public static String dialogInput(String msg, String title) {
         JFrame frame = new JFrame();
         frame.setAlwaysOnTop(true);
         frame.requestFocus();
-        return JOptionPane.showInputDialog(frame, msg);
+        return JOptionPane.showInputDialog(frame, msg, title, JOptionPane.QUESTION_MESSAGE);
+    }
+
+    public static boolean dialogConfirm(String msg, String title) {
+        JFrame frame = new JFrame();
+        frame.setAlwaysOnTop(true);
+        frame.requestFocus();
+        int dialogResult = JOptionPane.showConfirmDialog(frame, msg, title, JOptionPane.YES_NO_OPTION);
+        return dialogResult == 0;
     }
 }

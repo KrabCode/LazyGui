@@ -8,7 +8,6 @@ import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.ButtonNode;
 import toolbox.windows.nodes.NodeFolder;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public class StateListFolder extends NodeFolder {
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
         if(State.gui.button(path + "/new save")){
-            String newName = Utils.inputDialog("name:");
+            String newName = Utils.dialogInput("Input new save name:", "Create new save");
             if(newName != null){
                 State.createTreeSaveFile(newName);
             }
