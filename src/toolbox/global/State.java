@@ -118,6 +118,15 @@ public class State {
         }
     }
 
+    public static void renameFile(String oldName, String newName){
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().equals(oldName)) {
+                saveFile.renameTo(new File(saveDir.getAbsolutePath() + "/" + newName + ".json"));
+                break;
+            }
+        }
+    }
+
     private static String readFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(file.toPath());
         StringBuilder sb = new StringBuilder();

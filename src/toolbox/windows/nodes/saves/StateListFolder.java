@@ -1,6 +1,5 @@
 package toolbox.windows.nodes.saves;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
@@ -15,29 +14,50 @@ import java.util.List;
 
 public class StateListFolder extends NodeFolder {
 
+    ArrayList<AbstractNode> childrenToIgnoreWhenIterating = new ArrayList<>();
+
     public StateListFolder(String path, NodeFolder parent) {
         super(path, parent);
         if(Desktop.getDesktop().isSupported(Desktop.Action.OPEN)){
             children.add(new OpenFolderNode(path + "/open folder", this));
         }
         children.add(new ButtonNode(path + "/save", this));
+        childrenToIgnoreWhenIterating.addAll(children);
         updateStateList();
     }
 
     public void updateStateList() {
         List<File> filenames = State.getSaveFileList();
-        List<File> filenamesToRemove = new ArrayList<>();
         if(filenames == null){
             return;
         }
+        removeChildrenWithDeletedSaveFiles(filenames);
+        addNewlyFoundSaveFilesAsChildren(filenames);
+        children.sort((o1, o2) -> o2.name.compareTo(o1.name));
+    }
 
+    private void addNewlyFoundSaveFilesAsChildren(List<File> filenames) {
+        for (File file : filenames) {
+            String filename = file.getName();
+            if (!filename.contains(".json")) {
+                continue;
+            }
+            String saveDisplayName = getSaveDisplayName(filename);
+            String childNodePath = path + "/" + saveDisplayName;
+            if(NodeTree.findNode(childNodePath) == null){
+                children.add(1, new StateItemNode(childNodePath, this, filename));
+            }
+        }
+    }
+
+    private void removeChildrenWithDeletedSaveFiles(List<File> existingFilenames) {
         List<AbstractNode> childrenToRemove = new ArrayList<>();
         for(AbstractNode child : children){
-            if(child.name.equals("save") || child.name.equals("open folder")){
+            if(childrenToIgnoreWhenIterating.contains(child)){
                 continue;
             }
             boolean childHasLostSourceFile = true;
-            for(File file : filenames){
+            for(File file : existingFilenames){
                 if(child.name.equals(getSaveDisplayName(file.getName()))){
                     childHasLostSourceFile = false;
                     break;
@@ -49,24 +69,6 @@ public class StateListFolder extends NodeFolder {
         }
         children.removeAll(childrenToRemove);
         childrenToRemove.clear();
-        for (File file : filenames) {
-            String filename = file.getName();
-            if (!filename.contains(".json")) {
-                continue;
-            }
-            String saveDisplayName = getSaveDisplayName(filename);
-            String childNodePath = path + "/" + saveDisplayName;
-            if(!file.exists()){
-                PApplet.println("save file does not exist anymore, removing from gui " + saveDisplayName);
-                filenamesToRemove.add(file);
-                children.remove(findChildByName(saveDisplayName));
-            }else if(NodeTree.findNode(childNodePath) == null){
-                children.add(1, new StateItemNode(childNodePath, this, filename));
-            }
-        }
-        filenames.removeAll(filenamesToRemove);
-        filenamesToRemove.clear();
-        children.sort((o1, o2) -> o2.name.compareTo(o1.name));
     }
 
     private String getSaveDisplayName(String filename) {
