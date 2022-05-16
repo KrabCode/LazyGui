@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.List;
 
 import static processing.core.PApplet.*;
-import static processing.core.PApplet.second;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
 import static toolbox.global.Utils.timestamp;
@@ -95,6 +94,11 @@ public class State {
     }
 
     public static void loadMostRecentSave() {
+        reloadSaveFolderContents();
+        loadStateFromJson(saveFilesSorted.get(0));
+    }
+
+    private static void reloadSaveFolderContents() {
         File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));
@@ -103,7 +107,6 @@ public class State {
             return;
         }
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
-        loadStateFromJson(saveFilesSorted.get(0));
     }
 
     public static void loadStateFromFile(String filename) {
@@ -125,6 +128,7 @@ public class State {
     }
 
     public static ArrayList<File> getSaveFileList() {
+        reloadSaveFolderContents();
         return saveFilesSorted;
     }
 
