@@ -78,19 +78,9 @@ public class State {
     }
 
 
-    public static void createTreeSaveFile() {
-        String json = gson.toJson(NodeTree.getRoot());
-        BufferedWriter writer;
-        String timestamp = timestamp();
-        String filePath = saveDir.getAbsolutePath() + "/" + timestamp + ".json";
-        try {
-            writer = new BufferedWriter(new FileWriter(filePath));
-            writer.write(json);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        saveFilesSorted.add(0, new File(filePath));
+    public static void createTreeSaveFile(String filename) {
+        String filePath = saveDir.getAbsolutePath() + "/" + filename + ".json";
+        overwriteFileWithCurrentState(filePath);
     }
 
     public static void loadMostRecentSave() {
@@ -118,15 +108,6 @@ public class State {
         }
     }
 
-    public static void renameFile(String oldName, String newName){
-        for (File saveFile : saveFilesSorted) {
-            if (saveFile.getName().equals(oldName)) {
-                saveFile.renameTo(new File(saveDir.getAbsolutePath() + "/" + newName + ".json"));
-                break;
-            }
-        }
-    }
-
     private static String readFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(file.toPath());
         StringBuilder sb = new StringBuilder();
@@ -136,16 +117,46 @@ public class State {
         return sb.toString();
     }
 
+    public static void renameFile(String oldName, String newName){
+        if(oldName == null || newName == null){
+            return;
+        }
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().equals(oldName)) {
+                saveFile.renameTo(new File(saveDir.getAbsolutePath() + "/" + newName + ".json"));
+                break;
+            }
+        }
+    }
+
+    public static void deleteFile(String filename) {
+        new File(saveDir.getAbsolutePath() + "/" + filename).delete();
+    }
+
+    public static void overwriteFileWithCurrentState(String filename) {
+        deleteFile(filename);
+        String json = gson.toJson(NodeTree.getRoot());
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(filename, false));
+            writer.write(json);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<File> getSaveFileList() {
         reloadSaveFolderContents();
         return saveFilesSorted;
     }
 
-    // TODO deleting a file and trying to load it results in an error, maybe remove the option to do that pre-emptively, watching the actual files on disk
     public static void loadStateFromJson(File jsonToLoad) {
-        if(jsonToLoad.exists()){
+        if(!jsonToLoad.exists()){
+            println("Error: save file doesn't exist");
+            return;
         }
-        String json = null;
+        String json;
         try {
             json = readFile(jsonToLoad);
         } catch (IOException e) {

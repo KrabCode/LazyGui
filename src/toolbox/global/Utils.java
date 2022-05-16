@@ -6,6 +6,7 @@ import processing.core.PFont;
 import processing.core.PVector;
 import toolbox.windows.nodes.AbstractNode;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -200,4 +201,10 @@ public class Utils {
                 + nf(second(), 2);
     }
 
+    public static String inputDialog(String msg) {
+        JFrame frame = new JFrame();
+        frame.setAlwaysOnTop(true);
+        frame.requestFocus();
+        return JOptionPane.showInputDialog(frame, msg);
+    }
 }

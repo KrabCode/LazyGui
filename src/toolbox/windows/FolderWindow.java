@@ -159,7 +159,7 @@ public class FolderWindow extends Window {
     }
 
     public void createStateListFolderNode() {
-        StateListFolder stateListFolder = new StateListFolder(folder.path + "/saved", folder);
+        StateListFolder stateListFolder = new StateListFolder(folder.path + "/saves", folder);
         folder.children.add(stateListFolder);
     }
 }

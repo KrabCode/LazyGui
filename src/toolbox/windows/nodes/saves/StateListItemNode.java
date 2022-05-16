@@ -8,21 +8,26 @@ import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
+
 import javax.swing.*;
 
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.CORNER;
 
-class StateItemNode extends AbstractNode {
-    String filename;
-    public StateItemNode(String path, NodeFolder parent, String filename) {
+class StateListItemNode extends AbstractNode {
+    String fileName, fullPath;
+
+    public StateListItemNode(String path, NodeFolder parent, String fileName, String fullPath) {
         super(NodeType.VALUE_NODE, path, parent);
-        this.filename = filename;
+        this.fileName = fileName;
+        this.fullPath = fullPath;
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {
+        drawControlButtons(pg);
+    }
 
+    private void drawControlButtons(PGraphics pg) {
         pg.rectMode(CENTER);
         PVector buttonCenterPos;
         for (int i = 0; i < 3; i++) {
@@ -44,21 +49,31 @@ class StateItemNode extends AbstractNode {
     }
 
     public void nodeClicked(float x, float y) {
-
         if(saveButtonClicked(x,y)){
-            println("save");
-
-        }
-        if(renameButtonClicked(x,y)){
-            println("rename");
-            String newName = JOptionPane.showInputDialog("hello"); // TODO nefunguje v tomhle threadu
+            State.overwriteFileWithCurrentState(fullPath);
+            println("saved");
+        } else
+        if(renameButtonClicked(x,y)) {
+            JFrame frame = new JFrame();
+            frame.setAlwaysOnTop(true);
+            String newName = JOptionPane.showInputDialog(frame, "rename file:");
             if(newName != null){
-                State.renameFile(filename, newName);
+                State.renameFile(fileName, newName);
             }
-        }
+        } else
         if(deleteButtonClicked(x,y)){
-            println("delet");
+            JFrame frame = new JFrame();
+            frame.setAlwaysOnTop(true);
+            int dialogResult = JOptionPane.showConfirmDialog(frame, "really truly delete file?", "deleting file", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == 0){
+                State.deleteFile(fileName);
+            }
+        } else{
+            State.loadStateFromFile(fileName);
         }
+    }
+
+    public void rename(){
     }
 
     private boolean saveButtonClicked(float x, float y) {

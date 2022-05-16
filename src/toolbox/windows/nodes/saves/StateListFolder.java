@@ -3,10 +3,12 @@ package toolbox.windows.nodes.saves;
 import processing.core.PGraphics;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.ButtonNode;
 import toolbox.windows.nodes.NodeFolder;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class StateListFolder extends NodeFolder {
         if(Desktop.getDesktop().isSupported(Desktop.Action.OPEN)){
             children.add(new OpenFolderNode(path + "/open folder", this));
         }
-        children.add(new ButtonNode(path + "/save", this));
+        children.add(new ButtonNode(path + "/new save", this));
         childrenToIgnoreWhenIterating.addAll(children);
         updateStateList();
     }
@@ -33,7 +35,6 @@ public class StateListFolder extends NodeFolder {
         }
         removeChildrenWithDeletedSaveFiles(filenames);
         addNewlyFoundSaveFilesAsChildren(filenames);
-        children.sort((o1, o2) -> o2.name.compareTo(o1.name));
     }
 
     private void addNewlyFoundSaveFilesAsChildren(List<File> filenames) {
@@ -45,7 +46,7 @@ public class StateListFolder extends NodeFolder {
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
             if(NodeTree.findNode(childNodePath) == null){
-                children.add(1, new StateItemNode(childNodePath, this, filename));
+                children.add(1, new StateListItemNode(childNodePath, this, filename, file.getAbsolutePath()));
             }
         }
     }
@@ -72,13 +73,16 @@ public class StateListFolder extends NodeFolder {
     }
 
     private String getSaveDisplayName(String filename) {
-        return "- " + filename.substring(0, filename.indexOf(".json"));
+        return filename.substring(0, filename.indexOf(".json"));
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
-        if(State.gui.button(path + "/save")){
-            State.createTreeSaveFile();
+        if(State.gui.button(path + "/new save")){
+            String newName = Utils.inputDialog("name:");
+            if(newName != null){
+                State.createTreeSaveFile(newName);
+            }
         }
         updateStateList();
     }
