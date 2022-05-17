@@ -83,7 +83,9 @@ public class State {
 
     public static void loadMostRecentSave() {
         reloadSaveFolderContents();
-        loadStateFromJson(saveFilesSorted.get(0));
+        if(saveFilesSorted.size() > 0){
+            loadStateFromJson(saveFilesSorted.get(0));
+        }
     }
 
     private static void reloadSaveFolderContents() {

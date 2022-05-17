@@ -241,12 +241,12 @@ public class Gui implements UserInputSubscriber {
 
     private void themePicker(Theme defaultTheme, String defaultPaletteName) {
         String basePath = "/themes";
-        String userSelection = State.gui.stringPicker(basePath + "/type", ThemeType.getAllNames(), defaultPaletteName);
+        String userSelection = State.gui.stringPicker(basePath + "/preset", ThemeType.getAllNames(), defaultPaletteName);
 
         if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
             ThemeStore.currentSelection = ThemeType.getValue(userSelection);
         }
-        String customDefinitionPath = basePath + "/custom definition";
+        String customDefinitionPath = basePath + "/custom";
         ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
                 State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
         ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
