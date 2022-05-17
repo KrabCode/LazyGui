@@ -4,8 +4,8 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.State;
 import toolbox.global.Utils;
-import toolbox.global.palettes.PaletteColorType;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.ThemeColorType;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
@@ -35,10 +35,10 @@ class StateListItemNode extends AbstractNode {
             float buttonSize = cell;
             buttonCenterPos = new PVector(size.x - cell * i - cell * 0.5f, cell * 0.5f);
             pg.noStroke();
-            pg.fill(isMouseOverButton?PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND) : PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+            pg.fill(isMouseOverButton? ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND) : ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(buttonCenterPos.x, buttonCenterPos.y, buttonSize, buttonSize);
             pg.textAlign(CENTER,CENTER);
-            pg.fill(isMouseOverButton?PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND) : PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            pg.fill(isMouseOverButton? ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND) : ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             String textContent;
             if(i == 0){
                 textContent = "S";

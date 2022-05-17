@@ -4,9 +4,9 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.global.InternalShaderStore;
-import toolbox.global.palettes.PaletteColorType;
+import toolbox.global.palettes.ThemeColorType;
 import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.global.KeyCodes;
 
@@ -97,7 +97,7 @@ public abstract class ColorSliderNode extends SliderNode {
                 return 1;
             }
         }else{
-            return PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND);
+            return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);
         }
     }
 
@@ -202,7 +202,7 @@ public abstract class ColorSliderNode extends SliderNode {
                     return 1;
                 }
             }else{
-                return PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND);
+                return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);
             }
         }
     }

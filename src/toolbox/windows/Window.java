@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.userInput.UserInputPublisher;
@@ -15,7 +15,7 @@ import toolbox.Gui;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
-import static toolbox.global.palettes.PaletteColorType.*;
+import static toolbox.global.palettes.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;
@@ -60,9 +60,9 @@ public abstract class Window implements UserInputSubscriber {
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
+        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.fill(PaletteStore.getColor(NORMAL_BACKGROUND));
+        pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.rect(-1, -1, size.x + 1, size.y + 1);
         pg.popMatrix();
     }
@@ -70,16 +70,16 @@ public abstract class Window implements UserInputSubscriber {
     private void drawCloseButton(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
-        pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
+        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.line(size.x - cell, 0, size.x - cell, cell - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             NodeTree.setAllOtherNodesMouseOver(null, false);
-            pg.fill(PaletteStore.getColor(FOCUS_BACKGROUND));
+            pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
             pg.rect(size.x - cell + 1, 0, cell - 1, cell);
-            pg.stroke(PaletteStore.getColor(FOCUS_FOREGROUND));
+            pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
             pg.translate(size.x - cell * 0.5f + 0.5f, cell * 0.5f);
@@ -97,13 +97,13 @@ public abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         boolean highlight = shouldHighlightTitleBar();
-        pg.fill(highlight ? PaletteStore.getColor(FOCUS_BACKGROUND) : PaletteStore.getColor(NORMAL_BACKGROUND));
+        pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0, 0, size.x, titleBarHeight);
-        pg.fill(highlight ? PaletteStore.getColor(FOCUS_FOREGROUND) : PaletteStore.getColor(NORMAL_FOREGROUND));
+        pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
-        pg.stroke(PaletteStore.getColor(WINDOW_BORDER));
+        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, size.x, cell);
         pg.popMatrix();
     }

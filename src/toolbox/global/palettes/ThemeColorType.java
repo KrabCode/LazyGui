@@ -1,6 +1,6 @@
 package toolbox.global.palettes;
 
-public enum PaletteColorType {
+public enum ThemeColorType {
     WINDOW_BORDER,
     NORMAL_BACKGROUND,
     FOCUS_BACKGROUND,

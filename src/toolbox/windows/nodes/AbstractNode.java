@@ -8,8 +8,8 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
-import toolbox.global.palettes.PaletteStore;
-import toolbox.global.palettes.PaletteColorType;
+import toolbox.global.palettes.ThemeStore;
+import toolbox.global.palettes.ThemeColorType;
 
 import static processing.core.PApplet.*;
 
@@ -97,7 +97,7 @@ public abstract class AbstractNode {
 
     protected void highlightNodeNodeOnMouseOver(PGraphics pg) {
         pg.noStroke();
-        pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND));
+        pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         pg.rect(0,0,size.x,size.y);
     }
 
@@ -109,33 +109,33 @@ public abstract class AbstractNode {
 
     protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
         if (isMouseOverNode) {
-            pg.stroke(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         } else {
-            pg.stroke(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         }
     }
 
     protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
         if(isMouseOverNode){
-            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         } else {
-            pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         }
     }
 
     protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
         if (isMouseOverNode) {
-            pg.stroke(PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         } else {
-            pg.stroke(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
     }
 
     protected void fillBackgroundBasedOnMouseOver(PGraphics pg) {
         if(isMouseOverNode){
-            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         } else {
-            pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
     }
 
@@ -162,19 +162,19 @@ public abstract class AbstractNode {
         pg.rectMode(CENTER);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         if(isMouseOverNode){
-            pg.stroke(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         }else{
-            pg.stroke(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         }
         if(valueBoolean){
-            pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
-            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
             pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }else{
-            pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
-            pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }
     }
@@ -184,13 +184,13 @@ public abstract class AbstractNode {
         pg.translate(size.x - cell *0.5f, cell * 0.5f);
         if(isMouseOverNode){
             if (isDragged){
-                pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+                pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
             }else{
-                pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+                pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             }
 
         }
-        pg.stroke(PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
+        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         pg.rectMode(CENTER);
         pg.rect(0,0, cell * 0.25f, cell*0.15f);
     }

@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class PaletteStore {
+public class ThemeStore {
 
-    private static final Map<PaletteType, Palette> paletteMap = new HashMap<>();
-    public static PaletteType currentSelection = PaletteType.DARK;
+    private static final Map<ThemeType, Theme> paletteMap = new HashMap<>();
+    public static ThemeType currentSelection = ThemeType.DARK;
 
     public static void initSingleton() {
-        PaletteType[] allTypes = PaletteType.getAllValues();
-        for (PaletteType type : allTypes) {
-            paletteMap.put(type, PaletteType.getPalette(type));
+        ThemeType[] allTypes = ThemeType.getAllValues();
+        for (ThemeType type : allTypes) {
+            paletteMap.put(type, ThemeType.getPalette(type));
         }
     }
 
-    public static int getColor(PaletteColorType type) {
+    public static int getColor(ThemeColorType type) {
         switch (type) {
             case WINDOW_BORDER:
                 return paletteMap.get(currentSelection).windowBorder;
@@ -32,27 +32,27 @@ public class PaletteStore {
         return 0xFFFF0000;
     }
 
-    public static void setCustomColor(PaletteColorType type, int val) {
+    public static void setCustomColor(ThemeColorType type, int val) {
         switch (type) {
             case WINDOW_BORDER:
-                paletteMap.get(PaletteType.CUSTOM).windowBorder = val;
+                paletteMap.get(ThemeType.CUSTOM).windowBorder = val;
                 break;
             case NORMAL_BACKGROUND:
-                paletteMap.get(PaletteType.CUSTOM).normalBackground = val;
+                paletteMap.get(ThemeType.CUSTOM).normalBackground = val;
                 break;
             case FOCUS_BACKGROUND:
-                paletteMap.get(PaletteType.CUSTOM).focusBackground = val;
+                paletteMap.get(ThemeType.CUSTOM).focusBackground = val;
                 break;
             case NORMAL_FOREGROUND:
-                paletteMap.get(PaletteType.CUSTOM).normalForeground = val;
+                paletteMap.get(ThemeType.CUSTOM).normalForeground = val;
                 break;
             case FOCUS_FOREGROUND:
-                paletteMap.get(PaletteType.CUSTOM).focusForeground = val;
+                paletteMap.get(ThemeType.CUSTOM).focusForeground = val;
                 break;
         }
     }
 
-    public static void setCustomPalette(Palette palette) {
-        paletteMap.put(PaletteType.CUSTOM, palette);
+    public static void setCustomPalette(Theme theme) {
+        paletteMap.put(ThemeType.CUSTOM, theme);
     }
 }

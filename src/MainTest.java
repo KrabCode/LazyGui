@@ -3,7 +3,6 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.Gui;
 import toolbox.ShaderReloader;
-import toolbox.global.palettes.Palette;
 
 public class MainTest extends PApplet {
     Gui gui;
@@ -45,7 +44,7 @@ public class MainTest extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.palettePicker();
+        gui.themePicker();
         gui.draw();
 
         /*

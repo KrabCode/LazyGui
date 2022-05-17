@@ -2,8 +2,8 @@ package toolbox.windows.nodes.select;
 
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.global.palettes.PaletteColorType;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.ThemeColorType;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.ToggleNode;
 
@@ -35,10 +35,10 @@ public class StringPickerItem extends ToggleNode {
     public void drawLeftText(PGraphics pg, String text) {
         if(valueBoolean){
             pg.noStroke();
-            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_BACKGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
             pg.rectMode(CORNER);
             pg.rect(0,0,size.x,size.y);
-            pg.fill(PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND));
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
             float rectSize = cell * 0.25f;
             pg.rectMode(CENTER);
             pg.rect(size.x - cell*0.5f, size.y - cell*0.5f, rectSize, rectSize);

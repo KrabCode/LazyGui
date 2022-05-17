@@ -1,6 +1,6 @@
 package toolbox.global.palettes;
 
-public enum PaletteType {
+public enum ThemeType {
     DARK,
     LIGHT,
     PINK,
@@ -15,11 +15,11 @@ public enum PaletteType {
         return new String[]{"custom", "dark", "light", "pink", "blue"};
     }
 
-    public static PaletteType[] getAllValues() {
-        return new PaletteType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
+    public static ThemeType[] getAllValues() {
+        return new ThemeType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
     }
 
-    public static PaletteType getValue(String name) {
+    public static ThemeType getValue(String name) {
         switch (name) {
             case "dark": {
                 return DARK;
@@ -40,7 +40,7 @@ public enum PaletteType {
         return null;
     }
 
-    public static String getName(PaletteType query) {
+    public static String getName(ThemeType query) {
         switch (query) {
             case DARK: {
                 return "dark";
@@ -61,18 +61,18 @@ public enum PaletteType {
         return null;
     }
 
-    public static Palette getPalette(PaletteType query) {
+    public static Theme getPalette(ThemeType query) {
         switch (query) {
             case DARK:
             case CUSTOM: {
-                return new Palette(0xFF787878,
+                return new Theme(0xFF787878,
                         0xFF0B0B0B,
                         0xFF2F2F2F,
                         0xFFB0B0B0,
                         0xFFFFFFFF);
             }
             case LIGHT: {
-                return new Palette(0xFF000000,
+                return new Theme(0xFF000000,
                         0xFFD9D9D9,
                         0xFFAFAFAF,
                         0xFF000000,
@@ -80,7 +80,7 @@ public enum PaletteType {
                 );
             }
             case PINK: {
-                return new Palette(
+                return new Theme(
                         0xFFfcd3e7,
                         0xFF916b99,
                         0xFF532e6a,
@@ -89,7 +89,7 @@ public enum PaletteType {
                 );
             }
             case BLUE: {
-                return new Palette(
+                return new Theme(
                         0xFF000000,
                         0xFFc9d1ef,
                         0xFF6271c4,

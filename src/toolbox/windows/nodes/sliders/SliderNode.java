@@ -7,12 +7,12 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.global.KeyCodes;
-import toolbox.global.palettes.PaletteColorType;
+import toolbox.global.palettes.ThemeColorType;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
@@ -138,7 +138,7 @@ public class SliderNode extends AbstractNode {
             backgroundScrollX -= mouseDelta.x;
         }
         updateDrawBackgroundShader(pg);
-        pg.fill(PaletteStore.getColor(PaletteColorType.NORMAL_BACKGROUND));
+        pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(0,0, size.x, size.y);
         pg.resetShader();

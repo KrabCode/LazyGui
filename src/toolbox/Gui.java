@@ -5,12 +5,12 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import toolbox.global.palettes.Palette;
-import toolbox.global.palettes.PaletteColorType;
-import toolbox.global.palettes.PaletteStore;
+import toolbox.global.palettes.Theme;
+import toolbox.global.palettes.ThemeColorType;
+import toolbox.global.palettes.ThemeStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
-import toolbox.global.palettes.PaletteType;
+import toolbox.global.palettes.ThemeType;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
@@ -43,7 +43,7 @@ public class Gui implements UserInputSubscriber {
         }
         State.init(this, app);
         State.loadMostRecentSave();
-        PaletteStore.initSingleton();
+        ThemeStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
@@ -226,37 +226,37 @@ public class Gui implements UserInputSubscriber {
         return node.valueString;
     }
 
-    public void setPalette(Palette palette){
-        PaletteStore.currentSelection = PaletteType.CUSTOM;
-        PaletteStore.setCustomPalette(palette);
+    public void setPalette(Theme theme){
+        ThemeStore.currentSelection = ThemeType.CUSTOM;
+        ThemeStore.setCustomPalette(theme);
     }
 
-    public void palettePicker() {
-        palettePicker(PaletteType.getPalette(PaletteStore.currentSelection), null);
+    public void themePicker() {
+        themePicker(ThemeType.getPalette(ThemeStore.currentSelection), null);
     }
 
-    public void palettePicker(Palette defaultPalette) {
-        palettePicker(defaultPalette, PaletteType.getName(PaletteType.CUSTOM));
+    public void themePicker(Theme defaultTheme) {
+        themePicker(defaultTheme, ThemeType.getName(ThemeType.CUSTOM));
     }
 
-    private void palettePicker(Palette defaultPalette, String defaultPaletteName) {
-        String basePath = "/palette picker";
-        String userSelection = State.gui.stringPicker(basePath + "/type", PaletteType.getAllNames(), defaultPaletteName);
+    private void themePicker(Theme defaultTheme, String defaultPaletteName) {
+        String basePath = "/themes";
+        String userSelection = State.gui.stringPicker(basePath + "/type", ThemeType.getAllNames(), defaultPaletteName);
 
-        if (!userSelection.equals(PaletteType.getName(PaletteStore.currentSelection))) {
-            PaletteStore.currentSelection = PaletteType.getValue(userSelection);
+        if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
+            ThemeStore.currentSelection = ThemeType.getValue(userSelection);
         }
         String customDefinitionPath = basePath + "/custom definition";
-        PaletteStore.setCustomColor(PaletteColorType.FOCUS_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultPalette.focusForeground).hex);
-        PaletteStore.setCustomColor(PaletteColorType.FOCUS_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultPalette.focusBackground).hex);
-        PaletteStore.setCustomColor(PaletteColorType.NORMAL_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultPalette.normalForeground).hex);
-        PaletteStore.setCustomColor(PaletteColorType.NORMAL_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultPalette.normalBackground).hex);
-        PaletteStore.setCustomColor(PaletteColorType.WINDOW_BORDER,
-                State.gui.colorPicker(customDefinitionPath + "/window border", defaultPalette.windowBorder).hex);
+        ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultTheme.focusBackground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.NORMAL_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultTheme.normalForeground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.NORMAL_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultTheme.normalBackground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
+                State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
     }
 
     @SuppressWarnings("unused")

@@ -1,17 +1,17 @@
 package toolbox.global.palettes;
 
-public class Palette {
+public class Theme {
     public int windowBorder;
     public int normalBackground;
     public int focusBackground;
     public int normalForeground;
     public int focusForeground;
 
-    private Palette(){
+    private Theme(){
 
     }
 
-    public Palette(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
+    public Theme(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
         this.windowBorder = windowBorder;
         this.normalBackground = normalBackground;
         this.focusBackground = focusBackground;
