@@ -8,7 +8,6 @@ import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.ButtonNode;
 import toolbox.windows.nodes.NodeFolder;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +19,6 @@ public class StateListFolder extends NodeFolder {
 
     public StateListFolder(String path, NodeFolder parent) {
         super(path, parent);
-        if(Desktop.getDesktop().isSupported(Desktop.Action.OPEN)){
-            children.add(new OpenFolderNode(path + "/open folder", this));
-        }
         children.add(new ButtonNode(path + "/new save", this));
         childrenToIgnoreWhenIterating.addAll(children);
         updateStateList();
@@ -73,8 +69,8 @@ public class StateListFolder extends NodeFolder {
         childrenToRemove.clear();
     }
 
-    private String getSaveDisplayName(String filename) {
-        return filename.substring(0, filename.indexOf(".json"));
+    private String getSaveDisplayName(String filenameWithSuffix) {
+        return filenameWithSuffix.substring(0, filenameWithSuffix.indexOf(".json"));
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {
