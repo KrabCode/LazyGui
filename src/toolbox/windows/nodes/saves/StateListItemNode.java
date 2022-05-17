@@ -39,7 +39,7 @@ class StateListItemNode extends AbstractNode {
             pg.rect(buttonCenterPos.x, buttonCenterPos.y, buttonSize, buttonSize);
             pg.textAlign(CENTER,CENTER);
             pg.fill(isMouseOverButton?PaletteStore.getColor(PaletteColorType.FOCUS_FOREGROUND) : PaletteStore.getColor(PaletteColorType.NORMAL_FOREGROUND));
-            String textContent = "";
+            String textContent;
             if(i == 0){
                 textContent = "S";
             }else if(i == 1){
@@ -56,9 +56,8 @@ class StateListItemNode extends AbstractNode {
     public void nodeClicked(float x, float y) {
         if(saveButtonClicked(x,y)){
             State.overwriteFileWithCurrentState(fullPath);
-            println("saved");
         } else if(renameButtonClicked(x,y)) {
-            String newName = Utils.dialogInput("Rename save \"" + name + "\" to:", "Input new save name");
+            String newName = Utils.dialogInput("Rename save \"" + name + "\" to:", "Enter new save name");
             if(newName != null){
                 State.renameFile(fileName, newName);
             }

@@ -28,6 +28,7 @@ public class NodeFolder extends AbstractNode {
     public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     public FolderWindow window;
+    public float intendedWindowWidth = -1;
 
     protected final float previewRectSize = cell * 0.6f;
 

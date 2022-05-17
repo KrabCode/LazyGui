@@ -67,7 +67,7 @@ public abstract class AbstractNode {
      * @param w absolute screen width
      * @param h absolute screen height
      */
-    public void updateNodeCoordinates(float x, float y, float w, float h) {
+    public void updateInlineNodeCoordinates(float x, float y, float w, float h) {
         pos.x = x;
         pos.y = y;
         size.x = w;

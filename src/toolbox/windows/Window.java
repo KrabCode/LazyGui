@@ -22,9 +22,10 @@ public abstract class Window implements UserInputSubscriber {
     protected boolean closeable;
     protected AbstractNode parentNode;
     protected PVector pos;
-    protected PVector size;
+    public PVector size;
     float cell = State.cell;
     float titleBarHeight = cell;
+
     private boolean isDraggedAround;
 
     public Window(PVector pos, AbstractNode parentNode, boolean closeable) {

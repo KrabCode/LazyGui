@@ -13,7 +13,6 @@ import toolbox.Gui;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -28,7 +27,6 @@ public class State {
     public static PFont font = null;
     public static PApplet app = null;
     public static Gui gui = null;
-    public static Robot robot = null;
     public static GLWindow window = null;
     public static PGraphics normalizedColorProvider = null;
     public static float textMarginX = 5;
@@ -38,7 +36,6 @@ public class State {
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
-
 
     public static void init(Gui gui, PApplet app) {
         State.gui = gui;
@@ -51,6 +48,8 @@ public class State {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
             }
         }
+
+        registerExitHandler();
 
         sketchName = app.getClass().getSimpleName();
         saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
@@ -68,17 +67,18 @@ public class State {
             window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
         }
 
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
     }
 
+    private static void registerExitHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(State::createAutosave));
+    }
+
+    public static void createAutosave(){
+        createTreeSaveFile("autosave");
+    }
 
     public static void createTreeSaveFile(String filename) {
-        String filePath = saveDir.getAbsolutePath() + "/" + filename + ".json";
-        overwriteFileWithCurrentState(filePath);
+        overwriteFileWithCurrentState(getFullPathWithJsonSuffix(filename));
     }
 
     public static void loadMostRecentSave() {
@@ -115,33 +115,44 @@ public class State {
         return sb.toString();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void renameFile(String oldName, String newName){
         if(oldName == null || newName == null){
             return;
         }
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(oldName)) {
-                saveFile.renameTo(new File(saveDir.getAbsolutePath() + "/" + newName + ".json"));
+                saveFile.renameTo(new File(getFullPathWithJsonSuffix(newName)));
                 break;
             }
         }
     }
 
-    public static void deleteFile(String filename) {
-        new File(saveDir.getAbsolutePath() + "/" + filename).delete();
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteFile(String fileName) {
+        String fullPath = getFullPathWithoutTypeSuffix(fileName);
+        new File(fullPath).delete();
     }
 
-    public static void overwriteFileWithCurrentState(String filename) {
-        deleteFile(filename);
+    private static String getFullPathWithJsonSuffix(String filenameWithoutSuffix){
+        return getFullPathWithoutTypeSuffix(filenameWithoutSuffix + ".json");
+    }
+
+    private static String getFullPathWithoutTypeSuffix(String filenameWithSuffix){
+        return saveDir.getAbsolutePath() + "\\" + filenameWithSuffix;
+    }
+
+    public static void overwriteFileWithCurrentState(String fullPath) {
         String json = gson.toJson(NodeTree.getRoot());
         BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(filename, false));
+            writer = new BufferedWriter(new FileWriter(fullPath, false));
             writer.write(json);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        println("Saved current state to: " + fullPath);
     }
 
     public static ArrayList<File> getSaveFileList() {

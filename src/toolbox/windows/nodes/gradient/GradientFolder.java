@@ -36,6 +36,7 @@ public class GradientFolder extends NodeFolder {
             children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm, i % 2 == 0));
         }
         State.overwriteWithLoadedStateIfAny(this);
+        intendedWindowWidth = State.cell * 7;
     }
 
     @Override
@@ -43,6 +44,10 @@ public class GradientFolder extends NodeFolder {
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
         pg.image(out,0,0,previewRectSize,previewRectSize);
+        strokeForegroundBasedOnMouseOver(pg);
+        pg.rectMode(CENTER);
+        pg.noFill();
+        pg.rect(0,0,previewRectSize, previewRectSize);
         updateOutGraphics();
     }
 

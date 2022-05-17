@@ -15,6 +15,7 @@ import java.util.List;
 
 public class StateListFolder extends NodeFolder {
 
+
     ArrayList<AbstractNode> childrenToIgnoreWhenIterating = new ArrayList<>();
 
     public StateListFolder(String path, NodeFolder parent) {
@@ -25,6 +26,7 @@ public class StateListFolder extends NodeFolder {
         children.add(new ButtonNode(path + "/new save", this));
         childrenToIgnoreWhenIterating.addAll(children);
         updateStateList();
+        intendedWindowWidth = State.cell * 12;
     }
 
     public void updateStateList() {
