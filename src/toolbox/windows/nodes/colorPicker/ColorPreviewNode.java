@@ -10,6 +10,8 @@ import static processing.core.PConstants.CORNER;
 
 public class ColorPreviewNode extends AbstractNode {
 
+    // TODO display handles and allow movement of color positions
+
     ColorPickerFolder parentColorPickerFolder;
     String checkerboardShader = "checkerboard.glsl";
 
@@ -17,7 +19,7 @@ public class ColorPreviewNode extends AbstractNode {
         super(NodeType.VALUE_NODE, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
-        heightMultiplier = 2;
+        rowHeightInCells = 3;
         InternalShaderStore.getShader(checkerboardShader);
     }
 

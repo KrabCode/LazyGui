@@ -24,7 +24,6 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));
         gradientPosDefault = gradientPos;
         activeDefault = active;
-        intendedWindowWidth = State.cell * 7;
     }
 
     protected void updateDrawInlineNode(PGraphics pg) {

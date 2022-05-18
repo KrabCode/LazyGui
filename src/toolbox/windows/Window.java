@@ -21,16 +21,16 @@ public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;
     protected boolean closeable;
     protected AbstractNode parentNode;
-    protected PVector pos;
-    public PVector size;
+    protected PVector windowPos;
+    public PVector windowSize;
     float cell = State.cell;
     float titleBarHeight = cell;
 
     private boolean isDraggedAround;
 
-    public Window(PVector pos, AbstractNode parentNode, boolean closeable) {
-        this.pos = pos;
-        this.size = new PVector(State.windowWidth, cell * 1);
+    public Window(PVector windowPos, AbstractNode parentNode, boolean closeable) {
+        this.windowPos = windowPos;
+        this.windowSize = new PVector(State.defaultWindowWidthInPixels, cell * 1);
         this.parentNode = parentNode;
         this.closeable = closeable;
         UserInputPublisher.subscribe(this);
@@ -59,30 +59,30 @@ public abstract class Window implements UserInputSubscriber {
 
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
+        pg.translate(windowPos.x, windowPos.y);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(-1, -1, size.x + 1, size.y + 1);
+        pg.rect(-1, -1, windowSize.x + 1, windowSize.y + 1);
         pg.popMatrix();
     }
 
     private void drawCloseButton(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
+        pg.translate(windowPos.x, windowPos.y);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(size.x - cell, 0, size.x - cell, cell - 1);
+        pg.line(windowSize.x - cell, 0, windowSize.x - cell, cell - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             NodeTree.setAllOtherNodesMouseOver(null, false);
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(size.x - cell + 1, 0, cell - 1, cell);
+            pg.rect(windowSize.x - cell + 1, 0, cell - 1, cell);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
-            pg.translate(size.x - cell * 0.5f + 0.5f, cell * 0.5f);
+            pg.translate(windowSize.x - cell * 0.5f + 0.5f, cell * 0.5f);
             float n = cell * 0.2f;
             pg.line(-n, -n, n, n);
             pg.line(-n, n, n, -n);
@@ -95,16 +95,16 @@ public abstract class Window implements UserInputSubscriber {
 
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
+        pg.translate(windowPos.x, windowPos.y);
         boolean highlight = shouldHighlightTitleBar();
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(0, 0, size.x, titleBarHeight);
+        pg.rect(0, 0, windowSize.x, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-        pg.line(0, cell, size.x, cell);
+        pg.line(0, cell, windowSize.x, cell);
         pg.popMatrix();
     }
 
@@ -113,20 +113,20 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        float rightEdge = pg.width - size.x - 1;
-        float bottomEdge = pg.height - size.y - 1;
+        float rightEdge = pg.width - windowSize.x - 1;
+        float bottomEdge = pg.height - windowSize.y - 1;
         float lerpAmt = 0.3f;
-        if (pos.x < 0) {
-            pos.x = lerp(pos.x, 0, lerpAmt);
+        if (windowPos.x < 0) {
+            windowPos.x = lerp(windowPos.x, 0, lerpAmt);
         }
-        if (pos.y < 0) {
-            pos.y = lerp(pos.y, 0, lerpAmt);
+        if (windowPos.y < 0) {
+            windowPos.y = lerp(windowPos.y, 0, lerpAmt);
         }
-        if (pos.x > rightEdge) {
-            pos.x = lerp(pos.x, rightEdge, lerpAmt);
+        if (windowPos.x > rightEdge) {
+            windowPos.x = lerp(windowPos.x, rightEdge, lerpAmt);
         }
-        if (pos.y > bottomEdge) {
-            pos.y = lerp(pos.y, bottomEdge, lerpAmt);
+        if (windowPos.y > bottomEdge) {
+            windowPos.y = lerp(windowPos.y, bottomEdge, lerpAmt);
         }
     }
 
@@ -150,8 +150,8 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isDraggedAround) {
-            pos.x += x - px;
-            pos.y += y - py;
+            windowPos.x += x - px;
+            windowPos.y += y - py;
             e.setConsumed(true);
         }
     }
@@ -191,8 +191,8 @@ public abstract class Window implements UserInputSubscriber {
 
     public boolean isPointInsideContent(float x, float y) {
         return Utils.isPointInRect(x, y,
-                pos.x, pos.y + cell,
-                size.x, size.y - cell);
+                windowPos.x, windowPos.y + cell,
+                windowSize.x, windowSize.y - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
@@ -201,19 +201,19 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-        return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, size.y);
+        return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
         if (closeable) {
-            return Utils.isPointInRect(x, y, pos.x, pos.y, size.x - cell, titleBarHeight);
+            return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, titleBarHeight);
         }
-        return Utils.isPointInRect(x, y, pos.x, pos.y, size.x, titleBarHeight);
+        return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, titleBarHeight);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
         return Utils.isPointInRect(x, y,
-                pos.x + size.x - cell - 1, pos.y,
+                windowPos.x + windowSize.x - cell - 1, windowPos.y,
                 cell + 1, cell - 1);
     }
 }

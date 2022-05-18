@@ -58,7 +58,7 @@ class StateListItemNode extends AbstractNode {
             State.overwriteFileWithCurrentState(fullPath);
         } else if(renameButtonClicked(x,y)) {
             String newName = Utils.dialogInput("Rename save \"" + name + "\" to:", "Enter new save name");
-            if(newName != null){
+            if(newName != null && newName.length() > 0){
                 State.renameFile(fileName, newName);
             }
         } else if(deleteButtonClicked(x,y)){

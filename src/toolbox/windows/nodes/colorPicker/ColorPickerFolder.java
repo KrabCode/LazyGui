@@ -18,13 +18,14 @@ public class ColorPickerFolder extends NodeFolder {
     private int hex;
     private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
 
+
     public ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();
         State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
-        intendedWindowWidth = State.cell * 7;
+        idealWindowWidth = cell * 7;
     }
 
     protected void lazyInitNodes() {
@@ -147,4 +148,5 @@ public class ColorPickerFolder extends NodeFolder {
             }
         }
     }
+
 }

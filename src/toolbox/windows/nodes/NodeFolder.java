@@ -28,9 +28,10 @@ public class NodeFolder extends AbstractNode {
     public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     public FolderWindow window;
-    public float intendedWindowWidth = -1;
 
     protected final float previewRectSize = cell * 0.6f;
+
+    public float idealWindowWidth = State.defaultWindowWidthInPixels;
 
     public NodeFolder(String path, NodeFolder parent) {
         super(NodeType.FOLDER, path, parent);

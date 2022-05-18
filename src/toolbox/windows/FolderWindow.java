@@ -29,7 +29,7 @@ public class FolderWindow extends Window {
         this.folder = folder;
         folder.window = this;
         if(intendedWindowWidth > 0){
-            size.x = intendedWindowWidth;
+            windowSize.x = intendedWindowWidth;
         }
     }
 
@@ -39,15 +39,15 @@ public class FolderWindow extends Window {
     }
 
     public void drawFolder(PGraphics pg) {
-        size.y = cell + heightSumOfChildNodes();
+        windowSize.y = cell + heightSumOfChildNodes();
         pg.pushMatrix();
-        pg.translate(pos.x, pos.y);
+        pg.translate(windowPos.x, windowPos.y);
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
-            float nodeHeight = cell * node.heightMultiplier;
-            node.updateInlineNodeCoordinates(pos.x, pos.y + y, size.x, nodeHeight);
+            float nodeHeight = cell * node.rowHeightInCells;
+            node.updateInlineNodeCoordinates(windowPos.x, windowPos.y + y, windowSize.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.drawNode(pg);
@@ -62,7 +62,7 @@ public class FolderWindow extends Window {
     private float heightSumOfChildNodes() {
         float sum = 0;
         for (AbstractNode child : folder.children) {
-            sum += child.heightMultiplier * cell;
+            sum += child.rowHeightInCells * cell;
         }
         return sum;
     }

@@ -30,13 +30,13 @@ public class GradientFolder extends NodeFolder {
         children.add(directionTypeSlider);
         children.add(blendTypeSlider);
         colorCount = 5;
+        idealWindowWidth = State.cell * 7;
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount-1);
             // default A alpha is 1 for some reason even though I set 0 here
             children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm, i % 2 == 0));
         }
         State.overwriteWithLoadedStateIfAny(this);
-        intendedWindowWidth = State.cell * 7;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class GradientFolder extends NodeFolder {
         public GradientPreviewNode(String path, GradientFolder parent) {
             super(NodeType.VALUE_NODE, path, parent);
             this.parent = parent;
-            heightMultiplier = 4;
+            rowHeightInCells = 9;
         }
 
         @Override

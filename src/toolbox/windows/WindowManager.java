@@ -37,13 +37,16 @@ public class WindowManager {
             if(w.parentNode.path.equals(nodeFolder.path)){
                 w.uncover();
                 w.setFocusOnThis();
-//                w.size.x = nodeFolder.intendedWindowWidth;
+                float windowContentWidth = nodeFolder.idealWindowWidth;
+                if(windowContentWidth > 0){
+                    w.windowSize.x = windowContentWidth;
+                }
                 windowFound = true;
                 break;
             }
         }
         if(!windowFound){
-            Window window = new FolderWindow(pos, nodeFolder, true, nodeFolder.intendedWindowWidth);
+            Window window = new FolderWindow(pos, nodeFolder, true, nodeFolder.idealWindowWidth);
             singleton.windows.add(window);
             window.uncover();
         }

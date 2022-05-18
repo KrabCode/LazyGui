@@ -22,7 +22,7 @@ public class StateListFolder extends NodeFolder {
         children.add(new ButtonNode(path + "/new save", this));
         childrenToIgnoreWhenIterating.addAll(children);
         updateStateList();
-        intendedWindowWidth = State.cell * 12;
+        idealWindowWidth = State.cell * 12;
     }
 
     public void updateStateList() {
@@ -77,12 +77,11 @@ public class StateListFolder extends NodeFolder {
         super.updateDrawInlineNode(pg);
         if(State.gui.button(path + "/new save")){
             String newName = Utils.dialogInput("Input new save name:", "Create new save");
-            if(newName != null){
+            if(newName != null && newName.length() > 0){
                 State.createTreeSaveFile(newName);
             }
         }
         updateStateList();
     }
-
 
 }
