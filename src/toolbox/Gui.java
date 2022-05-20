@@ -5,12 +5,12 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import toolbox.global.palettes.Theme;
-import toolbox.global.palettes.ThemeColorType;
-import toolbox.global.palettes.ThemeStore;
+import toolbox.global.themes.Theme;
+import toolbox.global.themes.ThemeColorType;
+import toolbox.global.themes.ThemeStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
-import toolbox.global.palettes.ThemeType;
+import toolbox.global.themes.ThemeType;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
@@ -226,7 +226,7 @@ public class Gui implements UserInputSubscriber {
         return node.valueString;
     }
 
-    public void setPalette(Theme theme){
+    public void setTheme(Theme theme){
         ThemeStore.currentSelection = ThemeType.CUSTOM;
         ThemeStore.setCustomPalette(theme);
     }

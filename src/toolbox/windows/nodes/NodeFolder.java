@@ -4,8 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import toolbox.global.State;
-import toolbox.global.palettes.ThemeColorType;
-import toolbox.global.palettes.ThemeStore;
+import toolbox.global.themes.ThemeColorType;
+import toolbox.global.themes.ThemeStore;
 import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 

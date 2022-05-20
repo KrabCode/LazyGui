@@ -76,6 +76,7 @@ public class StateListFolder extends NodeFolder {
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
         if(State.gui.button(path + "/new save")){
+            // TODO run on background worker thread, the dialog stops the animation as of now
             String newName = Utils.dialogInput("Input new save name:", "Create new save");
             if(newName != null && newName.length() > 0){
                 State.createTreeSaveFile(newName);

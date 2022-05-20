@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.global.NodeTree;
 import toolbox.global.State;
-import toolbox.global.palettes.ThemeStore;
+import toolbox.global.themes.ThemeStore;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.userInput.UserInputPublisher;
@@ -15,7 +15,7 @@ import toolbox.Gui;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
-import static toolbox.global.palettes.ThemeColorType.*;
+import static toolbox.global.themes.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     public boolean hidden = false;

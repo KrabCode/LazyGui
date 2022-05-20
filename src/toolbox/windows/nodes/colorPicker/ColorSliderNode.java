@@ -4,9 +4,9 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.global.palettes.ThemeStore;
+import toolbox.global.themes.ThemeStore;
 import toolbox.global.InternalShaderStore;
-import toolbox.global.palettes.ThemeColorType;
+import toolbox.global.themes.ThemeColorType;
 import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.global.KeyCodes;
 

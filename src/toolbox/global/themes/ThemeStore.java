@@ -1,4 +1,4 @@
-package toolbox.global.palettes;
+package toolbox.global.themes;
 
 import java.util.HashMap;
 import java.util.Map;

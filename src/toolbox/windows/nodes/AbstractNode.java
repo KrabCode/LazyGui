@@ -8,8 +8,8 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
-import toolbox.global.palettes.ThemeStore;
-import toolbox.global.palettes.ThemeColorType;
+import toolbox.global.themes.ThemeStore;
+import toolbox.global.themes.ThemeColorType;
 
 import static processing.core.PApplet.*;
 

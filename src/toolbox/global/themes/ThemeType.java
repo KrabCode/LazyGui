@@ -1,4 +1,4 @@
-package toolbox.global.palettes;
+package toolbox.global.themes;
 
 public enum ThemeType {
     DARK,
