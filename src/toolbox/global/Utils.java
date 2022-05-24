@@ -51,7 +51,7 @@ public class Utils {
      * @param hue float to apply modulo to
      * @return float in the range [0,1)
      */
-    protected static float hueModulo(float hue) {
+    public static float hueModulo(float hue) {
         while (hue < 0) {
             hue += 1;
         }
