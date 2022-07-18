@@ -209,7 +209,10 @@ public abstract class AbstractNode {
         dragStartPos.y = y;
     }
 
-    public void mouseReleasedAnywhere(float x, float y) {
+    public void mouseReleasedAnywhere(MouseEvent e, float x, float y) {
+        if(isDragged){
+            e.setConsumed(true);
+        }
         isDragged = false;
         State.app.cursor();
     }

@@ -108,12 +108,13 @@ public class FolderWindow extends Window {
     public void mouseReleased(MouseEvent e, float x, float y) {
         super.mouseReleased(e, x, y);
         for (AbstractNode node : folder.children) {
-            node.mouseReleasedAnywhere(x, y);
+            node.mouseReleasedAnywhere(e, x, y);
         }
         if (isPointInsideContent(x, y)) {
             AbstractNode clickedNode = tryFindChildNodeAt(x, y);
             if (clickedNode != null && clickedNode.isParentWindowVisible()) {
                 clickedNode.mouseReleasedOverNode(x, y);
+                e.setConsumed(true);
             }
         }
     }
