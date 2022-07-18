@@ -22,6 +22,10 @@ import static processing.core.PApplet.*;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
 
+// TODO bug: set default value in java to something that compiles but freezes
+//          - the value gets autosaved and cannot be overwritten from the java default anymore
+//          - solution: remember the default when saving and ignore saved value if the new default is different
+
 public class State {
     public static float cell = 22;
     public static PFont font = null;
