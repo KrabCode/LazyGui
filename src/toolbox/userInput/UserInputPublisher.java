@@ -13,6 +13,7 @@ import static processing.core.PApplet.floor;
 import static processing.core.PApplet.println;
 
 public class UserInputPublisher implements KeyListener, MouseListener {
+    public static boolean mouseFallsThroughThisFrame = false;
     private static UserInputPublisher singleton;
     private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
 
@@ -79,6 +80,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -89,6 +91,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -99,6 +102,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -113,6 +117,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         }
         previousMouseX = e.getX();
         previousMouseY = e.getY();
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -127,6 +132,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         }
         previousMouseX = e.getX();
         previousMouseY = e.getY();
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -138,6 +144,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -148,6 +155,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
     @Override
@@ -158,6 +166,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
                 break;
             }
         }
+        mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
 }

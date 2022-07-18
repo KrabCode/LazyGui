@@ -1,8 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.opengl.PShader;
 import toolbox.Gui;
-import toolbox.ShaderReloader;
 
 public class MainTest extends PApplet {
     Gui gui;
@@ -27,20 +25,13 @@ public class MainTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.image(gui.gradient("bg"), 0, 0);
-        if (gui.toggle("shader/show")) {
-            shaderTime += radians(gui.slider("shader/time"));
-            String[] shaderPath = new String[]{"testFrag.glsl", "testVert.glsl"};
-            PShader shader = ShaderReloader.getShader(shaderPath[0], shaderPath[1]);
-            shader.set("time", shaderTime);
-            shader.set("alpha", gui.slider("shader/alpha", 0.5f, 0, 1));
-            ShaderReloader.filter(shaderPath[0], shaderPath[1], pg);
+        pg.fill(gui.colorPicker("bg").hex);
+        pg.rect(0,0,width, height);
+        pg.stroke(gui.colorPicker("stroke").hex);
+        pg.strokeWeight(gui.slider("weight", 5));
+        if(gui.mousePressedOutsideGui()){
+            pg.line(pmouseX, pmouseY, mouseX, mouseY);
         }
-        pg.fill(gui.colorPicker("text/fill").hex);
-        pg.textAlign(CENTER);
-        pg.textSize(gui.slider("text/size", 36));
-        pg.text(gui.stringPicker("text/content", new String[]{"hello", "world", "apples", "oranges"}, "hello"), width / 2f,height / 2f);
-
         pg.endDraw();
         clear();
         image(pg, 0, 0);

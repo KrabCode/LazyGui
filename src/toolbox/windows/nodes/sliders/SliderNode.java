@@ -253,6 +253,7 @@ public class SliderNode extends AbstractNode {
         if(isDragged){
             mouseDelta.x = px - x;
             mouseDelta.y = py - y;
+            e.setConsumed(true);
         }
 
     }

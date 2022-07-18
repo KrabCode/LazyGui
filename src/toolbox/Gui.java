@@ -103,6 +103,10 @@ public class Gui implements UserInputSubscriber {
         }
     }
 
+    public boolean mousePressedOutsideGui(){
+        return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
+    }
+
     @SuppressWarnings("unused")
     public float slider(String path) {
         return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
