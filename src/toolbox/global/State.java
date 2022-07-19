@@ -69,32 +69,6 @@ public class State {
 
     }
 
-    private static void registerExitHandler() {
-        Runtime.getRuntime().addShutdownHook(new Thread(State::createAutosave));
-    }
-
-    public static void createAutosave(){
-        if(isSketchStuckInEndlessLoop()){
-            println("NOT autosaving," +
-                    " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
-                    " which looks like an endless loop due to bad settings");
-            return;
-        }
-        createTreeSaveFile("autosave");
-    }
-
-    private static long lastFrameMillis;
-    private static long lastFrameMillisStuckLimit = 1000;
-
-    public static void updateSketchFreezeDetection(){
-        lastFrameMillis = app.millis();
-    }
-
-    public static boolean isSketchStuckInEndlessLoop(){
-        long timeSinceLastFrame = app.millis() - lastFrameMillis;
-        return timeSinceLastFrame > lastFrameMillisStuckLimit;
-    }
-
     public static void createTreeSaveFile(String filename) {
         overwriteFileWithCurrentState(getFullPathWithJsonSuffix(filename));
     }
@@ -225,4 +199,31 @@ public class State {
         }
         abstractNode.overwriteState(loadedNodeState);
     }
+
+    private static void registerExitHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(State::createAutosave));
+    }
+
+    public static void createAutosave(){
+        if(isSketchStuckInEndlessLoop()){
+            println("NOT autosaving," +
+                    " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
+                    " which looks like an endless loop due to bad settings");
+            return;
+        }
+        createTreeSaveFile("autosave");
+    }
+
+    private static long lastFrameMillis;
+    private static long lastFrameMillisStuckLimit = 1000;
+
+    public static void updateSketchFreezeDetection(){
+        lastFrameMillis = app.millis();
+    }
+
+    public static boolean isSketchStuckInEndlessLoop(){
+        long timeSinceLastFrame = app.millis() - lastFrameMillis;
+        return timeSinceLastFrame > lastFrameMillisStuckLimit;
+    }
+
 }
