@@ -1,6 +1,7 @@
 package toolbox.windows.nodes.sliders;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -27,6 +28,7 @@ public class SliderNode extends AbstractNode {
     public SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
         super(NodeType.VALUE_NODE, path, parentFolder);
         valueFloatDefault = defaultValue;
+        valueFloatDefaultOriginal = defaultValue;
         valueFloat = valueFloatDefault;
         valueFloatMin = -Float.MAX_VALUE;
         valueFloatMax =  Float.MAX_VALUE;
@@ -40,6 +42,7 @@ public class SliderNode extends AbstractNode {
     public SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE_NODE, path, parentFolder);
         valueFloatDefault = defaultValue;
+        valueFloatDefaultOriginal = defaultValue;
         valueFloat = defaultValue;
         valueFloatMin = min;
         valueFloatMax = max;
@@ -54,9 +57,12 @@ public class SliderNode extends AbstractNode {
     public float valueFloat;
     @Expose
     public float valueFloatPrecision;
+    @Expose
+    public final float valueFloatDefaultOriginal;
+
+    public float valueFloatDefault;
     public float valueFloatMin;
     public float valueFloatMax;
-    public float valueFloatDefault;
     public boolean valueFloatConstrained;
     public float valueFloatPrecisionDefault;
     float backgroundScrollX = 0;
@@ -261,10 +267,14 @@ public class SliderNode extends AbstractNode {
 
     @Override
     public void overwriteState(JsonElement loadedNode) {
-        valueFloatDefault = loadedNode.getAsJsonObject().get("valueFloat").getAsFloat();
-        if(loadedNode.getAsJsonObject().has("valueFloatPrecision")){
-            valueFloatPrecision = loadedNode.getAsJsonObject().get("valueFloatPrecision").getAsFloat();
+        JsonObject json = loadedNode.getAsJsonObject();
+        if(json.has("valueFloatPrecision")){
+            valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();
         }
-        valueFloat = valueFloatDefault;
+        if (json.has("valueFloat") &&
+                json.has("valueFloatDefaultOriginal") &&
+                json.get("valueFloatDefaultOriginal").getAsFloat() == valueFloatDefault) {
+            valueFloat = json.get("valueFloat").getAsFloat();
+        }
     }
 }

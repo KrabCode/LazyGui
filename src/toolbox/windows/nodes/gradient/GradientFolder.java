@@ -6,9 +6,10 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
 import toolbox.windows.nodes.colorPicker.Color;
-import toolbox.windows.nodes.sliders.SliderIntNode;
+import toolbox.windows.nodes.select.StringPickerFolder;
 
 import java.util.ArrayList;
 
@@ -17,20 +18,24 @@ import static processing.core.PConstants.P2D;
 
 public class GradientFolder extends NodeFolder {
     PGraphics out;
-    SliderIntNode directionTypeSlider;
-    SliderIntNode blendTypeSlider;
+    StringPickerFolder directionTypePicker;
+    StringPickerFolder blendTypePicker;
+    ArrayList<String> blendTypeOptions = new Utils.ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
+    ArrayList<String> directionOptions = new Utils.ArrayListBuilder<String>().add("x").add("y").add("center").build();
+
     String gradientShader = "gradient.glsl";
     private final int colorCount; // TODO make this default and set value with buttons at runtime
 
     public GradientFolder(String path, NodeFolder parent, float alpha) {
         super(path, parent);
-        directionTypeSlider = new SliderIntNode(path + "/direction", this, 0, 0, 2, 0.1f, true);
-        blendTypeSlider = new SliderIntNode(path + "/blend type", this, 0, 0, 3, 0.1f, true);
+        directionTypePicker = new StringPickerFolder(path + "/direction", this,  directionOptions.toArray(new String[0]), directionOptions.get(1));
+        blendTypePicker = new StringPickerFolder(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
+        // TODO blend type should be a string picker
         children.add(new GradientPreviewNode(path + "/preview", this));
-        children.add(directionTypeSlider);
-        children.add(blendTypeSlider);
+        children.add(directionTypePicker);
+        children.add(blendTypePicker);
         colorCount = 5;
-        idealWindowWidth = State.cell * 7;
+        idealWindowWidth = State.cell * 9;
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount-1);
             // default A alpha is 1 for some reason even though I set 0 here
@@ -74,8 +79,8 @@ public class GradientFolder extends NodeFolder {
         shader.set("colorCount", activeColorCount);
         shader.set("colorValues", getColorValues(activeColorCount), 4);
         shader.set("colorPositions", getColorPositions(activeColorCount), 1);
-        shader.set("directionType", directionTypeSlider.getIntValue());
-        shader.set("blendType", blendTypeSlider.getIntValue());
+        shader.set("directionType", directionOptions.indexOf(directionTypePicker.valueString));
+        shader.set("blendType", blendTypeOptions.indexOf(blendTypePicker.valueString));
         out.beginDraw();
         out.clear();
         InternalShaderStore.filter(gradientShader, out);

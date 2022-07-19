@@ -14,6 +14,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 
@@ -204,5 +205,18 @@ public class Utils {
         frame.requestFocus();
         int dialogResult = JOptionPane.showConfirmDialog(frame, msg, title, JOptionPane.YES_NO_OPTION);
         return dialogResult == 0;
+    }
+
+    public static class ArrayListBuilder<T>{
+        private final ArrayList<T> list = new ArrayList<T>();
+
+        public ArrayListBuilder<T> add(T o){
+            list.add(o);
+            return this;
+        }
+
+        public ArrayList<T> build(){
+            return list;
+        }
     }
 }

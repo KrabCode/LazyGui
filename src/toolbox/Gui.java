@@ -83,6 +83,7 @@ public class Gui implements UserInputSubscriber {
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
+        State.updateSketchFreezeDetection();
     }
 
     private void resetMatrixInAnyRenderer() {

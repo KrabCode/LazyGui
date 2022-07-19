@@ -25,21 +25,13 @@ public class MainTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.noStroke();
-        pg.fill(gui.colorPicker("bg").hex);
-        pg.rect(0,0,width, height);
+        pg.image(gui.gradient("bg"), 0, 0);
         pg.stroke(gui.colorPicker("stroke").hex);
         pg.strokeWeight(gui.slider("weight", 5));
         if(gui.mousePressedOutsideGui()){
             pg.line(pmouseX, pmouseY, mouseX, mouseY);
         }
-        String floatVal = String.valueOf(gui.slider("float", 1));
-        String intVal = String.valueOf(gui.sliderInt("int", 1));
-        pg.textAlign(LEFT);
-        pg.fill(255);
-        pg.textSize(64);
-        pg.text(floatVal, 200, 200);
-        pg.text(intVal, 200, 400);
-
+        gui.slider("hello", 4);
         pg.endDraw();
         clear();
         image(pg, 0, 0);

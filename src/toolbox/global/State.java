@@ -25,6 +25,7 @@ import static processing.core.PConstants.P2D;
 // TODO bug: set default value in java to something that compiles but freezes
 //          - the value gets autosaved and cannot be overwritten from the java default anymore
 //          - solution: remember the default when saving and ignore saved value if the new default is different
+//          - similar problem: set current value to something that freezes - don't autosave when frozen
 
 public class State {
     public static float cell = 22;
@@ -78,7 +79,25 @@ public class State {
     }
 
     public static void createAutosave(){
+        if(isSketchStuckInEndlessLoop()){
+            println("NOT autosaving," +
+                    " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
+                    " which looks like an endless loop due to bad settings");
+            return;
+        }
         createTreeSaveFile("autosave");
+    }
+
+    private static long lastFrameMillis;
+    private static long lastFrameMillisStuckLimit = 1000;
+
+    public static void updateSketchFreezeDetection(){
+        lastFrameMillis = app.millis();
+    }
+
+    public static boolean isSketchStuckInEndlessLoop(){
+        long timeSinceLastFrame = app.millis() - lastFrameMillis;
+        return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
 
     public static void createTreeSaveFile(String filename) {

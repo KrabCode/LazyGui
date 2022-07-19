@@ -205,18 +205,15 @@ vec4 lerpByBlendType(vec4 colorA, vec4 colorB, float amt){
     if(blendType == 2){
         return vec4(hsv2rgb(lerpHSV(rgb2hsv(colorA.rgb), rgb2hsv(colorB.rgb), smoothstep(0.0, 1.0, amt))), mixedAlpha);
     }
-    if(blendType == 3){
-        return mix(colorA, colorB, smoothstep(0.0, 1.0, amt));
-    }
     return vec4(0,0,0,1);
 }
 
 float getPosByDirectionType(vec2 uv, vec2 cv){
     if(directionType == 0){
-        return 1.-uv.y; // VERTICAL
+        return uv.x; // HORIZONTAL
     }
     if (directionType == 1) {
-        return uv.x; // HORIZONTAL
+        return 1.-uv.y; // VERTICAL
     }
     if (directionType == 2) {
         float maxLength = length(vec2(0.5));
