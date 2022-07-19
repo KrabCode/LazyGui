@@ -30,7 +30,6 @@ public class GradientFolder extends NodeFolder {
         super(path, parent);
         directionTypePicker = new StringPickerFolder(path + "/direction", this,  directionOptions.toArray(new String[0]), directionOptions.get(1));
         blendTypePicker = new StringPickerFolder(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
-        // TODO blend type should be a string picker
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionTypePicker);
         children.add(blendTypePicker);
