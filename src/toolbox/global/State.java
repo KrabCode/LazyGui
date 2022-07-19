@@ -37,6 +37,9 @@ public class State {
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
 
+    private static long lastFrameMillis;
+    private static final long lastFrameMillisStuckLimit = 1000;
+
     public static void init(Gui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
@@ -180,7 +183,7 @@ public class State {
             }
             lastLoadedStateMap.put(loadedPath, loadedNode);
             String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
-            if (Objects.equals(loadedType, NodeType.FOLDER.toString())) { // TODO bad
+            if (Objects.equals(loadedType, NodeType.FOLDER.toString())) {
                 JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
                 for (JsonElement child : loadedChildren) {
                     queue.offer(child);
@@ -213,9 +216,6 @@ public class State {
         }
         createTreeSaveFile("autosave");
     }
-
-    private static long lastFrameMillis;
-    private static long lastFrameMillisStuckLimit = 1000;
 
     public static void updateSketchFreezeDetection(){
         lastFrameMillis = app.millis();
