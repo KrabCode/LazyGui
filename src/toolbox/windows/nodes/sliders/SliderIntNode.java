@@ -12,12 +12,12 @@ public class SliderIntNode extends SliderNode {
     }
 
     public int getIntValue(){
-        return PApplet.round(valueFloat);
+        return PApplet.floor(valueFloat);
     }
 
     @Override
     public String getValueToDisplay() {
-        return String.valueOf(PApplet.round(valueFloat));
+        return String.valueOf(PApplet.floor(valueFloat));
     }
 
     @Override

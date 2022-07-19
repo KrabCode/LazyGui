@@ -32,6 +32,14 @@ public class MainTest extends PApplet {
         if(gui.mousePressedOutsideGui()){
             pg.line(pmouseX, pmouseY, mouseX, mouseY);
         }
+        String floatVal = String.valueOf(gui.slider("float", 1));
+        String intVal = String.valueOf(gui.sliderInt("int", 1));
+        pg.textAlign(LEFT);
+        pg.fill(255);
+        pg.textSize(64);
+        pg.text(floatVal, 200, 200);
+        pg.text(intVal, 200, 400);
+
         pg.endDraw();
         clear();
         image(pg, 0, 0);
