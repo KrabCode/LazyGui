@@ -8,7 +8,6 @@ import toolbox.global.NodeTree;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.saves.StateListFolder;
 
 
 /**
@@ -77,7 +76,7 @@ public class FolderWindow extends Window {
         if (isPointInsideContent(x, y)) {
             AbstractNode node = tryFindChildNodeAt(x, y);
             if (node != null && node.isParentWindowVisible()) {
-                node.nodeClicked(x, y);
+                node.mousePressedOverNode(x, y);
             }
         }
     }
@@ -168,8 +167,4 @@ public class FolderWindow extends Window {
         }
     }
 
-    public void createStateListFolderNode() {
-        StateListFolder stateListFolder = new StateListFolder(folder.path + "/saves", folder);
-        folder.children.add(stateListFolder);
-    }
 }

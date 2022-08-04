@@ -6,7 +6,6 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
 import toolbox.global.themes.Theme;
-import toolbox.global.themes.ThemeColorType;
 import toolbox.global.themes.ThemeStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
@@ -20,9 +19,11 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolder;
 import toolbox.windows.nodes.imagePicker.ImagePickerFolder;
+import toolbox.windows.nodes.saves.StateListFolder;
 import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
+import toolbox.windows.nodes.toolbar.ThemePickerFolder;
 
 import java.util.ArrayList;
 
@@ -53,9 +54,17 @@ public class Gui implements UserInputSubscriber {
                 NodeTree.getRoot(),
                 false
         );
-        rootFolder.createStateListFolderNode();
         WindowManager.addWindow(rootFolder);
+        createToolbarNode();
         lazyFollowSketchResolution();
+    }
+
+    public void createToolbarNode() {
+        String path = "/options";
+        NodeFolder toolbarFolder = new NodeFolder(path, NodeTree.getRoot());
+        NodeTree.getRoot().children.add(toolbarFolder);
+        NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbarFolder));
+        NodeTree.insertNodeAtItsPath(new ThemePickerFolder(path + "/themes", toolbarFolder));
     }
 
     void lazyFollowSketchResolution() {
@@ -234,34 +243,6 @@ public class Gui implements UserInputSubscriber {
     public void setTheme(Theme theme){
         ThemeStore.currentSelection = ThemeType.CUSTOM;
         ThemeStore.setCustomPalette(theme);
-    }
-
-    public void themePicker() {
-        themePicker(ThemeType.getPalette(ThemeStore.currentSelection), null);
-    }
-
-    public void themePicker(Theme defaultTheme) {
-        themePicker(defaultTheme, ThemeType.getName(ThemeType.CUSTOM));
-    }
-
-    private void themePicker(Theme defaultTheme, String defaultPaletteName) {
-        String basePath = "/themes";
-        String userSelection = State.gui.stringPicker(basePath + "/preset", ThemeType.getAllNames(), defaultPaletteName);
-
-        if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
-            ThemeStore.currentSelection = ThemeType.getValue(userSelection);
-        }
-        String customDefinitionPath = basePath + "/custom";
-        ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultTheme.focusBackground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.NORMAL_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultTheme.normalForeground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.NORMAL_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultTheme.normalBackground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
-                State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
     }
 
     @SuppressWarnings("unused")

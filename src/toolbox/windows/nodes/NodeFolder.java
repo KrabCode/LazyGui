@@ -66,8 +66,8 @@ public class NodeFolder extends AbstractNode {
     }
 
     @Override
-    public void nodeClicked(float x, float y) {
-        super.nodeClicked(x, y);
+    public void mousePressedOverNode(float x, float y) {
+        super.mousePressedOverNode(x, y);
         WindowManager.uncoverOrCreateWindow(this);
         this.isDragged = false;
 

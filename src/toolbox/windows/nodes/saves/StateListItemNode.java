@@ -10,8 +10,6 @@ import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
-
-import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 
 class StateListItemNode extends AbstractNode {
@@ -53,7 +51,7 @@ class StateListItemNode extends AbstractNode {
         }
     }
 
-    public void nodeClicked(float x, float y) {
+    public void mousePressedOverNode(float x, float y) {
         if(saveButtonClicked(x,y)){
             State.overwriteFileWithCurrentState(fullPath);
         } else if(renameButtonClicked(x,y)) {

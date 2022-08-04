@@ -102,7 +102,11 @@ public abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, windowSize.x, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        pg.text(parentNode.name, State.textMarginX, cell - State.font.getSize() * 0.6f);
+        String trimmedName = parentNode.name.substring(0, PApplet.min(parentNode.name.length(), 12));
+        if(parentNode.name.length() > 12){
+            trimmedName += "...";
+        }
+        pg.text(trimmedName, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, windowSize.x, cell);
         pg.popMatrix();

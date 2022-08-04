@@ -200,6 +200,7 @@ public class Utils {
     }
 
     public static boolean dialogConfirm(String msg, String title) {
+        // TODO do a normal dialog using a new custom dialog window inside processing, this JFrame stops other code execution, bad UX
         JFrame frame = new JFrame();
         frame.setAlwaysOnTop(true);
         frame.requestFocus();
@@ -208,7 +209,7 @@ public class Utils {
     }
 
     public static class ArrayListBuilder<T>{
-        private final ArrayList<T> list = new ArrayList<T>();
+        private final ArrayList<T> list = new ArrayList<>();
 
         public ArrayListBuilder<T> add(T o){
             list.add(o);

@@ -42,6 +42,7 @@ public abstract class AbstractNode {
 
     protected boolean displayInlineName = true;
 
+
     public AbstractNode(NodeType type, String path, NodeFolder parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
@@ -80,7 +81,7 @@ public abstract class AbstractNode {
         pg.pushStyle();
         pg.pushMatrix();
         if(isMouseOverNode){
-            highlightNodeNodeOnMouseOver(pg);
+            highlightNodeOnMouseOver(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
@@ -95,7 +96,7 @@ public abstract class AbstractNode {
         pg.popStyle();
     }
 
-    protected void highlightNodeNodeOnMouseOver(PGraphics pg) {
+    protected void highlightNodeOnMouseOver(PGraphics pg) {
         pg.noStroke();
         pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         pg.rect(0,0,size.x,size.y);
@@ -182,17 +183,19 @@ public abstract class AbstractNode {
     protected void drawRightButton(PGraphics pg) {
         pg.noFill();
         pg.translate(size.x - cell *0.5f, cell * 0.5f);
+        fillBackgroundBasedOnMouseOver(pg);
+        strokeForegroundBasedOnMouseOver(pg);
+        pg.rectMode(CENTER);
+        pg.rect(0,0, cell * 0.5f, cell*0.5f);
+        pg.stroke(ThemeStore.getColor(isDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
         if(isMouseOverNode){
             if (isDragged){
                 pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
             }else{
                 pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             }
-
         }
-        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        pg.rectMode(CENTER);
-        pg.rect(0,0, cell * 0.25f, cell*0.15f);
+        pg.ellipse(0,0,cell * 0.25f, cell * 0.25f);
     }
 
     private boolean isFocused(){
@@ -203,7 +206,7 @@ public abstract class AbstractNode {
         return parent.window.isFocused() && isMouseOverNode;
     }
 
-    public void nodeClicked(float x, float y) {
+    public void mousePressedOverNode(float x, float y) {
         isDragged = true;
         dragStartPos.x = x;
         dragStartPos.y = y;

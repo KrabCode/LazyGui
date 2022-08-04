@@ -29,8 +29,8 @@ public class ToggleNode extends AbstractNode {
 
 
     @Override
-    public void nodeClicked(float x, float y) {
-        super.nodeClicked(x, y);
+    public void mousePressedOverNode(float x, float y) {
+        super.mousePressedOverNode(x, y);
         armed = true;
     }
 
