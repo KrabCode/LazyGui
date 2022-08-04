@@ -62,7 +62,7 @@ public class Gui implements UserInputSubscriber {
     public void createToolbarNode() {
         String path = "/options";
         NodeFolder toolbarFolder = new NodeFolder(path, NodeTree.getRoot());
-        NodeTree.getRoot().children.add(toolbarFolder);
+        NodeTree.insertNodeAtItsPath((toolbarFolder));
         NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbarFolder));
         NodeTree.insertNodeAtItsPath(new ThemePickerFolder(path + "/themes", toolbarFolder));
     }
