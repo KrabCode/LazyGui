@@ -245,7 +245,7 @@ public abstract class AbstractNode {
         if(parent == null || parent.window == null){
             return !Gui.isGuiHidden;
         }
-        return !parent.window.hidden;
+        return !parent.window.closed;
     }
 
     // used by value nodes to load state from json

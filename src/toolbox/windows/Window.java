@@ -14,12 +14,13 @@ import toolbox.userInput.UserInputSubscriber;
 import toolbox.Gui;
 
 import static processing.core.PApplet.lerp;
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.*;
 import static toolbox.global.themes.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
-    public boolean hidden = false;
-    protected boolean closeable;
+    public boolean closed = false;
+    protected boolean isCloseable;
     protected AbstractNode parentNode;
     protected PVector windowPos;
     public PVector windowSize;
@@ -28,11 +29,11 @@ public abstract class Window implements UserInputSubscriber {
 
     private boolean isDraggedAround;
 
-    public Window(PVector windowPos, AbstractNode parentNode, boolean closeable) {
+    public Window(PVector windowPos, AbstractNode parentNode, boolean isCloseable) {
         this.windowPos = windowPos;
         this.windowSize = new PVector(State.defaultWindowWidthInPixels, cell * 1);
         this.parentNode = parentNode;
-        this.closeable = closeable;
+        this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
     }
 
@@ -43,7 +44,7 @@ public abstract class Window implements UserInputSubscriber {
 
     public void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
-        if (hidden) {
+        if (closed) {
             return;
         }
         constrainPosition(pg);
@@ -51,7 +52,7 @@ public abstract class Window implements UserInputSubscriber {
         drawBackgroundWithWindowBorder(pg);
         drawContent(pg);
         drawTitleBar(pg);
-        if (closeable) {
+        if (isCloseable) {
             drawCloseButton(pg);
         }
         pg.popMatrix();
@@ -102,14 +103,31 @@ public abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, windowSize.x, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = parentNode.name.substring(0, PApplet.min(parentNode.name.length(), 12));
-        if(parentNode.name.length() > 12){
-            trimmedName += "...";
-        }
+        String trimmedName = getTrimmedTextToFitOneLine(pg, parentNode.name, windowSize.x - cell * 2);
         pg.text(trimmedName, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, windowSize.x, cell);
         pg.popMatrix();
+    }
+
+    private String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
+        String dots = "...";
+        if(space < 40){
+            return dots;
+        }
+        float dotsWidth = pg.textWidth(dots);
+        String result = "";
+        int i = 0;
+        while(pg.textWidth(result) < space - dotsWidth){
+            result += text.charAt(i++);
+            if(i >= text.length()){
+                break;
+            }
+        }
+        if(i < text.length()){
+            result += dots;
+        }
+        return result;
     }
 
     protected boolean shouldHighlightTitleBar(){
@@ -136,7 +154,7 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mousePressed(MouseEvent e, float x, float y) {
-        if (isHidden()) {
+        if (isClosed()) {
             return;
         }
         if (isPointInsideWindow(x, y)) {
@@ -150,7 +168,7 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
-        if (isHidden()) {
+        if (isClosed()) {
             return;
         }
         if (isDraggedAround) {
@@ -162,11 +180,11 @@ public abstract class Window implements UserInputSubscriber {
 
     @Override
     public void mouseReleased(MouseEvent e, float x, float y) {
-        if (isHidden()) {
+        if (isClosed()) {
             return;
         }
-        if (closeable && isPointInsideCloseButton(x, y)) {
-            hide();
+        if (isCloseable && isPointInsideCloseButton(x, y)) {
+            close();
             e.setConsumed(true);
         } else if (isDraggedAround) {
             e.setConsumed(true);
@@ -174,18 +192,19 @@ public abstract class Window implements UserInputSubscriber {
         isDraggedAround = false;
     }
 
-    private void hide() {
-        hidden = true;
+    public void close() {
+        closed = true;
         isDraggedAround = false;
     }
 
-    public void uncover() {
-        hidden = false;
+    public void open() {
+        println("opening " + parentNode.path);
+        closed = false;
         isDraggedAround = true;
     }
 
-    private boolean isHidden() {
-        return hidden || Gui.isGuiHidden;
+    private boolean isClosed() {
+        return closed || Gui.isGuiHidden;
     }
 
     void setFocusOnThis() {
@@ -209,7 +228,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
-        if (closeable) {
+        if (isCloseable) {
             return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, titleBarHeight);
         }
         return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, titleBarHeight);

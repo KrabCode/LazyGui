@@ -234,8 +234,9 @@ public class SliderNode extends AbstractNode {
             valueFloat = valueFloatDefault;
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
-            onValueResetToDefault();
+            onValueChangedFromOutside();
         }
+        tryReadNumpadInput(e);
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
             Utils.setClipboardString(Float.toString(valueFloat));
         }
@@ -249,7 +250,26 @@ public class SliderNode extends AbstractNode {
         }
     }
 
-    protected void onValueResetToDefault() {
+    private void tryReadNumpadInput(KeyEvent e) {
+        switch(e.getKeyChar()){
+            case '0': valueFloat = 0; break;
+            case '1': valueFloat = 1; break;
+            case '2': valueFloat = 2; break;
+            case '3': valueFloat = 3; break;
+            case '4': valueFloat = 4; break;
+            case '5': valueFloat = 5; break;
+            case '6': valueFloat = 6; break;
+            case '7': valueFloat = 7; break;
+            case '8': valueFloat = 8; break;
+            case '9': valueFloat = 9; break;
+            default: {
+                return;
+            }
+        }
+        onValueChangedFromOutside();
+    }
+
+    protected void onValueChangedFromOutside() {
 
     }
 

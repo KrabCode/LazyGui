@@ -83,25 +83,25 @@ float hueModulo(float hue){
 void main(){
     vec2 uv = (gl_FragCoord.xy - quadPos.xy) / quadSize.xy;
     vec4 clr;
-    if(mode == 0){
+    if(mode == 0){  // hue
         float hueRangeMin = hueValue - precisionNormalized;
         float hueRangeMax = hueValue + precisionNormalized;
         float hueVarying = mod(map(uv.x, 0, 1, hueRangeMin, hueRangeMax), 1.); // hue repeats so mod() instead of clamp()
-        clr = vec4(hsv2rgb(vec3(hueVarying, saturationValue, brightnessValue)), 1.);
+        clr = vec4(hsv2rgb(vec3(hueVarying, max(0.5, saturationValue), max(0.5, brightnessValue))), 1.);
     }
-    if(mode == 1){
+    if(mode == 1){  // sat
         float satRangeMin = saturationValue - precisionNormalized;
         float satRangeMax = saturationValue + precisionNormalized;
         float satVarying = clamp(map(uv.x, 0, 1, satRangeMin, satRangeMax), 0., 1.);
         clr = vec4(hsv2rgb(vec3(hueValue, satVarying, brightnessValue)), 1.);
     }
-    if(mode == 2){
+    if(mode == 2){  // brightness
         float brRangeMin = brightnessValue - precisionNormalized;
         float brRangeMax = brightnessValue + precisionNormalized;
         float brVarying = clamp(map(uv.x, 0, 1, brRangeMin, brRangeMax), 0., 1.);
         clr = vec4(hsv2rgb(vec3(hueValue, saturationValue, brVarying)), 1.);;
     }
-    if(mode == 3){
+    if(mode == 3){  // alpha
         float aRangeMin = alphaValue - precisionNormalized;
         float aRangeMax = alphaValue + precisionNormalized;
         float aVarying = clamp(map(uv.x, 0, 1, aRangeMin, aRangeMax), 0., 1.);

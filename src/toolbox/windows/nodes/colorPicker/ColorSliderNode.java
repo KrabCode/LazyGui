@@ -133,8 +133,8 @@ public abstract class ColorSliderNode extends SliderNode {
         }
 
         @Override
-        protected void onValueResetToDefault() {
-            super.onValueResetToDefault();
+        protected void onValueChangedFromOutside() {
+            super.onValueChangedFromOutside();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
@@ -151,8 +151,8 @@ public abstract class ColorSliderNode extends SliderNode {
         }
 
         @Override
-        protected void onValueResetToDefault() {
-            super.onValueResetToDefault();
+        protected void onValueChangedFromOutside() {
+            super.onValueChangedFromOutside();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
@@ -170,8 +170,8 @@ public abstract class ColorSliderNode extends SliderNode {
         }
 
         @Override
-        protected void onValueResetToDefault() {
-            super.onValueResetToDefault();
+        protected void onValueChangedFromOutside() {
+            super.onValueChangedFromOutside();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
@@ -188,8 +188,8 @@ public abstract class ColorSliderNode extends SliderNode {
             parentColorPickerFolder.loadValuesFromHSBA();
         }
         @Override
-        protected void onValueResetToDefault() {
-            super.onValueResetToDefault();
+        protected void onValueChangedFromOutside() {
+            super.onValueChangedFromOutside();
             parentColorPickerFolder.loadValuesFromHSBA();
         }
 

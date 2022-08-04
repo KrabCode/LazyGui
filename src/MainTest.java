@@ -25,13 +25,41 @@ public class MainTest extends PApplet {
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
         pg.beginDraw();
-        pg.noStroke();
-        pg.image(gui.gradient("bg"), 0, 0);
-        pg.stroke(gui.colorPicker("stroke").hex);
-        pg.strokeWeight(gui.slider("weight", 5));
-        if(gui.mousePressedOutsideGui()){
-            pg.line(pmouseX, pmouseY, mouseX, mouseY);
+        drawBg();
+        drawBrush();
+        drawBox();
+        pg.endDraw();
+        clear();
+        image(pg, 0, 0);
+        gui.draw();
+
+        /*
+        if(gui.toggle("record")){
+            saveFrame("rec/" + i++ + ".jpg");
         }
+        */
+    }
+
+    private void drawBg() {
+        pg.noStroke();
+        pg.fill(gui.colorPicker("bg").hex);
+        pg.rect(0,0,width,height);
+    }
+
+    private void drawBrush() {
+        pg.fill(gui.colorPicker("brush/color").hex);
+        float brushWeight = gui.slider("brush/weight", 5);
+        if(gui.mousePressedOutsideGui()){
+            float dist = dist(pmouseX, pmouseY, mouseX, mouseY);
+            for (int i = 0; i <= dist; i++) {
+                float iNorm = norm(i, 0, dist);
+                pg.ellipse(lerp(mouseX, pmouseX, iNorm), lerp(mouseY, pmouseY, iNorm), brushWeight, brushWeight);
+            }
+
+        }
+    }
+
+    private void drawBox() {
         float boxSize = gui.slider("box/size", 120);
         pg.stroke(gui.colorPicker("box/stroke").hex);
         pg.fill(gui.colorPicker("box/fill").hex);
@@ -47,15 +75,5 @@ public class MainTest extends PApplet {
         pg.rotateZ(gui.slider("box/rot z")* rotationTime);
         pg.box(boxSize);
 
-        pg.endDraw();
-        clear();
-        image(pg, 0, 0);
-        gui.draw();
-
-        /*
-        if(gui.toggle("record")){
-            saveFrame("rec5/" + i++ + ".jpg");
-        }
-        */
     }
 }

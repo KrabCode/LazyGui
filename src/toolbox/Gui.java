@@ -32,6 +32,7 @@ import static processing.core.PApplet.*;
 
 public class Gui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
+    NodeFolder toolbar;
     public PGraphics pg;
     PApplet app;
 
@@ -55,16 +56,8 @@ public class Gui implements UserInputSubscriber {
                 false
         );
         WindowManager.addWindow(rootFolder);
-        createToolbarNode();
+        createToolbar();
         lazyFollowSketchResolution();
-    }
-
-    public void createToolbarNode() {
-        String path = "/options";
-        NodeFolder toolbarFolder = new NodeFolder(path, NodeTree.getRoot());
-        NodeTree.insertNodeAtItsPath((toolbarFolder));
-        NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbarFolder));
-        NodeTree.insertNodeAtItsPath(new ThemePickerFolder(path + "/themes", toolbarFolder));
     }
 
     void lazyFollowSketchResolution() {
@@ -80,6 +73,7 @@ public class Gui implements UserInputSubscriber {
 
     public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
+        updateToolbar();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
@@ -92,7 +86,22 @@ public class Gui implements UserInputSubscriber {
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
-        State.updateSketchFreezeDetection();
+        State.updateEndlessLoopDetection();
+    }
+
+    public void createToolbar() {
+        String path = "options";
+        toolbar = new NodeFolder(path, NodeTree.getRoot());
+        NodeTree.insertNodeAtItsPath((toolbar));
+        NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbar));
+        NodeTree.insertNodeAtItsPath(new ThemePickerFolder(path + "/themes", toolbar));
+    }
+
+    private void updateToolbar() {
+       if(button(toolbar.path + "/close all windows")){
+           WindowManager.closeAllWindows(); // TODO major bug, can't open any windows after this runs
+       }
+       State.hideHotkeyActive = toggle(toolbar.path + "/hotkeys/h: hide gui", false);
     }
 
     private void resetMatrixInAnyRenderer() {
@@ -108,7 +117,7 @@ public class Gui implements UserInputSubscriber {
         if (keyEvent.isAutoRepeat()) {
             return;
         }
-        if (keyEvent.getKeyChar() == 'h') {
+        if (keyEvent.getKeyChar() == 'h' && State.hideHotkeyActive) {
             isGuiHidden = !isGuiHidden;
         }
     }

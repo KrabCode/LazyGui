@@ -27,12 +27,12 @@ public class State {
     public static PFont font = null;
     public static PApplet app = null;
     public static Gui gui = null;
-    public static GLWindow window = null;
     public static PGraphics normalizedColorProvider = null;
     public static float textMarginX = 5;
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static final float defaultWindowWidthInPixels = State.cell * 10;
+    public static boolean hideHotkeyActive = false;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
@@ -64,12 +64,6 @@ public class State {
 
         normalizedColorProvider = app.createGraphics(256, 256, P2D);
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
-
-        PSurface surface = State.app.getSurface();
-        if (surface instanceof processing.opengl.PSurfaceJOGL) {
-            window = (com.jogamp.newt.opengl.GLWindow) (surface.getNative());
-        }
-
     }
 
     public static void createTreeSaveFile(String filename) {
@@ -217,7 +211,7 @@ public class State {
         createTreeSaveFile("autosave");
     }
 
-    public static void updateSketchFreezeDetection(){
+    public static void updateEndlessLoopDetection(){
         lastFrameMillis = app.millis();
     }
 

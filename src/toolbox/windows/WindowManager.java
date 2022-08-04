@@ -35,7 +35,7 @@ public class WindowManager {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.parentNode.path.equals(nodeFolder.path)){
-                w.uncover();
+                w.open();
                 w.setFocusOnThis();
                 float windowContentWidth = nodeFolder.idealWindowWidth;
                 if(windowContentWidth > 0){
@@ -48,7 +48,7 @@ public class WindowManager {
         if(!windowFound){
             Window window = new FolderWindow(pos, nodeFolder, true, nodeFolder.idealWindowWidth);
             singleton.windows.add(window);
-            window.uncover();
+            window.open();
         }
 
     }
@@ -71,5 +71,13 @@ public class WindowManager {
 
     public static void setFocus(Window window) {
         singleton.windowToSetFocusOn = window;
+    }
+
+    public static void closeAllWindows() {
+        for(Window win : singleton.windows){
+            if(win.isCloseable){
+                win.close();
+            }
+        }
     }
 }

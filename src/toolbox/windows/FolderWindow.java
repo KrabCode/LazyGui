@@ -40,7 +40,7 @@ public class FolderWindow extends Window {
     public void drawFolder(PGraphics pg) {
         windowSize.y = cell + heightSumOfChildNodes();
         pg.pushMatrix();
-        pg.translate(windowPos.x, windowPos.y);
+        pg.translate(windowPos.x-0.5f, windowPos.y);
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
         for (int i = 0; i < folder.children.size(); i++) {

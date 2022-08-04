@@ -28,7 +28,7 @@ public class ThemePickerFolder extends NodeFolder {
         if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
             ThemeStore.currentSelection = ThemeType.getValue(userSelection);
         }
-        String customDefinitionPath = path + "/custom";
+        String customDefinitionPath = path + "/custom definition";
         ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
                 State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
         ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
