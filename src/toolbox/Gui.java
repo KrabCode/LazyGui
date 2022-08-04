@@ -5,7 +5,9 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
+import toolbox.global.Utils;
 import toolbox.global.themes.Theme;
+import toolbox.global.themes.ThemeColorType;
 import toolbox.global.themes.ThemeStore;
 import toolbox.global.State;
 import toolbox.global.NodeTree;
@@ -23,15 +25,18 @@ import toolbox.windows.nodes.saves.StateListFolder;
 import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
-import toolbox.windows.nodes.toolbar.ThemePickerFolder;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static processing.core.PApplet.*;
 
 
 public class Gui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
+    public static boolean screenshotRequestedOnMainThread = false;
+    public static boolean hotkeyHideActive = false;
+    public static boolean hotkeyScreenshotActive = false;
     NodeFolder toolbar;
     public PGraphics pg;
     PApplet app;
@@ -81,35 +86,70 @@ public class Gui implements UserInputSubscriber {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
-        resetMatrixInAnyRenderer();
+        Utils.resetSketchMatrixInAnyRenderer();
         canvas.pushStyle();
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
         State.updateEndlessLoopDetection();
+        takeScreenshotIfNeeded();
     }
+
+    private void takeScreenshotIfNeeded() {
+        if(!screenshotRequestedOnMainThread){
+            return;
+        }
+        String randomId = UUID.randomUUID().toString().replace("-","").substring(0,8);
+        String filePath = "out/screenshots/" + State.app.getClass().getSimpleName() + "_" + randomId + ".jpg";
+        println("screenshot saved to: " + filePath);
+        State.app.save(filePath);
+        screenshotRequestedOnMainThread = false;
+    }
+
 
     public void createToolbar() {
         String path = "options";
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
         NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbar));
-        NodeTree.insertNodeAtItsPath(new ThemePickerFolder(path + "/themes", toolbar));
     }
 
     private void updateToolbar() {
+       updateThemePicker(toolbar.path + "/themes");
        if(button(toolbar.path + "/close all windows")){
-           WindowManager.closeAllWindows(); // TODO major bug, can't open any windows after this runs
+           WindowManager.closeAllWindows();
        }
-       State.hideHotkeyActive = toggle(toolbar.path + "/hotkeys/h: hide gui", false);
+       hotkeyHideActive = toggle(toolbar.path + "/hotkeys/h: hide gui", true);
+       hotkeyScreenshotActive = toggle(toolbar.path + "/hotkeys/s: take screenshot", true);
     }
 
-    private void resetMatrixInAnyRenderer() {
-        if (State.app.sketchRenderer().equals(P3D)) {
-            State.app.camera();
-        } else {
-            State.app.resetMatrix();
+    private void updateThemePicker(String path) {
+        String defaultPaletteName = "dark";
+        Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
+        assert defaultTheme != null;
+
+        String userSelection = State.gui.stringPicker(path + "/gui theme", ThemeType.getAllNames(), defaultPaletteName);
+        if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
+            ThemeStore.currentSelection = ThemeType.getValue(userSelection);
         }
+        String customDefinitionPath = path + "/custom theme editor";
+        ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultTheme.focusBackground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.NORMAL_FOREGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultTheme.normalForeground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.NORMAL_BACKGROUND,
+                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultTheme.normalBackground).hex);
+        ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
+                State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
+    }
+
+    private void hotkeyInteraction(KeyEvent keyEvent){
+        if (keyEvent.getKeyChar() == 'h' && hotkeyHideActive) {
+            isGuiHidden = !isGuiHidden;
+        }
+        screenshotRequestedOnMainThread = keyEvent.getKeyChar() == 's' && hotkeyScreenshotActive;
     }
 
     @Override
@@ -117,9 +157,7 @@ public class Gui implements UserInputSubscriber {
         if (keyEvent.isAutoRepeat()) {
             return;
         }
-        if (keyEvent.getKeyChar() == 'h' && State.hideHotkeyActive) {
-            isGuiHidden = !isGuiHidden;
-        }
+        hotkeyInteraction(keyEvent);
     }
 
     public boolean mousePressedOutsideGui(){
@@ -216,7 +254,7 @@ public class Gui implements UserInputSubscriber {
             node = createButtonNode(path);
             NodeTree.insertNodeAtItsPath(node);
         }
-        return node.valueBoolean;
+        return node.getBooleanValueAndSetItToFalse();
     }
 
     private ButtonNode createButtonNode(String path) {
@@ -335,4 +373,5 @@ public class Gui implements UserInputSubscriber {
         }
         return node.getOutputImage();
     }
+
 }

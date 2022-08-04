@@ -1,5 +1,7 @@
 package toolbox.windows.nodes.select;
 
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.State;
 import toolbox.windows.nodes.AbstractNode;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 public class StringPickerFolder extends NodeFolder {
 
+    @Expose
     public String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
 
@@ -88,5 +91,23 @@ public class StringPickerFolder extends NodeFolder {
     public void drawLeftText(PGraphics pg, String text) {
         super.drawLeftText(pg, text);
         drawRightText(pg, valueString);
+    }
+
+    @Override
+    public void overwriteState(JsonElement loadedNode) {
+        // TODO test if this even works
+        super.overwriteState(loadedNode);
+        JsonElement loadedString = loadedNode.getAsJsonObject().get("valueString");
+        if(loadedString == null){
+            return;
+        }
+        String oldValue = loadedString.getAsString();
+        for (AbstractNode child : children) {
+            StringPickerItem option = (StringPickerItem) child;
+            if(option.valueString.equals(oldValue)){
+                option.valueBoolean = true;
+                setAllOtherOptionsToFalse(option);
+            }
+        }
     }
 }

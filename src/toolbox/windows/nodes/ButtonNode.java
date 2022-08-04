@@ -24,4 +24,10 @@ public class ButtonNode extends AbstractNode {
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
+
+    public boolean getBooleanValueAndSetItToFalse() {
+        boolean result = valueBoolean;
+        valueBoolean = false;
+        return result;
+    }
 }

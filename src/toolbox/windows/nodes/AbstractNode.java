@@ -8,6 +8,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 import toolbox.global.State;
+import toolbox.global.Utils;
 import toolbox.global.themes.ThemeStore;
 import toolbox.global.themes.ThemeColorType;
 
@@ -142,8 +143,9 @@ public abstract class AbstractNode {
 
 
     public void drawLeftText(PGraphics pg, String text) {
+        String trimmedText = Utils.getTrimmedTextToFitOneLine(pg, text, size.x - cell);
         pg.textAlign(LEFT, CENTER);
-        pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);
+        pg.text(trimmedText, State.textMarginX, size.y - State.font.getSize() * 0.6f);
     }
 
     public void drawRightText(PGraphics pg, String text) {
@@ -171,22 +173,21 @@ public abstract class AbstractNode {
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
             pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }else{
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }
+        pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
     }
 
     protected void drawRightButton(PGraphics pg) {
         pg.noFill();
         pg.translate(size.x - cell *0.5f, cell * 0.5f);
         fillBackgroundBasedOnMouseOver(pg);
-        strokeForegroundBasedOnMouseOver(pg);
+        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         pg.rectMode(CENTER);
-        pg.rect(0,0, cell * 0.5f, cell*0.5f);
+        pg.rect(0,0, cell * 0.6f, cell*0.5f+1);
         pg.stroke(ThemeStore.getColor(isDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
         if(isMouseOverNode){
             if (isDragged){
@@ -195,7 +196,7 @@ public abstract class AbstractNode {
                 pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             }
         }
-        pg.ellipse(0,0,cell * 0.25f, cell * 0.25f);
+        pg.rect(0,0,cell * 0.2f, cell*0.2f);
     }
 
     private boolean isFocused(){

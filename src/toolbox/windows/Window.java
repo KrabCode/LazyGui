@@ -103,32 +103,13 @@ public abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, windowSize.x, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = getTrimmedTextToFitOneLine(pg, parentNode.name, windowSize.x - cell * 2);
+        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSize.x - cell * 1.1f);
         pg.text(trimmedName, State.textMarginX, cell - State.font.getSize() * 0.6f);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.line(0, cell, windowSize.x, cell);
         pg.popMatrix();
     }
 
-    private String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
-        String dots = "...";
-        if(space < 40){
-            return dots;
-        }
-        float dotsWidth = pg.textWidth(dots);
-        String result = "";
-        int i = 0;
-        while(pg.textWidth(result) < space - dotsWidth){
-            result += text.charAt(i++);
-            if(i >= text.length()){
-                break;
-            }
-        }
-        if(i < text.length()){
-            result += dots;
-        }
-        return result;
-    }
 
     protected boolean shouldHighlightTitleBar(){
         return isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround;
@@ -198,7 +179,6 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public void open() {
-        println("opening " + parentNode.path);
         closed = false;
         isDraggedAround = true;
     }

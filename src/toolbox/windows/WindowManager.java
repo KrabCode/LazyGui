@@ -24,8 +24,8 @@ public class WindowManager {
         }
     }
 
-    public static void addWindow(FolderWindow explorer) {
-        singleton.windows.add(explorer);
+    public static void addWindow(FolderWindow window) {
+        singleton.windows.add(window);
     }
 
     public static void uncoverOrCreateWindow(NodeFolder nodeFolder) {

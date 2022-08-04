@@ -1,9 +1,6 @@
 package toolbox.global;
 
-import processing.core.PApplet;
-import processing.core.PConstants;
-import processing.core.PFont;
-import processing.core.PVector;
+import processing.core.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -192,6 +189,14 @@ public class Utils {
         }
     }
 
+    public static void resetSketchMatrixInAnyRenderer() {
+        if (State.app.sketchRenderer().equals(P3D)) {
+            State.app.camera();
+        } else {
+            State.app.resetMatrix();
+        }
+    }
+
     public static String dialogInput(String msg, String title) {
         JFrame frame = new JFrame();
         frame.setAlwaysOnTop(true);
@@ -206,6 +211,20 @@ public class Utils {
         frame.requestFocus();
         int dialogResult = JOptionPane.showConfirmDialog(frame, msg, title, JOptionPane.YES_NO_OPTION);
         return dialogResult == 0;
+    }
+
+
+    public static String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
+        StringBuilder result = new StringBuilder();
+        for(int i = 0; i < text.length(); i++){
+            char character = text.charAt(i);
+            float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
+            if(textWidthAfterNewChar >= space){
+                break;
+            }
+            result.append(character);
+        }
+        return result.toString();
     }
 
     public static class ArrayListBuilder<T>{
