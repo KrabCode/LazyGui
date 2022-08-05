@@ -29,7 +29,9 @@ public class SliderNode extends AbstractNode {
         super(NodeType.VALUE_NODE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
-        valueFloat = valueFloatDefault;
+        if(!Float.isNaN(defaultValue)){
+            valueFloat = defaultValue;
+        }
         valueFloatMin = -Float.MAX_VALUE;
         valueFloatMax =  Float.MAX_VALUE;
         valueFloatPrecisionDefault = 0.1f;
@@ -43,7 +45,9 @@ public class SliderNode extends AbstractNode {
         super(NodeType.VALUE_NODE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
-        valueFloat = defaultValue;
+        if(!Float.isNaN(defaultValue)){
+            valueFloat = defaultValue;
+        }
         valueFloatMin = min;
         valueFloatMax = max;
         valueFloatPrecision = defaultPrecision;
@@ -164,6 +168,9 @@ public class SliderNode extends AbstractNode {
         if (fractionPadding == 0) {
             return String.valueOf(floor(valueFloat));
         }
+        if(Float.isNaN(valueFloat)){
+            return "NaN";
+        }
         return nf(valueFloat, 0, fractionPadding);
     }
 
@@ -231,7 +238,9 @@ public class SliderNode extends AbstractNode {
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
-            valueFloat = valueFloatDefault;
+            if(Float.isNaN(valueFloatDefault)){
+                valueFloat = valueFloatDefault;
+            }
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
             onValueChangedFromOutside();
@@ -243,7 +252,10 @@ public class SliderNode extends AbstractNode {
 
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
             try{
-                valueFloat = Float.parseFloat(Utils.getClipboardString());
+                float clipboardValue = Float.parseFloat(Utils.getClipboardString());
+                if(!Float.isNaN(clipboardValue)){
+                    valueFloat = clipboardValue;
+                }
             }catch(NumberFormatException nfe){
                 println("Could not parse float from this clipboard string: " + Utils.getClipboardString());
             }
