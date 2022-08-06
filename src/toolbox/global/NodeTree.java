@@ -6,7 +6,6 @@ import toolbox.windows.nodes.NodeType;
 
 import java.util.*;
 
-import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
 public class NodeTree {
@@ -50,7 +49,9 @@ public class NodeTree {
     }
 
     public static void lazyInitFolderPath(String path) {
-        String[] split = path.split("/");
+        // TODO replace all '//' with '/' - code below probably doesn't work
+        String sanitisedPath = path.replaceAll("//", "\\/").trim();
+        String[] split = sanitisedPath.split("/");
         String runningPath = split[0];
         NodeFolder parentFolder = null;
         for (int i = 0; i < split.length; i++) {
@@ -86,7 +87,7 @@ public class NodeTree {
 
     public static List<AbstractNode> getAllNodesAsList(){
         List<AbstractNode> result = new ArrayList<>();
-        Queue<AbstractNode> queue = new LinkedList();
+        Queue<AbstractNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()){
             AbstractNode node = queue.poll();

@@ -26,6 +26,7 @@ import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -100,9 +101,17 @@ public class Gui implements UserInputSubscriber {
             return;
         }
         String randomId = UUID.randomUUID().toString().replace("-","").substring(0,8);
-        String filePath = "out/screenshots/" + State.app.getClass().getSimpleName() + "_" + randomId + ".jpg";
-        println("screenshot saved to: " + filePath);
+        String folderPath = "out/screenshots/";
+        String filetype = ".png";
+        String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;
+
         State.app.save(filePath);
+        try{
+            println("Saved screenshot to: " + new File(folderPath).getAbsolutePath());
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+
         screenshotRequestedOnMainThread = false;
     }
 
@@ -276,7 +285,7 @@ public class Gui implements UserInputSubscriber {
 
     public String stringPicker(String path, String[] options, String defaultOption) {
         if (options == null || options.length == 0) {
-            throw new IllegalArgumentException("SelectString() options parameter must not be null and have length > 0");
+            throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
         StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
         if (node == null) {
