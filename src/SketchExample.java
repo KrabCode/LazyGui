@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 
-public class MainTest extends PApplet {
+public class SketchExample extends PApplet {
     Gui gui;
     PGraphics pg;
     PVector rotationTime;
@@ -58,12 +58,12 @@ public class MainTest extends PApplet {
 
     private int getBlendMode() {
         String selectedMode = gui.stringPicker("background/blend mode", new String[]{"subtract", "add", "blend"});
-        switch(selectedMode){
-            case "blend": return BLEND;
-            case "add": return ADD;
-            case "subtract": return SUBTRACT;
-        }
-        return BLEND;
+        // moving to java 17 for jpackage allows this apparently
+        return switch (selectedMode) {
+            case "add" -> ADD;
+            case "subtract" -> SUBTRACT;
+            default -> BLEND;
+        };
     }
 
     private void drawBrush() {
