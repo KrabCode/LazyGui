@@ -47,7 +47,7 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
     @Override
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
-        // TODO in theory none of this is needed, sliders and toggles can know and save and load the data themselves
+        // TODO in theory none of this is needed, the underlying sliders and toggles can know and save and load the data themselves
         JsonElement gradientPosLoaded = loadedNode.getAsJsonObject().get("gradientPosDefault");
         JsonElement gradientActiveLoaded = loadedNode.getAsJsonObject().get("active");
         if(gradientPosLoaded != null){

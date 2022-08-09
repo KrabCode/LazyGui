@@ -48,10 +48,9 @@ public class NodeTree {
         return null;
     }
 
+    // TODO some way to escape the / so you can still use it as a node name
     public static void lazyInitFolderPath(String path) {
-        // TODO replace all '//' with '/' - code below probably doesn't work
-        String sanitisedPath = path.replaceAll("//", "\\/").trim();
-        String[] split = sanitisedPath.split("/");
+        String[] split = path.split("/");
         String runningPath = split[0];
         NodeFolder parentFolder = null;
         for (int i = 0; i < split.length; i++) {
