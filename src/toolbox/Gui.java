@@ -26,20 +26,22 @@ import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static processing.core.PApplet.*;
 
 
 public class Gui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
-    public static boolean screenshotRequestedOnMainThread = false;
-    public static boolean hotkeyHideActive = false;
-    public static boolean hotkeyScreenshotActive = false;
+    private static boolean screenshotRequestedOnMainThread = false;
+    private static boolean hotkeyHideActive = false;
+    private static boolean hotkeyScreenshotActive = false;
+    private static boolean closeAllWindowsActive = false;
+    private PGraphics pg;
     NodeFolder toolbar;
-    public PGraphics pg;
     PApplet app;
 
     // TODO class cast exception explanation when e.g. a slider path collides with an existing folder
@@ -97,18 +99,18 @@ public class Gui implements UserInputSubscriber {
     }
 
     private void takeScreenshotIfNeeded() {
-        if(!screenshotRequestedOnMainThread){
+        if (!screenshotRequestedOnMainThread) {
             return;
         }
-        String randomId = UUID.randomUUID().toString().replace("-","").substring(0,8);
+        String randomId = Utils.generateRandomShortId();
         String folderPath = "out/screenshots/";
         String filetype = ".png";
         String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;
 
         State.app.save(filePath);
-        try{
+        try {
             println("Saved screenshot to: " + new File(folderPath).getAbsolutePath());
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -121,15 +123,33 @@ public class Gui implements UserInputSubscriber {
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
         NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbar));
+        NodeTree.insertNodeAtItsPath(new ButtonNode(path + "/open save folder", toolbar));
+        updateThemePicker(toolbar.path + "/themes");
     }
 
     private void updateToolbar() {
-       updateThemePicker(toolbar.path + "/themes");
-       if(button(toolbar.path + "/close all windows")){
-           WindowManager.closeAllWindows();
-       }
-       hotkeyHideActive = toggle(toolbar.path + "/hotkeys/h: hide gui", true);
-       hotkeyScreenshotActive = toggle(toolbar.path + "/hotkeys/s: take screenshot", true);
+        if (button(toolbar.path + "/open save folder")) {
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.open(State.saveDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        updateThemePicker(toolbar.path + "/themes");
+        hotkeyHideActive = toggle(toolbar.path + "/hotkeys/h: hide gui", true);
+        closeAllWindowsActive = toggle(toolbar.path + "/hotkeys/d: close all windows", true);
+        hotkeyScreenshotActive = toggle(toolbar.path + "/hotkeys/s: take screenshot", true);
+    }
+
+    private void hotkeyInteraction(KeyEvent keyEvent) {
+        if (keyEvent.getKeyChar() == 'h' && hotkeyHideActive) {
+            isGuiHidden = !isGuiHidden;
+        }
+        screenshotRequestedOnMainThread = keyEvent.getKeyChar() == 's' && hotkeyScreenshotActive;
+        if(keyEvent.getKeyChar() == 'd' && closeAllWindowsActive){
+            WindowManager.closeAllWindows();
+        }
     }
 
     private void updateThemePicker(String path) {
@@ -154,13 +174,6 @@ public class Gui implements UserInputSubscriber {
                 State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
     }
 
-    private void hotkeyInteraction(KeyEvent keyEvent){
-        if (keyEvent.getKeyChar() == 'h' && hotkeyHideActive) {
-            isGuiHidden = !isGuiHidden;
-        }
-        screenshotRequestedOnMainThread = keyEvent.getKeyChar() == 's' && hotkeyScreenshotActive;
-    }
-
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.isAutoRepeat()) {
@@ -169,7 +182,7 @@ public class Gui implements UserInputSubscriber {
         hotkeyInteraction(keyEvent);
     }
 
-    public boolean mousePressedOutsideGui(){
+    public boolean mousePressedOutsideGui() {
         return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
     }
 
@@ -296,7 +309,7 @@ public class Gui implements UserInputSubscriber {
         return node.valueString;
     }
 
-    public void setTheme(Theme theme){
+    public void setTheme(Theme theme) {
         ThemeStore.currentSelection = ThemeType.CUSTOM;
         ThemeStore.setCustomPalette(theme);
     }

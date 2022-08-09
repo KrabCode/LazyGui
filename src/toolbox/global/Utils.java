@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static processing.core.PApplet.*;
 
@@ -197,23 +198,6 @@ public class Utils {
         }
     }
 
-    public static String dialogInput(String msg, String title) {
-        JFrame frame = new JFrame();
-        frame.setAlwaysOnTop(true);
-        frame.requestFocus();
-        return JOptionPane.showInputDialog(frame, msg, title, JOptionPane.QUESTION_MESSAGE);
-    }
-
-    public static boolean dialogConfirm(String msg, String title) {
-        // TODO do a normal dialog using a new custom dialog window inside processing, this JFrame stops other code execution, bad UX
-        JFrame frame = new JFrame();
-        frame.setAlwaysOnTop(true);
-        frame.requestFocus();
-        int dialogResult = JOptionPane.showConfirmDialog(frame, msg, title, JOptionPane.YES_NO_OPTION);
-        return dialogResult == 0;
-    }
-
-
     public static String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
         StringBuilder result = new StringBuilder();
         for(int i = 0; i < text.length(); i++){
@@ -225,6 +209,10 @@ public class Utils {
             result.append(character);
         }
         return result.toString();
+    }
+
+    public static String generateRandomShortId() {
+        return UUID.randomUUID().toString().replace("-","").substring(0,8);
     }
 
     public static class ArrayListBuilder<T>{
