@@ -5,6 +5,9 @@ import processing.core.PVector;
 import toolbox.Gui;
 
 public class SketchExample extends PApplet {
+
+    // TODO publish an exe with jpackage that installs and runs SketchExample
+
     Gui gui;
     PGraphics pg;
     PVector rotationTime;
