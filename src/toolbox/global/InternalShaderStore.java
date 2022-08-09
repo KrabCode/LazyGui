@@ -14,12 +14,12 @@ public class InternalShaderStore {
 
     }
 
-    public static  void filter(String path, PGraphics pg) {
-        pg.filter(getShader(shaderFolder + path));
+    public static void filter(String path, PGraphics pg) {
+        pg.filter(getShader(path));
     }
 
     public static void shader(String path, PGraphics pg) {
-        pg.shader(getShader(shaderFolder + path));
+        pg.shader(getShader(path));
     }
 
     public static PShader getShader(String path) {
