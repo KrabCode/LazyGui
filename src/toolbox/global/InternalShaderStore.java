@@ -8,23 +8,25 @@ import java.util.Map;
 
 public class InternalShaderStore {
     private static final Map<String, PShader> shaders = new HashMap<>();
+    private static final String shaderFolder = "src/shaders/";
 
     private InternalShaderStore() {
 
     }
 
-    public static PShader getShader(String path) {
-        if(!shaders.containsKey(path)) {
-            shaders.put(path, State.app.loadShader(path));
-        }
-        return shaders.get(path);
-    }
-
     public static  void filter(String path, PGraphics pg) {
-        pg.filter(shaders.get(path));
+        pg.filter(getShader(shaderFolder + path));
     }
 
     public static void shader(String path, PGraphics pg) {
-        pg.shader(shaders.get(path));
+        pg.shader(getShader(shaderFolder + path));
+    }
+
+    public static PShader getShader(String path) {
+        String fullPath = shaderFolder + path;
+        if(!shaders.containsKey(fullPath)) {
+            shaders.put(fullPath, State.app.loadShader(fullPath));
+        }
+        return shaders.get(fullPath);
     }
 }

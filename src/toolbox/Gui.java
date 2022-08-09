@@ -186,6 +186,8 @@ public class Gui implements UserInputSubscriber {
         return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
     }
 
+    // TODO remove duplicated code that finds / creates a Node
+
     @SuppressWarnings("unused")
     public float slider(String path) {
         return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);

@@ -60,8 +60,8 @@ public class SketchExample extends PApplet {
     }
 
     private int getBlendMode() {
-        String selectedMode = gui.stringPicker("background/blend mode", new String[]{"subtract", "add", "blend"});
-        // moving to java 17 for jpackage allows this apparently
+        String selectedMode = gui.stringPicker("background/blend mode", new String[]{"blend", "add", "subtract"});
+        // java 17 required
         return switch (selectedMode) {
             case "add" -> ADD;
             case "subtract" -> SUBTRACT;
@@ -83,12 +83,13 @@ public class SketchExample extends PApplet {
 
     private void drawBox() {
         float boxSize = gui.slider("box/size", 120);
-        pg.stroke(gui.colorPicker("box/stroke color", color(1)).hex);
         pg.strokeWeight(gui.slider("box/stroke weight", 2));
+        pg.stroke(gui.colorPicker("box/stroke color", color(1)).hex);
+        int fillColor = gui.colorPicker("box/fill color", color(0, 0)).hex;
         if(gui.toggle("box/no fill", true)) {
             pg.noFill();
         }else{
-            pg.fill(gui.colorPicker("box/fill color", color(0, 0)).hex);
+            pg.fill(fillColor);
         }
         pg.translate(width/2f, height/2f);
         pg.translate(gui.slider("box/pos x"),
