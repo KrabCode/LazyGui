@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class InternalShaderStore {
     private static final Map<String, PShader> shaders = new HashMap<>();
-    private static final String shaderFolder = "src/shaders/";
+    private static final String shaderFolder = "shaders/";
 
     private InternalShaderStore() {
 

@@ -60,13 +60,13 @@ public class SketchExample extends PApplet {
     }
 
     private int getBlendMode() {
-        String selectedMode = gui.stringPicker("background/blend mode", new String[]{"blend", "add", "subtract"}, "subtract");
-        // java 17 required
-        return switch (selectedMode) {
-            case "add" -> ADD;
-            case "subtract" -> SUBTRACT;
-            default -> BLEND;
-        };
+        String selectedMode = gui.stringPicker("background/blend mode",
+                new String[]{"blend", "add", "subtract"}, "subtract");
+        switch (selectedMode) {
+            case "add": return ADD;
+            case "subtract": return SUBTRACT;
+            default: return BLEND;
+        }
     }
 
     private void drawBrush() {

@@ -1,0 +1,3 @@
+write a readme in two parts
+    - user section
+    - programmer section
