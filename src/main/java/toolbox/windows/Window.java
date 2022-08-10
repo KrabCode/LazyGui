@@ -79,7 +79,7 @@ public abstract class Window implements UserInputSubscriber {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSize.x - cell + 1, 0, cell - 1, cell);
+            pg.rect(windowSize.x - cell + 0.5f, 0, cell - 1, cell);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();

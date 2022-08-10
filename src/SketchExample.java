@@ -103,6 +103,13 @@ public class SketchExample extends PApplet {
         pg.rotateY(rotationTime.y);
         pg.rotateZ(rotationTime.z);
         pg.box(boxSize);
-
+        if(gui.toggle("box/recursion/active", false)){
+            int copies = gui.sliderInt("box/recursion/count", 5);
+            float scale = gui.slider("box/recursion/scale", 0.9f);
+            for (int i = 0; i < copies; i++) {
+                pg.scale(scale);
+                pg.box(boxSize);
+            }
+        }
     }
 }
