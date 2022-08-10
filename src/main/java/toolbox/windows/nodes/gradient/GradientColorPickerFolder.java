@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import toolbox.global.NodeTree;
-import toolbox.global.State;
 import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.ToggleNode;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;

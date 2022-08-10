@@ -60,7 +60,7 @@ public class SketchExample extends PApplet {
     }
 
     private int getBlendMode() {
-        String selectedMode = gui.stringPicker("background/blend mode", new String[]{"blend", "add", "subtract"});
+        String selectedMode = gui.stringPicker("background/blend mode", new String[]{"blend", "add", "subtract"}, "subtract");
         // java 17 required
         return switch (selectedMode) {
             case "add" -> ADD;
@@ -85,7 +85,7 @@ public class SketchExample extends PApplet {
         float boxSize = gui.slider("box/size", 120);
         pg.strokeWeight(gui.slider("box/stroke weight", 2));
         pg.stroke(gui.colorPicker("box/stroke color", color(1)).hex);
-        int fillColor = gui.colorPicker("box/fill color", color(0, 0)).hex;
+        int fillColor = gui.colorPicker("box/fill color", color(0.05f)).hex;
         if(gui.toggle("box/no fill", true)) {
             pg.noFill();
         }else{
@@ -95,7 +95,7 @@ public class SketchExample extends PApplet {
         pg.translate(gui.slider("box/pos x"),
                 gui.slider("box/pos y"),
                 gui.slider("box/pos z", 500));
-        float rotationTimeDelta = gui.slider("box/rotate multiplier", 1);
+        float rotationTimeDelta = gui.slider("box/rotate multiplier", 0.5f);
         rotationTime.x += radians(gui.slider("box/rotate x", 0.25f) * rotationTimeDelta);
         rotationTime.y += radians(gui.slider("box/rotate y", 0.25f) * rotationTimeDelta);
         rotationTime.z += radians(gui.slider("box/rotate z", 0.25f) * rotationTimeDelta);

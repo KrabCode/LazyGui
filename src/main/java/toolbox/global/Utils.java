@@ -2,7 +2,6 @@ package toolbox.global;
 
 import processing.core.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;

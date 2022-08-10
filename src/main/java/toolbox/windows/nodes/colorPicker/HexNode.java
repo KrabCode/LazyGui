@@ -3,11 +3,8 @@ package toolbox.windows.nodes.colorPicker;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import toolbox.global.State;
-import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
-import toolbox.global.KeyCodes;
 
 import static processing.core.PApplet.hex;
 import static processing.core.PApplet.println;
