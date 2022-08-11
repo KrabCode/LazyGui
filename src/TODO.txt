@@ -1,3 +1,9 @@
 write a readme in two parts
     - user section
     - programmer section
+
+simplify usage
+    - make Gui static
+    - subscribe to end of draw call and draw gui without the user
+
+find a good name
