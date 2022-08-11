@@ -1,6 +1,7 @@
 # Project exclude paths
 /.idea/
 /out/
+/saves/
 /libs/
 *.iml
 
