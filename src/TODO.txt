@@ -1,5 +1,6 @@
 write a readme in two parts
     - user section
+        - short videos with text overlay
     - programmer section
 
 simplify usage
@@ -7,3 +8,5 @@ simplify usage
     - subscribe to end of draw call and draw gui without the user
 
 find a good name
+conform to processing library folder structure
+include examples
