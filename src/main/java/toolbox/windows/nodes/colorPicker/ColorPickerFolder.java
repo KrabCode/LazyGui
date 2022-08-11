@@ -78,8 +78,8 @@ public class ColorPickerFolder extends NodeFolder {
                 getValue(alphaNodeName)));
     }
 
-    Color outputColor = new Color();
-    public Color getColor() {
+    PickerColor outputColor = new PickerColor();
+    public PickerColor getColor() {
         outputColor.hex = hex;
         outputColor.hue = hue();
         outputColor.saturation = saturation();

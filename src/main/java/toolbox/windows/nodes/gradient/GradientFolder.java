@@ -8,7 +8,7 @@ import toolbox.global.InternalShaderStore;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.PickerColor;
 import toolbox.windows.nodes.select.StringPickerFolder;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class GradientFolder extends NodeFolder {
             if(colorPicker.isSkipped()){
                 continue;
             }
-            Color color = colorPicker.getColor();
+            PickerColor color = colorPicker.getColor();
             result[i] = color.hue;
             result[i+1] = color.saturation;
             result[i+2] = color.brightness;

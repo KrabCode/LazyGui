@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import toolbox.global.State;
 import toolbox.windows.nodes.NodeFolder;
-import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.PickerColor;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
 import toolbox.windows.nodes.sliders.SliderNode;
 import toolbox.windows.nodes.ToggleNode;
@@ -46,7 +46,7 @@ public class ImagePickerFolder extends NodeFolder {
         float x = ((SliderNode) findChildByName("x")).valueFloat;
         float y = ((SliderNode) findChildByName("y")).valueFloat;
         float scale = ((SliderNode) findChildByName("scale")).valueFloat;
-        Color tint = ((ColorPickerFolder) findChildByName("tint")).getColor();
+        PickerColor tint = ((ColorPickerFolder) findChildByName("tint")).getColor();
         if (!knownImagePath.equals(currentImagePath)) {
             System.out.println("Loading image from: " + currentImagePath);
             img = State.app.loadImage(currentImagePath);
@@ -74,7 +74,7 @@ public class ImagePickerFolder extends NodeFolder {
         errorGraphics.endDraw();
     }
 
-    private void updateImageGraphics(float x, float y, float scale, Color tint) {
+    private void updateImageGraphics(float x, float y, float scale, PickerColor tint) {
         imageGraphics.beginDraw();
         imageGraphics.clear();
         imageGraphics.translate(x, y);

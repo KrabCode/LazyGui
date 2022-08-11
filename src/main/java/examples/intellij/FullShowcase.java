@@ -1,10 +1,12 @@
+package examples.intellij;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
 
-public class SketchExample extends PApplet {
+public class FullShowcase extends PApplet {
 
     Gui gui;
     PGraphics pg;
@@ -35,7 +37,6 @@ public class SketchExample extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.draw();
     }
 
     private void drawBg() {

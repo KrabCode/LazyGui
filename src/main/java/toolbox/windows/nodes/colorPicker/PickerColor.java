@@ -1,6 +1,6 @@
 package toolbox.windows.nodes.colorPicker;
 
-public class Color {
+public class PickerColor {
     public int hex = 0xFF000000;
 
     // [0,1]

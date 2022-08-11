@@ -14,13 +14,13 @@ import java.util.List;
 
 public class StateListFolder extends NodeFolder {
 
-
-    ArrayList<AbstractNode> childrenToIgnoreWhenIterating = new ArrayList<>();
+    ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     public StateListFolder(String path, NodeFolder parent) {
         super(path, parent);
         children.add(new ButtonNode(path + "/new save", this));
-        childrenToIgnoreWhenIterating.addAll(children);
+        children.add(new ButtonNode(path + "/open save folder", this));
+        childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
         idealWindowWidth = State.cell * 12;
     }
@@ -51,7 +51,7 @@ public class StateListFolder extends NodeFolder {
     private void removeChildrenWithDeletedSaveFiles(List<File> existingFilenames) {
         List<AbstractNode> childrenToRemove = new ArrayList<>();
         for(AbstractNode child : children){
-            if(childrenToIgnoreWhenIterating.contains(child)){
+            if(childrenThatAreNotSaveFiles.contains(child)){
                 continue;
             }
             boolean childHasLostSourceFile = true;
@@ -78,6 +78,9 @@ public class StateListFolder extends NodeFolder {
         if(State.gui.button(path + "/new save")){
             String newName = Utils.generateRandomShortId();
             State.createTreeSaveFile(newName);
+        }
+        if(State.gui.button(path + "/open save folder")){
+            Utils.openSaveFolder();
         }
         updateStateList();
     }

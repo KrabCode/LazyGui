@@ -13,7 +13,7 @@ import toolbox.global.State;
 import toolbox.global.NodeTree;
 import toolbox.global.themes.ThemeType;
 import toolbox.windows.nodes.*;
-import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.PickerColor;
 import toolbox.windows.nodes.colorPicker.ColorPickerFolder;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
@@ -26,9 +26,7 @@ import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
@@ -66,6 +64,7 @@ public class Gui implements UserInputSubscriber {
         WindowManager.addWindow(rootFolder);
         createToolbar();
         lazyFollowSketchResolution();
+        app.registerMethod("draw", this);
     }
 
     void lazyFollowSketchResolution() {
@@ -123,19 +122,10 @@ public class Gui implements UserInputSubscriber {
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
         NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbar));
-        NodeTree.insertNodeAtItsPath(new ButtonNode(path + "/open save folder", toolbar));
         updateThemePicker(toolbar.path + "/themes");
     }
 
     private void updateToolbar() {
-        if (button(toolbar.path + "/open save folder")) {
-            Desktop desktop = Desktop.getDesktop();
-            try {
-                desktop.open(State.saveDir);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         updateThemePicker(toolbar.path + "/themes");
         hotkeyHideActive = toggle(toolbar.path + "/hotkeys/h: hide gui", true);
         closeAllWindowsActive = toggle(toolbar.path + "/hotkeys/d: close all windows", true);
@@ -317,22 +307,22 @@ public class Gui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    public Color colorPicker(String path) {
+    public PickerColor colorPicker(String path) {
         return colorPicker(path, 1, 1, 0, 1);
     }
 
     @SuppressWarnings("unused")
-    public Color colorPicker(String path, float grayNorm) {
+    public PickerColor colorPicker(String path, float grayNorm) {
         return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }
 
     @SuppressWarnings("unused")
-    public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
+    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
         return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
     }
 
     @SuppressWarnings("unused")
-    public Color colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
+    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
             int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
@@ -344,7 +334,7 @@ public class Gui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    public Color colorPicker(String path, int hex) {
+    public PickerColor colorPicker(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
             NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
