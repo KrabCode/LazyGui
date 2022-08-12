@@ -12,14 +12,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StateListFolder extends NodeFolder {
+public class SaveNodeFolder extends NodeFolder {
 
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
-    public StateListFolder(String path, NodeFolder parent) {
+    public SaveNodeFolder(String path, NodeFolder parent) {
         super(path, parent);
-        children.add(new ButtonNode(path + "/new save", this));
         children.add(new ButtonNode(path + "/open save folder", this));
+        children.add(new ButtonNode(path + "/create new save", this));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
         idealWindowWidth = State.cell * 12;
@@ -43,7 +43,7 @@ public class StateListFolder extends NodeFolder {
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
             if(NodeTree.findNode(childNodePath) == null){
-                children.add(1, new StateListItemNode(childNodePath, this, filename, file.getAbsolutePath()));
+                children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename, file.getAbsolutePath()));
             }
         }
     }

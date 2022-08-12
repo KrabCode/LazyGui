@@ -7,10 +7,10 @@ import toolbox.windows.nodes.NodeFolder;
 import toolbox.windows.nodes.NodeType;
 
 
-class StateListItemNode extends AbstractNode {
+class SaveNode extends AbstractNode {
     String fileName, fullPath;
 
-    public StateListItemNode(String path, NodeFolder parent, String fileName, String fullPath) {
+    public SaveNode(String path, NodeFolder parent, String fileName, String fullPath) {
         super(NodeType.VALUE_NODE, path, parent);
         this.fileName = fileName;
         this.fullPath = fullPath;

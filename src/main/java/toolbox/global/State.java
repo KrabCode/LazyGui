@@ -70,9 +70,10 @@ public class State {
     public static void loadMostRecentSave() {
         reloadSaveFolderContents();
         if(saveFilesSorted.size() > 0){
-            loadStateFromJson(saveFilesSorted.get(0));
+            loadStateFromFile(saveFilesSorted.get(0));
         }
     }
+
 
     private static void reloadSaveFolderContents() {
         File[] saveFiles = saveDir.listFiles();
@@ -88,7 +89,7 @@ public class State {
     public static void loadStateFromFile(String filename) {
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename)) {
-                loadStateFromJson(saveFile);
+                loadStateFromFile(saveFile);
                 return;
             }
         }
@@ -148,23 +149,26 @@ public class State {
         return saveFilesSorted;
     }
 
-    public static void loadStateFromJson(File jsonToLoad) {
-        if(!jsonToLoad.exists()){
+    public static void loadStateFromFile(File file){
+        if(!file.exists()){
             println("Error: save file doesn't exist");
             return;
         }
         String json;
         try {
-            json = readFile(jsonToLoad);
+            json = readFile(file);
         } catch (IOException e) {
             println("Error loading state from file", e.getMessage());
             return;
         }
-        // don't delete or do anything to the existing nodes, just overwrite their values if they exist
-        JsonElement loadedRoot = gson.fromJson(json, JsonElement.class);
+        JsonElement root = gson.fromJson(json, JsonElement.class);
+        loadStateFromJson(root);
+    }
+
+    public static void loadStateFromJson(JsonElement root) {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
-        queue.offer(loadedRoot);
+        queue.offer(root);
         while (!queue.isEmpty()) {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();

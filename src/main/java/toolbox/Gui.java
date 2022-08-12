@@ -21,7 +21,7 @@ import toolbox.windows.FolderWindow;
 import toolbox.windows.WindowManager;
 import toolbox.windows.nodes.gradient.GradientFolder;
 import toolbox.windows.nodes.imagePicker.ImagePickerFolder;
-import toolbox.windows.nodes.saves.StateListFolder;
+import toolbox.windows.nodes.saves.SaveNodeFolder;
 import toolbox.windows.nodes.select.StringPickerFolder;
 import toolbox.windows.nodes.sliders.SliderIntNode;
 import toolbox.windows.nodes.sliders.SliderNode;
@@ -121,7 +121,7 @@ public class Gui implements UserInputSubscriber {
         String path = "options";
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
-        NodeTree.insertNodeAtItsPath(new StateListFolder(path + "/saves", toolbar));
+        NodeTree.insertNodeAtItsPath(new SaveNodeFolder(path + "/saves", toolbar));
         updateThemePicker(toolbar.path + "/themes");
     }
 
