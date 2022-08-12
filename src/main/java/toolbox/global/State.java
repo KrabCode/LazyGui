@@ -34,6 +34,9 @@ public class State {
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
 
+    static ArrayList<String> undoStack = new ArrayList<>();
+    static ArrayList<String> redoStack = new ArrayList<>();
+
     private static long lastFrameMillis;
     private static final long lastFrameMillisStuckLimit = 1000;
 
@@ -132,7 +135,7 @@ public class State {
     }
 
     public static void overwriteFileWithCurrentState(String fullPath) {
-        String json = gson.toJson(NodeTree.getRoot());
+        String json = getCurrentStateAsJsonString();
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(fullPath, false));
@@ -142,6 +145,10 @@ public class State {
             e.printStackTrace();
         }
         println("Saved current state to: " + fullPath);
+    }
+
+    private static String getCurrentStateAsJsonString() {
+        return gson.toJson(NodeTree.getRoot());
     }
 
     public static ArrayList<File> getSaveFileList() {
@@ -220,5 +227,38 @@ public class State {
         long timeSinceLastFrame = app.millis() - lastFrameMillis;
         return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
+
+    public static void onStateChanged(){
+        pushToUndoStack();
+    }
+
+    public static void undo() {
+        popFromUndoStack();
+    }
+
+    public static void redo() {
+        popFromRedoStack();
+    }
+
+    private static void pushToUndoStack(){
+        undoStack.add(getCurrentStateAsJsonString());
+    }
+
+    private static void popFromUndoStack() {
+        if(undoStack.isEmpty()){
+            return;
+        }
+        String poppedJson = undoStack.remove(undoStack.size() - 1);
+        loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
+    }
+
+    public static void pushToRedoStack(){
+
+    }
+
+    public static void popFromRedoStack(){
+
+    }
+
 
 }

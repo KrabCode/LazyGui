@@ -5,6 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
+import toolbox.global.KeyCodes;
 import toolbox.global.Utils;
 import toolbox.global.themes.Theme;
 import toolbox.global.themes.ThemeColorType;
@@ -35,9 +36,7 @@ import static processing.core.PApplet.*;
 public class Gui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
-    private static boolean hotkeyHideActive = false;
-    private static boolean hotkeyScreenshotActive = false;
-    private static boolean closeAllWindowsActive = false;
+    private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive;
     private PGraphics pg;
     NodeFolder toolbar;
     PApplet app;
@@ -126,19 +125,30 @@ public class Gui implements UserInputSubscriber {
     }
 
     private void updateToolbar() {
-        updateThemePicker(toolbar.path + "/themes");
-        hotkeyHideActive = toggle(toolbar.path + "/hotkeys/h: hide gui", true);
-        closeAllWindowsActive = toggle(toolbar.path + "/hotkeys/d: close all windows", true);
-        hotkeyScreenshotActive = toggle(toolbar.path + "/hotkeys/s: take screenshot", true);
+        String path = toolbar.path;
+        updateThemePicker(path + "/themes");
+        hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);
+        hotkeyCloseAllWindowsActive = toggle(path + "/hotkeys/d: close all windows", true);
+        hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);
+        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
+        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
     }
 
     private void hotkeyInteraction(KeyEvent keyEvent) {
-        if (keyEvent.getKeyChar() == 'h' && hotkeyHideActive) {
+        char key = keyEvent.getKeyChar();
+        int keyCode = keyEvent.getKeyCode();
+        if (key == 'h' && hotkeyHideActive) {
             isGuiHidden = !isGuiHidden;
         }
-        screenshotRequestedOnMainThread = keyEvent.getKeyChar() == 's' && hotkeyScreenshotActive;
-        if(keyEvent.getKeyChar() == 'd' && closeAllWindowsActive){
+        screenshotRequestedOnMainThread = (key == 's' && hotkeyScreenshotActive);
+        if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
+        }
+        if(keyCode == KeyCodes.KEY_CODE_CTRL_Z){
+            State.undo();
+        }
+        if(keyCode == KeyCodes.KEY_CODE_CTRL_Y){
+            State.redo();
         }
     }
 
