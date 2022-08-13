@@ -6,7 +6,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.global.State;
 import toolbox.global.Utils;
 import toolbox.global.themes.ThemeStore;
@@ -245,7 +245,7 @@ public abstract class AbstractNode {
 
     public boolean isParentWindowVisible(){
         if(parent == null || parent.window == null){
-            return !Gui.isGuiHidden;
+            return !LazyGui.isGuiHidden;
         }
         return !parent.window.closed;
     }

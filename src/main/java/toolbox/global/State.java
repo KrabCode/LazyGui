@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.windows.nodes.NodeType;
 
@@ -24,7 +24,7 @@ public class State {
     public static float cell = 22;
     public static PFont font = null;
     public static PApplet app = null;
-    public static Gui gui = null;
+    public static LazyGui gui = null;
     public static PGraphics normalizedColorProvider = null;
     public static float textMarginX = 5;
     public static String sketchName = null;
@@ -40,7 +40,7 @@ public class State {
     private static long lastFrameMillis;
     private static final long lastFrameMillisStuckLimit = 1000;
 
-    public static void init(Gui gui, PApplet app) {
+    public static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
 //        printAvailableFonts();

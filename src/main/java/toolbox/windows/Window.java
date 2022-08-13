@@ -11,7 +11,7 @@ import toolbox.global.Utils;
 import toolbox.windows.nodes.AbstractNode;
 import toolbox.userInput.UserInputPublisher;
 import toolbox.userInput.UserInputSubscriber;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.println;
@@ -184,7 +184,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private boolean isClosed() {
-        return closed || Gui.isGuiHidden;
+        return closed || LazyGui.isGuiHidden;
     }
 
     void setFocusOnThis() {

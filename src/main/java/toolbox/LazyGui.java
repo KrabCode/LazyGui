@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import static processing.core.PApplet.*;
 
 
-public class Gui implements UserInputSubscriber {
+public class LazyGui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive;
@@ -43,7 +43,7 @@ public class Gui implements UserInputSubscriber {
 
     // TODO class cast exception explanation when e.g. a slider path collides with an existing folder
 
-    public Gui(PApplet sketch) {
+    public LazyGui(PApplet sketch) {
         this.app = sketch;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The Toolbox library requires the P2D or P3D renderer");
@@ -132,6 +132,7 @@ public class Gui implements UserInputSubscriber {
         hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);
         undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
         redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
+        // todo autosave toggle
     }
 
     private void hotkeyInteraction(KeyEvent keyEvent) {

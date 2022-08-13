@@ -1,14 +1,14 @@
-package examples.intellij;
+package examples;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 public class FullShowcase extends PApplet {
 
-    Gui gui;
+    LazyGui gui;
     PGraphics pg;
     PVector rotationTime;
 
@@ -22,7 +22,7 @@ public class FullShowcase extends PApplet {
     }
 
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P3D);
         colorMode(HSB,1,1,1,1);
         rotationTime = new PVector();

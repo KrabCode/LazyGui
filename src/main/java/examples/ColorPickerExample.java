@@ -1,10 +1,10 @@
-package examples.intellij;
+package examples;
 
 import processing.core.PApplet;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 public class ColorPickerExample extends PApplet {
-    Gui gui;
+    LazyGui gui;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -15,7 +15,7 @@ public class ColorPickerExample extends PApplet {
     }
 
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
     }
 
     @SuppressWarnings("DuplicatedCode")
