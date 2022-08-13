@@ -145,10 +145,10 @@ public class LazyGui implements UserInputSubscriber {
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
         }
-        if(keyCode == KeyCodes.KEY_CODE_CTRL_Z){
+        if(keyCode == KeyCodes.KEY_CODE_CTRL_Z && undoHotkeyActive){
             State.undo();
         }
-        if(keyCode == KeyCodes.KEY_CODE_CTRL_Y){
+        if(keyCode == KeyCodes.KEY_CODE_CTRL_Y && redoHotkeyActive){
             State.redo();
         }
     }
