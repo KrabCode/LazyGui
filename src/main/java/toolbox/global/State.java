@@ -250,15 +250,11 @@ public class State {
             return;
         }
         String poppedJson = undoStack.remove(undoStack.size() - 1);
-        pushToRedoStack(poppedJson);
+        redoStack.add(poppedJson);
         loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
     }
 
-    public static void pushToRedoStack(String jsonState){
-        redoStack.add(jsonState);
-    }
-
-    public static void popFromRedoStack(){
+    private static void popFromRedoStack(){
         if(redoStack.isEmpty()){
             return;
         }
@@ -266,10 +262,4 @@ public class State {
         undoStack.add(poppedJson);
         loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
     }
-
-    public static void deleteRedoStack(){
-        redoStack.clear();
-    }
-
-
 }
