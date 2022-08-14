@@ -216,7 +216,7 @@ public abstract class AbstractNode {
     public void mouseReleasedAnywhere(MouseEvent e, float x, float y) {
         if(isDragged){
             e.setConsumed(true);
-            State.onStateChanged();
+            State.onUndoableActionEnded();
         }
         isDragged = false;
         State.app.cursor();

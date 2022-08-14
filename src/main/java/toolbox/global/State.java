@@ -39,6 +39,7 @@ public class State {
 
     private static long lastFrameMillis;
     private static final long lastFrameMillisStuckLimit = 1000;
+    private static final int undoStackSizeLimit = 1000;
 
     public static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
@@ -228,7 +229,7 @@ public class State {
         return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
 
-    public static void onStateChanged(){
+    public static void onUndoableActionEnded(){
         // TODO print diff for debug, some undos don't change anything
         pushToUndoStack();
     }
@@ -243,6 +244,9 @@ public class State {
 
     private static void pushToUndoStack(){
         undoStack.add(getCurrentStateAsJsonString());
+        while(undoStack.size() > undoStackSizeLimit){
+            undoStack.remove(0);
+        }
         redoStack.clear();
     }
 

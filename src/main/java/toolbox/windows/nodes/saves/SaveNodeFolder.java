@@ -75,7 +75,7 @@ public class SaveNodeFolder extends NodeFolder {
 
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
-        if(State.gui.button(path + "/new save")){
+        if(State.gui.button(path + "/create new save")){
             String newName = Utils.generateRandomShortId();
             State.createTreeSaveFile(newName);
         }

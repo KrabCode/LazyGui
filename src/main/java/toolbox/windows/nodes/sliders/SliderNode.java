@@ -278,9 +278,11 @@ public class SliderNode extends AbstractNode {
                 return;
             }
         }
+        State.onUndoableActionEnded();
         onValueChangedFromOutside();
     }
 
+    // TODO just use a setter in the color pickers instead of this inheritance madness :<
     protected void onValueChangedFromOutside() {
 
     }
