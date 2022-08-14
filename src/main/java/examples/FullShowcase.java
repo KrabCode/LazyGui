@@ -3,8 +3,8 @@ package examples;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import toolbox.LazyGui;
-import toolbox.global.Utils;
+import lazy.LazyGui;
+import lazy.global.Utils;
 
 public class FullShowcase extends PApplet {
 

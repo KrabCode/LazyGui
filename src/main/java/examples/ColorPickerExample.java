@@ -1,7 +1,7 @@
 package examples;
 
 import processing.core.PApplet;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 public class ColorPickerExample extends PApplet {
     LazyGui gui;
