@@ -237,7 +237,6 @@ public class SliderNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        float originalValue = valueFloat;
         if(e.getKeyChar() == 'r'){
             if(Float.isNaN(valueFloatDefault)){
                 valueFloat = valueFloatDefault;
@@ -260,10 +259,6 @@ public class SliderNode extends AbstractNode {
             }catch(NumberFormatException nfe){
                 println("Could not parse float from this clipboard string: " + Utils.getClipboardString());
             }
-        }
-
-        if(valueFloat != originalValue){
-            State.onStateChanged();
         }
     }
 

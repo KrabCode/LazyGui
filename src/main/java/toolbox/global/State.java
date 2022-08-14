@@ -229,6 +229,7 @@ public class State {
     }
 
     public static void onStateChanged(){
+        // TODO print diff for debug, some undos don't change anything
         pushToUndoStack();
     }
 
