@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Class-Path: core.jar gluegen-rt-natives-linux-aarch64.jar gluegen-rt-nat
+ ives-linux-amd64.jar gluegen-rt-natives-linux-armv6hf.jar gluegen-rt-na
+ tives-linux-i586.jar gluegen-rt-natives-macosx-universal.jar gluegen-rt
+ -natives-windows-amd64.jar gluegen-rt-natives-windows-i586.jar gluegen-
+ rt.jar jogl-all-natives-linux-aarch64.jar jogl-all-natives-linux-amd64.
+ jar jogl-all-natives-linux-armv6hf.jar jogl-all-natives-linux-i586.jar 
+ jogl-all-natives-macosx-universal.jar jogl-all-natives-windows-amd64.ja
+ r jogl-all-natives-windows-i586.jar jogl-all.jar gson-2.8.9.jar
+
