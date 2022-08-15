@@ -7,6 +7,4 @@ simplify usage
     - make Gui static
     - subscribe to end of draw call and draw gui without the user
 
-find a good name
-conform to processing library folder structure
-include examples
+manually create processing examples from the existing pure java examples
