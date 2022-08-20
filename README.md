@@ -1,7 +1,9 @@
-## LazyGUI is on a mission to make iteration faster and easier
+## LazyGUI is on a mission to make iterating in processing a joyful experience
 
 ### Why?
 Because optimizing your iteration loop makes your life easier and your output prettier.
+
+---
 
 ### What?
 
@@ -24,6 +26,7 @@ GUI changes are lost forever.
 - hotkey based undo and redo
 - pre-made and custom color themes
 
+---
 
 ### How?
 
