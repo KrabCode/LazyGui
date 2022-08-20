@@ -1,11 +1,12 @@
-# Lazy Gui
-
----
+## LazyGUI is on a mission to make iteration faster and easier
 
 ### Why?
+Because optimizing your iteration loop makes your life easier and your output prettier.
+
+### What?
 
 **Problem**: You're making a processing sketch, and you want to tweak some values. But restarting the sketch slows you
-down. So you use a processing GUI library, register its control elements in setup() and then ask for their values in
+down. So you use one of the dozen other processing GUI libraries, register its control elements in setup() and then ask for their values in
 draw(). But now when you want to add a new control element you need to add code to two unrelated places. This slows you
 down.
 
@@ -23,13 +24,8 @@ GUI changes are lost forever.
 - hotkey based undo and redo
 - pre-made and custom color themes
 
----
 
-#### Faster iteration makes your life easier and your output prettier.
-
----
-
-### How to use it?
+### How?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and drag & drop it into your Processing
 editor window.
