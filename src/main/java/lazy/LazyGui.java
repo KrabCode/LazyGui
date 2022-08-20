@@ -21,7 +21,6 @@ import lazy.userInput.UserInputSubscriber;
 import lazy.windows.FolderWindow;
 import lazy.windows.WindowManager;
 import lazy.windows.nodes.gradient.GradientFolder;
-import lazy.windows.nodes.imagePicker.ImagePickerFolder;
 import lazy.windows.nodes.saves.SaveNodeFolder;
 import lazy.windows.nodes.select.StringPickerFolder;
 import lazy.windows.nodes.sliders.SliderIntNode;
@@ -383,20 +382,4 @@ public class LazyGui implements UserInputSubscriber {
         }
         return node.getOutputGraphics();
     }
-
-    @SuppressWarnings("unused")
-    public PImage imagePicker(String path) {
-        return imagePicker(path, "");
-    }
-
-    public PImage imagePicker(String path, String defaultFilePath) {
-        ImagePickerFolder node = (ImagePickerFolder) NodeTree.findNode(path);
-        if (node == null) {
-            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ImagePickerFolder(path, parentFolder, defaultFilePath);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getOutputImage();
-    }
-
 }
