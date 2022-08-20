@@ -52,8 +52,8 @@ void draw(){
 
 #### Slider
 ```java
-float x=gui.slider("x");
-ellipse(x,height/2,50,50);
+float x = gui.slider("x");
+ellipse(x, height/2, 50, 50);
 ```
 
 #### Button:
