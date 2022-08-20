@@ -8,3 +8,7 @@ simplify usage
     - subscribe to end of draw call and draw gui without the user
 
 manually create processing examples from the existing pure java examples
+
+gui factory where you OPT INTO advanced features like
+    - saving at all
+    - themes
