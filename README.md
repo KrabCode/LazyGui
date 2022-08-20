@@ -34,13 +34,13 @@ First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) 
 editor window.
 
 #### Initialize the GUI:
-
+This initializes the GUI in `setup()` and displays it every time `draw()` ends.
 ```java
 LazyGui gui;
 
 void setup(){
     size(800,800,P2D);
-    gui=new LazyGui(this);
+    gui = new LazyGui(this);
 }
 
 void draw(){
