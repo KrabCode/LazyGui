@@ -18,8 +18,8 @@ public class FullShowcase extends PApplet {
     }
 
     public void settings() {
-        size(1000, 1000, P3D);
-//        fullScreen(P3D);
+//        size(1000, 1000, P3D);
+        fullScreen(P3D);
     }
 
     public void setup() {
@@ -38,7 +38,7 @@ public class FullShowcase extends PApplet {
         clear();
         image(pg, 0, 0);
         if(frameCount < 800){
-            pg.save("out/rec/"+ recSketchId + "/" + frameCount + ".jpg");
+//            pg.save("out/rec/"+ recSketchId + "/" + frameCount + ".jpg");
         }
     }
 

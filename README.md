@@ -12,8 +12,8 @@ down. So you use one of the dozen other processing GUI libraries, register its c
 draw(). But now when you want to add a new control element you need to add code to two unrelated places. This slows you
 down.
 
-- **Solution**: Just ask for the values in draw() and have the GUI silently take care of the initialization and putting
-  your control inside a window of related controls based on a string path you provide.
+- **Solution**: Just ask for the values in draw() and have the GUI silently take care of the initialization and placing
+  your control element inside a folder of related elements based on a string path you provide.
 
 **Problem**: You just tweaked some values in your GUI, but now you need to change the code and restart the program. Your
 GUI changes are lost forever.
@@ -55,7 +55,7 @@ float x = gui.slider("x");
 ellipse(x, height/2, 50, 50);
 ```
 
-#### Button:
+#### Button
 
 ```java
 if(gui.button("say hello once")){
