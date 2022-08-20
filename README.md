@@ -19,10 +19,9 @@ GUI changes are lost forever.
   initialization. This allows you to seamlessly change your code and continue where you left off.
 
 #### Other features:
-
 - autosave GUI state on program exit
-- undo and redo
-- premade and custom color themes
+- hotkey based undo and redo
+- pre-made and custom color themes
 
 ---
 
