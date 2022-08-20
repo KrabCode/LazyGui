@@ -59,16 +59,16 @@ ellipse(x,height/2,50,50);
 #### Button:
 
 ```java
-if(gui.button("say hello")){
-    println("hello world");
+if(gui.button("say hello once")){
+    println("hello");
 }
 ```
 
 #### Toggle
 
 ```java
-if(gui.toggle("spam")){
-    println("")
+if(gui.toggle("spam every frame")){
+    println("I'm trapped in a string factory")
 }
 ```
 
@@ -94,3 +94,14 @@ background(pickedColor);
 PGraphics gradient = gui.gradient("background");
 image(gradient, 0, 0);
 ```
+
+### Folders
+
+You may have noticed the string parameter to every control, I call that the **path** and it must be unique.
+The forward slash `/` is a reserved character used to make folders.
+
+#### Keep the sliders called "x" and "y" in a folder called "pos"
+```java
+float x = gui.slider("pos/x");
+float y = gui.slider("pos/y");
+``` 
