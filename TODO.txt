@@ -1,14 +1,15 @@
 write a readme in two parts
     - user section
-        - short videos with text overlay
+        - short videos with explanation and input overlay
     - programmer section
 
-simplify usage
-    - make Gui static
-    - subscribe to end of draw call and draw gui without the user
+simplify
+    - make Gui static?
 
-manually create processing examples from the existing pure java examples
+prettify
+    - slider shader should use theme colors rather than a hardcoded black/gray gradient
 
-gui factory where you OPT INTO advanced features like
-    - saving at all
-    - themes
+manually create a few processing examples from the existing pure java examples
+
+streamline
+    - gui factory where you OPT INTO advanced features like saving, themes
