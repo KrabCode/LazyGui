@@ -130,7 +130,7 @@ public class SliderNode extends AbstractNode {
     }
 
     void updateDrawSliderNodeValue(PGraphics pg) {
-        String valueText = getValueToDisplay().replaceAll(",", ".");
+        String valueText = getPrintableValue();
         if (isDragged || isMouseOverNode) {
             updateValue();
             boolean constrainedThisFrame = tryConstrainValue();
@@ -142,6 +142,10 @@ public class SliderNode extends AbstractNode {
         drawRightText(pg, valueText);
     }
 
+    @Override
+    public String getPrintableValue() {
+        return getValueToDisplay().replaceAll(",", ".");
+    }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
         if(!constrainedThisFrame){

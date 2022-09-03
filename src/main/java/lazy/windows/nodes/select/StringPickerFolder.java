@@ -94,6 +94,11 @@ public class StringPickerFolder extends NodeFolder {
     }
 
     @Override
+    public String getPrintableValue() {
+        return valueString;
+    }
+
+    @Override
     public void overwriteState(JsonElement loadedNode) {
         // TODO test if this even works
         super.overwriteState(loadedNode);

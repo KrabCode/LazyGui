@@ -14,7 +14,6 @@ import lazy.windows.nodes.select.StringPickerFolder;
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
-import static processing.core.PConstants.P2D;
 
 public class GradientFolder extends NodeFolder {
     PGraphics out;

@@ -55,4 +55,9 @@ public class ToggleNode extends AbstractNode {
             valueBooleanDefault = valueBoolean;
         }
     }
+
+    @Override
+    public String getPrintableValue() {
+        return String.valueOf(valueBoolean);
+    }
 }

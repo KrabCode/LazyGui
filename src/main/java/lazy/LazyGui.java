@@ -3,7 +3,6 @@ package lazy;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.core.PVector;
 import lazy.global.KeyCodes;
 import lazy.global.Utils;
@@ -121,6 +120,7 @@ public class LazyGui implements UserInputSubscriber {
         NodeTree.insertNodeAtItsPath((toolbar));
         NodeTree.insertNodeAtItsPath(new SaveNodeFolder(path + "/saves", toolbar));
         updateThemePicker(toolbar.path + "/themes");
+
     }
 
     private void updateToolbar() {

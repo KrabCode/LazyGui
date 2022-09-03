@@ -30,4 +30,9 @@ public class ButtonNode extends AbstractNode {
         valueBoolean = false;
         return result;
     }
+
+    @Override
+    public String getPrintableValue() {
+        return "(button)";
+    }
 }

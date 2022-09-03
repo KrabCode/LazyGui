@@ -254,4 +254,8 @@ public abstract class AbstractNode {
     public void overwriteState(JsonElement loadedNode){
 
     }
+
+    public String getPrintableValue(){
+        return "";
+    }
 }

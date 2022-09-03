@@ -10,7 +10,6 @@ import lazy.global.State;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PApplet.floor;
-import static processing.core.PApplet.println;
 
 public class UserInputPublisher implements KeyListener, MouseListener {
     public static boolean mouseFallsThroughThisFrame = false;

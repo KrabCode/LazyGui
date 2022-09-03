@@ -11,7 +11,6 @@ import lazy.windows.WindowManager;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 

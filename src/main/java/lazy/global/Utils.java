@@ -1,5 +1,8 @@
 package lazy.global;
 
+import lazy.windows.nodes.AbstractNode;
+import lazy.windows.nodes.NodeFolder;
+import lazy.windows.nodes.NodeType;
 import processing.core.*;
 
 import java.awt.*;
@@ -101,5 +104,58 @@ public class Utils {
         public ArrayList<T> build(){
             return list;
         }
+    }
+
+
+    public static String prettyPrintTree(){
+        StringBuilder sb = new StringBuilder();
+        printNTree(NodeTree.getRoot(), new boolean[1000], 0, false, sb);
+        return sb.toString();
+    }
+
+    // This method uses and adapts code from here: https://www.geeksforgeeks.org/print-n-ary-tree-graphically/
+    private static void printNTree(AbstractNode x,
+                                   boolean[] flag,
+                                   int depth, boolean isLast, StringBuilder sb)
+    {
+        // Condition when node is None
+        if (x == null)
+            return;
+
+        // Loop to print the depths of the
+        // current node
+        for (int i = 1; i < depth; ++i) {
+            sb.append("| ");
+        }
+        String valueToPrint = x.getPrintableValue();
+        String textToPrint = x.name + (valueToPrint.length() == 0 ? "" : " : " + valueToPrint);
+
+        if (depth != 0) {
+            String symbol = x.type == NodeType.FOLDER ? "+ " : "- ";
+            if (isLast) {
+                sb.append(symbol)
+                        .append(textToPrint)
+                        .append('\n');
+                flag[depth] = false;
+            }
+            else {
+                sb.append(symbol)
+                        .append(textToPrint)
+                        .append('\n');
+            }
+        }
+
+        int it = 0;
+        if(x.type == NodeType.FOLDER){
+            NodeFolder f = (NodeFolder) x;
+            for (AbstractNode i : f.children) {
+                ++it;
+                // Recursive call for the
+                // children nodes
+                printNTree(i, flag, depth + 1,
+                        it == (f.children.size()) - 1, sb);
+            }
+        }
+        flag[depth] = true;
     }
 }

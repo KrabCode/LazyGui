@@ -6,8 +6,6 @@ import processing.core.PGraphics;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeType;
 
-import static processing.core.PApplet.hex;
-import static processing.core.PApplet.println;
 
 public class HexNode extends AbstractNode {
 
@@ -33,5 +31,10 @@ public class HexNode extends AbstractNode {
     @Override
     public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
+    }
+
+    @Override
+    public String getPrintableValue() {
+        return parentColorPickerFolder.hexString;
     }
 }
