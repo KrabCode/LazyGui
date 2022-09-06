@@ -6,7 +6,7 @@ import lazy.global.State;
 
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, NodeFolder folder) {
-        super(NodeType.VALUE_NODE, path, folder);
+        super(NodeType.TRANSIENT, path, folder);
     }
 
     public boolean valueBoolean = false;

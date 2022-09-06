@@ -1,5 +1,6 @@
 package lazy.windows.nodes.select;
 
+import lazy.windows.nodes.NodeType;
 import processing.core.PGraphics;
 import lazy.global.State;
 import lazy.global.themes.ThemeColorType;
@@ -15,6 +16,7 @@ public class StringPickerItem extends ToggleNode {
 
     public StringPickerItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
         super(path, folder, valueBoolean);
+        this.type = NodeType.TRANSIENT;
         this.valueString = valueString;
     }
 

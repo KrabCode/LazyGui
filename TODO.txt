@@ -13,3 +13,6 @@ manually create a few processing examples from the existing pure java examples
 
 streamline
     - gui factory where you OPT INTO advanced features like saving, themes
+
+optimize save file size
+    - only include non-transient nodes in json and pretty print

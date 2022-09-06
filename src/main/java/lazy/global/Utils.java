@@ -12,6 +12,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 import static processing.core.PApplet.*;
@@ -69,10 +70,10 @@ public class Utils {
 
     public static String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
         StringBuilder result = new StringBuilder();
-        for(int i = 0; i < text.length(); i++){
+        for (int i = 0; i < text.length(); i++) {
             char character = text.charAt(i);
             float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
-            if(textWidthAfterNewChar >= space){
+            if (textWidthAfterNewChar >= space) {
                 break;
             }
             result.append(character);
@@ -81,7 +82,7 @@ public class Utils {
     }
 
     public static String generateRandomShortId() {
-        return UUID.randomUUID().toString().replace("-","").substring(0,8);
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
     }
 
     public static void openSaveFolder() {
@@ -93,51 +94,73 @@ public class Utils {
         }
     }
 
-    public static class ArrayListBuilder<T>{
+    public static class ArrayListBuilder<T> {
         private final ArrayList<T> list = new ArrayList<>();
 
-        public ArrayListBuilder<T> add(T o){
+        public ArrayListBuilder<T> add(T o) {
             list.add(o);
             return this;
         }
 
-        public ArrayList<T> build(){
+        public ArrayList<T> build() {
             return list;
         }
     }
 
 
-    public static String prettyPrintTree(){
+    public static String prettyPrintTree() {
         StringBuilder sb = new StringBuilder();
         getPrintableTree(NodeTree.getRoot(), 1, sb);
         return sb.toString();
     }
 
-    private static void getPrintableTree(AbstractNode root, int depth, StringBuilder outputBuilder) {
+    private static void getPrintableTree(AbstractNode node, int depth, StringBuilder outputBuilder) {
         StringBuilder prefix = new StringBuilder();
-        boolean hasChildren = false;
-        boolean isFolder = root.type == NodeType.FOLDER;
-        if(isFolder){
-            NodeFolder folder = (NodeFolder) root;
-            hasChildren = folder.children.size() > 0;
-        }
-        for (int i = 0; i < depth; i++) {
-            boolean atMaxDepth = i == depth - 1;
-            if (atMaxDepth) {
-                if (hasChildren) {
-                    prefix.append("+ ");
-                } else {
-                    prefix.append("- ");
+        boolean hasNonTransientChildren = false;
+
+        boolean isFolder = node.type == NodeType.FOLDER;
+        if (isFolder) {
+            NodeFolder folder = (NodeFolder) node;
+            boolean hasChildren = folder.children.size() > 0;
+            if(hasChildren){
+                for(AbstractNode child : folder.children){
+                    if(child.type != NodeType.TRANSIENT){
+                        hasNonTransientChildren = true;
+                        break;
+                    }
                 }
-            } else {
-                prefix.append("|   ");
             }
         }
-        outputBuilder.append(prefix).append(root.name).append(": ").append(root.getPrintableValue()).append("\n");
-        if(isFolder){
-            NodeFolder folder = (NodeFolder) root;
-            for (AbstractNode node : folder.children) {
-                getPrintableTree(node, depth + 1, outputBuilder);
+        boolean shouldDisplay = node.type != NodeType.TRANSIENT && (!isFolder || hasNonTransientChildren);
+        if (shouldDisplay) {
+            for (int i = 0; i < depth; i++) {
+                boolean atMaxDepth = i == depth - 1;
+                if (atMaxDepth) {
+                    prefix.append(hasNonTransientChildren ? "+ " : "- ");
+                } else {
+                    prefix.append("|  ");
+                }
+            }
+            String nodeValue = node.getPrintableValue();
+            boolean hasValue = nodeValue != null && nodeValue.length() > 0;
+            outputBuilder.append(prefix)
+                    .append(node.name)
+                    .append(hasValue ? ": " : "")
+                    .append(nodeValue)
+                    .append("\n");
+        }
+        if (isFolder) {
+            NodeFolder folder = (NodeFolder) node;
+            AbstractNode skippedOptions = null;
+            for (AbstractNode child : folder.children) {
+                if("options".equals(child.path)){
+                    skippedOptions = child;
+                    continue;
+                }
+                getPrintableTree(child, depth + 1, outputBuilder);
+            }
+            if(skippedOptions != null){
+                getPrintableTree(skippedOptions, depth + 1, outputBuilder);
             }
         }
     }

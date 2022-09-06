@@ -14,7 +14,7 @@ public class ColorPreviewNode extends AbstractNode {
     String checkerboardShader = "checkerboard.glsl";
 
     public ColorPreviewNode(String path, ColorPickerFolder parentColorPickerFolder) {
-        super(NodeType.VALUE_NODE, path, parentColorPickerFolder);
+        super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
         rowHeightInCells = 3;

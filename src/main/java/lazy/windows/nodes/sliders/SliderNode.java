@@ -26,7 +26,7 @@ import static processing.core.PApplet.*;
 public class SliderNode extends AbstractNode {
 
     public SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
-        super(NodeType.VALUE_NODE, path, parentFolder);
+        super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
         if(!Float.isNaN(defaultValue)){
@@ -42,7 +42,7 @@ public class SliderNode extends AbstractNode {
     }
 
     public SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
-        super(NodeType.VALUE_NODE, path, parentFolder);
+        super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
         if(!Float.isNaN(defaultValue)){

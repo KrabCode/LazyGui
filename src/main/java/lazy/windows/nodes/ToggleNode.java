@@ -15,7 +15,7 @@ public class ToggleNode extends AbstractNode {
     public float handlePosNorm;
 
     public ToggleNode(String path, NodeFolder folder, boolean defaultValue) {
-        super(NodeType.VALUE_NODE, path, folder);
+        super(NodeType.VALUE, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
         handlePosNorm = valueBoolean ? 1 : 0;

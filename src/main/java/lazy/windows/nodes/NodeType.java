@@ -1,7 +1,7 @@
 package lazy.windows.nodes;
 
 public enum NodeType {
-    VALUE_NODE,
+    VALUE,
     FOLDER,
-    TRANSIENT_NODE
+    TRANSIENT
 }

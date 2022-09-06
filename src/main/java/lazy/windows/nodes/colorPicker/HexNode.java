@@ -12,7 +12,7 @@ public class HexNode extends AbstractNode {
     ColorPickerFolder parentColorPickerFolder;
 
     public HexNode(String path, ColorPickerFolder parentFolder) {
-        super(NodeType.VALUE_NODE, path, parentFolder);
+        super(NodeType.VALUE, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }
 
