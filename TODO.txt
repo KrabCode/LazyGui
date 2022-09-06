@@ -16,3 +16,4 @@ streamline
 
 optimize save file size
     - only include non-transient nodes in json and pretty print
+    - make a screenshot while saving!!
