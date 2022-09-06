@@ -85,6 +85,7 @@ public class State {
         // TODO save screenshot to easily identify the saved state output later
         //  - problem: we're not in OpenGL's animation thread when autosaving on program exit,
         //    which means no access to image output, and caching output just in case sounds expensive
+        //  - possible solution: just don't attempt to take a screenshot while exiting, it'll still work in manual saves
 
 //        String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
 //        State.app.g.save(screenshotPath);
