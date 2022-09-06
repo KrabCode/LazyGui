@@ -109,53 +109,36 @@ public class Utils {
 
     public static String prettyPrintTree(){
         StringBuilder sb = new StringBuilder();
-        printNTree(NodeTree.getRoot(), new boolean[1000], 0, false, sb);
+        getPrintableTree(NodeTree.getRoot(), 1, sb);
         return sb.toString();
     }
 
-    // This method uses and adapts code from here: https://www.geeksforgeeks.org/print-n-ary-tree-graphically/
-    private static void printNTree(AbstractNode x,
-                                   boolean[] flag,
-                                   int depth, boolean isLast, StringBuilder sb)
-    {
-        // Condition when node is None
-        if (x == null)
-            return;
-
-        // Loop to print the depths of the
-        // current node
-        for (int i = 1; i < depth; ++i) {
-            sb.append("| ");
+    private static void getPrintableTree(AbstractNode root, int depth, StringBuilder outputBuilder) {
+        StringBuilder prefix = new StringBuilder();
+        boolean hasChildren = false;
+        boolean isFolder = root.type == NodeType.FOLDER;
+        if(isFolder){
+            NodeFolder folder = (NodeFolder) root;
+            hasChildren = folder.children.size() > 0;
         }
-        String valueToPrint = x.getPrintableValue();
-        String textToPrint = x.name + (valueToPrint.length() == 0 ? "" : " : " + valueToPrint);
-
-        if (depth != 0) {
-            String symbol = x.type == NodeType.FOLDER ? "+ " : "- ";
-            if (isLast) {
-                sb.append(symbol)
-                        .append(textToPrint)
-                        .append('\n');
-                flag[depth] = false;
-            }
-            else {
-                sb.append(symbol)
-                        .append(textToPrint)
-                        .append('\n');
+        for (int i = 0; i < depth; i++) {
+            boolean atMaxDepth = i == depth - 1;
+            if (atMaxDepth) {
+                if (hasChildren) {
+                    prefix.append("+ ");
+                } else {
+                    prefix.append("- ");
+                }
+            } else {
+                prefix.append("|   ");
             }
         }
-
-        int it = 0;
-        if(x.type == NodeType.FOLDER){
-            NodeFolder f = (NodeFolder) x;
-            for (AbstractNode i : f.children) {
-                ++it;
-                // Recursive call for the
-                // children nodes
-                printNTree(i, flag, depth + 1,
-                        it == (f.children.size()) - 1, sb);
+        outputBuilder.append(prefix).append(root.name).append(": ").append(root.getPrintableValue()).append("\n");
+        if(isFolder){
+            NodeFolder folder = (NodeFolder) root;
+            for (AbstractNode node : folder.children) {
+                getPrintableTree(node, depth + 1, outputBuilder);
             }
         }
-        flag[depth] = true;
     }
 }
