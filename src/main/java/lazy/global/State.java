@@ -10,7 +10,6 @@ import processing.core.PGraphics;
 import lazy.LazyGui;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeType;
-import processing.core.PImage;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -66,7 +65,7 @@ public class State {
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
     }
 
-    public static void createTreeSaveFiles(String filenameWithoutSuffix, boolean takeScreenshot) {
+    public static void createTreeSaveFiles(String filenameWithoutSuffix) {
         // save main json
         String jsonPath = getFullPathWithSuffix(filenameWithoutSuffix, ".json");
         overwriteFile(jsonPath, getTreeAsJsonString());
@@ -82,11 +81,11 @@ public class State {
         overwriteFile(prettyPrintPath, treeViewNotice + prettyTree);
 //        println("Saved current state preview to: " + prettyPrintPath);
 
-        if (takeScreenshot) {
-            String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
-            State.app.g.save(screenshotPath);
-//            println("Saved screenshot to: " + screenshotPath);
-        }
+        // TODO I can never be certain when this runs - it can happen halfway through drawing and that's useless
+        //      flip a take screenshot switch and pass the intended path to Gui for a proper screenshot to get captured
+        //            String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
+        //            State.app.g.save(screenshotPath);
+        //            println("Saved screenshot to: " + screenshotPath);
     }
 
     public static void loadMostRecentSave() {
@@ -214,7 +213,7 @@ public class State {
                     " which looks like an endless loop due to bad settings");
             return;
         }
-        createTreeSaveFiles("auto", false);
+        createTreeSaveFiles("auto");
     }
 
     public static void updateEndlessLoopDetection() {
