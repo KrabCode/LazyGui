@@ -66,11 +66,11 @@ public class State {
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
     }
 
-    public static void createTreeSaveFiles(String filenameWithoutSuffix) {
+    public static void createTreeSaveFiles(String filenameWithoutSuffix, boolean takeScreenshot) {
         // save main json
         String jsonPath = getFullPathWithSuffix(filenameWithoutSuffix, ".json");
         overwriteFile(jsonPath, getTreeAsJsonString());
-        println("Saved current state to: " + jsonPath);
+//        println("Saved current state to: " + jsonPath);
 
         // save pretty printed preview
         String treeViewNotice = "NOTICE: This file contains a preview of the tree found in the json next to it." +
@@ -80,21 +80,18 @@ public class State {
         String prettyPrintPath = getFullPathWithSuffix(filenameWithoutSuffix, ".txt");
         String prettyTree = prettyPrintTree();
         overwriteFile(prettyPrintPath, treeViewNotice + prettyTree);
-        println("Saved current state preview to: " + prettyPrintPath);
+//        println("Saved current state preview to: " + prettyPrintPath);
 
-        // TODO save screenshot to easily identify the saved state output later
-        //  - problem: we're not in OpenGL's animation thread when autosaving on program exit,
-        //    which means no access to image output, and caching output just in case sounds expensive
-        //  - possible solution: just don't attempt to take a screenshot while exiting, it'll still work in manual saves
-
-//        String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
-//        State.app.g.save(screenshotPath);
-//        println("Saved screenshot to: " + screenshotPath);
+        if (takeScreenshot) {
+            String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
+            State.app.g.save(screenshotPath);
+//            println("Saved screenshot to: " + screenshotPath);
+        }
     }
 
     public static void loadMostRecentSave() {
         reloadSaveFolderContents();
-        if(saveFilesSorted.size() > 0){
+        if (saveFilesSorted.size() > 0) {
             loadStateFromFile(saveFilesSorted.get(0));
         }
     }
@@ -129,11 +126,11 @@ public class State {
         return sb.toString();
     }
 
-    private static String getFullPathWithSuffix(String filenameWithoutSuffix, String suffix){
+    private static String getFullPathWithSuffix(String filenameWithoutSuffix, String suffix) {
         return getFullPathWithoutTypeSuffix(filenameWithoutSuffix + suffix);
     }
 
-    private static String getFullPathWithoutTypeSuffix(String filenameWithSuffix){
+    private static String getFullPathWithoutTypeSuffix(String filenameWithSuffix) {
         return saveDir.getAbsolutePath() + "\\" + filenameWithSuffix;
     }
 
@@ -157,8 +154,8 @@ public class State {
         return saveFilesSorted;
     }
 
-    public static void loadStateFromFile(File file){
-        if(!file.exists()){
+    public static void loadStateFromFile(File file) {
+        if (!file.exists()) {
             println("Error: save file doesn't exist");
             return;
         }
@@ -210,26 +207,26 @@ public class State {
         Runtime.getRuntime().addShutdownHook(new Thread(State::createAutosave));
     }
 
-    public static void createAutosave(){
-        if(isSketchStuckInEndlessLoop()){
+    public static void createAutosave() {
+        if (isSketchStuckInEndlessLoop()) {
             println("NOT autosaving," +
                     " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
                     " which looks like an endless loop due to bad settings");
             return;
         }
-        createTreeSaveFiles("auto");
+        createTreeSaveFiles("auto", false);
     }
 
-    public static void updateEndlessLoopDetection(){
+    public static void updateEndlessLoopDetection() {
         lastFrameMillis = app.millis();
     }
 
-    public static boolean isSketchStuckInEndlessLoop(){
+    public static boolean isSketchStuckInEndlessLoop() {
         long timeSinceLastFrame = app.millis() - lastFrameMillis;
         return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
 
-    public static void onUndoableActionEnded(){
+    public static void onUndoableActionEnded() {
         // TODO print diff for debug, some undos don't change anything
         pushToUndoStack();
     }
@@ -242,16 +239,16 @@ public class State {
         popFromRedoStack();
     }
 
-    private static void pushToUndoStack(){
+    private static void pushToUndoStack() {
         undoStack.add(getTreeAsJsonString());
-        while(undoStack.size() > undoStackSizeLimit){
+        while (undoStack.size() > undoStackSizeLimit) {
             undoStack.remove(0);
         }
         redoStack.clear();
     }
 
     private static void popFromUndoStack() {
-        if(undoStack.isEmpty()){
+        if (undoStack.isEmpty()) {
             return;
         }
         String poppedJson = undoStack.remove(undoStack.size() - 1);
@@ -259,8 +256,8 @@ public class State {
         loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
     }
 
-    private static void popFromRedoStack(){
-        if(redoStack.isEmpty()){
+    private static void popFromRedoStack() {
+        if (redoStack.isEmpty()) {
             return;
         }
         String poppedJson = redoStack.remove(redoStack.size() - 1);
