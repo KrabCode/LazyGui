@@ -28,6 +28,7 @@ public class State {
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static final float defaultWindowWidthInPixels = State.cell * 10;
+    public static boolean autosaveEnabled = true;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     public static File saveDir;
@@ -54,18 +55,24 @@ public class State {
         registerExitHandler();
 
         sketchName = app.getClass().getSimpleName();
-        saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
-        println("Save folder path: " + saveDir.getAbsolutePath());
-        if (!saveDir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            saveDir.mkdirs();
-        }
+        lazyInitSaveDir(true);
 
         normalizedColorProvider = app.createGraphics(256, 256, P2D);
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
     }
 
-    public static void createTreeSaveFiles(String filenameWithoutSuffix) {
+    private static void lazyInitSaveDir(boolean printWelcomeMessage) {
+        saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
+        if(printWelcomeMessage){
+             println("Save folder path: " + saveDir.getAbsolutePath());
+        }
+        if (!saveDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            saveDir.mkdirs();
+        }
+    }
+
+    private static void createTreeSaveFiles(String filenameWithoutSuffix) {
         // save main json
         String jsonPath = getFullPathWithSuffix(filenameWithoutSuffix, ".json");
         overwriteFile(jsonPath, getTreeAsJsonString());
@@ -81,11 +88,7 @@ public class State {
         overwriteFile(prettyPrintPath, treeViewNotice + prettyTree);
 //        println("Saved current state preview to: " + prettyPrintPath);
 
-        // TODO I can never be certain when this runs - it can happen halfway through drawing and that's useless
-        //      flip a take screenshot switch and pass the intended path to Gui for a proper screenshot to get captured
-        //            String screenshotPath = getFullPathWithSuffix(filenameWithoutSuffix, ".jpg");
-        //            State.app.g.save(screenshotPath);
-        //            println("Saved screenshot to: " + screenshotPath);
+        gui.requestScreenshot(getFullPathWithSuffix(filenameWithoutSuffix, ".jpg"));
     }
 
     public static void loadMostRecentSave() {
@@ -97,6 +100,7 @@ public class State {
 
 
     private static void reloadSaveFolderContents() {
+        lazyInitSaveDir(false);
         File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));
@@ -207,6 +211,9 @@ public class State {
     }
 
     public static void createAutosave() {
+        if(!autosaveEnabled){
+            return;
+        }
         if (isSketchStuckInEndlessLoop()) {
             println("NOT autosaving," +
                     " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
@@ -262,6 +269,11 @@ public class State {
         String poppedJson = redoStack.remove(redoStack.size() - 1);
         undoStack.add(poppedJson);
         loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
+    }
+
+    public static void createNewSaveWithRandomName() {
+        String newName = Utils.generateRandomShortId();
+        State.createTreeSaveFiles(newName);
     }
 
 }

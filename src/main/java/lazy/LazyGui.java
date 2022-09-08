@@ -34,7 +34,9 @@ import static processing.core.PApplet.*;
 public class LazyGui implements UserInputSubscriber {
     public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
-    private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive;
+    private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
+    private static String requestedScreenshotCustomPath = "";
+    private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
     private PGraphics pg;
     NodeFolder toolbar;
     PApplet app;
@@ -94,8 +96,13 @@ public class LazyGui implements UserInputSubscriber {
         takeScreenshotIfNeeded();
     }
 
+    public void requestScreenshot(String customPath){
+        screenshotRequestedOnMainThreadWithCustomPath = true;
+        requestedScreenshotCustomPath = customPath;
+    }
+
     private void takeScreenshotIfNeeded() {
-        if (!screenshotRequestedOnMainThread) {
+        if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
             return;
         }
         String randomId = Utils.generateRandomShortId();
@@ -103,14 +110,19 @@ public class LazyGui implements UserInputSubscriber {
         String filetype = ".png";
         String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;
 
+        if(screenshotRequestedOnMainThreadWithCustomPath){
+            filePath = requestedScreenshotCustomPath;
+        }
+
         State.app.save(filePath);
         try {
-            println("Saved screenshot to: " + new File(folderPath).getAbsolutePath());
+            // println("Saved screenshot to: " + new File(filePath).getAbsolutePath());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         screenshotRequestedOnMainThread = false;
+        screenshotRequestedOnMainThreadWithCustomPath = false;
     }
 
 
@@ -131,7 +143,7 @@ public class LazyGui implements UserInputSubscriber {
         hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);
         undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
         redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
-        // todo autosave toggle
+        saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
     }
 
     private void hotkeyInteraction(KeyEvent keyEvent) {
@@ -149,6 +161,9 @@ public class LazyGui implements UserInputSubscriber {
         }
         if(keyCode == KeyCodes.KEY_CODE_CTRL_Y && redoHotkeyActive){
             State.redo();
+        }
+        if(keyCode == KeyCodes.KEY_CODE_CTRL_S && saveHotkeyActive){
+            State.createNewSaveWithRandomName();
         }
     }
 

@@ -12,7 +12,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 import static processing.core.PApplet.*;
@@ -110,11 +109,11 @@ public class Utils {
 
     public static String prettyPrintTree() {
         StringBuilder sb = new StringBuilder();
-        getPrintableTree(NodeTree.getRoot(), 1, sb);
+        buildPrettyPrintedTreeString(NodeTree.getRoot(), 1, sb);
         return sb.toString();
     }
 
-    private static void getPrintableTree(AbstractNode node, int depth, StringBuilder outputBuilder) {
+    private static void buildPrettyPrintedTreeString(AbstractNode node, int depth, StringBuilder outputBuilder) {
         StringBuilder prefix = new StringBuilder();
         boolean hasNonTransientChildren = false;
 
@@ -157,10 +156,10 @@ public class Utils {
                     skippedOptions = child;
                     continue;
                 }
-                getPrintableTree(child, depth + 1, outputBuilder);
+                buildPrettyPrintedTreeString(child, depth + 1, outputBuilder);
             }
             if(skippedOptions != null){
-                getPrintableTree(skippedOptions, depth + 1, outputBuilder);
+                buildPrettyPrintedTreeString(skippedOptions, depth + 1, outputBuilder);
             }
         }
     }

@@ -1,5 +1,6 @@
 package lazy.windows.nodes.saves;
 
+import lazy.windows.nodes.ToggleNode;
 import processing.core.PGraphics;
 import lazy.global.NodeTree;
 import lazy.global.State;
@@ -20,6 +21,7 @@ public class SaveNodeFolder extends NodeFolder {
         super(path, parent);
         children.add(new ButtonNode(path + "/open save folder", this));
         children.add(new ButtonNode(path + "/create new save", this));
+        children.add(new ToggleNode(path + "/autosave on exit", this, true));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
         idealWindowWidth = State.cell * 12;
@@ -76,12 +78,12 @@ public class SaveNodeFolder extends NodeFolder {
     protected void updateDrawInlineNode(PGraphics pg) {
         super.updateDrawInlineNode(pg);
         if(State.gui.button(path + "/create new save")){
-            String newName = Utils.generateRandomShortId();
-            State.createTreeSaveFiles(newName);
+            State.createNewSaveWithRandomName();
         }
         if(State.gui.button(path + "/open save folder")){
             Utils.openSaveFolder();
         }
+        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit");
         updateStateList();
     }
 
