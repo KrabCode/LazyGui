@@ -48,6 +48,6 @@ public class StringPickerItem extends ToggleNode {
             fillForegroundBasedOnMouseOver(pg);
         }
         pg.textAlign(LEFT, CENTER);
-        pg.text(text, State.textMarginX, size.y - State.font.getSize() * 0.6f);
+        pg.text(text, State.textMarginX, size.y - State.textMarginY);
     }
 }

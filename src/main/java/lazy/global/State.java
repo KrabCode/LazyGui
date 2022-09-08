@@ -19,12 +19,19 @@ import static lazy.global.Utils.prettyPrintTree;
 import static processing.core.PApplet.*;
 
 public class State {
-    public static float cell = 22;
+    public static float cell = 24;
     public static PFont font = null;
     public static PApplet app = null;
     public static LazyGui gui = null;
     public static PGraphics normalizedColorProvider = null;
+
+    // TODO package font with library!
+    //  consolas is lovely, also consider:  Jetbrains Mono, Atkinson Hyperlegible
+    private static String intendedFontName = "Consolas";
+    private static float intendedFontSize = 18;
     public static float textMarginX = 5;
+    public static float textMarginY = 12;
+
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static final float defaultWindowWidthInPixels = State.cell * 10;
@@ -43,9 +50,9 @@ public class State {
     public static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
-//        printAvailableFonts();
+
         try {
-            State.font = app.createFont("Calibri", 20);
+            State.font = app.createFont(intendedFontName, intendedFontSize);
         } catch (RuntimeException ex) {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
@@ -64,7 +71,7 @@ public class State {
     private static void lazyInitSaveDir(boolean printWelcomeMessage) {
         saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
         if(printWelcomeMessage){
-             println("Save folder path: " + saveDir.getAbsolutePath());
+             println("LazyGui save folder: " + saveDir.getAbsolutePath());
         }
         if (!saveDir.exists()) {
             //noinspection ResultOfMethodCallIgnored

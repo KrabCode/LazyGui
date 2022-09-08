@@ -15,5 +15,7 @@ streamline
     - gui factory where you OPT INTO advanced features like saving, themes
 
 optimize save file size
-    - only include non-transient nodes in json and pretty print
-    - make a screenshot while saving!!
+    - only include non-transient nodes in json (pretty print already does this)
+
+ensure font availability
+    - decide on a font and package it with the library

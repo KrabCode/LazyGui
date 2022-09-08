@@ -145,15 +145,14 @@ public abstract class AbstractNode {
     public void drawLeftText(PGraphics pg, String text) {
         String trimmedText = Utils.getTrimmedTextToFitOneLine(pg, text, size.x - cell);
         pg.textAlign(LEFT, CENTER);
-        pg.text(trimmedText, State.textMarginX, size.y - State.font.getSize() * 0.6f);
+        pg.text(trimmedText, State.textMarginX, size.y - State.textMarginY);
     }
 
     public void drawRightText(PGraphics pg, String text) {
         pg.textAlign(RIGHT, CENTER);
-        float textMarginX = 5;
         pg.text(text,
-                size.x - textMarginX,
-                size.y * 0.5f
+                size.x - State.textMarginX,
+                size.y - State.textMarginY
         );
     }
 

@@ -2,6 +2,7 @@ package lazy.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
+import lazy.global.State;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import lazy.global.themes.ThemeStore;
@@ -84,9 +85,8 @@ public abstract class ColorSliderNode extends SliderNode {
     @Override
     public void drawRightText(PGraphics pg, String text) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
-        float textMarginX = 5;
         pg.textAlign(RIGHT, CENTER);
-        pg.text(text,size.x - textMarginX, size.y * 0.5f);
+        pg.text(text,size.x - State.textMarginX, size.y - State.textMarginY);
     }
 
     protected int foregroundMouseOverBrightnessAwareColor(){

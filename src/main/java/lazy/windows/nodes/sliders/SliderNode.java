@@ -278,10 +278,10 @@ public class SliderNode extends AbstractNode {
             case '7': valueFloat = 7; break;
             case '8': valueFloat = 8; break;
             case '9': valueFloat = 9; break;
-            case '+': valueFloat++; break;
-            case '-': valueFloat--; break;
-            case '*': valueFloat *= 10; break;
-            case '/': valueFloat *= 0.1f; break;
+            case '+': valueFloat += valueFloatPrecision; break;
+            case '-': valueFloat -= valueFloatPrecision; break;
+            case '*': increasePrecision(); break;
+            case '/': decreasePrecision(); break;
             default: {
                 return;
             }

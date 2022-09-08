@@ -46,7 +46,7 @@ public class LazyGui implements UserInputSubscriber {
     public LazyGui(PApplet sketch) {
         this.app = sketch;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
-            println("The Toolbox library requires the P2D or P3D renderer");
+            println("The LazyGui library requires the P2D or P3D renderer.");
         }
         State.init(this, app);
         State.loadMostRecentSave();

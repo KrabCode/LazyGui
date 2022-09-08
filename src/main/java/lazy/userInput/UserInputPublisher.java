@@ -31,7 +31,7 @@ public class UserInputPublisher implements KeyListener, MouseListener {
             window.addKeyListener(this);
             window.addMouseListener(this);
         } else {
-            System.out.println("Please use P2D or P3D in your size() or fullScreen() in order to use h Toolbox");
+            System.out.println("Please use P2D or P3D in your size() or fullScreen() in order to use LazyGui");
         }
     }
 
