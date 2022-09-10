@@ -22,7 +22,7 @@ public class ColorPreviewNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         drawCheckerboard(pg);
         drawColorPreview(pg);
     }

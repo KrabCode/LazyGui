@@ -53,7 +53,7 @@ public class StringPickerFolder extends NodeFolder {
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         // don't draw folder icon
         checkForChildValueChange();
         rememberCurrentValues();

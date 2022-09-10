@@ -23,7 +23,7 @@ public class ToggleNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         drawRightToggleHandle(pg, valueBoolean);
     }
 

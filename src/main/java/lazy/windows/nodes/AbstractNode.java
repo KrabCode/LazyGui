@@ -77,24 +77,24 @@ public abstract class AbstractNode {
     }
 
 
-    public void drawNode(PGraphics pg) {
+    public void updateDrawInlineNode(PGraphics pg) {
         // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
-        pg.pushStyle();
-        pg.pushMatrix();
         if(isMouseOverNode){
             highlightNodeOnMouseOver(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
-        updateDrawInlineNode(pg);
+        updateDrawInlineNodeInner(pg);
         pg.popMatrix();
         pg.popStyle();
         if(displayInlineName){
             fillForegroundBasedOnMouseOver(pg);
             drawLeftText(pg, name);
         }
-        pg.popMatrix();
-        pg.popStyle();
+    }
+
+    public void drawTooltipAbsolutePos(PGraphics pg, int mouseX, int mouseY) {
+
     }
 
     protected void highlightNodeOnMouseOver(PGraphics pg) {
@@ -103,7 +103,7 @@ public abstract class AbstractNode {
         pg.rect(0,0,size.x,size.y);
     }
 
-    protected abstract void updateDrawInlineNode(PGraphics pg);
+    protected abstract void updateDrawInlineNodeInner(PGraphics pg);
 
     protected void validatePrecision() {
 

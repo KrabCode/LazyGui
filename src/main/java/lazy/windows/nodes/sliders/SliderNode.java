@@ -125,7 +125,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         updateDrawSliderNodeValue(pg);
     }
 

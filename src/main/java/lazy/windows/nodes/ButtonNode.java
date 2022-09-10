@@ -13,7 +13,7 @@ public class ButtonNode extends AbstractNode {
     private boolean mousePressedLastFrame = false;
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         drawRightButton(pg);
         boolean mousePressed = State.app.mousePressed;
         valueBoolean = isMouseOverNode && mousePressedLastFrame && !mousePressed;

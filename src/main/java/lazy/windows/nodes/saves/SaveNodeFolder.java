@@ -75,8 +75,8 @@ public class SaveNodeFolder extends NodeFolder {
         return filenameWithSuffix.substring(0, filenameWithSuffix.indexOf(".json"));
     }
 
-    protected void updateDrawInlineNode(PGraphics pg) {
-        super.updateDrawInlineNode(pg);
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
+        super.updateDrawInlineNodeInner(pg);
         if(State.gui.button(path + "/create new save")){
             State.createNewSaveWithRandomName();
         }

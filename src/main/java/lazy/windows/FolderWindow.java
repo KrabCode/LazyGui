@@ -49,13 +49,24 @@ public class FolderWindow extends Window {
             node.updateInlineNodeCoordinates(windowPos.x, windowPos.y + y, windowSize.x, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
-            node.drawNode(pg);
+            node.updateDrawInlineNode(pg);
             pg.popMatrix();
             pg.popStyle();
             y += nodeHeight;
             pg.translate(0, nodeHeight);
         }
         pg.popMatrix();
+        pg.pushMatrix();
+        pg.pushStyle();
+        for (int i = 0; i < folder.children.size(); i++) {
+            AbstractNode node = folder.children.get(i);
+            if(node.isMouseOverNode){
+                node.drawTooltipAbsolutePos(pg, State.app.mouseX,State.app.mouseY);
+                break;
+            }
+        }
+        pg.popMatrix();
+        pg.popStyle();
     }
 
     private float heightSumOfChildNodes() {

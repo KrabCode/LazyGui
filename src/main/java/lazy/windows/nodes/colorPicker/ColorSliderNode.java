@@ -53,8 +53,8 @@ public abstract class ColorSliderNode extends SliderNode {
     abstract void updateColorInParentFolder();
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
-        super.updateDrawInlineNode(pg);
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
+        super.updateDrawInlineNodeInner(pg);
         if(isDragged){
             pg.stroke(foregroundMouseOverBrightnessAwareColor());
             pg.strokeWeight(1);

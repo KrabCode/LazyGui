@@ -27,7 +27,7 @@ public class GradientFolder extends NodeFolder {
 
     public GradientFolder(String path, NodeFolder parent, float alpha) {
         super(path, parent);
-        directionTypePicker = new StringPickerFolder(path + "/direction", this,  directionOptions.toArray(new String[0]), directionOptions.get(1));
+        directionTypePicker = new StringPickerFolder(path + "/direction", this, directionOptions.toArray(new String[0]), directionOptions.get(1));
         blendTypePicker = new StringPickerFolder(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionTypePicker);
@@ -35,7 +35,7 @@ public class GradientFolder extends NodeFolder {
         colorCount = 5;
         idealWindowWidth = State.cell * 9;
         for (int i = 0; i < colorCount; i++) {
-            float iNorm = norm(i, 0, colorCount-1);
+            float iNorm = norm(i, 0, colorCount - 1);
             // default A alpha is 1 for some reason even though I set 0 here
             children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm, i % 2 == 0));
         }
@@ -43,22 +43,23 @@ public class GradientFolder extends NodeFolder {
     }
 
     @Override
-    protected void updateDrawInlineNode(PGraphics pg) {
+    protected void updateDrawInlineNodeInner(PGraphics pg) {
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
-        pg.image(out,0,0,previewRectSize,previewRectSize);
+        pg.image(out, 0, 0, previewRectSize, previewRectSize);
         strokeForegroundBasedOnMouseOver(pg);
         pg.rectMode(CENTER);
         pg.noFill();
-        pg.rect(0,0,previewRectSize, previewRectSize);
+        pg.rect(0, 0, previewRectSize, previewRectSize);
         updateOutGraphics();
     }
 
-    String getColorNameByIndex(int index){
-        return String.valueOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(index));
+    String getColorNameByIndex(int index) {
+        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return String.valueOf(a.charAt(index));
     }
 
-    private void updateOutGraphics(){
+    private void updateOutGraphics() {
         PApplet app = State.app;
         if (out == null || out.width != app.width || out.height != app.height) {
             out = app.createGraphics(app.width, app.height, P2D);
@@ -85,7 +86,7 @@ public class GradientFolder extends NodeFolder {
         out.endDraw();
     }
 
-    private int getColorCount(){
+    private int getColorCount() {
         int activeColorCount = colorCount;
         ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         for (GradientColorPickerFolder colorPicker : colorPickers) {
@@ -100,15 +101,15 @@ public class GradientFolder extends NodeFolder {
         ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount * 4];
         int i = 0;
-        for(GradientColorPickerFolder colorPicker : colorPickers){
-            if(colorPicker.isSkipped()){
+        for (GradientColorPickerFolder colorPicker : colorPickers) {
+            if (colorPicker.isSkipped()) {
                 continue;
             }
             PickerColor color = colorPicker.getColor();
             result[i] = color.hue;
-            result[i+1] = color.saturation;
-            result[i+2] = color.brightness;
-            result[i+3] = color.alpha;
+            result[i + 1] = color.saturation;
+            result[i + 2] = color.brightness;
+            result[i + 3] = color.alpha;
             i += 4;
         }
         return result;
@@ -118,8 +119,8 @@ public class GradientFolder extends NodeFolder {
         ArrayList<GradientColorPickerFolder> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount];
         int i = 0;
-        for(GradientColorPickerFolder colorPicker : colorPickers){
-            if(colorPicker.isSkipped()){
+        for (GradientColorPickerFolder colorPicker : colorPickers) {
+            if (colorPicker.isSkipped()) {
                 continue;
             }
             result[i++] = colorPicker.getGradientPos();
@@ -132,10 +133,10 @@ public class GradientFolder extends NodeFolder {
         return out;
     }
 
-    public ArrayList<GradientColorPickerFolder> getAllGradientColorPickerChildrenInPositionOrder(){
+    public ArrayList<GradientColorPickerFolder> getAllGradientColorPickerChildrenInPositionOrder() {
         ArrayList<GradientColorPickerFolder> result = new ArrayList<>();
-        for(AbstractNode node : children){
-            if(node.className.contains("GradientColorPickerFolder")){
+        for (AbstractNode node : children) {
+            if (node.className.contains("GradientColorPickerFolder")) {
                 result.add((GradientColorPickerFolder) node);
             }
         }
@@ -147,7 +148,7 @@ public class GradientFolder extends NodeFolder {
     }
 
     GradientColorPickerFolder createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
-                                                        float pos, boolean active){
+                                                        float pos, boolean active) {
         int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolder(path, this, hex, pos, active);
     }
@@ -163,7 +164,7 @@ public class GradientFolder extends NodeFolder {
         }
 
         @Override
-        protected void updateDrawInlineNode(PGraphics pg) {
+        protected void updateDrawInlineNodeInner(PGraphics pg) {
             pg.image(parent.getOutputGraphics(), 0, 0, size.x, size.y);
         }
 
