@@ -41,8 +41,6 @@ public class LazyGui implements UserInputSubscriber {
     NodeFolder toolbar;
     PApplet app;
 
-    // TODO class cast exception explanation when e.g. a slider path collides with an existing folder
-
     public LazyGui(PApplet sketch) {
         this.app = sketch;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {

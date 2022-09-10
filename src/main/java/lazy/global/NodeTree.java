@@ -48,7 +48,7 @@ public class NodeTree {
         return null;
     }
 
-    // TODO some way to escape the / so you can still use it as a node name
+    // https://github.com/KrabCode/LazyGui/issues/6
     public static void lazyInitFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];

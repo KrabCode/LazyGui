@@ -25,8 +25,7 @@ public class State {
     public static LazyGui gui = null;
     public static PGraphics normalizedColorProvider = null;
 
-    // TODO package font with library!
-    //  consolas is lovely, also consider:  Jetbrains Mono, Atkinson Hyperlegible
+    // https://github.com/KrabCode/LazyGui/issues/4
     private static String intendedFontName = "Consolas";
     private static float intendedFontSize = 18;
     public static float textMarginX = 5;
@@ -240,7 +239,6 @@ public class State {
     }
 
     public static void onUndoableActionEnded() {
-        // TODO print diff for debug, some undos don't change anything
         pushToUndoStack();
     }
 

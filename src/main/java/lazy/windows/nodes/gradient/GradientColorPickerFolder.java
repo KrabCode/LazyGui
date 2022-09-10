@@ -46,24 +46,14 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
     @Override
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
-        // TODO in theory none of this is needed, the underlying sliders and toggles can know and save and load the data themselves
-        JsonElement gradientPosLoaded = loadedNode.getAsJsonObject().get("gradientPosDefault");
-        JsonElement gradientActiveLoaded = loadedNode.getAsJsonObject().get("active");
-        if(gradientPosLoaded != null){
-            gradientPosDefault = gradientPosLoaded.getAsFloat();
-            SliderNode pos = ((SliderNode) NodeTree.findNode(path + "/pos"));
-            if(pos != null){
-                pos.valueFloat = gradientPosDefault;
-                pos.valueFloatDefault = gradientPosDefault;
-            }
+        SliderNode pos = (SliderNode) findChildByName("pos");
+        if(pos != null){
+            pos.overwriteState(loadedNode.getAsJsonObject().get("gradientPosDefault"));
         }
-        if(gradientActiveLoaded != null){
-            activeDefault = gradientActiveLoaded.getAsBoolean();
-            ToggleNode active = ((ToggleNode)NodeTree.findNode(path + "/active"));
-            if(active != null){
-                active.valueBoolean = activeDefault;
-                active.valueBooleanDefault = activeDefault;
-            }
+        // TODO in theory none of this is needed, the underlying sliders and toggles can know and save and load the data themselves
+        ToggleNode active = (ToggleNode) findChildByName("active");
+        if(active != null){
+            active.overwriteState(loadedNode.getAsJsonObject().get("active"));
         }
     }
 }

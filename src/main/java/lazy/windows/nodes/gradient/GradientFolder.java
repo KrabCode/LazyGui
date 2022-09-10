@@ -23,7 +23,7 @@ public class GradientFolder extends NodeFolder {
     ArrayList<String> directionOptions = new Utils.ArrayListBuilder<String>().add("x").add("y").add("center").build();
 
     String gradientShader = "gradient.glsl";
-    private final int colorCount; // TODO make this default and set value with buttons at runtime
+    private final int colorCount;
 
     public GradientFolder(String path, NodeFolder parent, float alpha) {
         super(path, parent);
@@ -169,7 +169,7 @@ public class GradientFolder extends NodeFolder {
 
         @Override
         public void drawLeftText(PGraphics pg, String text) {
-            // skip drawing the "preview" left text by not calling super.drawLeftText() here
+            // we skip drawing the "preview" left text by not calling super.drawLeftText() here
         }
     }
 
