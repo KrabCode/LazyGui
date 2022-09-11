@@ -93,10 +93,6 @@ public abstract class AbstractNode {
         }
     }
 
-    public void drawTooltipAbsolutePos(PGraphics pg, int mouseX, int mouseY) {
-
-    }
-
     protected void highlightNodeOnMouseOver(PGraphics pg) {
         pg.noStroke();
         pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));

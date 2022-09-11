@@ -56,17 +56,6 @@ public class FolderWindow extends Window {
             pg.translate(0, nodeHeight);
         }
         pg.popMatrix();
-        pg.pushMatrix();
-        pg.pushStyle();
-        for (int i = 0; i < folder.children.size(); i++) {
-            AbstractNode node = folder.children.get(i);
-            if(node.isMouseOverNode){
-                node.drawTooltipAbsolutePos(pg, State.app.mouseX,State.app.mouseY);
-                break;
-            }
-        }
-        pg.popMatrix();
-        pg.popStyle();
     }
 
     private float heightSumOfChildNodes() {
