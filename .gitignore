@@ -4,5 +4,6 @@
 /saves/
 /libs/
 *.iml
+/data/JetBrainsMono-2.242
 
 src/test/Camera.java
