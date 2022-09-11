@@ -1,4 +1,4 @@
-package lazy.global;
+package lazy;
 
 
 @SuppressWarnings("CommentedOutCode")

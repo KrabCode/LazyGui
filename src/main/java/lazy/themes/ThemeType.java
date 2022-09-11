@@ -1,4 +1,4 @@
-package lazy.global.themes;
+package lazy.themes;
 
 public enum ThemeType {
     DARK,

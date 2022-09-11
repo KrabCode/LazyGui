@@ -2,9 +2,9 @@ package lazy.windows.nodes.select;
 
 import lazy.windows.nodes.NodeType;
 import processing.core.PGraphics;
-import lazy.global.State;
-import lazy.global.themes.ThemeColorType;
-import lazy.global.themes.ThemeStore;
+import lazy.State;
+import lazy.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
 import lazy.windows.nodes.NodeFolder;
 import lazy.windows.nodes.ToggleNode;
 

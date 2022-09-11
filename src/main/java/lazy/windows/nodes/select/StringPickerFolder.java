@@ -3,7 +3,7 @@ package lazy.windows.nodes.select;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
-import lazy.global.State;
+import lazy.State;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeFolder;
 

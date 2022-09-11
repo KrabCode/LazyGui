@@ -1,4 +1,4 @@
-package lazy.global;
+package lazy;
 
 import processing.core.PGraphics;
 import processing.opengl.PShader;

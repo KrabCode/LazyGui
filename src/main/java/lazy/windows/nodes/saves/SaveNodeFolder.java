@@ -2,9 +2,9 @@ package lazy.windows.nodes.saves;
 
 import lazy.windows.nodes.ToggleNode;
 import processing.core.PGraphics;
-import lazy.global.NodeTree;
-import lazy.global.State;
-import lazy.global.Utils;
+import lazy.NodeTree;
+import lazy.State;
+import lazy.Utils;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.ButtonNode;
 import lazy.windows.nodes.NodeFolder;

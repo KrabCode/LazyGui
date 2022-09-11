@@ -4,14 +4,10 @@ import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.global.KeyCodes;
-import lazy.global.Utils;
-import lazy.global.themes.Theme;
-import lazy.global.themes.ThemeColorType;
-import lazy.global.themes.ThemeStore;
-import lazy.global.State;
-import lazy.global.NodeTree;
-import lazy.global.themes.ThemeType;
+import lazy.themes.Theme;
+import lazy.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
+import lazy.themes.ThemeType;
 import lazy.windows.nodes.*;
 import lazy.windows.nodes.colorPicker.PickerColor;
 import lazy.windows.nodes.colorPicker.ColorPickerFolder;
@@ -25,7 +21,6 @@ import lazy.windows.nodes.select.StringPickerFolder;
 import lazy.windows.nodes.sliders.SliderIntNode;
 import lazy.windows.nodes.sliders.SliderNode;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import static processing.core.PApplet.*;

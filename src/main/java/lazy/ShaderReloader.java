@@ -2,7 +2,6 @@ package lazy;
 
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import lazy.global.State;
 
 import java.io.File;
 import java.util.ArrayList;

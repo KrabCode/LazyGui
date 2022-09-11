@@ -2,7 +2,7 @@ package lazy.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.global.InternalShaderStore;
+import lazy.InternalShaderStore;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeType;
 

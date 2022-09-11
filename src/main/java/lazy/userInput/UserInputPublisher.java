@@ -5,7 +5,7 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import processing.core.PSurface;
-import lazy.global.State;
+import lazy.State;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

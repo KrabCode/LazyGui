@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.global.State;
+import lazy.State;
 
 public class ToggleNode extends AbstractNode {
 

@@ -2,12 +2,12 @@ package lazy.windows;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.global.State;
+import lazy.State;
 import lazy.windows.nodes.NodeFolder;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static lazy.global.State.cell;
+import static lazy.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;

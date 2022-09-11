@@ -2,14 +2,14 @@ package lazy.windows.nodes.colorPicker;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
-import lazy.global.State;
+import lazy.State;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import lazy.global.themes.ThemeStore;
-import lazy.global.InternalShaderStore;
-import lazy.global.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
+import lazy.InternalShaderStore;
+import lazy.themes.ThemeColorType;
 import lazy.windows.nodes.sliders.SliderNode;
-import lazy.global.KeyCodes;
+import lazy.KeyCodes;
 
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;

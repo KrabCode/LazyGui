@@ -1,4 +1,4 @@
-package lazy.global;
+package lazy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
-import lazy.LazyGui;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeType;
 
@@ -15,7 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
-import static lazy.global.Utils.prettyPrintTree;
+import static lazy.Utils.prettyPrintTree;
 import static processing.core.PApplet.*;
 
 public class State {
@@ -25,11 +24,10 @@ public class State {
     public static LazyGui gui = null;
     public static PGraphics normalizedColorProvider = null;
 
-    // https://github.com/KrabCode/LazyGui/issues/4
-    private static String intendedFontName = "Consolas";
-    private static float intendedFontSize = 18;
+    private static String fontPath = "JetBrainsMono-2.242\\fonts\\ttf\\JetBrainsMono-Regular.ttf";
+    private static float fontSize = 16;
     public static float textMarginX = 5;
-    public static float textMarginY = 12;
+    public static float textMarginY = 14;
 
     public static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
@@ -51,7 +49,8 @@ public class State {
         State.app = app;
 
         try {
-            State.font = app.createFont(intendedFontName, intendedFontSize);
+//            State.font = app.createFont(intendedFontName, intendedFontSize);
+            State.font = app.createFont(fontPath, fontSize);
         } catch (RuntimeException ex) {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");

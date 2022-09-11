@@ -3,9 +3,9 @@ package lazy.windows.nodes;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.global.State;
-import lazy.global.themes.ThemeColorType;
-import lazy.global.themes.ThemeStore;
+import lazy.State;
+import lazy.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
 import lazy.windows.FolderWindow;
 import lazy.windows.WindowManager;
 

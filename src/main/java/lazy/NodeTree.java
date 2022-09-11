@@ -1,4 +1,4 @@
-package lazy.global;
+package lazy;
 
 import lazy.windows.nodes.NodeFolder;
 import lazy.windows.nodes.AbstractNode;

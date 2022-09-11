@@ -4,10 +4,10 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.global.NodeTree;
-import lazy.global.State;
-import lazy.global.themes.ThemeStore;
-import lazy.global.Utils;
+import lazy.NodeTree;
+import lazy.State;
+import lazy.themes.ThemeStore;
+import lazy.Utils;
 import lazy.windows.nodes.AbstractNode;
 import lazy.userInput.UserInputPublisher;
 import lazy.userInput.UserInputSubscriber;
@@ -16,7 +16,7 @@ import lazy.LazyGui;
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.*;
-import static lazy.global.themes.ThemeColorType.*;
+import static lazy.themes.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     public boolean closed = false;
