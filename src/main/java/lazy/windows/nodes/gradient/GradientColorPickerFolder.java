@@ -17,8 +17,8 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));
     }
 
-    protected void updateDrawInlineNodeInner(PGraphics pg) {
-        super.updateDrawInlineNodeInner(pg);
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+        super.updateDrawInlineNodeAbstract(pg);
         if(isSkipped()){
             pg.strokeCap(ROUND);
             pg.strokeWeight(1.99f);

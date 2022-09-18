@@ -22,7 +22,7 @@ public abstract class Window implements UserInputSubscriber {
     public boolean closed = false;
     protected boolean isCloseable;
     protected AbstractNode parentNode;
-    protected PVector windowPos;
+    public PVector windowPos;
     public PVector windowSize;
     float cell = State.cell;
     float titleBarHeight = cell;

@@ -84,7 +84,7 @@ public abstract class AbstractNode {
         }
         pg.pushMatrix();
         pg.pushStyle();
-        updateDrawInlineNodeInner(pg);
+        updateDrawInlineNodeAbstract(pg);
         pg.popMatrix();
         pg.popStyle();
         if(displayInlineName){
@@ -99,7 +99,7 @@ public abstract class AbstractNode {
         pg.rect(0,0,size.x,size.y);
     }
 
-    protected abstract void updateDrawInlineNodeInner(PGraphics pg);
+    protected abstract void updateDrawInlineNodeAbstract(PGraphics pg);
 
     protected void validatePrecision() {
 

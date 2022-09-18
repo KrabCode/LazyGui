@@ -43,7 +43,7 @@ public class GradientFolder extends NodeFolder {
     }
 
     @Override
-    protected void updateDrawInlineNodeInner(PGraphics pg) {
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
         pg.image(out, 0, 0, previewRectSize, previewRectSize);
@@ -164,7 +164,7 @@ public class GradientFolder extends NodeFolder {
         }
 
         @Override
-        protected void updateDrawInlineNodeInner(PGraphics pg) {
+        protected void updateDrawInlineNodeAbstract(PGraphics pg) {
             pg.image(parent.getOutputGraphics(), 0, 0, size.x, size.y);
         }
 

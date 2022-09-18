@@ -38,7 +38,7 @@ public class NodeFolder extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeInner(PGraphics pg) {
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         drawMiniatureWindowIcon(pg);
     }
 

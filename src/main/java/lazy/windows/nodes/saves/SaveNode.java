@@ -15,7 +15,7 @@ class SaveNode extends AbstractNode {
         this.fullPath = fullPath;
     }
 
-    protected void updateDrawInlineNodeInner(PGraphics pg) {
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
         drawRightText(pg, "load");
     }

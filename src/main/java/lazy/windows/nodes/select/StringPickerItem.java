@@ -21,7 +21,7 @@ public class StringPickerItem extends ToggleNode {
     }
 
     @Override
-    public void updateDrawInlineNodeInner(PGraphics pg){
+    public void updateDrawInlineNodeAbstract(PGraphics pg){
         // do not draw the right toggle handle
     }
 

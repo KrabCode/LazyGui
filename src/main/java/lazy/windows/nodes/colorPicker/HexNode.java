@@ -17,7 +17,7 @@ public class HexNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeInner(PGraphics pg) {
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
         drawRightText(pg, parentColorPickerFolder.hexString);
     }
