@@ -95,12 +95,14 @@ public class NodeFolder extends AbstractNode {
         JsonObject wholeObject = loadedNode.getAsJsonObject();
         if(wholeObject.has("window")){
             JsonObject winObject = wholeObject.getAsJsonObject("window");
-            boolean isClosed = winObject.get("closed").getAsBoolean();
-            float posX = winObject.get("windowPosX").getAsFloat();
-            float posY = winObject.get("windowPosY").getAsFloat();
-            if(!isClosed){
-                WindowManager.uncoverOrCreateWindow(this, posX, posY);
-                // open it at this spot
+            if(winObject.has("closed") && winObject.has("posX") && winObject.has("posX")){
+                boolean isClosed = winObject.get("closed").getAsBoolean();
+                float posX = winObject.get("posX").getAsFloat();
+                float posY = winObject.get("posY").getAsFloat();
+                if(!isClosed){
+                    WindowManager.uncoverOrCreateWindow(this, posX, posY);
+                    // open it at this spot
+                }
             }
         }
     }
