@@ -1,5 +1,7 @@
 package lazy.windows.nodes;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
@@ -11,6 +13,7 @@ import lazy.windows.WindowManager;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -26,6 +29,7 @@ public class NodeFolder extends AbstractNode {
     @Expose
     public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
+    @Expose
     public FolderWindow window;
 
     protected final float previewRectSize = cell * 0.6f;
@@ -84,5 +88,20 @@ public class NodeFolder extends AbstractNode {
             }
         }
         return null;
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        super.overwriteState(loadedNode);
+        JsonObject wholeObject = loadedNode.getAsJsonObject();
+        if(wholeObject.has("window")){
+            JsonObject winObject = wholeObject.getAsJsonObject("window");
+            boolean isClosed = winObject.get("closed").getAsBoolean();
+            float posX = winObject.get("windowPosX").getAsFloat();
+            float posY = winObject.get("windowPosY").getAsFloat();
+            if(!isClosed){
+                WindowManager.uncoverOrCreateWindow(this, posX, posY);
+                // open it at this spot
+            }
+        }
     }
 }

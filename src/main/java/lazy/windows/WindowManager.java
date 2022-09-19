@@ -28,10 +28,20 @@ public class WindowManager {
         singleton.windows.add(window);
     }
 
-    public static void uncoverOrCreateWindow(NodeFolder nodeFolder) {
+    public static void uncoverOrCreateWindow(NodeFolder nodeFolder){
+        uncoverOrCreateWindow(nodeFolder, null, null);
+    }
+
+    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float posX, Float posY) {
         float mouseX = State.app.mouseX;
         float mouseY = State.app.mouseY;
         PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
+        if(posX != null){
+            pos.x = posX;
+        }
+        if(posY != null){
+            pos.y = posY;
+        }
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.parentNode.path.equals(nodeFolder.path)){
@@ -39,14 +49,14 @@ public class WindowManager {
                 w.setFocusOnThis();
                 float windowContentWidth = nodeFolder.idealWindowWidth;
                 if(windowContentWidth > 0){
-                    w.windowSize.x = windowContentWidth;
+                    w.windowSizeX = windowContentWidth;
                 }
                 windowFound = true;
                 break;
             }
         }
         if(!windowFound){
-            Window window = new FolderWindow(pos, nodeFolder, true, nodeFolder.idealWindowWidth);
+            Window window = new FolderWindow(pos.x, pos.y, nodeFolder, true, nodeFolder.idealWindowWidth);
             singleton.windows.add(window);
             window.open();
         }

@@ -42,18 +42,18 @@ public class LazyGui implements UserInputSubscriber {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
         State.init(this, app);
-        State.loadMostRecentSave();
         ThemeStore.initSingleton();
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
         float cell = State.cell;
         FolderWindow rootFolder = new FolderWindow(
-                new PVector(cell, cell),
+                cell, cell,
                 NodeTree.getRoot(),
                 false
         );
         WindowManager.addWindow(rootFolder);
+        State.loadMostRecentSave();
         createToolbar();
         lazyFollowSketchResolution();
         app.registerMethod("draw", this);

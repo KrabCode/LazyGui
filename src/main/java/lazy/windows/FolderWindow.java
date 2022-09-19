@@ -3,7 +3,6 @@ package lazy.windows;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import lazy.NodeTree;
 import lazy.State;
 import lazy.Utils;
@@ -17,18 +16,18 @@ import lazy.windows.nodes.*;
 public class FolderWindow extends Window {
     public final NodeFolder folder;
 
-    public FolderWindow(PVector pos, NodeFolder folder, boolean closeable) {
-        super(pos, folder, closeable);
+    public FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable) {
+        super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
     }
 
-    public FolderWindow(PVector pos, NodeFolder folder, boolean closeable, float intendedWindowWidth) {
-        super(pos, folder, closeable);
+    public FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable, float intendedWindowWidth) {
+        super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
         if(intendedWindowWidth > 0){
-            windowSize.x = intendedWindowWidth;
+            windowSizeX = intendedWindowWidth;
         }
     }
 
@@ -38,15 +37,15 @@ public class FolderWindow extends Window {
     }
 
     public void drawFolder(PGraphics pg) {
-        windowSize.y = cell + heightSumOfChildNodes();
+        windowSizeY = cell + heightSumOfChildNodes();
         pg.pushMatrix();
-        pg.translate(windowPos.x-0.5f, windowPos.y);
+        pg.translate(posX -0.5f, posY);
         pg.translate(0, titleBarHeight);
         float y = titleBarHeight;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
             float nodeHeight = cell * node.rowHeightInCells;
-            node.updateInlineNodeCoordinates(windowPos.x, windowPos.y + y, windowSize.x, nodeHeight);
+            node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.updateDrawInlineNode(pg);

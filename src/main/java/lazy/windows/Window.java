@@ -1,9 +1,9 @@
 package lazy.windows;
 
+import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import lazy.NodeTree;
 import lazy.State;
 import lazy.themes.ThemeStore;
@@ -14,24 +14,28 @@ import lazy.userInput.UserInputSubscriber;
 import lazy.LazyGui;
 
 import static processing.core.PApplet.lerp;
-import static processing.core.PApplet.println;
 import static processing.core.PConstants.*;
 import static lazy.themes.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
+    @Expose
+    public float posX;
+    @Expose
+    public float posY;
+    @Expose
     public boolean closed = false;
+    public float windowSizeX, windowSizeY;
     protected boolean isCloseable;
     protected AbstractNode parentNode;
-    public PVector windowPos;
-    public PVector windowSize;
     float cell = State.cell;
     float titleBarHeight = cell;
-
     private boolean isDraggedAround;
 
-    public Window(PVector windowPos, AbstractNode parentNode, boolean isCloseable) {
-        this.windowPos = windowPos;
-        this.windowSize = new PVector(State.defaultWindowWidthInPixels, cell * 1);
+    public Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
+        this.posX = posX;
+        this.posY = posY;
+        this.windowSizeX = State.defaultWindowWidthInPixels;
+        this.windowSizeY = cell * 1;
         this.parentNode = parentNode;
         this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
@@ -60,30 +64,30 @@ public abstract class Window implements UserInputSubscriber {
 
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(windowPos.x, windowPos.y);
+        pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(-1, -1, windowSize.x + 1, windowSize.y + 1);
+        pg.rect(-1, -1, windowSizeX + 1, windowSizeY + 1);
         pg.popMatrix();
     }
 
     private void drawCloseButton(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(windowPos.x, windowPos.y);
+        pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(windowSize.x - cell, 0, windowSize.x - cell, cell - 1);
+        pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             NodeTree.setAllOtherNodesMouseOver(null, false);
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSize.x - cell + 0.5f, 0, cell - 1, cell);
+            pg.rect(windowSizeX - cell + 0.5f, 0, cell - 1, cell);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
-            pg.translate(windowSize.x - cell * 0.5f + 0.5f, cell * 0.5f);
+            pg.translate(windowSizeX - cell * 0.5f + 0.5f, cell * 0.5f);
             float n = cell * 0.2f;
             pg.line(-n, -n, n, n);
             pg.line(-n, n, n, -n);
@@ -96,17 +100,17 @@ public abstract class Window implements UserInputSubscriber {
 
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(windowPos.x, windowPos.y);
+        pg.translate(posX, posY);
         boolean highlight = shouldHighlightTitleBar();
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(0, 0, windowSize.x, titleBarHeight);
+        pg.rect(0, 0, windowSizeX, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSize.x - cell * 1.1f);
+        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-        pg.line(0, cell, windowSize.x, cell);
+        pg.line(0, cell, windowSizeX, cell);
         pg.popMatrix();
     }
 
@@ -116,20 +120,20 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        float rightEdge = pg.width - windowSize.x - 1;
-        float bottomEdge = pg.height - windowSize.y - 1;
+        float rightEdge = pg.width - windowSizeX - 1;
+        float bottomEdge = pg.height - windowSizeY - 1;
         float lerpAmt = 0.3f;
-        if (windowPos.x < 0) {
-            windowPos.x = lerp(windowPos.x, 0, lerpAmt);
+        if (posX < 0) {
+            posX = lerp(posX, 0, lerpAmt);
         }
-        if (windowPos.y < 0) {
-            windowPos.y = lerp(windowPos.y, 0, lerpAmt);
+        if (posY < 0) {
+            posY = lerp(posY, 0, lerpAmt);
         }
-        if (windowPos.x > rightEdge) {
-            windowPos.x = lerp(windowPos.x, rightEdge, lerpAmt);
+        if (posX > rightEdge) {
+            posX = lerp(posX, rightEdge, lerpAmt);
         }
-        if (windowPos.y > bottomEdge) {
-            windowPos.y = lerp(windowPos.y, bottomEdge, lerpAmt);
+        if (posY > bottomEdge) {
+            posY = lerp(posY, bottomEdge, lerpAmt);
         }
     }
 
@@ -153,8 +157,8 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isDraggedAround) {
-            windowPos.x += x - px;
-            windowPos.y += y - py;
+            posX += x - px;
+            posY += y - py;
             e.setConsumed(true);
         }
     }
@@ -194,8 +198,8 @@ public abstract class Window implements UserInputSubscriber {
 
     public boolean isPointInsideContent(float x, float y) {
         return Utils.isPointInRect(x, y,
-                windowPos.x, windowPos.y + cell,
-                windowSize.x, windowSize.y - cell);
+                posX, posY + cell,
+                windowSizeX, windowSizeY - cell);
     }
 
     public boolean isPointInsideSketchWindow(float x, float y) {
@@ -204,19 +208,19 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-        return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
 
     public boolean isPointInsideTitleBar(float x, float y) {
         if (isCloseable) {
-            return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x - cell, titleBarHeight);
+            return Utils.isPointInRect(x, y, posX, posY, windowSizeX - cell, titleBarHeight);
         }
-        return Utils.isPointInRect(x, y, windowPos.x, windowPos.y, windowSize.x, titleBarHeight);
+        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, titleBarHeight);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
         return Utils.isPointInRect(x, y,
-                windowPos.x + windowSize.x - cell - 1, windowPos.y,
+                posX + windowSizeX - cell - 1, posY,
                 cell + 1, cell - 1);
     }
 }
