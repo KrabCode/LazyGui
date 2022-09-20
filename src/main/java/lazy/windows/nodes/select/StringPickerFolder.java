@@ -19,7 +19,7 @@ public class StringPickerFolder extends NodeFolder {
     public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
         if(!arrayContainsDefault(options, defaultOption)){
-            // gracefully ignore the default which does not appear in the options and carry on
+            // gracefully ignore the default when it does not appear in the options and carry on as if no default was specified
            defaultOption = null;
         }
         valueString = options[0];

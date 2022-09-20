@@ -17,7 +17,7 @@ public class ColorPickerFolder extends NodeFolder {
     public String hexString;
     private int hex;
     private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
-
+    private final PickerColor outputColor = new PickerColor();
 
     public ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
         super(path, parentFolder);
@@ -78,7 +78,6 @@ public class ColorPickerFolder extends NodeFolder {
                 getValue(alphaNodeName)));
     }
 
-    PickerColor outputColor = new PickerColor();
     public PickerColor getColor() {
         outputColor.hex = hex;
         outputColor.hue = hue();

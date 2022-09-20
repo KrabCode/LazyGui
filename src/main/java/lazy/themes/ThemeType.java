@@ -11,10 +11,6 @@ public enum ThemeType {
         return new String[]{"dark", "light", "pink", "blue", "custom"};
     }
 
-    public static String[] getAllNamesStartingWithCustom() {
-        return new String[]{"custom", "dark", "light", "pink", "blue"};
-    }
-
     public static ThemeType[] getAllValues() {
         return new ThemeType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
     }
