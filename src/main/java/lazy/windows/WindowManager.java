@@ -29,10 +29,10 @@ public class WindowManager {
     }
 
     public static void uncoverOrCreateWindow(NodeFolder nodeFolder){
-        uncoverOrCreateWindow(nodeFolder, null, null);
+        uncoverOrCreateWindow(nodeFolder, null, null, true);
     }
 
-    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float posX, Float posY) {
+    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float posX, Float posY, boolean setFocus) {
         float mouseX = State.app.mouseX;
         float mouseY = State.app.mouseY;
         PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
@@ -45,8 +45,7 @@ public class WindowManager {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.parentNode.path.equals(nodeFolder.path)){
-                w.open();
-                w.setFocusOnThis();
+                w.open(setFocus);
                 float windowContentWidth = nodeFolder.idealWindowWidth;
                 if(windowContentWidth > 0){
                     w.windowSizeX = windowContentWidth;
@@ -58,7 +57,7 @@ public class WindowManager {
         if(!windowFound){
             Window window = new FolderWindow(pos.x, pos.y, nodeFolder, true, nodeFolder.idealWindowWidth);
             singleton.windows.add(window);
-            window.open();
+            window.open(setFocus);
         }
 
     }

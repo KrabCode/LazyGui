@@ -182,9 +182,12 @@ public abstract class Window implements UserInputSubscriber {
         isDraggedAround = false;
     }
 
-    public void open() {
+    public void open(boolean startDragging) {
         closed = false;
-        isDraggedAround = true;
+        if(startDragging){
+            isDraggedAround = true;
+            setFocusOnThis();
+        }
     }
 
     private boolean isClosed() {

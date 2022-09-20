@@ -100,7 +100,7 @@ public class NodeFolder extends AbstractNode {
                 float posX = winObject.get("posX").getAsFloat();
                 float posY = winObject.get("posY").getAsFloat();
                 if(!isClosed){
-                    WindowManager.uncoverOrCreateWindow(this, posX, posY);
+                    WindowManager.uncoverOrCreateWindow(this, posX, posY, false);
                     // open it at this spot
                 }
             }

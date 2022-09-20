@@ -125,6 +125,7 @@ public class ColorPickerFolder extends NodeFolder {
 
     @Override
     public void overwriteState(JsonElement loadedNode) {
+        super.overwriteState(loadedNode);
         JsonElement loadedString = loadedNode.getAsJsonObject().get("hexString");
         if(loadedString != null){
             setHex(unhex(loadedString.getAsString()));
