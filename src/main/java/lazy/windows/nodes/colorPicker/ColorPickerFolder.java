@@ -23,9 +23,9 @@ public class ColorPickerFolder extends NodeFolder {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();
+        idealWindowWidth = cell * 7;
         State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
-        idealWindowWidth = cell * 7;
     }
 
     protected void lazyInitNodes() {
