@@ -175,10 +175,10 @@ public class State {
             return;
         }
         JsonElement root = gson.fromJson(json, JsonElement.class);
-        loadStateFromJson(root);
+        loadStateFromJsonElement(root);
     }
 
-    public static void loadStateFromJson(JsonElement root) {
+    public static void loadStateFromJsonElement(JsonElement root) {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(root);
@@ -263,7 +263,7 @@ public class State {
         }
         String poppedJson = undoStack.remove(undoStack.size() - 1);
         redoStack.add(poppedJson);
-        loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
+        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class));
     }
 
     private static void popFromRedoStack() {
@@ -272,7 +272,7 @@ public class State {
         }
         String poppedJson = redoStack.remove(redoStack.size() - 1);
         undoStack.add(poppedJson);
-        loadStateFromJson(gson.fromJson(poppedJson, JsonElement.class));
+        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class));
     }
 
     public static void createNewSaveWithRandomName() {

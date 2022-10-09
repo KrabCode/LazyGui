@@ -32,15 +32,15 @@ public class WindowManager {
         uncoverOrCreateWindow(nodeFolder, null, null, true);
     }
 
-    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float posX, Float posY, boolean setFocus) {
+    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float nullablePosX, Float nullablePosY, boolean setFocus) {
         float mouseX = State.app.mouseX;
         float mouseY = State.app.mouseY;
         PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
-        if(posX != null){
-            pos.x = posX;
+        if(nullablePosX != null){
+            pos.x = nullablePosX;
         }
-        if(posY != null){
-            pos.y = posY;
+        if(nullablePosY != null){
+            pos.y = nullablePosY;
         }
         boolean windowFound = false;
         for (Window w : singleton.windows) {
@@ -59,7 +59,11 @@ public class WindowManager {
             singleton.windows.add(window);
             window.open(setFocus);
         }
-
+        // the root window will always be found and initialized before this runs, so if we want to load its position from json, we need to do it manually
+        if(windowFound && nodeFolder.parent == null){
+            nodeFolder.window.posX = pos.x;
+            nodeFolder.window.posY = pos.y;
+        }
     }
 
     public static void updateAndDrawWindows(PGraphics pg) {
