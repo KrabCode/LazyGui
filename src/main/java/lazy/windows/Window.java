@@ -143,6 +143,9 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isPointInsideWindow(x, y)) {
+            if(!isFocused()){
+                setFocusOnThis();
+            }
             e.setConsumed(true);
         }
         if (isPointInsideTitleBar(x, y)) {
