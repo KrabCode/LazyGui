@@ -3,7 +3,6 @@ package lazy;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import lazy.themes.Theme;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
@@ -17,11 +16,12 @@ import lazy.windows.FolderWindow;
 import lazy.windows.WindowManager;
 import lazy.windows.nodes.gradient.GradientFolder;
 import lazy.windows.nodes.saves.SaveNodeFolder;
-import lazy.windows.nodes.select.StringPickerFolder;
+import lazy.windows.nodes.stringPicker.StringPickerFolder;
 import lazy.windows.nodes.sliders.SliderIntNode;
 import lazy.windows.nodes.sliders.SliderNode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static processing.core.PApplet.*;
 
@@ -54,7 +54,7 @@ public class LazyGui implements UserInputSubscriber {
         );
         WindowManager.addWindow(rootFolder);
         State.loadMostRecentSave();
-        createToolbar();
+        createOptionsFolder();
         lazyFollowSketchResolution();
         app.registerMethod("draw", this);
     }
@@ -72,7 +72,8 @@ public class LazyGui implements UserInputSubscriber {
 
     public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
-        updateToolbar();
+        updateOptionsFolder();
+        updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
@@ -87,6 +88,13 @@ public class LazyGui implements UserInputSubscriber {
         canvas.popStyle();
         State.updateEndlessLoopDetection();
         takeScreenshotIfNeeded();
+    }
+
+    private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
+        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
+        for(AbstractNode node : allNodes){
+            node.updateValues();
+        }
     }
 
     public void requestScreenshot(String customPath){
@@ -119,7 +127,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
 
-    public void createToolbar() {
+    public void createOptionsFolder() {
         String path = "options";
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
@@ -128,7 +136,7 @@ public class LazyGui implements UserInputSubscriber {
 
     }
 
-    private void updateToolbar() {
+    private void updateOptionsFolder() {
         String path = toolbar.path;
         updateThemePicker(path + "/themes");
         hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);

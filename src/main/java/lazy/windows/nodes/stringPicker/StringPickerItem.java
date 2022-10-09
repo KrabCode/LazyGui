@@ -1,4 +1,4 @@
-package lazy.windows.nodes.select;
+package lazy.windows.nodes.stringPicker;
 
 import lazy.windows.nodes.NodeType;
 import processing.core.PGraphics;

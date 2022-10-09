@@ -9,7 +9,7 @@ import lazy.State;
 import lazy.Utils;
 import lazy.windows.nodes.*;
 import lazy.windows.nodes.colorPicker.PickerColor;
-import lazy.windows.nodes.select.StringPickerFolder;
+import lazy.windows.nodes.stringPicker.StringPickerFolder;
 
 import java.util.ArrayList;
 

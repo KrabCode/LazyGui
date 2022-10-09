@@ -43,8 +43,7 @@ public abstract class AbstractNode {
 
     protected boolean displayInlineName = true;
 
-
-    public AbstractNode(NodeType type, String path, NodeFolder parentFolder) {
+    protected AbstractNode(NodeType type, String path, NodeFolder parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
@@ -76,7 +75,11 @@ public abstract class AbstractNode {
         size.y = h;
     }
 
-
+    /**
+     * Main update function, only called when the parent window containing this node is open.
+     * See update()
+     * @param pg main PGraphics of the gui of the same size as the main PApplet canvas to draw on
+     */
     public void updateDrawInlineNode(PGraphics pg) {
         // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         if(isMouseOverNode){
@@ -91,6 +94,13 @@ public abstract class AbstractNode {
             fillForegroundBasedOnMouseOver(pg);
             drawLeftText(pg, name);
         }
+    }
+
+    /**
+     * Secondary update function, called for all nodes every frame, regardless of their parent window's closed state.
+     */
+    public void updateValues(){
+
     }
 
     protected void highlightNodeOnMouseOver(PGraphics pg) {
@@ -253,4 +263,5 @@ public abstract class AbstractNode {
     public String getPrintableValue(){
         return "";
     }
+
 }

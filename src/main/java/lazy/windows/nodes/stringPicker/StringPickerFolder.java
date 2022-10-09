@@ -1,4 +1,4 @@
-package lazy.windows.nodes.select;
+package lazy.windows.nodes.stringPicker;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
@@ -55,6 +55,10 @@ public class StringPickerFolder extends NodeFolder {
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         // don't draw folder icon
+    }
+
+    @Override
+    public void updateValues() {
         checkForChildValueChange();
         rememberCurrentValues();
     }
