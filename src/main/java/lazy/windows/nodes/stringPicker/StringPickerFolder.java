@@ -7,14 +7,14 @@ import lazy.State;
 import lazy.windows.nodes.AbstractNode;
 import lazy.windows.nodes.NodeFolder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StringPickerFolder extends NodeFolder {
 
     @Expose
     public String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
+    private final String[] options;
 
     public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
@@ -22,6 +22,7 @@ public class StringPickerFolder extends NodeFolder {
             // gracefully ignore the default when it does not appear in the options and carry on as if no default was specified
            defaultOption = null;
         }
+        this.options = options;
         valueString = options[0];
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
@@ -41,6 +42,10 @@ public class StringPickerFolder extends NodeFolder {
         State.overwriteWithLoadedStateIfAny(this);
         checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
         rememberCurrentValues();
+    }
+
+    public List<String> getOptions(){
+        return Arrays.asList(options);
     }
 
     private boolean arrayContainsDefault(String[] options, String defaultOption) {
@@ -75,10 +80,32 @@ public class StringPickerFolder extends NodeFolder {
         }
     }
 
-    private void setAllOtherOptionsToFalse(StringPickerItem optionToKeepTrue) {
+    public void selectOption(String optionToSet) {
+        boolean success = false;
+        for (AbstractNode child : children) {
+            StringPickerItem option = (StringPickerItem) child;
+            if(option.valueString.equals(optionToSet)){
+                option.valueBoolean = true;
+                success = true;
+            }
+        }
+        if(success){
+            setAllOtherOptionsToFalse(optionToSet);
+        }
+    }
+
+    public void setAllOtherOptionsToFalse(StringPickerItem optionToKeepTrue) {
         for (AbstractNode child : children) {
             StringPickerItem option = (StringPickerItem) child;
             if(!option.path.equals(optionToKeepTrue.path)){
+                option.valueBoolean = false;
+            }
+        }
+    }
+    public void setAllOtherOptionsToFalse(String optionToKeepTrue) {
+        for (AbstractNode child : children) {
+            StringPickerItem option = (StringPickerItem) child;
+            if(!option.valueString.equals(optionToKeepTrue)){
                 option.valueBoolean = false;
             }
         }

@@ -202,8 +202,6 @@ public class LazyGui implements UserInputSubscriber {
         return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
     }
 
-    // TODO remove duplicated code that finds / creates a Node
-
     @SuppressWarnings("unused")
     public float slider(String path) {
         return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
@@ -234,6 +232,15 @@ public class LazyGui implements UserInputSubscriber {
         SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
+    }
+
+    public void sliderSet(String path, float value){
+        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderNode(path, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueFloat = value;
     }
 
     @SuppressWarnings("unused")
@@ -268,6 +275,15 @@ public class LazyGui implements UserInputSubscriber {
         return node;
     }
 
+    public void sliderIntSet(String path, int value){
+        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderIntNode(path, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueFloat = value;
+    }
+
     @SuppressWarnings("unused")
     public boolean toggle(String path) {
         return toggle(path, false);
@@ -280,6 +296,15 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
+    }
+
+    public void toggleSet(String path, boolean value) {
+        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createToggleNode(path, value);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueBoolean = value;
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
@@ -325,6 +350,20 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
+    }
+
+    public void stringPickerSet(String path, String optionToSet){
+        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        if (node != null) {
+            List<String> options = node.getOptions();
+            if(options.contains(optionToSet)){
+                node.selectOption(optionToSet);
+            }else{
+                println("attempted to set an option: " + optionToSet +
+                    " to a string picker at path: " + path +
+                    " which does not appear in the options: " + options);
+            }
+        }
     }
 
     public void setTheme(Theme theme) {
@@ -378,7 +417,6 @@ public class LazyGui implements UserInputSubscriber {
             node = new ColorPickerFolder(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         } else {
-
             node.setHex(hex);
             node.loadValuesFromHex(false);
         }

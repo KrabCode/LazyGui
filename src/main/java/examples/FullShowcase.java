@@ -10,8 +10,6 @@ public class FullShowcase extends PApplet {
 
     LazyGui gui;
     PGraphics pg;
-    private float rotationTime;
-    String recSketchId = Utils.generateRandomShortId();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -34,12 +32,15 @@ public class FullShowcase extends PApplet {
         drawBg();
         drawBrush();
         drawBox();
+        displayTimeValues();
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        if(frameCount < 800){
-//            pg.save("out/rec/"+ recSketchId + "/" + frameCount + ".jpg");
-        }
+    }
+
+    private void displayTimeValues() {
+        gui.sliderIntSet("time/frameCount", frameCount);
+        gui.sliderSet("time/rad(frameCount)", radians(frameCount));
     }
 
     private void drawBg() {
@@ -64,6 +65,9 @@ public class FullShowcase extends PApplet {
     private int getBlendMode(String path, String defaultMode) {
         String selectedMode = gui.stringPicker(path + "/blend mode",
                 new String[]{"blend", "add", "subtract"}, defaultMode);
+        if(gui.button(path + "/blend mode reset")){
+            gui.stringPickerSet(path + "/blend mode", defaultMode);
+        }
         switch (selectedMode) {
             case "add":
                 return ADD;
@@ -95,14 +99,18 @@ public class FullShowcase extends PApplet {
         } else {
             pg.fill(fillColor);
         }
+        if(gui.button("box/set no fill!")){
+            gui.toggleSet("box/no fill", true);
+        }
         pg.translate(width / 2f, height / 2f);
         pg.translate(gui.slider("box/pos/x"),
                 gui.slider("box/pos/y"),
                 gui.slider("box/pos/z", 500));
         float boxSize = gui.slider("box/size", 120);
+        float rotationPos = gui.slider("box/rotate pos");
         float rotationSpeed = gui.slider("box/rotate speed", 0.5f);
-        rotationTime += radians(rotationSpeed);
-        pg.rotate(rotationTime, gui.slider("box/rotate axis/x", 0),
+        gui.sliderSet("box/rotate pos", rotationPos + radians(rotationSpeed));
+        pg.rotate(rotationPos, gui.slider("box/rotate axis/x", 0),
                 gui.slider("box/rotate axis/y", 0),
                 gui.slider("box/rotate axis/z", 1));
         pg.blendMode(getBlendMode("box", "blend"));
