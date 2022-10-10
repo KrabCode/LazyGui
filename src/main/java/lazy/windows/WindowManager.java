@@ -59,7 +59,7 @@ public class WindowManager {
             singleton.windows.add(window);
             window.open(setFocus);
         }
-        // the root window will always be found and initialized before this runs, so if we want to load its position from json, we need to do it manually
+        // the root window will always be initialized before this runs and thus always found, so if we want to load its position from json, we need to do it manually
         if(windowFound && nodeFolder.parent == null){
             nodeFolder.window.posX = pos.x;
             nodeFolder.window.posY = pos.y;

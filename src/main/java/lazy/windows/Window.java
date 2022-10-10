@@ -104,7 +104,7 @@ public abstract class Window implements UserInputSubscriber {
         boolean highlight = shouldHighlightTitleBar();
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(0, 0, windowSizeX, titleBarHeight);
+        pg.rect(0, 0, windowSizeX - 1, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);

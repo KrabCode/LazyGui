@@ -47,12 +47,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
         float cell = State.cell;
-        FolderWindow rootFolder = new FolderWindow(
-                cell, cell,
-                NodeTree.getRoot(),
-                false
-        );
-        WindowManager.addWindow(rootFolder);
+        WindowManager.addWindow( new FolderWindow(cell, cell,NodeTree.getRoot(),false));
         State.loadMostRecentSave();
         createOptionsFolder();
         lazyFollowSketchResolution();
