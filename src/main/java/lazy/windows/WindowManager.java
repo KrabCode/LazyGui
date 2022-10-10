@@ -11,6 +11,7 @@ import static lazy.State.cell;
 
 public class WindowManager {
     private static WindowManager singleton;
+    public static boolean showConnectingLines = false;
     private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private Window windowToSetFocusOn = null;
 
@@ -76,6 +77,15 @@ public class WindowManager {
         for (Window win : singleton.windows) {
             win.drawWindow(pg);
         }
+        if(showConnectingLines){
+            for (Window win : singleton.windows) {
+                drawLineToFirstVisibleParent(pg, win);
+            }
+        }
+    }
+
+    private static void drawLineToFirstVisibleParent(PGraphics pg, Window window) {
+        // TODO implement
     }
 
     public static boolean isFocused(Window window) {
