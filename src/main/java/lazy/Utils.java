@@ -12,6 +12,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static processing.core.PApplet.*;
@@ -78,6 +79,11 @@ public class Utils {
             result.append(character);
         }
         return result.toString();
+    }
+
+    public static String[] splitFullPathWithoutEndAndRoot(String fullPath){
+        String[] pathWithEnd = fullPath.split("/");
+        return Arrays.copyOf(pathWithEnd, pathWithEnd.length-1);
     }
 
     public static String generateRandomShortId() {

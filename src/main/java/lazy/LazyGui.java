@@ -134,7 +134,6 @@ public class LazyGui implements UserInputSubscriber {
     private void updateOptionsFolder() {
         String path = toolbar.path;
         updateThemePicker(path + "/themes");
-        WindowManager.showConnectingLines = toggle(path + "/guide");
         hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);
         hotkeyCloseAllWindowsActive = toggle(path + "/hotkeys/d: close all windows", true);
         hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);

@@ -53,11 +53,31 @@ public abstract class Window implements UserInputSubscriber {
         }
         constrainPosition(pg);
         pg.pushMatrix();
+        drawPathTooltipOnHighlight(pg);
         drawBackgroundWithWindowBorder(pg);
         drawContent(pg);
         drawTitleBar(pg);
         if (isCloseable) {
             drawCloseButton(pg);
+        }
+        pg.popMatrix();
+    }
+
+    private void drawPathTooltipOnHighlight(PGraphics pg) {
+        if (!shouldHighlightTitleBar()) {
+            return;
+        }
+        pg.pushMatrix();
+        pg.translate(posX, posY);
+        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
+        int lineCount = pathSplit.length;
+        float tooltipHeight = lineCount * cell;
+        pg.noStroke();
+        pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
+        pg.rect(0, -tooltipHeight, windowSizeX, tooltipHeight);
+        pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
+        for (int i = 0; i < lineCount; i++) {
+            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX, -i * cell - State.textMarginY);
         }
         pg.popMatrix();
     }
@@ -115,7 +135,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
 
-    protected boolean shouldHighlightTitleBar(){
+    protected boolean shouldHighlightTitleBar() {
         return isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround;
     }
 
@@ -143,7 +163,7 @@ public abstract class Window implements UserInputSubscriber {
             return;
         }
         if (isPointInsideWindow(x, y)) {
-            if(!isFocused()){
+            if (!isFocused()) {
                 setFocusOnThis();
             }
             e.setConsumed(true);
@@ -187,7 +207,7 @@ public abstract class Window implements UserInputSubscriber {
 
     public void open(boolean startDragging) {
         closed = false;
-        if(startDragging){
+        if (startDragging) {
             isDraggedAround = true;
             setFocusOnThis();
         }

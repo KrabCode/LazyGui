@@ -40,8 +40,8 @@ public class FolderWindow extends Window {
         windowSizeY = cell + heightSumOfChildNodes();
         pg.pushMatrix();
         pg.translate(posX -0.5f, posY);
-        pg.translate(0, titleBarHeight);
-        float y = titleBarHeight;
+        pg.translate(0, cell);
+        float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
             float nodeHeight = cell * node.rowHeightInCells;
