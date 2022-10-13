@@ -32,6 +32,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomPath = "";
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
+    public static boolean drawPathTooltips = false;
     private PGraphics pg;
     NodeFolder toolbar;
     PApplet app;
@@ -140,6 +141,7 @@ public class LazyGui implements UserInputSubscriber {
         undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
         redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
+        drawPathTooltips = toggle(path + "/window path tooltips", true);
     }
 
     private void hotkeyInteraction(KeyEvent keyEvent) {

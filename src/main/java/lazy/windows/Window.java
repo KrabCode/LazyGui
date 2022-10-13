@@ -64,7 +64,7 @@ public abstract class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!shouldHighlightTitleBar()) {
+        if (!shouldHighlightTitleBar() || !LazyGui.drawPathTooltips) {
             return;
         }
         pg.pushMatrix();
@@ -97,13 +97,13 @@ public abstract class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell - 1);
+        pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             NodeTree.setAllOtherNodesMouseOver(null, false);
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSizeX - cell + 0.5f, 0, cell - 1, cell);
+            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, cell);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
@@ -124,7 +124,11 @@ public abstract class Window implements UserInputSubscriber {
         boolean highlight = shouldHighlightTitleBar();
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(0, 0, windowSizeX - 1, titleBarHeight);
+        float titleBarWidth = windowSizeX - cell;
+        if(!isCloseable){
+             titleBarWidth += cell;
+        }
+        pg.rect(0, 0, titleBarWidth, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);

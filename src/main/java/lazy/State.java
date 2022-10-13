@@ -24,8 +24,8 @@ public class State {
     public static LazyGui gui = null;
     public static PGraphics normalizedColorProvider = null;
 
-    private static String fontPath = "JetBrainsMono-Regular.ttf";
-    private static float fontSize = 16;
+    private static final String fontPath = "JetBrainsMono-Regular.ttf";
+    private static final float fontSize = 16;
     public static float textMarginX = 5;
     public static float textMarginY = 14;
 
