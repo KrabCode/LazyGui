@@ -72,9 +72,9 @@ public abstract class Window implements UserInputSubscriber {
         String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
-        pg.noStroke();
+        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(0, -tooltipHeight, windowSizeX, tooltipHeight);
+        pg.rect(-1, -tooltipHeight, windowSizeX - cell + 1, tooltipHeight);
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
         for (int i = 0; i < lineCount; i++) {
             pg.text(pathSplit[lineCount - 1 - i], State.textMarginX, -i * cell - State.textMarginY);
