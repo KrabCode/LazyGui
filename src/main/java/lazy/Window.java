@@ -9,21 +9,21 @@ import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
 import static lazy.ThemeColorType.*;
 
-public abstract class Window implements UserInputSubscriber {
+abstract class Window implements UserInputSubscriber {
     @Expose
-    public float posX;
+    float posX;
     @Expose
-    public float posY;
+    float posY;
     @Expose
-    public boolean closed = false;
-    public float windowSizeX, windowSizeY;
+    boolean closed = false;
+    float windowSizeX, windowSizeY;
     protected boolean isCloseable;
     protected AbstractNode parentNode;
     float cell = State.cell;
     float titleBarHeight = cell;
     private boolean isDraggedAround;
 
-    public Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
+    Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
         this.posX = posX;
         this.posY = posY;
         this.windowSizeX = State.defaultWindowWidthInPixels;
@@ -34,11 +34,11 @@ public abstract class Window implements UserInputSubscriber {
     }
 
 
-    public boolean isFocused() {
+    boolean isFocused() {
         return WindowManager.isFocused(this);
     }
 
-    public void drawWindow(PGraphics pg) {
+    void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
         if (closed) {
             return;
@@ -196,12 +196,12 @@ public abstract class Window implements UserInputSubscriber {
         isDraggedAround = false;
     }
 
-    public void close() {
+    void close() {
         closed = true;
         isDraggedAround = false;
     }
 
-    public void open(boolean startDragging) {
+    void open(boolean startDragging) {
         closed = false;
         if (startDragging) {
             isDraggedAround = true;
@@ -218,22 +218,22 @@ public abstract class Window implements UserInputSubscriber {
         UserInputPublisher.setFocus(this);
     }
 
-    public boolean isPointInsideContent(float x, float y) {
+    boolean isPointInsideContent(float x, float y) {
         return Utils.isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
     }
 
-    public boolean isPointInsideSketchWindow(float x, float y) {
+    boolean isPointInsideSketchWindow(float x, float y) {
         PApplet app = State.app;
         return Utils.isPointInRect(x, y, 0, 0, app.width, app.height);
     }
 
-    public boolean isPointInsideWindow(float x, float y) {
+    boolean isPointInsideWindow(float x, float y) {
         return Utils.isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
 
-    public boolean isPointInsideTitleBar(float x, float y) {
+    boolean isPointInsideTitleBar(float x, float y) {
         if (isCloseable) {
             return Utils.isPointInRect(x, y, posX, posY, windowSizeX - cell, titleBarHeight);
         }

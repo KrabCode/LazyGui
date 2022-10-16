@@ -5,11 +5,11 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 
 
-public class HexNode extends AbstractNode {
+class ColorPickerHexNode extends AbstractNode {
 
     ColorPickerFolder parentColorPickerFolder;
 
-    public HexNode(String path, ColorPickerFolder parentFolder) {
+    ColorPickerHexNode(String path, ColorPickerFolder parentFolder) {
         super(NodeType.VALUE, path, parentFolder);
         this.parentColorPickerFolder = parentFolder;
     }
@@ -21,18 +21,18 @@ public class HexNode extends AbstractNode {
     }
 
     @Override
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(KeyEvent e, float x, float y) {
         parentColorPickerFolder.keyPressedOverNode(e, x, y);
     }
 
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 
     @Override
-    public String getPrintableValue() {
+    String getPrintableValue() {
         return parentColorPickerFolder.hexString;
     }
 }

@@ -9,16 +9,16 @@ import processing.core.PGraphics;
  * A FolderWindow is the only visible GUI element
  * it lets the user see its child nodes including folders and interact with them
  */
-public class FolderWindow extends Window {
-    public final NodeFolder folder;
+class FolderWindow extends Window {
+    final NodeFolder folder;
 
-    public FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable) {
+    FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
     }
 
-    public FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable, float intendedWindowWidth) {
+    FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable, float intendedWindowWidth) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
@@ -32,7 +32,7 @@ public class FolderWindow extends Window {
         drawFolder(pg);
     }
 
-    public void drawFolder(PGraphics pg) {
+    void drawFolder(PGraphics pg) {
         windowSizeY = cell + heightSumOfChildNodes();
         pg.pushMatrix();
         pg.translate(posX -0.5f, posY);

@@ -1,6 +1,6 @@
 package lazy;
 
-public enum NodeType {
+enum NodeType {
     VALUE,
     FOLDER,
     TRANSIENT

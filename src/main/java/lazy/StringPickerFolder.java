@@ -6,14 +6,14 @@ import processing.core.PGraphics;
 
 import java.util.*;
 
-public class StringPickerFolder extends NodeFolder {
+class StringPickerFolder extends NodeFolder {
 
     @Expose
-    public String valueString;
+    String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
     private final String[] options;
 
-    public StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
+    StringPickerFolder(String path, NodeFolder parent, String[] options, String defaultOption) {
         super(path, parent);
         if(!arrayContainsDefault(options, defaultOption)){
             // gracefully ignore the default when it does not appear in the options and carry on as if no default was specified
@@ -41,7 +41,7 @@ public class StringPickerFolder extends NodeFolder {
         rememberCurrentValues();
     }
 
-    public List<String> getOptions(){
+    List<String> getOptions(){
         return Arrays.asList(options);
     }
 
@@ -60,7 +60,7 @@ public class StringPickerFolder extends NodeFolder {
     }
 
     @Override
-    public void updateValues() {
+    void updateValues() {
         checkForChildValueChange();
         rememberCurrentValues();
     }
@@ -77,7 +77,7 @@ public class StringPickerFolder extends NodeFolder {
         }
     }
 
-    public void selectOption(String optionToSet) {
+    void selectOption(String optionToSet) {
         boolean success = false;
         for (AbstractNode child : children) {
             StringPickerItem option = (StringPickerItem) child;
@@ -91,7 +91,7 @@ public class StringPickerFolder extends NodeFolder {
         }
     }
 
-    public void setAllOtherOptionsToFalse(StringPickerItem optionToKeepTrue) {
+    void setAllOtherOptionsToFalse(StringPickerItem optionToKeepTrue) {
         for (AbstractNode child : children) {
             StringPickerItem option = (StringPickerItem) child;
             if(!option.path.equals(optionToKeepTrue.path)){
@@ -99,7 +99,7 @@ public class StringPickerFolder extends NodeFolder {
             }
         }
     }
-    public void setAllOtherOptionsToFalse(String optionToKeepTrue) {
+    void setAllOtherOptionsToFalse(String optionToKeepTrue) {
         for (AbstractNode child : children) {
             StringPickerItem option = (StringPickerItem) child;
             if(!option.valueString.equals(optionToKeepTrue)){
@@ -116,18 +116,18 @@ public class StringPickerFolder extends NodeFolder {
     }
 
     @Override
-    public void drawLeftText(PGraphics pg, String text) {
+    void drawLeftText(PGraphics pg, String text) {
         super.drawLeftText(pg, text);
         drawRightText(pg, valueString);
     }
 
     @Override
-    public String getPrintableValue() {
+    String getPrintableValue() {
         return valueString;
     }
 
     @Override
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         // TODO test if this even works
         super.overwriteState(loadedNode);
         JsonElement loadedString = loadedNode.getAsJsonObject().get("valueString");

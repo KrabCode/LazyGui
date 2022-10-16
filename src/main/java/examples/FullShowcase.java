@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import lazy.LazyGui;
-import lazy.Utils;
 
 public class FullShowcase extends PApplet {
 

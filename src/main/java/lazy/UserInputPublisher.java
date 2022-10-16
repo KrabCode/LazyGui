@@ -10,8 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static processing.core.PApplet.floor;
 
-public class UserInputPublisher implements KeyListener, MouseListener {
-    public static boolean mouseFallsThroughThisFrame = false;
+class UserInputPublisher implements KeyListener, MouseListener {
+    static boolean mouseFallsThroughThisFrame = false;
     private static UserInputPublisher singleton;
     private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
 
@@ -34,17 +34,17 @@ public class UserInputPublisher implements KeyListener, MouseListener {
         }
     }
 
-    public static void createSingleton() {
+    static void createSingleton() {
         if (singleton == null) {
             singleton = new UserInputPublisher();
         }
     }
 
-    public static void subscribe(UserInputSubscriber subscriber) {
+    static void subscribe(UserInputSubscriber subscriber) {
         singleton.subscribers.add(0, subscriber);
     }
 
-    public static void setFocus(UserInputSubscriber subscriber){
+    static void setFocus(UserInputSubscriber subscriber){
         singleton.subscribers.remove(subscriber);
         singleton.subscribers.add(0, subscriber);
     }

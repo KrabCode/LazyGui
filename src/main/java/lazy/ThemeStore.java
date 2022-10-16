@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ThemeStore {
+class ThemeStore {
 
     private static final Map<ThemeType, Theme> paletteMap = new HashMap<>();
-    public static ThemeType currentSelection = ThemeType.DARK;
+    static ThemeType currentSelection = ThemeType.DARK;
 
-    public static void initSingleton() {
+    static void initSingleton() {
         ThemeType[] allTypes = ThemeType.getAllValues();
         for (ThemeType type : allTypes) {
             paletteMap.put(type, ThemeType.getPalette(type));
         }
     }
 
-    public static int getColor(ThemeColorType type) {
+    static int getColor(ThemeColorType type) {
         switch (type) {
             case WINDOW_BORDER:
                 return paletteMap.get(currentSelection).windowBorder;
@@ -32,7 +32,7 @@ public class ThemeStore {
         return 0xFFFF0000;
     }
 
-    public static void setCustomColor(ThemeColorType type, int val) {
+    static void setCustomColor(ThemeColorType type, int val) {
         switch (type) {
             case WINDOW_BORDER:
                 paletteMap.get(ThemeType.CUSTOM).windowBorder = val;
@@ -52,7 +52,7 @@ public class ThemeStore {
         }
     }
 
-    public static void setCustomPalette(Theme theme) {
+    static void setCustomPalette(Theme theme) {
         paletteMap.put(ThemeType.CUSTOM, theme);
     }
 }

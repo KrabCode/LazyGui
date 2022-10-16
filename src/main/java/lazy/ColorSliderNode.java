@@ -8,14 +8,14 @@ import processing.opengl.PShader;
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;
 
-public abstract class ColorSliderNode extends SliderNode {
+abstract class ColorSliderNode extends SliderNode {
 
-    public final ColorPickerFolder parentColorPickerFolder;
+    final ColorPickerFolder parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    public ColorSliderNode(String path, ColorPickerFolder parentFolder) {
+    ColorSliderNode(String path, ColorPickerFolder parentFolder) {
         super(path, parentFolder, 0, 0, 1, 0.01f, true);
         this.parentColorPickerFolder = parentFolder;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
@@ -24,7 +24,7 @@ public abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    public void validatePrecision() {
+    protected void validatePrecision() {
         if (valueFloatPrecision >= maximumFloatPrecision) {
             valueFloatPrecision = maximumFloatPrecision;
             currentPrecisionIndex = precisionRange.indexOf(maximumFloatPrecision);
@@ -32,14 +32,14 @@ public abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragNodeContinue(e, x, y, px, py);
         updateColorInParentFolder();
         e.setConsumed(true);
     }
 
     @Override
-    public void mouseReleasedOverNode(float x, float y) {
+    void mouseReleasedOverNode(float x, float y) {
         super.mouseReleasedOverNode(x, y);
         updateColorInParentFolder();
     }
@@ -71,13 +71,13 @@ public abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    public void drawLeftText(PGraphics pg, String text) {
+    void drawLeftText(PGraphics pg, String text) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
         super.drawLeftText(pg, text);
     }
 
     @Override
-    public void drawRightText(PGraphics pg, String text) {
+    void drawRightText(PGraphics pg, String text) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
         pg.textAlign(RIGHT, CENTER);
         pg.text(text,size.x - State.textMarginX, size.y - State.textMarginY);
@@ -97,7 +97,7 @@ public abstract class ColorSliderNode extends SliderNode {
 
 
     @Override
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y); // handle the value change
         if (e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
             // reflect the value change in the resulting color
@@ -105,9 +105,9 @@ public abstract class ColorSliderNode extends SliderNode {
         }
     }
 
-    public static class HueNode extends ColorSliderNode {
+    static class HueNode extends ColorSliderNode {
 
-        public HueNode(String path, ColorPickerFolder parentFolder) {
+        HueNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 0;
         }
@@ -133,8 +133,8 @@ public abstract class ColorSliderNode extends SliderNode {
         }
     }
 
-    public static class SaturationNode extends ColorSliderNode {
-        public SaturationNode(String path, ColorPickerFolder parentFolder) {
+    static class SaturationNode extends ColorSliderNode {
+        SaturationNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 1;
         }
@@ -151,9 +151,9 @@ public abstract class ColorSliderNode extends SliderNode {
         }
     }
 
-    public static class BrightnessNode extends ColorSliderNode {
+    static class BrightnessNode extends ColorSliderNode {
 
-        public BrightnessNode(String path, ColorPickerFolder parentFolder) {
+        BrightnessNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 2;
         }
@@ -170,9 +170,9 @@ public abstract class ColorSliderNode extends SliderNode {
         }
     }
 
-    public static class AlphaNode extends ColorSliderNode {
+    static class AlphaNode extends ColorSliderNode {
 
-        public AlphaNode(String path, ColorPickerFolder parentFolder) {
+        AlphaNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 3;
         }

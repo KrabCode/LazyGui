@@ -7,15 +7,14 @@ import processing.core.PGraphics;
 
 import static processing.core.PApplet.*;
 
-public class ColorPickerFolder extends NodeFolder {
+class ColorPickerFolder extends NodeFolder {
 
     @Expose
-    public String hexString;
+    String hexString;
     private int hex;
     private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
-    private final PickerColor outputColor = new PickerColor();
 
-    public ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
+    ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();
@@ -37,7 +36,7 @@ public class ColorPickerFolder extends NodeFolder {
         children.add(new ColorSliderNode.SaturationNode(path + "/" + satNodeName, this));
         children.add(new ColorSliderNode.BrightnessNode(path + "/" + brNodeName, this));
         children.add(new ColorSliderNode.AlphaNode(path + "/" + alphaNodeName, this));
-        children.add(new HexNode(path + "/hex", this));
+        children.add(new ColorPickerHexNode(path + "/hex", this));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class ColorPickerFolder extends NodeFolder {
         pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 
-    public void loadValuesFromHex(boolean setDefaults) {
+    void loadValuesFromHex(boolean setDefaults) {
         lazyInitNodes();
         PGraphics colorProvider = State.normalizedColorProvider;
         ((ColorSliderNode) findChildByName(hueNodeName)).valueFloat = colorProvider.hue(hex);
@@ -65,7 +64,7 @@ public class ColorPickerFolder extends NodeFolder {
         }
     }
 
-    public void loadValuesFromHSBA(){
+    void loadValuesFromHSBA(){
         PGraphics colorProvider = State.normalizedColorProvider;
         setHex(colorProvider.color(
                 getValue(hueNodeName),
@@ -74,43 +73,38 @@ public class ColorPickerFolder extends NodeFolder {
                 getValue(alphaNodeName)));
     }
 
-    public PickerColor getColor() {
-        outputColor.hex = hex;
-        outputColor.hue = hue();
-        outputColor.saturation = saturation();
-        outputColor.brightness = brightness();
-        outputColor.alpha = alpha();
-        return outputColor;
+    PickerColor getColor() {
+        return new PickerColor(hex, hue(), saturation(), brightness(), alpha());
     }
 
     private float getValue(String nodeName){
         return ((ColorSliderNode) findChildByName(nodeName)).valueFloat;
     }
 
-    public float hue() {
+    float hue() {
         return getValue(hueNodeName);
     }
 
-    public float saturation() {
+    float saturation() {
         return getValue(satNodeName);
     }
 
-    public float brightness() {
+    float brightness() {
         return getValue(brNodeName);
     }
-    public float alpha() {
+    float alpha() {
         return getValue(alphaNodeName);
     }
 
-    public String getHexString() {
+    String getHexString() {
         return hexString;
     }
 
-    public int getHex() {
+    int getHex() {
         return hex;
     }
 
-    public void setHex(int hex) {
+    void setHex(int hex) {
         if(hex == 0){
             hex = unhex("00010101");
         }
@@ -119,7 +113,7 @@ public class ColorPickerFolder extends NodeFolder {
     }
 
     @Override
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
         JsonElement loadedString = loadedNode.getAsJsonObject().get("hexString");
         if(loadedString != null){
@@ -128,7 +122,7 @@ public class ColorPickerFolder extends NodeFolder {
         }
     }
 
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
             Utils.setClipboardString(getHexString());

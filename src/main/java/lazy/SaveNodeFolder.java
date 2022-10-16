@@ -6,11 +6,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SaveNodeFolder extends NodeFolder {
+class SaveNodeFolder extends NodeFolder {
 
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
-    public SaveNodeFolder(String path, NodeFolder parent) {
+    SaveNodeFolder(String path, NodeFolder parent) {
         super(path, parent);
         children.add(new ButtonNode(path + "/open save folder", this));
         children.add(new ButtonNode(path + "/create new save", this));
@@ -20,7 +20,7 @@ public class SaveNodeFolder extends NodeFolder {
         idealWindowWidth = State.cell * 12;
     }
 
-    public void updateStateList() {
+    void updateStateList() {
         List<File> filenames = State.getSaveFileList();
         if(filenames == null){
             return;

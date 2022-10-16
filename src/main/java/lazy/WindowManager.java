@@ -7,30 +7,30 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
 
-public class WindowManager {
+class WindowManager {
     private static WindowManager singleton;
     private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private Window windowToSetFocusOn = null;
 
-    public WindowManager() {
+    WindowManager() {
 
     }
 
-    public static void createSingleton() {
+    static void createSingleton() {
         if (singleton == null) {
             singleton = new WindowManager();
         }
     }
 
-    public static void addWindow(FolderWindow window) {
+    static void addWindow(FolderWindow window) {
         singleton.windows.add(window);
     }
 
-    public static void uncoverOrCreateWindow(NodeFolder nodeFolder){
+    static void uncoverOrCreateWindow(NodeFolder nodeFolder){
         uncoverOrCreateWindow(nodeFolder, null, null, true);
     }
 
-    public static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float nullablePosX, Float nullablePosY, boolean setFocus) {
+    static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float nullablePosX, Float nullablePosY, boolean setFocus) {
         float mouseX = State.app.mouseX;
         float mouseY = State.app.mouseY;
         PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
@@ -64,7 +64,7 @@ public class WindowManager {
         }
     }
 
-    public static void updateAndDrawWindows(PGraphics pg) {
+    static void updateAndDrawWindows(PGraphics pg) {
         if(singleton.windowToSetFocusOn != null){
             singleton.windows.remove(singleton.windowToSetFocusOn);
             singleton.windows.add(singleton.windowToSetFocusOn);
@@ -76,15 +76,15 @@ public class WindowManager {
         }
     }
 
-    public static boolean isFocused(Window window) {
+    static boolean isFocused(Window window) {
         return singleton.windows.get(singleton.windows.size()-1).equals(window);
     }
 
-    public static void setFocus(Window window) {
+    static void setFocus(Window window) {
         singleton.windowToSetFocusOn = window;
     }
 
-    public static void closeAllWindows() {
+    static void closeAllWindows() {
         for(Window win : singleton.windows){
             if(win.isCloseable){
                 win.close();

@@ -2,12 +2,12 @@ package lazy;
 
 
 @SuppressWarnings("CommentedOutCode")
-public class KeyCodes {
-    public static final int KEY_CODE_CTRL_C = 67;
-    public static final int KEY_CODE_CTRL_V = 86;
-    public static final int KEY_CODE_CTRL_Z = 89;
-    public static final int KEY_CODE_CTRL_Y = 90;
-    public static final int KEY_CODE_CTRL_S = 83;
+class KeyCodes {
+    static final int KEY_CODE_CTRL_C = 67;
+    static final int KEY_CODE_CTRL_V = 86;
+    static final int KEY_CODE_CTRL_Z = 89;
+    static final int KEY_CODE_CTRL_Y = 90;
+    static final int KEY_CODE_CTRL_S = 83;
 /*
  // find keycodes in processing:
 

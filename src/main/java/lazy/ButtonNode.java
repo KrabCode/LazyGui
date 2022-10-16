@@ -3,12 +3,12 @@ package lazy;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 
-public class ButtonNode extends AbstractNode {
-    public ButtonNode(String path, NodeFolder folder) {
+class ButtonNode extends AbstractNode {
+    ButtonNode(String path, NodeFolder folder) {
         super(NodeType.TRANSIENT, path, folder);
     }
 
-    public boolean valueBoolean = false;
+    boolean valueBoolean = false;
     private boolean mousePressedLastFrame = false;
 
     @Override
@@ -20,18 +20,18 @@ public class ButtonNode extends AbstractNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 
-    public boolean getBooleanValueAndSetItToFalse() {
+    boolean getBooleanValueAndSetItToFalse() {
         boolean result = valueBoolean;
         valueBoolean = false;
         return result;
     }
 
     @Override
-    public String getPrintableValue() {
+    String getPrintableValue() {
         return "(button)";
     }
 }

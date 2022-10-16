@@ -4,23 +4,23 @@ import processing.core.PGraphics;
 
 import static processing.core.PConstants.*;
 
-public class StringPickerItem extends ToggleNode {
+class StringPickerItem extends ToggleNode {
 
     String valueString;
 
-    public StringPickerItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
+    StringPickerItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
         super(path, folder, valueBoolean);
         this.type = NodeType.TRANSIENT;
         this.valueString = valueString;
     }
 
     @Override
-    public void updateDrawInlineNodeAbstract(PGraphics pg){
+    protected void updateDrawInlineNodeAbstract(PGraphics pg){
         // do not draw the right toggle handle
     }
 
     @Override
-    public void mouseReleasedOverNode(float x, float y){
+    void mouseReleasedOverNode(float x, float y){
         if(armed && !valueBoolean){ // can only toggle manually to true, toggle to false happens automatically
             valueBoolean = true;
         }
@@ -28,7 +28,7 @@ public class StringPickerItem extends ToggleNode {
     }
 
     @Override
-    public void drawLeftText(PGraphics pg, String text) {
+    void drawLeftText(PGraphics pg, String text) {
         if(valueBoolean){
             pg.noStroke();
             pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));

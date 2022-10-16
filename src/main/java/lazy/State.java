@@ -15,25 +15,25 @@ import java.util.*;
 import static lazy.Utils.prettyPrintTree;
 import static processing.core.PApplet.*;
 
-public class State {
-    public static float cell = 24;
-    public static PFont font = null;
-    public static PApplet app = null;
-    public static LazyGui gui = null;
-    public static PGraphics normalizedColorProvider = null;
+class State {
+    static float cell = 24;
+    static PFont font = null;
+    static PApplet app = null;
+    static LazyGui gui = null;
+    static PGraphics normalizedColorProvider = null;
 
     private static final String fontPath = "JetBrainsMono-Regular.ttf";
     private static final float fontSize = 16;
-    public static float textMarginX = 5;
-    public static float textMarginY = 14;
+    static float textMarginX = 5;
+    static float textMarginY = 14;
 
-    public static String sketchName = null;
+    static String sketchName = null;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    public static final float defaultWindowWidthInPixels = State.cell * 10;
-    public static boolean autosaveEnabled = true;
+    static final float defaultWindowWidthInPixels = State.cell * 10;
+    static boolean autosaveEnabled = true;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
-    public static File saveDir;
+    static File saveDir;
 
     static ArrayList<String> undoStack = new ArrayList<>();
     static ArrayList<String> redoStack = new ArrayList<>();
@@ -42,7 +42,7 @@ public class State {
     private static final long lastFrameMillisStuckLimit = 1000;
     private static final int undoStackSizeLimit = 1000;
 
-    public static void init(LazyGui gui, PApplet app) {
+    static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
         State.app = app;
 
@@ -94,7 +94,7 @@ public class State {
         gui.requestScreenshot(getFullPathWithSuffix(filenameWithoutSuffix, ".jpg"));
     }
 
-    public static void loadMostRecentSave() {
+    static void loadMostRecentSave() {
         reloadSaveFolderContents();
         if (saveFilesSorted.size() > 0) {
             loadStateFromFile(saveFilesSorted.get(0));
@@ -114,7 +114,7 @@ public class State {
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
     }
 
-    public static void loadStateFromFile(String filename) {
+    static void loadStateFromFile(String filename) {
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename)) {
                 loadStateFromFile(saveFile);
@@ -140,7 +140,7 @@ public class State {
         return saveDir.getAbsolutePath() + "\\" + filenameWithSuffix;
     }
 
-    public static void overwriteFile(String fullPath, String content) {
+    static void overwriteFile(String fullPath, String content) {
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(fullPath, false));
@@ -155,12 +155,12 @@ public class State {
         return gson.toJson(NodeTree.getRoot());
     }
 
-    public static ArrayList<File> getSaveFileList() {
+    static ArrayList<File> getSaveFileList() {
         reloadSaveFolderContents();
         return saveFilesSorted;
     }
 
-    public static void loadStateFromFile(File file) {
+    static void loadStateFromFile(File file) {
         if (!file.exists()) {
             println("Error: save file doesn't exist");
             return;
@@ -176,7 +176,7 @@ public class State {
         loadStateFromJsonElement(root);
     }
 
-    public static void loadStateFromJsonElement(JsonElement root) {
+    static void loadStateFromJsonElement(JsonElement root) {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(root);
@@ -198,11 +198,11 @@ public class State {
         }
     }
 
-    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode) {
+    static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode) {
         overwriteWithLoadedStateIfAny(abstractNode, lastLoadedStateMap.get(abstractNode.path));
     }
 
-    public static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode, JsonElement loadedNodeState) {
+    static void overwriteWithLoadedStateIfAny(AbstractNode abstractNode, JsonElement loadedNodeState) {
         if (loadedNodeState == null) {
             return;
         }
@@ -213,7 +213,7 @@ public class State {
         Runtime.getRuntime().addShutdownHook(new Thread(State::createAutosave));
     }
 
-    public static void createAutosave() {
+    static void createAutosave() {
         if(!autosaveEnabled){
             return;
         }
@@ -226,24 +226,24 @@ public class State {
         createTreeSaveFiles("auto");
     }
 
-    public static void updateEndlessLoopDetection() {
+    static void updateEndlessLoopDetection() {
         lastFrameMillis = app.millis();
     }
 
-    public static boolean isSketchStuckInEndlessLoop() {
+    static boolean isSketchStuckInEndlessLoop() {
         long timeSinceLastFrame = app.millis() - lastFrameMillis;
         return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
 
-    public static void onUndoableActionEnded() {
+    static void onUndoableActionEnded() {
         pushToUndoStack();
     }
 
-    public static void undo() {
+    static void undo() {
         popFromUndoStack();
     }
 
-    public static void redo() {
+    static void redo() {
         popFromRedoStack();
     }
 
@@ -273,7 +273,7 @@ public class State {
         loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class));
     }
 
-    public static void createNewSaveWithRandomName() {
+    static void createNewSaveWithRandomName() {
         String newName = Utils.generateRandomShortId();
         State.createTreeSaveFiles(newName);
     }

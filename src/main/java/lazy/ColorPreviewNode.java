@@ -5,12 +5,12 @@ import processing.core.PGraphics;
 
 import static processing.core.PConstants.CORNER;
 
-public class ColorPreviewNode extends AbstractNode {
+class ColorPreviewNode extends AbstractNode {
 
     ColorPickerFolder parentColorPickerFolder;
     String checkerboardShader = "checkerboard.glsl";
 
-    public ColorPreviewNode(String path, ColorPickerFolder parentColorPickerFolder) {
+    ColorPreviewNode(String path, ColorPickerFolder parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         displayInlineName = false;
@@ -41,7 +41,7 @@ public class ColorPreviewNode extends AbstractNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 }

@@ -4,7 +4,7 @@ import java.util.*;
 
 import static processing.core.PApplet.println;
 
-public class NodeTree {
+class NodeTree {
     private static final NodeFolder root = new NodeFolder("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
 
@@ -12,17 +12,17 @@ public class NodeTree {
 
     }
 
-    public static NodeFolder getRoot() {
+    static NodeFolder getRoot() {
         return root;
     }
 
-    public static NodeFolder findParentFolderLazyInitPath(String nodePath) {
+    static NodeFolder findParentFolderLazyInitPath(String nodePath) {
         String folderPath = Utils.getPathWithoutName(nodePath);
         lazyInitFolderPath(folderPath);
         return (NodeFolder) findNode(folderPath);
     }
 
-    public static AbstractNode findNode(String path) {
+    static AbstractNode findNode(String path) {
         if (nodesByPath.containsKey(path)) {
             return nodesByPath.get(path);
         }
@@ -45,7 +45,7 @@ public class NodeTree {
     }
 
     // https://github.com/KrabCode/LazyGui/issues/6
-    public static void lazyInitFolderPath(String path) {
+    static void lazyInitFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
         NodeFolder parentFolder = null;
@@ -69,7 +69,7 @@ public class NodeTree {
         }
     }
 
-    public static void insertNodeAtItsPath(AbstractNode node) {
+    static void insertNodeAtItsPath(AbstractNode node) {
         if (findNode(node.path) != null) {
             return;
         }
@@ -80,7 +80,7 @@ public class NodeTree {
         folder.children.add(node);
     }
 
-    public static List<AbstractNode> getAllNodesAsList(){
+    static List<AbstractNode> getAllNodesAsList(){
         List<AbstractNode> result = new ArrayList<>();
         Queue<AbstractNode> queue = new LinkedList<>();
         queue.offer(root);
@@ -97,7 +97,7 @@ public class NodeTree {
         return result;
     }
 
-    public static void setAllOtherNodesMouseOver(AbstractNode nodeToKeep, boolean newValue){
+    static void setAllOtherNodesMouseOver(AbstractNode nodeToKeep, boolean newValue){
         List<AbstractNode> allNodes = getAllNodesAsList();
         allNodes.remove(nodeToKeep);
         for(AbstractNode node : allNodes){

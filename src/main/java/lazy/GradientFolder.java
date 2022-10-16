@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static processing.core.PApplet.*;
 
-public class GradientFolder extends NodeFolder {
+class GradientFolder extends NodeFolder {
     PGraphics out;
     StringPickerFolder directionTypePicker;
     StringPickerFolder blendTypePicker;
@@ -19,7 +19,7 @@ public class GradientFolder extends NodeFolder {
     String gradientShader = "gradient.glsl";
     private final int colorCount;
 
-    public GradientFolder(String path, NodeFolder parent, float alpha) {
+    GradientFolder(String path, NodeFolder parent, float alpha) {
         super(path, parent);
         directionTypePicker = new StringPickerFolder(path + "/direction", this, directionOptions.toArray(new String[0]), directionOptions.get(1));
         blendTypePicker = new StringPickerFolder(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
@@ -122,12 +122,12 @@ public class GradientFolder extends NodeFolder {
         return result;
     }
 
-    public PGraphics getOutputGraphics() {
+    PGraphics getOutputGraphics() {
         updateOutGraphics();
         return out;
     }
 
-    public ArrayList<GradientColorPickerFolder> getAllGradientColorPickerChildrenInPositionOrder() {
+    ArrayList<GradientColorPickerFolder> getAllGradientColorPickerChildrenInPositionOrder() {
         ArrayList<GradientColorPickerFolder> result = new ArrayList<>();
         for (AbstractNode node : children) {
             if (node.className.contains("GradientColorPickerFolder")) {
@@ -137,7 +137,7 @@ public class GradientFolder extends NodeFolder {
         return result;
     }
 
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
     }
 
@@ -151,7 +151,7 @@ public class GradientFolder extends NodeFolder {
 
         GradientFolder parent;
 
-        public GradientPreviewNode(String path, GradientFolder parent) {
+        GradientPreviewNode(String path, GradientFolder parent) {
             super(NodeType.VALUE, path, parent);
             this.parent = parent;
             rowHeightInCells = 9;
@@ -163,7 +163,7 @@ public class GradientFolder extends NodeFolder {
         }
 
         @Override
-        public void drawLeftText(PGraphics pg, String text) {
+        void drawLeftText(PGraphics pg, String text) {
             // we skip drawing the "preview" left text by not calling super.drawLeftText() here
         }
     }

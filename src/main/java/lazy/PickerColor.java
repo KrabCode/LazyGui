@@ -1,11 +1,19 @@
 package lazy;
 
 public class PickerColor {
-    public int hex = 0xFF000000;
+    public final int hex;
 
     // [0,1]
-    public float hue;
-    public float saturation;
-    public float brightness;
-    public float alpha;
+    public final float hue;
+    public final float saturation;
+    public final float brightness;
+    public final float alpha;
+
+    PickerColor(int hex, float hue, float sat, float br, float alpha){
+        this.hex = hex;
+        this.hue = hue;
+        this.saturation = sat;
+        this.brightness = br;
+        this.alpha = alpha;
+    }
 }

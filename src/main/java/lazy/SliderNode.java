@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 import static processing.core.PApplet.*;
 
-public class SliderNode extends AbstractNode {
+class SliderNode extends AbstractNode {
 
-    public SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
+    SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
@@ -32,7 +32,7 @@ public class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    public SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
+    SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
@@ -49,17 +49,17 @@ public class SliderNode extends AbstractNode {
     }
 
     @Expose
-    public float valueFloat;
+    float valueFloat;
     @Expose
-    public float valueFloatPrecision;
+    float valueFloatPrecision;
     @Expose
-    public final float valueFloatDefaultOriginal;
+    final float valueFloatDefaultOriginal;
 
-    public float valueFloatDefault;
-    public float valueFloatMin;
-    public float valueFloatMax;
-    public boolean valueFloatConstrained;
-    public float valueFloatPrecisionDefault;
+    float valueFloatDefault;
+    float valueFloatMin;
+    float valueFloatMax;
+    boolean valueFloatConstrained;
+    float valueFloatPrecisionDefault;
     float backgroundScrollX = 0;
 
 
@@ -75,7 +75,7 @@ public class SliderNode extends AbstractNode {
         loadPrecisionFromNode();
     }
 
-    public void initSliderBackgroundShader(){
+    void initSliderBackgroundShader(){
         InternalShaderStore.getShader(shaderPath);
     }
 
@@ -134,7 +134,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    public String getPrintableValue() {
+    String getPrintableValue() {
         return getValueToDisplay().replaceAll(",", ".");
     }
 
@@ -158,7 +158,7 @@ public class SliderNode extends AbstractNode {
         InternalShaderStore.shader(shaderPath, pg);
     }
 
-    public String getValueToDisplay() {
+    String getValueToDisplay() {
         int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
         if (fractionPadding == 0) {
             return String.valueOf(floor(valueFloat));
@@ -169,7 +169,7 @@ public class SliderNode extends AbstractNode {
         return nf(valueFloat, 0, fractionPadding);
     }
 
-    public String getPrecisionToDisplay() {
+    String getPrecisionToDisplay() {
         float p = valueFloatPrecision;
         if (p >= 1) {
             p = floor(p);
@@ -187,7 +187,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    public void mouseWheelMovedOverNode(float x, float y, int dir) {
+    void mouseWheelMovedOverNode(float x, float y, int dir) {
         super.mouseWheelMovedOverNode(x,y, dir);
         if(dir > 0){
             decreasePrecision();
@@ -230,7 +230,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(KeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             if(Float.isNaN(valueFloatDefault)){
@@ -287,7 +287,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
         super.mouseDragNodeContinue(e, x, y, px, py);
         if(isDragged){
             mouseDelta.x = px - x;
@@ -299,7 +299,7 @@ public class SliderNode extends AbstractNode {
 
 
     @Override
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
         if(json.has("valueFloatPrecision")){
             valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();

@@ -15,23 +15,23 @@ import static processing.core.PConstants.CORNER;
 /**
  * A node that opens a new window with child nodes when clicked.
  */
-public class NodeFolder extends AbstractNode {
+class NodeFolder extends AbstractNode {
 
     /**
      * CopyOnWriteArrayList is needed to avoid concurrent modification
      * because the children get drawn by one thread and user input changes the list from another thread
      */
     @Expose
-    public CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     @Expose
-    public FolderWindow window;
+    FolderWindow window;
 
     protected final float previewRectSize = cell * 0.6f;
 
-    public float idealWindowWidth = State.defaultWindowWidthInPixels;
+    float idealWindowWidth = State.defaultWindowWidthInPixels;
 
-    public NodeFolder(String path, NodeFolder parent) {
+    NodeFolder(String path, NodeFolder parent) {
         super(NodeType.FOLDER, path, parent);
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -64,7 +64,7 @@ public class NodeFolder extends AbstractNode {
     }
 
     @Override
-    public void mousePressedOverNode(float x, float y) {
+    void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
         WindowManager.uncoverOrCreateWindow(this);
         this.isDragged = false;
@@ -72,7 +72,7 @@ public class NodeFolder extends AbstractNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 
@@ -85,7 +85,7 @@ public class NodeFolder extends AbstractNode {
         return null;
     }
 
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
         JsonObject wholeObject = loadedNode.getAsJsonObject();
         if(wholeObject.has("window")){

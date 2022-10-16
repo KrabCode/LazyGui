@@ -2,25 +2,25 @@ package lazy;
 
 import processing.core.PApplet;
 
-public class SliderIntNode extends SliderNode {
+class SliderIntNode extends SliderNode {
 
     float minimumIntPrecision = 0.1f;
 
-    public SliderIntNode(String path, NodeFolder parentFolder, int defaultValue, int min, int max, float defaultPrecision, boolean constrained) {
+    SliderIntNode(String path, NodeFolder parentFolder, int defaultValue, int min, int max, float defaultPrecision, boolean constrained) {
         super(path, parentFolder, defaultValue, min, max, defaultPrecision, constrained);
     }
 
-    public int getIntValue(){
+    int getIntValue(){
         return PApplet.floor(valueFloat);
     }
 
     @Override
-    public String getValueToDisplay() {
+    String getValueToDisplay() {
         return String.valueOf(PApplet.floor(valueFloat));
     }
 
     @Override
-    public void validatePrecision() {
+    protected void validatePrecision() {
         if (valueFloatPrecision <= minimumIntPrecision) {
             valueFloatPrecision = minimumIntPrecision;
             currentPrecisionIndex = precisionRange.indexOf(minimumIntPrecision);

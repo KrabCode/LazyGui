@@ -5,15 +5,15 @@ import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 
-public class ToggleNode extends AbstractNode {
+class ToggleNode extends AbstractNode {
 
     @Expose
-    public boolean valueBoolean;
-    public boolean valueBooleanDefault;
+    boolean valueBoolean;
+    boolean valueBooleanDefault;
     protected boolean armed = false;
-    public float handlePosNorm;
+    float handlePosNorm;
 
-    public ToggleNode(String path, NodeFolder folder, boolean defaultValue) {
+    ToggleNode(String path, NodeFolder folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
@@ -28,13 +28,13 @@ public class ToggleNode extends AbstractNode {
 
 
     @Override
-    public void mousePressedOverNode(float x, float y) {
+    void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
         armed = true;
     }
 
     @Override
-    public void mouseReleasedOverNode(float x, float y){
+    void mouseReleasedOverNode(float x, float y){
         super.mouseReleasedOverNode(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
@@ -43,11 +43,11 @@ public class ToggleNode extends AbstractNode {
     }
 
     @Override
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         JsonElement booleanElement = loadedNode.getAsJsonObject().get("valueBoolean");
         if(booleanElement != null){
             valueBoolean = booleanElement.getAsBoolean();
@@ -56,7 +56,7 @@ public class ToggleNode extends AbstractNode {
     }
 
     @Override
-    public String getPrintableValue() {
+    String getPrintableValue() {
         return String.valueOf(valueBoolean);
     }
 }

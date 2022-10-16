@@ -16,25 +16,25 @@ import static processing.core.PApplet.*;
  *  - a transient preview of some value
  *  - a directly adjustable value that is returned to the user
  */
-public abstract class AbstractNode {
+abstract class AbstractNode {
     @Expose
-    public String className = this.getClass().getSimpleName();
+    String className = this.getClass().getSimpleName();
     @Expose
-    public String path;
+    String path;
     @Expose
-    public NodeType type;
+    NodeType type;
 
-    public NodeFolder parent;
-    public PVector pos = new PVector();
-    public PVector size = new PVector();
+    NodeFolder parent;
+    PVector pos = new PVector();
+    PVector size = new PVector();
 
-    public String name;
-    public final float cell = State.cell;
-    public int rowHeightInCells = 1;
+    String name;
+    final float cell = State.cell;
+    int rowHeightInCells = 1;
 
     protected  PVector dragStartPos = new PVector();
-    public boolean isDragged = false;
-    public boolean isMouseOverNode = false;
+    boolean isDragged = false;
+    boolean isMouseOverNode = false;
 
     protected boolean displayInlineName = true;
 
@@ -63,7 +63,7 @@ public abstract class AbstractNode {
      * @param w absolute screen width
      * @param h absolute screen height
      */
-    public void updateInlineNodeCoordinates(float x, float y, float w, float h) {
+    void updateInlineNodeCoordinates(float x, float y, float w, float h) {
         pos.x = x;
         pos.y = y;
         size.x = w;
@@ -75,7 +75,7 @@ public abstract class AbstractNode {
      * See update()
      * @param pg main PGraphics of the gui of the same size as the main PApplet canvas to draw on
      */
-    public void updateDrawInlineNode(PGraphics pg) {
+    void updateDrawInlineNode(PGraphics pg) {
         // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         if(isMouseOverNode){
             highlightNodeOnMouseOver(pg);
@@ -94,7 +94,7 @@ public abstract class AbstractNode {
     /**
      * Secondary update function, called for all nodes every frame, regardless of their parent window's closed state.
      */
-    public void updateValues(){
+    void updateValues(){
 
     }
 
@@ -143,13 +143,13 @@ public abstract class AbstractNode {
     }
 
 
-    public void drawLeftText(PGraphics pg, String text) {
+    void drawLeftText(PGraphics pg, String text) {
         String trimmedText = Utils.getTrimmedTextToFitOneLine(pg, text, size.x - cell);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, State.textMarginX, size.y - State.textMarginY);
     }
 
-    public void drawRightText(PGraphics pg, String text) {
+    void drawRightText(PGraphics pg, String text) {
         pg.textAlign(RIGHT, CENTER);
         pg.text(text,
                 size.x - State.textMarginX,
@@ -207,13 +207,13 @@ public abstract class AbstractNode {
         return parent.window.isFocused() && isMouseOverNode;
     }
 
-    public void mousePressedOverNode(float x, float y) {
+    void mousePressedOverNode(float x, float y) {
         isDragged = true;
         dragStartPos.x = x;
         dragStartPos.y = y;
     }
 
-    public void mouseReleasedAnywhere(MouseEvent e, float x, float y) {
+    void mouseReleasedAnywhere(MouseEvent e, float x, float y) {
         if(isDragged){
             e.setConsumed(true);
             State.onUndoableActionEnded();
@@ -222,28 +222,28 @@ public abstract class AbstractNode {
         State.app.cursor();
     }
 
-    public void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(KeyEvent e, float x, float y) {
 
     }
 
-    public void keyPressedOutOfNode(KeyEvent keyEvent, float x, float y) {
+    void keyPressedOutOfNode(KeyEvent keyEvent, float x, float y) {
 
     }
 
-    public void mouseReleasedOverNode(float x, float y) {
+    void mouseReleasedOverNode(float x, float y) {
 
     }
 
-    public void mouseWheelMovedOverNode(float x, float y, int dir) {
+    void mouseWheelMovedOverNode(float x, float y, int dir) {
 
     }
 
-    public void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 //        State.app.noCursor();
 //        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }
 
-    public boolean isParentWindowVisible(){
+    boolean isParentWindowVisible(){
         if(parent == null || parent.window == null){
             return !LazyGui.isGuiHidden;
         }
@@ -251,11 +251,11 @@ public abstract class AbstractNode {
     }
 
     // used by value nodes to load state from json
-    public void overwriteState(JsonElement loadedNode){
+    void overwriteState(JsonElement loadedNode){
 
     }
 
-    public String getPrintableValue(){
+    String getPrintableValue(){
         return "";
     }
 

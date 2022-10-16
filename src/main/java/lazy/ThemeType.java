@@ -1,21 +1,21 @@
 package lazy;
 
-public enum ThemeType {
+enum ThemeType {
     DARK,
     LIGHT,
     PINK,
     BLUE,
     CUSTOM;
 
-    public static String[] getAllNames() {
+    static String[] getAllNames() {
         return new String[]{"dark", "light", "pink", "blue", "custom"};
     }
 
-    public static ThemeType[] getAllValues() {
+    static ThemeType[] getAllValues() {
         return new ThemeType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
     }
 
-    public static ThemeType getValue(String name) {
+    static ThemeType getValue(String name) {
         switch (name) {
             case "dark": {
                 return DARK;
@@ -36,7 +36,7 @@ public enum ThemeType {
         return null;
     }
 
-    public static String getName(ThemeType query) {
+    static String getName(ThemeType query) {
         switch (query) {
             case DARK: {
                 return "dark";
@@ -57,7 +57,7 @@ public enum ThemeType {
         return null;
     }
 
-    public static Theme getPalette(ThemeType query) {
+    static Theme getPalette(ThemeType query) {
         switch (query) {
             case DARK:
             case CUSTOM: {

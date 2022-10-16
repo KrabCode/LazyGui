@@ -5,9 +5,9 @@ import processing.core.PGraphics;
 
 import static processing.core.PConstants.ROUND;
 
-public class GradientColorPickerFolder extends ColorPickerFolder {
+class GradientColorPickerFolder extends ColorPickerFolder {
 
-    public GradientColorPickerFolder(String path, NodeFolder parentFolder, int hex, float gradientPos, boolean active) {
+    GradientColorPickerFolder(String path, NodeFolder parentFolder, int hex, float gradientPos, boolean active) {
         super(path, parentFolder, hex);
         this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));
@@ -24,16 +24,16 @@ public class GradientColorPickerFolder extends ColorPickerFolder {
         }
     }
 
-    public float getGradientPos() {
+    float getGradientPos() {
         return ((SliderNode) findChildByName("pos")).valueFloat;
     }
 
-    public boolean isSkipped(){
+    boolean isSkipped(){
         return !((ToggleNode) findChildByName("active")).valueBoolean;
     }
 
     @Override
-    public void overwriteState(JsonElement loadedNode) {
+    void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
     }
 }

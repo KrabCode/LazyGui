@@ -10,7 +10,7 @@ import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
 import static processing.core.PApplet.println;
 
-public class ShaderReloader {
+class ShaderReloader {
     private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
 
@@ -18,43 +18,43 @@ public class ShaderReloader {
 
     }
 
-    public static PShader getShader(String fragPath) {
+    static PShader getShader(String fragPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath, null);
         snapshot = initIfNull(snapshot, fragPath, null);
         return snapshot.compiledShader;
     }
 
-    public static PShader getShader(String fragPath, String vertPath) {
+    static PShader getShader(String fragPath, String vertPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath, vertPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
         return snapshot.compiledShader;
     }
 
-    public static void filter(String fragPath) {
+    static void filter(String fragPath) {
         shader(fragPath, null, true, State.app.g);
     }
 
-    public static void filter(String path, PGraphics pg) {
+    static void filter(String path, PGraphics pg) {
         shader(path, null, true, pg);
     }
 
-    public static void filter(String fragPath, String vertPath, PGraphics pg) {
+    static void filter(String fragPath, String vertPath, PGraphics pg) {
         shader(fragPath, vertPath, true, pg);
     }
 
-    public static void shader(String fragPath, String vertPath, PGraphics canvas) {
+    static void shader(String fragPath, String vertPath, PGraphics canvas) {
         shader(fragPath, vertPath, false, canvas);
     }
 
-    public static void shader(String fragPath, String vertPath) {
+    static void shader(String fragPath, String vertPath) {
         shader(fragPath, vertPath, false, State.app.g);
     }
 
-    public static void shader(String fragPath, PGraphics canvas) {
+    static void shader(String fragPath, PGraphics canvas) {
         shader(fragPath, null, false, canvas);
     }
 
-    public static void shader(String fragPath) {
+    static void shader(String fragPath) {
         shader(fragPath, null, false, State.app.g);
     }
 

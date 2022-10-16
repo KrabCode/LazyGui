@@ -11,12 +11,12 @@ import static processing.core.PApplet.*;
 
 
 public class LazyGui implements UserInputSubscriber {
-    public static boolean isGuiHidden = false;
+    static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomPath = "";
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
-    public static boolean drawPathTooltips = false;
+    static boolean drawPathTooltips = false;
     private PGraphics pg;
     NodeFolder toolbar;
     PApplet app;
@@ -77,7 +77,7 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
-    public void requestScreenshot(String customPath){
+    void requestScreenshot(String customPath){
         screenshotRequestedOnMainThreadWithCustomPath = true;
         requestedScreenshotCustomPath = customPath;
     }
@@ -96,18 +96,12 @@ public class LazyGui implements UserInputSubscriber {
         }
 
         State.app.save(filePath);
-        try {
-            // println("Saved screenshot to: " + new File(filePath).getAbsolutePath());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
         screenshotRequestedOnMainThread = false;
         screenshotRequestedOnMainThreadWithCustomPath = false;
     }
 
 
-    public void createOptionsFolder() {
+    void createOptionsFolder() {
         String path = "options";
         toolbar = new NodeFolder(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
@@ -194,7 +188,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    public float slider(String path, float defaultValue, float min, float max) {
+    float slider(String path, float defaultValue, float min, float max) {
         return slider(path, defaultValue, min, max, true);
     }
 
@@ -225,7 +219,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    public int sliderInt(String path) {
+    int sliderInt(String path) {
         return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
@@ -235,7 +229,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    public int sliderInt(String path, int defaultValue, int min, int max) {
+    int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
     }
 

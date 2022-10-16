@@ -1,6 +1,6 @@
 package lazy;
 
-public enum ThemeColorType {
+enum ThemeColorType {
     WINDOW_BORDER,
     NORMAL_BACKGROUND,
     FOCUS_BACKGROUND,

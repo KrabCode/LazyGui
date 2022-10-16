@@ -6,7 +6,7 @@ import processing.opengl.PShader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InternalShaderStore {
+class InternalShaderStore {
     private static final Map<String, PShader> shaders = new HashMap<>();
     private static final String shaderFolder = "shaders/";
 
@@ -14,15 +14,15 @@ public class InternalShaderStore {
 
     }
 
-    public static void filter(String path, PGraphics pg) {
+    static void filter(String path, PGraphics pg) {
         pg.filter(getShader(path));
     }
 
-    public static void shader(String path, PGraphics pg) {
+    static void shader(String path, PGraphics pg) {
         pg.shader(getShader(path));
     }
 
-    public static PShader getShader(String path) {
+    static PShader getShader(String path) {
         String fullPath = shaderFolder + path;
         if(!shaders.containsKey(fullPath)) {
             shaders.put(fullPath, State.app.loadShader(fullPath));
