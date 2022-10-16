@@ -188,7 +188,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    float slider(String path, float defaultValue, float min, float max) {
+    public float slider(String path, float defaultValue, float min, float max) {
         return slider(path, defaultValue, min, max, true);
     }
 
@@ -219,7 +219,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    int sliderInt(String path) {
+    public int sliderInt(String path) {
         return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
@@ -229,7 +229,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @SuppressWarnings("unused")
-    int sliderInt(String path, int defaultValue, int min, int max) {
+    public int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
     }
 
