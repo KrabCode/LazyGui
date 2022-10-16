@@ -1,11 +1,7 @@
-package lazy.windows.nodes.gradient;
+package lazy;
 
 import com.google.gson.JsonElement;
 import processing.core.PGraphics;
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.ToggleNode;
-import lazy.windows.nodes.colorPicker.ColorPickerFolder;
-import lazy.windows.nodes.sliders.SliderNode;
 
 import static processing.core.PConstants.ROUND;
 

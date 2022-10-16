@@ -1,10 +1,9 @@
-package lazy.windows.nodes;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.State;
 
 public class ToggleNode extends AbstractNode {
 

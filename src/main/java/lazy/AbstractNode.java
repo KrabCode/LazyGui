@@ -1,4 +1,4 @@
-package lazy.windows.nodes;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
@@ -6,11 +6,6 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.LazyGui;
-import lazy.State;
-import lazy.Utils;
-import lazy.themes.ThemeStore;
-import lazy.themes.ThemeColorType;
 
 import static processing.core.PApplet.*;
 

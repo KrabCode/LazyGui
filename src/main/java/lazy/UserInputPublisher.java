@@ -1,11 +1,10 @@
-package lazy.userInput;
+package lazy;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import processing.core.PSurface;
-import lazy.State;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

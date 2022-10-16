@@ -1,10 +1,6 @@
-package lazy.windows.nodes.saves;
+package lazy;
 
 import processing.core.PGraphics;
-import lazy.State;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.NodeType;
 
 class SaveNode extends AbstractNode {
     String fileName, fullPath;

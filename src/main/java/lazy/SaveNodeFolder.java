@@ -1,13 +1,6 @@
-package lazy.windows.nodes.saves;
+package lazy;
 
-import lazy.windows.nodes.ToggleNode;
 import processing.core.PGraphics;
-import lazy.NodeTree;
-import lazy.State;
-import lazy.Utils;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.ButtonNode;
-import lazy.windows.nodes.NodeFolder;
 
 import java.io.File;
 import java.util.ArrayList;

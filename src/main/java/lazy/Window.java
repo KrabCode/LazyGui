@@ -1,21 +1,13 @@
-package lazy.windows;
+package lazy;
 
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.NodeTree;
-import lazy.State;
-import lazy.themes.ThemeStore;
-import lazy.Utils;
-import lazy.windows.nodes.AbstractNode;
-import lazy.userInput.UserInputPublisher;
-import lazy.userInput.UserInputSubscriber;
-import lazy.LazyGui;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
-import static lazy.themes.ThemeColorType.*;
+import static lazy.ThemeColorType.*;
 
 public abstract class Window implements UserInputSubscriber {
     @Expose

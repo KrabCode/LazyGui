@@ -1,4 +1,4 @@
-package lazy.windows.nodes.colorPicker;
+package lazy;
 
 public class PickerColor {
     public int hex = 0xFF000000;

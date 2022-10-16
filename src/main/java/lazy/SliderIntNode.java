@@ -1,7 +1,6 @@
-package lazy.windows.nodes.sliders;
+package lazy;
 
 import processing.core.PApplet;
-import lazy.windows.nodes.NodeFolder;
 
 public class SliderIntNode extends SliderNode {
 

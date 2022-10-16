@@ -7,8 +7,6 @@ import com.google.gson.JsonElement;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeType;
 
 import java.io.*;
 import java.nio.file.Files;

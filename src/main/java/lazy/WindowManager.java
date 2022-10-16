@@ -1,9 +1,7 @@
-package lazy.windows;
+package lazy;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.State;
-import lazy.windows.nodes.NodeFolder;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

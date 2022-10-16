@@ -1,4 +1,4 @@
-package lazy.userInput;
+package lazy;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;

@@ -1,12 +1,6 @@
-package lazy.windows.nodes.stringPicker;
+package lazy;
 
-import lazy.windows.nodes.NodeType;
 import processing.core.PGraphics;
-import lazy.State;
-import lazy.themes.ThemeColorType;
-import lazy.themes.ThemeStore;
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.ToggleNode;
 
 import static processing.core.PConstants.*;
 

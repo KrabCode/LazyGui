@@ -1,12 +1,8 @@
-package lazy.windows;
+package lazy;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.NodeTree;
-import lazy.State;
-import lazy.Utils;
-import lazy.windows.nodes.*;
 
 
 /**

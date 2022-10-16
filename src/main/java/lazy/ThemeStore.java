@@ -1,4 +1,4 @@
-package lazy.themes;
+package lazy;
 
 import java.util.HashMap;
 import java.util.Map;

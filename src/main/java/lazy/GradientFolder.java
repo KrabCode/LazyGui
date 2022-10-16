@@ -1,15 +1,9 @@
-package lazy.windows.nodes.gradient;
+package lazy;
 
 import com.google.gson.JsonElement;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import lazy.InternalShaderStore;
-import lazy.State;
-import lazy.Utils;
-import lazy.windows.nodes.*;
-import lazy.windows.nodes.colorPicker.PickerColor;
-import lazy.windows.nodes.stringPicker.StringPickerFolder;
 
 import java.util.ArrayList;
 

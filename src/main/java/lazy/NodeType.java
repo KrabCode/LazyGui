@@ -1,4 +1,4 @@
-package lazy.windows.nodes;
+package lazy;
 
 public enum NodeType {
     VALUE,

@@ -1,10 +1,7 @@
-package lazy.windows.nodes.colorPicker;
+package lazy;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.InternalShaderStore;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeType;
 
 import static processing.core.PConstants.CORNER;
 

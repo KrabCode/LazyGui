@@ -1,13 +1,9 @@
-package lazy.windows.nodes.colorPicker;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.KeyEvent;
 import processing.core.PGraphics;
-import lazy.State;
-import lazy.Utils;
-import lazy.windows.nodes.NodeFolder;
-import lazy.KeyCodes;
 
 import static processing.core.PApplet.*;
 

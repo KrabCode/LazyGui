@@ -1,4 +1,4 @@
-package lazy.themes;
+package lazy;
 
 public enum ThemeColorType {
     WINDOW_BORDER,

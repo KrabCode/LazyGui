@@ -1,10 +1,8 @@
-package lazy.windows.nodes.colorPicker;
+package lazy;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeType;
 
 
 public class HexNode extends AbstractNode {

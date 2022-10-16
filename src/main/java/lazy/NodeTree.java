@@ -1,9 +1,5 @@
 package lazy;
 
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeType;
-
 import java.util.*;
 
 import static processing.core.PApplet.println;

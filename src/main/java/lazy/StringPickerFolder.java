@@ -1,11 +1,8 @@
-package lazy.windows.nodes.stringPicker;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
-import lazy.State;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeFolder;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package lazy.windows.nodes.sliders;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,15 +8,6 @@ import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
-import lazy.themes.ThemeStore;
-import lazy.InternalShaderStore;
-import lazy.State;
-import lazy.Utils;
-import lazy.KeyCodes;
-import lazy.themes.ThemeColorType;
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.NodeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

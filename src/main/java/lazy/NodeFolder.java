@@ -1,15 +1,10 @@
-package lazy.windows.nodes;
+package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.State;
-import lazy.themes.ThemeColorType;
-import lazy.themes.ThemeStore;
-import lazy.windows.FolderWindow;
-import lazy.windows.WindowManager;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

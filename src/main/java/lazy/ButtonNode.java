@@ -1,8 +1,7 @@
-package lazy.windows.nodes;
+package lazy;
 
 import com.jogamp.newt.event.MouseEvent;
 import processing.core.PGraphics;
-import lazy.State;
 
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, NodeFolder folder) {

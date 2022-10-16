@@ -1,8 +1,5 @@
 package lazy;
 
-import lazy.windows.nodes.AbstractNode;
-import lazy.windows.nodes.NodeFolder;
-import lazy.windows.nodes.NodeType;
 import processing.core.*;
 
 import java.awt.*;

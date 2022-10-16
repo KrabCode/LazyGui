@@ -1,4 +1,4 @@
-package lazy.themes;
+package lazy;
 
 public class Theme {
     public int windowBorder;
