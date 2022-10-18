@@ -10,6 +10,11 @@ import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
 import static processing.core.PApplet.println;
 
+/**
+ * Utility class for live coding shaders based on a string path to shader and re-compiling when needed using the shader file's last modified time.
+ * This saving the shader in your text editor is needed to actually recompile it and display the results.
+ * No sketch restarting needed unless you want to set a new uniform.
+ */
 public class ShaderReloader {
     private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
@@ -18,12 +23,27 @@ public class ShaderReloader {
 
     }
 
+    /**
+     * Get the currently compiled snapshot of a fragment shader for uniform setting purposes.
+     * Does not attempt to compile it unless the shader snapshot is new to this class.
+     *
+     * @param fragPath path to the shader, either absolute or relative from the data folder
+     * @return PShader to set uniforms on
+     */
     public static PShader getShader(String fragPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath, null);
         snapshot = initIfNull(snapshot, fragPath, null);
         return snapshot.compiledShader;
     }
 
+    /**
+     * Gets the currently compiled snapshot of a vertex + fragment shader for uniform setting purposes.
+     * Does not attempt to compile it - relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
+     *
+     * @param fragPath path to the fragment shader, either absolute or relative from the data folder
+     * @param vertPath path to the vertex shader, either absolute or relative from the data folder
+     * @return PShader to set uniforms on
+     */
     public static PShader getShader(String fragPath, String vertPath) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath, vertPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
