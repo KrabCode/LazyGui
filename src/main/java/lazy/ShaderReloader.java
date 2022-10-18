@@ -24,8 +24,9 @@ public class ShaderReloader {
     }
 
     /**
-     * Get the currently compiled snapshot of a fragment shader for uniform setting purposes.
-     * Does not attempt to compile it unless the shader snapshot is new to this class.
+     * Gets the currently compiled snapshot of a vertex + fragment shader for uniform setting purposes.
+     * Does not attempt to compile it unless the shader path combination has not been compiled yet,
+     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() later to attempt to re-compile.
      *
      * @param fragPath path to the shader, either absolute or relative from the data folder
      * @return PShader to set uniforms on
@@ -38,7 +39,8 @@ public class ShaderReloader {
 
     /**
      * Gets the currently compiled snapshot of a vertex + fragment shader for uniform setting purposes.
-     * Does not attempt to compile it - relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
+     * Does not attempt to compile it unless the shader path combination has not been compiled yet,
+     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() later to attempt to re-compile.
      *
      * @param fragPath path to the fragment shader, either absolute or relative from the data folder
      * @param vertPath path to the vertex shader, either absolute or relative from the data folder
