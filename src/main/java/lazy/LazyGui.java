@@ -9,7 +9,13 @@ import java.util.List;
 
 import static processing.core.PApplet.*;
 
-
+/**
+ * Main class for controlling the GUI from the library user's processing code.
+ * Should be initialized as a global variable in processing setup() function with `new LazyGui(this).
+ * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
+ * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
+ * If the control element does not exist yet at the time its value is requested it gets newly created.
+ */
 public class LazyGui implements UserInputSubscriber {
     static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
@@ -46,11 +52,15 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
+    /**
+     * Updates and draws the GUI on the main processing canvas.
+     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
+     */
     public void draw() {
         draw(State.app.g);
     }
 
-    public void draw(PGraphics canvas) {
+    private void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
         updateOptionsFolder();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
@@ -69,6 +79,267 @@ public class LazyGui implements UserInputSubscriber {
         State.updateEndlessLoopDetection();
         takeScreenshotIfNeeded();
     }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.isAutoRepeat()) {
+            return;
+        }
+        hotkeyInteraction(keyEvent);
+    }
+
+    /**
+     * Utility function that can help the library user tell if a mouse press collided and interacted with the GUI.
+     * For example with a mouse controlled brush you might not want to keep drawing on the main canvas
+     * when you just want to adjust its properties in the GUI and don't expect that to affect the artwork.
+     * The GUI cannot make the mousePressed() method stop getting called in the processing sketch,
+     * so a utility function is needed to help decide what to do.
+     *
+     * @return whether you should use this mouse press in the processing sketch
+     */
+    public boolean mousePressedOutsideGui() {
+        return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
+    }
+
+    /**
+     * Gets the value of a slider and lazily initializes it with the default value set to 0.
+     * @param path forward slash separated unique path to the slider
+     * @return current float value of the slider
+     */
+    public float slider(String path) {
+        return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
+    }
+
+
+    public float slider(String path, float defaultValue) {
+        return slider(path, defaultValue, Float.MAX_VALUE, -Float.MAX_VALUE, false);
+    }
+
+
+    public float slider(String path, float defaultValue, float min, float max) {
+        return slider(path, defaultValue, min, max, true);
+    }
+
+
+    private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
+        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderNode(path, defaultValue, min, max, constrained);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.valueFloat;
+    }
+
+    private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
+        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        node.initSliderBackgroundShader();
+        return node;
+    }
+
+    public void sliderSet(String path, float value){
+        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderNode(path, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueFloat = value;
+    }
+
+
+    public int sliderInt(String path) {
+        return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+    }
+
+
+    public int sliderInt(String path, int defaultValue) {
+        return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+    }
+
+
+    public int sliderInt(String path, int defaultValue, int min, int max) {
+        return sliderInt(path, defaultValue, min, max, true);
+    }
+
+
+    private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
+        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderIntNode(path, defaultValue, min, max, constrained);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return PApplet.floor(node.valueFloat);
+    }
+
+    private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
+        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        node.initSliderBackgroundShader();
+        return node;
+    }
+
+    public void sliderIntSet(String path, int value){
+        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderIntNode(path, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueFloat = value;
+    }
+
+
+    public boolean toggle(String path) {
+        return toggle(path, false);
+    }
+
+    public boolean toggle(String path, boolean defaultValue) {
+        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createToggleNode(path, defaultValue);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.valueBoolean;
+    }
+
+    public void toggleSet(String path, boolean value) {
+        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createToggleNode(path, value);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueBoolean = value;
+    }
+
+    private ToggleNode createToggleNode(String path, boolean defaultValue) {
+        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        return new ToggleNode(path, folder, defaultValue);
+    }
+
+
+    public boolean button(String path) {
+        ButtonNode node = (ButtonNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createButtonNode(path);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getBooleanValueAndSetItToFalse();
+    }
+
+    private ButtonNode createButtonNode(String path) {
+        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        return new ButtonNode(path, folder);
+    }
+
+    public String stringPicker(String path, ArrayList<String> options) {
+        return stringPicker(path, options.toArray(new String[0]), null);
+    }
+
+    public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
+        return stringPicker(path, options.toArray(new String[0]), defaultOption);
+    }
+
+    public String stringPicker(String path, String[] options) {
+        return stringPicker(path, options, null);
+    }
+
+    public String stringPicker(String path, String[] options, String defaultOption) {
+        if (options == null || options.length == 0) {
+            throw new IllegalArgumentException("options parameter must not be null nor empty");
+        }
+        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        if (node == null) {
+            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new StringPickerFolder(path, parentFolder, options, defaultOption);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.valueString;
+    }
+
+    public void stringPickerSet(String path, String optionToSet){
+        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        if (node != null) {
+            List<String> options = node.getOptions();
+            if(options.contains(optionToSet)){
+                node.selectOption(optionToSet);
+            }else{
+                println("attempted to set an option: " + optionToSet +
+                    " to a string picker at path: " + path +
+                    " which does not appear in the options: " + options);
+            }
+        }
+    }
+
+    public void setTheme(Theme theme) {
+        ThemeStore.currentSelection = ThemeType.CUSTOM;
+        ThemeStore.setCustomPalette(theme);
+    }
+
+
+    public PickerColor colorPicker(String path) {
+        return colorPicker(path, 1, 1, 0, 1);
+    }
+
+
+    public PickerColor colorPicker(String path, float grayNorm) {
+        return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
+    }
+
+
+    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
+        return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
+    }
+
+
+    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        if (node == null) {
+            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
+            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getColor();
+    }
+
+
+    public PickerColor colorPicker(String path, int hex) {
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        if (node == null) {
+            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getColor();
+    }
+
+
+    public void colorPickerSet(String path, int hex) {
+        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        if (node == null) {
+            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolder(path, folder, hex);
+            NodeTree.insertNodeAtItsPath(node);
+        } else {
+            node.setHex(hex);
+            node.loadValuesFromHex(false);
+        }
+    }
+
+
+    public PGraphics gradient(String path) {
+        return gradient(path, 1);
+    }
+
+    public PGraphics gradient(String path, float alpha) {
+        GradientFolder node = (GradientFolder) NodeTree.findNode(path);
+        if (node == null) {
+            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new GradientFolder(path, parentFolder, alpha);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getOutputGraphics();
+    }
+
 
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
@@ -165,250 +436,4 @@ public class LazyGui implements UserInputSubscriber {
                 State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
     }
 
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        if (keyEvent.isAutoRepeat()) {
-            return;
-        }
-        hotkeyInteraction(keyEvent);
-    }
-
-    public boolean mousePressedOutsideGui() {
-        return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
-    }
-
-    @SuppressWarnings("unused")
-    public float slider(String path) {
-        return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
-    }
-
-    @SuppressWarnings("unused")
-    public float slider(String path, float defaultValue) {
-        return slider(path, defaultValue, Float.MAX_VALUE, -Float.MAX_VALUE, false);
-    }
-
-    @SuppressWarnings("unused")
-    public float slider(String path, float defaultValue, float min, float max) {
-        return slider(path, defaultValue, min, max, true);
-    }
-
-    @SuppressWarnings("unused")
-    private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
-        SliderNode node = (SliderNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createSliderNode(path, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.valueFloat;
-    }
-
-    private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
-        node.initSliderBackgroundShader();
-        return node;
-    }
-
-    public void sliderSet(String path, float value){
-        SliderNode node = (SliderNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createSliderNode(path, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.valueFloat = value;
-    }
-
-    @SuppressWarnings("unused")
-    public int sliderInt(String path) {
-        return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-    }
-
-    @SuppressWarnings("unused")
-    public int sliderInt(String path, int defaultValue) {
-        return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-    }
-
-    @SuppressWarnings("unused")
-    public int sliderInt(String path, int defaultValue, int min, int max) {
-        return sliderInt(path, defaultValue, min, max, true);
-    }
-
-    @SuppressWarnings("unused")
-    private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createSliderIntNode(path, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return PApplet.floor(node.valueFloat);
-    }
-
-    private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
-        node.initSliderBackgroundShader();
-        return node;
-    }
-
-    public void sliderIntSet(String path, int value){
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createSliderIntNode(path, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.valueFloat = value;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean toggle(String path) {
-        return toggle(path, false);
-    }
-
-    public boolean toggle(String path, boolean defaultValue) {
-        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createToggleNode(path, defaultValue);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.valueBoolean;
-    }
-
-    public void toggleSet(String path, boolean value) {
-        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createToggleNode(path, value);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.valueBoolean = value;
-    }
-
-    private ToggleNode createToggleNode(String path, boolean defaultValue) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-        return new ToggleNode(path, folder, defaultValue);
-    }
-
-    @SuppressWarnings("unused")
-    public boolean button(String path) {
-        ButtonNode node = (ButtonNode) NodeTree.findNode(path);
-        if (node == null) {
-            node = createButtonNode(path);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getBooleanValueAndSetItToFalse();
-    }
-
-    private ButtonNode createButtonNode(String path) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-        return new ButtonNode(path, folder);
-    }
-
-    public String stringPicker(String path, ArrayList<String> options) {
-        return stringPicker(path, options.toArray(new String[0]), null);
-    }
-
-    public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
-        return stringPicker(path, options.toArray(new String[0]), defaultOption);
-    }
-
-    public String stringPicker(String path, String[] options) {
-        return stringPicker(path, options, null);
-    }
-
-    public String stringPicker(String path, String[] options, String defaultOption) {
-        if (options == null || options.length == 0) {
-            throw new IllegalArgumentException("options parameter must not be null nor empty");
-        }
-        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
-        if (node == null) {
-            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringPickerFolder(path, parentFolder, options, defaultOption);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.valueString;
-    }
-
-    public void stringPickerSet(String path, String optionToSet){
-        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
-        if (node != null) {
-            List<String> options = node.getOptions();
-            if(options.contains(optionToSet)){
-                node.selectOption(optionToSet);
-            }else{
-                println("attempted to set an option: " + optionToSet +
-                    " to a string picker at path: " + path +
-                    " which does not appear in the options: " + options);
-            }
-        }
-    }
-
-    public void setTheme(Theme theme) {
-        ThemeStore.currentSelection = ThemeType.CUSTOM;
-        ThemeStore.setCustomPalette(theme);
-    }
-
-    @SuppressWarnings("unused")
-    public PickerColor colorPicker(String path) {
-        return colorPicker(path, 1, 1, 0, 1);
-    }
-
-    @SuppressWarnings("unused")
-    public PickerColor colorPicker(String path, float grayNorm) {
-        return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
-    }
-
-    @SuppressWarnings("unused")
-    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
-        return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
-    }
-
-    @SuppressWarnings("unused")
-    public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
-        if (node == null) {
-            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getColor();
-    }
-
-    @SuppressWarnings("unused")
-    public PickerColor colorPicker(String path, int hex) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
-        if (node == null) {
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getColor();
-    }
-
-    @SuppressWarnings("unused")
-    public void colorPickerSet(String path, int hex) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
-        if (node == null) {
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
-        } else {
-            node.setHex(hex);
-            node.loadValuesFromHex(false);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public PGraphics gradient(String path) {
-        return gradient(path, 1);
-    }
-
-    public PGraphics gradient(String path, float alpha) {
-        GradientFolder node = (GradientFolder) NodeTree.findNode(path);
-        if (node == null) {
-            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new GradientFolder(path, parentFolder, alpha);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getOutputGraphics();
-    }
 }

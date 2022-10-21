@@ -11,7 +11,8 @@ import static java.lang.System.currentTimeMillis;
 import static processing.core.PApplet.println;
 
 /**
- * Utility class for live coding shaders based on a string path to shader and re-compiling when needed using the shader file's last modified time.
+ * Utility class for live-coding shaders
+ * Based on a string path to shader and re-compiling when needed using the shader file's last modified time.
  * This saving the shader in your text editor is needed to actually recompile it and display the results.
  * No sketch restarting needed unless you want to set a new uniform.
  */
@@ -24,9 +25,9 @@ public class ShaderReloader {
     }
 
     /**
-     * Gets the currently compiled snapshot of a vertex + fragment shader for uniform setting purposes.
-     * Does not attempt to compile it unless the shader path combination has not been compiled yet,
-     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() later to attempt to re-compile.
+     * Gets the current snapshot of a vertex + fragment shader for uniform setting purposes.
+     * Only attempts to compile at lazy initialization time,
+     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
      *
      * @param fragPath path to the shader, either absolute or relative from the data folder
      * @return PShader to set uniforms on
@@ -38,9 +39,9 @@ public class ShaderReloader {
     }
 
     /**
-     * Gets the currently compiled snapshot of a vertex + fragment shader for uniform setting purposes.
-     * Does not attempt to compile it unless the shader path combination has not been compiled yet,
-     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() later to attempt to re-compile.
+     * Gets the current snapshot of a vertex + fragment shader for uniform setting purposes.
+     * Only attempts to compile at lazy initialization time,
+     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
      *
      * @param fragPath path to the fragment shader, either absolute or relative from the data folder
      * @param vertPath path to the vertex shader, either absolute or relative from the data folder
@@ -52,38 +53,80 @@ public class ShaderReloader {
         return snapshot.compiledShader;
     }
 
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing filter() on the main canvas.
+     *
+     * @param fragPath path to fragment shader
+     */
     public static void filter(String fragPath) {
         shader(fragPath, null, true, State.app.g);
     }
 
-    public static void filter(String path, PGraphics pg) {
-        shader(path, null, true, pg);
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing filter() on the parameter canvas.
+     *
+     * @param fragPath path to fragment shader
+     * @param pg canvas to apply the filter on
+     */
+    public static void filter(String fragPath, PGraphics pg) {
+        shader(fragPath, null, true, pg);
     }
 
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing filter() on the parameter canvas.
+     *
+     * @param fragPath path to fragment shader
+     * @param vertPath path to fragment shader
+     * @param pg canvas to apply the filter on
+     */
     public static void filter(String fragPath, String vertPath, PGraphics pg) {
         shader(fragPath, vertPath, true, pg);
     }
 
-    public static void shader(String fragPath, String vertPath, PGraphics canvas) {
-        shader(fragPath, vertPath, false, canvas);
-    }
-
-    public static void shader(String fragPath, String vertPath) {
-        shader(fragPath, vertPath, false, State.app.g);
-    }
-
-    public static void shader(String fragPath, PGraphics canvas) {
-        shader(fragPath, null, false, canvas);
-    }
-
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing shader() on the main canvas.
+     *
+     * @param fragPath path to fragment shader
+     */
     public static void shader(String fragPath) {
         shader(fragPath, null, false, State.app.g);
     }
 
-    private static void shader(String fragPath, String vertPath, boolean filter, PGraphics canvas) {
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing shader() on the main canvas.
+     *
+     * @param fragPath path to fragment shader
+     * @param fragPath path to vertex shader
+     */
+    public static void shader(String fragPath, String vertPath) {
+        shader(fragPath, vertPath, false, State.app.g);
+    }
+
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing shader() on the parameter canvas.
+     *
+     * @param fragPath path to fragment shader
+     * @param pg canvas to apply the shader on
+     */
+    public static void shader(String fragPath, PGraphics pg) {
+        shader(fragPath, null, false, pg);
+    }
+
+    /**
+     * Re-compiles the shader if needed and then applies it as a processing shader() on the parameter canvas.
+     *
+     * @param fragPath path to fragment shader
+     * @param vertPath path to fragment shader
+     * @param pg canvas to apply the shader on
+     */
+    public static void shader(String fragPath, String vertPath, PGraphics pg) {
+        shader(fragPath, vertPath, false, pg);
+    }
+
+    private static void shader(String fragPath, String vertPath, boolean filter, PGraphics pg) {
         ShaderSnapshot snapshot = findSnapshotByPath(fragPath, vertPath);
         snapshot = initIfNull(snapshot, fragPath, vertPath);
-        snapshot.update(filter, canvas);
+        snapshot.update(filter, pg);
     }
 
     private static ShaderSnapshot initIfNull(ShaderSnapshot snapshot, String fragPath, String vertPath) {
