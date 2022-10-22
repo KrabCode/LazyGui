@@ -11,10 +11,10 @@ import static processing.core.PApplet.*;
 
 /**
  * Main class for controlling the GUI from the library user's processing code.
- * Should be initialized as a global variable in processing setup() function with `new LazyGui(this).
- * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
- * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
- * If the control element does not exist yet at the time its value is requested it gets newly created.
+ * Should be initialized as a global variable in processing </code>setup()</code> function with </code>new LazyGui(this)</code>
+ * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends.
+ * Allows the library user to get the value of a gui control element at any time inside </code>draw()</code>, even repeatedly inside loops.
+ * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
  */
 public class LazyGui implements UserInputSubscriber {
     static boolean isGuiHidden = false;
@@ -27,6 +27,13 @@ public class LazyGui implements UserInputSubscriber {
     NodeFolder toolbar;
     PApplet app;
 
+    /**
+     * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
+     * Meant to be initialized in <code>setup()</code> with <code>new LazyGui(this)</code>
+     * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends
+     *
+     * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
+     */
     public LazyGui(PApplet sketch) {
         this.app = sketch;
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
@@ -85,7 +92,7 @@ public class LazyGui implements UserInputSubscriber {
         if (keyEvent.isAutoRepeat()) {
             return;
         }
-        hotkeyInteraction(keyEvent);
+        tryHandleHotkeyInteraction(keyEvent);
     }
 
     /**
@@ -102,7 +109,8 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the value of a slider and lazily initializes it with the default value set to 0.
+     * Gets the value of a float slider, lazily initializes it if needed and uses a default value of 0.
+     *
      * @param path forward slash separated unique path to the slider
      * @return current float value of the slider
      */
@@ -110,16 +118,30 @@ public class LazyGui implements UserInputSubscriber {
         return slider(path, 0, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-
+    /**
+     * Gets the value of a float slider, lazily initializes it if needed and uses a specified default value.
+     *
+     * @param path forward slash separated unique path to the slider
+     * @param defaultValue default value to set the slider to
+     * @return current float value of the slider
+     */
     public float slider(String path, float defaultValue) {
         return slider(path, defaultValue, Float.MAX_VALUE, -Float.MAX_VALUE, false);
     }
 
-
+    /**
+     * Gets the value of a float slider, lazily initializes it if needed and uses a default value specified in the parameter
+     * along with enforcing a minimum and maximum of reachable values.
+     *
+     * @param path forward slash separated unique path to the slider
+     * @param defaultValue the default value, ideally between min and max
+     * @param min the value cannot go below this, min < max must be true
+     * @param max the value cannot go above this, max > min must be true
+     * @return current float value of the slider
+     */
     public float slider(String path, float defaultValue, float min, float max) {
         return slider(path, defaultValue, min, max, true);
     }
-
 
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         SliderNode node = (SliderNode) NodeTree.findNode(path);
@@ -137,6 +159,15 @@ public class LazyGui implements UserInputSubscriber {
         return node;
     }
 
+    /**
+     * Sets the value of a slider manually without user interaction in the sketch.
+     * Still allows user interaction after it's set.
+     * Initializes a new float slider at the given path if needed
+     * with the value param used as a default value and with no constraint on min and max value.
+     *
+     * @param path forward slash separated unique path to the slider
+     * @param value value to set the float slider at the path to
+     */
     public void sliderSet(String path, float value){
         SliderNode node = (SliderNode) NodeTree.findNode(path);
         if (node == null) {
@@ -146,21 +177,36 @@ public class LazyGui implements UserInputSubscriber {
         node.valueFloat = value;
     }
 
-
+    /**
+     * // TODO javadocs
+     * @param path
+     * @return
+     */
     public int sliderInt(String path) {
         return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
-
+    /**
+     *
+     * @param path
+     * @param defaultValue
+     * @return
+     */
     public int sliderInt(String path, int defaultValue) {
         return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
-
+    /**
+     *
+     * @param path
+     * @param defaultValue
+     * @param min
+     * @param max
+     * @return
+     */
     public int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
     }
-
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
@@ -178,6 +224,11 @@ public class LazyGui implements UserInputSubscriber {
         return node;
     }
 
+    /**
+     *
+     * @param path
+     * @param value
+     */
     public void sliderIntSet(String path, int value){
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
         if (node == null) {
@@ -187,11 +238,21 @@ public class LazyGui implements UserInputSubscriber {
         node.valueFloat = value;
     }
 
-
+    /**
+     *
+     * @param path
+     * @return
+     */
     public boolean toggle(String path) {
         return toggle(path, false);
     }
 
+    /**
+     *
+     * @param path
+     * @param defaultValue
+     * @return
+     */
     public boolean toggle(String path, boolean defaultValue) {
         ToggleNode node = (ToggleNode) NodeTree.findNode(path);
         if (node == null) {
@@ -201,6 +262,11 @@ public class LazyGui implements UserInputSubscriber {
         return node.valueBoolean;
     }
 
+    /**
+     *
+     * @param path
+     * @param value
+     */
     public void toggleSet(String path, boolean value) {
         ToggleNode node = (ToggleNode) NodeTree.findNode(path);
         if (node == null) {
@@ -215,7 +281,11 @@ public class LazyGui implements UserInputSubscriber {
         return new ToggleNode(path, folder, defaultValue);
     }
 
-
+    /**
+     *
+     * @param path
+     * @return
+     */
     public boolean button(String path) {
         ButtonNode node = (ButtonNode) NodeTree.findNode(path);
         if (node == null) {
@@ -230,18 +300,44 @@ public class LazyGui implements UserInputSubscriber {
         return new ButtonNode(path, folder);
     }
 
+    /**
+     *
+     * @param path
+     * @param options
+     * @return
+     */
     public String stringPicker(String path, ArrayList<String> options) {
         return stringPicker(path, options.toArray(new String[0]), null);
     }
 
+    /**
+     *
+     * @param path
+     * @param options
+     * @param defaultOption
+     * @return
+     */
     public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
         return stringPicker(path, options.toArray(new String[0]), defaultOption);
     }
 
+    /**
+     *
+     * @param path
+     * @param options
+     * @return
+     */
     public String stringPicker(String path, String[] options) {
         return stringPicker(path, options, null);
     }
 
+    /**
+     *
+     * @param path
+     * @param options
+     * @param defaultOption
+     * @return
+     */
     public String stringPicker(String path, String[] options, String defaultOption) {
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
@@ -255,6 +351,11 @@ public class LazyGui implements UserInputSubscriber {
         return node.valueString;
     }
 
+    /**
+     *
+     * @param path
+     * @param optionToSet
+     */
     public void stringPickerSet(String path, String optionToSet){
         StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
         if (node != null) {
@@ -269,27 +370,55 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
+    /**
+     *
+     * @param theme
+     */
     public void setTheme(Theme theme) {
         ThemeStore.currentSelection = ThemeType.CUSTOM;
         ThemeStore.setCustomPalette(theme);
     }
 
-
+    /**
+     *
+     * @param path
+     * @return
+     */
     public PickerColor colorPicker(String path) {
         return colorPicker(path, 1, 1, 0, 1);
     }
 
-
+    /**
+     *
+     * @param path
+     * @param grayNorm
+     * @return
+     */
     public PickerColor colorPicker(String path, float grayNorm) {
         return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
     }
 
-
+    /**
+     *
+     * @param path
+     * @param hueNorm
+     * @param saturationNorm
+     * @param brightnessNorm
+     * @return
+     */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
         return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
     }
 
-
+    /**
+     *
+     * @param path
+     * @param hueNorm
+     * @param saturationNorm
+     * @param brightnessNorm
+     * @param alphaNorm
+     * @return
+     */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -301,7 +430,12 @@ public class LazyGui implements UserInputSubscriber {
         return node.getColor();
     }
 
-
+    /**
+     *
+     * @param path
+     * @param hex
+     * @return
+     */
     public PickerColor colorPicker(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -312,7 +446,11 @@ public class LazyGui implements UserInputSubscriber {
         return node.getColor();
     }
 
-
+    /**
+     *
+     * @param path
+     * @param hex
+     */
     public void colorPickerSet(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -325,11 +463,21 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
-
+    /**
+     *
+     * @param path
+     * @return
+     */
     public PGraphics gradient(String path) {
         return gradient(path, 1);
     }
 
+    /**
+     *
+     * @param path
+     * @param alpha
+     * @return
+     */
     public PGraphics gradient(String path, float alpha) {
         GradientFolder node = (GradientFolder) NodeTree.findNode(path);
         if (node == null) {
@@ -340,17 +488,16 @@ public class LazyGui implements UserInputSubscriber {
         return node.getOutputGraphics();
     }
 
+    void requestScreenshot(String customPath){
+        screenshotRequestedOnMainThreadWithCustomPath = true;
+        requestedScreenshotCustomPath = customPath;
+    }
 
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         for(AbstractNode node : allNodes){
             node.updateValues();
         }
-    }
-
-    void requestScreenshot(String customPath){
-        screenshotRequestedOnMainThreadWithCustomPath = true;
-        requestedScreenshotCustomPath = customPath;
     }
 
     private void takeScreenshotIfNeeded() {
@@ -370,7 +517,6 @@ public class LazyGui implements UserInputSubscriber {
         screenshotRequestedOnMainThread = false;
         screenshotRequestedOnMainThreadWithCustomPath = false;
     }
-
 
     void createOptionsFolder() {
         String path = "options";
@@ -393,7 +539,7 @@ public class LazyGui implements UserInputSubscriber {
         drawPathTooltips = toggle(path + "/window path tooltips", true);
     }
 
-    private void hotkeyInteraction(KeyEvent keyEvent) {
+    private void tryHandleHotkeyInteraction(KeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {
@@ -435,5 +581,4 @@ public class LazyGui implements UserInputSubscriber {
         ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
                 State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
     }
-
 }

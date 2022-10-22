@@ -12,7 +12,10 @@ class ColorPickerFolder extends NodeFolder {
     @Expose
     String hexString;
     private int hex;
-    private String hueNodeName, satNodeName, brNodeName , alphaNodeName;
+    private final String hueNodeName = "hue";
+    private final String satNodeName = "sat";
+    private final String brNodeName = "br";
+    private final String alphaNodeName = "alpha";
 
     ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
         super(path, parentFolder);
@@ -27,10 +30,6 @@ class ColorPickerFolder extends NodeFolder {
         if(children.size() > 0){
             return;
         }
-        hueNodeName = "hue";
-        satNodeName = "sat";
-        brNodeName = "br";
-        alphaNodeName = "a";
         children.add(new ColorPreviewNode(path + "/preview", this));
         children.add(new ColorSliderNode.HueNode(path + "/" + hueNodeName, this));
         children.add(new ColorSliderNode.SaturationNode(path + "/" + satNodeName, this));
@@ -92,6 +91,7 @@ class ColorPickerFolder extends NodeFolder {
     float brightness() {
         return getValue(brNodeName);
     }
+
     float alpha() {
         return getValue(alphaNodeName);
     }

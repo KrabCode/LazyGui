@@ -6,6 +6,9 @@ uniform float time;
 uniform float scrollX;
 uniform float precisionNormalized;
 
+// TODO add percent indicator when min/max is specified
+// https://github.com/KrabCode/LazyGui/issues/25
+
 const float PI = 3.14159;
 const float TAU = PI * 2.;
 const int colorsPerGradient = 3;

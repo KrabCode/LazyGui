@@ -19,7 +19,8 @@ class NodeTree {
     static NodeFolder findParentFolderLazyInitPath(String nodePath) {
         String folderPath = Utils.getPathWithoutName(nodePath);
         lazyInitFolderPath(folderPath);
-        return (NodeFolder) findNode(folderPath);
+        AbstractNode pathParent = findNode(folderPath);
+        return (NodeFolder) pathParent;
     }
 
     static AbstractNode findNode(String path) {
@@ -44,6 +45,7 @@ class NodeTree {
         return null;
     }
 
+    // TODO find some way to escape the slash in path params
     // https://github.com/KrabCode/LazyGui/issues/6
     static void lazyInitFolderPath(String path) {
         String[] split = path.split("/");
@@ -61,7 +63,7 @@ class NodeTree {
             } else if (n.type == NodeType.FOLDER) {
                 parentFolder = (NodeFolder) n;
             } else {
-                println("expected folder based on path but got value node");
+                println("Expected to find or to be able to create a folder at path \"" + runningPath + "\" but found an existing " + n.className + ". You cannot put any control elements there.");
             }
             if (i < split.length - 1) {
                 runningPath += "/" + split[i + 1];

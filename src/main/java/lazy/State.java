@@ -220,7 +220,7 @@ class State {
         if (isSketchStuckInEndlessLoop()) {
             println("NOT autosaving," +
                     " because the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
-                    " which looks like an endless loop due to bad settings");
+                    " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
         createTreeSaveFiles("auto");
