@@ -29,8 +29,8 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
-     * Meant to be initialized in <code>setup()</code> with <code>new LazyGui(this)</code>
-     * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends
+     * Meant to be initialized in <code>setup()</code> with <code>new LazyGui(this)</code>.
+     * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends.
      *
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
@@ -61,13 +61,21 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Updates and draws the GUI on the main processing canvas.
-     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
+     * Not meant to be called manually by the library user as it gets called automatically at the end of <code>draw()</code>.
+     * Must stay public because otherwise this registering won't work: <code>app.registerMethod("draw", this);</code>
      */
     public void draw() {
         draw(State.app.g);
     }
 
-    private void draw(PGraphics canvas) {
+    /**
+     * Updates and draws the GUI on the specified parameter canvas, assuming its size is identical to the main sketch size.
+     * Not meant to be called manually by the library user as it gets called automatically at the end of <code>draw()</code>.
+     * Does not need to be public, but left in for convenience.
+     *
+     * @param canvas canvas to draw the GUI on
+     */
+    public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
         updateOptionsFolder();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
@@ -96,9 +104,9 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Utility function that can help the library user tell if a mouse press collided and interacted with the GUI.
+     * Utility function to tell if a mouse press collided and interacted with the GUI.
      * For example with a mouse controlled brush you might not want to keep drawing on the main canvas
-     * when you just want to adjust its properties in the GUI and don't expect that to affect the artwork.
+     * when you just want to adjust its properties in the GUI and you don't expect that to affect the artwork.
      * The GUI cannot make the mousePressed() method stop getting called in the processing sketch,
      * so a utility function is needed to help decide what to do.
      *
@@ -109,7 +117,8 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the value of a float slider, lazily initializes it if needed and uses a default value of 0.
+     * Gets the value of a float slider control element.
+     * lazily initializes it if needed and uses a default value of 0.
      *
      * @param path forward slash separated unique path to the slider
      * @return current float value of the slider
@@ -119,7 +128,8 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the value of a float slider, lazily initializes it if needed and uses a specified default value.
+     * Gets the value of a float slider control element.
+     * lazily initializes it if needed and uses a specified default value.
      *
      * @param path forward slash separated unique path to the slider
      * @param defaultValue default value to set the slider to
@@ -130,7 +140,8 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the value of a float slider, lazily initializes it if needed and uses a default value specified in the parameter
+     * Gets the value of a float slider control element.
+     * lazily initializes it if needed and uses a default value specified in the parameter.
      * along with enforcing a minimum and maximum of reachable values.
      *
      * @param path forward slash separated unique path to the slider
@@ -160,9 +171,9 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Sets the value of a slider manually without user interaction in the sketch.
-     * Still allows user interaction after it's set.
-     * Initializes a new float slider at the given path if needed
+     * Sets the value of a float slider control element manually at runtime without requiring user interaction.
+     * Does not block changing the value in the future in any way.
+     * Initializes a new float slider at the given path if needed.
      * with the value param used as a default value and with no constraint on min and max value.
      *
      * @param path forward slash separated unique path to the slider
@@ -178,31 +189,38 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * // TODO javadocs
-     * @param path
-     * @return
+     * Gets the value of an integer slider control element.
+     * lazily initializes it if needed and uses a default value of 0.
+     *
+     * @param path forward slash separated unique path to the slider
+     * @return current float value of the slider
      */
     public int sliderInt(String path) {
         return sliderInt(path, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
     /**
+     * Gets the value of an integer slider control element.
+     * lazily initializes it if needed and uses a specified default value.
      *
-     * @param path
-     * @param defaultValue
-     * @return
+     * @param path forward slash separated unique path to the slider
+     * @param defaultValue default value to set the slider to
+     * @return current float value of the slider
      */
     public int sliderInt(String path, int defaultValue) {
         return sliderInt(path, defaultValue, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
     }
 
     /**
+     * Gets the value of an integer slider control element.
+     * lazily initializes it if needed and uses a default value specified in the parameter.
+     * along with enforcing a minimum and maximum of reachable values.
      *
-     * @param path
-     * @param defaultValue
-     * @param min
-     * @param max
-     * @return
+     * @param path forward slash separated unique path to the slider
+     * @param defaultValue the default value, ideally between min and max
+     * @param min the value cannot go below this, min < max must be true
+     * @param max the value cannot go above this, max > min must be true
+     * @return current float value of the slider
      */
     public int sliderInt(String path, int defaultValue, int min, int max) {
         return sliderInt(path, defaultValue, min, max, true);
@@ -225,9 +243,13 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Sets the value of an integer slider control element manually at runtime without requiring user interaction.
+     * Initializes a new float slider at the given path if needed.
+     * Does not block changing the value in the future in any way.
+     * with the value param used as a default value and with no constraint on min and max value.
      *
-     * @param path
-     * @param value
+     * @param path forward slash separated unique path to the slider
+     * @param value value to set the float slider at the path to
      */
     public void sliderIntSet(String path, int value){
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
@@ -239,19 +261,23 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the current value of a toggle control element.
+     * lazily initializes it if needed and sets its value to false by default.
      *
-     * @param path
-     * @return
+     * @param path forward slash separated unique path to the toggle.
+     * @return current value of the toggle
      */
     public boolean toggle(String path) {
         return toggle(path, false);
     }
 
     /**
+     * Gets the current value of a toggle control element.
+     * lazily initializes it if needed and sets its value to the specified parameter default.
      *
-     * @param path
-     * @param defaultValue
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @param defaultValue default value of the toggle
+     * @return current value of the toggle
      */
     public boolean toggle(String path, boolean defaultValue) {
         ToggleNode node = (ToggleNode) NodeTree.findNode(path);
@@ -263,9 +289,12 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Sets the value of a boolean toggle control element.
+     * Does not block changing the value in the future in any way.
+     * Lazily initializes the toggle if needed.
      *
-     * @param path
-     * @param value
+     * @param path forward slash separated unique path to the toggle
+     * @param value current value of the toggle
      */
     public void toggleSet(String path, boolean value) {
         ToggleNode node = (ToggleNode) NodeTree.findNode(path);
@@ -282,9 +311,17 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the value of a button control element and sets it to false.
+     * Lazily initializes the button if needed.
+     * Meant to be used inside <code>draw()</code> like this:
+     * <pre>
+     * if(gui.button("actions/print")){
+     *     println("hello world");
+     * }
+     * </pre>
      *
-     * @param path
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @return button value that can only be true once per user interaction
      */
     public boolean button(String path) {
         ButtonNode node = (ButtonNode) NodeTree.findNode(path);
@@ -301,42 +338,54 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the currently selected string from a list of options in a gui control element.
+     * Lazily initializes the string picker if needed.
+     * Sets the default value to the first value in the list.
      *
-     * @param path
-     * @param options
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @param options list of options to display
+     * @return currently selected string
      */
     public String stringPicker(String path, ArrayList<String> options) {
         return stringPicker(path, options.toArray(new String[0]), null);
     }
 
     /**
+     * Gets the currently selected string from a list of options in a gui control element.
+     * Lazily initializes the string picker if needed.
+     * Sets the default value to the specified parameter value, which must be contained in the options list, or it will be ignored.
      *
-     * @param path
-     * @param options
-     * @param defaultOption
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @param options list of options to display
+     * @param defaultOption default option to select, must also be found in options or it is ignored
+     * @return currently selected string
      */
     public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
         return stringPicker(path, options.toArray(new String[0]), defaultOption);
     }
 
     /**
+     * Gets the currently selected string from an array of options in a gui control element.
+     * Lazily initializes the string picker if needed.
+     * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
-     * @param path
-     * @param options
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @param options list of options to display
+     * @return currently selected string
      */
     public String stringPicker(String path, String[] options) {
         return stringPicker(path, options, null);
     }
 
     /**
+     * Gets the currently selected string from an array of options in a gui control element.
+     * Lazily initializes the string picker if needed.
+     * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
-     * @param path
-     * @param options
-     * @param defaultOption
-     * @return
+     * @param path forward slash separated unique path to the toggle
+     * @param options list of options to display
+     * @param defaultOption default option to select, must also be found in options or it is ignored
+     * @return currently selected string
      */
     public String stringPicker(String path, String[] options, String defaultOption) {
         if (options == null || options.length == 0) {
