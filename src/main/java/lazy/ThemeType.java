@@ -1,6 +1,9 @@
 package lazy;
 
-enum ThemeType {
+/**
+ * Shorthands for some pre-defined themes with a custom option.
+ */
+public enum ThemeType {
     DARK,
     LIGHT,
     PINK,

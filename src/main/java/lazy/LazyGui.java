@@ -117,10 +117,21 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Sets the sketch theme to a custom palette manually from code.
+     * Meant to be used once in setup after initializing the LazyGui and making a new LazyGui.Theme object with the desired hex colors.
+     *
+     * @param theme custom theme to be used
+     */
+    public void setTheme(Theme theme) {
+        ThemeStore.currentSelection = ThemeType.CUSTOM;
+        ThemeStore.setCustomPalette(theme);
+    }
+
+    /**
      * Gets the value of a float slider control element.
      * lazily initializes it if needed and uses a default value of 0.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @return current float value of the slider
      */
     public float slider(String path) {
@@ -131,7 +142,7 @@ public class LazyGui implements UserInputSubscriber {
      * Gets the value of a float slider control element.
      * lazily initializes it if needed and uses a specified default value.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param defaultValue default value to set the slider to
      * @return current float value of the slider
      */
@@ -144,7 +155,7 @@ public class LazyGui implements UserInputSubscriber {
      * lazily initializes it if needed and uses a default value specified in the parameter.
      * along with enforcing a minimum and maximum of reachable values.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param defaultValue the default value, ideally between min and max
      * @param min the value cannot go below this, min < max must be true
      * @param max the value cannot go above this, max > min must be true
@@ -176,7 +187,7 @@ public class LazyGui implements UserInputSubscriber {
      * Initializes a new float slider at the given path if needed.
      * with the value param used as a default value and with no constraint on min and max value.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param value value to set the float slider at the path to
      */
     public void sliderSet(String path, float value){
@@ -192,7 +203,7 @@ public class LazyGui implements UserInputSubscriber {
      * Gets the value of an integer slider control element.
      * lazily initializes it if needed and uses a default value of 0.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @return current float value of the slider
      */
     public int sliderInt(String path) {
@@ -203,7 +214,7 @@ public class LazyGui implements UserInputSubscriber {
      * Gets the value of an integer slider control element.
      * lazily initializes it if needed and uses a specified default value.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param defaultValue default value to set the slider to
      * @return current float value of the slider
      */
@@ -216,7 +227,7 @@ public class LazyGui implements UserInputSubscriber {
      * lazily initializes it if needed and uses a default value specified in the parameter.
      * along with enforcing a minimum and maximum of reachable values.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param defaultValue the default value, ideally between min and max
      * @param min the value cannot go below this, min < max must be true
      * @param max the value cannot go above this, max > min must be true
@@ -248,7 +259,7 @@ public class LazyGui implements UserInputSubscriber {
      * Does not block changing the value in the future in any way.
      * with the value param used as a default value and with no constraint on min and max value.
      *
-     * @param path forward slash separated unique path to the slider
+     * @param path forward slash separated unique path to the control element
      * @param value value to set the float slider at the path to
      */
     public void sliderIntSet(String path, int value){
@@ -264,7 +275,7 @@ public class LazyGui implements UserInputSubscriber {
      * Gets the current value of a toggle control element.
      * lazily initializes it if needed and sets its value to false by default.
      *
-     * @param path forward slash separated unique path to the toggle.
+     * @param path forward slash separated unique path to the control element.
      * @return current value of the toggle
      */
     public boolean toggle(String path) {
@@ -275,7 +286,7 @@ public class LazyGui implements UserInputSubscriber {
      * Gets the current value of a toggle control element.
      * lazily initializes it if needed and sets its value to the specified parameter default.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param defaultValue default value of the toggle
      * @return current value of the toggle
      */
@@ -293,7 +304,7 @@ public class LazyGui implements UserInputSubscriber {
      * Does not block changing the value in the future in any way.
      * Lazily initializes the toggle if needed.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param value current value of the toggle
      */
     public void toggleSet(String path, boolean value) {
@@ -320,7 +331,7 @@ public class LazyGui implements UserInputSubscriber {
      * }
      * </pre>
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @return button value that can only be true once per user interaction
      */
     public boolean button(String path) {
@@ -342,7 +353,7 @@ public class LazyGui implements UserInputSubscriber {
      * Lazily initializes the string picker if needed.
      * Sets the default value to the first value in the list.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param options list of options to display
      * @return currently selected string
      */
@@ -355,7 +366,7 @@ public class LazyGui implements UserInputSubscriber {
      * Lazily initializes the string picker if needed.
      * Sets the default value to the specified parameter value, which must be contained in the options list, or it will be ignored.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param options list of options to display
      * @param defaultOption default option to select, must also be found in options or it is ignored
      * @return currently selected string
@@ -369,7 +380,7 @@ public class LazyGui implements UserInputSubscriber {
      * Lazily initializes the string picker if needed.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param options list of options to display
      * @return currently selected string
      */
@@ -382,9 +393,9 @@ public class LazyGui implements UserInputSubscriber {
      * Lazily initializes the string picker if needed.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
-     * @param path forward slash separated unique path to the toggle
+     * @param path forward slash separated unique path to the control element
      * @param options list of options to display
-     * @param defaultOption default option to select, must also be found in options or it is ignored
+     * @param defaultOption default option to select, must also be found in options, or it is ignored
      * @return currently selected string
      */
     public String stringPicker(String path, String[] options, String defaultOption) {
@@ -401,9 +412,12 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Sets the string picker value to a given parameter.
+     * Does not lazily initialize the string picker because it doesn't know what all the options should be.
+     * If the option to set is not found in the string picker's list of options it is ignored and a warning message is printed to console.
      *
-     * @param path
-     * @param optionToSet
+     * @param path forward slash separated unique path to the control element
+     * @param optionToSet string option to set the string picker to
      */
     public void stringPickerSet(String path, String optionToSet){
         StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
@@ -420,58 +434,59 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the color value of a color picker control element.
+     * Lazily initializes the color picker if needed.
+     * Default hsba values are (1,1,0,1) - therefore default color is black.
      *
-     * @param theme
-     */
-    public void setTheme(Theme theme) {
-        ThemeStore.currentSelection = ThemeType.CUSTOM;
-        ThemeStore.setCustomPalette(theme);
-    }
-
-    /**
-     *
-     * @param path
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path) {
         return colorPicker(path, 1, 1, 0, 1);
     }
 
     /**
+     * Gets the color value of a color picker control element.
+     * Lazily initializes the color picker if needed with the specified grayNorm brightness in the range [0,1].
+     * Default hsba values are (0,0,grayNorm,1).
      *
-     * @param path
-     * @param grayNorm
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @param grayNorm default brightness in the range [0,1]
+     * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float grayNorm) {
-        return colorPicker(path, grayNorm, grayNorm, grayNorm, 1);
+        return colorPicker(path, 0, 0, grayNorm, 1);
     }
 
     /**
+     * Gets the color value of a color picker control element.
+     * Lazily initializes the color picker if needed with the specified defaults.
      *
-     * @param path
-     * @param hueNorm
-     * @param saturationNorm
-     * @param brightnessNorm
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @param hueNorm default hue in the range [0,1]
+     * @param saturationNorm default saturation in the range [0,1]
+     * @param brightnessNorm default brightness in the range [0,1]
+     * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm) {
         return colorPicker(path, hueNorm, saturationNorm, brightnessNorm, 1);
     }
 
     /**
+     * Gets the color value of a color picker control element.
+     * Lazily initializes the color picker if needed with the specified defaults.
      *
-     * @param path
-     * @param hueNorm
-     * @param saturationNorm
-     * @param brightnessNorm
-     * @param alphaNorm
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @param hueNorm default hue in the range [0,1]
+     * @param saturationNorm default saturation in the range [0,1]
+     * @param brightnessNorm default brightness in the range [0,1]
+     * @param alphaNorm default alpha in the range [0,1]
+     * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
         if (node == null) {
-            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, 1);
+            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
             NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
             node = new ColorPickerFolder(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
@@ -480,10 +495,12 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the color value of a color picker control element.
+     * Lazily initializes the color picker if needed with the parameter hex value as default color.
      *
-     * @param path
-     * @param hex
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @param hex hex color as an integer like 0xFF123456, also works with processing 'color' type
+     * @return hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
@@ -496,9 +513,12 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Sets the color picker to a given hex value.
+     * Lazily initializes the color picker if needed with the parameter hex value as default color.
+     * Does not block changing the value in the future in any way.
      *
-     * @param path
-     * @param hex
+     * @param path forward slash separated unique path to the control element
+     * @param hex hex color to set, also works with processing 'color' type
      */
     public void colorPickerSet(String path, int hex) {
         ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
@@ -513,19 +533,23 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets a gradient as an image with size matching the main processing sketch size.
+     * Lazily initializes the gradient picker if needed.
      *
-     * @param path
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path) {
         return gradient(path, 1);
     }
 
     /**
+     * Gets a gradient as an image with size matching the main processing sketch size.
+     * Lazily initializes the gradient picker if needed with the alpha parameter as default alpha for all its colors.
      *
-     * @param path
-     * @param alpha
-     * @return
+     * @param path forward slash separated unique path to the control element
+     * @param alpha default alpha of all the colors in the gradient
+     * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path, float alpha) {
         GradientFolder node = (GradientFolder) NodeTree.findNode(path);
