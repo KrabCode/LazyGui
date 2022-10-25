@@ -54,7 +54,6 @@ public class UserInputPublisher {
         }
     }
 
-
     public void mouseEvent(MouseEvent event) {
         updatePreviousMousePositionBeforeHandling(event);
         switch(event.getAction()){
@@ -77,6 +76,19 @@ public class UserInputPublisher {
         updatePreviousMousePositionAfterHandling(event);
     }
 
+    private void updatePreviousMousePositionAfterHandling(MouseEvent event) {
+        prevX = event.getX();
+        prevY = event.getY();
+    }
+
+    private void updatePreviousMousePositionBeforeHandling(MouseEvent e) {
+        if(prevX == -1){
+            prevX = e.getX();
+        }
+        if(prevY == -1){
+            prevY = e.getY();
+        }
+    }
 
     public void mousePressed(MouseEvent event) {
         LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
@@ -111,20 +123,6 @@ public class UserInputPublisher {
             }
         }
         mouseFallsThroughThisFrame = !e.isConsumed();
-    }
-
-    private void updatePreviousMousePositionAfterHandling(MouseEvent event) {
-        prevX = event.getX();
-        prevY = event.getY();
-    }
-
-    private void updatePreviousMousePositionBeforeHandling(MouseEvent e) {
-        if(prevX == -1){
-            prevX = e.getX();
-        }
-        if(prevY == -1){
-            prevY = e.getY();
-        }
     }
 
     void mouseDragged(MouseEvent event) {
