@@ -1,11 +1,11 @@
 package lazy;
 
-public class LazyMouseEvent {
+class LazyMouseEvent {
     private boolean consumed;
     private final float x, y, px, py;
     private final int scrollWheelRotation;
 
-    public LazyMouseEvent(float x, float y, float px, float py) {
+    LazyMouseEvent(float x, float y, float px, float py) {
         scrollWheelRotation = 0;
         this.x = x;
         this.y = y;
@@ -13,7 +13,7 @@ public class LazyMouseEvent {
         this.py = py;
     }
 
-    public LazyMouseEvent(int scrollWheelRotation) {
+    LazyMouseEvent(int scrollWheelRotation) {
         this.scrollWheelRotation = scrollWheelRotation;
         x = State.app.mouseX;
         y = State.app.mouseY;
