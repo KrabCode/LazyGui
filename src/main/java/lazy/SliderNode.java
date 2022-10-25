@@ -3,8 +3,8 @@ package lazy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
+
+
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
@@ -196,8 +196,6 @@ class SliderNode extends AbstractNode {
         }
     }
 
-
-
     private void increasePrecision() {
         currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
         setPrecisionToNode();
@@ -230,7 +228,7 @@ class SliderNode extends AbstractNode {
     }
 
     @Override
-    void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             if(Float.isNaN(valueFloatDefault)){
@@ -257,7 +255,7 @@ class SliderNode extends AbstractNode {
         }
     }
 
-    private void tryReadNumpadInput(KeyEvent e) {
+    private void tryReadNumpadInput(LazyKeyEvent e) {
         switch(e.getKeyChar()){
             case '0': valueFloat = 0; break;
             case '1': valueFloat = 1; break;
@@ -287,16 +285,14 @@ class SliderNode extends AbstractNode {
     }
 
     @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragNodeContinue(e, x, y, px, py);
+    void mouseDragNodeContinue(LazyMouseEvent e) {
+        super.mouseDragNodeContinue(e);
         if(isDragged){
-            mouseDelta.x = px - x;
-            mouseDelta.y = py - y;
+            mouseDelta.x = e.getPrevX() - e.getX();
+            mouseDelta.y = e.getPrevY() - e.getY();
             e.setConsumed(true);
         }
-
     }
-
 
     @Override
     void overwriteState(JsonElement loadedNode) {

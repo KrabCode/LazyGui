@@ -1,7 +1,7 @@
 package lazy;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
+
+
 import processing.core.PGraphics;
 
 
@@ -21,14 +21,8 @@ class ColorPickerHexNode extends AbstractNode {
     }
 
     @Override
-    void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         parentColorPickerFolder.keyPressedOverNode(e, x, y);
-    }
-
-
-    @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-
     }
 
     @Override

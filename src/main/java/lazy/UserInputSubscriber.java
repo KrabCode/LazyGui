@@ -1,50 +1,36 @@
 package lazy;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
 
 interface UserInputSubscriber  {
     // everything is default empty
     // because I only want the implementing classes to
     // use what methods they want and not mention the rest
 
-    default void keyPressed(KeyEvent keyEvent) {
+    default void keyPressed(LazyKeyEvent e) {
 
     }
 
-    default void keyReleased(KeyEvent keyEvent) {
+    default void keyReleased(LazyKeyEvent e) {
 
     }
 
-    default void mouseClicked(MouseEvent e, float x, float y) {
+    default void mousePressed(LazyMouseEvent e) {
 
     }
 
-    default void mouseEntered(MouseEvent e,float x, float y) {
+    default void mouseReleased(LazyMouseEvent e) {
 
     }
 
-    default void mouseExited(MouseEvent e,float x, float y) {
+    default void mouseMoved(LazyMouseEvent e) {
 
     }
 
-    default void mousePressed(MouseEvent e,float x, float y) {
+    default void mouseDragged(LazyMouseEvent e) {
 
     }
 
-    default void mouseReleased(MouseEvent e,float x, float y) {
-
-    }
-
-    default void mouseMoved(MouseEvent e,float x, float y, float px, float py) {
-
-    }
-
-    default void mouseDragged(MouseEvent e,float x, float y, float px, float py) {
-
-    }
-
-    default void mouseWheelMoved(MouseEvent e,int dir, float x, float y) {
+    default void mouseWheelMoved(LazyMouseEvent e) {
 
     }
 }

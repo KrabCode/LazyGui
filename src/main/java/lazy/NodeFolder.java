@@ -3,7 +3,7 @@ package lazy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import com.jogamp.newt.event.MouseEvent;
+
 import processing.core.PGraphics;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -68,11 +68,6 @@ class NodeFolder extends AbstractNode {
         super.mousePressedOverNode(x, y);
         WindowManager.uncoverOrCreateWindow(this);
         this.isDragged = false;
-
-    }
-
-    @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
 
     }
 

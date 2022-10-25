@@ -2,7 +2,7 @@ package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-import com.jogamp.newt.event.KeyEvent;
+
 import processing.core.PGraphics;
 
 import static processing.core.PApplet.*;
@@ -122,7 +122,7 @@ class ColorPickerFolder extends NodeFolder {
         }
     }
 
-    void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
             Utils.setClipboardString(getHexString());

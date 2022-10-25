@@ -2,8 +2,8 @@ package lazy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
+
+
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -213,7 +213,7 @@ abstract class AbstractNode {
         dragStartPos.y = y;
     }
 
-    void mouseReleasedAnywhere(MouseEvent e, float x, float y) {
+    void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isDragged){
             e.setConsumed(true);
             State.onUndoableActionEnded();
@@ -222,11 +222,11 @@ abstract class AbstractNode {
         State.app.cursor();
     }
 
-    void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 
     }
 
-    void keyPressedOutOfNode(KeyEvent keyEvent, float x, float y) {
+    void keyPressedOutOfNode(LazyKeyEvent keyEvent, float x, float y) {
 
     }
 
@@ -238,7 +238,7 @@ abstract class AbstractNode {
 
     }
 
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(LazyMouseEvent e) {
 //        State.app.noCursor();
 //        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }

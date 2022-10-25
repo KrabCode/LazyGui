@@ -1,7 +1,7 @@
 package lazy;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
+
+
 import processing.core.PGraphics;
 
 
@@ -63,29 +63,29 @@ class FolderWindow extends Window {
 
 
     @Override
-    public void mousePressed(MouseEvent e, float x, float y) {
-        super.mousePressed(e, x, y);
-        if (isPointInsideTitleBar(x, y)) {
+    public void mousePressed(LazyMouseEvent e) {
+        super.mousePressed(e);
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
             return;
         }
-        if (isPointInsideContent(x, y)) {
-            AbstractNode node = tryFindChildNodeAt(x, y);
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
-                node.mousePressedOverNode(x, y);
+                node.mousePressedOverNode(e.getX(), e.getY());
             }
         }
     }
 
     @Override
-    public void mouseMoved(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseMoved(e, x, y, px, py);
-        if(isPointInsideTitleBar(x,y)){
+    public void mouseMoved(LazyMouseEvent e) {
+        super.mouseMoved(e);
+        if(isPointInsideTitleBar(e.getX(),e.getY())){
             e.setConsumed(true);
             NodeTree.setAllOtherNodesMouseOver(null, false);
             return;
         }
-        if (isPointInsideContent(x, y)) {
-            AbstractNode node = tryFindChildNodeAt(x, y);
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
                 node.isMouseOverNode = true;
                 NodeTree.setAllOtherNodesMouseOver(node, false);
@@ -99,36 +99,36 @@ class FolderWindow extends Window {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e, float x, float y) {
-        super.mouseReleased(e, x, y);
+    public void mouseReleased(LazyMouseEvent e) {
+        super.mouseReleased(e);
         for (AbstractNode node : folder.children) {
-            node.mouseReleasedAnywhere(e, x, y);
+            node.mouseReleasedAnywhere(e);
         }
-        if (isPointInsideContent(x, y)) {
-            AbstractNode clickedNode = tryFindChildNodeAt(x, y);
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
             if (clickedNode != null && clickedNode.isParentWindowVisible()) {
-                clickedNode.mouseReleasedOverNode(x, y);
+                clickedNode.mouseReleasedOverNode(e.getX(), e.getY());
                 e.setConsumed(true);
             }
         }
     }
 
     @Override
-    public void mouseWheelMoved(MouseEvent e, int dir, float x, float y) {
-        super.mouseWheelMoved(e, dir, x, y);
-        if (isPointInsideTitleBar(x, y)) {
+    public void mouseWheelMoved(LazyMouseEvent e) {
+        super.mouseWheelMoved(e);
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
             return;
         }
-        if (isPointInsideContent(x, y)) {
-            AbstractNode clickedNode = tryFindChildNodeAt(x, y);
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
             if (clickedNode != null && clickedNode.isParentWindowVisible()) {
-                clickedNode.mouseWheelMovedOverNode(x, y, dir);
+                clickedNode.mouseWheelMovedOverNode(e.getX(), e.getY(), e.getRotation());
             }
         }
     }
 
     @Override
-    public void keyPressed(KeyEvent keyEvent) {
+    public void keyPressed(LazyKeyEvent keyEvent) {
         super.keyPressed(keyEvent);
         float x = State.app.mouseX;
         float y = State.app.mouseY;
@@ -153,11 +153,11 @@ class FolderWindow extends Window {
     }
 
     @Override
-    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragged(e, x, y, px, py);
+    public void mouseDragged(LazyMouseEvent e) {
+        super.mouseDragged(e);
         for (AbstractNode child : folder.children) {
             if (child.isDragged && child.isParentWindowVisible()) {
-                child.mouseDragNodeContinue(e, x, y, px, py);
+                child.mouseDragNodeContinue(e);
             }
         }
     }

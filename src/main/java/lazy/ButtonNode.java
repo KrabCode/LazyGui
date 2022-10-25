@@ -1,6 +1,6 @@
 package lazy;
 
-import com.jogamp.newt.event.MouseEvent;
+
 import processing.core.PGraphics;
 
 class ButtonNode extends AbstractNode {
@@ -20,7 +20,7 @@ class ButtonNode extends AbstractNode {
     }
 
     @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
+    void mouseDragNodeContinue(LazyMouseEvent e) {
 
     }
 

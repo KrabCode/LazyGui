@@ -1,6 +1,6 @@
 package lazy;
 
-import com.jogamp.newt.event.KeyEvent;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -11,9 +11,9 @@ import static processing.core.PApplet.*;
 
 /**
  * Main class for controlling the GUI from the library user's processing code.
- * Should be initialized as a global variable in processing </code>setup()</code> function with </code>new LazyGui(this)</code>
- * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends.
- * Allows the library user to get the value of a gui control element at any time inside </code>draw()</code>, even repeatedly inside loops.
+ * Should be initialized as a global variable in processing setup() function with new LazyGui(this)
+ * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
+ * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
  * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
  */
 public class LazyGui implements UserInputSubscriber {
@@ -29,8 +29,8 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
-     * Meant to be initialized in <code>setup()</code> with <code>new LazyGui(this)</code>.
-     * Registers itself at end of the </code>draw()</code> method and displays the GUI whenever </code>draw()</code> ends.
+     * Meant to be initialized in setup() with <code>new LazyGui(this)</code>.
+     * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
      *
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
@@ -61,8 +61,8 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Updates and draws the GUI on the main processing canvas.
-     * Not meant to be called manually by the library user as it gets called automatically at the end of <code>draw()</code>.
-     * Must stay public because otherwise this registering won't work: <code>app.registerMethod("draw", this);</code>
+     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
+     * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
      */
     public void draw() {
         draw(State.app.g);
@@ -70,7 +70,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Updates and draws the GUI on the specified parameter canvas, assuming its size is identical to the main sketch size.
-     * Not meant to be called manually by the library user as it gets called automatically at the end of <code>draw()</code>.
+     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
      * Does not need to be public, but left in for convenience.
      *
      * @param canvas canvas to draw the GUI on
@@ -96,10 +96,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        if (keyEvent.isAutoRepeat()) {
-            return;
-        }
+    public void keyPressed(LazyKeyEvent keyEvent) {
         tryHandleHotkeyInteraction(keyEvent);
     }
 
@@ -324,7 +321,7 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Gets the value of a button control element and sets it to false.
      * Lazily initializes the button if needed.
-     * Meant to be used inside <code>draw()</code> like this:
+     * Meant to be used inside draw() like this:
      * <pre>
      * if(gui.button("actions/print")){
      *     println("hello world");
@@ -612,7 +609,7 @@ public class LazyGui implements UserInputSubscriber {
         drawPathTooltips = toggle(path + "/window path tooltips", true);
     }
 
-    private void tryHandleHotkeyInteraction(KeyEvent keyEvent) {
+    private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
         char key = keyEvent.getKeyChar();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {

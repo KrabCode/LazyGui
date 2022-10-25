@@ -1,7 +1,7 @@
 package lazy;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseEvent;
+
+
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -32,8 +32,8 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-        super.mouseDragNodeContinue(e, x, y, px, py);
+    void mouseDragNodeContinue(LazyMouseEvent e) {
+        super.mouseDragNodeContinue(e);
         updateColorInParentFolder();
         e.setConsumed(true);
     }
@@ -97,7 +97,7 @@ abstract class ColorSliderNode extends SliderNode {
 
 
     @Override
-    void keyPressedOverNode(KeyEvent e, float x, float y) {
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y); // handle the value change
         if (e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
             // reflect the value change in the resulting color

@@ -1,7 +1,7 @@
 package lazy;
 
 import com.google.gson.annotations.Expose;
-import com.jogamp.newt.event.MouseEvent;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -154,40 +154,40 @@ abstract class Window implements UserInputSubscriber {
     }
 
     @Override
-    public void mousePressed(MouseEvent e, float x, float y) {
+    public void mousePressed(LazyMouseEvent e) {
         if (isClosed()) {
             return;
         }
-        if (isPointInsideWindow(x, y)) {
+        if (isPointInsideWindow(e.getX(), e.getY())) {
             if (!isFocused()) {
                 setFocusOnThis();
             }
             e.setConsumed(true);
         }
-        if (isPointInsideTitleBar(x, y)) {
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
             isDraggedAround = true;
             setFocusOnThis();
         }
     }
 
     @Override
-    public void mouseDragged(MouseEvent e, float x, float y, float px, float py) {
+    public void mouseDragged(LazyMouseEvent e) {
         if (isClosed()) {
             return;
         }
         if (isDraggedAround) {
-            posX += x - px;
-            posY += y - py;
+            posX += e.getX() - e.getPrevX();
+            posY += e.getY() - e.getPrevY();
             e.setConsumed(true);
         }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e, float x, float y) {
+    public void mouseReleased(LazyMouseEvent e) {
         if (isClosed()) {
             return;
         }
-        if (isCloseable && isPointInsideCloseButton(x, y)) {
+        if (isCloseable && isPointInsideCloseButton(e.getX(), e.getY())) {
             close();
             e.setConsumed(true);
         } else if (isDraggedAround) {

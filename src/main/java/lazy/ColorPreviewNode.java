@@ -1,6 +1,6 @@
 package lazy;
 
-import com.jogamp.newt.event.MouseEvent;
+
 import processing.core.PGraphics;
 
 import static processing.core.PConstants.CORNER;
@@ -38,10 +38,5 @@ class ColorPreviewNode extends AbstractNode {
         pg.fill(parentColorPickerFolder.getColor().hex);
         pg.noStroke();
         pg.rect(0, 0, size.x, size.y);
-    }
-
-    @Override
-    void mouseDragNodeContinue(MouseEvent e, float x, float y, float px, float py) {
-
     }
 }
