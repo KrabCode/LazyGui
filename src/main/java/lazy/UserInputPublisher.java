@@ -4,10 +4,15 @@ import processing.event.MouseEvent;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Internal LazyGui class used to register with PApplet user input events.
+ * Must be public for PApplet to be able to reach it, but not meant to be used or even looked at by library users.
+ */
 public class UserInputPublisher {
     static boolean mouseFallsThroughThisFrame = false;
     private static UserInputPublisher singleton;
     private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
+    private float prevX = -1, prevY = -1;
 
     private UserInputPublisher() {
         registerListeners();
@@ -90,7 +95,7 @@ public class UserInputPublisher {
         }
     }
 
-    public void mousePressed(MouseEvent event) {
+    void mousePressed(MouseEvent event) {
         LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mousePressed(e);
@@ -111,8 +116,6 @@ public class UserInputPublisher {
         }
         mouseFallsThroughThisFrame = !e.isConsumed();
     }
-
-    float prevX = -1, prevY = -1;
 
     void mouseMoved(MouseEvent event) {
         LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
