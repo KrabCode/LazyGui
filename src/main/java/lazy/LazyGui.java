@@ -95,6 +95,10 @@ public class LazyGui implements UserInputSubscriber {
         takeScreenshotIfNeeded();
     }
 
+    /**
+     * Method subscribed to PApplet input events, not meant for library users.
+     * @param keyEvent current key event
+     */
     @Override
     public void keyPressed(LazyKeyEvent keyEvent) {
         tryHandleHotkeyInteraction(keyEvent);
