@@ -47,8 +47,8 @@ abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         drawPathTooltipOnHighlight(pg);
         drawBackgroundWithWindowBorder(pg);
-        drawContent(pg);
         drawTitleBar(pg);
+        drawContent(pg);
         if (isCloseable) {
             drawCloseButton(pg);
         }
@@ -64,12 +64,15 @@ abstract class Window implements UserInputSubscriber {
         String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
-        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
+        float tooltipXOffset = cell * 0.5f;
+        float tooltipWidth = windowSizeX - tooltipXOffset - cell;
+//        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
+        pg.noStroke();
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(-1, -tooltipHeight, windowSizeX - cell + 1, tooltipHeight);
+        pg.rect(tooltipXOffset, -tooltipHeight, tooltipWidth, tooltipHeight);
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
         for (int i = 0; i < lineCount; i++) {
-            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX, -i * cell - State.textMarginY);
+            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, -i * cell - State.textMarginY);
         }
         pg.popMatrix();
     }
@@ -89,17 +92,17 @@ abstract class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell);
+        pg.line(windowSizeX - cell, 0, windowSizeX - cell, titleBarHeight - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             NodeTree.setAllOtherNodesMouseOver(null, false);
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, cell);
+            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, titleBarHeight - 1);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
-            pg.translate(windowSizeX - cell * 0.5f + 0.5f, cell * 0.5f);
+            pg.translate(windowSizeX - cell * 0.5f + 0.5f, titleBarHeight * 0.5f);
             float n = cell * 0.2f;
             pg.line(-n, -n, n, n);
             pg.line(-n, n, n, -n);
@@ -115,18 +118,13 @@ abstract class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         boolean highlight = shouldHighlightTitleBar();
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.noStroke();
-        float titleBarWidth = windowSizeX - cell;
-        if(!isCloseable){
-             titleBarWidth += cell;
-        }
-        pg.rect(0, 0, titleBarWidth, titleBarHeight);
+        float titleBarWidth = windowSizeX;
+        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
+        pg.rect(-1, -1, titleBarWidth + 1, titleBarHeight);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
-        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-        pg.line(0, cell, windowSizeX, cell);
         pg.popMatrix();
     }
 
