@@ -154,8 +154,8 @@ public class LazyGui implements UserInputSubscriber {
      *
      * @param path forward slash separated unique path to the control element
      * @param defaultValue the default value, ideally between min and max
-     * @param min the value cannot go below this, min < max must be true
-     * @param max the value cannot go above this, max > min must be true
+     * @param min the value cannot go below this, min &lt; max must be true
+     * @param max the value cannot go above this, max &gt; min must be true
      * @return current float value of the slider
      */
     public float slider(String path, float defaultValue, float min, float max) {
@@ -226,8 +226,8 @@ public class LazyGui implements UserInputSubscriber {
      *
      * @param path forward slash separated unique path to the control element
      * @param defaultValue the default value, ideally between min and max
-     * @param min the value cannot go below this, min < max must be true
-     * @param max the value cannot go above this, max > min must be true
+     * @param min the value cannot go below this, min &lt; max must be true
+     * @param max the value cannot go above this, max &gt; min must be true
      * @return current float value of the slider
      */
     public int sliderInt(String path, int defaultValue, int min, int max) {

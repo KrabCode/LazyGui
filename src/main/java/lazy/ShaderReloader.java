@@ -96,7 +96,7 @@ public class ShaderReloader {
      * Re-compiles the shader if needed and then applies it as a processing shader() on the main canvas.
      *
      * @param fragPath path to fragment shader
-     * @param fragPath path to vertex shader
+     * @param vertPath path to vertex shader
      */
     public static void shader(String fragPath, String vertPath) {
         shader(fragPath, vertPath, false, State.app.g);
