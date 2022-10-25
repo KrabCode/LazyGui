@@ -606,7 +606,7 @@ public class LazyGui implements UserInputSubscriber {
         undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
         redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
-        drawPathTooltips = toggle(path + "/window path tooltips", true);
+        drawPathTooltips = toggle(path + "/show path tooltips", true);
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {

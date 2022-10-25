@@ -5,12 +5,12 @@ public class LazyMouseEvent {
     private final float x, y, px, py;
     private final int scrollWheelRotation;
 
-    public LazyMouseEvent() {
+    public LazyMouseEvent(float x, float y, float px, float py) {
         scrollWheelRotation = 0;
-        x = State.app.mouseX;
-        y = State.app.mouseY;
-        px = State.app.pmouseX;
-        py = State.app.pmouseY;
+        this.x = x;
+        this.y = y;
+        this.px = px;
+        this.py = py;
     }
 
     public LazyMouseEvent(int scrollWheelRotation) {

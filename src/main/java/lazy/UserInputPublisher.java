@@ -1,9 +1,7 @@
 package lazy;
 
-import processing.core.PApplet;
 import processing.event.MouseEvent;
 
-import java.awt.event.MouseWheelEvent;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UserInputPublisher {
@@ -58,28 +56,30 @@ public class UserInputPublisher {
 
 
     public void mouseEvent(MouseEvent event) {
+        updatePreviousMousePositionBeforeHandling(event);
         switch(event.getAction()){
             case MouseEvent.MOVE:
-                mouseMoved();
+                mouseMoved(event);
                 break;
             case MouseEvent.PRESS:
-                mousePressed();
+                mousePressed(event);
                 break;
             case MouseEvent.RELEASE:
-                mouseReleased();
+                mouseReleased(event);
                 break;
             case MouseEvent.DRAG:
-                mouseDragged();
+                mouseDragged(event);
                 break;
             case MouseEvent.WHEEL:
                 mouseWheel(event);
                 break;
         }
+        updatePreviousMousePositionAfterHandling(event);
     }
 
 
-    public void mousePressed() {
-        LazyMouseEvent e = new LazyMouseEvent();
+    public void mousePressed(MouseEvent event) {
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mousePressed(e);
             if (e.isConsumed()) {
@@ -89,8 +89,8 @@ public class UserInputPublisher {
         mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
-    void mouseReleased() {
-        LazyMouseEvent e = new LazyMouseEvent();
+    void mouseReleased(MouseEvent event) {
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseReleased(e);
             if (e.isConsumed()) {
@@ -100,8 +100,10 @@ public class UserInputPublisher {
         mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
-    void mouseMoved() {
-        LazyMouseEvent e = new LazyMouseEvent();
+    float prevX = -1, prevY = -1;
+
+    void mouseMoved(MouseEvent event) {
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseMoved(e);
             if (e.isConsumed()) {
@@ -111,8 +113,22 @@ public class UserInputPublisher {
         mouseFallsThroughThisFrame = !e.isConsumed();
     }
 
-    void mouseDragged() {
-        LazyMouseEvent e = new LazyMouseEvent();
+    private void updatePreviousMousePositionAfterHandling(MouseEvent event) {
+        prevX = event.getX();
+        prevY = event.getY();
+    }
+
+    private void updatePreviousMousePositionBeforeHandling(MouseEvent e) {
+        if(prevX == -1){
+            prevX = e.getX();
+        }
+        if(prevY == -1){
+            prevY = e.getY();
+        }
+    }
+
+    void mouseDragged(MouseEvent event) {
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseDragged(e);
             if (e.isConsumed()) {
