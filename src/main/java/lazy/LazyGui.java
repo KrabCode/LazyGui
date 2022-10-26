@@ -10,7 +10,7 @@ import java.util.List;
 import static processing.core.PApplet.*;
 
 /**
- * Main class for controlling the GUI from the library user's processing code.
+ * Main class for controlling the GUI from a processing sketch.
  * Should be initialized as a global variable in processing setup() function with new LazyGui(this)
  * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
  * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
@@ -351,7 +351,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the currently selected string from a list of options in a gui control element.
-     * Lazily initializes the string picker if needed.
+     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the first value in the list.
      *
      * @param path forward slash separated unique path to the control element
@@ -364,7 +364,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the currently selected string from a list of options in a gui control element.
-     * Lazily initializes the string picker if needed.
+     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options list, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element
@@ -378,7 +378,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the currently selected string from an array of options in a gui control element.
-     * Lazily initializes the string picker if needed.
+     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element
@@ -391,7 +391,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the currently selected string from an array of options in a gui control element.
-     * Lazily initializes the string picker if needed.
+     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element

@@ -1,5 +1,6 @@
 package lazy;
 
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,8 +20,7 @@ public class UserInputPublisher {
     }
 
     private void registerListeners() {
-        State.app.registerMethod("keyPressed", this);
-        State.app.registerMethod("keyReleased", this);
+        State.app.registerMethod("keyEvent", this);
         State.app.registerMethod("mouseEvent", this);
     }
 
@@ -39,8 +39,23 @@ public class UserInputPublisher {
         singleton.subscribers.add(0, subscriber);
     }
 
-    public void keyPressed() {
-        LazyKeyEvent e = new LazyKeyEvent(State.app.keyCode, State.app.key);
+    /**
+     * Method used for subscribing to processing keyboard input events, not meant to be used by the library user.
+     * @param event key event
+     */
+    public void keyEvent(KeyEvent event){
+        switch(event.getAction()){
+            case KeyEvent.PRESS:
+                keyPressed(event);
+                break;
+            case KeyEvent.RELEASE:
+                keyReleased(event);
+                break;
+        }
+    }
+
+    void keyPressed(KeyEvent event) {
+        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyPressed(e);
             if (e.isConsumed()) {
@@ -49,8 +64,8 @@ public class UserInputPublisher {
         }
     }
 
-    public void keyReleased() {
-        LazyKeyEvent e = new LazyKeyEvent(State.app.keyCode, State.app.key);
+    void keyReleased(KeyEvent event) {
+        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyReleased(e);
             if (e.isConsumed()) {
@@ -59,6 +74,10 @@ public class UserInputPublisher {
         }
     }
 
+    /**
+     * Method used for subscribing to processing mouse input events, not meant to be used by the library user.
+     * @param event mouse event
+     */
     public void mouseEvent(MouseEvent event) {
         updatePreviousMousePositionBeforeHandling(event);
         switch(event.getAction()){
