@@ -43,6 +43,7 @@ public class UserInputPublisher {
      * Method used for subscribing to processing keyboard input events, not meant to be used by the library user.
      * @param event key event
      */
+    @SuppressWarnings("unused")
     public void keyEvent(KeyEvent event){
         switch(event.getAction()){
             case KeyEvent.PRESS:
@@ -78,6 +79,7 @@ public class UserInputPublisher {
      * Method used for subscribing to processing mouse input events, not meant to be used by the library user.
      * @param event mouse event
      */
+    @SuppressWarnings("unused")
     public void mouseEvent(MouseEvent event) {
         updatePreviousMousePositionBeforeHandling(event);
         switch(event.getAction()){
