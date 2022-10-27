@@ -26,7 +26,7 @@ abstract class Window implements UserInputSubscriber {
     Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
         this.posX = posX;
         this.posY = posY;
-        this.windowSizeX = State.defaultWindowWidthInPixels;
+        this.windowSizeX = State.defaultWindowWidth;
         this.windowSizeY = cell * 1;
         this.parentNode = parentNode;
         this.isCloseable = isCloseable;

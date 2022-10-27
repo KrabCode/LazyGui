@@ -16,6 +16,7 @@ import static lazy.Utils.prettyPrintTree;
 import static processing.core.PApplet.*;
 
 class State {
+
     static float cell = 24;
     static PFont font = null;
     static PApplet app = null;
@@ -28,9 +29,9 @@ class State {
     static float textMarginY = 14;
 
     static String sketchName = null;
-    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    static final float defaultWindowWidthInPixels = State.cell * 10;
     static boolean autosaveEnabled = true;
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    static final float defaultWindowWidth = State.cell * 10;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     static File saveDir;

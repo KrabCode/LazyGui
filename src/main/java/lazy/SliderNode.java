@@ -239,18 +239,20 @@ class SliderNode extends AbstractNode {
             onValueChangedFromOutside();
         }
         tryReadNumpadInput(e);
-        if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
+        if(e.getKeyCode() == KeyCodes.CTRL_C) {
             Utils.setClipboardString(Float.toString(valueFloat));
         }
-
-        if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
+        if(e.getKeyCode() == KeyCodes.CTRL_V) {
+            String clipboardString = Utils.getClipboardString();
             try{
-                float clipboardValue = Float.parseFloat(Utils.getClipboardString());
+                float clipboardValue = Float.parseFloat(clipboardString);
                 if(!Float.isNaN(clipboardValue)){
                     valueFloat = clipboardValue;
+                }else{
+                    println("Could not parse float from this clipboard string: " + clipboardString);
                 }
             }catch(NumberFormatException nfe){
-                println("Could not parse float from this clipboard string: " + Utils.getClipboardString());
+                println("Could not parse float from this clipboard string: " + clipboardString);
             }
         }
     }

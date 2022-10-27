@@ -623,13 +623,13 @@ public class LazyGui implements UserInputSubscriber {
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
         }
-        if(keyCode == KeyCodes.KEY_CODE_CTRL_Z && undoHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_Z && undoHotkeyActive){
             State.undo();
         }
-        if(keyCode == KeyCodes.KEY_CODE_CTRL_Y && redoHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_Y && redoHotkeyActive){
             State.redo();
         }
-        if(keyCode == KeyCodes.KEY_CODE_CTRL_S && saveHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_S && saveHotkeyActive){
             State.createNewSaveWithRandomName();
         }
     }

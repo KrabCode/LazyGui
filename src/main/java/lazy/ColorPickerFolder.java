@@ -123,11 +123,11 @@ class ColorPickerFolder extends NodeFolder {
     }
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
-        super.keyPressedOverNode(e, x, y);
-        if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_C) {
+//        super.keyPressedOverNode(e, x, y);
+        if(e.getKeyCode() == KeyCodes.CTRL_C) {
             Utils.setClipboardString(getHexString());
         }
-        if(e.getKeyCode() == KeyCodes.KEY_CODE_CTRL_V) {
+        if(e.getKeyCode() == KeyCodes.CTRL_V) {
             String pastedString = Utils.getClipboardString();
             try{
                 int pastedHex = (int)Long.parseLong(pastedString, 16);

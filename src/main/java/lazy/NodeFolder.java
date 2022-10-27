@@ -8,7 +8,6 @@ import processing.core.PGraphics;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -29,7 +28,7 @@ class NodeFolder extends AbstractNode {
 
     protected final float previewRectSize = cell * 0.6f;
 
-    float idealWindowWidth = State.defaultWindowWidthInPixels;
+    float idealWindowWidth = State.defaultWindowWidth;
 
     NodeFolder(String path, NodeFolder parent) {
         super(NodeType.FOLDER, path, parent);
@@ -50,17 +49,17 @@ class NodeFolder extends AbstractNode {
         pg.rectMode(CENTER);
         pg.rect(0, 0, previewRectSize, previewRectSize); // window border
         pg.rectMode(CORNER);
-        pg.translate(-previewRectSize*0.5f, -previewRectSize*0.5f);
+        pg.translate(-previewRectSize * 0.5f, -previewRectSize * 0.5f);
         pg.pushStyle();
         AbstractNode enabledNode = findChildByName("enabled");
-        if(enabledNode != null &&
+        if (enabledNode != null &&
                 enabledNode.className.contains("ToggleNode") &&
-                ((ToggleNode) enabledNode).valueBoolean){
+                ((ToggleNode) enabledNode).valueBoolean) {
             pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         }
-        pg.rect(0,0,previewRectSize, miniCell); // handle
+        pg.rect(0, 0, previewRectSize, miniCell); // handle
         pg.popStyle();
-        pg.rect(previewRectSize-miniCell, 0, miniCell, miniCell); // close button
+        pg.rect(previewRectSize - miniCell, 0, miniCell, miniCell); // close button
     }
 
     @Override
@@ -71,25 +70,38 @@ class NodeFolder extends AbstractNode {
 
     }
 
-    protected AbstractNode findChildByName(String name){
-        for(AbstractNode node : children){
-            if(node.name.equals(name)){
+    protected AbstractNode findChildByName(String name) {
+        for (AbstractNode node : children) {
+            if (node.name.equals(name)) {
                 return node;
             }
         }
         return null;
     }
 
+    @Override
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+        // copy + paste whole folders of controls
+        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+            Utils.setClipboardFolder(this);
+        }
+        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+            NodeFolder toPaste = Utils.getClipboardFolder();
+            Utils.pasteStateFromNode(toPaste, this);
+        }
+    }
+
+
     void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
         JsonObject wholeObject = loadedNode.getAsJsonObject();
-        if(wholeObject.has("window")){
+        if (wholeObject.has("window")) {
             JsonObject winObject = wholeObject.getAsJsonObject("window");
-            if(winObject.has("closed") && winObject.has("posX") && winObject.has("posX")){
+            if (winObject.has("closed") && winObject.has("posX") && winObject.has("posX")) {
                 boolean isClosed = winObject.get("closed").getAsBoolean();
                 float posX = winObject.get("posX").getAsFloat();
                 float posY = winObject.get("posY").getAsFloat();
-                if(!isClosed){
+                if (!isClosed) {
                     WindowManager.uncoverOrCreateWindow(this, posX, posY, false);
                     // open it at this spot
                 }

@@ -16,6 +16,8 @@ import static processing.core.PApplet.*;
 
 class Utils {
 
+    private static NodeFolder clipboardFolder;
+
     static void setClipboardString(String data) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(data);
@@ -30,6 +32,14 @@ class Utils {
             ex.printStackTrace();
         }
         return "";
+    }
+
+    public static void setClipboardFolder(NodeFolder nodeFolder) {
+        clipboardFolder = nodeFolder;
+    }
+
+    public static NodeFolder getClipboardFolder() {
+        return clipboardFolder;
     }
 
     static boolean isPointInRect(float px, float py, float rx, float ry, float rw, float rh) {
@@ -95,6 +105,42 @@ class Utils {
             e.printStackTrace();
         }
     }
+
+    static void pasteStateFromNode(NodeFolder sourceFolder, NodeFolder targetFolder) {
+            for (AbstractNode sourceChild : sourceFolder.children) {
+                AbstractNode targetChild = targetFolder.findChildByName(sourceChild.name);
+                if(targetChild == null || !targetChild.className.equals(sourceChild.className)){
+                    continue;
+                }
+                if (sourceChild.type == NodeType.VALUE) {
+                    switch(targetChild.className){
+                        case "SliderNode":
+                        case "SliderIntNode":
+                            ((SliderNode) targetChild).valueFloat = ((SliderNode) sourceChild).valueFloat;
+                            break;
+                        case "ToggleNode":
+                            ((ToggleNode) targetChild).valueBoolean = ((ToggleNode) sourceChild).valueBoolean;
+                            break;
+                    }
+                }else if(sourceChild.type == NodeType.FOLDER){
+                    switch (targetChild.className){
+                        case "ColorPickerFolder":
+                            ((ColorPickerFolder) targetChild).setHex(
+                                    ((ColorPickerFolder) sourceChild).getHex()
+                            );
+                            break;
+                        case "StringPickerFolder":
+                            ((StringPickerFolder) targetChild).selectOption(
+                                    ((StringPickerFolder) sourceChild).valueString
+                            );
+                            break;
+                        case "NodeFolder":
+                            pasteStateFromNode((NodeFolder) sourceChild, (NodeFolder) targetChild);
+                            break;
+                    }
+                }
+            }
+        }
 
     static class ArrayListBuilder<T> {
         private final ArrayList<T> list = new ArrayList<>();
