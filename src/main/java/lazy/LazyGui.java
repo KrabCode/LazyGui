@@ -607,8 +607,10 @@ public class LazyGui implements UserInputSubscriber {
         hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);
         hotkeyCloseAllWindowsActive = toggle(path + "/hotkeys/d: close all windows", true);
         hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);
-        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
-        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
+        // TODO fix
+        //  https://github.com/KrabCode/LazyGui/issues/36
+//        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
+//        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
         drawPathTooltips = toggle(path + "/show path tooltips", true);
     }

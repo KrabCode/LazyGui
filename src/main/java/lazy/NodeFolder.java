@@ -88,6 +88,7 @@ class NodeFolder extends AbstractNode {
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             NodeFolder toPaste = Utils.getClipboardFolder();
             Utils.pasteStateFromNode(toPaste, this);
+            State.onUndoableActionEnded();
         }
     }
 

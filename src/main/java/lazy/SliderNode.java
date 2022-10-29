@@ -16,6 +16,9 @@ import static processing.core.PApplet.*;
 
 class SliderNode extends AbstractNode {
 
+    private int numpadInputAppendLastFrame;
+    protected int numpadInputAppendCooldown = 60;
+
     SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
@@ -48,7 +51,7 @@ class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    @Expose
+    @Expose()
     float valueFloat;
     @Expose
     float valueFloatPrecision;
@@ -232,11 +235,10 @@ class SliderNode extends AbstractNode {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyChar() == 'r'){
             if(Float.isNaN(valueFloatDefault)){
-                valueFloat = valueFloatDefault;
+                setValueFloat(valueFloatDefault);
             }
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
-            onValueChangedFromOutside();
         }
         tryReadNumpadInput(e);
         if(e.getKeyCode() == KeyCodes.CTRL_C) {
@@ -247,7 +249,7 @@ class SliderNode extends AbstractNode {
             try{
                 float clipboardValue = Float.parseFloat(clipboardString);
                 if(!Float.isNaN(clipboardValue)){
-                    valueFloat = clipboardValue;
+                    setValueFloat(clipboardValue);
                 }else{
                     println("Could not parse float from this clipboard string: " + clipboardString);
                 }
@@ -259,16 +261,22 @@ class SliderNode extends AbstractNode {
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
         switch(e.getKeyChar()){
-            case '0': valueFloat = 0; break;
-            case '1': valueFloat = 1; break;
-            case '2': valueFloat = 2; break;
-            case '3': valueFloat = 3; break;
-            case '4': valueFloat = 4; break;
-            case '5': valueFloat = 5; break;
-            case '6': valueFloat = 6; break;
-            case '7': valueFloat = 7; break;
-            case '8': valueFloat = 8; break;
-            case '9': valueFloat = 9; break;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                tryAddNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())));
+                break;
+            case '.':
+            case ',':
+                // TODO https://github.com/KrabCode/LazyGui/issues/16
+                break;
             case '+': valueFloat += valueFloatPrecision; break;
             case '-': valueFloat -= valueFloatPrecision; break;
             case '*': increasePrecision(); break;
@@ -278,11 +286,30 @@ class SliderNode extends AbstractNode {
             }
         }
         State.onUndoableActionEnded();
-        onValueChangedFromOutside();
+        onValueFloatChanged();
     }
 
-    // TODO just use a setter in the color pickers instead of this inheritance madness :<
-    protected void onValueChangedFromOutside() {
+    private void tryAddNumberInputToValue(Integer input) {
+        boolean append = State.app.frameCount - numpadInputAppendLastFrame < numpadInputAppendCooldown;
+        numpadInputAppendLastFrame = State.app.frameCount;
+        if(!append){
+            setValueFloat(input);
+            return;
+        }
+        int valueSoFar = floor(valueFloat);
+        setValueFloat(valueSoFar * 10 + input);
+
+        // TODO https://github.com/KrabCode/LazyGui/issues/16
+        //  implement float point append
+        //  probably split the value string into two, append to right half and reassemble
+    }
+
+    protected void setValueFloat(float floatToSet) {
+        valueFloat = floatToSet;
+        onValueFloatChanged();
+    }
+
+    protected void onValueFloatChanged() {
 
     }
 
@@ -305,7 +332,7 @@ class SliderNode extends AbstractNode {
         if (json.has("valueFloat") &&
                 json.has("valueFloatDefaultOriginal") &&
                 json.get("valueFloatDefaultOriginal").getAsFloat() == valueFloatDefault) {
-            valueFloat = json.get("valueFloat").getAsFloat();
+            setValueFloat(json.get("valueFloat").getAsFloat());
         }
     }
 }

@@ -12,6 +12,8 @@ class ColorPickerFolder extends NodeFolder {
     @Expose
     String hexString;
     private int hex;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String hexNodeName = "hex";
     private final String hueNodeName = "hue";
     private final String satNodeName = "sat";
     private final String brNodeName = "br";
@@ -27,7 +29,7 @@ class ColorPickerFolder extends NodeFolder {
     }
 
     protected void lazyInitNodes() {
-        if(children.size() > 0){
+        if (children.size() > 0) {
             return;
         }
         children.add(new ColorPreviewNode(path + "/preview", this));
@@ -35,7 +37,7 @@ class ColorPickerFolder extends NodeFolder {
         children.add(new ColorSliderNode.SaturationNode(path + "/" + satNodeName, this));
         children.add(new ColorSliderNode.BrightnessNode(path + "/" + brNodeName, this));
         children.add(new ColorSliderNode.AlphaNode(path + "/" + alphaNodeName, this));
-        children.add(new ColorPickerHexNode(path + "/hex", this));
+        children.add(new ColorPickerHexNode(path + "/" + hexNodeName, this));
     }
 
     @Override
@@ -55,7 +57,7 @@ class ColorPickerFolder extends NodeFolder {
         ((ColorSliderNode) findChildByName(satNodeName)).valueFloat = colorProvider.saturation(hex);
         ((ColorSliderNode) findChildByName(brNodeName)).valueFloat = colorProvider.brightness(hex);
         ((ColorSliderNode) findChildByName(alphaNodeName)).valueFloat = colorProvider.alpha(hex);
-        if(setDefaults){
+        if (setDefaults) {
             ((ColorSliderNode) findChildByName(hueNodeName)).valueFloatDefault = colorProvider.hue(hex);
             ((ColorSliderNode) findChildByName(satNodeName)).valueFloatDefault = colorProvider.saturation(hex);
             ((ColorSliderNode) findChildByName(brNodeName)).valueFloatDefault = colorProvider.brightness(hex);
@@ -63,7 +65,7 @@ class ColorPickerFolder extends NodeFolder {
         }
     }
 
-    void loadValuesFromHSBA(){
+    void loadValuesFromHSBA() {
         PGraphics colorProvider = State.normalizedColorProvider;
         setHex(colorProvider.color(
                 getValue(hueNodeName),
@@ -76,7 +78,7 @@ class ColorPickerFolder extends NodeFolder {
         return new PickerColor(hex, hue(), saturation(), brightness(), alpha());
     }
 
-    private float getValue(String nodeName){
+    private float getValue(String nodeName) {
         return ((ColorSliderNode) findChildByName(nodeName)).valueFloat;
     }
 
@@ -105,7 +107,7 @@ class ColorPickerFolder extends NodeFolder {
     }
 
     void setHex(int hex) {
-        if(hex == 0){
+        if (hex == 0) {
             hex = unhex("00010101");
         }
         this.hex = hex;
@@ -116,7 +118,7 @@ class ColorPickerFolder extends NodeFolder {
     void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
         JsonElement loadedString = loadedNode.getAsJsonObject().get("hexString");
-        if(loadedString != null){
+        if (loadedString != null) {
             setHex(unhex(loadedString.getAsString()));
             loadValuesFromHex(true);
         }
@@ -124,16 +126,18 @@ class ColorPickerFolder extends NodeFolder {
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 //        super.keyPressedOverNode(e, x, y);
-        if(e.getKeyCode() == KeyCodes.CTRL_C) {
+//        - we don't want to copy the contents of the folder itself... let ColorPickerFolder handle it
+        if (e.getKeyCode() == KeyCodes.CTRL_C) {
             Utils.setClipboardString(getHexString());
         }
-        if(e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.CTRL_V) {
             String pastedString = Utils.getClipboardString();
-            try{
-                int pastedHex = (int)Long.parseLong(pastedString, 16);
+            try {
+                int pastedHex = (int) Long.parseLong(pastedString, 16);
                 setHex(pastedHex);
                 loadValuesFromHex(false);
-            }catch(NumberFormatException nfe){
+                State.onUndoableActionEnded();
+            } catch (NumberFormatException nfe) {
                 println("Could not parse hex color from input string: \"" + pastedString + "\"");
             }
         }

@@ -117,6 +117,7 @@ class Utils {
                         case "SliderNode":
                         case "SliderIntNode":
                             ((SliderNode) targetChild).valueFloat = ((SliderNode) sourceChild).valueFloat;
+                            ((SliderNode) targetChild).valueFloatPrecision = ((SliderNode) sourceChild).valueFloatPrecision;
                             break;
                         case "ToggleNode":
                             ((ToggleNode) targetChild).valueBoolean = ((ToggleNode) sourceChild).valueBoolean;

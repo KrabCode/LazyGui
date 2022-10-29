@@ -21,6 +21,7 @@ abstract class ColorSliderNode extends SliderNode {
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         initSliderBackgroundShader();
         InternalShaderStore.getShader(colorShaderPath);
+        numpadInputAppendCooldown = 0;
     }
 
     @Override
@@ -44,7 +45,15 @@ abstract class ColorSliderNode extends SliderNode {
         updateColorInParentFolder();
     }
 
-    abstract void updateColorInParentFolder();
+    @Override
+    protected void onValueFloatChanged() {
+        updateColorInParentFolder();
+    }
+
+    protected void updateColorInParentFolder() {
+        if(parentColorPickerFolder == null) return;
+        parentColorPickerFolder.loadValuesFromHSBA();
+    }
 
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
@@ -102,6 +111,7 @@ abstract class ColorSliderNode extends SliderNode {
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             // reflect the value change in the resulting color
             updateColorInParentFolder();
+            State.onUndoableActionEnded();
         }
     }
 
@@ -113,23 +123,12 @@ abstract class ColorSliderNode extends SliderNode {
         }
 
         @Override
-        void updateColorInParentFolder() {
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
-
-        @Override
         protected boolean tryConstrainValue() {
             while (valueFloat < 0) {
                 valueFloat += 1;
             }
             valueFloat %= 1;
             return false;
-        }
-
-        @Override
-        protected void onValueChangedFromOutside() {
-            super.onValueChangedFromOutside();
-            parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
 
@@ -138,35 +137,12 @@ abstract class ColorSliderNode extends SliderNode {
             super(path, parentFolder);
             shaderColorMode = 1;
         }
-
-        @Override
-        void updateColorInParentFolder() {
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
-
-        @Override
-        protected void onValueChangedFromOutside() {
-            super.onValueChangedFromOutside();
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
     }
 
     static class BrightnessNode extends ColorSliderNode {
-
         BrightnessNode(String path, ColorPickerFolder parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 2;
-        }
-
-        @Override
-        void updateColorInParentFolder() {
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
-
-        @Override
-        protected void onValueChangedFromOutside() {
-            super.onValueChangedFromOutside();
-            parentColorPickerFolder.loadValuesFromHSBA();
         }
     }
 
@@ -176,17 +152,6 @@ abstract class ColorSliderNode extends SliderNode {
             super(path, parentFolder);
             shaderColorMode = 3;
         }
-
-        @Override
-        void updateColorInParentFolder() {
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
-        @Override
-        protected void onValueChangedFromOutside() {
-            super.onValueChangedFromOutside();
-            parentColorPickerFolder.loadValuesFromHSBA();
-        }
-
 
         protected int foregroundMouseOverBrightnessAwareColor(){
             if(isMouseOverNode){
