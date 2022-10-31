@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
@@ -21,7 +22,7 @@ abstract class Window implements UserInputSubscriber {
     protected AbstractNode parentNode;
     float cell = State.cell;
     float titleBarHeight = cell;
-    private boolean isDraggedAround;
+    boolean isDraggedAround;
 
     Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
         this.posX = posX;
@@ -46,7 +47,11 @@ abstract class Window implements UserInputSubscriber {
         constrainPosition(pg);
         pg.pushMatrix();
         drawBackgroundWithWindowBorder(pg);
-        drawTitleBar(pg);
+        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
+        if(highlight && parentNode != NodeTree.getRoot()){
+            drawConnectingLineFromTitleBarToInlineNode(pg);
+        }
+        drawTitleBar(pg, highlight);
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
         if (isCloseable) {
@@ -116,16 +121,9 @@ abstract class Window implements UserInputSubscriber {
 
     protected abstract void drawContent(PGraphics pg);
 
-    protected void drawTitleBar(PGraphics pg) {
+    protected void drawTitleBar(PGraphics pg, boolean highlight) {
         pg.pushMatrix();
         pg.pushStyle();
-        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
-        if(highlight && isCloseable){
-            pg.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
-            pg.strokeCap(ROUND);
-            pg.strokeWeight(1);
-            pg.line(posX + 1, posY + titleBarHeight / 2f, parentNode.pos.x + parentNode.size.x, parentNode.pos.y + parentNode.size.y  / 2f);
-        }
         pg.translate(posX, posY);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         float titleBarWidth = windowSizeX;
@@ -137,6 +135,13 @@ abstract class Window implements UserInputSubscriber {
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
         pg.popStyle();
         pg.popMatrix();
+    }
+
+    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
+        pg.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
+        pg.strokeCap(ROUND);
+        pg.strokeWeight(1);
+        pg.line(posX + 1, posY + titleBarHeight / 2f, parentNode.pos.x + parentNode.size.x, parentNode.pos.y + parentNode.size.y  / 2f);
     }
 
     private void constrainPosition(PGraphics pg) {
@@ -196,8 +201,15 @@ abstract class Window implements UserInputSubscriber {
             e.setConsumed(true);
         } else if (isDraggedAround) {
             e.setConsumed(true);
+            trySnapToGrid();
         }
         isDraggedAround = false;
+    }
+
+    private void trySnapToGrid() {
+        PVector snappedPos = GridSnapHelper.snapToGrid(posX, posY);
+        posX = snappedPos.x;
+        posY = snappedPos.y;
     }
 
     void close() {

@@ -45,7 +45,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
         float cell = State.cell;
-        WindowManager.addWindow( new FolderWindow(cell, cell,NodeTree.getRoot(),false));
+        WindowManager.addWindow( new FolderWindow(cell, cell, NodeTree.getRoot(),false));
         State.loadMostRecentSave();
         createOptionsFolder();
         lazyFollowSketchResolution();
@@ -82,6 +82,7 @@ public class LazyGui implements UserInputSubscriber {
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
+        GridSnapHelper.displayGuide(pg, isAnyWindowBeingDragged());
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
@@ -93,6 +94,19 @@ public class LazyGui implements UserInputSubscriber {
         canvas.popStyle();
         State.updateEndlessLoopDetection();
         takeScreenshotIfNeeded();
+    }
+
+    private boolean isAnyWindowBeingDragged() {
+        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
+        for(AbstractNode node : allNodes){
+            if(node.type == NodeType.FOLDER){
+                FolderNode folder = (FolderNode) node;
+                if(folder.window != null && folder.window.isDraggedAround){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -612,7 +626,14 @@ public class LazyGui implements UserInputSubscriber {
 //        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
-        drawPathTooltips = toggle(path + "/show path tooltips", true);
+        drawPathTooltips = toggle(path + "/windows/show path tooltips", true);
+        // TODO variable cell size
+        //  https://github.com/KrabCode/LazyGui/issues/37
+        String snapGridPath = path + "/windows/snap to grid/";
+        GridSnapHelper.snapToGridEnabled = toggle(snapGridPath + "active", true);
+        GridSnapHelper.snapGridCellSize = sliderInt(snapGridPath + "cell size", floor(State.cell));
+        GridSnapHelper.showGuideWhenDragging = toggle(snapGridPath + "show guide", true);
+        GridSnapHelper.maxAlpha = slider(snapGridPath + "guide alpha", 0.5f, 0, 1);
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
