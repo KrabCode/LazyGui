@@ -8,7 +8,7 @@ package lazy;
  * Please note that ColorPicker tries to avoid hex values of exactly 0 because
  * they are not transparent in processing even though the alpha is 0, which is probably a bug.
  * It returns 0x00010101 instead which looks perfectly transparent in processing.
- * @see ColorPickerFolder
+ * @see ColorPickerFolderNode
  */
 public class PickerColor {
     /**

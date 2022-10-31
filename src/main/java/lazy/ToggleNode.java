@@ -13,7 +13,7 @@ class ToggleNode extends AbstractNode {
     protected boolean armed = false;
     float handlePosNorm;
 
-    ToggleNode(String path, NodeFolder folder, boolean defaultValue) {
+    ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
         valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;

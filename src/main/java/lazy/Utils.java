@@ -16,7 +16,7 @@ import static processing.core.PApplet.*;
 
 class Utils {
 
-    private static NodeFolder clipboardFolder;
+    private static FolderNode clipboardFolder;
 
     static void setClipboardString(String data) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -34,11 +34,11 @@ class Utils {
         return "";
     }
 
-    public static void setClipboardFolder(NodeFolder nodeFolder) {
-        clipboardFolder = nodeFolder;
+    public static void setClipboardFolder(FolderNode folderNode) {
+        clipboardFolder = folderNode;
     }
 
-    public static NodeFolder getClipboardFolder() {
+    public static FolderNode getClipboardFolder() {
         return clipboardFolder;
     }
 
@@ -106,7 +106,7 @@ class Utils {
         }
     }
 
-    static void pasteStateFromNode(NodeFolder sourceFolder, NodeFolder targetFolder) {
+    static void pasteStateFromNode(FolderNode sourceFolder, FolderNode targetFolder) {
             for (AbstractNode sourceChild : sourceFolder.children) {
                 AbstractNode targetChild = targetFolder.findChildByName(sourceChild.name);
                 if(targetChild == null || !targetChild.className.equals(sourceChild.className)){
@@ -125,18 +125,18 @@ class Utils {
                     }
                 }else if(sourceChild.type == NodeType.FOLDER){
                     switch (targetChild.className){
-                        case "ColorPickerFolder":
-                            ((ColorPickerFolder) targetChild).setHex(
-                                    ((ColorPickerFolder) sourceChild).getHex()
+                        case "ColorPickerFolderNode":
+                            ((ColorPickerFolderNode) targetChild).setHex(
+                                    ((ColorPickerFolderNode) sourceChild).getHex()
                             );
                             break;
-                        case "StringPickerFolder":
-                            ((StringPickerFolder) targetChild).selectOption(
-                                    ((StringPickerFolder) sourceChild).valueString
+                        case "StringPickerFolderNode":
+                            ((StringPickerFolderNode) targetChild).selectOption(
+                                    ((StringPickerFolderNode) sourceChild).valueString
                             );
                             break;
-                        case "NodeFolder":
-                            pasteStateFromNode((NodeFolder) sourceChild, (NodeFolder) targetChild);
+                        case "FolderNode":
+                            pasteStateFromNode((FolderNode) sourceChild, (FolderNode) targetChild);
                             break;
                     }
                 }
@@ -169,7 +169,7 @@ class Utils {
 
         boolean isFolder = node.type == NodeType.FOLDER;
         if (isFolder) {
-            NodeFolder folder = (NodeFolder) node;
+            FolderNode folder = (FolderNode) node;
             boolean hasChildren = folder.children.size() > 0;
             if(hasChildren){
                 for(AbstractNode child : folder.children){
@@ -199,7 +199,7 @@ class Utils {
                     .append("\n");
         }
         if (isFolder) {
-            NodeFolder folder = (NodeFolder) node;
+            FolderNode folder = (FolderNode) node;
             AbstractNode skippedOptions = null;
             for (AbstractNode child : folder.children) {
                 if("options".equals(child.path)){

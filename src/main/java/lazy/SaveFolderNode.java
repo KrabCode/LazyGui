@@ -6,18 +6,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-class SaveNodeFolder extends NodeFolder {
+class SaveFolderNode extends FolderNode {
 
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
-    SaveNodeFolder(String path, NodeFolder parent) {
+    SaveFolderNode(String path, FolderNode parent) {
         super(path, parent);
         children.add(new ButtonNode(path + "/open save folder", this));
         children.add(new ButtonNode(path + "/create new save", this));
         children.add(new ToggleNode(path + "/autosave on exit", this, true));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
-        idealWindowWidth = State.cell * 12;
     }
 
     void updateStateList() {

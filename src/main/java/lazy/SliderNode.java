@@ -19,7 +19,7 @@ class SliderNode extends AbstractNode {
     private int numpadInputAppendLastFrame;
     protected int numpadInputAppendCooldown = 60;
 
-    SliderNode(String path, NodeFolder parentFolder, float defaultValue) {
+    SliderNode(String path, FolderNode parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;
@@ -35,7 +35,7 @@ class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    SliderNode(String path, NodeFolder parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
+    SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         valueFloatDefaultOriginal = defaultValue;

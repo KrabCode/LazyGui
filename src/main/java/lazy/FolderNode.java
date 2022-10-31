@@ -14,7 +14,7 @@ import static processing.core.PConstants.CORNER;
 /**
  * A node that opens a new window with child nodes when clicked.
  */
-class NodeFolder extends AbstractNode {
+class FolderNode extends AbstractNode {
 
     /**
      * CopyOnWriteArrayList is needed to avoid concurrent modification
@@ -30,7 +30,7 @@ class NodeFolder extends AbstractNode {
 
     float idealWindowWidth = State.defaultWindowWidth;
 
-    NodeFolder(String path, NodeFolder parent) {
+    FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -86,7 +86,7 @@ class NodeFolder extends AbstractNode {
             Utils.setClipboardFolder(this);
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            NodeFolder toPaste = Utils.getClipboardFolder();
+            FolderNode toPaste = Utils.getClipboardFolder();
             Utils.pasteStateFromNode(toPaste, this);
             State.onUndoableActionEnded();
         }

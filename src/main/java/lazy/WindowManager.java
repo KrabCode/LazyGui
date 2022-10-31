@@ -26,11 +26,11 @@ class WindowManager {
         singleton.windows.add(window);
     }
 
-    static void uncoverOrCreateWindow(NodeFolder nodeFolder){
-        uncoverOrCreateWindow(nodeFolder, null, null, true);
+    static void uncoverOrCreateWindow(FolderNode folderNode){
+        uncoverOrCreateWindow(folderNode, null, null, true);
     }
 
-    static void uncoverOrCreateWindow(NodeFolder nodeFolder, Float nullablePosX, Float nullablePosY, boolean setFocus) {
+    static void uncoverOrCreateWindow(FolderNode folderNode, Float nullablePosX, Float nullablePosY, boolean setFocus) {
         float mouseX = State.app.mouseX;
         float mouseY = State.app.mouseY;
         PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
@@ -42,9 +42,9 @@ class WindowManager {
         }
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.parentNode.path.equals(nodeFolder.path)){
+            if(w.parentNode.path.equals(folderNode.path)){
                 w.open(setFocus);
-                float windowContentWidth = nodeFolder.idealWindowWidth;
+                float windowContentWidth = folderNode.idealWindowWidth;
                 if(windowContentWidth > 0){
                     w.windowSizeX = windowContentWidth;
                 }
@@ -53,14 +53,14 @@ class WindowManager {
             }
         }
         if(!windowFound){
-            Window window = new FolderWindow(pos.x, pos.y, nodeFolder, true, nodeFolder.idealWindowWidth);
+            Window window = new FolderWindow(pos.x, pos.y, folderNode, true, folderNode.idealWindowWidth);
             singleton.windows.add(window);
             window.open(setFocus);
         }
         // the root window will always be initialized before this runs and thus always found, so if we want to load its position from json, we need to do it manually
-        if(windowFound && nodeFolder.parent == null){
-            nodeFolder.window.posX = pos.x;
-            nodeFolder.window.posY = pos.y;
+        if(windowFound && folderNode.parent == null){
+            folderNode.window.posX = pos.x;
+            folderNode.window.posY = pos.y;
         }
     }
 

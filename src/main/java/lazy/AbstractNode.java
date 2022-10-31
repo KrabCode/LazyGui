@@ -24,7 +24,7 @@ abstract class AbstractNode {
     @Expose
     NodeType type;
 
-    NodeFolder parent;
+    FolderNode parent;
     PVector pos = new PVector();
     PVector size = new PVector();
 
@@ -36,9 +36,14 @@ abstract class AbstractNode {
     boolean isDragged = false;
     boolean isMouseOverNode = false;
 
+    void setIsMouseOverThisNodeOnly(){
+        isMouseOverNode = true;
+        NodeTree.setAllOtherNodesMouseOverToFalse(this);
+    }
+
     protected boolean displayInlineName = true;
 
-    protected AbstractNode(NodeType type, String path, NodeFolder parentFolder) {
+    protected AbstractNode(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;

@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 
 import static processing.core.PApplet.*;
 
-class ColorPickerFolder extends NodeFolder {
+class ColorPickerFolderNode extends FolderNode {
 
     @Expose
     String hexString;
@@ -19,7 +19,7 @@ class ColorPickerFolder extends NodeFolder {
     private final String brNodeName = "br";
     private final String alphaNodeName = "alpha";
 
-    ColorPickerFolder(String path, NodeFolder parentFolder, int hex) {
+    ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();
@@ -126,7 +126,7 @@ class ColorPickerFolder extends NodeFolder {
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 //        super.keyPressedOverNode(e, x, y);
-//        - we don't want to copy the contents of the folder itself... let ColorPickerFolder handle it
+//        - we don't want to copy the contents of the folder itself... let ColorPickerFolderNode handle it
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
             Utils.setClipboardString(getHexString());
         }

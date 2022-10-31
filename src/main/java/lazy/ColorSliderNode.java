@@ -10,12 +10,12 @@ import static processing.core.PConstants.*;
 
 abstract class ColorSliderNode extends SliderNode {
 
-    final ColorPickerFolder parentColorPickerFolder;
+    final ColorPickerFolderNode parentColorPickerFolder;
     float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
-    ColorSliderNode(String path, ColorPickerFolder parentFolder) {
+    ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
         super(path, parentFolder, 0, 0, 1, 0.01f, true);
         this.parentColorPickerFolder = parentFolder;
         currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
@@ -117,7 +117,7 @@ abstract class ColorSliderNode extends SliderNode {
 
     static class HueNode extends ColorSliderNode {
 
-        HueNode(String path, ColorPickerFolder parentFolder) {
+        HueNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 0;
         }
@@ -133,14 +133,14 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     static class SaturationNode extends ColorSliderNode {
-        SaturationNode(String path, ColorPickerFolder parentFolder) {
+        SaturationNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 1;
         }
     }
 
     static class BrightnessNode extends ColorSliderNode {
-        BrightnessNode(String path, ColorPickerFolder parentFolder) {
+        BrightnessNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 2;
         }
@@ -148,7 +148,7 @@ abstract class ColorSliderNode extends SliderNode {
 
     static class AlphaNode extends ColorSliderNode {
 
-        AlphaNode(String path, ColorPickerFolder parentFolder) {
+        AlphaNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 3;
         }

@@ -4,7 +4,7 @@ package lazy;
 import processing.core.PGraphics;
 
 class ButtonNode extends AbstractNode {
-    ButtonNode(String path, NodeFolder folder) {
+    ButtonNode(String path, FolderNode folder) {
         super(NodeType.TRANSIENT, path, folder);
     }
 

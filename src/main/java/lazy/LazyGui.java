@@ -24,7 +24,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
     static boolean drawPathTooltips = false;
     private PGraphics pg;
-    NodeFolder toolbar;
+    FolderNode toolbar;
     PApplet app;
 
     /**
@@ -176,7 +176,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
         SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
@@ -244,11 +244,11 @@ public class LazyGui implements UserInputSubscriber {
             node = createSliderIntNode(path, defaultValue, min, max, constrained);
             NodeTree.insertNodeAtItsPath(node);
         }
-        return PApplet.floor(node.valueFloat);
+        return node.getIntValue();
     }
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
         SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
@@ -318,7 +318,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
         return new ToggleNode(path, folder, defaultValue);
     }
 
@@ -345,7 +345,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private ButtonNode createButtonNode(String path) {
-        NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
+        FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
         return new ButtonNode(path, folder);
     }
 
@@ -403,10 +403,10 @@ public class LazyGui implements UserInputSubscriber {
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
-        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringPickerFolder(path, parentFolder, options, defaultOption);
+            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new StringPickerFolderNode(path, parentFolder, options, defaultOption);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
@@ -421,7 +421,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param optionToSet string option to set the string picker to
      */
     public void stringPickerSet(String path, String optionToSet){
-        StringPickerFolder node = (StringPickerFolder) NodeTree.findNode(path);
+        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(path);
         if (node != null) {
             List<String> options = node.getOptions();
             if(options.contains(optionToSet)){
@@ -485,11 +485,11 @@ public class LazyGui implements UserInputSubscriber {
      * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
@@ -504,10 +504,10 @@ public class LazyGui implements UserInputSubscriber {
      * @return hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, int hex) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
@@ -522,10 +522,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param hex hex color to set, also works with processing 'color' type
      */
     public void colorPickerSet(String path, int hex) {
-        ColorPickerFolder node = (ColorPickerFolder) NodeTree.findNode(path);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            NodeFolder folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolder(path, folder, hex);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
@@ -553,10 +553,10 @@ public class LazyGui implements UserInputSubscriber {
      * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path, float alpha) {
-        GradientFolder node = (GradientFolder) NodeTree.findNode(path);
+        GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            NodeFolder parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new GradientFolder(path, parentFolder, alpha);
+            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new GradientFolderNode(path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
@@ -594,9 +594,9 @@ public class LazyGui implements UserInputSubscriber {
 
     void createOptionsFolder() {
         String path = "options";
-        toolbar = new NodeFolder(path, NodeTree.getRoot());
+        toolbar = new FolderNode(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((toolbar));
-        NodeTree.insertNodeAtItsPath(new SaveNodeFolder(path + "/saves", toolbar));
+        NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", toolbar));
         updateThemePicker(toolbar.path + "/themes");
 
     }

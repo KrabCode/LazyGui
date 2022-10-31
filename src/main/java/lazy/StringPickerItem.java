@@ -8,7 +8,7 @@ class StringPickerItem extends ToggleNode {
 
     String valueString;
 
-    StringPickerItem(String path, NodeFolder folder, boolean valueBoolean, String valueString) {
+    StringPickerItem(String path, FolderNode folder, boolean valueBoolean, String valueString) {
         super(path, folder, valueBoolean);
         this.type = NodeType.TRANSIENT;
         this.valueString = valueString;

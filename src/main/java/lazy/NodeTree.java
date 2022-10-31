@@ -5,22 +5,22 @@ import java.util.*;
 import static processing.core.PApplet.println;
 
 class NodeTree {
-    private static final NodeFolder root = new NodeFolder("", null);
+    private static final FolderNode root = new FolderNode("", null);
     private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
 
     private NodeTree() {
 
     }
 
-    static NodeFolder getRoot() {
+    static FolderNode getRoot() {
         return root;
     }
 
-    static NodeFolder findParentFolderLazyInitPath(String nodePath) {
+    static FolderNode findParentFolderLazyInitPath(String nodePath) {
         String folderPath = Utils.getPathWithoutName(nodePath);
         lazyInitFolderPath(folderPath);
         AbstractNode pathParent = findNode(folderPath);
-        return (NodeFolder) pathParent;
+        return (FolderNode) pathParent;
     }
 
     static AbstractNode findNode(String path) {
@@ -36,7 +36,7 @@ class NodeTree {
                 return node;
             }
             if (node.type == NodeType.FOLDER) {
-                NodeFolder folder = (NodeFolder) node;
+                FolderNode folder = (FolderNode) node;
                 for (AbstractNode child : folder.children) {
                     queue.offer(child);
                 }
@@ -50,18 +50,18 @@ class NodeTree {
     static void lazyInitFolderPath(String path) {
         String[] split = path.split("/");
         String runningPath = split[0];
-        NodeFolder parentFolder = null;
+        FolderNode parentFolder = null;
         for (int i = 0; i < split.length; i++) {
             AbstractNode n = findNode(runningPath);
             if (n == null) {
                 if (parentFolder == null) {
                     parentFolder = root;
                 }
-                n = new NodeFolder(runningPath, parentFolder);
+                n = new FolderNode(runningPath, parentFolder);
                 parentFolder.children.add(n);
-                parentFolder = (NodeFolder) n;
+                parentFolder = (FolderNode) n;
             } else if (n.type == NodeType.FOLDER) {
-                parentFolder = (NodeFolder) n;
+                parentFolder = (FolderNode) n;
             } else {
                 println("Expected to find or to be able to create a folder at path \"" + runningPath + "\" but found an existing " + n.className + ". You cannot put any control elements there.");
             }
@@ -77,7 +77,7 @@ class NodeTree {
         }
         String folderPath = Utils.getPathWithoutName(node.path);
         lazyInitFolderPath(folderPath);
-        NodeFolder folder = (NodeFolder) findNode(folderPath);
+        FolderNode folder = (FolderNode) findNode(folderPath);
         assert folder != null;
         folder.children.add(node);
     }
@@ -90,7 +90,7 @@ class NodeTree {
             AbstractNode node = queue.poll();
             result.add(node);
             if (node.type == NodeType.FOLDER) {
-                NodeFolder folder = (NodeFolder) node;
+                FolderNode folder = (FolderNode) node;
                 for (AbstractNode child : folder.children) {
                     queue.offer(child);
                 }
@@ -99,11 +99,13 @@ class NodeTree {
         return result;
     }
 
-    static void setAllOtherNodesMouseOver(AbstractNode nodeToKeep, boolean newValue){
+    static void setAllOtherNodesMouseOverToFalse(AbstractNode nodeToKeep){
         List<AbstractNode> allNodes = getAllNodesAsList();
-        allNodes.remove(nodeToKeep);
         for(AbstractNode node : allNodes){
-            node.isMouseOverNode = newValue;
+            if(node == nodeToKeep){
+                continue;
+            }
+            node.isMouseOverNode = false;
         }
     }
 }

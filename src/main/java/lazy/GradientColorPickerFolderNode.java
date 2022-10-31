@@ -5,9 +5,9 @@ import processing.core.PGraphics;
 
 import static processing.core.PConstants.ROUND;
 
-class GradientColorPickerFolder extends ColorPickerFolder {
+class GradientColorPickerFolderNode extends ColorPickerFolderNode {
 
-    GradientColorPickerFolder(String path, NodeFolder parentFolder, int hex, float gradientPos, boolean active) {
+    GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
         super(path, parentFolder, hex);
         this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));

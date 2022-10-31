@@ -56,7 +56,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!shouldHighlightTitleBar() || !LazyGui.drawPathTooltips) {
+        if (!shouldHighlightNode() || !LazyGui.drawPathTooltips) {
             return;
         }
         pg.pushMatrix();
@@ -94,7 +94,6 @@ abstract class Window implements UserInputSubscriber {
         pg.strokeWeight(1);
         pg.line(windowSizeX - cell, 0, windowSizeX - cell, titleBarHeight - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
-            NodeTree.setAllOtherNodesMouseOver(null, false);
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
@@ -116,7 +115,10 @@ abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
         pg.translate(posX, posY);
-        boolean highlight = shouldHighlightTitleBar();
+        boolean highlight = shouldHighlightNode();
+        if(highlight){
+//            parentNode.setIsMouseOverThisNodeOnly();
+        }
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         float titleBarWidth = windowSizeX;
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
@@ -129,8 +131,8 @@ abstract class Window implements UserInputSubscriber {
     }
 
 
-    protected boolean shouldHighlightTitleBar() {
-        return isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround;
+    protected boolean shouldHighlightNode() {
+        return isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround || parentNode.isMouseOverNode;
     }
 
     private void constrainPosition(PGraphics pg) {

@@ -1,7 +1,6 @@
 package lazy;
 
 
-
 import processing.core.PGraphics;
 
 
@@ -10,19 +9,19 @@ import processing.core.PGraphics;
  * it lets the user see its child nodes including folders and interact with them
  */
 class FolderWindow extends Window {
-    final NodeFolder folder;
+    final FolderNode folder;
 
-    FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable) {
+    FolderWindow(float posX, float posY, FolderNode folder, boolean closeable) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
     }
 
-    FolderWindow(float posX, float posY, NodeFolder folder, boolean closeable, float intendedWindowWidth) {
+    FolderWindow(float posX, float posY, FolderNode folder, boolean closeable, float intendedWindowWidth) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
-        if(intendedWindowWidth > 0){
+        if (intendedWindowWidth > 0) {
             windowSizeX = intendedWindowWidth;
         }
     }
@@ -35,7 +34,7 @@ class FolderWindow extends Window {
     void drawFolder(PGraphics pg) {
         windowSizeY = cell + heightSumOfChildNodes();
         pg.pushMatrix();
-        pg.translate(posX -0.5f, posY);
+        pg.translate(posX - 0.5f, posY);
         pg.translate(0, cell);
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
@@ -79,22 +78,18 @@ class FolderWindow extends Window {
     @Override
     public void mouseMoved(LazyMouseEvent e) {
         super.mouseMoved(e);
-        if(isPointInsideTitleBar(e.getX(),e.getY())){
+        boolean removeMouseOverFromEverything = false;
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
-            NodeTree.setAllOtherNodesMouseOver(null, false);
-            return;
-        }
-        if (isPointInsideContent(e.getX(), e.getY())) {
+            parentNode.setIsMouseOverThisNodeOnly();
+        } else if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
-                node.isMouseOverNode = true;
-                NodeTree.setAllOtherNodesMouseOver(node, false);
+                node.setIsMouseOverThisNodeOnly();
                 e.setConsumed(true);
             }
         } else {
-            for(AbstractNode child : folder.children){
-                child.isMouseOverNode = false;
-            }
+            NodeTree.setAllOtherNodesMouseOverToFalse(null);
         }
     }
 
@@ -138,7 +133,7 @@ class FolderWindow extends Window {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
         }
-        for(AbstractNode anyNode : folder.children){
+        for (AbstractNode anyNode : folder.children) {
             anyNode.keyPressedOutOfNode(keyEvent, x, y);
         }
     }
