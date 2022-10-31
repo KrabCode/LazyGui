@@ -40,27 +40,27 @@ public class GridSnapHelper {
         alpha = constrain(alpha, 0, maxAlpha);
     }
 
-    static PVector snapToGrid(float x, float y){
+    static PVector snapToGrid(float inputX, float inputY){
         if(!snapToGridEnabled) {
-            return new PVector(x, y);
+            return new PVector(inputX, inputY);
         }
         int cell = snapGridCellSize;
-        int ix = floor(x);
-        int iy = floor(y);
-        if(ix % cell > cell / 2 ){
-            ix += cell;
+        int x = floor(inputX);
+        int y = floor(inputY);
+        if(x % cell > cell / 2 ){
+            x += cell;
         }
-        if(iy % cell > cell / 2 ){
-            iy += cell;
+        if(y % cell > cell / 2 ){
+            y += cell;
         }
-        ix = constrain(ix, 0, State.app.width);
-        iy = constrain(iy, 0, State.app.width);
-        while(ix % cell != 0){
-            ix -= 1;
+        x = constrain(x, 0, State.app.width);
+        y = constrain(y, 0, State.app.width);
+        while(x % cell != 0){
+            x -= 1;
         }
-        while(iy % cell != 0){
-            iy -= 1;
+        while(y % cell != 0){
+            y -= 1;
         }
-        return new PVector(ix, iy);
+        return new PVector(x, y);
     }
 }
