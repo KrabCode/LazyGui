@@ -65,16 +65,17 @@ abstract class Window implements UserInputSubscriber {
         String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
+        float tooltipYOffset = -1;
         float tooltipXOffset = cell * 0.5f;
         float tooltipWidth = windowSizeX - tooltipXOffset - cell;
-//        pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
+//        pg.stroke(ThemeStore.getColor(WINDOW_BORDER)); // tooltip border maybe?
         pg.noStroke();
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(tooltipXOffset, -tooltipHeight, tooltipWidth, tooltipHeight);
+        pg.rect(tooltipXOffset, tooltipYOffset - tooltipHeight, tooltipWidth, tooltipHeight);
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT,CENTER);
         for (int i = 0; i < lineCount; i++) {
-            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, -i * cell - State.textMarginY);
+            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, tooltipYOffset -i * cell - State.textMarginY);
         }
         pg.popMatrix();
         pg.popStyle();
