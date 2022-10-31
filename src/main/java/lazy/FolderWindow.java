@@ -78,7 +78,6 @@ class FolderWindow extends Window {
     @Override
     public void mouseMoved(LazyMouseEvent e) {
         super.mouseMoved(e);
-        boolean removeMouseOverFromEverything = false;
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
             parentNode.setIsMouseOverThisNodeOnly();
