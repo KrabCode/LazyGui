@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 /**
@@ -23,6 +24,7 @@ public class LazyGui implements UserInputSubscriber {
     private static String requestedScreenshotCustomPath = "";
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
     static boolean drawPathTooltips = false;
+    static boolean drawContextLines = false;
     private PGraphics pg;
     FolderNode toolbar;
     PApplet app;
@@ -44,8 +46,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        float cell = State.cell;
-        WindowManager.addWindow( new FolderWindow(cell, cell, NodeTree.getRoot(),false));
+        WindowManager.addWindow(new FolderWindow(cell, cell, NodeTree.getRoot(),false));
         State.loadMostRecentSave();
         createOptionsFolder();
         lazyFollowSketchResolution();
@@ -626,14 +627,23 @@ public class LazyGui implements UserInputSubscriber {
 //        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
-        drawPathTooltips = toggle(path + "/windows/show path tooltips", true);
-        // TODO variable cell size
-        //  https://github.com/KrabCode/LazyGui/issues/37
-        String snapGridPath = path + "/windows/snap to grid/";
+
+        String snapGridPath = path + "/snap to grid/";
         GridSnapHelper.snapToGridEnabled = toggle(snapGridPath + "active", true);
-        GridSnapHelper.snapGridCellSize = sliderInt(snapGridPath + "cell size", floor(State.cell));
+        GridSnapHelper.snapGridCellSize = sliderInt(snapGridPath + "cell size", floor(cell));
         GridSnapHelper.showGuideWhenDragging = toggle(snapGridPath + "show guide", true);
         GridSnapHelper.maxAlpha = slider(snapGridPath + "guide alpha", 0.5f, 0, 1);
+
+        String winPath = path + "/windows/";
+        drawPathTooltips = toggle(winPath + "show path tooltips", true);
+        drawContextLines = toggle(winPath + "show context lines", true);
+        State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
+        State.tryUpdateFont(
+                slider(winPath + "font size", State.getLastFontSize(), 1, Float.MAX_VALUE),
+                slider(winPath + "font x", State.textMarginX),
+                slider(winPath + "font y", State.textMarginY)
+        );
+
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {

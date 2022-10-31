@@ -2,6 +2,7 @@ package lazy;
 
 import processing.core.PGraphics;
 
+import static lazy.State.cell;
 import static processing.core.PConstants.*;
 
 class StringPickerItem extends ToggleNode {

@@ -3,6 +3,8 @@ package lazy;
 
 import processing.core.PGraphics;
 
+import static lazy.State.cell;
+
 
 /**
  * A FolderWindow is the only visible GUI element
@@ -10,6 +12,7 @@ import processing.core.PGraphics;
  */
 class FolderWindow extends Window {
     final FolderNode folder;
+    float intendedWindowWidthInCells = State.defaultWindowWidth;
 
     FolderWindow(float posX, float posY, FolderNode folder, boolean closeable) {
         super(posX, posY, folder, closeable);
@@ -17,13 +20,11 @@ class FolderWindow extends Window {
         folder.window = this;
     }
 
-    FolderWindow(float posX, float posY, FolderNode folder, boolean closeable, float intendedWindowWidth) {
+    FolderWindow(float posX, float posY, FolderNode folder, boolean closeable, float intendedWindowWidthInCells) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
-        if (intendedWindowWidth > 0) {
-            windowSizeX = intendedWindowWidth;
-        }
+        this.intendedWindowWidthInCells = intendedWindowWidthInCells;
     }
 
     @Override
@@ -40,6 +41,7 @@ class FolderWindow extends Window {
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
             float nodeHeight = cell * node.rowHeightInCells;
+            windowSizeX = cell * intendedWindowWidthInCells;
             node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();

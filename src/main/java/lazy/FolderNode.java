@@ -8,6 +8,7 @@ import processing.core.PGraphics;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static lazy.State.cell;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -25,8 +26,6 @@ class FolderNode extends AbstractNode {
 
     @Expose
     FolderWindow window;
-
-    protected final float previewRectSize = cell * 0.6f;
 
     float idealWindowWidth = State.defaultWindowWidth;
 
@@ -52,6 +51,9 @@ class FolderNode extends AbstractNode {
         pg.translate(-previewRectSize * 0.5f, -previewRectSize * 0.5f);
         pg.pushStyle();
         AbstractNode enabledNode = findChildByName("enabled");
+        if(enabledNode == null){
+            enabledNode = findChildByName("active");
+        }
         if (enabledNode != null &&
                 enabledNode.className.contains("ToggleNode") &&
                 ((ToggleNode) enabledNode).valueBoolean) {

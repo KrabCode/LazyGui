@@ -310,7 +310,7 @@ class SliderNode extends AbstractNode {
     }
 
     protected void onValueFloatChanged() {
-
+        tryConstrainValue();
     }
 
     @Override

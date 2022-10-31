@@ -18,20 +18,23 @@ import static processing.core.PApplet.*;
 class State {
 
     static float cell = 24;
+    static float previewRectSize = cell * 0.6f;
+
     static PFont font = null;
     static PApplet app = null;
     static LazyGui gui = null;
     static PGraphics normalizedColorProvider = null;
 
     private static final String fontPath = "JetBrainsMono-Regular.ttf";
-    private static final float fontSize = 16;
+    static private final float defaultFontSize = 16;
+    static private float lastFontSize = -1;
     static float textMarginX = 5;
     static float textMarginY = 14;
 
     static String sketchName = null;
     static boolean autosaveEnabled = true;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    static final float defaultWindowWidth = State.cell * 10;
+    static final float defaultWindowWidth = 10;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     static File saveDir;
@@ -47,14 +50,7 @@ class State {
         State.gui = gui;
         State.app = app;
 
-        try {
-//            State.font = app.createFont(intendedFontName, intendedFontSize);
-            State.font = app.createFont(fontPath, fontSize);
-        } catch (RuntimeException ex) {
-            if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
-                throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
-            }
-        }
+        tryUpdateFont(defaultFontSize, textMarginX, textMarginY);
 
         registerExitHandler();
 
@@ -63,6 +59,26 @@ class State {
 
         normalizedColorProvider = app.createGraphics(256, 256, P2D);
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
+    }
+
+    static void tryUpdateFont(float inputFontSize, float textMarginX, float textMarginY) {
+        State.textMarginX = textMarginX;
+        State.textMarginY = textMarginY;
+        if(inputFontSize == lastFontSize){
+            return;
+        }
+        try {
+            State.font = app.createFont(fontPath, inputFontSize);
+        } catch (RuntimeException ex) {
+            if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
+                throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
+            }
+        }
+        lastFontSize = inputFontSize;
+    }
+
+    static float getLastFontSize(){
+        return lastFontSize;
     }
 
     private static void lazyInitSaveDir(boolean printWelcomeMessage) {
@@ -279,4 +295,8 @@ class State {
         State.createTreeSaveFiles(newName);
     }
 
+    public static void setCellSize(float inputCellSize) {
+        cell = inputCellSize;
+        previewRectSize = cell * 0.6f;
+    }
 }

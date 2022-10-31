@@ -6,6 +6,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static lazy.State.cell;
 import static processing.core.PApplet.lerp;
 import static processing.core.PConstants.*;
 import static lazy.ThemeColorType.*;
@@ -20,15 +21,11 @@ abstract class Window implements UserInputSubscriber {
     float windowSizeX, windowSizeY;
     protected boolean isCloseable;
     protected AbstractNode parentNode;
-    float cell = State.cell;
-    float titleBarHeight = cell;
     boolean isDraggedAround;
 
     Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
         this.posX = posX;
         this.posY = posY;
-        this.windowSizeX = State.defaultWindowWidth;
-        this.windowSizeY = cell * 1;
         this.parentNode = parentNode;
         this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
@@ -48,7 +45,7 @@ abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         drawBackgroundWithWindowBorder(pg);
         boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
-        if(highlight && parentNode != NodeTree.getRoot()){
+        if(LazyGui.drawContextLines && highlight && parentNode != NodeTree.getRoot()){
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
         drawTitleBar(pg, highlight);
@@ -101,16 +98,16 @@ abstract class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
-        pg.line(windowSizeX - cell, 0, windowSizeX - cell, titleBarHeight - 1);
+        pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell - 1);
         if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, titleBarHeight - 1);
+            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, cell - 1);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
-            pg.translate(windowSizeX - cell * 0.5f + 0.5f, titleBarHeight * 0.5f);
+            pg.translate(windowSizeX - cell * 0.5f + 0.5f, cell * 0.5f);
             float n = cell * 0.2f;
             pg.line(-n, -n, n, n);
             pg.line(-n, n, n, -n);
@@ -128,7 +125,7 @@ abstract class Window implements UserInputSubscriber {
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         float titleBarWidth = windowSizeX;
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-        pg.rect(-1, -1, titleBarWidth + 1, titleBarHeight);
+        pg.rect(-1, -1, titleBarWidth + 1, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);
@@ -141,7 +138,7 @@ abstract class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.strokeCap(ROUND);
         pg.strokeWeight(1);
-        pg.line(posX + 1, posY + titleBarHeight / 2f, parentNode.pos.x + parentNode.size.x, parentNode.pos.y + parentNode.size.y  / 2f);
+        pg.line(posX + 1, posY + cell / 2f, parentNode.pos.x + parentNode.size.x, parentNode.pos.y + parentNode.size.y  / 2f);
     }
 
     private void constrainPosition(PGraphics pg) {
@@ -251,9 +248,9 @@ abstract class Window implements UserInputSubscriber {
 
     boolean isPointInsideTitleBar(float x, float y) {
         if (isCloseable) {
-            return Utils.isPointInRect(x, y, posX, posY, windowSizeX - cell, titleBarHeight);
+            return Utils.isPointInRect(x, y, posX, posY, windowSizeX - cell, cell);
         }
-        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, titleBarHeight);
+        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {

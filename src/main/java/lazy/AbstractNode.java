@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 /**
@@ -29,7 +30,6 @@ abstract class AbstractNode {
     PVector size = new PVector();
 
     String name;
-    final float cell = State.cell;
     int rowHeightInCells = 1;
 
     protected  PVector dragStartPos = new PVector();
@@ -192,7 +192,8 @@ abstract class AbstractNode {
         fillBackgroundBasedOnMouseOver(pg);
         pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         pg.rectMode(CENTER);
-        pg.rect(0,0, cell * 0.6f, cell*0.5f+1);
+        float outerButtonSize = cell * 0.6f;
+        pg.rect(0,0, outerButtonSize, outerButtonSize);
         pg.stroke(ThemeStore.getColor(isDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
         if(isMouseOverNode){
             if (isDragged){
@@ -201,7 +202,8 @@ abstract class AbstractNode {
                 pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
             }
         }
-        pg.rect(0,0,cell * 0.2f, cell*0.2f);
+        float innerButtonSize = cell * 0.35f;
+        pg.rect(0,0, innerButtonSize, innerButtonSize);
     }
 
     private boolean isFocused(){

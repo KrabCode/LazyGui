@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import processing.core.PGraphics;
 
+import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 class ColorPickerFolderNode extends FolderNode {
@@ -23,7 +24,7 @@ class ColorPickerFolderNode extends FolderNode {
         super(path, parentFolder);
         setHex(hex);
         lazyInitNodes();
-        idealWindowWidth = cell * 7;
+        idealWindowWidth = 7;
         State.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
