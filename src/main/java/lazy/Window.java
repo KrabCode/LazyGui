@@ -45,9 +45,9 @@ abstract class Window implements UserInputSubscriber {
         }
         constrainPosition(pg);
         pg.pushMatrix();
-        drawPathTooltipOnHighlight(pg);
         drawBackgroundWithWindowBorder(pg);
         drawTitleBar(pg);
+        drawPathTooltipOnHighlight(pg);
         drawContent(pg);
         if (isCloseable) {
             drawCloseButton(pg);
@@ -60,6 +60,7 @@ abstract class Window implements UserInputSubscriber {
             return;
         }
         pg.pushMatrix();
+        pg.pushStyle();
         pg.translate(posX, posY);
         String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
         int lineCount = pathSplit.length;
@@ -71,10 +72,12 @@ abstract class Window implements UserInputSubscriber {
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.rect(tooltipXOffset, -tooltipHeight, tooltipWidth, tooltipHeight);
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
+        pg.textAlign(LEFT,CENTER);
         for (int i = 0; i < lineCount; i++) {
             pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, -i * cell - State.textMarginY);
         }
         pg.popMatrix();
+        pg.popStyle();
     }
 
     protected void drawBackgroundWithWindowBorder(PGraphics pg) {
@@ -115,7 +118,7 @@ abstract class Window implements UserInputSubscriber {
     protected void drawTitleBar(PGraphics pg) {
         pg.pushMatrix();
         pg.pushStyle();
-        boolean highlight = isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || isDraggedAround || parentNode.isMouseOverNode;
+        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
         if(highlight && isCloseable){
             pg.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
             pg.strokeCap(ROUND);
