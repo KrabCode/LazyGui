@@ -26,8 +26,8 @@ class State {
     static PGraphics normalizedColorProvider = null;
 
     private static final String fontPath = "JetBrainsMono-Regular.ttf";
-    static private final float defaultFontSize = 16;
-    static private float lastFontSize = -1;
+    static private final int defaultFontSize = 16;
+    static private int lastFontSize = -1;
     static float textMarginX = 5;
     static float textMarginY = 14;
 
@@ -61,7 +61,7 @@ class State {
         normalizedColorProvider.colorMode(HSB, 1, 1, 1, 1);
     }
 
-    static void tryUpdateFont(float inputFontSize, float textMarginX, float textMarginY) {
+    static void tryUpdateFont(int inputFontSize, float textMarginX, float textMarginY) {
         State.textMarginX = textMarginX;
         State.textMarginY = textMarginY;
         if(inputFontSize == lastFontSize){
@@ -77,7 +77,7 @@ class State {
         lastFontSize = inputFontSize;
     }
 
-    static float getLastFontSize(){
+    static int getLastFontSize(){
         return lastFontSize;
     }
 

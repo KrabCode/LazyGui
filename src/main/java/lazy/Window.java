@@ -8,6 +8,7 @@ import processing.core.PVector;
 
 import static lazy.State.cell;
 import static processing.core.PApplet.lerp;
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.*;
 import static lazy.ThemeColorType.*;
 
@@ -36,7 +37,7 @@ abstract class Window implements UserInputSubscriber {
         return WindowManager.isFocused(this);
     }
 
-    void drawWindow(PGraphics pg) {
+    void drawWindow(PGraphics pg, PGraphics overlay) {
         pg.textFont(State.font);
         if (closed) {
             return;
@@ -45,7 +46,7 @@ abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         drawBackgroundWithWindowBorder(pg);
         boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
-        if(LazyGui.drawContextLines && highlight && parentNode != NodeTree.getRoot()){
+        if(LazyGui.showContextLines && highlight && parentNode != NodeTree.getRoot()){
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
         drawTitleBar(pg, highlight);
@@ -58,7 +59,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || !LazyGui.drawPathTooltips) {
+        if (!isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || !LazyGui.showPathTooltips) {
             return;
         }
         pg.pushMatrix();
@@ -89,6 +90,8 @@ abstract class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
+        //TODO make window fit exactly, fix overlaps... maybe draw background first, content middle and border last?
+        // https://github.com/KrabCode/LazyGui/issues/44
         pg.rect(-1, -1, windowSizeX + 1, windowSizeY + 1);
         pg.popMatrix();
     }
@@ -134,11 +137,16 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
-        pg.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
-        pg.strokeCap(ROUND);
-        pg.strokeWeight(1);
-        pg.line(posX + 1, posY + cell / 2f, parentNode.pos.x + parentNode.size.x, parentNode.pos.y + parentNode.size.y  / 2f);
+    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics overlay) {
+        if(!parentNode.isParentWindowVisible()){
+            return;
+        }
+        overlay.pushStyle();
+        overlay.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
+        overlay.strokeCap(ROUND);
+        overlay.strokeWeight(1);
+        overlay.line(posX + 1, posY + cell / 2f, parentNode.pos.x + parentNode.size.x - 1, parentNode.pos.y + parentNode.size.y  / 2f);
+        overlay.popStyle();
     }
 
     private void constrainPosition(PGraphics pg) {

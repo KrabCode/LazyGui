@@ -3,48 +3,41 @@ package lazy;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 public class GridSnapHelper {
-    public static int snapGridCellSize = 20;
-    public static boolean snapToGridEnabled;
-    public static boolean showGuideWhenDragging = true;
-    private static final float alphaChangePerFrame = 0.025f;
-    static float maxAlpha = 0.5f;
-    private static float alpha = 0;
+    public static boolean snapToGridEnabled = true;
+    public static boolean showGuideWhenDragging = false;
 
     static void displayGuide(PGraphics pg, boolean shouldLightUp){
-        if(!showGuideWhenDragging){
+        if(!showGuideWhenDragging || !shouldLightUp){
             return;
         }
-        updateAlpha(shouldLightUp);
-        pg.strokeWeight(1.99f);
-        pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER), alpha);
+        pg.pushStyle();
+        pg.strokeWeight(1);
         float w = pg.width;
         float h = pg.height;
         float m = max(w, h);
-        for (int x = 0; x < m; x+= snapGridCellSize) {
+        for (int x = 0; x < m; x+= cell) {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.line(x, 0, x, h);
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+            pg.line(x+1, 0, x+1, h);
         }
-        for (int y = 0; y < m; y+= snapGridCellSize) {
+        for (int y = 0; y < m; y+= cell) {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.line(0, y, w, y);
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+            pg.line(0, y+1, w, y+1);
         }
-    }
-
-    private static void updateAlpha(boolean shouldLightUp) {
-        if(shouldLightUp){
-            alpha += alphaChangePerFrame;
-        }else{
-            alpha -= alphaChangePerFrame;
-        }
-        alpha = constrain(alpha, 0, maxAlpha);
+        pg.popStyle();
     }
 
     static PVector snapToGrid(float inputX, float inputY){
         if(!snapToGridEnabled) {
             return new PVector(inputX, inputY);
         }
-        int cell = snapGridCellSize;
         int x = floor(inputX);
         int y = floor(inputY);
         if(x % cell > cell / 2 ){

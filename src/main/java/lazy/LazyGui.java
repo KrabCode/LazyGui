@@ -23,9 +23,9 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomPath = "";
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
-    static boolean drawPathTooltips = false;
-    static boolean drawContextLines = false;
-    private PGraphics pg;
+    static boolean showPathTooltips = false;
+    static boolean showContextLines = false;
+    private PGraphics pg, overlay;
     FolderNode toolbar;
     PApplet app;
 
@@ -56,6 +56,9 @@ public class LazyGui implements UserInputSubscriber {
     void lazyFollowSketchResolution() {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
             pg = app.createGraphics(app.width, app.height, P2D);
+            pg.colorMode(HSB, 1, 1, 1, 1);
+            overlay = app.createGraphics(app.width, app.height, P2D);
+            overlay.colorMode(HSB, 1, 1, 1, 1);
             pg.noSmooth();
         }
     }
@@ -80,18 +83,21 @@ public class LazyGui implements UserInputSubscriber {
         lazyFollowSketchResolution();
         updateOptionsFolder();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
+        overlay.beginDraw();
+        overlay.clear();
         pg.beginDraw();
-        pg.colorMode(HSB, 1, 1, 1, 1);
         pg.clear();
         GridSnapHelper.displayGuide(pg, isAnyWindowBeingDragged());
         if (!isGuiHidden) {
-            WindowManager.updateAndDrawWindows(pg);
+            WindowManager.updateAndDrawWindows(pg, overlay);
         }
         pg.endDraw();
+        overlay.endDraw();
         Utils.resetSketchMatrixInAnyRenderer();
         canvas.pushStyle();
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
+        canvas.image(overlay, 0, 0);
         canvas.popStyle();
         State.updateEndlessLoopDetection();
         takeScreenshotIfNeeded();
@@ -628,22 +634,18 @@ public class LazyGui implements UserInputSubscriber {
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
 
-        String snapGridPath = path + "/snap to grid/";
-        GridSnapHelper.snapToGridEnabled = toggle(snapGridPath + "active", true);
-        GridSnapHelper.snapGridCellSize = sliderInt(snapGridPath + "cell size", floor(cell));
-        GridSnapHelper.showGuideWhenDragging = toggle(snapGridPath + "show guide", true);
-        GridSnapHelper.maxAlpha = slider(snapGridPath + "guide alpha", 0.5f, 0, 1);
 
         String winPath = path + "/windows/";
-        drawPathTooltips = toggle(winPath + "show path tooltips", true);
-        drawContextLines = toggle(winPath + "show context lines", true);
+        GridSnapHelper.snapToGridEnabled = toggle(winPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
+        GridSnapHelper.showGuideWhenDragging = toggle(winPath + "show grid", GridSnapHelper.showGuideWhenDragging);
+        showPathTooltips = toggle(winPath + "show path tooltips", true);
+        showContextLines = toggle(winPath + "show context lines", true);
         State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
         State.tryUpdateFont(
-                slider(winPath + "font size", State.getLastFontSize(), 1, Float.MAX_VALUE),
+                sliderInt(winPath + "font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
                 slider(winPath + "font x", State.textMarginX),
                 slider(winPath + "font y", State.textMarginY)
         );
-
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {

@@ -34,20 +34,20 @@ class FolderWindow extends Window {
 
     void drawFolder(PGraphics pg) {
         windowSizeY = cell + heightSumOfChildNodes();
+        windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();
-        pg.translate(posX - 0.5f, posY);
+        pg.translate(posX, posY);
         pg.translate(0, cell);
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
             float nodeHeight = cell * node.rowHeightInCells;
-            windowSizeX = cell * intendedWindowWidthInCells;
             node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.updateDrawInlineNode(pg);
-            pg.popMatrix();
             pg.popStyle();
+            pg.popMatrix();
             y += nodeHeight;
             pg.translate(0, nodeHeight);
         }

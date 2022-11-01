@@ -44,10 +44,6 @@ class WindowManager {
         for (Window w : singleton.windows) {
             if(w.parentNode.path.equals(folderNode.path)){
                 w.open(setFocus);
-                float windowContentWidth = folderNode.idealWindowWidth;
-                if(windowContentWidth > 0){
-                    w.windowSizeX = windowContentWidth;
-                }
                 windowFound = true;
                 break;
             }
@@ -64,15 +60,14 @@ class WindowManager {
         }
     }
 
-    static void updateAndDrawWindows(PGraphics pg) {
+    static void updateAndDrawWindows(PGraphics pg, PGraphics overlay) {
         if(singleton.windowToSetFocusOn != null){
             singleton.windows.remove(singleton.windowToSetFocusOn);
             singleton.windows.add(singleton.windowToSetFocusOn);
             singleton.windowToSetFocusOn = null;
         }
-
         for (Window win : singleton.windows) {
-            win.drawWindow(pg);
+            win.drawWindow(pg, overlay);
         }
     }
 
