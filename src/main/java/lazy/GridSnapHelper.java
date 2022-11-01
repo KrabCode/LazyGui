@@ -19,13 +19,14 @@ public class GridSnapHelper {
         float w = pg.width;
         float h = pg.height;
         float m = max(w, h);
-        for (int x = 0; x < m; x+= cell) {
+        int step = floor(cell);
+        for (int x = 0; x < m; x+= step) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.line(x, 0, x, h);
             pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.line(x+1, 0, x+1, h);
         }
-        for (int y = 0; y < m; y+= cell) {
+        for (int y = 0; y < m; y+= step) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.line(0, y, w, y);
             pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));

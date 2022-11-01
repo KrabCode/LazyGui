@@ -44,11 +44,12 @@ abstract class Window implements UserInputSubscriber {
         }
         constrainPosition(pg);
         pg.pushMatrix();
-        drawBackgroundWithWindowBorder(pg);
+        drawBackgroundWithWindowBorder(pg, true);
         boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
         if(LazyGui.showContextLines && highlight && parentNode != NodeTree.getRoot()){
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
+        drawBackgroundWithWindowBorder(pg, false);
         drawTitleBar(pg, highlight);
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
@@ -84,15 +85,18 @@ abstract class Window implements UserInputSubscriber {
         pg.popStyle();
     }
 
-    protected void drawBackgroundWithWindowBorder(PGraphics pg) {
+    protected void drawBackgroundWithWindowBorder(PGraphics pg, boolean drawBackgroundOnly) {
         pg.pushMatrix();
         pg.translate(posX, posY);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        //TODO make window fit exactly, fix overlaps... maybe draw background first, content middle and border last?
-        // https://github.com/KrabCode/LazyGui/issues/44
-        pg.rect(-1, -1, windowSizeX + 1, windowSizeY + 1);
+        if(drawBackgroundOnly){
+            pg.noStroke();
+        }else{
+            pg.noFill();
+        }
+        pg.rect(0, 0, windowSizeX, windowSizeY);
         pg.popMatrix();
     }
 
@@ -128,7 +132,7 @@ abstract class Window implements UserInputSubscriber {
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         float titleBarWidth = windowSizeX;
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-        pg.rect(-1, -1, titleBarWidth + 1, cell);
+        pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);

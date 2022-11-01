@@ -30,13 +30,13 @@ class ColorPreviewNode extends AbstractNode {
         pg.rectMode(CORNER);
         pg.fill(1);
         pg.noStroke();
-        pg.rect(0, 0, size.x - 1, size.y);
+        pg.rect(1, 1, size.x - 1, size.y-1);
         pg.resetShader();
     }
 
     private void drawColorPreview(PGraphics pg) {
         pg.fill(parentColorPickerFolder.getColor().hex);
         pg.noStroke();
-        pg.rect(0, 0, size.x, size.y);
+        pg.rect(1, 1, size.x - 1, size.y-1);
     }
 }

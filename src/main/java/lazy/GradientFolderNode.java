@@ -29,7 +29,7 @@ class GradientFolderNode extends FolderNode {
         children.add(directionTypePicker);
         children.add(blendTypePicker);
         colorCount = 5;
-        idealWindowWidth = cell * 9;
+        idealWindowWidth = 9;
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount - 1);
             // default A alpha is 1 for some reason even though I set 0 here

@@ -148,7 +148,7 @@ class SliderNode extends AbstractNode {
         updateDrawBackgroundShader(pg);
         pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(0,0, size.x, size.y);
+        pg.rect(1,0, size.x-1, size.y);
         pg.resetShader();
     }
 
