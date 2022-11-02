@@ -34,9 +34,6 @@ public class GridSnapHelper {
         if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG){
             updateAlpha(draggedWindow);
         }
-        if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG && draggedWindow == null){
-            return;
-        }
         if(selectedVisibilityModeIndex == VISIBILITY_NEVER){
             return;
         }

@@ -63,6 +63,16 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Utility method for displaying the GUI before draw() ends for the purposes of recording.
+     * Does not update the gui, only returns the previous frame's gui canvas.
+     * Can be confusing when displayed due to seeing duplicated GUI images with slightly different content.
+     * @return previous frame's gui canvas
+     */
+    public PGraphics getGuiCanvas() {
+        return pg;
+    }
+
+    /**
      * Updates and draws the GUI on the main processing canvas.
      * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
      * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
