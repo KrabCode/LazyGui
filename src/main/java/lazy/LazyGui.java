@@ -87,7 +87,7 @@ public class LazyGui implements UserInputSubscriber {
         overlay.clear();
         pg.beginDraw();
         pg.clear();
-        GridSnapHelper.displayGuide(pg, isAnyWindowBeingDragged());
+        GridSnapHelper.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg, overlay);
         }
@@ -103,17 +103,17 @@ public class LazyGui implements UserInputSubscriber {
         takeScreenshotIfNeeded();
     }
 
-    private boolean isAnyWindowBeingDragged() {
+    private Window getWindowBeingDraggedIfAny() {
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         for(AbstractNode node : allNodes){
             if(node.type == NodeType.FOLDER){
                 FolderNode folder = (FolderNode) node;
                 if(folder.window != null && folder.window.isDraggedAround){
-                    return true;
+                    return folder.window;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -637,7 +637,8 @@ public class LazyGui implements UserInputSubscriber {
 
         String winPath = path + "/windows/";
         GridSnapHelper.snapToGridEnabled = toggle(winPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
-        GridSnapHelper.showGuideWhenDragging = toggle(winPath + "show grid", GridSnapHelper.showGuideWhenDragging);
+        GridSnapHelper.showGuideWhenDragging = toggle(winPath + "show drag guide", GridSnapHelper.showGuideWhenDragging);
+        GridSnapHelper.setMaxAlpha(slider(winPath + "grid alpha", 0.5f, 0, 1));
         showPathTooltips = toggle(winPath + "show path tooltips", true);
         showContextLines = toggle(winPath + "show context lines", true);
         State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
@@ -646,6 +647,7 @@ public class LazyGui implements UserInputSubscriber {
                 slider(winPath + "font x", State.textMarginX),
                 slider(winPath + "font y", State.textMarginY)
         );
+
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {

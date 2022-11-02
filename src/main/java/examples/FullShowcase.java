@@ -33,6 +33,8 @@ public class FullShowcase extends PApplet {
         drawBox("box a/");
         drawBox("box b/");
         displayTimeValues();
+        // todo fix gradient border :(
+        gui.toggle("lol/if it fits/i sits");
         pg.endDraw();
         clear();
         image(pg, 0, 0);
