@@ -154,6 +154,16 @@ class Utils {
         ArrayList<T> build() {
             return list;
         }
+
+        // I don't know what this annotation means but IntelliJ suggested it, so I'm keeping it
+        @SafeVarargs
+        public final ArrayListBuilder<T> add(T... options) {
+            for (T t :
+                 options) {
+                add(t);
+            }
+            return this;
+        }
     }
 
 

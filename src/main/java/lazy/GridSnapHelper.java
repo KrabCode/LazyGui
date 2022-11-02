@@ -4,45 +4,58 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
 
+import java.util.List;
+
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 public class GridSnapHelper {
     public static boolean snapToGridEnabled = true;
-    public static boolean showGuideWhenDragging = false;
-    private static PShader lineShader;
-    private static final String lineShaderPathFrag = "shaders/gridLineFrag.glsl";
-    private static final String lineShaderPathVert = "shaders/gridLineVert.glsl";
 
-    private static float alpha = 0;
-    private static final float alphaDelta = 0.1f;
-    private static float alphaMax = 0.5f;
-    private static int pointGridColor = -1;
+    private static PShader lineShader;
+    private static final String lineShaderPathFrag = "shaders/gridPointFrag.glsl";
+    private static final String lineShaderPathVert = "shaders/gridLineVert.glsl";
+    static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
+    private static final int VISIBILITY_ALWAYS = 0;
+    private static final int VISIBILITY_ON_DRAG = 1;
+    private static final int VISIBILITY_NEVER = 2;
+    private static final int defaultVisibilityModeIndex = VISIBILITY_ON_DRAG;
+    private static int selectedVisibilityModeIndex = defaultVisibilityModeIndex;
+
+    private static float dragAlpha = 0;
+    private static final float dragAlphaDelta = 0.05f;
+    private static PickerColor pointGridColor = null;
+    private static float pointWeight = 3;
 
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
-        if(!showGuideWhenDragging){
+        if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG){
+            updateAlpha(draggedWindow);
+        }
+        if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG && draggedWindow == null){
             return;
         }
-        updateAlpha(draggedWindow);
-
+        if(selectedVisibilityModeIndex == VISIBILITY_NEVER){
+            return;
+        }
         lineShader = ShaderReloader.getShader(lineShaderPathFrag);
-        lineShader.set("alpha", alpha);
+        lineShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
+        lineShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
         if(draggedWindow != null){
             lineShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
         }
 
         ShaderReloader.shader(lineShaderPathFrag, pg);
 
-
         pg.pushStyle();
-        pg.strokeWeight(5);
+        pg.strokeWeight(pointWeight);
         float w = pg.width;
         float h = pg.height;
         int step = floor(cell);
         pg.beginShape(POINTS);
+        int pointColor = pointGridColor != null ? pointGridColor.hex : State.normalizedColorProvider.color(1);
+        pg.stroke(pointColor);
         for (int x = 0; x < w; x+= step) {
             for (int y = 0; y < h; y+= step) {
-                pg.stroke(State.normalizedColorProvider.color(1));
                 pg.vertex(x+0.5f,y+0.5f);
             }
         }
@@ -53,18 +66,15 @@ public class GridSnapHelper {
         pg.resetShader();
     }
 
-    public static void setMaxAlpha(float value) {
-        alphaMax = value;
-        alphaMax = constrain(alphaMax, 0, 1);
-    }
-
     private static void updateAlpha(Window draggedWindow) {
+        float dragAlphaMax = pointGridColor.alpha;
+        dragAlphaMax = constrain(dragAlphaMax, 0, 1);
         if(draggedWindow != null){
-            alpha = lerp(alpha, alphaMax, alphaDelta);
+            dragAlpha = lerp(dragAlpha, dragAlphaMax, dragAlphaDelta);
         }else{
-            alpha = lerp(alpha, 0, alphaDelta);
+            dragAlpha = lerp(dragAlpha, 0, dragAlphaDelta);
         }
-        alpha = constrain(alpha, 0, alphaMax);
+        dragAlpha = constrain(dragAlpha, 0, dragAlphaMax);
     }
 
     static PVector snapToGrid(float inputX, float inputY){
@@ -88,5 +98,28 @@ public class GridSnapHelper {
             y -= 1;
         }
         return new PVector(x, y);
+    }
+
+    public static List<String> getOptions() {
+        return availableVisibilityModes;
+    }
+
+    public static void setSelectedVisibilityMode(String mode) {
+        if(!availableVisibilityModes.contains(mode)){
+            return;
+        }
+        selectedVisibilityModeIndex = availableVisibilityModes.indexOf(mode);
+    }
+
+    public static String getDefaultVisibilityMode() {
+        return getOptions().get(defaultVisibilityModeIndex);
+    }
+
+    public static void setPointColor(PickerColor clr){
+        pointGridColor = clr;
+    }
+
+    public static void setPointWeight(float weight) {
+        pointWeight = weight;
     }
 }

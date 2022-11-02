@@ -4,7 +4,6 @@ package lazy;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static lazy.State.cell;
@@ -26,7 +25,7 @@ public class LazyGui implements UserInputSubscriber {
     static boolean showPathTooltips = false;
     static boolean showContextLines = false;
     private PGraphics pg, overlay;
-    FolderNode toolbar;
+    FolderNode optionsNode;
     PApplet app;
 
     /**
@@ -379,7 +378,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param options list of options to display
      * @return currently selected string
      */
-    public String stringPicker(String path, ArrayList<String> options) {
+    public String stringPicker(String path, List<String> options) {
         return stringPicker(path, options.toArray(new String[0]), null);
     }
 
@@ -393,7 +392,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param defaultOption default option to select, must also be found in options or it is ignored
      * @return currently selected string
      */
-    public String stringPicker(String path, ArrayList<String> options, String defaultOption) {
+    public String stringPicker(String path, List<String> options, String defaultOption) {
         return stringPicker(path, options.toArray(new String[0]), defaultOption);
     }
 
@@ -615,15 +614,15 @@ public class LazyGui implements UserInputSubscriber {
 
     void createOptionsFolder() {
         String path = "options";
-        toolbar = new FolderNode(path, NodeTree.getRoot());
-        NodeTree.insertNodeAtItsPath((toolbar));
-        NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", toolbar));
-        updateThemePicker(toolbar.path + "/themes");
+        optionsNode = new FolderNode(path, NodeTree.getRoot());
+        NodeTree.insertNodeAtItsPath((optionsNode));
+        NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", optionsNode));
+        updateThemePicker(optionsNode.path + "/themes");
 
     }
 
     private void updateOptionsFolder() {
-        String path = toolbar.path;
+        String path = optionsNode.path;
         updateThemePicker(path + "/themes");
         hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);
         hotkeyCloseAllWindowsActive = toggle(path + "/hotkeys/d: close all windows", true);
@@ -634,11 +633,15 @@ public class LazyGui implements UserInputSubscriber {
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
 
+        String gridPath = path + "/grid/";
+        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
+        GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
+                GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
+        GridSnapHelper.setPointColor(colorPicker(gridPath + "grid point color",
+                State.normalizedColorProvider.color(0.5f, 1)));
+        GridSnapHelper.setPointWeight(slider(gridPath + "grid point weight", 3));
 
         String winPath = path + "/windows/";
-        GridSnapHelper.snapToGridEnabled = toggle(winPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
-        GridSnapHelper.showGuideWhenDragging = toggle(winPath + "show drag guide", GridSnapHelper.showGuideWhenDragging);
-        GridSnapHelper.setMaxAlpha(slider(winPath + "grid alpha", 0.5f, 0, 1));
         showPathTooltips = toggle(winPath + "show path tooltips", true);
         showContextLines = toggle(winPath + "show context lines", true);
         State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
