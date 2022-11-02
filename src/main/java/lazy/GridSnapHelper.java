@@ -14,7 +14,6 @@ public class GridSnapHelper {
 
     private static PShader lineShader;
     private static final String lineShaderPathFrag = "shaders/gridPointFrag.glsl";
-    private static final String lineShaderPathVert = "shaders/gridLineVert.glsl";
     static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static final int VISIBILITY_ALWAYS = 0;
     private static final int VISIBILITY_ON_DRAG = 1;
@@ -28,6 +27,10 @@ public class GridSnapHelper {
     private static float pointWeight = 3;
 
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
+        // TODO move from ShaderReloader to InternalShaderStore when done
+        if(lineShader == null){
+            lineShader = ShaderReloader.getShader(lineShaderPathFrag);
+        }
         if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG){
             updateAlpha(draggedWindow);
         }
