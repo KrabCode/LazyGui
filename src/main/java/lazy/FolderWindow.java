@@ -29,10 +29,10 @@ class FolderWindow extends Window {
 
     @Override
     protected void drawContent(PGraphics pg) {
-        drawFolder(pg);
+        drawInlineFolderChildren(pg);
     }
 
-    void drawFolder(PGraphics pg) {
+    void drawInlineFolderChildren(PGraphics pg) {
         windowSizeY = cell + heightSumOfChildNodes();
         windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();

@@ -647,9 +647,9 @@ public class LazyGui implements UserInputSubscriber {
         GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
         GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
                 GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
-        GridSnapHelper.setPointColor(colorPicker(gridPath + "grid point color",
+        GridSnapHelper.setPointColor(colorPicker(gridPath + "point color",
                 State.normalizedColorProvider.color(0.5f, 1)));
-        GridSnapHelper.setPointWeight(slider(gridPath + "grid point weight", 3));
+        GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));
 
         String winPath = path + "/windows/";
         showPathTooltips = toggle(winPath + "show path tooltips", true);

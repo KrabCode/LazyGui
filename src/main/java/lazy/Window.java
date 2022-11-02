@@ -50,9 +50,9 @@ abstract class Window implements UserInputSubscriber {
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
         drawBackgroundWithWindowBorder(pg, false);
-        drawTitleBar(pg, highlight);
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
+        drawTitleBar(pg, highlight);
         if (isCloseable) {
             drawCloseButton(pg);
         }

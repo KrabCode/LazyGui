@@ -165,8 +165,6 @@ abstract class AbstractNode {
     protected void drawRightToggleHandle(PGraphics pg, boolean valueBoolean) {
         float rectWidth = cell * 0.3f;
         float rectHeight = cell * 0.3f;
-
-
         pg.rectMode(CENTER);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         if(isMouseOverNode){
@@ -174,16 +172,18 @@ abstract class AbstractNode {
         }else{
             pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         }
+        float turnedOffHandleScale = 0.5f;
         if(valueBoolean){
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
             pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+            pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
         }else{
-            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-            pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+            pg.rect(0,0, rectWidth*2, rectHeight);
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
+            pg.rect(-rectWidth*0.5f,0, rectWidth*turnedOffHandleScale, rectHeight*turnedOffHandleScale);
         }
-        pg.rect(rectWidth*0.5f,0, rectWidth, rectHeight);
     }
 
     protected void drawRightButton(PGraphics pg) {
