@@ -42,11 +42,11 @@ class GradientFolderNode extends FolderNode {
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
-        pg.image(out, 0, 0, previewRectSize, previewRectSize);
+        pg.image(out, 1, 0, previewRectSize-1, previewRectSize);
         strokeForegroundBasedOnMouseOver(pg);
         pg.rectMode(CENTER);
         pg.noFill();
-        pg.rect(0, 0, previewRectSize, previewRectSize);
+        pg.rect(1, 0, previewRectSize-1, previewRectSize);
         updateOutGraphics();
     }
 
@@ -161,7 +161,7 @@ class GradientFolderNode extends FolderNode {
 
         @Override
         protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-            pg.image(parent.getOutputGraphics(), 0, 0, size.x, size.y);
+            pg.image(parent.getOutputGraphics(), 1, 0, size.x-1, size.y);
         }
 
         @Override

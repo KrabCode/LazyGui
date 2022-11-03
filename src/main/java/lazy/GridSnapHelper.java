@@ -10,7 +10,7 @@ import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 public class GridSnapHelper {
-    public static boolean snapToGridEnabled = true;
+    public static boolean snapToGridEnabled = false;
 
     private static PShader lineShader;
     private static final String lineShaderPathFrag = "shaders/gridPointFrag.glsl";
@@ -77,7 +77,7 @@ public class GridSnapHelper {
         dragAlpha = constrain(dragAlpha, 0, dragAlphaMax);
     }
 
-    static PVector snapToGrid(float inputX, float inputY){
+    static PVector trySnapToGrid(float inputX, float inputY){
         if(!snapToGridEnabled) {
             return new PVector(inputX, inputY);
         }

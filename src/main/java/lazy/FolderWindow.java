@@ -12,19 +12,11 @@ import static lazy.State.cell;
  */
 class FolderWindow extends Window {
     final FolderNode folder;
-    float intendedWindowWidthInCells = State.defaultWindowWidth;
 
     FolderWindow(float posX, float posY, FolderNode folder, boolean closeable) {
         super(posX, posY, folder, closeable);
         this.folder = folder;
         folder.window = this;
-    }
-
-    FolderWindow(float posX, float posY, FolderNode folder, boolean closeable, float intendedWindowWidthInCells) {
-        super(posX, posY, folder, closeable);
-        this.folder = folder;
-        folder.window = this;
-        this.intendedWindowWidthInCells = intendedWindowWidthInCells;
     }
 
     @Override
@@ -33,6 +25,7 @@ class FolderWindow extends Window {
     }
 
     void drawInlineFolderChildren(PGraphics pg) {
+        float intendedWindowWidthInCells = folder.idealWindowWidth;;
         windowSizeY = cell + heightSumOfChildNodes();
         windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();

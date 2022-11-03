@@ -37,7 +37,7 @@ abstract class Window implements UserInputSubscriber {
         return WindowManager.isFocused(this);
     }
 
-    void drawWindow(PGraphics pg, PGraphics overlay) {
+    void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
         if (closed) {
             return;
@@ -110,7 +110,7 @@ abstract class Window implements UserInputSubscriber {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSizeX - cell + 0.5f, 0, cell-1, cell - 1);
+            pg.rect(windowSizeX - cell + 0.5f, 1, cell-1, cell - 1);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
@@ -216,7 +216,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void trySnapToGrid() {
-        PVector snappedPos = GridSnapHelper.snapToGrid(posX, posY);
+        PVector snappedPos = GridSnapHelper.trySnapToGrid(posX, posY);
         posX = snappedPos.x;
         posY = snappedPos.y;
     }

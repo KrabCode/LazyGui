@@ -6,6 +6,7 @@ import processing.core.PGraphics;
 
 import java.util.List;
 
+import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
@@ -24,7 +25,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
     static boolean showPathTooltips = false;
     static boolean showContextLines = false;
-    private PGraphics pg, overlay;
+    private PGraphics pg;
     FolderNode optionsNode;
     PApplet app;
 
@@ -56,8 +57,6 @@ public class LazyGui implements UserInputSubscriber {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
             pg = app.createGraphics(app.width, app.height, P2D);
             pg.colorMode(HSB, 1, 1, 1, 1);
-            overlay = app.createGraphics(app.width, app.height, P2D);
-            overlay.colorMode(HSB, 1, 1, 1, 1);
             pg.noSmooth();
         }
     }
@@ -92,28 +91,24 @@ public class LazyGui implements UserInputSubscriber {
         lazyFollowSketchResolution();
         updateOptionsFolder();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
-        overlay.beginDraw();
-        overlay.clear();
         pg.beginDraw();
         pg.clear();
         GridSnapHelper.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
-            WindowManager.updateAndDrawWindows(pg, overlay);
+            WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
-        overlay.endDraw();
         Utils.resetSketchMatrixInAnyRenderer();
         canvas.pushStyle();
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
-        canvas.image(overlay, 0, 0);
         canvas.popStyle();
         State.updateEndlessLoopDetection();
         takeScreenshotIfNeeded();
     }
 
     private Window getWindowBeingDraggedIfAny() {
-        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
+        List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
             if(node.type == NodeType.FOLDER){
                 FolderNode folder = (FolderNode) node;
@@ -598,7 +593,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
-        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
+        List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
             node.updateValues();
         }
@@ -643,14 +638,6 @@ public class LazyGui implements UserInputSubscriber {
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
         saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
 
-        String gridPath = path + "/grid/";
-        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
-        GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
-                GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
-        GridSnapHelper.setPointColor(colorPicker(gridPath + "point color",
-                State.normalizedColorProvider.color(0.5f, 1)));
-        GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));
-
         String winPath = path + "/windows/";
         showPathTooltips = toggle(winPath + "show path tooltips", true);
         showContextLines = toggle(winPath + "show context lines", true);
@@ -660,6 +647,20 @@ public class LazyGui implements UserInputSubscriber {
                 slider(winPath + "font x", State.textMarginX),
                 slider(winPath + "font y", State.textMarginY)
         );
+
+        String gridPath = path + "/grid/";
+        boolean previousSnapToGridState = GridSnapHelper.snapToGridEnabled;
+        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
+        if(!previousSnapToGridState && GridSnapHelper.snapToGridEnabled){
+            // cell size must be updated before this for this auto snap to work on startup
+            WindowManager.snapAllStaticWindowsToGrid();
+        }
+        GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
+                GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
+        GridSnapHelper.setPointColor(colorPicker(gridPath + "point color",
+                State.normalizedColorProvider.color(0.5f, 1)));
+        GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));
+
 
     }
 

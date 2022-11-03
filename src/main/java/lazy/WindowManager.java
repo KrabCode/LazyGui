@@ -49,7 +49,7 @@ class WindowManager {
             }
         }
         if(!windowFound){
-            Window window = new FolderWindow(pos.x, pos.y, folderNode, true, folderNode.idealWindowWidth);
+            Window window = new FolderWindow(pos.x, pos.y, folderNode, true);
             singleton.windows.add(window);
             window.open(setFocus);
         }
@@ -60,14 +60,14 @@ class WindowManager {
         }
     }
 
-    static void updateAndDrawWindows(PGraphics pg, PGraphics overlay) {
+    static void updateAndDrawWindows(PGraphics pg) {
         if(singleton.windowToSetFocusOn != null){
             singleton.windows.remove(singleton.windowToSetFocusOn);
             singleton.windows.add(singleton.windowToSetFocusOn);
             singleton.windowToSetFocusOn = null;
         }
         for (Window win : singleton.windows) {
-            win.drawWindow(pg, overlay);
+            win.drawWindow(pg);
         }
     }
 
@@ -84,6 +84,17 @@ class WindowManager {
             if(win.isCloseable){
                 win.close();
             }
+        }
+    }
+
+    public static void snapAllStaticWindowsToGrid() {
+        for (Window w : singleton.windows) {
+          if(w.closed || w.isDraggedAround){
+              continue;
+          }
+          PVector newPos = GridSnapHelper.trySnapToGrid(w.posX, w.posY);
+          w.posX = newPos.x;
+          w.posY = newPos.y;
         }
     }
 }
