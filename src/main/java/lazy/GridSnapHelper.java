@@ -13,7 +13,7 @@ public class GridSnapHelper {
     public static boolean snapToGridEnabled = false;
 
     private static PShader lineShader;
-    private static final String lineShaderPathFrag = "shaders/gridPointFrag.glsl";
+    private static final String pointShaderPath = "gridPointFrag.glsl";
     static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static final int VISIBILITY_ALWAYS = 0;
     private static final int VISIBILITY_ON_DRAG = 1;
@@ -29,7 +29,7 @@ public class GridSnapHelper {
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
         // TODO move from ShaderReloader to InternalShaderStore when done
         if(lineShader == null){
-            lineShader = ShaderReloader.getShader(lineShaderPathFrag);
+            lineShader = InternalShaderStore.getShader(pointShaderPath);
         }
         if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG){
             updateAlpha(draggedWindow);
@@ -37,14 +37,12 @@ public class GridSnapHelper {
         if(selectedVisibilityModeIndex == VISIBILITY_NEVER){
             return;
         }
-        lineShader = ShaderReloader.getShader(lineShaderPathFrag);
         lineShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
         lineShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
         if(draggedWindow != null){
             lineShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
         }
-
-        ShaderReloader.shader(lineShaderPathFrag, pg);
+        InternalShaderStore.shader(pointShaderPath, pg);
 
         pg.pushStyle();
         pg.strokeWeight(pointWeight);
@@ -54,8 +52,8 @@ public class GridSnapHelper {
         pg.beginShape(POINTS);
         int pointColor = pointGridColor != null ? pointGridColor.hex : State.normalizedColorProvider.color(1);
         pg.stroke(pointColor);
-        for (int x = 0; x < w; x+= step) {
-            for (int y = 0; y < h; y+= step) {
+        for (int x = 0; x <= w; x+= step) {
+            for (int y = 0; y <= h; y+= step) {
                 pg.vertex(x+0.5f,y+0.5f);
             }
         }

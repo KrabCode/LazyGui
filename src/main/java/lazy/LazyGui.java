@@ -650,7 +650,7 @@ public class LazyGui implements UserInputSubscriber {
 
         String gridPath = path + "/grid/";
         boolean previousSnapToGridState = GridSnapHelper.snapToGridEnabled;
-        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", GridSnapHelper.snapToGridEnabled);
+        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", true);
         if(!previousSnapToGridState && GridSnapHelper.snapToGridEnabled){
             // cell size must be updated before this for this auto snap to work on startup
             WindowManager.snapAllStaticWindowsToGrid();
