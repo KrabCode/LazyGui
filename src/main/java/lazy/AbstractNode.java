@@ -106,7 +106,7 @@ abstract class AbstractNode {
     protected void highlightNodeOnMouseOver(PGraphics pg) {
         pg.noStroke();
         pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
-        pg.rect(1,0,size.x-1,size.y);
+        pg.rect(0,0,size.x,size.y);
     }
 
     protected abstract void updateDrawInlineNodeAbstract(PGraphics pg);

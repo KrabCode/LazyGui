@@ -49,9 +49,9 @@ abstract class Window implements UserInputSubscriber {
         if(LazyGui.showContextLines && highlight && parentNode != NodeTree.getRoot()){
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
-        drawBackgroundWithWindowBorder(pg, false);
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
+        drawBackgroundWithWindowBorder(pg, false);
         drawTitleBar(pg, highlight);
         if (isCloseable) {
             drawCloseButton(pg);

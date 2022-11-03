@@ -51,7 +51,8 @@ void draw(){
 float x = gui.slider("my circle/x");
 ellipse(x, height/2, 50, 50);
 ```
-![slider visual](readme_assets/slider.png)
+
+![slider visual](https://i.imgur.com/MrPaF6x.mp4)
 
 #### Button
 

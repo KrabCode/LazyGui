@@ -1,1 +1,0 @@
-github dark mode background: 0xFF0A0E12
