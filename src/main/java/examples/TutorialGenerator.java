@@ -33,7 +33,7 @@ public class TutorialGenerator extends PApplet {
     public void keyPressed() {
         if(key == 's'){
             image(gui.getGuiCanvas(), 0, 0);
-//            save("C:\\Projects\\LazyGui\\readme_assets\\slider_2.png");
+            save("C:\\Projects\\LazyGui\\readme_assets\\slider.png");
         }
     }
 }

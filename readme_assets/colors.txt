@@ -1,1 +1,1 @@
-github dark mode background: 0x0D1117
+github dark mode background: 0xFF0A0E12
