@@ -12,14 +12,11 @@ down. So you use one of the dozen other processing GUI libraries, register its c
 draw(). But now when you want to add a new control element you need to add code to two unrelated places. This slows you
 down.
 
-- **Solution**: Just ask for the values in draw() and have the GUI silently take care of the initialization and placing
-  your control element inside a folder of related elements based on a string path you provide.
+- **Solution**: Do not mention control elements in setup(). Ask for their values in draw() using unique paths and have the GUI silently take care of the initialization and placing your control element.
 
-**Problem**: You just tweaked some values in your GUI, but now you need to change the code and restart the program. Your
-GUI changes are lost forever.
+**Problem**: You just tweaked some values in your GUI, but now you need to change the code and restart the program. Your GUI changes are lost forever.
 
-- **Solution**: Save the GUI state as a JSON file. Load the most recently saved values at control element
-  initialization. This allows you to seamlessly change your code and continue where you left off.
+- **Solution**: Save the GUI state as a JSON file. Load the most recently saved values at control element initialization. This allows you to seamlessly change your code and continue where you left off.
 
 #### Other features:
 - autosave GUI state on program exit
@@ -31,7 +28,7 @@ GUI changes are lost forever.
 ### How?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and drag & drop it into your Processing
-editor window.
+editor window. If you are using a full fledged IDE simply import the jar as a library.
 
 #### Initialize the GUI:
 This initializes the GUI in `setup()` and displays it every time `draw()` ends.
@@ -51,9 +48,10 @@ void draw(){
 
 #### Slider
 ```java
-float x = gui.slider("x");
+float x = gui.slider("my circle/x");
 ellipse(x, height/2, 50, 50);
 ```
+[slider](readme_assets/slider.png)
 
 #### Button
 
