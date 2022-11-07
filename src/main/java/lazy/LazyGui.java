@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.util.List;
 
 import static lazy.NodeTree.getAllNodesAsList;
-import static lazy.State.cell;
+import static lazy.State.*;
 import static processing.core.PApplet.*;
 
 /**
@@ -657,8 +657,13 @@ public class LazyGui implements UserInputSubscriber {
         }
         GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
                 GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
-        GridSnapHelper.setPointColor(colorPicker(gridPath + "point color",
-                State.normalizedColorProvider.color(0.5f, 1)));
+
+        PickerColor clr = colorPicker(gridPath + "point color",
+                State.normalizedColorProvider.color(0.5f, 1));
+        colorPickerSet(gridPath + "point color",
+                normalizedColorProvider.color(clr.hue + gui.slider(gridPath + "point hue change") % 1f, clr.saturation, clr.brightness));
+
+        GridSnapHelper.setPointColor(clr);
         GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));
 
 
