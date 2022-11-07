@@ -25,7 +25,7 @@ abstract class AbstractNode {
     @Expose
     NodeType type;
 
-    FolderNode parent;
+    final FolderNode parent;
     PVector pos = new PVector();
     PVector size = new PVector();
 
@@ -257,6 +257,13 @@ abstract class AbstractNode {
         return !parent.window.closed;
     }
 
+    boolean isParentWindowOpen(){
+        if(parent == null || parent.window == null){
+            return false;
+        }
+        return !parent.window.closed;
+    }
+
     // used by value nodes to load state from json
     void overwriteState(JsonElement loadedNode){
 
@@ -266,4 +273,8 @@ abstract class AbstractNode {
         return "";
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " @ " + path;
+    }
 }

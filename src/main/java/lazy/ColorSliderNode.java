@@ -95,9 +95,9 @@ abstract class ColorSliderNode extends SliderNode {
     protected int foregroundMouseOverBrightnessAwareColor(){
         if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f){
-                return 0;
+                return State.normalizedColorProvider.color(0);
             }else{
-                return 1;
+                return State.normalizedColorProvider.color(1);
             }
         }else{
             return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);
@@ -147,22 +147,9 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     static class AlphaNode extends ColorSliderNode {
-
         AlphaNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 3;
-        }
-
-        protected int foregroundMouseOverBrightnessAwareColor(){
-            if(isMouseOverNode){
-                if(parentColorPickerFolder.brightness() > 0.7f && valueFloat > 0.3f){
-                    return 0;
-                }else{
-                    return 1;
-                }
-            }else{
-                return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);
-            }
         }
     }
 }

@@ -21,13 +21,13 @@ abstract class Window implements UserInputSubscriber {
     boolean closed = false;
     float windowSizeX, windowSizeY;
     protected boolean isCloseable;
-    protected AbstractNode parentNode;
+    protected FolderNode owner;
     boolean isDraggedAround;
 
-    Window(float posX, float posY, AbstractNode parentNode, boolean isCloseable) {
+    Window(float posX, float posY, FolderNode owner, boolean isCloseable) {
         this.posX = posX;
         this.posY = posY;
-        this.parentNode = parentNode;
+        this.owner = owner;
         this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
     }
@@ -45,8 +45,8 @@ abstract class Window implements UserInputSubscriber {
         constrainPosition(pg);
         pg.pushMatrix();
         drawBackgroundWithWindowBorder(pg, true);
-        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || parentNode.isMouseOverNode;
-        if(LazyGui.showContextLines && highlight && parentNode != NodeTree.getRoot()){
+        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || owner.isMouseOverNode;
+        if(LazyGui.showContextLines && highlight && owner != NodeTree.getRoot()){
             drawConnectingLineFromTitleBarToInlineNode(pg);
         }
         drawPathTooltipOnHighlight(pg);
@@ -66,7 +66,7 @@ abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
-        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(parentNode.path);
+        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(owner.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
         float tooltipYOffset = -1;
@@ -135,21 +135,23 @@ abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, parentNode.name, windowSizeX - cell * 1.1f);
+        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, owner.name, windowSizeX - cell * 1.1f);
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
         pg.popStyle();
         pg.popMatrix();
     }
 
     private void drawConnectingLineFromTitleBarToInlineNode(PGraphics overlay) {
-        if(!parentNode.isParentWindowVisible()){
+        if(!owner.isParentWindowVisible()){
             return;
         }
+        AbstractNode firstOpenParent = owner;
         overlay.pushStyle();
         overlay.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
         overlay.strokeCap(ROUND);
         overlay.strokeWeight(1);
-        overlay.line(posX + 1, posY + cell / 2f, parentNode.pos.x + parentNode.size.x - 1, parentNode.pos.y + parentNode.size.y  / 2f);
+        overlay.line(posX + 1, posY + cell / 2f, firstOpenParent.pos.x + firstOpenParent.size.x - 1,
+                firstOpenParent.pos.y + firstOpenParent.size.y  / 2f);
         overlay.popStyle();
     }
 

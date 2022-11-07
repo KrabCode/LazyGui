@@ -6,6 +6,7 @@ import processing.core.PVector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
+import static processing.core.PApplet.println;
 
 class WindowManager {
     private static WindowManager singleton;
@@ -42,7 +43,7 @@ class WindowManager {
         }
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.parentNode.path.equals(folderNode.path)){
+            if(w.owner.path.equals(folderNode.path)){
                 w.open(setFocus);
                 windowFound = true;
                 break;

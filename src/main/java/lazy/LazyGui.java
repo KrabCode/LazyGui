@@ -658,10 +658,7 @@ public class LazyGui implements UserInputSubscriber {
         GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
                 GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
 
-        PickerColor clr = colorPicker(gridPath + "point color",
-                State.normalizedColorProvider.color(0.5f, 1));
-        colorPickerSet(gridPath + "point color",
-                normalizedColorProvider.color(clr.hue + gui.slider(gridPath + "point hue change") % 1f, clr.saturation, clr.brightness));
+        PickerColor clr = colorPicker(gridPath + "point color", State.normalizedColorProvider.color(0.5f, 1));
 
         GridSnapHelper.setPointColor(clr);
         GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));

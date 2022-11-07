@@ -75,7 +75,7 @@ class FolderWindow extends Window {
         super.mouseMoved(e);
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
-            parentNode.setIsMouseOverThisNodeOnly();
+            owner.setIsMouseOverThisNodeOnly();
         } else if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {

@@ -108,5 +108,16 @@ class NodeTree {
             node.isMouseOverNode = false;
         }
     }
+
+    // TODO fix lol
+    public static Window findFirstOpenParentWindowRecursively(FolderNode owner) {
+        // this does not work
+        // TODO not this
+        println("checking " + owner);
+        if(owner.isParentWindowOpen()){
+            return owner.parent.window;
+        }
+        return findFirstOpenParentWindowRecursively(owner.parent);
+    }
 }
 
