@@ -93,7 +93,7 @@ class WindowManager {
           if(w.closed || w.isDraggedAround){
               continue;
           }
-          PVector newPos = GridSnapHelper.trySnapToGrid(w.posX, w.posY);
+          PVector newPos = UtilGridSnap.trySnapToGrid(w.posX, w.posY);
           w.posX = newPos.x;
           w.posY = newPos.y;
         }

@@ -18,13 +18,16 @@ import static processing.core.PApplet.*;
  * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
  */
 public class LazyGui implements UserInputSubscriber {
+
     static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomPath = "";
-    private static boolean hotkeyHideActive, undoHotkeyActive, redoHotkeyActive, hotkeyScreenshotActive, hotkeyCloseAllWindowsActive, saveHotkeyActive;
+    private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
+            hotkeyCloseAllWindowsActive, hotkeySaveActive;
     static boolean showPathTooltips = false;
-    static boolean showContextLines = false;
+
+
     private PGraphics pg;
     FolderNode optionsNode;
     PApplet app;
@@ -89,11 +92,11 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void draw(PGraphics canvas) {
         lazyFollowSketchResolution();
-        updateOptionsFolder();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
         pg.clear();
-        GridSnapHelper.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
+        updateOptionsFolder();
+        UtilGridSnap.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
@@ -636,11 +639,12 @@ public class LazyGui implements UserInputSubscriber {
         //  https://github.com/KrabCode/LazyGui/issues/36
 //        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
 //        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
-        saveHotkeyActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
+        hotkeySaveActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
 
         String winPath = path + "/windows/";
         showPathTooltips = toggle(winPath + "show path tooltips", true);
-        showContextLines = toggle(winPath + "show context lines", true);
+
+
         State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
         State.tryUpdateFont(
                 sliderInt(winPath + "font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
@@ -649,21 +653,9 @@ public class LazyGui implements UserInputSubscriber {
         );
 
         String gridPath = path + "/grid/";
-        boolean previousSnapToGridState = GridSnapHelper.snapToGridEnabled;
-        GridSnapHelper.snapToGridEnabled = toggle(gridPath + "snap to grid", true);
-        if(!previousSnapToGridState && GridSnapHelper.snapToGridEnabled){
-            // cell size must be updated before this for this auto snap to work on startup
-            WindowManager.snapAllStaticWindowsToGrid();
-        }
-        GridSnapHelper.setSelectedVisibilityMode(stringPicker(gridPath + "show grid",
-                GridSnapHelper.getOptions(), GridSnapHelper.getDefaultVisibilityMode()));
+        UtilGridSnap.update(gridPath);
 
-        PickerColor clr = colorPicker(gridPath + "point color", State.normalizedColorProvider.color(0.5f, 1));
-
-        GridSnapHelper.setPointColor(clr);
-        GridSnapHelper.setPointWeight(slider(gridPath + "point weight", 3));
-
-
+        UtilContextLines.update(path + "/context lines/", pg);
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
@@ -676,13 +668,13 @@ public class LazyGui implements UserInputSubscriber {
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
         }
-        if(keyCode == KeyCodes.CTRL_Z && undoHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
             State.undo();
         }
-        if(keyCode == KeyCodes.CTRL_Y && redoHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
             State.redo();
         }
-        if(keyCode == KeyCodes.CTRL_S && saveHotkeyActive){
+        if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
             State.createNewSaveWithRandomName();
         }
     }

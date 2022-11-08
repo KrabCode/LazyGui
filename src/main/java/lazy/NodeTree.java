@@ -110,6 +110,9 @@ class NodeTree {
     }
 
     public static FolderNode findFirstOpenParentNodeRecursively(FolderNode node) {
+        if(node == getRoot()){
+            return null;
+        }
         if(node.isParentWindowOpen()){
             return node;
         }

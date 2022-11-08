@@ -23,6 +23,7 @@ abstract class Window implements UserInputSubscriber {
     protected boolean isCloseable;
     protected FolderNode owner;
     boolean isDraggedAround;
+    private boolean isTitleHighligted;
 
     Window(float posX, float posY, FolderNode owner, boolean isCloseable) {
         this.posX = posX;
@@ -39,20 +40,17 @@ abstract class Window implements UserInputSubscriber {
 
     void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
+        isTitleHighligted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || owner.isMouseOverNode;
         if (closed) {
             return;
         }
         constrainPosition(pg);
         pg.pushMatrix();
         drawBackgroundWithWindowBorder(pg, true);
-        boolean highlight = (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || owner.isMouseOverNode;
-        if(LazyGui.showContextLines && highlight && owner != NodeTree.getRoot()){
-            drawConnectingLineFromTitleBarToInlineNode(pg);
-        }
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
         drawBackgroundWithWindowBorder(pg, false);
-        drawTitleBar(pg, highlight);
+        drawTitleBar(pg, isTitleHighligted);
         if (isCloseable) {
             drawCloseButton(pg);
         }
@@ -141,19 +139,15 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
+    void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
         AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(owner);
-        if(!firstOpenParent.isParentWindowVisible()){
+        if(firstOpenParent == null || !firstOpenParent.isParentWindowVisible()){
             return;
         }
-        pg.pushStyle();
-        pg.stroke(State.normalizedColorProvider.color(0.5f));
-        pg.strokeCap(ROUND);
-        pg.strokeWeight(1.5f);
+
         pg.line(posX + 1, posY + cell / 2f,
                 firstOpenParent.pos.x + firstOpenParent.size.x - 1,
                 firstOpenParent.pos.y + firstOpenParent.size.y  / 2f);
-        pg.popStyle();
     }
 
     private void constrainPosition(PGraphics pg) {
@@ -219,7 +213,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void trySnapToGrid() {
-        PVector snappedPos = GridSnapHelper.trySnapToGrid(posX, posY);
+        PVector snappedPos = UtilGridSnap.trySnapToGrid(posX, posY);
         posX = snappedPos.x;
         posY = snappedPos.y;
     }
@@ -273,4 +267,9 @@ abstract class Window implements UserInputSubscriber {
                 posX + windowSizeX - cell - 1, posY,
                 cell + 1, cell - 1);
     }
+
+    public boolean isTitleHighligted() {
+        return isTitleHighligted;
+    }
+
 }

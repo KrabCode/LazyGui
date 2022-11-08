@@ -9,7 +9,7 @@ import java.util.List;
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
-public class GridSnapHelper {
+public class UtilGridSnap {
     public static boolean snapToGridEnabled = false;
 
     private static PShader lineShader;
@@ -119,5 +119,20 @@ public class GridSnapHelper {
 
     public static void setPointWeight(float weight) {
         pointWeight = weight;
+    }
+
+    public static void update(String gridPath) {
+        boolean previousSnapToGridState = UtilGridSnap.snapToGridEnabled;
+        UtilGridSnap.snapToGridEnabled = State.gui.toggle(gridPath + "snap to grid", true);
+        if(!previousSnapToGridState && UtilGridSnap.snapToGridEnabled){
+            // cell size must be updated before this for this auto snap to work on startup
+            WindowManager.snapAllStaticWindowsToGrid();
+        }
+        UtilGridSnap.setSelectedVisibilityMode(State.gui.stringPicker(gridPath + "show grid",
+                UtilGridSnap.getOptions(), UtilGridSnap.getDefaultVisibilityMode()));
+        PickerColor clr = State.gui.colorPicker(gridPath + "point color", State.normalizedColorProvider.color(0.5f, 1));
+
+        UtilGridSnap.setPointColor(clr);
+        UtilGridSnap.setPointWeight(State.gui.slider(gridPath + "point weight", 3));
     }
 }
