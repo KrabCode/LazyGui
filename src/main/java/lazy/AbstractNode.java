@@ -275,6 +275,6 @@ abstract class AbstractNode {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " @ " + path;
+        return "Folder @ " + path + " | " + (isParentWindowOpen() ? "open" : "closed");
     }
 }

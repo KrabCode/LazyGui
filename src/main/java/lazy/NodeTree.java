@@ -109,15 +109,11 @@ class NodeTree {
         }
     }
 
-    // TODO fix lol
-    public static Window findFirstOpenParentWindowRecursively(FolderNode owner) {
-        // this does not work
-        // TODO not this
-        println("checking " + owner);
-        if(owner.isParentWindowOpen()){
-            return owner.parent.window;
+    public static FolderNode findFirstOpenParentNodeRecursively(FolderNode node) {
+        if(node.isParentWindowOpen()){
+            return node;
         }
-        return findFirstOpenParentWindowRecursively(owner.parent);
+        return findFirstOpenParentNodeRecursively(node.parent);
     }
 }
 

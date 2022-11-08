@@ -141,18 +141,19 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics overlay) {
-        if(!owner.isParentWindowVisible()){
+    private void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
+        AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(owner);
+        if(!firstOpenParent.isParentWindowVisible()){
             return;
         }
-        AbstractNode firstOpenParent = owner;
-        overlay.pushStyle();
-        overlay.stroke(ThemeStore.getColor(NORMAL_FOREGROUND));
-        overlay.strokeCap(ROUND);
-        overlay.strokeWeight(1);
-        overlay.line(posX + 1, posY + cell / 2f, firstOpenParent.pos.x + firstOpenParent.size.x - 1,
+        pg.pushStyle();
+        pg.stroke(State.normalizedColorProvider.color(0.5f));
+        pg.strokeCap(ROUND);
+        pg.strokeWeight(1.5f);
+        pg.line(posX + 1, posY + cell / 2f,
+                firstOpenParent.pos.x + firstOpenParent.size.x - 1,
                 firstOpenParent.pos.y + firstOpenParent.size.y  / 2f);
-        overlay.popStyle();
+        pg.popStyle();
     }
 
     private void constrainPosition(PGraphics pg) {
