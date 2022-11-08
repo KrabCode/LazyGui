@@ -6,7 +6,6 @@ import processing.core.PVector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
-import static processing.core.PApplet.println;
 
 class WindowManager {
     private static WindowManager singleton;
@@ -32,9 +31,11 @@ class WindowManager {
     }
 
     static void uncoverOrCreateWindow(FolderNode folderNode, Float nullablePosX, Float nullablePosY, boolean setFocus) {
-        float mouseX = State.app.mouseX;
-        float mouseY = State.app.mouseY;
-        PVector pos = new PVector(mouseX - cell * 0.5f, mouseY-cell * 0.5f);
+        PVector pos = new PVector(cell, cell);
+        if(folderNode.parent != null){
+            Window parentWin = folderNode.parent.window;
+            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, parentWin.posY);
+        }
         if(nullablePosX != null){
             pos.x = nullablePosX;
         }

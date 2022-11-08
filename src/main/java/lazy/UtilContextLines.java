@@ -6,8 +6,6 @@ import processing.core.PGraphics;
 import java.util.List;
 
 public class UtilContextLines {
-
-
     public static final List<String> contextLinesOptions = new Utils.ArrayListBuilder<String>()
             .add("never", "on hover", "always").build();
     public static final int SHOW_CONTEXT_LINES_MODE_NEVER = 0;
