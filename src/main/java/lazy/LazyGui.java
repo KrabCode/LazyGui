@@ -625,26 +625,16 @@ public class LazyGui implements UserInputSubscriber {
         optionsNode = new FolderNode(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((optionsNode));
         NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", optionsNode));
-        updateThemePicker(optionsNode.path + "/themes");
+        ThemeStore.updateThemePicker(optionsNode.path + "/themes");
 
     }
 
     private void updateOptionsFolder() {
         String path = optionsNode.path;
-        updateThemePicker(path + "/themes");
-        hotkeyHideActive = toggle(path + "/hotkeys/h: hide gui", true);
-        hotkeyCloseAllWindowsActive = toggle(path + "/hotkeys/d: close all windows", true);
-        hotkeyScreenshotActive = toggle(path + "/hotkeys/s: take screenshot", true);
-        // TODO fix
-        //  https://github.com/KrabCode/LazyGui/issues/36
-//        undoHotkeyActive = toggle(path + "/hotkeys/ctrl + z: undo", true);
-//        redoHotkeyActive = toggle(path + "/hotkeys/ctrl + y: redo", true);
-        hotkeySaveActive = toggle(path + "/hotkeys/ctrl + s: new save", true);
+        updateHotkeyToggles(path + "/hotkeys/");
 
         String winPath = path + "/windows/";
         showPathTooltips = toggle(winPath + "show path tooltips", true);
-
-
         State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
         State.tryUpdateFont(
                 sliderInt(winPath + "font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
@@ -652,10 +642,20 @@ public class LazyGui implements UserInputSubscriber {
                 slider(winPath + "font y", State.textMarginY)
         );
 
-        String gridPath = path + "/grid/";
-        UtilGridSnap.update(gridPath);
-
+        ThemeStore.updateThemePicker(path + "/themes");
+        UtilGridSnap.update(path + "/grid/");
         UtilContextLines.update(path + "/context lines/", pg);
+    }
+
+    private void updateHotkeyToggles(String path) {
+        hotkeyHideActive = toggle(path + "h: hide gui", true);
+        hotkeyCloseAllWindowsActive = toggle(path + "d: close all windows", true);
+        hotkeyScreenshotActive = toggle(path + "s: take screenshot", true);
+        // TODO fix
+        //  https://github.com/KrabCode/LazyGui/issues/36
+//        undoHotkeyActive = toggle(path + "ctrl + z: undo", true);
+//        redoHotkeyActive = toggle(path + "ctrl + y: redo", true);
+        hotkeySaveActive = toggle(path + "ctrl + s: new save", true);
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
@@ -679,25 +679,4 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
-    private void updateThemePicker(String path) {
-        String defaultPaletteName = "dark";
-        Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
-        assert defaultTheme != null;
-
-        String userSelection = State.gui.stringPicker(path + "/gui theme", ThemeType.getAllNames(), defaultPaletteName);
-        if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
-            ThemeStore.currentSelection = ThemeType.getValue(userSelection);
-        }
-        String customDefinitionPath = path + "/custom theme editor";
-        ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus foreground", defaultTheme.focusForeground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/focus background", defaultTheme.focusBackground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.NORMAL_FOREGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal foreground", defaultTheme.normalForeground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.NORMAL_BACKGROUND,
-                State.gui.colorPicker(customDefinitionPath + "/normal background", defaultTheme.normalBackground).hex);
-        ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
-                State.gui.colorPicker(customDefinitionPath + "/window border", defaultTheme.windowBorder).hex);
-    }
 }
