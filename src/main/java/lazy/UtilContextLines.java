@@ -15,18 +15,14 @@ public class UtilContextLines {
 
     public static void update(String path, PGraphics pg) {
         showContextLinesMode = contextLinesOptions.indexOf(State.gui.stringPicker(path + "visibility", contextLinesOptions));
+        pg.pushStyle();
+        pg.stroke(State.gui.colorPicker(path + "color", State.normalizedColorProvider.color(0.5f)).hex);
+        pg.strokeCap(PConstants.SQUARE);
+        pg.strokeWeight(State.gui.slider(path + "weight", 0));
+        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
             return;
         }
-        pg.pushStyle();
-        pg.stroke(State.gui.colorPicker(path + "color", State.normalizedColorProvider.color(0.5f)).hex);
-        String strokeCapName = State.gui.stringPicker(path + "cap", new String[]{"round", "square", "project"});
-        int strokeCap = strokeCapName.equals("square") ? PConstants.SQUARE :
-                        strokeCapName.equals("round") ? PConstants.ROUND :
-                                PConstants.PROJECT;
-        pg.strokeCap(strokeCap);
-        pg.strokeWeight(State.gui.slider(path + "weight", 0));
-        List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         for (AbstractNode node : allNodes) {
             if (node.type != NodeType.FOLDER) {
                 continue;
