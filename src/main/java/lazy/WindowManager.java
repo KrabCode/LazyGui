@@ -45,8 +45,10 @@ class WindowManager {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.owner.path.equals(folderNode.path)){
-                w.posX = pos.x;
-                w.posY = pos.y;
+                if(w.closed){
+                    w.posX = pos.x;
+                    w.posY = pos.y;
+                }
                 w.open(setFocus);
                 windowFound = true;
                 break;
