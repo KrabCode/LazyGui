@@ -34,7 +34,7 @@ class WindowManager {
         PVector pos = new PVector(cell, cell);
         if(folderNode.parent != null){
             Window parentWin = folderNode.parent.window;
-            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, parentWin.posY);
+            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, folderNode.pos.y);
         }
         if(nullablePosX != null){
             pos.x = nullablePosX;
@@ -45,6 +45,8 @@ class WindowManager {
         boolean windowFound = false;
         for (Window w : singleton.windows) {
             if(w.owner.path.equals(folderNode.path)){
+                w.posX = pos.x;
+                w.posY = pos.y;
                 w.open(setFocus);
                 windowFound = true;
                 break;

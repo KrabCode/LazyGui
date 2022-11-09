@@ -28,11 +28,10 @@ public class UtilContextLines {
                 continue;
             }
             FolderNode folderNode = (FolderNode) node;
-            if (folderNode.window == null) {
+            if (folderNode.window == null || folderNode.window.closed) {
                 continue;
             }
-            boolean shouldShowLineFromTitleTowardsInlineNode =
-                    (!folderNode.window.closed && showContextLinesMode == SHOW_CONTEXT_LINES_ALWAYS) ||
+            boolean shouldShowLineFromTitleTowardsInlineNode = showContextLinesMode == SHOW_CONTEXT_LINES_ALWAYS ||
                     (folderNode.window.isTitleHighligted() && showContextLinesMode == SHOW_CONTEXT_LINES_MODE_ON_HOVER);
             if (shouldShowLineFromTitleTowardsInlineNode) {
                 folderNode.window.drawConnectingLineFromTitleBarToInlineNode(pg);
