@@ -50,7 +50,7 @@ public class SinewaveExample extends PApplet {
         for (int i = 0; i < detail; i++) {
             float norm = norm(i, 0, detail-1);
             float x = -w/2f + w * norm;
-            float y = h * sin(x * freq + time);
+            float y = h * sin(norm * freq * TAU + time);
             pg.vertex(x,y);
         }
         pg.endShape();
