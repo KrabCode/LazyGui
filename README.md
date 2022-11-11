@@ -48,11 +48,10 @@ void draw(){
 
 #### Slider
 ```java
-float x = gui.slider("my circle/x");
+float x = gui.slider("folder/x");
 ellipse(x, height/2, 50, 50);
 ```
-
-![slider visual](https://i.imgur.com/MrPaF6x.mp4)
+[slider visual](https://i.imgur.com/MrPaF6x.mp4)
 
 #### Button
 
