@@ -15,7 +15,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+        size(800, 800, P2D);
     }
 
     @Override
@@ -32,12 +32,11 @@ public class SinewaveExample extends PApplet {
         drawSinewave();
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
     }
 
     private void drawSinewave() {
         String path = "sinewave/";
-        int detail = gui.sliderInt(path + "detail", 500);
+        int detail = gui.sliderInt(path + "detail", 100);
         float freq = gui.slider(path + "freq", 0.01f);
         time += radians(gui.slider(path + "time", 1));
         pg.translate(width/2f + gui.slider(path + "x"), height/2f +  + gui.slider(path + "y"));
@@ -45,7 +44,7 @@ public class SinewaveExample extends PApplet {
         float h = gui.slider(path + "height", 200);
         pg.noFill();
         pg.stroke(gui.colorPicker(path + "stroke", color(255)).hex);
-        pg.strokeWeight(gui.slider(path + "weight", 10));
+        pg.strokeWeight(gui.slider(path + "weight", 5));
         pg.beginShape();
         for (int i = 0; i < detail; i++) {
             float norm = norm(i, 0, detail-1);
