@@ -75,7 +75,7 @@ class SaveFolderNode extends FolderNode {
         if(State.gui.button(path + "/open save folder")){
             Utils.openSaveFolder();
         }
-        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit");
+        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit", State.autosaveEnabled);
         updateStateList();
     }
 
