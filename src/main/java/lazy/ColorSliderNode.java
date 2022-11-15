@@ -66,7 +66,7 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    protected void updateDrawBackgroundShader(PGraphics pg) {
+    protected void updateBackgroundShader(PGraphics pg) {
         PShader shader = InternalShaderStore.getShader(colorShaderPath);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);

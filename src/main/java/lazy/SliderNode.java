@@ -22,7 +22,6 @@ class SliderNode extends AbstractNode {
     SliderNode(String path, FolderNode parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
-        valueFloatDefaultOriginal = defaultValue;
         if(!Float.isNaN(defaultValue)){
             valueFloat = defaultValue;
         }
@@ -38,7 +37,6 @@ class SliderNode extends AbstractNode {
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
-        valueFloatDefaultOriginal = defaultValue;
         if(!Float.isNaN(defaultValue)){
             valueFloat = defaultValue;
         }
@@ -55,8 +53,6 @@ class SliderNode extends AbstractNode {
     float valueFloat;
     @Expose
     float valueFloatPrecision;
-    @Expose
-    final float valueFloatDefaultOriginal;
 
     float valueFloatDefault;
     float valueFloatMin;
@@ -91,7 +87,7 @@ class SliderNode extends AbstractNode {
         precisionRange.add(1.0f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        currentPrecisionIndex = 4;
+        currentPrecisionIndex = 5;
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
@@ -145,14 +141,14 @@ class SliderNode extends AbstractNode {
         if(!constrainedThisFrame){
             backgroundScrollX -= mouseDelta.x;
         }
-        updateDrawBackgroundShader(pg);
+        updateBackgroundShader(pg);
         pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(1,0, size.x-1, size.y);
         pg.resetShader();
     }
 
-    protected void updateDrawBackgroundShader(PGraphics pg) {
+    protected void updateBackgroundShader(PGraphics pg) {
         PShader shader = InternalShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
         shader.set("quadPos", pos.x, pos.y);
