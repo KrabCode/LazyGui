@@ -16,7 +16,7 @@ public class UtilContextLines {
     public static void update(String path, PGraphics pg) {
         showContextLinesMode = contextLinesOptions.indexOf(State.gui.stringPicker(path + "visibility", contextLinesOptions));
         pg.pushStyle();
-        pg.stroke(State.gui.colorPicker(path + "color", State.normalizedColorProvider.color(0.5f)).hex);
+        pg.stroke(State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex);
         pg.strokeCap(PConstants.SQUARE);
         pg.strokeWeight(State.gui.slider(path + "weight", 0));
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();

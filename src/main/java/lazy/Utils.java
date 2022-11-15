@@ -223,4 +223,17 @@ class Utils {
             }
         }
     }
+
+    /**
+     * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
+     * @param hue value to transfer to the [0-1] range without changing apparent color value
+     * @return hue in the range between 0-1
+     */
+    static float hueModulo(float hue){
+        if (hue < 0.f){
+            return hue % 1f + 1f;
+        } else {
+            return hue % 1f;
+        }
+    }
 }

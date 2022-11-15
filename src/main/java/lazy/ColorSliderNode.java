@@ -95,9 +95,9 @@ abstract class ColorSliderNode extends SliderNode {
     protected int foregroundMouseOverBrightnessAwareColor(){
         if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f){
-                return State.normalizedColorProvider.color(0);
+                return State.normalizedHsbColorProvider.color(0);
             }else{
-                return State.normalizedColorProvider.color(1);
+                return State.normalizedHsbColorProvider.color(1);
             }
         }else{
             return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);

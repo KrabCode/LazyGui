@@ -213,8 +213,7 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Sets the value of a float slider control element manually at runtime without requiring user interaction.
      * Does not block changing the value in the future in any way.
-     * Initializes a new float slider at the given path if needed.
-     * with the value param used as a default value and with no constraint on min and max value.
+     * Initializes a new float slider at the given path if needed with the value parameter used as a default value and with no constraint on min and max value.
      *
      * @param path forward slash separated unique path to the control element
      * @param value value to set the float slider at the path to
@@ -226,6 +225,23 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
+    }
+
+    /**
+     * Adds a float to the value of a float or int slider control element manually at runtime without requiring user interaction.
+     * Does not block changing the value in the future in any way.
+     * Initializes a new float slider at the given path if needed with default value 0 and with no constraint on min and max value.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param amountToAdd value to set the float slider at the path to
+     */
+    public void sliderAdd(String path, float amountToAdd){
+        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        if (node == null) {
+            node = createSliderNode(path, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.valueFloat += amountToAdd;
     }
 
     /**
@@ -515,7 +531,7 @@ public class LazyGui implements UserInputSubscriber {
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            int hex = State.normalizedColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+            int hex = State.normalizedHsbColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
@@ -557,6 +573,28 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
+            node.loadValuesFromHex(false);
+        }
+    }
+
+    /**
+     * Adds hue to the color picker, looping it correctly both in both directions.
+     * Lazily initializes the color picker if needed with default color 0xFF000000 (full alpha black).
+     * Does not block changing the value in the future in any way.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param hueToAdd hue to add, with the hue value being normalized to the range [0,1]
+     */
+    public void colorPickerHueAdd(String path, float hueToAdd) {
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
+        if (node == null) {
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new ColorPickerFolderNode(path, folder, normalizedHsbColorProvider.color(0,1));
+            NodeTree.insertNodeAtItsPath(node);
+        } else {
+            PickerColor oldColor = node.getColor();
+            float newLoopedHue = Utils.hueModulo(oldColor.hue + hueToAdd);
+            node.setHex(normalizedHsbColorProvider.color(newLoopedHue, oldColor.saturation, oldColor.brightness, oldColor.alpha));
             node.loadValuesFromHex(false);
         }
     }

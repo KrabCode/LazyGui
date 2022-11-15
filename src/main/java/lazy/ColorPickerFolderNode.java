@@ -53,7 +53,7 @@ class ColorPickerFolderNode extends FolderNode {
 
     void loadValuesFromHex(boolean setDefaults) {
         lazyInitNodes();
-        PGraphics colorProvider = State.normalizedColorProvider;
+        PGraphics colorProvider = State.normalizedHsbColorProvider;
         ((ColorSliderNode) findChildByName(hueNodeName)).valueFloat = colorProvider.hue(hex);
         ((ColorSliderNode) findChildByName(satNodeName)).valueFloat = colorProvider.saturation(hex);
         ((ColorSliderNode) findChildByName(brNodeName)).valueFloat = colorProvider.brightness(hex);
@@ -67,7 +67,7 @@ class ColorPickerFolderNode extends FolderNode {
     }
 
     void loadValuesFromHSBA() {
-        PGraphics colorProvider = State.normalizedColorProvider;
+        PGraphics colorProvider = State.normalizedHsbColorProvider;
         setHex(colorProvider.color(
                 getValue(hueNodeName),
                 getValue(satNodeName),
