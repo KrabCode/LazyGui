@@ -6,10 +6,10 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.util.Arrays;
+
 import static lazy.State.cell;
-import static processing.core.PApplet.lerp;
-import static processing.core.PApplet.println;
-import static processing.core.PConstants.*;
+import static processing.core.PApplet.*;
 import static lazy.ThemeColorType.*;
 
 abstract class Window implements UserInputSubscriber {
@@ -139,15 +139,46 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    void drawConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
+    void drawShortestConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
         AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(owner);
         if(firstOpenParent == null || !firstOpenParent.isParentWindowVisible()){
             return;
         }
+        float xOffset = cell / 2f;
+        float y0 = posY + cell / 2f;
+        float y1 = firstOpenParent.pos.y + firstOpenParent.size.y  / 2f;
 
-        pg.line(posX + 1, posY + cell / 2f,
-                firstOpenParent.pos.x + firstOpenParent.size.x - 1,
-                firstOpenParent.pos.y + firstOpenParent.size.y  / 2f);
+        float x0a = posX - xOffset;
+        float x0b = posX + windowSizeX + xOffset;
+        float x1a = firstOpenParent.pos.x - xOffset;
+        float x1b = firstOpenParent.pos.x + firstOpenParent.size.x + xOffset;
+
+        class PointDist{
+            final float x0, x1, d;
+
+            public PointDist(float x0, float x1, float d) {
+                this.x0 = x0;
+                this.x1 = x1;
+                this.d = d;
+            }
+        }
+
+        PointDist[] pointsWithDistances = new PointDist[]{
+                new PointDist(x0a, x1a, dist(x0a, y0, x1a, y1)),
+                new PointDist(x0a, x1b, dist(x0a, y0, x1b, y1)),
+                new PointDist(x0b, x1b, dist(x0b, y0, x1b, y1)),
+                new PointDist(x0b, x1a, dist(x0b, y0, x1a, y1)),
+        };
+        Arrays.sort(pointsWithDistances, (p1, p2) -> Float.compare(p1.d, p2.d));
+
+        float x0 = pointsWithDistances[0].x0;
+        float x1 = pointsWithDistances[0].x1;
+
+        float diam = cell * 0.25f;
+        pg.line(x0, y0, x1, y1);
+        pg.rectMode(CENTER);
+        pg.rect(x0,y0,diam,diam);
+        pg.rect(x1,y1,diam,diam);
     }
 
     private void constrainPosition(PGraphics pg) {

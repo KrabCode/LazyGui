@@ -16,9 +16,11 @@ public class UtilContextLines {
     public static void update(String path, PGraphics pg) {
         showContextLinesMode = contextLinesOptions.indexOf(State.gui.stringPicker(path + "visibility", contextLinesOptions));
         pg.pushStyle();
-        pg.stroke(State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex);
+        int clr = State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex;
+        pg.stroke(clr);
+        pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);
-        pg.strokeWeight(State.gui.slider(path + "weight", 0));
+        pg.strokeWeight(State.gui.slider(path + "weight", 2));
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
             return;
@@ -34,7 +36,7 @@ public class UtilContextLines {
             boolean shouldShowLineFromTitleTowardsInlineNode = showContextLinesMode == SHOW_CONTEXT_LINES_ALWAYS ||
                     (folderNode.window.isTitleHighligted() && showContextLinesMode == SHOW_CONTEXT_LINES_MODE_ON_HOVER);
             if (shouldShowLineFromTitleTowardsInlineNode) {
-                folderNode.window.drawConnectingLineFromTitleBarToInlineNode(pg);
+                folderNode.window.drawShortestConnectingLineFromTitleBarToInlineNode(pg);
             }
         }
         pg.popStyle();
