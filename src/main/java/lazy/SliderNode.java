@@ -45,7 +45,9 @@ class SliderNode extends AbstractNode {
         valueFloatMax = max;
         valueFloatPrecision = defaultPrecision;
         valueFloatPrecisionDefault = defaultPrecision;
-        valueFloatConstrained = constrained;
+        valueFloatConstrained = constrained &&
+                max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
+                min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
         initSliderPrecisionArrays();
         State.overwriteWithLoadedStateIfAny(this);
     }
