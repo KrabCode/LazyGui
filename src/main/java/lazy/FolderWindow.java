@@ -4,6 +4,7 @@ package lazy;
 import processing.core.PGraphics;
 
 import static lazy.State.cell;
+import static processing.core.PApplet.println;
 
 
 /**
@@ -73,7 +74,8 @@ class FolderWindow extends Window {
     @Override
     public void mouseMoved(LazyMouseEvent e) {
         super.mouseMoved(e);
-        if (isPointInsideTitleBar(e.getX(), e.getY())) {
+        if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
+            println("hello");
             e.setConsumed(true);
             owner.setIsMouseOverThisNodeOnly();
         } else if (isPointInsideContent(e.getX(), e.getY())) {
