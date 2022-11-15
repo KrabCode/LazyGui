@@ -18,6 +18,7 @@ class SliderNode extends AbstractNode {
 
     private int numpadInputAppendLastFrame;
     protected int numpadInputAppendCooldown = 60;
+    protected boolean showPercentIndicatorWhenConstrained = true;
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
@@ -87,7 +88,7 @@ class SliderNode extends AbstractNode {
         precisionRange.add(1.0f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        currentPrecisionIndex = 5;
+        currentPrecisionIndex = 4;
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
@@ -141,10 +142,15 @@ class SliderNode extends AbstractNode {
         if(!constrainedThisFrame){
             backgroundScrollX -= mouseDelta.x;
         }
+        float widthMult = 1f;
+        if(valueFloatConstrained && showPercentIndicatorWhenConstrained){
+            widthMult = constrain(norm(valueFloat, valueFloatMin, valueFloatMax),0,1);
+            backgroundScrollX = 0;
+        }
         updateBackgroundShader(pg);
         pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(1,0, size.x-1, size.y);
+        pg.rect(1,0, (size.x-1) * widthMult, size.y);
         pg.resetShader();
     }
 

@@ -87,7 +87,7 @@ void main(){
     x = 0.5+0.5*sin(x);
 
     vec3 edge = hexToRgb(0x2F2F2F);
-    vec3 center = hexToRgb(0x4F4F4F);
+    vec3 center = hexToRgb(0x5F5F5F);
     colorPoint[colorsPerGradient] gradient = colorPoint[](
         colorPoint(0.,  edge),
         colorPoint(0.5, center),
