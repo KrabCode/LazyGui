@@ -15,7 +15,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void settings() {
-        size(800, 800, P2D);
+        size(1200, 1000, P2D);
     }
 
     @Override
