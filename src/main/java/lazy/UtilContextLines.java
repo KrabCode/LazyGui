@@ -6,15 +6,19 @@ import processing.core.PGraphics;
 import java.util.List;
 
 public class UtilContextLines {
-    public static final List<String> contextLinesOptions = new Utils.ArrayListBuilder<String>()
-            .add("never", "on hover", "always").build();
+    public static final String NEVER = "never";
+    public static final String ON_HOVER = "on hover";
+    public static final String ALWAYS = "always";
     public static final int SHOW_CONTEXT_LINES_MODE_NEVER = 0;
     public static final int SHOW_CONTEXT_LINES_MODE_ON_HOVER = 1;
     public static final int SHOW_CONTEXT_LINES_ALWAYS = 2;
+    public static final List<String> contextLinesOptions = new Utils.ArrayListBuilder<String>()
+            .add(NEVER, ON_HOVER, ALWAYS).build();
     public static int showContextLinesMode = SHOW_CONTEXT_LINES_MODE_ON_HOVER;
 
     public static void update(String path, PGraphics pg) {
-        showContextLinesMode = contextLinesOptions.indexOf(State.gui.stringPicker(path + "visibility", contextLinesOptions));
+        showContextLinesMode = contextLinesOptions.indexOf(
+                State.gui.stringPicker(path + "visibility", contextLinesOptions, ON_HOVER));
         pg.pushStyle();
         int clr = State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex;
         pg.stroke(clr);
