@@ -75,7 +75,6 @@ class FolderWindow extends Window {
     public void mouseMoved(LazyMouseEvent e) {
         super.mouseMoved(e);
         if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
-            println("hello");
             e.setConsumed(true);
             owner.setIsMouseOverThisNodeOnly();
         } else if (isPointInsideContent(e.getX(), e.getY())) {
