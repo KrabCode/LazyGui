@@ -32,7 +32,7 @@ class State {
     static float textMarginY = 14;
 
     static String sketchName = null;
-    static boolean autosaveEnabled = true;
+    static boolean autosaveEnabled = false;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     static final float defaultWindowWidth = 10;
     private static ArrayList<File> saveFilesSorted;

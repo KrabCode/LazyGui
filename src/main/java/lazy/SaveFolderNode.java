@@ -14,7 +14,7 @@ class SaveFolderNode extends FolderNode {
         super(path, parent);
         children.add(new ButtonNode(path + "/open save folder", this));
         children.add(new ButtonNode(path + "/create new save", this));
-        children.add(new ToggleNode(path + "/autosave on exit", this, true));
+        children.add(new ToggleNode(path + "/autosave on exit", this, false));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
@@ -75,7 +75,7 @@ class SaveFolderNode extends FolderNode {
         if(State.gui.button(path + "/open save folder")){
             Utils.openSaveFolder();
         }
-        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit");
+        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit", State.autosaveEnabled);
         updateStateList();
     }
 
