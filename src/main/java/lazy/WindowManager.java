@@ -34,7 +34,7 @@ class WindowManager {
         PVector pos = new PVector(cell, cell);
         if(folderNode.parent != null){
             Window parentWin = folderNode.parent.window;
-            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, folderNode.pos.y);
+            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, parentWin.posY);
         }
         if(nullablePosX != null){
             pos.x = nullablePosX;
