@@ -4,7 +4,6 @@ package lazy;
 import processing.core.PGraphics;
 
 import static lazy.State.cell;
-import static processing.core.PApplet.println;
 
 
 /**
@@ -26,7 +25,7 @@ class FolderWindow extends Window {
     }
 
     void drawInlineFolderChildren(PGraphics pg) {
-        float intendedWindowWidthInCells = folder.idealWindowWidth;;
+        float intendedWindowWidthInCells = folder.idealWindowWidth;
         windowSizeY = cell + heightSumOfChildNodes();
         windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();
