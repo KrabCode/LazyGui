@@ -164,7 +164,7 @@ abstract class AbstractNode {
 
     protected void drawRightToggleHandle(PGraphics pg, boolean valueBoolean) {
         float rectWidth = cell * 0.3f;
-        float rectHeight = cell * 0.3f;
+        float rectHeight = cell * 0.25f;
         pg.rectMode(CENTER);
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         if(isMouseOverNode){
