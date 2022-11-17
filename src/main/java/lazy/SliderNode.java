@@ -17,24 +17,9 @@ import static processing.core.PApplet.*;
 class SliderNode extends AbstractNode {
 
     private int numpadInputAppendLastFrame;
-    protected int numpadInputAppendCooldown = 60;
+    protected int numpadInputAppendCooldown = 90;
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
-
-    SliderNode(String path, FolderNode parentFolder, float defaultValue) {
-        super(NodeType.VALUE, path, parentFolder);
-        valueFloatDefault = defaultValue;
-        if (!Float.isNaN(defaultValue)) {
-            valueFloat = defaultValue;
-        }
-        valueFloatMin = -Float.MAX_VALUE;
-        valueFloatMax = Float.MAX_VALUE;
-        valueFloatPrecisionDefault = 0.1f;
-        valueFloatPrecision = valueFloatPrecisionDefault;
-        valueFloatConstrained = false;
-        initSliderPrecisionArrays();
-        State.overwriteWithLoadedStateIfAny(this);
-    }
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
@@ -299,19 +284,20 @@ class SliderNode extends AbstractNode {
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
             setValueFloat(input);
-            // set the precision for it to be ready for increasing precision when adding fractions
+            // set the precision for it to be ready for increasing precision when appending fractions
             setWholeNumberPrecision();
             return;
         }
         int valueFloored = floor(valueFloat);
         if (numberInputIndexAfterFloatingPoint == -1) {
-            // append whole number
-            setValueFloat(valueFloored * 10 + input);
-
+            // append whole number (floating point can represent only 7 whole digits)
+            // see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+            if(String.valueOf(valueFloored).length() <= 7){
+                setValueFloat(valueFloored * 10 + input);
+            }
         } else {
             // append fraction only
-            numberInputIndexAfterFloatingPoint++;
-            float fractionToAdd = input * (pow(0.1f, numberInputIndexAfterFloatingPoint));
+            float fractionToAdd = input * (pow(0.1f, ++numberInputIndexAfterFloatingPoint));
             setValueFloat(valueFloat + fractionToAdd);
             // adjust precision to show the new number
             increasePrecision();
