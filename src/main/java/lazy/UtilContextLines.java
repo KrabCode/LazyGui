@@ -21,7 +21,7 @@ public class UtilContextLines {
                 State.gui.stringPicker(path + "visibility", contextLinesOptions, ON_HOVER));
         boolean shouldPickShortestLine = State.gui.toggle(path + "shortest line");
         pg.pushStyle();
-        int clr = State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex;
+        int clr = State.gui.colorPicker(path + "color", State.colorStore.color(0.5f)).hex;
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);

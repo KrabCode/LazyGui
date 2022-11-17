@@ -531,7 +531,7 @@ public class LazyGui implements UserInputSubscriber {
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
-            int hex = State.normalizedHsbColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+            int hex = State.colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
             node = new ColorPickerFolderNode(path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
@@ -589,12 +589,12 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, normalizedHsbColorProvider.color(0,1));
+            node = new ColorPickerFolderNode(path, folder, colorStore.color(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
             PickerColor oldColor = node.getColor();
             float newLoopedHue = Utils.hueModulo(oldColor.hue + hueToAdd);
-            node.setHex(normalizedHsbColorProvider.color(newLoopedHue, oldColor.saturation, oldColor.brightness, oldColor.alpha));
+            node.setHex(colorStore.color(newLoopedHue, oldColor.saturation, oldColor.brightness, oldColor.alpha));
             node.loadValuesFromHex(false);
         }
     }
@@ -716,5 +716,4 @@ public class LazyGui implements UserInputSubscriber {
             State.createNewSaveWithRandomName();
         }
     }
-
 }

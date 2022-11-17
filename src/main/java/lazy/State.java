@@ -23,7 +23,7 @@ class State {
     static PFont font = null;
     static PApplet app = null;
     static LazyGui gui = null;
-    static PGraphics normalizedHsbColorProvider = null;
+    static PGraphics colorStore = null;
 
     private static final String fontPath = "JetBrainsMono-Regular.ttf";
     static private final int defaultFontSize = 16;
@@ -57,8 +57,8 @@ class State {
         sketchName = app.getClass().getSimpleName();
         lazyInitSaveDir(true);
 
-        normalizedHsbColorProvider = app.createGraphics(256, 256, P2D);
-        normalizedHsbColorProvider.colorMode(HSB, 1, 1, 1, 1);
+        colorStore = app.createGraphics(256, 256, P2D);
+        colorStore.colorMode(HSB, 1, 1, 1, 1);
     }
 
     static void tryUpdateFont(int inputFontSize, float textMarginX, float textMarginY) {

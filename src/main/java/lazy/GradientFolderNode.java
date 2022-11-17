@@ -145,7 +145,7 @@ class GradientFolderNode extends FolderNode {
 
     GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
                                                             float pos, boolean active) {
-        int hex = State.normalizedHsbColorProvider.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+        int hex = State.colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 

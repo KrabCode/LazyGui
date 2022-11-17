@@ -50,7 +50,7 @@ public class UtilGridSnap {
         float h = pg.height;
         int step = floor(cell);
         pg.beginShape(POINTS);
-        int pointColor = pointGridColor != null ? pointGridColor.hex : State.normalizedHsbColorProvider.color(1);
+        int pointColor = pointGridColor != null ? pointGridColor.hex : State.colorStore.color(1);
         pg.stroke(pointColor);
         for (int x = 0; x <= w; x+= step) {
             for (int y = 0; y <= h; y+= step) {
@@ -130,7 +130,7 @@ public class UtilGridSnap {
         }
         UtilGridSnap.setSelectedVisibilityMode(State.gui.stringPicker(gridPath + "show grid",
                 UtilGridSnap.getOptions(), UtilGridSnap.getDefaultVisibilityMode()));
-        PickerColor clr = State.gui.colorPicker(gridPath + "point color", State.normalizedHsbColorProvider.color(0.5f, 1));
+        PickerColor clr = State.gui.colorPicker(gridPath + "point color", State.colorStore.color(0.5f, 1));
 
         UtilGridSnap.setPointColor(clr);
         UtilGridSnap.setPointWeight(State.gui.slider(gridPath + "point weight", 3));

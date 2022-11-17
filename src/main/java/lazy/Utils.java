@@ -18,6 +18,19 @@ class Utils {
 
     private static FolderNode clipboardFolder;
 
+    /**
+     * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
+     * @param hue value to transfer to the [0-1] range without changing apparent color value
+     * @return hue in the range between 0-1
+     */
+    static float hueModulo(float hue){
+        if (hue < 0.f){
+            return hue % 1f + 1f;
+        } else {
+            return hue % 1f;
+        }
+    }
+
     static void setClipboardString(String data) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(data);
@@ -146,16 +159,15 @@ class Utils {
     static class ArrayListBuilder<T> {
         private final ArrayList<T> list = new ArrayList<>();
 
+        ArrayList<T> build() {
+            return list;
+        }
+
         ArrayListBuilder<T> add(T o) {
             list.add(o);
             return this;
         }
 
-        ArrayList<T> build() {
-            return list;
-        }
-
-        // I don't know what this annotation means but IntelliJ suggested it, so I'm keeping it
         @SafeVarargs
         public final ArrayListBuilder<T> add(T... options) {
             for (T t :
@@ -224,16 +236,4 @@ class Utils {
         }
     }
 
-    /**
-     * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
-     * @param hue value to transfer to the [0-1] range without changing apparent color value
-     * @return hue in the range between 0-1
-     */
-    static float hueModulo(float hue){
-        if (hue < 0.f){
-            return hue % 1f + 1f;
-        } else {
-            return hue % 1f;
-        }
-    }
 }
