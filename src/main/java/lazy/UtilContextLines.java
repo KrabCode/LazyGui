@@ -14,17 +14,19 @@ public class UtilContextLines {
     public static final int SHOW_CONTEXT_LINES_ALWAYS = 2;
     public static final List<String> contextLinesOptions = new Utils.ArrayListBuilder<String>()
             .add(NEVER, ON_HOVER, ALWAYS).build();
-    public static int showContextLinesMode = SHOW_CONTEXT_LINES_MODE_ON_HOVER;
+
 
     public static void update(String path, PGraphics pg) {
-        showContextLinesMode = contextLinesOptions.indexOf(
+        int showContextLinesMode = contextLinesOptions.indexOf(
                 State.gui.stringPicker(path + "visibility", contextLinesOptions, ON_HOVER));
+        boolean shouldPickShortestLine = State.gui.toggle(path + "shortest line");
         pg.pushStyle();
         int clr = State.gui.colorPicker(path + "color", State.normalizedHsbColorProvider.color(0.5f)).hex;
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);
         pg.strokeWeight(State.gui.slider(path + "weight", 2));
+        float endpointRectSize = State.gui.slider(path + "end size", 0.25f * State.cell);
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
             return;
@@ -40,7 +42,7 @@ public class UtilContextLines {
             boolean shouldShowLineFromTitleTowardsInlineNode = showContextLinesMode == SHOW_CONTEXT_LINES_ALWAYS ||
                     (folderNode.window.isTitleHighligted() && showContextLinesMode == SHOW_CONTEXT_LINES_MODE_ON_HOVER);
             if (shouldShowLineFromTitleTowardsInlineNode) {
-                folderNode.window.drawShortestConnectingLineFromTitleBarToInlineNode(pg);
+                folderNode.window.drawContextLineFromTitleBarToInlineNode(pg, endpointRectSize, shouldPickShortestLine);
             }
         }
         pg.popStyle();

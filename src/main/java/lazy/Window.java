@@ -75,9 +75,9 @@ abstract class Window implements UserInputSubscriber {
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
         pg.rect(tooltipXOffset, tooltipYOffset - tooltipHeight, tooltipWidth, tooltipHeight);
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
-        pg.textAlign(LEFT,CENTER);
+        pg.textAlign(LEFT, CENTER);
         for (int i = 0; i < lineCount; i++) {
-            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, tooltipYOffset -i * cell - State.textMarginY);
+            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, tooltipYOffset - i * cell - State.textMarginY);
         }
         pg.popMatrix();
         pg.popStyle();
@@ -89,9 +89,9 @@ abstract class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        if(drawBackgroundOnly){
+        if (drawBackgroundOnly) {
             pg.noStroke();
-        }else{
+        } else {
             pg.noFill();
         }
         pg.rect(0, 0, windowSizeX, windowSizeY);
@@ -108,7 +108,7 @@ abstract class Window implements UserInputSubscriber {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
-            pg.rect(windowSizeX - cell + 0.5f, 1, cell-1, cell - 1);
+            pg.rect(windowSizeX - cell + 0.5f, 1, cell - 1, cell - 1);
             pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
             pg.strokeWeight(1.99f);
             pg.pushMatrix();
@@ -139,46 +139,43 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    void drawShortestConnectingLineFromTitleBarToInlineNode(PGraphics pg) {
+    void drawContextLineFromTitleBarToInlineNode(PGraphics pg, float endRectSize, boolean pickShortestLine) {
         AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(owner);
-        if(firstOpenParent == null || !firstOpenParent.isParentWindowVisible()){
+        if (firstOpenParent == null || !firstOpenParent.isParentWindowVisible()) {
             return;
         }
         float xOffset = cell / 2f;
         float y0 = posY + cell / 2f;
-        float y1 = firstOpenParent.pos.y + firstOpenParent.size.y  / 2f;
-
+        float y1 = firstOpenParent.pos.y + firstOpenParent.size.y / 2f;
         float x0a = posX - xOffset;
         float x0b = posX + windowSizeX + xOffset;
         float x1a = firstOpenParent.pos.x - xOffset;
         float x1b = firstOpenParent.pos.x + firstOpenParent.size.x + xOffset;
-
-        class PointDist{
-            final float x0, x1, d;
-
-            public PointDist(float x0, float x1, float d) {
-                this.x0 = x0;
-                this.x1 = x1;
-                this.d = d;
+        float x0 = x0a;
+        float x1 = x1b;
+        if (pickShortestLine) {
+            class PointDist {
+                final float x0, x1, d;
+                public PointDist(float x0, float x1, float d) {
+                    this.x0 = x0;
+                    this.x1 = x1;
+                    this.d = d;
+                }
             }
+            PointDist[] pointsWithDistances = new PointDist[]{
+                    new PointDist(x0a, x1a, dist(x0a, y0, x1a, y1)),
+                    new PointDist(x0a, x1b, dist(x0a, y0, x1b, y1)),
+                    new PointDist(x0b, x1b, dist(x0b, y0, x1b, y1)),
+                    new PointDist(x0b, x1a, dist(x0b, y0, x1a, y1)),
+            };
+            Arrays.sort(pointsWithDistances, (p1, p2) -> Float.compare(p1.d, p2.d));
+            x0 = pointsWithDistances[0].x0;
+            x1 = pointsWithDistances[0].x1;
         }
-
-        PointDist[] pointsWithDistances = new PointDist[]{
-                new PointDist(x0a, x1a, dist(x0a, y0, x1a, y1)),
-                new PointDist(x0a, x1b, dist(x0a, y0, x1b, y1)),
-                new PointDist(x0b, x1b, dist(x0b, y0, x1b, y1)),
-                new PointDist(x0b, x1a, dist(x0b, y0, x1a, y1)),
-        };
-        Arrays.sort(pointsWithDistances, (p1, p2) -> Float.compare(p1.d, p2.d));
-
-        float x0 = pointsWithDistances[0].x0;
-        float x1 = pointsWithDistances[0].x1;
-
-        float diam = cell * 0.25f;
         pg.line(x0, y0, x1, y1);
         pg.rectMode(CENTER);
-        pg.rect(x0,y0,diam,diam);
-        pg.rect(x1,y1,diam,diam);
+        pg.rect(x0, y0, endRectSize, endRectSize);
+        pg.rect(x1, y1, endRectSize, endRectSize);
     }
 
     private void constrainPosition(PGraphics pg) {
