@@ -16,7 +16,7 @@ import static processing.core.PApplet.*;
 
 class SliderNode extends AbstractNode {
 
-    private int numpadInputAppendLastFrame;
+    private int numpadInputAppendLastFrame = -1;
     protected int numpadInputAppendCooldown = 90;
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
@@ -279,7 +279,8 @@ class SliderNode extends AbstractNode {
     }
 
     private void tryAppendNumberInputToValue(Integer input) {
-        boolean replaceMode = State.app.frameCount - numpadInputAppendLastFrame > numpadInputAppendCooldown;
+        boolean replaceMode = numpadInputAppendLastFrame == -1 ||
+                State.app.frameCount - numpadInputAppendLastFrame > numpadInputAppendCooldown;
         numpadInputAppendLastFrame = State.app.frameCount;
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
