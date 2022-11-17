@@ -19,15 +19,16 @@ class SliderNode extends AbstractNode {
     private int numpadInputAppendLastFrame;
     protected int numpadInputAppendCooldown = 60;
     protected boolean showPercentIndicatorWhenConstrained = true;
+    private int numberInputIndexAfterFloatingPoint = -1;
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
-        if(!Float.isNaN(defaultValue)){
+        if (!Float.isNaN(defaultValue)) {
             valueFloat = defaultValue;
         }
         valueFloatMin = -Float.MAX_VALUE;
-        valueFloatMax =  Float.MAX_VALUE;
+        valueFloatMax = Float.MAX_VALUE;
         valueFloatPrecisionDefault = 0.1f;
         valueFloatPrecision = valueFloatPrecisionDefault;
         valueFloatConstrained = false;
@@ -38,7 +39,7 @@ class SliderNode extends AbstractNode {
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
-        if(!Float.isNaN(defaultValue)){
+        if (!Float.isNaN(defaultValue)) {
             valueFloat = defaultValue;
         }
         valueFloatMin = min;
@@ -77,7 +78,7 @@ class SliderNode extends AbstractNode {
         loadPrecisionFromNode();
     }
 
-    void initSliderBackgroundShader(){
+    void initSliderBackgroundShader() {
         InternalShaderStore.getShader(shaderPath);
     }
 
@@ -141,18 +142,18 @@ class SliderNode extends AbstractNode {
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
-        if(!constrainedThisFrame){
+        if (!constrainedThisFrame) {
             backgroundScrollX -= mouseDelta.x;
         }
         float widthMult = 1f;
-        if(valueFloatConstrained && showPercentIndicatorWhenConstrained){
-            widthMult = constrain(norm(valueFloat, valueFloatMin, valueFloatMax),0,1);
+        if (valueFloatConstrained && showPercentIndicatorWhenConstrained) {
+            widthMult = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
             backgroundScrollX = 0;
         }
         updateBackgroundShader(pg);
         pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
-        pg.rect(1,0, (size.x-1) * widthMult, size.y);
+        pg.rect(1, 0, (size.x - 1) * widthMult, size.y);
         pg.resetShader();
     }
 
@@ -170,7 +171,7 @@ class SliderNode extends AbstractNode {
         if (fractionPadding == 0) {
             return String.valueOf(floor(valueFloat));
         }
-        if(Float.isNaN(valueFloat)){
+        if (Float.isNaN(valueFloat)) {
             return "NaN";
         }
         return nf(valueFloat, 0, fractionPadding);
@@ -178,25 +179,33 @@ class SliderNode extends AbstractNode {
 
     @Override
     void mouseWheelMovedOverNode(float x, float y, int dir) {
-        super.mouseWheelMovedOverNode(x,y, dir);
-        if(dir > 0){
-            decreasePrecision();
-        }else if(dir < 0){
+        super.mouseWheelMovedOverNode(x, y, dir);
+        if (dir > 0) {
             increasePrecision();
+        } else if (dir < 0) {
+            decreasePrecision();
         }
     }
 
-    private void increasePrecision() {
-        currentPrecisionIndex = min(currentPrecisionIndex + 1, precisionRange.size() - 1);
-        setPrecisionToNode();
+    private void setWholeNumberPrecision(){
+        for (int i = 0; i < precisionRange.size(); i++) {
+            if(precisionRange.get(i) >= 1f){
+                setPrecisionToNode(i);
+                break;
+            }
+        }
     }
 
     private void decreasePrecision() {
-        currentPrecisionIndex = max(currentPrecisionIndex - 1, 0);
-        setPrecisionToNode();
+        setPrecisionToNode(min(currentPrecisionIndex + 1, precisionRange.size() - 1));
     }
 
-    protected void setPrecisionToNode() {
+    private void increasePrecision() {
+        setPrecisionToNode(max(currentPrecisionIndex - 1, 0));
+    }
+
+    protected void setPrecisionToNode(int newPrecisionIndex) {
+        currentPrecisionIndex = newPrecisionIndex;
         valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
         validatePrecision();
     }
@@ -209,7 +218,7 @@ class SliderNode extends AbstractNode {
     protected boolean tryConstrainValue() {
         boolean constrained = false;
         if (valueFloatConstrained) {
-            if(valueFloat > valueFloatMax || valueFloat < valueFloatMin){
+            if (valueFloat > valueFloatMax || valueFloat < valueFloatMin) {
                 constrained = true;
             }
             valueFloat = constrain(valueFloat, valueFloatMin, valueFloatMax);
@@ -220,34 +229,34 @@ class SliderNode extends AbstractNode {
     @Override
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        if(e.getKeyChar() == 'r'){
-            if(Float.isNaN(valueFloatDefault)){
+        if (e.getKeyChar() == 'r') {
+            if (Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
             valueFloatPrecision = valueFloatPrecisionDefault;
             currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         }
         tryReadNumpadInput(e);
-        if(e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.getKeyCode() == KeyCodes.CTRL_C) {
             Utils.setClipboardString(Float.toString(valueFloat));
         }
-        if(e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.CTRL_V) {
             String clipboardString = Utils.getClipboardString();
-            try{
+            try {
                 float clipboardValue = Float.parseFloat(clipboardString);
-                if(!Float.isNaN(clipboardValue)){
+                if (!Float.isNaN(clipboardValue)) {
                     setValueFloat(clipboardValue);
-                }else{
+                } else {
                     println("Could not parse float from this clipboard string: " + clipboardString);
                 }
-            }catch(NumberFormatException nfe){
+            } catch (NumberFormatException nfe) {
                 println("Could not parse float from this clipboard string: " + clipboardString);
             }
         }
     }
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
-        switch(e.getKeyChar()){
+        switch (e.getKeyChar()) {
             case '0':
             case '1':
             case '2':
@@ -262,12 +271,20 @@ class SliderNode extends AbstractNode {
                 break;
             case '.':
             case ',':
-                tryAppendFloatingPointInput();
+                numberInputIndexAfterFloatingPoint = 0;
                 break;
-            case '+': valueFloat += valueFloatPrecision; break;
-            case '-': valueFloat -= valueFloatPrecision; break;
-            case '*': increasePrecision(); break;
-            case '/': decreasePrecision(); break;
+            case '+':
+                valueFloat += valueFloatPrecision;
+                break;
+            case '-':
+                valueFloat -= valueFloatPrecision;
+                break;
+            case '*':
+                decreasePrecision();
+                break;
+            case '/':
+                increasePrecision();
+                break;
             default: {
                 return;
             }
@@ -277,26 +294,28 @@ class SliderNode extends AbstractNode {
     }
 
     private void tryAppendNumberInputToValue(Integer input) {
-        boolean append = State.app.frameCount - numpadInputAppendLastFrame < numpadInputAppendCooldown;
+        boolean replaceMode = State.app.frameCount - numpadInputAppendLastFrame > numpadInputAppendCooldown;
         numpadInputAppendLastFrame = State.app.frameCount;
-        if(!append){
+        if (replaceMode) {
+            numberInputIndexAfterFloatingPoint = -1;
             setValueFloat(input);
+            setWholeNumberPrecision();
             return;
         }
-        if(dotIndex == -1){
+        int valueFloored = floor(valueFloat);
+        if (numberInputIndexAfterFloatingPoint == -1) {
             // append whole number
-            int valueSoFar = floor(valueFloat);
-            setValueFloat(valueSoFar * 10 + input);
-            return;
+            setValueFloat(valueFloored * 10 + input);
+
+        } else {
+            // append fraction only
+            numberInputIndexAfterFloatingPoint++;
+            float fractionToAdd = input * (pow(0.1f, numberInputIndexAfterFloatingPoint));
+            setValueFloat(valueFloat + fractionToAdd);
+            // adjust precision to show the new number
+            increasePrecision();
         }
-        // append number after floating point when applicable
 
-    }
-
-    int dotIndex = -1;
-
-    private void tryAppendFloatingPointInput() {
-        // TODO implement... https://github.com/KrabCode/LazyGui/issues/16
     }
 
     protected void setValueFloat(float floatToSet) {
@@ -311,7 +330,7 @@ class SliderNode extends AbstractNode {
     @Override
     void mouseDragNodeContinue(LazyMouseEvent e) {
         super.mouseDragNodeContinue(e);
-        if(isDragged){
+        if (isDragged) {
             mouseDelta.x = e.getPrevX() - e.getX();
             mouseDelta.y = e.getPrevY() - e.getY();
             e.setConsumed(true);
@@ -321,7 +340,7 @@ class SliderNode extends AbstractNode {
     @Override
     void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
-        if(json.has("valueFloatPrecision")){
+        if (json.has("valueFloatPrecision")) {
             valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();
         }
         if (json.has("valueFloat") &&
