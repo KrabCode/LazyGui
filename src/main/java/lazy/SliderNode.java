@@ -299,6 +299,7 @@ class SliderNode extends AbstractNode {
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
             setValueFloat(input);
+            // set the precision for it to be ready for increasing precision when adding fractions
             setWholeNumberPrecision();
             return;
         }
