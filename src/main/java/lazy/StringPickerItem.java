@@ -17,7 +17,7 @@ class StringPickerItem extends ToggleNode {
 
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg){
-        // do not draw the right toggle handle
+        // do not call super() to not draw the right toggle handle
         if(valueBoolean){
             pg.noStroke();
             pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));

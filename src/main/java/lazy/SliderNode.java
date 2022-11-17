@@ -176,23 +176,6 @@ class SliderNode extends AbstractNode {
         return nf(valueFloat, 0, fractionPadding);
     }
 
-    String getPrecisionToDisplay() {
-        float p = valueFloatPrecision;
-        if (p >= 1) {
-            p = floor(p);
-        }
-        if (abs(p - 0.0001f) < 0.00001f) {
-            return "0.0001";
-        }
-        if (abs(p - 0.00001f) < 0.000001f) {
-            return "0.00001";
-        }
-        if (abs(p - 0.000001f) < 0.0000001f) {
-            return "0.000001";
-        }
-        return nf(p);
-    }
-
     @Override
     void mouseWheelMovedOverNode(float x, float y, int dir) {
         super.mouseWheelMovedOverNode(x,y, dir);
@@ -275,11 +258,11 @@ class SliderNode extends AbstractNode {
             case '7':
             case '8':
             case '9':
-                tryAddNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())));
+                tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())));
                 break;
             case '.':
             case ',':
-                // TODO https://github.com/KrabCode/LazyGui/issues/16
+                tryAppendFloatingPointInput();
                 break;
             case '+': valueFloat += valueFloatPrecision; break;
             case '-': valueFloat -= valueFloatPrecision; break;
@@ -293,19 +276,27 @@ class SliderNode extends AbstractNode {
         onValueFloatChanged();
     }
 
-    private void tryAddNumberInputToValue(Integer input) {
+    private void tryAppendNumberInputToValue(Integer input) {
         boolean append = State.app.frameCount - numpadInputAppendLastFrame < numpadInputAppendCooldown;
         numpadInputAppendLastFrame = State.app.frameCount;
         if(!append){
             setValueFloat(input);
             return;
         }
-        int valueSoFar = floor(valueFloat);
-        setValueFloat(valueSoFar * 10 + input);
+        if(dotIndex == -1){
+            // append whole number
+            int valueSoFar = floor(valueFloat);
+            setValueFloat(valueSoFar * 10 + input);
+            return;
+        }
+        // append number after floating point when applicable
 
-        // TODO https://github.com/KrabCode/LazyGui/issues/16
-        //  implement float point append
-        //  probably split the value string into two, append to right half and reassemble
+    }
+
+    int dotIndex = -1;
+
+    private void tryAppendFloatingPointInput() {
+        // TODO implement... https://github.com/KrabCode/LazyGui/issues/16
     }
 
     protected void setValueFloat(float floatToSet) {

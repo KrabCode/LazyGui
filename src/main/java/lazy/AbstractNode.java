@@ -172,7 +172,7 @@ abstract class AbstractNode {
         }else{
             pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         }
-        float turnedOffHandleScale = 0.5f;
+        float turnedOffHandleScale = 0.25f;
         if(valueBoolean){
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
             pg.rect(-rectWidth*0.5f,0, rectWidth, rectHeight);

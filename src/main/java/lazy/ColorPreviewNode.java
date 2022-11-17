@@ -39,4 +39,9 @@ class ColorPreviewNode extends AbstractNode {
         pg.noStroke();
         pg.rect(1, 1, size.x - 1, size.y-1);
     }
+
+    @Override
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+        parentColorPickerFolder.keyPressedOverNode(e, x, y);
+    }
 }
