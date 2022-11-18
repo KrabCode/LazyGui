@@ -16,7 +16,12 @@ class SliderIntNode extends SliderNode {
 
     @Override
     String getValueToDisplay() {
-        return String.valueOf(PApplet.floor(valueFloat));
+        // manual string floor
+        String floatDisplay = super.getValueToDisplay();
+        if(floatDisplay.contains(".")){
+            return floatDisplay.split("\\.")[0];
+        }
+        return floatDisplay;
     }
 
     @Override
