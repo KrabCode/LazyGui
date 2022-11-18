@@ -79,6 +79,9 @@ public class UtilGridSnap {
         if(!snapToGridEnabled) {
             return new PVector(inputX, inputY);
         }
+        float negativeModuloBuffer = cell * 60;
+        inputX += negativeModuloBuffer;
+        inputY += negativeModuloBuffer;
         int x = floor(inputX);
         int y = floor(inputY);
         if(x % cell > cell / 2 ){
@@ -87,15 +90,13 @@ public class UtilGridSnap {
         if(y % cell > cell / 2 ){
             y += cell;
         }
-        x = constrain(x, 0, State.app.width);
-        y = constrain(y, 0, State.app.width);
         while(x % cell != 0){
             x -= 1;
         }
         while(y % cell != 0){
             y -= 1;
         }
-        return new PVector(x, y);
+        return new PVector(x-negativeModuloBuffer, y-negativeModuloBuffer);
     }
 
     public static List<String> getOptions() {

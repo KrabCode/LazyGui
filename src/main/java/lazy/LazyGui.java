@@ -25,7 +25,7 @@ public class LazyGui implements UserInputSubscriber {
     private static String requestedScreenshotCustomPath = "";
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive;
-    static boolean showPathTooltips = false;
+
 
 
     private PGraphics pg;
@@ -670,16 +670,7 @@ public class LazyGui implements UserInputSubscriber {
     private void updateOptionsFolder() {
         String path = optionsNode.path;
         updateHotkeyToggles(path + "/hotkeys/");
-
-        String winPath = path + "/windows/";
-        showPathTooltips = toggle(winPath + "show path tooltips", true);
-        State.setCellSize(sliderInt(winPath + "cell size", floor(cell), 12, Integer.MAX_VALUE));
-        State.tryUpdateFont(
-                sliderInt(winPath + "font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
-                slider(winPath + "font x", State.textMarginX),
-                slider(winPath + "font y", State.textMarginY)
-        );
-
+        WindowManager.updateWindowOptions(path + "/windows/");
         ThemeStore.updateThemePicker(path + "/themes");
         UtilGridSnap.update(path + "/grid/");
         UtilContextLines.update(path + "/context lines/", pg);

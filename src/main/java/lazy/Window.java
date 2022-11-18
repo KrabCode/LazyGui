@@ -58,7 +58,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || !LazyGui.showPathTooltips) {
+        if (!isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || !WindowManager.showPathTooltips) {
             return;
         }
         pg.pushMatrix();
@@ -179,6 +179,9 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
+        if(!State.keepWindowsInBounds){
+            return;
+        }
         float rightEdge = pg.width - windowSizeX - 1;
         float bottomEdge = pg.height - windowSizeY - 1;
         float lerpAmt = 0.3f;

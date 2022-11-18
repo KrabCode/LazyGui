@@ -77,8 +77,8 @@ class ThemeStore {
             Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
             assert defaultTheme != null;
 
-            String userSelection = State.gui.stringPicker(path + "/theme presets", ThemeType.getAllNames(), defaultPaletteName);
-            String editPath = path + "/theme editor/";
+            String userSelection = State.gui.stringPicker(path + "/preset", ThemeType.getAllNames(), defaultPaletteName);
+            String editPath = path + "/editor/";
             if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
                 ThemeType newSelectionToCopy = ThemeType.getValue(userSelection);
                 State.gui.colorPickerSet(editPath + "focus foreground", ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND, newSelectionToCopy));

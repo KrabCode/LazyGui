@@ -6,11 +6,13 @@ import processing.core.PVector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
+import static processing.core.PApplet.floor;
 
 class WindowManager {
     private static WindowManager singleton;
     private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private Window windowToSetFocusOn = null;
+    static boolean showPathTooltips = false;
 
     WindowManager() {
 
@@ -102,5 +104,16 @@ class WindowManager {
           w.posX = newPos.x;
           w.posY = newPos.y;
         }
+    }
+
+    public static void updateWindowOptions(String path) {
+        showPathTooltips = State.gui.toggle(path + "show path tooltips", true);
+        State.setKeepWindowsInBounds(State.gui.toggle(path + "keep in bounds"));
+        State.setCellSize(State.gui.sliderInt(path + "cell size", floor(cell), 12, Integer.MAX_VALUE));
+        State.tryUpdateFont(
+                State.gui.sliderInt(path + "font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
+                State.gui.slider(path + "font x", State.textMarginX),
+                State.gui.slider(path + "font y", State.textMarginY)
+        );
     }
 }
