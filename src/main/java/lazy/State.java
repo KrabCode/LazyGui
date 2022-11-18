@@ -55,7 +55,7 @@ class State {
         registerExitHandler();
 
         sketchName = app.getClass().getSimpleName();
-        lazyInitSaveDir(true);
+        lazyInitSaveDir();
 
         colorStore = app.createGraphics(256, 256, P2D);
         colorStore.colorMode(HSB, 1, 1, 1, 1);
@@ -81,11 +81,8 @@ class State {
         return lastFontSize;
     }
 
-    private static void lazyInitSaveDir(boolean printWelcomeMessage) {
+    private static void lazyInitSaveDir() {
         saveDir = new File(State.app.sketchPath() + "/saves/" + sketchName);
-        if(printWelcomeMessage){
-             println("LazyGui save folder: " + saveDir.getAbsolutePath());
-        }
         if (!saveDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             saveDir.mkdirs();
@@ -120,7 +117,7 @@ class State {
 
 
     private static void reloadSaveFolderContents() {
-        lazyInitSaveDir(false);
+        lazyInitSaveDir();
         File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));

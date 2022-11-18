@@ -6,15 +6,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-class SaveFolderNode extends FolderNode {
+import static lazy.State.saveDir;
+import static processing.core.PApplet.print;
+import static processing.core.PApplet.println;
 
+class SaveFolderNode extends FolderNode {
+    String pathPrintFolderPath = "/print folder path";
+    String pathOpenSaveFolder  = "/open save folder";
+    String pathAutosaveOnExit  = "/autosave on exit";
+    String pathCreateNewSave   = "/create new save";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     SaveFolderNode(String path, FolderNode parent) {
         super(path, parent);
-        children.add(new ButtonNode(path + "/open save folder", this));
-        children.add(new ButtonNode(path + "/create new save", this));
-        children.add(new ToggleNode(path + "/autosave on exit", this, false));
+        children.add(new ButtonNode(path + pathCreateNewSave, this));
+        children.add(new ButtonNode(path + pathPrintFolderPath, this));
+        children.add(new ButtonNode(path + pathOpenSaveFolder , this));
+        children.add(new ToggleNode(path + pathAutosaveOnExit  , this, false));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
@@ -69,13 +77,17 @@ class SaveFolderNode extends FolderNode {
 
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         super.updateDrawInlineNodeAbstract(pg);
-        if(State.gui.button(path + "/create new save")){
+        if(State.gui.button(path + pathCreateNewSave)){
             State.createNewSaveWithRandomName();
         }
-        if(State.gui.button(path + "/open save folder")){
+        if(State.gui.button(path + pathOpenSaveFolder)){
             Utils.openSaveFolder();
         }
-        State.autosaveEnabled = State.gui.toggle(path + "/autosave on exit", State.autosaveEnabled);
+        if(State.gui.button(path + pathPrintFolderPath)){
+            println("LazyGui save folder: " + saveDir.getAbsolutePath());
+        }
+
+        State.autosaveEnabled = State.gui.toggle(path + pathAutosaveOnExit, State.autosaveEnabled);
         updateStateList();
     }
 
