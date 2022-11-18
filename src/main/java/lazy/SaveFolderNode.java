@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static lazy.State.saveDir;
-import static processing.core.PApplet.print;
 import static processing.core.PApplet.println;
 
 class SaveFolderNode extends FolderNode {
