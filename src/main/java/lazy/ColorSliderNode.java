@@ -11,7 +11,7 @@ import static processing.core.PConstants.*;
 abstract class ColorSliderNode extends SliderNode {
 
     final ColorPickerFolderNode parentColorPickerFolder;
-    float maximumFloatPrecision = 0.1f;
+    float maximumFloatPrecision = 1;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
@@ -19,10 +19,8 @@ abstract class ColorSliderNode extends SliderNode {
         super(path, parentFolder, 0, 0, 1, 0.01f, true);
         this.parentColorPickerFolder = parentFolder;
         showPercentIndicatorWhenConstrained = false;
-        currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         initSliderBackgroundShader();
         InternalShaderStore.getShader(colorShaderPath);
-        numpadInputAppendCooldown = 0;
     }
 
     @Override

@@ -20,8 +20,8 @@ class SliderNode extends AbstractNode {
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastFrame = -1;
-    protected int numpadInputAppendCooldown = 60;
-    private float numpadRunningInputBuffer = 0;
+    protected int numpadInputAppendCooldown = 30;
+    private float numpadBufferValue = 0;
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
 
@@ -81,7 +81,7 @@ class SliderNode extends AbstractNode {
         precisionRange.add(1.0f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        currentPrecisionIndex = 4;
+        setPrecisionIndexAndValue(4);
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
@@ -98,10 +98,10 @@ class SliderNode extends AbstractNode {
             float thisValue = precisionRange.get(i);
             float nextValue = precisionRange.get(i + 1);
             if (thisValue == p) {
-                currentPrecisionIndex = i;
+                setPrecisionIndexAndValue(i);
                 return;
             } else if (thisValue < p && nextValue > p) {
-                currentPrecisionIndex = i + 1;
+                setPrecisionIndexAndValue(i + 1);
                 precisionRange.add(i + 1, p);
                 precisionRangeDigitsAfterDot.put(p, String.valueOf(p).length() - 2);
             }
@@ -153,7 +153,7 @@ class SliderNode extends AbstractNode {
 
     String getValueToDisplay() {
         int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
-        float value = isNumpadInputActive() ? numpadRunningInputBuffer : valueFloat;
+        float value = isNumpadInputActive() ? numpadBufferValue : valueFloat;
         if (fractionPadding == 0) {
             String wholeNumber = String.valueOf(floor(value));
             if(numberInputIndexAfterFloatingPoint == 0){
@@ -180,31 +180,33 @@ class SliderNode extends AbstractNode {
     private void setWholeNumberPrecision(){
         for (int i = 0; i < precisionRange.size(); i++) {
             if(precisionRange.get(i) >= 1f){
-                setPrecisionToNode(i);
+                setPrecisionIndexAndValue(i);
                 break;
             }
         }
     }
 
     private void decreasePrecision() {
-        setPrecisionToNode(min(currentPrecisionIndex + 1, precisionRange.size() - 1));
+        setPrecisionIndexAndValue(min(currentPrecisionIndex + 1, precisionRange.size() - 1));
     }
 
     private void increasePrecision() {
-        setPrecisionToNode(max(currentPrecisionIndex - 1, 0));
+        setPrecisionIndexAndValue(max(currentPrecisionIndex - 1, 0));
     }
 
-    protected void setPrecisionToNode(int newPrecisionIndex) {
+    protected void setPrecisionIndexAndValue(int newPrecisionIndex) {
         currentPrecisionIndex = newPrecisionIndex;
         valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
         validatePrecision();
     }
 
     private void updateValue() {
-        float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
-        valueFloat -= delta;
+        if(mouseDelta.x != 0){
+            float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
+            setValueFloat(valueFloat -= delta);
+        }
         if(numpadInputJustFinished()){
-            valueFloat = numpadRunningInputBuffer;
+            setValueFloat(numpadBufferValue);
         }
     }
 
@@ -288,24 +290,27 @@ class SliderNode extends AbstractNode {
         numpadInputAppendLastFrame = State.app.frameCount;
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
-            numpadRunningInputBuffer = input;
+            numpadBufferValue = input;
             // set the precision for it to be ready for increasing precision when appending fractions
             setWholeNumberPrecision();
             return;
         }
-        int valueFloored = floor(numpadRunningInputBuffer);
+        int valueFloored = floor(numpadBufferValue);
         if (numberInputIndexAfterFloatingPoint == -1) {
             // append whole number (floating point can represent only 7 whole digits)
             // see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
             if(String.valueOf(valueFloored).length() <= 7){
-                numpadRunningInputBuffer = valueFloored * 10 + input;
+                numpadBufferValue = valueFloored * 10 + input;
             }
         } else {
             // append fraction only
             float fractionToAdd = input * (pow(0.1f, ++numberInputIndexAfterFloatingPoint));
-            numpadRunningInputBuffer = numpadRunningInputBuffer + fractionToAdd;
+            numpadBufferValue = numpadBufferValue + fractionToAdd;
             // adjust precision to show the new number
-            increasePrecision();
+
+            if(numberInputIndexAfterFloatingPoint > nf(fractionToAdd,0,0).length() - 3){
+                increasePrecision();
+            }
         }
 
     }
