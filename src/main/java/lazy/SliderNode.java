@@ -38,11 +38,12 @@ class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    @Expose()
+    @Expose
     float valueFloat;
     @Expose
+    int currentPrecisionIndex;
+    @Expose
     float valueFloatPrecision;
-
     float valueFloatDefault;
     float valueFloatMin;
     float valueFloatMax;
@@ -54,7 +55,7 @@ class SliderNode extends AbstractNode {
     PVector mouseDelta = new PVector();
     protected ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
-    protected int currentPrecisionIndex;
+
 
     String shaderPath = "sliderBackground.glsl";
 
@@ -154,7 +155,11 @@ class SliderNode extends AbstractNode {
     String getValueToDisplay() {
         int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
         if (fractionPadding == 0) {
-            return String.valueOf(floor(valueFloat));
+            String wholeNumber = String.valueOf(floor(valueFloat));
+            if(numberInputIndexAfterFloatingPoint == 0){
+                wholeNumber += ".";
+            }
+            return wholeNumber;
         }
         if (Float.isNaN(valueFloat)) {
             return "NaN";
@@ -257,12 +262,17 @@ class SliderNode extends AbstractNode {
             case '.':
             case ',':
                 numberInputIndexAfterFloatingPoint = 0;
+                numpadInputAppendLastFrame = State.app.frameCount;
                 break;
             case '+':
-                valueFloat += valueFloatPrecision;
+                if(valueFloat <= 0){
+                    valueFloat = abs(valueFloat);
+                }
                 break;
             case '-':
-                valueFloat -= valueFloatPrecision;
+                if(valueFloat >= 0){
+                    valueFloat = -valueFloat;
+                }
                 break;
             case '*':
                 decreasePrecision();
@@ -328,12 +338,14 @@ class SliderNode extends AbstractNode {
     @Override
     void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
+        if (json.has("currentPrecisionIndex")) {
+            currentPrecisionIndex = json.get("currentPrecisionIndex").getAsInt();
+        }
         if (json.has("valueFloatPrecision")) {
             valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();
+            valueFloatPrecisionDefault = json.get("valueFloatPrecision").getAsFloat();
         }
-        if (json.has("valueFloat") &&
-                json.has("valueFloatDefaultOriginal") &&
-                json.get("valueFloatDefaultOriginal").getAsFloat() == valueFloatDefault) {
+        if (json.has("valueFloat")) {
             setValueFloat(json.get("valueFloat").getAsFloat());
         }
     }

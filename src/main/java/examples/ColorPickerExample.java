@@ -24,6 +24,7 @@ public class ColorPickerExample extends PApplet {
         fill(gui.colorPicker("foreground", color(200)).hex);
         gui.colorPickerHueAdd("foreground", gui.slider("foreground hue +"));
         gui.slider("test/input");
+        gui.sliderInt("test/input");
         noStroke();
         rectMode(CENTER);
         rect(width/2f, height/2f, 150, 150);

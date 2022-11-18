@@ -25,8 +25,8 @@ public class UtilContextLines {
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);
-        pg.strokeWeight(State.gui.slider(path + "weight", 2));
-        float endpointRectSize = State.gui.slider(path + "end size", 0.25f * State.cell);
+        pg.strokeWeight(State.gui.slider(path + "weight", 1.2f));
+        float endpointRectSize = State.gui.slider(path + "end size", 3.5f);
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
             return;
