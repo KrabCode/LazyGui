@@ -203,7 +203,7 @@ class SliderNode extends AbstractNode {
     private void updateValue() {
         if(mouseDelta.x != 0){
             float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
-            setValueFloat(valueFloat -= delta);
+            setValueFloat(valueFloat - delta);
         }
         if(numpadInputJustFinished()){
             setValueFloat(numpadBufferValue);

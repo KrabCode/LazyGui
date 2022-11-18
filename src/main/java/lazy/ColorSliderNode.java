@@ -47,11 +47,14 @@ abstract class ColorSliderNode extends SliderNode {
 
     @Override
     protected void onValueFloatChanged() {
+        super.onValueFloatChanged();
         updateColorInParentFolder();
     }
 
     protected void updateColorInParentFolder() {
-        if(parentColorPickerFolder == null) return;
+        if(parentColorPickerFolder == null) {
+            return;
+        }
         parentColorPickerFolder.loadValuesFromHSBA();
     }
 
