@@ -31,7 +31,7 @@ class ButtonNode extends AbstractNode {
     }
 
     @Override
-    String getPrintableValue() {
+    String getConsolePrintableValue() {
         return "(button)";
     }
 }

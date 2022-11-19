@@ -212,7 +212,7 @@ class Utils {
                     prefix.append("|  ");
                 }
             }
-            String nodeValue = node.getPrintableValue();
+            String nodeValue = node.getConsolePrintableValue();
             boolean hasValue = nodeValue != null && nodeValue.length() > 0;
             outputBuilder.append(prefix)
                     .append(node.name)

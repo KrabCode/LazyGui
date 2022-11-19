@@ -16,7 +16,7 @@ class SliderIntNode extends SliderNode {
 
     @Override
     String getValueToDisplay() {
-        // manual string floor
+        // float floor as a string
         String floatDisplay = super.getValueToDisplay();
         if(floatDisplay.contains(".")){
             return floatDisplay.split("\\.")[0];

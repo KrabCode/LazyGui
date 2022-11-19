@@ -122,7 +122,7 @@ class StringPickerFolderNode extends FolderNode {
     }
 
     @Override
-    String getPrintableValue() {
+    String getConsolePrintableValue() {
         return valueString;
     }
 

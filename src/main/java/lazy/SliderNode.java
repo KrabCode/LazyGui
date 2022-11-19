@@ -20,8 +20,7 @@ class SliderNode extends AbstractNode {
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastFrame = -1;
-    protected int numpadInputAppendCooldown = 30;
-    private float numpadBufferValue = 0;
+    protected float numpadBufferValue = 0;
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
 
@@ -114,16 +113,18 @@ class SliderNode extends AbstractNode {
     }
 
     void updateDrawSliderNodeValue(PGraphics pg) {
-        String valueText = getValueToDisplay();
+        if(numpadInputJustFinished()){
+            setValueFloat(numpadBufferValue);
+        }
         if (isDragged || isMouseOverNode) {
-            updateValue();
+            updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
             mouseDelta.x = 0;
             mouseDelta.y = 0;
         }
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, valueText);
+        drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""));
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
@@ -200,13 +201,10 @@ class SliderNode extends AbstractNode {
         validatePrecision();
     }
 
-    private void updateValue() {
+    private void updateValueMouseInteraction() {
         if(mouseDelta.x != 0){
             float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
-        }
-        if(numpadInputJustFinished()){
-            setValueFloat(numpadBufferValue);
         }
     }
 
@@ -233,7 +231,11 @@ class SliderNode extends AbstractNode {
         }
         tryReadNumpadInput(e);
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            Utils.setClipboardString(Float.toString(valueFloat));
+            String value = getValueToDisplay();
+            if(value.endsWith(".")){
+                value += "0";
+            }
+            Utils.setClipboardString(value);
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             String clipboardString = Utils.getClipboardString();
@@ -286,7 +288,7 @@ class SliderNode extends AbstractNode {
 
     private void tryAppendNumberInputToValue(Integer input) {
         boolean replaceMode = numpadInputAppendLastFrame == -1 ||
-                State.app.frameCount - numpadInputAppendLastFrame > numpadInputAppendCooldown;
+                State.app.frameCount - numpadInputAppendLastFrame > State.numpadInputAppendCooldown;
         numpadInputAppendLastFrame = State.app.frameCount;
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
@@ -315,14 +317,14 @@ class SliderNode extends AbstractNode {
 
     }
 
-    private boolean isNumpadInputActive() {
+    protected boolean isNumpadInputActive() {
         return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount <= numpadInputAppendLastFrame + numpadInputAppendCooldown;
+                State.app.frameCount <= numpadInputAppendLastFrame + State.numpadInputAppendCooldown;
     }
 
-    private boolean numpadInputJustFinished(){
+    protected boolean numpadInputJustFinished(){
         return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount == numpadInputAppendLastFrame + numpadInputAppendCooldown;
+                State.app.frameCount == numpadInputAppendLastFrame + State.numpadInputAppendCooldown;
     }
 
     protected void setValueFloat(float floatToSet) {
@@ -360,7 +362,7 @@ class SliderNode extends AbstractNode {
     }
 
     @Override
-    String getPrintableValue() {
+    String getConsolePrintableValue() {
         return getValueToDisplay();
     }
 

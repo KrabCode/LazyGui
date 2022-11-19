@@ -26,7 +26,7 @@ class ColorPickerHexNode extends AbstractNode {
     }
 
     @Override
-    String getPrintableValue() {
+    String getConsolePrintableValue() {
         return parentColorPickerFolder.hexString;
     }
 }

@@ -269,7 +269,7 @@ abstract class AbstractNode {
 
     }
 
-    String getPrintableValue(){
+    String getConsolePrintableValue(){
         return "";
     }
 

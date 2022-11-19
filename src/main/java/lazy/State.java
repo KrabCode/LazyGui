@@ -20,6 +20,7 @@ class State {
     static float cell = 24;
     static float previewRectSize = cell * 0.6f;
 
+    static int numpadInputAppendCooldown = 30;
     static PFont font = null;
     static PApplet app = null;
     static LazyGui gui = null;

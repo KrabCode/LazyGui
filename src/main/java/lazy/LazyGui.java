@@ -60,7 +60,8 @@ public class LazyGui implements UserInputSubscriber {
         if (pg == null || pg.width != app.width || pg.height != app.height) {
             pg = app.createGraphics(app.width, app.height, P2D);
             pg.colorMode(HSB, 1, 1, 1, 1);
-            pg.noSmooth();
+//            pg.noSmooth();
+            pg.smooth(8);
         }
     }
 
@@ -669,11 +670,12 @@ public class LazyGui implements UserInputSubscriber {
 
     private void updateOptionsFolder() {
         String path = optionsNode.path;
-        updateHotkeyToggles(path + "/hotkeys/");
         WindowManager.updateWindowOptions(path + "/windows/");
         ThemeStore.updateThemePicker(path + "/themes");
         UtilGridSnap.update(path + "/grid/");
         UtilContextLines.update(path + "/context lines/", pg);
+        updateHotkeyToggles(path + "/hotkeys/");
+        State.numpadInputAppendCooldown = sliderInt(path+ "/numpad input frames", numpadInputAppendCooldown, 30, 360);
     }
 
     private void updateHotkeyToggles(String path) {
