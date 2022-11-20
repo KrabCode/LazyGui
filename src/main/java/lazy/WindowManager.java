@@ -35,8 +35,10 @@ class WindowManager {
     static void uncoverOrCreateWindow(FolderNode folderNode, Float nullablePosX, Float nullablePosY, boolean setFocus) {
         PVector pos = new PVector(cell, cell);
         if(folderNode.parent != null){
-            Window parentWin = folderNode.parent.window;
-            pos = new PVector(parentWin.posX + parentWin.windowSizeX + cell, parentWin.posY);
+            Window parentWindow = folderNode.parent.window;
+            if(parentWindow != null){
+                pos = new PVector(parentWindow.posX + parentWindow.windowSizeX + cell, parentWindow.posY);
+            }
         }
         if(nullablePosX != null){
             pos.x = nullablePosX;
