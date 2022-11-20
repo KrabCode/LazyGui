@@ -48,6 +48,8 @@ class State {
     private static final long lastFrameMillisStuckLimit = 1000;
     private static final int undoStackSizeLimit = 1000;
 
+    static String pathPrefix = "";
+
     static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
         State.app = app;

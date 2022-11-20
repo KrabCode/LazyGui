@@ -75,7 +75,7 @@ class NodeTree {
         if (findNode(node.path) != null) {
             return;
         }
-        String folderPath = Utils.getPathWithoutName(node.path);
+        String folderPath = Utils.getPathWithoutName(State.gui.getPath() + node.path);
         lazyInitFolderPath(folderPath);
         FolderNode folder = (FolderNode) findNode(folderPath);
         assert folder != null;
