@@ -60,7 +60,7 @@ class StringPickerFolderNode extends FolderNode {
     }
 
     @Override
-    void updateValues() {
+    void updateValuesRegardlessOfParentWindowOpenness() {
         checkForChildValueChange();
         rememberCurrentValues();
     }

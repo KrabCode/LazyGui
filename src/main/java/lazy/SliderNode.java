@@ -288,7 +288,7 @@ class SliderNode extends AbstractNode {
 
     private void tryAppendNumberInputToValue(Integer input) {
         boolean replaceMode = numpadInputAppendLastFrame == -1 ||
-                State.app.frameCount - numpadInputAppendLastFrame > State.numpadInputAppendCooldown;
+                State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
         numpadInputAppendLastFrame = State.app.frameCount;
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
@@ -319,12 +319,12 @@ class SliderNode extends AbstractNode {
 
     protected boolean isNumpadInputActive() {
         return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount <= numpadInputAppendLastFrame + State.numpadInputAppendCooldown;
+                State.app.frameCount <= numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
     }
 
     protected boolean numpadInputJustFinished(){
         return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount == numpadInputAppendLastFrame + State.numpadInputAppendCooldown;
+                State.app.frameCount == numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
     }
 
     protected void setValueFloat(float floatToSet) {

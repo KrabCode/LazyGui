@@ -579,6 +579,35 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
+     * Gets the current value of a string input element.
+     * Lazily initializes the string input if needed with its content set to an empty string.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @return current value of a string input element
+     */
+    public String stringInput(String path){
+        return stringInput(path, "");
+    }
+
+    /**
+     * Gets the current value of a string input element.
+     * Lazily initializes the string input if needed with the specified default.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param content default value for the text content
+     * @return current value of a string input element
+     */
+    public String stringInput(String path, String content){
+        StringInputNode node = (StringInputNode) NodeTree.findNode(path);
+        if(node == null){
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            node = new StringInputNode(path, folder, content);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getStringValue();
+    }
+
+    /**
      * Adds hue to the color picker, looping it correctly both in both directions.
      * Lazily initializes the color picker if needed with default color 0xFF000000 (full alpha black).
      * Does not block changing the value in the future in any way.
@@ -637,7 +666,7 @@ public class LazyGui implements UserInputSubscriber {
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
-            node.updateValues();
+            node.updateValuesRegardlessOfParentWindowOpenness();
         }
     }
 
@@ -675,7 +704,7 @@ public class LazyGui implements UserInputSubscriber {
         UtilGridSnap.update(path + "/grid/");
         UtilContextLines.update(path + "/context lines/", pg);
         updateHotkeyToggles(path + "/hotkeys/");
-        State.numpadInputAppendCooldown = sliderInt(path+ "/numpad input frames", numpadInputAppendCooldown, 30, 360);
+        State.keyboardInputAppendCooldown = sliderInt(path+ "/numpad input frames", keyboardInputAppendCooldown, 30, 360);
     }
 
     private void updateHotkeyToggles(String path) {

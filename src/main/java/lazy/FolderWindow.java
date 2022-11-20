@@ -125,10 +125,8 @@ class FolderWindow extends Window {
         if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
             if (isPointInsideContent(x, y)) {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
+                keyEvent.consume();
             }
-        }
-        for (AbstractNode anyNode : folder.children) {
-            anyNode.keyPressedOutOfNode(keyEvent, x, y);
         }
     }
 

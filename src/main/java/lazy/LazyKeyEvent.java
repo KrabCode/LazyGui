@@ -14,11 +14,19 @@ class LazyKeyEvent {
         return consumed;
     }
 
+    void consume(){
+        consumed = true;
+    }
+
     char getKeyChar() {
         return keyChar;
     }
 
     int getKeyCode(){
         return keyCode;
+    }
+
+    public String toString(){
+        return super.toString() + "\t| keyCode: " + keyCode + " | keyChar: " + keyChar + " | consumed: " + consumed;
     }
 }

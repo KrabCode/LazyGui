@@ -99,7 +99,7 @@ abstract class AbstractNode {
     /**
      * Secondary update function, called for all nodes every frame, regardless of their parent window's closed state.
      */
-    void updateValues(){
+    void updateValuesRegardlessOfParentWindowOpenness(){
 
     }
 
@@ -230,10 +230,6 @@ abstract class AbstractNode {
     }
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
-
-    }
-
-    void keyPressedOutOfNode(LazyKeyEvent keyEvent, float x, float y) {
 
     }
 
