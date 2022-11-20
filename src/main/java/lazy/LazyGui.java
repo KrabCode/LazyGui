@@ -4,8 +4,9 @@ package lazy;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
+import java.util.Queue;
 
 import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.*;
@@ -27,7 +28,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive;
 
-    private static final Stack<String> pathPrefixStack = new Stack<>();
+    private static final Queue<String> pathPrefixQueue = new LinkedList<>();
 
     private PGraphics pg;
     FolderNode optionsNode;
@@ -97,6 +98,7 @@ public class LazyGui implements UserInputSubscriber {
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
         pg.clear();
+        clearPath();
         updateOptionsFolder();
         UtilGridSnap.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
@@ -207,7 +209,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        SliderNode node = new SliderNode(getPath() + path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -295,7 +297,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        SliderIntNode node = new SliderIntNode(getPath() + path, folder, defaultValue, min, max, 0.1f, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -365,7 +367,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private ToggleNode createToggleNode(String path, boolean defaultValue) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        return new ToggleNode(path, folder, defaultValue);
+        return new ToggleNode(getPath() + path, folder, defaultValue);
     }
 
     /**
@@ -392,7 +394,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private ButtonNode createButtonNode(String path) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        return new ButtonNode(path, folder);
+        return new ButtonNode(getPath() + path, folder);
     }
 
     /**
@@ -452,7 +454,7 @@ public class LazyGui implements UserInputSubscriber {
         StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringPickerFolderNode(path, parentFolder, options, defaultOption);
+            node = new StringPickerFolderNode(getPath() + path, parentFolder, options, defaultOption);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
@@ -535,7 +537,7 @@ public class LazyGui implements UserInputSubscriber {
         if (node == null) {
             int hex = State.colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            node = new ColorPickerFolderNode(getPath() + path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
@@ -553,7 +555,7 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            node = new ColorPickerFolderNode(getPath() + path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
@@ -571,7 +573,7 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            node = new ColorPickerFolderNode(getPath() + path, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
@@ -602,7 +604,7 @@ public class LazyGui implements UserInputSubscriber {
         StringInputNode node = (StringInputNode) NodeTree.findNode(path);
         if(node == null){
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringInputNode(path, folder, content);
+            node = new StringInputNode(getPath() + path, folder, content);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getStringValue();
@@ -620,7 +622,7 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, colorStore.color(0,1));
+            node = new ColorPickerFolderNode(getPath() + path, folder, colorStore.color(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
             PickerColor oldColor = node.getColor();
@@ -653,7 +655,7 @@ public class LazyGui implements UserInputSubscriber {
         GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(path);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new GradientFolderNode(path, parentFolder, alpha);
+            node = new GradientFolderNode(getPath() + path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
@@ -705,7 +707,7 @@ public class LazyGui implements UserInputSubscriber {
         UtilGridSnap.update(path + "/grid/");
         UtilContextLines.update(path + "/context lines/", pg);
         updateHotkeyToggles(path + "/hotkeys/");
-        State.keyboardInputAppendCooldown = sliderInt(path+ "/numpad input frames", keyboardInputAppendCooldown, 30, 360);
+        State.keyboardInputAppendCooldown = sliderInt(path + "/numpad input frames", keyboardInputAppendCooldown, 30, 360);
     }
 
     private void updateHotkeyToggles(String path) {
@@ -747,7 +749,7 @@ public class LazyGui implements UserInputSubscriber {
      * @see public void setPathPrefix(String pathPrefix)
      */
     public void clearPath(){
-        pathPrefixStack.clear();
+        pathPrefixQueue.clear();
     }
 
     /**
@@ -760,11 +762,8 @@ public class LazyGui implements UserInputSubscriber {
      * @param pathPrefix global prefix to be applied to any control element path in this class until set otherwise
      */
     public void setPath(String pathPrefix){
-        if(pathPrefix == null){
-            pathPrefix = "";
-        }
-        pathPrefixStack.clear();
-        pathPrefixStack.push(pathPrefix);
+        pathPrefixQueue.clear();
+        pathPrefixQueue.offer(pathPrefix);
     }
 
     /**
@@ -774,10 +773,10 @@ public class LazyGui implements UserInputSubscriber {
      * @return current path prefix
      */
     public String getPath(){
-        if(pathPrefixStack.isEmpty()){
+        if(pathPrefixQueue.isEmpty()){
             return "";
         }
-        return pathPrefixStack.peek();
+        return pathPrefixQueue.peek();
     }
 
     /**
@@ -788,8 +787,9 @@ public class LazyGui implements UserInputSubscriber {
      *
      * @param newPathPrefix full new path prefix to be pushed
      */
+
     public void pushPath(String newPathPrefix){
-        pathPrefixStack.push(newPathPrefix);
+        pathPrefixQueue.offer(newPathPrefix);
     }
 
     /**
@@ -797,7 +797,9 @@ public class LazyGui implements UserInputSubscriber {
      * revealing the value that was there before the last pushPath() call.
      * Can be nested much like pushMatrix() and popMatrix().
      */
+
     public void popPath(){
-        pathPrefix = pathPrefixStack.pop();
+        pathPrefixQueue.poll();
     }
+
 }
