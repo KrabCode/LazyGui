@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 
 import java.util.List;
-import java.util.Stack;
 
 import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.*;
@@ -27,7 +26,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive;
 
-    private static final Stack<String> pathPrefixStack = new Stack<>();
+
 
     private PGraphics pg;
     FolderNode optionsNode;
@@ -738,66 +737,5 @@ public class LazyGui implements UserInputSubscriber {
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
             State.createNewSaveWithRandomName();
         }
-    }
-
-    /**
-     * Clears the global path prefix and resets it to the root window.
-     * Clears and therefore resets the underlying path prefix stack used with pushPath(), popPath().
-     *
-     * @see public void setPathPrefix(String pathPrefix)
-     */
-    public void clearPath(){
-        pathPrefixStack.clear();
-    }
-
-    /**
-     * Sets the global path prefix to be applied to any control element path in this class.
-     * Clears and therefore resets the underlying path prefix stack used with pushPath(), popPath().
-     * Intended to reduce code repetition; in a folder of items,
-     * you want all the elements to share a lot of their paths,
-     * but you don't want to write the shared part more than once.
-     *
-     * @param pathPrefix global prefix to be applied to any control element path in this class until set otherwise
-     */
-    public void setPath(String pathPrefix){
-        if(pathPrefix == null){
-            pathPrefix = "";
-        }
-        pathPrefixStack.clear();
-        pathPrefixStack.push(pathPrefix);
-    }
-
-    /**
-     * Gets the global path prefix currently applied to any control element path in this class.
-     * Returns what's at the top of the path prefix stack. Can be useful for debugging.
-     *
-     * @return current path prefix
-     */
-    public String getPath(){
-        if(pathPrefixStack.isEmpty()){
-            return "";
-        }
-        return pathPrefixStack.peek();
-    }
-
-    /**
-     * Pushes a whole path prefix on top of the path prefix stack, replacing anything currently there.
-     * The string on top of the stack is applied as a prefix to any control element path in this class.
-     * No appending is taking place, you must specify the full new prefix in the parameter.
-     * Can be nested much like pushMatrix() and popMatrix().
-     *
-     * @param newPathPrefix full new path prefix to be pushed
-     */
-    public void pushPath(String newPathPrefix){
-        pathPrefixStack.push(newPathPrefix);
-    }
-
-    /**
-     * Pops the top of the path prefix stack,
-     * revealing the value that was there before the last pushPath() call.
-     * Can be nested much like pushMatrix() and popMatrix().
-     */
-    public void popPath(){
-        pathPrefix = pathPrefixStack.pop();
     }
 }
