@@ -157,7 +157,7 @@ class SliderNode extends AbstractNode {
         float value = isNumpadInputActive() ? numpadBufferValue : valueFloat;
         if (fractionPadding == 0) {
             String wholeNumber = String.valueOf(floor(value));
-            if(numberInputIndexAfterFloatingPoint == 0){
+            if(numberInputIndexAfterFloatingPoint == 0 && isNumpadInputActive()){
                 wholeNumber += ".";
             }
             return wholeNumber;
