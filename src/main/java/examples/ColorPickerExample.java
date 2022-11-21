@@ -21,9 +21,9 @@ public class ColorPickerExample extends PApplet {
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
         String path = "scene/";
-        background(gui.colorPicker(path + "background", color(20)).hex);
-        fill(gui.colorPicker(path + "rect/fill", color(200)).hex);
-        gui.colorPickerHueAdd(path + "rect/fill", gui.slider(path + "rect/fill hue +"));
+        background(gui.colorPicker(path + "background", color(0xFF252525)).hex);
+        fill(gui.colorPicker(path + "rect/fill", color(0xFF689FC8)).hex);
+        gui.colorPickerHueAdd(path + "rect/fill", gui.slider(path + "rect/fill hue +", 0.005f));
         stroke(gui.colorPicker(path + "rect/stroke").hex);
         strokeWeight(gui.slider(path + "rect/weight", 10));
         rectMode(CENTER);
