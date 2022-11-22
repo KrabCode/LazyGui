@@ -4,6 +4,7 @@ package lazy;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static lazy.NodeTree.getAllNodesAsList;
@@ -22,7 +23,7 @@ public class LazyGui implements UserInputSubscriber {
     static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
-    private static String requestedScreenshotCustomPath = "";
+    private static String requestedScreenshotCustomFilePath = "";
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive;
 
@@ -96,6 +97,7 @@ public class LazyGui implements UserInputSubscriber {
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
         pg.clear();
+        clearPath();
         updateOptionsFolder();
         UtilGridSnap.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
@@ -196,9 +198,10 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
-        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createSliderNode(path, defaultValue, min, max, constrained);
+            node = createSliderNode(fullPath, defaultValue, min, max, constrained);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueFloat;
@@ -220,9 +223,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param value value to set the float slider at the path to
      */
     public void sliderSet(String path, float value){
-        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createSliderNode(path, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            node = createSliderNode(fullPath, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
@@ -237,9 +241,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param amountToAdd value to set the float slider at the path to
      */
     public void sliderAdd(String path, float amountToAdd){
-        SliderNode node = (SliderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createSliderNode(path, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            node = createSliderNode(fullPath, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueFloat += amountToAdd;
@@ -284,9 +289,10 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createSliderIntNode(path, defaultValue, min, max, constrained);
+            node = createSliderIntNode(fullPath, defaultValue, min, max, constrained);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getIntValue();
@@ -309,9 +315,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param value value to set the float slider at the path to
      */
     public void sliderIntSet(String path, int value){
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createSliderIntNode(path, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+            node = createSliderIntNode(fullPath, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
@@ -337,9 +344,10 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of the toggle
      */
     public boolean toggle(String path, boolean defaultValue) {
-        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createToggleNode(path, defaultValue);
+            node = createToggleNode(fullPath, defaultValue);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
@@ -354,9 +362,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param value current value of the toggle
      */
     public void toggleSet(String path, boolean value) {
-        ToggleNode node = (ToggleNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createToggleNode(path, value);
+            node = createToggleNode(fullPath, value);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueBoolean = value;
@@ -381,9 +390,10 @@ public class LazyGui implements UserInputSubscriber {
      * @return button value that can only be true once per user interaction
      */
     public boolean button(String path) {
-        ButtonNode node = (ButtonNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ButtonNode node = (ButtonNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            node = createButtonNode(path);
+            node = createButtonNode(fullPath);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getBooleanValueAndSetItToFalse();
@@ -445,13 +455,14 @@ public class LazyGui implements UserInputSubscriber {
      * @return currently selected string
      */
     public String stringPicker(String path, String[] options, String defaultOption) {
+        String fullPath = getPath() + path;
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
-        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(path);
+        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringPickerFolderNode(path, parentFolder, options, defaultOption);
+            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new StringPickerFolderNode(fullPath, parentFolder, options, defaultOption);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
@@ -466,14 +477,15 @@ public class LazyGui implements UserInputSubscriber {
      * @param optionToSet string option to set the string picker to
      */
     public void stringPickerSet(String path, String optionToSet){
-        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(fullPath);
         if (node != null) {
             List<String> options = node.getOptions();
             if(options.contains(optionToSet)){
                 node.selectOption(optionToSet);
             }else{
                 println("attempted to set an option: " + optionToSet +
-                    " to a string picker at path: " + path +
+                    " to a string picker at path: " + fullPath +
                     " which does not appear in the options: " + options);
             }
         }
@@ -530,14 +542,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
-        if (node == null) {
-            int hex = State.colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getColor();
+        return colorPicker(path, colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm));
     }
 
     /**
@@ -549,10 +554,11 @@ public class LazyGui implements UserInputSubscriber {
      * @return hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new ColorPickerFolderNode(fullPath, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getColor();
@@ -567,10 +573,11 @@ public class LazyGui implements UserInputSubscriber {
      * @param hex hex color to set, also works with processing 'color' type
      */
     public void colorPickerSet(String path, int hex) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new ColorPickerFolderNode(path, folder, hex);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new ColorPickerFolderNode(fullPath, folder, hex);
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
@@ -598,10 +605,11 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of a string input element
      */
     public String stringInput(String path, String content){
-        StringInputNode node = (StringInputNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        StringInputNode node = (StringInputNode) NodeTree.findNode(fullPath);
         if(node == null){
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-            node = new StringInputNode(path, folder, content);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new StringInputNode(fullPath, folder, content);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getStringValue();
@@ -616,9 +624,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param hueToAdd hue to add, with the hue value being normalized to the range [0,1]
      */
     public void colorPickerHueAdd(String path, float hueToAdd) {
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(path, folder, colorStore.color(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
@@ -649,18 +658,19 @@ public class LazyGui implements UserInputSubscriber {
      * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path, float alpha) {
-        GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(path);
+        String fullPath = getPath() + path;
+        GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
-            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(path);
+            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new GradientFolderNode(path, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
     }
 
-    void requestScreenshot(String customPath){
+    void requestScreenshot(String customFilePath){
         screenshotRequestedOnMainThreadWithCustomPath = true;
-        requestedScreenshotCustomPath = customPath;
+        requestedScreenshotCustomFilePath = customFilePath;
     }
 
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
@@ -680,7 +690,7 @@ public class LazyGui implements UserInputSubscriber {
         String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;
 
         if(screenshotRequestedOnMainThreadWithCustomPath){
-            filePath = requestedScreenshotCustomPath;
+            filePath = requestedScreenshotCustomFilePath;
         }
 
         State.app.save(filePath);
@@ -694,17 +704,17 @@ public class LazyGui implements UserInputSubscriber {
         NodeTree.insertNodeAtItsPath((optionsNode));
         NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", optionsNode));
         ThemeStore.updateThemePicker(optionsNode.path + "/themes");
-
     }
 
     private void updateOptionsFolder() {
-        String path = optionsNode.path;
-        WindowManager.updateWindowOptions(path + "/windows/");
-        ThemeStore.updateThemePicker(path + "/themes");
-        UtilGridSnap.update(path + "/grid/");
-        UtilContextLines.update(path + "/context lines/", pg);
-        updateHotkeyToggles(path + "/hotkeys/");
-        State.keyboardInputAppendCooldown = sliderInt(path+ "/numpad input frames", keyboardInputAppendCooldown, 30, 360);
+        setPath(optionsNode.path);
+        WindowManager.updateWindowOptions("windows/");
+        ThemeStore.updateThemePicker("themes");
+        UtilGridSnap.update("grid/");
+        UtilContextLines.update("context lines/", pg);
+        updateHotkeyToggles("hotkeys/");
+        State.keyboardInputAppendCooldown = sliderInt("numpad input frames", keyboardInputAppendCooldown, 30, 360);
+        popFolder();
     }
 
     private void updateHotkeyToggles(String path) {
@@ -737,5 +747,40 @@ public class LazyGui implements UserInputSubscriber {
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
             State.createNewSaveWithRandomName();
         }
+    }
+
+    LinkedList<String> pathPrefix = new LinkedList<>();
+
+    public void pushFolder(String folderNameToAppend){
+        pathPrefix.addFirst(folderNameToAppend);
+    }
+
+    public void popFolder(){
+        pathPrefix.removeFirst();
+    }
+
+    public String getPath(){
+        if(pathPrefix.isEmpty()){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = pathPrefix.size() - 1; i >= 0; i--) {
+            String folder = pathPrefix.get(i);
+            sb.append(folder);
+            if(!folder.endsWith("/")){
+                sb.append("/");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public void clearPath(){
+        pathPrefix.clear();
+    }
+
+    public void setPath(String pathToSet){
+        clearPath();
+        pathPrefix.add(pathToSet);
     }
 }

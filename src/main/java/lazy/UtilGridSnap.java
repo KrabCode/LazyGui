@@ -24,7 +24,7 @@ public class UtilGridSnap {
     private static float dragAlpha = 0;
     private static final float dragAlphaDelta = 0.05f;
     private static PickerColor pointGridColor = null;
-    private static float pointWeight = 3;
+    private static float pointWeight = 4;
 
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
         // TODO move from ShaderReloader to InternalShaderStore when done
@@ -134,6 +134,6 @@ public class UtilGridSnap {
         PickerColor clr = State.gui.colorPicker(gridPath + "point color", State.colorStore.color(0.5f, 1));
 
         UtilGridSnap.setPointColor(clr);
-        UtilGridSnap.setPointWeight(State.gui.slider(gridPath + "point weight", 3));
+        UtilGridSnap.setPointWeight(State.gui.slider(gridPath + "point weight", UtilGridSnap.pointWeight));
     }
 }
