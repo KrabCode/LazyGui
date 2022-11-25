@@ -635,10 +635,7 @@ public class LazyGui implements UserInputSubscriber {
             node = new ColorPickerFolderNode(path, folder, colorStore.color(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
-            PickerColor oldColor = node.getColor();
-            float newLoopedHue = Utils.hueModulo(oldColor.hue + hueToAdd);
-            node.setHex(colorStore.color(newLoopedHue, oldColor.saturation, oldColor.brightness, oldColor.alpha));
-            node.loadValuesFromHex(false);
+            node.setHue(hueToAdd);
         }
     }
 

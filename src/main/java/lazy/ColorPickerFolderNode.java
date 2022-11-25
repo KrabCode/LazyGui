@@ -14,11 +14,11 @@ class ColorPickerFolderNode extends FolderNode {
     String hexString;
     private int hex;
     @SuppressWarnings("FieldCanBeLocal")
-    private final String hexNodeName = "hex";
-    private final String hueNodeName = "hue";
-    private final String satNodeName = "sat";
-    private final String brNodeName = "br";
-    private final String alphaNodeName = "alpha";
+    private final String HEX_NODE_NAME = "hex";
+    private final String HUE_NODE_NAME = "hue";
+    private final String SAT_NODE_NAME = "sat";
+    private final String BR_NODE_NAME = "br";
+    private final String ALPHA_NODE_NAME = "alpha";
 
     ColorPickerFolderNode(String path, FolderNode parentFolder, int hex) {
         super(path, parentFolder);
@@ -34,11 +34,11 @@ class ColorPickerFolderNode extends FolderNode {
             return;
         }
         children.add(new ColorPreviewNode(path + "/preview", this));
-        children.add(new ColorSliderNode.HueNode(path + "/" + hueNodeName, this));
-        children.add(new ColorSliderNode.SaturationNode(path + "/" + satNodeName, this));
-        children.add(new ColorSliderNode.BrightnessNode(path + "/" + brNodeName, this));
-        children.add(new ColorSliderNode.AlphaNode(path + "/" + alphaNodeName, this));
-        children.add(new ColorPickerHexNode(path + "/" + hexNodeName, this));
+        children.add(new ColorSliderNode.HueNode(path + "/" + HUE_NODE_NAME, this));
+        children.add(new ColorSliderNode.SaturationNode(path + "/" + SAT_NODE_NAME, this));
+        children.add(new ColorSliderNode.BrightnessNode(path + "/" + BR_NODE_NAME, this));
+        children.add(new ColorSliderNode.AlphaNode(path + "/" + ALPHA_NODE_NAME, this));
+        children.add(new ColorPickerHexNode(path + "/" + HEX_NODE_NAME, this));
     }
 
     @Override
@@ -54,25 +54,25 @@ class ColorPickerFolderNode extends FolderNode {
     void loadValuesFromHex(boolean setDefaults) {
         lazyInitNodes();
         PGraphics colorProvider = State.colorStore;
-        ((ColorSliderNode) findChildByName(hueNodeName)).valueFloat = colorProvider.hue(hex);
-        ((ColorSliderNode) findChildByName(satNodeName)).valueFloat = colorProvider.saturation(hex);
-        ((ColorSliderNode) findChildByName(brNodeName)).valueFloat = colorProvider.brightness(hex);
-        ((ColorSliderNode) findChildByName(alphaNodeName)).valueFloat = colorProvider.alpha(hex);
+        ((ColorSliderNode) findChildByName(HUE_NODE_NAME)).valueFloat = colorProvider.hue(hex);
+        ((ColorSliderNode) findChildByName(SAT_NODE_NAME)).valueFloat = colorProvider.saturation(hex);
+        ((ColorSliderNode) findChildByName(BR_NODE_NAME)).valueFloat = colorProvider.brightness(hex);
+        ((ColorSliderNode) findChildByName(ALPHA_NODE_NAME)).valueFloat = colorProvider.alpha(hex);
         if (setDefaults) {
-            ((ColorSliderNode) findChildByName(hueNodeName)).valueFloatDefault = colorProvider.hue(hex);
-            ((ColorSliderNode) findChildByName(satNodeName)).valueFloatDefault = colorProvider.saturation(hex);
-            ((ColorSliderNode) findChildByName(brNodeName)).valueFloatDefault = colorProvider.brightness(hex);
-            ((ColorSliderNode) findChildByName(alphaNodeName)).valueFloatDefault = colorProvider.alpha(hex);
+            ((ColorSliderNode) findChildByName(HUE_NODE_NAME)).valueFloatDefault = colorProvider.hue(hex);
+            ((ColorSliderNode) findChildByName(SAT_NODE_NAME)).valueFloatDefault = colorProvider.saturation(hex);
+            ((ColorSliderNode) findChildByName(BR_NODE_NAME)).valueFloatDefault = colorProvider.brightness(hex);
+            ((ColorSliderNode) findChildByName(ALPHA_NODE_NAME)).valueFloatDefault = colorProvider.alpha(hex);
         }
     }
 
     void loadValuesFromHSBA() {
         PGraphics colorProvider = State.colorStore;
         setHex(colorProvider.color(
-                getValue(hueNodeName),
-                getValue(satNodeName),
-                getValue(brNodeName),
-                getValue(alphaNodeName)));
+                getValue(HUE_NODE_NAME),
+                getValue(SAT_NODE_NAME),
+                getValue(BR_NODE_NAME),
+                getValue(ALPHA_NODE_NAME)));
     }
 
     PickerColor getColor() {
@@ -88,19 +88,19 @@ class ColorPickerFolderNode extends FolderNode {
     }
 
     float hue() {
-        return getValue(hueNodeName);
+        return getValue(HUE_NODE_NAME);
     }
 
     float saturation() {
-        return getValue(satNodeName);
+        return getValue(SAT_NODE_NAME);
     }
 
     float brightness() {
-        return getValue(brNodeName);
+        return getValue(BR_NODE_NAME);
     }
 
     float alpha() {
-        return getValue(alphaNodeName);
+        return getValue(ALPHA_NODE_NAME);
     }
 
     String getHexString() {
@@ -152,4 +152,9 @@ class ColorPickerFolderNode extends FolderNode {
         }
     }
 
+    void setHue(float hueToAdd) {
+        ColorSliderNode hueSlider = (ColorSliderNode) findChildByName(HUE_NODE_NAME);
+        hueSlider.valueFloat = Utils.hueModulo(hueSlider.valueFloat + hueToAdd);
+        loadValuesFromHSBA();
+    }
 }
