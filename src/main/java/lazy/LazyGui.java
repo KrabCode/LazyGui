@@ -4,7 +4,7 @@ package lazy;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lazy.NodeTree.getAllNodesAsList;
@@ -27,11 +27,15 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive;
 
-
+    ArrayList<String> pathPrefix = new ArrayList<>();
+    int stackSizeWarningLevel = 64;
+    private boolean printedPushWarningAlready = false;
+    private boolean printedPopWarningAlready = false;
 
     private PGraphics pg;
     FolderNode optionsNode;
     PApplet app;
+
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
@@ -97,7 +101,7 @@ public class LazyGui implements UserInputSubscriber {
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
         pg.clear();
-        clearPath();
+        clearFolder();
         updateOptionsFolder();
         UtilGridSnap.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
@@ -140,7 +144,7 @@ public class LazyGui implements UserInputSubscriber {
      * For example with a mouse controlled brush you might not want to keep drawing on the main canvas
      * when you just want to adjust its properties in the GUI and you don't expect that to affect the artwork.
      * The GUI cannot make the mousePressed() method stop getting called in the processing sketch,
-     * so a utility function is needed to help decide what to do.
+     * so a utility function is needed to help the library user decide what to do.
      *
      * @return whether you should use this mouse press in the processing sketch
      */
@@ -150,7 +154,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Sets the sketch theme to a custom palette manually from code.
-     * Meant to be used once in setup after initializing the LazyGui and making a new LazyGui.Theme object with the desired hex colors.
+     * Meant to be used once in setup after initializing the LazyGui using a new Theme object with the desired hex colors.
      *
      * @param theme custom theme to be used
      */
@@ -198,7 +202,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, defaultValue, min, max, constrained);
@@ -223,7 +227,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param value value to set the float slider at the path to
      */
     public void sliderSet(String path, float value){
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
@@ -241,7 +245,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param amountToAdd value to set the float slider at the path to
      */
     public void sliderAdd(String path, float amountToAdd){
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
@@ -289,7 +293,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, defaultValue, min, max, constrained);
@@ -315,7 +319,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param value value to set the float slider at the path to
      */
     public void sliderIntSet(String path, int value){
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
@@ -344,7 +348,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of the toggle
      */
     public boolean toggle(String path, boolean defaultValue) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, defaultValue);
@@ -362,7 +366,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param value current value of the toggle
      */
     public void toggleSet(String path, boolean value) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, value);
@@ -390,7 +394,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return button value that can only be true once per user interaction
      */
     public boolean button(String path) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ButtonNode node = (ButtonNode) NodeTree.findNode(fullPath);
         if (node == null) {
             node = createButtonNode(fullPath);
@@ -455,7 +459,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return currently selected string
      */
     public String stringPicker(String path, String[] options, String defaultOption) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
@@ -477,7 +481,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param optionToSet string option to set the string picker to
      */
     public void stringPickerSet(String path, String optionToSet){
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(fullPath);
         if (node != null) {
             List<String> options = node.getOptions();
@@ -554,7 +558,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, int hex) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -573,7 +577,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param hex hex color to set, also works with processing 'color' type
      */
     public void colorPickerSet(String path, int hex) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -605,7 +609,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of a string input element
      */
     public String stringInput(String path, String content){
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         StringInputNode node = (StringInputNode) NodeTree.findNode(fullPath);
         if(node == null){
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -624,7 +628,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param hueToAdd hue to add, with the hue value being normalized to the range [0,1]
      */
     public void colorPickerHueAdd(String path, float hueToAdd) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -658,7 +662,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path, float alpha) {
-        String fullPath = getPath() + path;
+        String fullPath = getFolder() + path;
         GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -666,6 +670,86 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
+    }
+
+
+    /**
+     * Pushes a folder name to the global path prefix stack. Can be used multiple times just like pushMatrix().
+     * Removes all slashes from the parameter and adds a slash at the end for consistency and ease of path retrieval.
+     * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
+     * This is useful for not repeating the whole path string every time you want to call a control element.
+     *
+     * @param folderName one folder's name to push to the stack
+     */
+    public void pushFolder(String folderName){
+        if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
+            println("Too many calls to pushFolder() - stack size reached " + stackSizeWarningLevel +
+                    ", possibly due to runaway recursion");
+            printedPushWarningAlready = true;
+        }
+        String sanitizedFolderName = folderName.replaceAll("/", "");
+        if(!sanitizedFolderName.endsWith("/")){
+            sanitizedFolderName += "/";
+        }
+        pathPrefix.add(0, sanitizedFolderName);
+    }
+
+    /**
+     * Pops the last pushed folder name from the global path prefix stack. Can be used multiple times just like popMatrix().
+     * Warns once when the stack is empty and popFolder() is attempted.
+     * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
+     * This is useful for not repeating the whole path string every time you want to call a control element.
+     */
+    public void popFolder(){
+        if(pathPrefix.isEmpty() && printedPopWarningAlready){
+            println("Too many calls to popFolder() - there is nothing to pop");
+            printedPopWarningAlready = true;
+        }
+        if(!pathPrefix.isEmpty()){
+            pathPrefix.remove(0);
+        }
+    }
+
+    /**
+     * Clears the global path prefix stack, removing all its elements.
+     * Nothing will be prefixed in subsequent calls to control elements.
+     * Also happens every time draw() ends and LazyGui.draw() begins,
+     * so that the library user doesn't always have to pop their folder pushes, since they get cleared every frame.
+     */
+    public void clearFolder(){
+        pathPrefix.clear();
+    }
+
+    /**
+     * Clears the global path prefix and puts pathToSet into it as the only element.
+     * The path parameter allows internal slashes but adds a slash at the end if missing.
+     * Any GUI control element call will apply this path as a prefix to their own path parameter.
+     *
+     * @param pathToSet path prefix to set
+     */
+    public void setFolder(String pathToSet){
+        clearFolder();
+        String sanitizedPath = pathToSet;
+        if(!sanitizedPath.endsWith("/")){
+            sanitizedPath = sanitizedPath + "/";
+        }
+        pathPrefix.add(sanitizedPath);
+    }
+
+    /**
+     * Gets the current path prefix stack, mostly used internally by LazyGui, but can also be useful for debugging.
+     * @return entire path prefix stack concatenated to one string
+     */
+    public String getFolder(){
+        if(pathPrefix.isEmpty()){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = pathPrefix.size() - 1; i >= 0; i--) {
+            String folder = pathPrefix.get(i);
+            sb.append(folder);
+        }
+        return sb.toString();
     }
 
     void requestScreenshot(String customFilePath){
@@ -702,30 +786,34 @@ public class LazyGui implements UserInputSubscriber {
         String path = "options";
         optionsNode = new FolderNode(path, NodeTree.getRoot());
         NodeTree.insertNodeAtItsPath((optionsNode));
-        NodeTree.insertNodeAtItsPath(new SaveFolderNode(path + "/saves", optionsNode));
-        ThemeStore.updateThemePicker(optionsNode.path + "/themes");
+        pushFolder("options");
+        NodeTree.insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
+        ThemeStore.updateThemePicker();
+        popFolder();
     }
 
     private void updateOptionsFolder() {
-        setPath(optionsNode.path);
-        WindowManager.updateWindowOptions("windows/");
-        ThemeStore.updateThemePicker("themes");
-        UtilGridSnap.update("grid/");
-        UtilContextLines.update("context lines/", pg);
-        updateHotkeyToggles("hotkeys/");
+        setFolder(optionsNode.path);
+        WindowManager.updateWindowOptions();
+        ThemeStore.updateThemePicker();
+        UtilGridSnap.update();
+        UtilContextLines.update(pg);
+        updateHotkeyToggles();
         State.keyboardInputAppendCooldown = sliderInt("numpad input frames", keyboardInputAppendCooldown, 30, 360);
         popFolder();
     }
 
-    private void updateHotkeyToggles(String path) {
-        hotkeyHideActive = toggle(path + "h: hide gui", true);
-        hotkeyCloseAllWindowsActive = toggle(path + "d: close all windows", true);
-        hotkeyScreenshotActive = toggle(path + "s: take screenshot", true);
+    private void updateHotkeyToggles() {
+        pushFolder("hotkeys");
+        hotkeyHideActive = toggle("h: hide gui", true);
+        hotkeyCloseAllWindowsActive = toggle("d: close all windows", true);
+        hotkeyScreenshotActive = toggle("s: take screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36
-//        undoHotkeyActive = toggle(path + "ctrl + z: undo", true);
-//        redoHotkeyActive = toggle(path + "ctrl + y: redo", true);
-        hotkeySaveActive = toggle(path + "ctrl + s: new save", true);
+//        undoHotkeyActive = toggle("ctrl + z: undo", true);
+//        redoHotkeyActive = toggle("ctrl + y: redo", true);
+        hotkeySaveActive = toggle("ctrl + s: new save", true);
+        popFolder();
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
@@ -747,40 +835,5 @@ public class LazyGui implements UserInputSubscriber {
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
             State.createNewSaveWithRandomName();
         }
-    }
-
-    LinkedList<String> pathPrefix = new LinkedList<>();
-
-    public void pushFolder(String folderNameToAppend){
-        pathPrefix.addFirst(folderNameToAppend);
-    }
-
-    public void popFolder(){
-        pathPrefix.removeFirst();
-    }
-
-    public String getPath(){
-        if(pathPrefix.isEmpty()){
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = pathPrefix.size() - 1; i >= 0; i--) {
-            String folder = pathPrefix.get(i);
-            sb.append(folder);
-            if(!folder.endsWith("/")){
-                sb.append("/");
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public void clearPath(){
-        pathPrefix.clear();
-    }
-
-    public void setPath(String pathToSet){
-        clearPath();
-        pathPrefix.add(pathToSet);
     }
 }

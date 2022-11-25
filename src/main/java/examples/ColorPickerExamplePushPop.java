@@ -23,7 +23,6 @@ public class ColorPickerExamplePushPop extends PApplet {
         gui.pushFolder("scene");
             background(gui.colorPicker("background", color(0xFF252525)).hex);
             gui.pushFolder("rect");
-            gui.pushFolder("mleb");
                 fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
                 gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
                 stroke(gui.colorPicker("stroke").hex);

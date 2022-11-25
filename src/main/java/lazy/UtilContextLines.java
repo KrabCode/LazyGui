@@ -16,17 +16,20 @@ public class UtilContextLines {
             .add(NEVER, ON_HOVER, ALWAYS).build();
 
 
-    public static void update(String path, PGraphics pg) {
+    public static void update(PGraphics pg) {
+        State.gui.pushFolder("context lines");
         int showContextLinesMode = contextLinesOptions.indexOf(
-                State.gui.stringPicker(path + "visibility", contextLinesOptions, ON_HOVER));
-        boolean shouldPickShortestLine = State.gui.toggle(path + "shortest line");
+                State.gui.stringPicker("visibility", contextLinesOptions, ON_HOVER));
+        boolean shouldPickShortestLine = State.gui.toggle("shortest line");
         pg.pushStyle();
-        int clr = State.gui.colorPicker(path + "color", State.colorStore.color(0.5f)).hex;
+        int clr = State.gui.colorPicker("color", State.colorStore.color(0.5f)).hex;
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);
-        pg.strokeWeight(State.gui.slider(path + "weight", 1.2f));
-        float endpointRectSize = State.gui.slider(path + "end size", 3.5f);
+        pg.strokeWeight(State.gui.slider("weight", 1.2f));
+        float endpointRectSize = State.gui.slider("end size", 3.5f);
+        State.gui.popFolder();
+
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
             return;

@@ -122,18 +122,20 @@ public class UtilGridSnap {
         pointWeight = weight;
     }
 
-    public static void update(String gridPath) {
+    public static void update() {
+        State.gui.pushFolder("grid");
         boolean previousSnapToGridState = UtilGridSnap.snapToGridEnabled;
-        UtilGridSnap.snapToGridEnabled = State.gui.toggle(gridPath + "snap to grid", true);
+        UtilGridSnap.snapToGridEnabled = State.gui.toggle("snap to grid", true);
         if(!previousSnapToGridState && UtilGridSnap.snapToGridEnabled){
             // cell size must be updated before this for this auto snap to work on startup
             WindowManager.snapAllStaticWindowsToGrid();
         }
-        UtilGridSnap.setSelectedVisibilityMode(State.gui.stringPicker(gridPath + "show grid",
+        UtilGridSnap.setSelectedVisibilityMode(State.gui.stringPicker("show grid",
                 UtilGridSnap.getOptions(), UtilGridSnap.getDefaultVisibilityMode()));
-        PickerColor clr = State.gui.colorPicker(gridPath + "point color", State.colorStore.color(0.5f, 1));
+        PickerColor clr = State.gui.colorPicker("point color", State.colorStore.color(0.5f, 1));
 
         UtilGridSnap.setPointColor(clr);
-        UtilGridSnap.setPointWeight(State.gui.slider(gridPath + "point weight", UtilGridSnap.pointWeight));
+        UtilGridSnap.setPointWeight(State.gui.slider("point weight", UtilGridSnap.pointWeight));
+        State.gui.popFolder();
     }
 }
