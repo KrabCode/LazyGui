@@ -29,5 +29,7 @@ public class ColorPickerExamplePushPop extends PApplet {
                 strokeWeight(gui.slider("weight", 10));
         rectMode(CENTER);
         rect(width/2f, height/2f, 150, 150);
+        gui.draw();
+        gui.draw();
     }
 }

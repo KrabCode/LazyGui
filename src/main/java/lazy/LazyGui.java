@@ -20,6 +20,7 @@ import static processing.core.PApplet.*;
  */
 public class LazyGui implements UserInputSubscriber {
 
+    private static int lastFrameCountGuiWasShown = -1;
     static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
@@ -82,7 +83,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Updates and draws the GUI on the main processing canvas.
-     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
+     * Gets called automatically at the end of draw().
      * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
      */
     public void draw() {
@@ -91,12 +92,17 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Updates and draws the GUI on the specified parameter canvas, assuming its size is identical to the main sketch size.
-     * Not meant to be called manually by the library user as it gets called automatically at the end of draw().
-     * Does not need to be public, but left in for convenience.
+     * Gets called automatically at the end of draw().
+     * LazyGui will enforce itself being drawn only once per frame internally, which can be useful for gui recording.
+     * If it does get called manually, it will skip execution until the next frameCount.
      *
      * @param canvas canvas to draw the GUI on
      */
     public void draw(PGraphics canvas) {
+        if(lastFrameCountGuiWasShown == State.app.frameCount){
+            return;
+        }
+        lastFrameCountGuiWasShown = State.app.frameCount;
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
@@ -114,7 +120,7 @@ public class LazyGui implements UserInputSubscriber {
         canvas.image(pg, 0, 0);
         canvas.popStyle();
         State.updateEndlessLoopDetection();
-        takeScreenshotIfNeeded();
+        takeScreenshotIfRequested();
     }
 
     private Window getWindowBeingDraggedIfAny() {
@@ -761,7 +767,7 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
-    private void takeScreenshotIfNeeded() {
+    private void takeScreenshotIfRequested() {
         if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
             return;
         }
