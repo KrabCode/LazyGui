@@ -335,15 +335,42 @@ public class LazyGui implements UserInputSubscriber {
         node.valueFloat = value;
     }
 
+    /**
+     * // TODO document plot when done
+     *      https://github.com/KrabCode/LazyGui/issues/69
+     *
+     * @param path
+     * @return
+     */
     public PVector plotXY(String path){
-        return plotXY(path, null);
+        return plotXYZ(path, null, false);
     }
 
-    PVector plotXY(String path, PVector defaultXY){
+    public PVector plotXY(String path, float defaultX, float defaultY){
+        return plotXYZ(path, new PVector(defaultX, defaultY), false);
+    }
+
+    public PVector plotXY(String path, PVector defaultXY){
+        return plotXYZ(path, defaultXY == null ? new PVector() : defaultXY, false);
+    }
+
+    public PVector plotXYZ(String path){
+        return plotXYZ(path, null, true);
+    }
+
+    public PVector plotXYZ(String path, PVector defaultXYZ){
+        return plotXYZ(path, defaultXYZ == null ? new PVector() : defaultXYZ.copy(), true);
+    }
+
+    public PVector plotXYZ(String path, float defaultX, float defaultY, float defaultZ){
+        return plotXYZ(path, new PVector(defaultX, defaultY, defaultZ), true);
+    }
+
+    PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
         String fullPath = getFolder() + path;
         PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
         if(node == null){
-            node = createPlotNode(fullPath, defaultXY, false);
+            node = createPlotNode(fullPath, defaultXYZ, useZ);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getVectorValue();
