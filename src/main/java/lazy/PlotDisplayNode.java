@@ -56,8 +56,16 @@ class PlotDisplayNode extends AbstractNode {
     }
 
     private void drawPlotGrid(PGraphics pg) {
+        pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
+        if(!isDragged &&
+            !sliderX.isDragged &&
+            !sliderY.isDragged &&
+            !isMouseOverNode &&
+            !sliderX.isMouseOverNode &&
+            !sliderY.isMouseOverNode){
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
+        }
         pg.pushMatrix();
-        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         int cellCountX = floor(1 + 2 * sliderX.currentPrecisionIndex);
         int cellCountY = floor(1 + 2 * sliderY.currentPrecisionIndex);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
