@@ -30,7 +30,7 @@ abstract class AbstractNode {
     PVector size = new PVector();
 
     String name;
-    int rowHeightInCells = 1;
+    float rowHeightInCells = 1;
 
     boolean isDragged = false;
     boolean isMouseOverNode = false;

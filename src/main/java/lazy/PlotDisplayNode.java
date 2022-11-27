@@ -5,16 +5,16 @@ import processing.core.PGraphics;
 import static processing.core.PApplet.*;
 
 
-public class PlotDisplayNode extends AbstractNode {
+class PlotDisplayNode extends AbstractNode {
 
-    private SliderNode sliderX;
-    private SliderNode sliderY;
+    private final SliderNode sliderX;
+    private final SliderNode sliderY;
 
     protected PlotDisplayNode(String path, FolderNode parentFolder, SliderNode sliderX, SliderNode sliderY) {
         super(NodeType.TRANSIENT, path, parentFolder);
         this.sliderX = sliderX;
         this.sliderY = sliderY;
-        rowHeightInCells = 6;
+        rowHeightInCells = parentFolder.idealWindowWidthInCells;
         shouldDrawLeftNameText = false;
     }
 
@@ -22,8 +22,10 @@ public class PlotDisplayNode extends AbstractNode {
     void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
         sliderY.verticalMouseMode = true;
-        sliderX.mousePressedOverNode(x,y);
-        sliderY.mousePressedOverNode(x,y);
+        sliderX.disableShader();
+        sliderY.disableShader();
+        sliderX.mousePressedOverNode(x, y);
+        sliderY.mousePressedOverNode(x, y);
     }
 
     @Override
@@ -36,18 +38,15 @@ public class PlotDisplayNode extends AbstractNode {
     void mouseReleasedAnywhere(LazyMouseEvent e) {
         super.mouseReleasedAnywhere(e);
         sliderY.verticalMouseMode = false;
+        sliderX.enableShader();
+        sliderY.enableShader();
     }
 
     @Override
     void mouseWheelMovedOverNode(float x, float y, int dir) {
         super.mouseWheelMovedOverNode(x, y, dir);
-        if (dir > 0) {
-            sliderX.increasePrecision();
-            sliderY.increasePrecision();
-        } else if (dir < 0) {
-            sliderX.decreasePrecision();
-            sliderY.decreasePrecision();
-        }
+        sliderX.mouseWheelMovedOverNode(x, y, dir);
+        sliderY.mouseWheelMovedOverNode(x, y, dir);
     }
 
     @Override
@@ -58,31 +57,35 @@ public class PlotDisplayNode extends AbstractNode {
 
     private void drawPlotGrid(PGraphics pg) {
         pg.pushMatrix();
-        int cellCount = floor(parent.idealWindowWidthInCells);
+        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
+        int cellCountX = floor(1 + 2 * sliderX.currentPrecisionIndex);
+        int cellCountY = floor(1 + 2 * sliderY.currentPrecisionIndex);
+        // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
         float w = (size.x - 2);
         float h = (size.y - 2);
-        float valueX = sliderX.valueFloat;
-        float valueY = sliderY.valueFloat;
-        float xStep = w / cellCount;
-        float yStep = xStep;
-        float xOffset = -(valueX % xStep);
-        float yOffset = -(valueY % yStep);
-        strokeForegroundBasedOnMouseOver(pg);
-        pg.translate(1, 1);
-        for (int i = 0; i <= cellCount; i++) {
-            pg.strokeWeight(0.25f);
-            float x = xOffset + i * xStep;
-            if (x >= 0 && x <= w) {
-                pg.line(x, 0, x, h);
-            }
-            float y = yOffset + i * yStep;
-            if (y >= 0 && y <= h) {
-                pg.line(0, y, w, y);
+        float valueChangePerCell = 10;
+        float valueChangePerCellX = valueChangePerCell * sliderX.valueFloatPrecision;
+        float valueChangePerCellY = valueChangePerCell * sliderY.valueFloatPrecision;
+        float valueRangeX = cellCountX * valueChangePerCellX;
+        float valueRangeY = cellCountY * valueChangePerCellY;
+        float nearValueX = valueChangePerCellX / 2 + sliderX.valueFloat % valueChangePerCellX;
+        float nearValueY = valueChangePerCellY / 2 + sliderY.valueFloat % valueChangePerCellY;
+        pg.translate(w / 2f, h / 2f);
+        for (float valX = -valueChangePerCellX * 2; valX <= valueRangeX + valueChangePerCellX * 2; valX += valueChangePerCellX) {
+            float x = map(valX - nearValueX, 0, valueRangeX, -w / 2f, w / 2f);
+            if (abs(x) <= w / 2f) {
+                pg.line(x, -h / 2, x, h / 2);
             }
         }
-        pg.stroke(State.colorStore.color(1,1,1));
-        pg.strokeWeight(10);
-        pg.point(w / 2, h / 2);
+        for (float valY = -valueChangePerCellY * 2; valY <= valueRangeY + valueChangePerCell * 2; valY += valueChangePerCellY) {
+            float y = map(valY - nearValueY, 0, valueRangeY, -h / 2f, h / 2f);
+            if (abs(y) <= h / 2f) {
+                pg.line(-w / 2, y, w / 2, y);
+            }
+        }
+        strokeForegroundBasedOnMouseOver(pg);
+        pg.strokeWeight(7.5f);
+        pg.point(0.5f, 0.5f);
         pg.popMatrix();
     }
 

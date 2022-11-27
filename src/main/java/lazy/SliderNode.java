@@ -23,6 +23,7 @@ class SliderNode extends AbstractNode {
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
     boolean verticalMouseMode = false;
+    private boolean displayShader = true;
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
@@ -72,7 +73,6 @@ class SliderNode extends AbstractNode {
     }
 
     private void initPrecision() {
-        precisionRange.add(0.00001f);
         precisionRange.add(0.0001f);
         precisionRange.add(0.001f);
         precisionRange.add(0.01f);
@@ -144,6 +144,9 @@ class SliderNode extends AbstractNode {
     }
 
     protected void updateBackgroundShader(PGraphics pg) {
+        if(!displayShader){
+            return;
+        }
         PShader shader = InternalShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
         shader.set("quadPos", pos.x, pos.y);
@@ -365,4 +368,11 @@ class SliderNode extends AbstractNode {
         return getValueToDisplay();
     }
 
+    public void enableShader() {
+        displayShader = true;
+    }
+
+    public void disableShader() {
+        displayShader = false;
+    }
 }

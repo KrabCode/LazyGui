@@ -2,7 +2,7 @@ package lazy;
 
 import processing.core.PVector;
 
-public class PlotFolderNode extends FolderNode {
+class PlotFolderNode extends FolderNode {
     static final String PLOT_DISPLAY_NAME = "_";
     static final String SLIDER_X_NAME = "x";
     static final String SLIDER_Y_NAME = "y";
@@ -15,7 +15,7 @@ public class PlotFolderNode extends FolderNode {
 
     PlotFolderNode(String path, FolderNode parent, PVector defaultXY, boolean useZ) {
         super(path, parent);
-        idealWindowWidthInCells = 8;
+        idealWindowWidthInCells = 7;
         PVector defaultPos = new PVector();
         if(defaultXY != null){
             defaultPos = defaultXY.copy();
