@@ -61,9 +61,9 @@ class PlotDisplayNode extends AbstractNode {
         int cellCountX = floor(1 + 2 * sliderX.currentPrecisionIndex);
         int cellCountY = floor(1 + 2 * sliderY.currentPrecisionIndex);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
-        float w = (size.x - 2);
-        float h = (size.y - 2);
-        float valueChangePerCell = 10;
+        float w = (size.x - 1);
+        float h = (size.y - 1);
+        float valueChangePerCell = 100;
         float valueChangePerCellX = valueChangePerCell * sliderX.valueFloatPrecision;
         float valueChangePerCellY = valueChangePerCell * sliderY.valueFloatPrecision;
         float valueRangeX = cellCountX * valueChangePerCellX;
