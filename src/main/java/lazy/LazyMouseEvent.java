@@ -48,4 +48,9 @@ class LazyMouseEvent {
     int getRotation() {
         return scrollWheelRotation;
     }
+
+    @Override
+    public String toString() {
+        return "x " + x + " | " + "px " + px + " | " + "y " + y + " | " + "py " + py;
+    }
 }

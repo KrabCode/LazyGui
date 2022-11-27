@@ -36,7 +36,7 @@ class State {
     static String sketchName = null;
     static boolean autosaveEnabled = false;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    static final float defaultWindowWidth = 10;
+    static final float defaultWindowWidthInCells = 10;
     private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     static File saveDir;

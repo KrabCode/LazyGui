@@ -13,7 +13,7 @@ class ColorPreviewNode extends AbstractNode {
     ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
-        displayInlineName = false;
+        shouldDrawLeftNameText = false;
         rowHeightInCells = 3;
         InternalShaderStore.getShader(checkerboardShader);
     }

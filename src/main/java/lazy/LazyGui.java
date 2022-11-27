@@ -3,6 +3,7 @@ package lazy;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -332,6 +333,25 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
+    }
+
+    public PVector plotXY(String path){
+        return plotXY(path, null);
+    }
+
+    PVector plotXY(String path, PVector defaultXY){
+        String fullPath = getFolder() + path;
+        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        if(node == null){
+            node = createPlotNode(fullPath, defaultXY, false);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getVectorValue();
+    }
+
+    private PlotFolderNode createPlotNode(String fullPath, PVector defaultXY, boolean useZ) {
+        FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+        return new PlotFolderNode(fullPath, folder, defaultXY, useZ);
     }
 
     /**

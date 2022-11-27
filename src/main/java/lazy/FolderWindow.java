@@ -25,7 +25,7 @@ class FolderWindow extends Window {
     }
 
     void drawInlineFolderChildren(PGraphics pg) {
-        float intendedWindowWidthInCells = folder.idealWindowWidth;
+        float intendedWindowWidthInCells = folder.idealWindowWidthInCells;
         windowSizeY = cell + heightSumOfChildNodes();
         windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();

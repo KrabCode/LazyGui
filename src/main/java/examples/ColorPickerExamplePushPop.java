@@ -2,6 +2,7 @@ package examples;
 
 import lazy.LazyGui;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class ColorPickerExamplePushPop extends PApplet {
     LazyGui gui;
@@ -21,6 +22,8 @@ public class ColorPickerExamplePushPop extends PApplet {
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
         gui.pushFolder("scene");
+        PVector tran = gui.plotXY("plot test");
+        translate(tran.x, tran.y);
             background(gui.colorPicker("background", color(0xFF252525)).hex);
             gui.pushFolder("rect");
                 fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);

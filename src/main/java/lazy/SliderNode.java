@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
 
 
 import processing.core.PGraphics;
-import processing.core.PVector;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ class SliderNode extends AbstractNode {
     protected float numpadBufferValue = 0;
     protected boolean showPercentIndicatorWhenConstrained = true;
     private int numberInputIndexAfterFloatingPoint = -1;
+    boolean verticalMouseMode = false;
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
@@ -55,7 +55,7 @@ class SliderNode extends AbstractNode {
     float backgroundScrollX = 0;
 
 
-    PVector mouseDelta = new PVector();
+    float mouseDeltaX, mouseDeltaY;
     protected ArrayList<Float> precisionRange = new ArrayList<>();
     HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
 
@@ -120,8 +120,8 @@ class SliderNode extends AbstractNode {
             updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
-            mouseDelta.x = 0;
-            mouseDelta.y = 0;
+            mouseDeltaX = 0;
+            mouseDeltaY = 0;
         }
         fillForegroundBasedOnMouseOver(pg);
         drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""));
@@ -129,7 +129,7 @@ class SliderNode extends AbstractNode {
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
         if (!constrainedThisFrame) {
-            backgroundScrollX -= mouseDelta.x;
+            backgroundScrollX -= verticalMouseMode ? mouseDeltaY : mouseDeltaX;
         }
         float widthMult = 1f;
         if (valueFloatConstrained && showPercentIndicatorWhenConstrained) {
@@ -187,11 +187,11 @@ class SliderNode extends AbstractNode {
         }
     }
 
-    private void decreasePrecision() {
+    void decreasePrecision() {
         setPrecisionIndexAndValue(min(currentPrecisionIndex + 1, precisionRange.size() - 1));
     }
 
-    private void increasePrecision() {
+    void increasePrecision() {
         setPrecisionIndexAndValue(max(currentPrecisionIndex - 1, 0));
     }
 
@@ -202,8 +202,9 @@ class SliderNode extends AbstractNode {
     }
 
     private void updateValueMouseInteraction() {
-        if(mouseDelta.x != 0){
-            float delta = mouseDelta.x * precisionRange.get(currentPrecisionIndex);
+        float mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
+        if(mouseDelta != 0){
+            float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
         }
     }
@@ -339,11 +340,9 @@ class SliderNode extends AbstractNode {
     @Override
     void mouseDragNodeContinue(LazyMouseEvent e) {
         super.mouseDragNodeContinue(e);
-        if (isDragged) {
-            mouseDelta.x = e.getPrevX() - e.getX();
-            mouseDelta.y = e.getPrevY() - e.getY();
-            e.setConsumed(true);
-        }
+        mouseDeltaX = e.getPrevX() - e.getX();
+        mouseDeltaY = e.getPrevY() - e.getY();
+        e.setConsumed(true);
     }
 
     @Override

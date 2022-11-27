@@ -27,7 +27,7 @@ class FolderNode extends AbstractNode {
     @Expose
     FolderWindow window;
 
-    float idealWindowWidth = State.defaultWindowWidth;
+    float idealWindowWidthInCells = State.defaultWindowWidthInCells;
 
     FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);

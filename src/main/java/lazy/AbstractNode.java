@@ -32,7 +32,6 @@ abstract class AbstractNode {
     String name;
     int rowHeightInCells = 1;
 
-    protected  PVector dragStartPos = new PVector();
     boolean isDragged = false;
     boolean isMouseOverNode = false;
 
@@ -41,7 +40,7 @@ abstract class AbstractNode {
         NodeTree.setAllOtherNodesMouseOverToFalse(this);
     }
 
-    protected boolean displayInlineName = true;
+    protected boolean shouldDrawLeftNameText = true;
 
     protected AbstractNode(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
@@ -90,7 +89,7 @@ abstract class AbstractNode {
         updateDrawInlineNodeAbstract(pg);
         pg.popMatrix();
         pg.popStyle();
-        if(displayInlineName){
+        if(shouldDrawLeftNameText){
             fillForegroundBasedOnMouseOver(pg);
             drawLeftText(pg, name);
         }
@@ -216,8 +215,6 @@ abstract class AbstractNode {
 
     void mousePressedOverNode(float x, float y) {
         isDragged = true;
-        dragStartPos.x = x;
-        dragStartPos.y = y;
     }
 
     void mouseReleasedAnywhere(LazyMouseEvent e) {
