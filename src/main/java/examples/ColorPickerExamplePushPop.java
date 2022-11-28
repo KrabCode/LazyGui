@@ -24,12 +24,12 @@ public class ColorPickerExamplePushPop extends PApplet {
         gui.pushFolder("scene");
         PVector tran = gui.plotXY("plot test");
         translate(tran.x, tran.y);
-            background(gui.colorPicker("background", color(0xFF252525)).hex);
-            gui.pushFolder("rect");
-                fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
-                gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
-                stroke(gui.colorPicker("stroke").hex);
-                strokeWeight(gui.slider("weight", 10));
+        background(gui.colorPicker("background", color(0xFF252525)).hex);
+        gui.pushFolder("rect");
+        fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
+        gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
+        stroke(gui.colorPicker("stroke").hex);
+        strokeWeight(gui.slider("weight", 10));
         rectMode(CENTER);
         rect(width/2f, height/2f, 150, 150);
         gui.draw();

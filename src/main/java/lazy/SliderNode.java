@@ -265,6 +265,8 @@ class SliderNode extends AbstractNode {
             case ',':
                 numberInputIndexAfterFloatingPoint = 0;
                 numpadInputAppendLastFrame = State.app.frameCount;
+                // set the precision for it to be ready for increasing precision when appending fractions
+                setWholeNumberPrecision();
                 break;
             case '+':
                 if(valueFloat <= 0){
@@ -297,8 +299,6 @@ class SliderNode extends AbstractNode {
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
             numpadBufferValue = input;
-            // set the precision for it to be ready for increasing precision when appending fractions
-            setWholeNumberPrecision();
             return;
         }
         int valueFloored = floor(numpadBufferValue);
@@ -313,7 +313,6 @@ class SliderNode extends AbstractNode {
             float fractionToAdd = input * (pow(0.1f, ++numberInputIndexAfterFloatingPoint));
             numpadBufferValue = numpadBufferValue + fractionToAdd;
             // adjust precision to show the new number
-
             if(numberInputIndexAfterFloatingPoint > nf(fractionToAdd,0,0).length() - 3){
                 increasePrecision();
             }
