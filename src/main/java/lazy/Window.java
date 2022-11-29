@@ -24,6 +24,7 @@ abstract class Window implements UserInputSubscriber {
     protected FolderNode owner;
     boolean isDraggedAround;
     private boolean isTitleHighligted;
+    private boolean closeButtonPressInProgress;
 
     Window(float posX, float posY, FolderNode owner, boolean isCloseable) {
         this.posX = posX;
@@ -104,7 +105,7 @@ abstract class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell - 1);
-        if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY)) {
+        if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY) || closeButtonPressInProgress) {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
@@ -214,6 +215,10 @@ abstract class Window implements UserInputSubscriber {
             isDraggedAround = true;
             setFocusOnThis();
         }
+        if(isPointInsideCloseButton(e.getX(), e.getY())){
+            closeButtonPressInProgress = true;
+            e.setConsumed(true);
+        }
     }
 
     @Override
@@ -233,13 +238,14 @@ abstract class Window implements UserInputSubscriber {
         if (isClosed()) {
             return;
         }
-        if (isCloseable && isPointInsideCloseButton(e.getX(), e.getY())) {
+        if (isCloseable && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
             close();
             e.setConsumed(true);
         } else if (isDraggedAround) {
             e.setConsumed(true);
             trySnapToGrid();
         }
+        closeButtonPressInProgress = false;
         isDraggedAround = false;
     }
 
