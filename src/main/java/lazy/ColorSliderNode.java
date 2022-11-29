@@ -16,7 +16,7 @@ abstract class ColorSliderNode extends SliderNode {
     protected int shaderColorMode = -1;
 
     ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
-        super(path, parentFolder, 0, 0, 1, 0.01f, true);
+        super(path, parentFolder, 0, 0, 1, true);
         this.parentColorPickerFolder = parentFolder;
         showPercentIndicatorWhenConstrained = false;
         setPrecisionIndexAndValue(precisionRange.indexOf(0.01f));

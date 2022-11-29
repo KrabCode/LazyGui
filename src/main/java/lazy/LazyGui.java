@@ -220,7 +220,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        SliderNode node = new SliderNode(path, folder, defaultValue, min, max, constrained);
         node.initSliderBackgroundShader();
         return node;
     }
@@ -311,7 +311,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private SliderIntNode createSliderIntNode(String path, int defaultValue, int min, int max, boolean constrained) {
         FolderNode folder = NodeTree.findParentFolderLazyInitPath(path);
-        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, 0.1f, constrained);
+        SliderIntNode node = new SliderIntNode(path, folder, defaultValue, min, max, constrained);
         node.initSliderBackgroundShader();
         return node;
     }

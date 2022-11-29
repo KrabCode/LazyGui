@@ -25,7 +25,7 @@ class SliderNode extends AbstractNode {
     boolean verticalMouseMode = false;
     private boolean displayShader = true;
 
-    SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, float defaultPrecision, boolean constrained) {
+    SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
         if (!Float.isNaN(defaultValue)) {
@@ -33,8 +33,6 @@ class SliderNode extends AbstractNode {
         }
         valueFloatMin = min;
         valueFloatMax = max;
-        valueFloatPrecision = defaultPrecision;
-        valueFloatPrecisionDefault = defaultPrecision;
         valueFloatConstrained = constrained &&
                 max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
                 min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
@@ -52,7 +50,6 @@ class SliderNode extends AbstractNode {
     float valueFloatMin;
     float valueFloatMax;
     boolean valueFloatConstrained;
-    float valueFloatPrecisionDefault;
     float backgroundScrollX = 0;
 
 
@@ -65,7 +62,6 @@ class SliderNode extends AbstractNode {
 
     private void initSliderPrecisionArrays() {
         initPrecision();
-        loadArbitraryPrecisionIntoArrays();
     }
 
     void initSliderBackgroundShader() {
@@ -88,11 +84,15 @@ class SliderNode extends AbstractNode {
         precisionRangeDigitsAfterDot.put(1f, 0);
         precisionRangeDigitsAfterDot.put(10f, 0);
         precisionRangeDigitsAfterDot.put(100f, 0);
-        attemptToSetAppropriatePrecisionForDefaultValue();
+        setSensiblePrecisionForCurrentValue();
     }
 
-    private void attemptToSetAppropriatePrecisionForDefaultValue() {
+    private void setSensiblePrecisionForCurrentValue() {
         float val = valueFloat;
+        if(val == 0){
+            setPrecisionIndexAndValue(precisionRange.indexOf(1f));
+            return;
+        }
         if(val < precisionRange.get(0)){
             setPrecisionIndexAndValue(0);
             return;
@@ -105,22 +105,6 @@ class SliderNode extends AbstractNode {
         }
         // set default precision if all else fails
         setPrecisionIndexAndValue(precisionRange.indexOf(1f));
-    }
-
-    private void loadArbitraryPrecisionIntoArrays() {
-        float p = valueFloatPrecision;
-        for (int i = 0; i < precisionRange.size() - 1; i++) {
-            float thisValue = precisionRange.get(i);
-            float nextValue = precisionRange.get(i + 1);
-            if (thisValue == p) {
-                setPrecisionIndexAndValue(i);
-                return;
-            } else if (thisValue < p && nextValue > p) {
-                setPrecisionIndexAndValue(i + 1);
-                precisionRange.add(i + 1, p);
-                precisionRangeDigitsAfterDot.put(p, String.valueOf(p).length() - 2);
-            }
-        }
     }
 
     @Override
@@ -246,8 +230,6 @@ class SliderNode extends AbstractNode {
             if (Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
-            valueFloatPrecision = valueFloatPrecisionDefault;
-            currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
         }
         tryReadNumpadInput(e);
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
@@ -371,7 +353,6 @@ class SliderNode extends AbstractNode {
         }
         if (json.has("valueFloatPrecision")) {
             valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();
-            valueFloatPrecisionDefault = json.get("valueFloatPrecision").getAsFloat();
         }
         if (json.has("valueFloat")) {
             setValueFloat(json.get("valueFloat").getAsFloat());

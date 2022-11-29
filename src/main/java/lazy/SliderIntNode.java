@@ -6,8 +6,8 @@ class SliderIntNode extends SliderNode {
 
     float minimumIntPrecision = 0.1f;
 
-    SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, float defaultPrecision, boolean constrained) {
-        super(path, parentFolder, defaultValue, min, max, defaultPrecision, constrained);
+    SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, boolean constrained) {
+        super(path, parentFolder, defaultValue, min, max, constrained);
     }
 
     int getIntValue(){

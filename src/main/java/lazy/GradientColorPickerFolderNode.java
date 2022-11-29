@@ -10,7 +10,7 @@ class GradientColorPickerFolderNode extends ColorPickerFolderNode {
 
     GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
         super(path, parentFolder, hex);
-        this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,0.01f, true));
+        this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,true));
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));
     }
 

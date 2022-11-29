@@ -24,14 +24,14 @@ class PlotFolderNode extends FolderNode {
         if (defaultXY != null) {
             defaultPos = defaultXY.copy();
         }
-        sliderX = new SliderNode(path + "/" + SLIDER_X_NAME, this, defaultPos.x, -Float.MAX_VALUE, Float.MAX_VALUE, 0.1f, false);
-        sliderY = new SliderNode(path + "/" + SLIDER_Y_NAME, this, defaultPos.y, -Float.MAX_VALUE, Float.MAX_VALUE, 0.1f, false);
+        sliderX = new SliderNode(path + "/" + SLIDER_X_NAME, this, defaultPos.x, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+        sliderY = new SliderNode(path + "/" + SLIDER_Y_NAME, this, defaultPos.y, -Float.MAX_VALUE, Float.MAX_VALUE, false);
         plot = new PlotDisplayNode(path + "/" + PLOT_DISPLAY_NAME, this, sliderX, sliderY);
         children.add(plot);
         children.add(sliderX);
         children.add(sliderY);
         if (useZ) {
-            sliderZ = new SliderNode(path + "/" + SLIDER_Z_NAME, this, defaultPos.z, -Float.MAX_VALUE, Float.MAX_VALUE, 0.1f, false);
+            sliderZ = new SliderNode(path + "/" + SLIDER_Z_NAME, this, defaultPos.z, -Float.MAX_VALUE, Float.MAX_VALUE, false);
             children.add(sliderZ);
         }
     }
