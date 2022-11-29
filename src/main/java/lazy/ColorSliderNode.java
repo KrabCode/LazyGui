@@ -70,16 +70,16 @@ abstract class ColorSliderNode extends SliderNode {
 
     @Override
     protected void updateBackgroundShader(PGraphics pg) {
-        PShader shader = InternalShaderStore.getShader(colorShaderPath);
-        shader.set("quadPos", pos.x, pos.y);
-        shader.set("quadSize", size.x, size.y);
-        shader.set("hueValue", parentColorPickerFolder.hue());
-        shader.set("brightnessValue", parentColorPickerFolder.brightness());
-        shader.set("saturationValue", parentColorPickerFolder.saturation());
-        shader.set("alphaValue", parentColorPickerFolder.alpha());
-        shader.set("mode", shaderColorMode);
-        shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
-        InternalShaderStore.shader(colorShaderPath, pg);
+        PShader bgShader = InternalShaderStore.getShader(colorShaderPath);
+        bgShader.set("quadPos", pos.x, pos.y);
+        bgShader.set("quadSize", size.x, size.y);
+        bgShader.set("hueValue", parentColorPickerFolder.hue());
+        bgShader.set("brightnessValue", parentColorPickerFolder.brightness());
+        bgShader.set("saturationValue", parentColorPickerFolder.saturation());
+        bgShader.set("alphaValue", parentColorPickerFolder.alpha());
+        bgShader.set("mode", shaderColorMode);
+        bgShader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
+        pg.shader(bgShader);
     }
 
     @Override

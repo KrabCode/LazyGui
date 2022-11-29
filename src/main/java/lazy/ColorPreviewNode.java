@@ -2,20 +2,21 @@ package lazy;
 
 
 import processing.core.PGraphics;
+import processing.opengl.PShader;
 
 import static processing.core.PConstants.CORNER;
 
 class ColorPreviewNode extends AbstractNode {
 
     ColorPickerFolderNode parentColorPickerFolder;
-    String checkerboardShader = "checkerboard.glsl";
+    String checkerboardShaderPath = "checkerboard.glsl";
 
     ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
         shouldDrawLeftNameText = false;
         rowHeightInCells = 3;
-        InternalShaderStore.getShader(checkerboardShader);
+        InternalShaderStore.getShader(checkerboardShaderPath);
     }
 
     @Override
@@ -25,8 +26,9 @@ class ColorPreviewNode extends AbstractNode {
     }
 
     private void drawCheckerboard(PGraphics pg) {
-        InternalShaderStore.getShader(checkerboardShader).set("quadPos", pos.x, pos.y);
-        InternalShaderStore.shader(checkerboardShader, pg);
+        PShader checkerboardShader = InternalShaderStore.getShader(checkerboardShaderPath);
+        checkerboardShader.set("quadPos", pos.x, pos.y);
+        pg.shader(checkerboardShader);
         pg.rectMode(CORNER);
         pg.fill(1);
         pg.noStroke();

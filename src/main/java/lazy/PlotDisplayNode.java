@@ -14,45 +14,9 @@ class PlotDisplayNode extends AbstractNode {
         super(NodeType.TRANSIENT, path, parentFolder);
         this.sliderX = sliderX;
         this.sliderY = sliderY;
-        rowHeightInCells = parentFolder.idealWindowWidthInCells;
         shouldDrawLeftNameText = false;
-    }
-
-    @Override
-    void mousePressedOverNode(float x, float y) {
-        super.mousePressedOverNode(x, y);
-        sliderY.verticalMouseMode = true;
-        sliderX.disableShader();
-        sliderY.disableShader();
-        sliderX.mousePressedOverNode(x, y);
-        sliderY.mousePressedOverNode(x, y);
-    }
-
-    @Override
-    void mouseDragNodeContinue(LazyMouseEvent e) {
-        sliderX.mouseDragNodeContinue(e);
-        sliderY.mouseDragNodeContinue(e);
-    }
-
-    @Override
-    void mouseReleasedAnywhere(LazyMouseEvent e) {
-        super.mouseReleasedAnywhere(e);
-        sliderY.verticalMouseMode = false;
-        sliderX.enableShader();
-        sliderY.enableShader();
-    }
-
-    @Override
-    void mouseWheelMovedOverNode(float x, float y, int dir) {
-        super.mouseWheelMovedOverNode(x, y, dir);
-        sliderX.mouseWheelMovedOverNode(x, y, dir);
-        sliderY.mouseWheelMovedOverNode(x, y, dir);
-    }
-
-    @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        pg.noFill();
-        drawPlotGrid(pg);
+        //noinspection SuspiciousNameCombination
+        rowHeightInCells = parentFolder.idealWindowWidthInCells;
     }
 
     private void drawPlotGrid(PGraphics pg) {
@@ -98,4 +62,46 @@ class PlotDisplayNode extends AbstractNode {
     }
 
 
+    @Override
+    void mousePressedOverNode(float x, float y) {
+        super.mousePressedOverNode(x, y);
+        sliderY.verticalMouseMode = true;
+        sliderX.disableShader();
+        sliderY.disableShader();
+        sliderX.mousePressedOverNode(x, y);
+        sliderY.mousePressedOverNode(x, y);
+    }
+
+    @Override
+    void mouseDragNodeContinue(LazyMouseEvent e) {
+        sliderX.mouseDragNodeContinue(e);
+        sliderY.mouseDragNodeContinue(e);
+    }
+
+    @Override
+    void mouseReleasedAnywhere(LazyMouseEvent e) {
+        super.mouseReleasedAnywhere(e);
+        sliderY.verticalMouseMode = false;
+        sliderX.enableShader();
+        sliderY.enableShader();
+    }
+
+    @Override
+    void mouseWheelMovedOverNode(float x, float y, int dir) {
+        super.mouseWheelMovedOverNode(x, y, dir);
+        sliderX.mouseWheelMovedOverNode(x, y, dir);
+        sliderY.mouseWheelMovedOverNode(x, y, dir);
+    }
+
+    @Override
+    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+        pg.noFill();
+        drawPlotGrid(pg);
+    }
+
+    void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+        super.keyPressedOverNode(e, x, y);
+        sliderX.keyPressedOverNode(e, x, y);
+        sliderY.keyPressedOverNode(e, x, y);
+    }
 }

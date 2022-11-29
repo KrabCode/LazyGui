@@ -716,7 +716,7 @@ public class LazyGui implements UserInputSubscriber {
         GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new GradientFolderNode(path, parentFolder, alpha);
+            node = new GradientFolderNode(fullPath, parentFolder, alpha);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();

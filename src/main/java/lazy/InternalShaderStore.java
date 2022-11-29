@@ -1,6 +1,5 @@
 package lazy;
 
-import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import java.util.HashMap;
@@ -12,14 +11,6 @@ class InternalShaderStore {
 
     private InternalShaderStore() {
 
-    }
-
-    static void filter(String path, PGraphics pg) {
-        pg.filter(getShader(path));
-    }
-
-    static void shader(String path, PGraphics pg) {
-        pg.shader(getShader(path));
     }
 
     static PShader getShader(String path) {

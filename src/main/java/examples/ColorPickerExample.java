@@ -1,7 +1,8 @@
 package examples;
 
-import processing.core.PApplet;
 import lazy.LazyGui;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 public class ColorPickerExample extends PApplet {
     LazyGui gui;
@@ -20,13 +21,21 @@ public class ColorPickerExample extends PApplet {
 
     @SuppressWarnings("DuplicatedCode")
     public void draw() {
-        String path = "scene/";
-        background(gui.colorPicker(path + "background", color(0xFF252525)).hex);
-        path += "rect/";
-        fill(gui.colorPicker(path + "fill", color(0xFF689FC8)).hex);
-        gui.colorPickerHueAdd(path + "fill", gui.slider(path + "fill hue +", 0.005f));
-        stroke(gui.colorPicker(path + "stroke").hex);
-        strokeWeight(gui.slider(path + "weight", 10));
+        gui.pushFolder("scene");
+        gui.pushFolder("background");
+        if(gui.toggle("solidly", true)){
+            background(gui.colorPicker("solid", color(0xFF252525)).hex);
+        }else{
+            image(gui.gradient("gradient"), 0, 0);
+        }
+        gui.popFolder();
+        PVector tran = gui.plotXY("plot test");
+        translate(tran.x, tran.y);
+        gui.pushFolder("rect");
+        fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
+        gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
+        stroke(gui.colorPicker("stroke").hex);
+        strokeWeight(gui.slider("weight", 10));
         rectMode(CENTER);
         rect(width/2f, height/2f, 150, 150);
     }

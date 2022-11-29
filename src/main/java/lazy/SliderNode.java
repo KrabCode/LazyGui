@@ -136,23 +136,24 @@ class SliderNode extends AbstractNode {
             widthMult = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
             backgroundScrollX = 0;
         }
-        updateBackgroundShader(pg);
+        if(displayShader){
+            updateBackgroundShader(pg);
+        }
         pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         pg.noStroke();
         pg.rect(1, 0, (size.x - 1) * widthMult, size.y);
-        pg.resetShader();
+        if(displayShader){
+            pg.resetShader();
+        }
     }
 
     protected void updateBackgroundShader(PGraphics pg) {
-        if(!displayShader){
-            return;
-        }
         PShader shader = InternalShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
         shader.set("quadPos", pos.x, pos.y);
         shader.set("quadSize", size.x, size.y);
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
-        InternalShaderStore.shader(shaderPath, pg);
+        pg.shader(shader);
     }
 
     String getValueToDisplay() {

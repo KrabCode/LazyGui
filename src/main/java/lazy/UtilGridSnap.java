@@ -12,7 +12,7 @@ import static processing.core.PApplet.*;
 public class UtilGridSnap {
     public static boolean snapToGridEnabled = false;
 
-    private static PShader lineShader;
+    private static PShader pointShader;
     private static final String pointShaderPath = "gridPointFrag.glsl";
     static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static final int VISIBILITY_ALWAYS = 0;
@@ -27,9 +27,8 @@ public class UtilGridSnap {
     private static float pointWeight = 4;
 
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
-        // TODO move from ShaderReloader to InternalShaderStore when done
-        if(lineShader == null){
-            lineShader = InternalShaderStore.getShader(pointShaderPath);
+        if(pointShader == null){
+            pointShader = InternalShaderStore.getShader(pointShaderPath);
         }
         if(selectedVisibilityModeIndex == VISIBILITY_ON_DRAG){
             updateAlpha(draggedWindow);
@@ -37,12 +36,12 @@ public class UtilGridSnap {
         if(selectedVisibilityModeIndex == VISIBILITY_NEVER){
             return;
         }
-        lineShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
-        lineShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
+        pointShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
+        pointShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
         if(draggedWindow != null){
-            lineShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
+            pointShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
         }
-        InternalShaderStore.shader(pointShaderPath, pg);
+        pg.shader(pointShader);
 
         pg.pushStyle();
         pg.strokeWeight(pointWeight);

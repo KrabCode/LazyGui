@@ -20,6 +20,7 @@ class GradientFolderNode extends FolderNode {
 
     String gradientShader = "gradient.glsl";
     private final int colorCount;
+    private int lastUpdatedFrame = -1;
 
     GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);
@@ -33,7 +34,7 @@ class GradientFolderNode extends FolderNode {
         for (int i = 0; i < colorCount; i++) {
             float iNorm = norm(i, 0, colorCount - 1);
             // default A alpha is 1 for some reason even though I set 0 here
-            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), 0, 0, iNorm, alpha, iNorm, i % 2 == 0));
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), iNorm, alpha, iNorm, i % 2 == 0));
         }
         State.overwriteWithLoadedStateIfAny(this);
     }
@@ -56,6 +57,10 @@ class GradientFolderNode extends FolderNode {
     }
 
     private void updateOutGraphics() {
+        if(lastUpdatedFrame == State.app.frameCount){
+            return; // weird bugs when updated more than once per frame
+        }
+        lastUpdatedFrame = State.app.frameCount;
         PApplet app = State.app;
         if (out == null || out.width != app.width || out.height != app.height) {
             out = app.createGraphics(app.width, app.height, P2D);
@@ -78,7 +83,7 @@ class GradientFolderNode extends FolderNode {
         shader.set("blendType", blendTypeOptions.indexOf(blendTypePicker.valueString));
         out.beginDraw();
         out.clear();
-        InternalShaderStore.filter(gradientShader, out);
+        out.filter(shader);
         out.endDraw();
     }
 
@@ -143,9 +148,9 @@ class GradientFolderNode extends FolderNode {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorPickerFolderNode createGradientColorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm,
+    GradientColorPickerFolderNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
                                                             float pos, boolean active) {
-        int hex = State.colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+        int hex = State.colorStore.color(0, 0, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 
@@ -157,17 +162,14 @@ class GradientFolderNode extends FolderNode {
             super(NodeType.VALUE, path, parent);
             this.parent = parent;
             rowHeightInCells = 6;
+            shouldDrawLeftNameText = false;
         }
 
         @Override
         protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-            pg.image(parent.getOutputGraphics(), 1, 0, size.x-1, size.y);
+            pg.image(parent.getOutputGraphics(), 1, 1, size.x-1, size.y-1);
         }
 
-        @Override
-        void drawLeftText(PGraphics pg, String text) {
-            // we skip drawing the "preview" left text by not calling super.drawLeftText() here
-        }
     }
 
 }
