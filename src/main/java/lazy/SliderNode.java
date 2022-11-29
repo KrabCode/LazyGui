@@ -299,13 +299,15 @@ class SliderNode extends AbstractNode {
             numberInputIndexAfterFloatingPoint = -1;
             numpadBufferValue = input;
             if(numpadBufferValue != 0){
+                // when I only reset a value to 0 I usually want to keep its old precision
+                // when I start typing something other than 0 I usually do want whole number precision
                 setWholeNumberPrecision();
             }
             return;
         }
         int valueFloored = floor(numpadBufferValue);
         if (numberInputIndexAfterFloatingPoint == -1) {
-            // append whole number (floating point can represent only 7 whole digits)
+            // append whole number (but floating point can represent only 7 whole digits comfortably)
             // see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
             if(String.valueOf(valueFloored).length() <= 7){
                 numpadBufferValue = valueFloored * 10 + input;
