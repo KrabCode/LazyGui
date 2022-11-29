@@ -15,7 +15,6 @@ class PlotFolderNode extends FolderNode {
     private final SliderNode sliderX;
     private final SliderNode sliderY;
     private SliderNode sliderZ;
-    private final PlotDisplayNode plot;
 
     PlotFolderNode(String path, FolderNode parent, PVector defaultXY, boolean useZ) {
         super(path, parent);
@@ -26,8 +25,7 @@ class PlotFolderNode extends FolderNode {
         }
         sliderX = new SliderNode(path + "/" + SLIDER_X_NAME, this, defaultPos.x, -Float.MAX_VALUE, Float.MAX_VALUE, false);
         sliderY = new SliderNode(path + "/" + SLIDER_Y_NAME, this, defaultPos.y, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-        plot = new PlotDisplayNode(path + "/" + PLOT_DISPLAY_NAME, this, sliderX, sliderY);
-        children.add(plot);
+        children.add(new PlotDisplayNode(path + "/" + PLOT_DISPLAY_NAME, this, sliderX, sliderY));
         children.add(sliderX);
         children.add(sliderY);
         if (useZ) {
@@ -47,6 +45,7 @@ class PlotFolderNode extends FolderNode {
         int count = 3;
         for (int i = 0; i < count; i++) {
             float x = map(i, 0, count-1, -n, n);
+            //noinspection SuspiciousNameCombination
             pg.line(-n, x, n, x);
             pg.line(x, -n, x, n);
         }

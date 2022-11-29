@@ -150,7 +150,7 @@ class GradientFolderNode extends FolderNode {
 
     GradientColorPickerFolderNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
                                                             float pos, boolean active) {
-        int hex = State.colorStore.color(0, 0, brightnessNorm, alphaNorm);
+        int hex = State.normColor(0, 0, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 

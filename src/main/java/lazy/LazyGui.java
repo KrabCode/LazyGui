@@ -599,7 +599,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        return colorPicker(path, colorStore.color(hueNorm, saturationNorm, brightnessNorm, alphaNorm));
+        return colorPicker(path, normColor(hueNorm, saturationNorm, brightnessNorm, alphaNorm));
     }
 
     /**
@@ -685,7 +685,7 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new ColorPickerFolderNode(path, folder, colorStore.color(0,1));
+            node = new ColorPickerFolderNode(path, folder, normColor(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHue(hueToAdd);

@@ -66,13 +66,14 @@ public class TutorialGenerator extends PApplet {
     }
 
     public void record(){
-        int recLength = gui.sliderInt("rec/frames", 600);
-        if (gui.button("rec/start")) {
+        gui.pushFolder("rec");
+        int recLength = gui.sliderInt("frames", 600);
+        if (gui.button("start")) {
             recordingId = generateRandomShortId();
             recStarted = frameCount;
             saveIndex = 1;
         }
-        boolean stopCommand = gui.button("rec/stop");
+        boolean stopCommand = gui.button("stop");
         if (stopCommand) {
             recStarted = -1;
         }
@@ -80,7 +81,7 @@ public class TutorialGenerator extends PApplet {
         String sketchMainClassName = getClass().getSimpleName();
         String recDir = "out/rec/" + sketchMainClassName +"_" + recordingId;
         String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
-        if(gui.button("rec/open folder")){
+        if(gui.button("open folder")){
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(recDirAbsolute + "\\");
             if(!dir.exists()){
@@ -92,10 +93,10 @@ public class TutorialGenerator extends PApplet {
                 e.printStackTrace();
             }
         }
-        int recordRectPosX = width / 2 + gui.sliderInt("rec/rect center x", 0);
-        int recordRectPosY = height / 2 + gui.sliderInt("rec/rect center y", 0);
-        int recordRectSizeX = gui.sliderInt("rec/rect size x div 2", width / 4);
-        int recordRectSizeY = gui.sliderInt("rec/rect size y div 2", height / 4);
+        int recordRectPosX = width / 2 + gui.sliderInt("rect center x", 0);
+        int recordRectPosY = height / 2 + gui.sliderInt("rect center y", 0);
+        int recordRectSizeX = gui.sliderInt("rect size x", height / 2);
+        int recordRectSizeY = gui.sliderInt("rect size y", height / 2);
         if(recordRectSizeX % 2 != 0){
             recordRectSizeX += 1;
         }
@@ -116,7 +117,7 @@ public class TutorialGenerator extends PApplet {
         if(stopCommand || (recStarted != -1 && frameCount == recStarted + recLength)){
             println("Recorded image series folder: " + recDirAbsolute);
         }
-        if (gui.toggle("rec/show rect")) {
+        if (gui.toggle("show rect")) {
             pushStyle();
             stroke(color(0xFFFFFFFF));
             noFill();
@@ -125,8 +126,8 @@ public class TutorialGenerator extends PApplet {
             popStyle();
         }
 
-        int ffmpegFramerate = gui.sliderInt("rec/ffmpeg fps", 60, 1, Integer.MAX_VALUE);
-        if(gui.button("rec/ffmpeg make mp4")){
+        int ffmpegFramerate = gui.sliderInt("ffmpeg fps", 60, 1, Integer.MAX_VALUE);
+        if(gui.button("ffmpeg make mp4")){
             String outMovieFilename = recDirAbsolute + "/_" + generateRandomShortId();
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
             String command = String.format("ffmpeg  -r " + ffmpegFramerate +" -i %s -start_number_range 100000 -an %s.mp4",
@@ -144,5 +145,6 @@ public class TutorialGenerator extends PApplet {
                 e.printStackTrace();
             }
         }
+        gui.popFolder();
     }
 }

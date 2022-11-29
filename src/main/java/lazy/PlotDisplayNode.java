@@ -21,12 +21,7 @@ class PlotDisplayNode extends AbstractNode {
 
     private void drawPlotGrid(PGraphics pg) {
         pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
-        if(!isDragged &&
-            !sliderX.isDragged &&
-            !sliderY.isDragged &&
-            !isMouseOverNode &&
-            !sliderX.isMouseOverNode &&
-            !sliderY.isMouseOverNode){
+        if(shouldHighlightGrid()){
             pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         }
         pg.pushMatrix();
@@ -43,22 +38,44 @@ class PlotDisplayNode extends AbstractNode {
         float nearValueX = valueChangePerCellX / 2 + sliderX.valueFloat % valueChangePerCellX;
         float nearValueY = valueChangePerCellY / 2 + sliderY.valueFloat % valueChangePerCellY;
         pg.translate(w / 2f, h / 2f);
-        for (float valX = -valueChangePerCellX * 2; valX <= valueRangeX + valueChangePerCellX * 2; valX += valueChangePerCellX) {
+        float valueStartX = -valueChangePerCellX * 2;
+        float valueEndX = valueRangeX + valueChangePerCellX * 2;
+        float valueStartY = -valueChangePerCellY * 2;
+        float valueEndY = valueRangeY + valueChangePerCellY * 2;
+        // draw lines
+        for (float valX = valueStartX; valX <= valueEndX; valX += valueChangePerCellX) {
             float x = map(valX - nearValueX, 0, valueRangeX, -w / 2f, w / 2f);
             if (abs(x) <= w / 2f) {
                 pg.line(x, -h / 2, x, h / 2);
             }
         }
-        for (float valY = -valueChangePerCellY * 2; valY <= valueRangeY + valueChangePerCell * 2; valY += valueChangePerCellY) {
+        for (float valY = valueStartY; valY <= valueEndY; valY += valueChangePerCellY) {
             float y = map(valY - nearValueY, 0, valueRangeY, -h / 2f, h / 2f);
             if (abs(y) <= h / 2f) {
                 pg.line(-w / 2, y, w / 2, y);
             }
         }
+        // draw zero
+        float zeroX = map(0, valueStartX, valueEndX, -w/2f, w/2f);
+        float zeroY = map(0, valueStartY, valueEndY, -h/2f, h/2f);
+        pg.stroke(State.normColor(0.6f,1,1));
+        pg.strokeWeight(7.5f);
+        pg.point(zeroX, zeroY);
+
+        // draw selection marker
         strokeForegroundBasedOnMouseOver(pg);
         pg.strokeWeight(7.5f);
         pg.point(0.5f, 0.5f);
         pg.popMatrix();
+    }
+
+    private boolean shouldHighlightGrid() {
+        return !(isDragged ||
+                sliderX.isDragged ||
+                sliderY.isDragged ||
+                isMouseOverNode ||
+                sliderX.isMouseOverNode ||
+                sliderY.isMouseOverNode);
     }
 
 

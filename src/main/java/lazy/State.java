@@ -24,7 +24,7 @@ class State {
     static PFont font = null;
     static PApplet app = null;
     static LazyGui gui = null;
-    static PGraphics colorStore = null;
+    private static PGraphics colorStore = null;
 
     private static final String fontPath = "JetBrainsMono-Regular.ttf";
     static private final int defaultFontSize = 16;
@@ -66,7 +66,7 @@ class State {
     static void tryUpdateFont(int inputFontSize, float textMarginX, float textMarginY) {
         State.textMarginX = textMarginX;
         State.textMarginY = textMarginY;
-        if(inputFontSize == lastFontSize){
+        if (inputFontSize == lastFontSize) {
             return;
         }
         try {
@@ -79,7 +79,7 @@ class State {
         lastFontSize = inputFontSize;
     }
 
-    static int getLastFontSize(){
+    static int getLastFontSize() {
         return lastFontSize;
     }
 
@@ -230,7 +230,7 @@ class State {
     }
 
     static void createAutosave() {
-        if(!autosaveEnabled){
+        if (!autosaveEnabled) {
             return;
         }
         if (isSketchStuckInEndlessLoop()) {
@@ -299,9 +299,27 @@ class State {
         previewRectSize = cell * 0.6f;
     }
 
-
-
     static void setKeepWindowsInBounds(boolean value) {
         keepWindowsInBounds = value;
+    }
+
+    static int normColor(float br) {
+        return normColor(0, 0, br, 1);
+    }
+
+    static int normColor(float br, float alpha) {
+        return normColor(0, 0, br, alpha);
+    }
+
+    static int normColor(float hue, float sat, float br) {
+        return normColor(hue, sat, br, 1);
+    }
+
+    static int normColor(float hue, float sat, float br, float alpha) {
+        return colorStore.color(hue, sat, br, alpha);
+    }
+
+    public static PGraphics getColorStore() {
+        return colorStore;
     }
 }
