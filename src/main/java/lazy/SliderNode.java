@@ -298,7 +298,9 @@ class SliderNode extends AbstractNode {
         if (replaceMode) {
             numberInputIndexAfterFloatingPoint = -1;
             numpadBufferValue = input;
-            setWholeNumberPrecision();
+            if(numpadBufferValue != 0){
+                setWholeNumberPrecision();
+            }
             return;
         }
         int valueFloored = floor(numpadBufferValue);

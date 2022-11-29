@@ -68,8 +68,8 @@ class PlotDisplayNode extends AbstractNode {
 
         float zeroScreenX = map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f);
         float zeroScreenY = map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f);
-        zeroScreenX = constrain(zeroScreenX, -w / 2f + zeroWeight / 2f, w / 2f - zeroWeight / 2f);
-        zeroScreenY = constrain(zeroScreenY, -h / 2f + zeroWeight / 2f, h / 2f - zeroWeight / 2f);
+        zeroScreenX = constrain(zeroScreenX, -w / 2f + zeroWeight / 2f, w / 2f - zeroWeight / 2f+1);
+        zeroScreenY = constrain(zeroScreenY, -h / 2f + zeroWeight / 2f, h / 2f - zeroWeight / 2f+0.5f);
         strokeForegroundBasedOnMouseOver(pg);
         pg.point(zeroScreenX + 0.5f, zeroScreenY + 0.5f);
 
