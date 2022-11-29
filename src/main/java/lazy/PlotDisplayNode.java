@@ -21,7 +21,7 @@ class PlotDisplayNode extends AbstractNode {
 
     private void drawPlotGrid(PGraphics pg) {
         pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
-        if(shouldHighlightGrid()){
+        if (shouldHighlightGrid()) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         }
         pg.pushMatrix();
@@ -42,6 +42,7 @@ class PlotDisplayNode extends AbstractNode {
         float valueEndX = valueRangeX + valueChangePerCellX * 2;
         float valueStartY = -valueChangePerCellY * 2;
         float valueEndY = valueRangeY + valueChangePerCellY * 2;
+
         // draw lines
         for (float valX = valueStartX; valX <= valueEndX; valX += valueChangePerCellX) {
             float x = map(valX - nearValueX, 0, valueRangeX, -w / 2f, w / 2f);
@@ -55,17 +56,23 @@ class PlotDisplayNode extends AbstractNode {
                 pg.line(-w / 2, y, w / 2, y);
             }
         }
-        // draw zero
-        float zeroX = map(0, valueStartX, valueEndX, -w/2f, w/2f);
-        float zeroY = map(0, valueStartY, valueEndY, -h/2f, h/2f);
-        pg.stroke(State.normColor(0.6f,1,1));
-        pg.strokeWeight(7.5f);
-        pg.point(zeroX, zeroY);
 
         // draw selection marker
         strokeForegroundBasedOnMouseOver(pg);
-        pg.strokeWeight(7.5f);
+        pg.strokeWeight(10);
         pg.point(0.5f, 0.5f);
+
+        // draw zero
+        float zeroWeight = 6;
+        pg.strokeWeight(zeroWeight);
+
+        float zeroScreenX = map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f);
+        float zeroScreenY = map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f);
+        zeroScreenX = constrain(zeroScreenX, -w / 2f + zeroWeight / 2f, w / 2f - zeroWeight / 2f);
+        zeroScreenY = constrain(zeroScreenY, -h / 2f + zeroWeight / 2f, h / 2f - zeroWeight / 2f);
+        strokeForegroundBasedOnMouseOver(pg);
+        pg.point(zeroScreenX + 0.5f, zeroScreenY + 0.5f);
+
         pg.popMatrix();
     }
 

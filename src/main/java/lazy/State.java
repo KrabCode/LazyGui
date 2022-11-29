@@ -31,7 +31,7 @@ class State {
     static private int lastFontSize = -1;
     static float textMarginX = 5;
     static float textMarginY = 14;
-    static boolean keepWindowsInBounds = true;
+    static boolean shouldKeepWindowsInBounds = true;
 
     static String sketchName = null;
     static boolean autosaveEnabled = false;
@@ -299,8 +299,8 @@ class State {
         previewRectSize = cell * 0.6f;
     }
 
-    static void setKeepWindowsInBounds(boolean value) {
-        keepWindowsInBounds = value;
+    static void setShouldKeepWindowsInBounds(boolean value) {
+        shouldKeepWindowsInBounds = value;
     }
 
     static int normColor(float br) {

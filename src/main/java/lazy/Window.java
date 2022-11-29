@@ -180,7 +180,7 @@ abstract class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        if(!State.keepWindowsInBounds){
+        if(!State.shouldKeepWindowsInBounds){
             return;
         }
         float rightEdge = pg.width - windowSizeX - 1;
