@@ -77,10 +77,9 @@ class SliderNode extends AbstractNode {
         precisionRange.add(0.001f);
         precisionRange.add(0.01f);
         precisionRange.add(0.1f);
-        precisionRange.add(1.0f);
+        precisionRange.add(1f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        setPrecisionIndexAndValue(4);
         precisionRangeDigitsAfterDot.put(0.00001f, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
@@ -89,6 +88,23 @@ class SliderNode extends AbstractNode {
         precisionRangeDigitsAfterDot.put(1f, 0);
         precisionRangeDigitsAfterDot.put(10f, 0);
         precisionRangeDigitsAfterDot.put(100f, 0);
+        attemptToSetAppropriatePrecisionForDefaultValue();
+    }
+
+    private void attemptToSetAppropriatePrecisionForDefaultValue() {
+        float val = valueFloat;
+        if(val < precisionRange.get(0)){
+            setPrecisionIndexAndValue(0);
+            return;
+        }
+        for (int i = 0; i < precisionRange.size() - 1; i++) {
+            if(val >= precisionRange.get(i) && val <= precisionRange.get(i + 1)){
+                setPrecisionIndexAndValue(i);
+                return;
+            }
+        }
+        // set default precision if all else fails
+        setPrecisionIndexAndValue(precisionRange.indexOf(1f));
     }
 
     private void loadArbitraryPrecisionIntoArrays() {

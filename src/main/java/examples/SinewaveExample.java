@@ -28,30 +28,50 @@ public class SinewaveExample extends PApplet {
     @Override
     public void draw() {
         pg.beginDraw();
+        gui.pushFolder("scene");
         drawBackground();
+        drawRectangle();
         drawSinewave();
+        gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);
     }
 
+    private void drawRectangle() {
+        pg.pushMatrix();
+        gui.pushFolder("rect");
+        pg.fill(gui.colorPicker("fill", 0xFF000000).hex);
+        pg.stroke(gui.colorPicker("stroke", 0xFFA0A0A0).hex);
+        pg.strokeWeight(gui.slider("weight", 6));
+        pg.rectMode(CENTER);
+        pg.translate(width/2f, height/2f);
+        pg.rect(gui.slider("x"),
+                gui.slider("y"),
+                gui.slider("w", 500),
+                gui.slider("h", 280));
+        gui.popFolder();
+        pg.popMatrix();
+    }
+
     private void drawSinewave() {
-        String path = "sinewave/";
-        int detail = gui.sliderInt(path + "detail", 100);
-        float freq = gui.slider(path + "freq", 0.01f);
-        time += radians(gui.slider(path + "time", 1));
-        pg.translate(width/2f + gui.slider(path + "x"), height/2f +  + gui.slider(path + "y"));
-        float w = gui.slider(path + "width", 400);
-        float h = gui.slider(path + "height", 200);
+        gui.pushFolder("sinewave");
+        int detail = gui.sliderInt("detail", 100);
+        float freq = gui.slider("freq", 1);
+        time += radians(gui.slider("time", 1));
+        pg.translate(width/2f + gui.slider("x"), height/2f +  + gui.slider("y"));
+        float w = gui.slider("width", 400);
+        float h = gui.slider("height", 200);
         pg.noFill();
-        pg.stroke(gui.colorPicker(path + "stroke", color(255)).hex);
-        pg.strokeWeight(gui.slider(path + "weight", 5));
+        pg.stroke(gui.colorPicker("stroke", color(255)).hex);
+        pg.strokeWeight(gui.slider("weight", 4));
         pg.beginShape();
         for (int i = 0; i < detail; i++) {
             float norm = norm(i, 0, detail-1);
             float x = -w/2f + w * norm;
-            float y = h * sin(norm * freq * TAU + time);
+            float y = h * 0.5f * sin(norm * freq * TAU + time);
             pg.vertex(x,y);
         }
+        gui.popFolder();
         pg.endShape();
     }
 
