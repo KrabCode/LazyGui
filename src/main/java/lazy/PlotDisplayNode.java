@@ -1,6 +1,7 @@
 package lazy;
 
 import processing.core.PGraphics;
+import processing.core.PVector;
 
 import static processing.core.PApplet.*;
 
@@ -28,8 +29,8 @@ class PlotDisplayNode extends AbstractNode {
         int cellCountX = floor(1 + 2 * sliderX.currentPrecisionIndex);
         int cellCountY = floor(1 + 2 * sliderY.currentPrecisionIndex);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
-        float w = (size.x - 1);
-        float h = (size.y - 1);
+        float w = (size.x);
+        float h = (size.y);
         float valueChangePerCell = 100;
         float valueChangePerCellX = valueChangePerCell * sliderX.valueFloatPrecision;
         float valueChangePerCellY = valueChangePerCell * sliderY.valueFloatPrecision;
@@ -57,22 +58,47 @@ class PlotDisplayNode extends AbstractNode {
             }
         }
 
+        float zeroW = w * 0.035f;
+        float zeroH = zeroW * 1.8f;
+
         // draw selection marker
         strokeForegroundBasedOnMouseOver(pg);
-        pg.strokeWeight(10);
-        pg.point(0.5f, 0.5f);
+        pg.strokeWeight(max(zeroW, zeroH) + 3);
+        pg.point(0.5f, 0.5f); // 0.5f is needed to center the point... for some reason
 
         // draw zero
-        float zeroWeight = 6;
-        pg.strokeWeight(zeroWeight);
-
-        float zeroScreenX = map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f);
-        float zeroScreenY = map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f);
-        zeroScreenX = constrain(zeroScreenX, -w / 2f + zeroWeight / 2f, w / 2f - zeroWeight / 2f+1);
-        zeroScreenY = constrain(zeroScreenY, -h / 2f + zeroWeight / 2f, h / 2f - zeroWeight / 2f+0.5f);
+        float zeroInnerLineLength = zeroH * 0.2f;
+        float zeroScreenRangeX = w / 2 - zeroW / 2;
+        float zeroScreenRangeY = h / 2 - zeroH / 2;
+        float zeroScreenX = constrain(map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRangeX, zeroScreenRangeX);
+        float zeroScreenY = constrain(map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRangeY, zeroScreenRangeY);
+        pg.noFill();
+        pg.strokeWeight(1.99f);
         strokeForegroundBasedOnMouseOver(pg);
-        pg.point(zeroScreenX + 0.5f, zeroScreenY + 0.5f);
-
+        if (abs(zeroScreenX) >= zeroScreenRangeX || abs(zeroScreenY) >= zeroScreenRangeY) {
+            // draw arrow towards 0
+            float arrowLength = 20;
+            float arrowAppendageLength = 6;
+            float arrowAppendageAngle = 0.7f;
+            PVector toZero = new PVector(zeroScreenX, zeroScreenY);
+            PVector arrowBase = toZero.copy().setMag(toZero.mag() - arrowLength);
+            pg.line(arrowBase.x, arrowBase.y, zeroScreenX, zeroScreenY);
+            PVector appendageHuggingArrowLine = arrowBase.copy().setMag(arrowAppendageLength);
+            for (int i = 0; i < 2; i++) {
+                pg.pushMatrix();
+                pg.translate(zeroScreenX, zeroScreenY);
+                float rotateDirectionSign = i % 2 == 0 ? 1 : -1;
+                pg.rotate(PI + arrowAppendageAngle * rotateDirectionSign);
+                pg.line(0, 0, appendageHuggingArrowLine.x, appendageHuggingArrowLine.y);
+                pg.popMatrix();
+            }
+        } else {
+            // draw rounded rectangle 0
+            pg.rectMode(CENTER);
+            pg.rect(zeroScreenX, zeroScreenY, zeroW, zeroH, zeroW / 2f);
+            pg.line(zeroScreenX, zeroScreenY - zeroInnerLineLength / 2,
+                    zeroScreenX, zeroScreenY + zeroInnerLineLength / 2);
+        }
         pg.popMatrix();
     }
 
