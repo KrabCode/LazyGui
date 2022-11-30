@@ -14,10 +14,11 @@ import static processing.core.PApplet.*;
 
 /**
  * Main class for controlling the GUI from a processing sketch.
- * Should be initialized as a global variable in processing setup() function with new LazyGui(this)
+ * Should be initialized as a global variable in processing setup() function with new LazyGui(this).
  * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
  * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
  * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
+ * Please note that only one LazyGui object is expected to exist in any given sketch, which is not enforced, it just won't work.
  */
 @SuppressWarnings("unused")
 public class LazyGui implements UserInputSubscriber {
@@ -521,7 +522,7 @@ public class LazyGui implements UserInputSubscriber {
      *
      * @param path forward slash separated unique path to the control element
      * @param options list of options to display
-     * @param defaultOption default option to select, must also be found in options or it is ignored
+     * @param defaultOption default option to select, which must also be found in the options, or it will be ignored
      * @return currently selected string
      */
     public String radio(String path, List<String> options, String defaultOption) {
@@ -764,8 +765,9 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Pushes a folder name to the global path prefix stack. Can be used multiple times just like pushMatrix().
-     * Removes all slashes from the parameter and adds a slash at the end for consistency and ease of path retrieval.
+     * Pushes a folder name to the global path prefix stack.
+     * Can be used multiple times in pairs just like pushMatrix and popMatrix().
+     * Removes all slashes from the parameter and adds a slash at the end to enforce consistency and ease of path retrieval.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.
      *
@@ -785,7 +787,8 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Pops the last pushed folder name from the global path prefix stack. Can be used multiple times just like popMatrix().
+     * Pops the last pushed folder name from the global path prefix stack.
+     * Can be used multiple times in pairs just like pushMatrix and popMatrix().
      * Warns once when the stack is empty and popFolder() is attempted.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.
@@ -804,7 +807,8 @@ public class LazyGui implements UserInputSubscriber {
      * Clears the global path prefix stack, removing all its elements.
      * Nothing will be prefixed in subsequent calls to control elements.
      * Also happens every time draw() ends and LazyGui.draw() begins,
-     * so that the library user doesn't always have to pop their folder pushes, since they get cleared every frame.
+     * in order for LazyGui to be certain of what the current path is for its own control elements like the options folder
+     * and so the library user doesn't have to pop all of their folders, since they get cleared every frame.
      */
     public void clearFolder(){
         pathPrefix.clear();
