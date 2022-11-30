@@ -134,7 +134,7 @@ abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = Utils.getTrimmedTextToFitOneLine(pg, owner.name, windowSizeX - cell * 1.1f);
+        String trimmedName = Utils.getSubstringFromStartToFit(pg, owner.name, windowSizeX - cell - State.textMarginX);
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
         pg.popStyle();
         pg.popMatrix();

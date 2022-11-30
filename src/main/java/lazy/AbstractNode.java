@@ -148,7 +148,7 @@ abstract class AbstractNode {
 
 
     void drawLeftText(PGraphics pg, String text) {
-        String trimmedText = Utils.getTrimmedTextToFitOneLine(pg, text, size.x - cell);
+        String trimmedText = Utils.getSubstringFromStartToFit(pg, text, size.x - cell - State.textMarginX * 2);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, State.textMarginX, size.y - State.textMarginY);
     }

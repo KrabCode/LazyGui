@@ -20,13 +20,15 @@ public class TextInputNode extends AbstractNode {
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, content);
+        drawRightText(pg, getDisplayValue(pg));
     }
 
     @Override
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+        // based on tip #13 in here:
+        // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
-//            PApplet.println(e.toString());
+//            println(e.toString());
             if (e.getKeyCode() == PConstants.BACKSPACE) {
                 if (content.length() > 0) {
                     content = content.substring(0, content.length() - 1);
@@ -41,6 +43,7 @@ public class TextInputNode extends AbstractNode {
                 content = content + e.getKeyChar();
             }
         }
+//        println(content.replaceAll("\\n", "(newline)"));
     }
 
     @Override
@@ -51,9 +54,21 @@ public class TextInputNode extends AbstractNode {
         }
     }
 
-
     public String getStringValue() {
         return content;
+    }
+
+    private String getDisplayValue(PGraphics pg) {
+        if(content.endsWith("\n")){
+            return "";
+        }
+        float availableWidth = parent.window.windowSizeX - pg.textWidth(name + " ") - State.textMarginX * 2;
+        if(!content.contains("\n")){
+            return Utils.getSubstringFromEndToFit(pg, content, availableWidth);
+        }
+        String[] lines = content.split("[\\r\\n]+");
+        String lastLine = lines[lines.length-1];
+        return Utils.getSubstringFromEndToFit(pg, lastLine, availableWidth);
     }
 
     @Override

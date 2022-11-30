@@ -29,7 +29,7 @@ public class ColorPickerExample extends PApplet {
             image(gui.gradient("gradient"), 0, 0);
         }
         gui.popFolder();
-        PVector tran = gui.plotXY("plot test");
+        PVector tran = gui.plotXY("plot test testing jon hello test aaaaa");
         translate(tran.x, tran.y);
         gui.pushFolder("rect");
         fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);

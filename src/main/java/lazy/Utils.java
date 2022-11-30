@@ -88,15 +88,28 @@ class Utils {
         }
     }
 
-    static String getTrimmedTextToFitOneLine(PGraphics pg, String text, float space) {
+    static String getSubstringFromStartToFit(PGraphics pg, String text, float availableWidth) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             char character = text.charAt(i);
             float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
-            if (textWidthAfterNewChar >= space) {
+            if (textWidthAfterNewChar >= availableWidth) {
                 break;
             }
             result.append(character);
+        }
+        return result.toString();
+    }
+
+    static String getSubstringFromEndToFit(PGraphics pg, String text, float availableWidth){
+        StringBuilder result = new StringBuilder();
+        for (int i = text.length() - 1; i >= 0; i--) {
+            char character = text.charAt(i);
+            float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
+            if (textWidthAfterNewChar >= availableWidth) {
+                break;
+            }
+            result.insert(0, character);
         }
         return result.toString();
     }
