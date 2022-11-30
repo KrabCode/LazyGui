@@ -36,7 +36,7 @@ class PlotDisplayNode extends AbstractNode {
         int cellCountY = floor(rowHeightInCells);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
         float w = (size.x - 1);
-        float h = (size.y);
+        float h = (size.y - 1);
         float valueChangePerCell = 10;
         float valueChangePerCellX = valueChangePerCell * sliderX.valueFloatPrecision;
         float valueChangePerCellY = valueChangePerCell * sliderY.valueFloatPrecision;
@@ -64,34 +64,26 @@ class PlotDisplayNode extends AbstractNode {
             }
         }
 
-        float zeroW = w * 0.035f;
-        float zeroH = zeroW * 1.8f;
+        pg.translate(0.5f, 0.5f);
 
-        // draw selection marker
+        // find zero position on screen
+        float zeroSize = w * 0.08f;
+        float zeroScreenRange = w / 2 - zeroSize / 2;
+        float zeroScreenX = constrain(map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRange, zeroScreenRange);
+        float zeroScreenY = constrain(map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRange, zeroScreenRange);
+
+        // draw zero cross or arrow
         strokeForegroundBasedOnMouseOver(pg);
-        pg.strokeWeight(max(zeroW, zeroH) + 3);
-        pg.point(0.5f, 0.5f); // 0.5f is needed to center the point... for some reason
-
-        // calc zero
-        float zeroInnerLineLength = zeroH * 0.2f;
-        float zeroScreenRangeX = w / 2 - zeroW / 2;
-        float zeroScreenRangeY = h / 2 - zeroH / 2;
-        float zeroScreenX = constrain(map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRangeX, zeroScreenRangeX);
-        float zeroScreenY = constrain(map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRangeY, zeroScreenRangeY);
-
-        // debug rect
-        pg.noFill();
         pg.strokeWeight(1.99f);
-        pg.stroke(1,1,1);
-        pg.rectMode(CENTER);
-        pg.rect(0,0,zeroScreenRangeX*2, zeroScreenRangeY*2);
-
-        // draw zero - consider drawing a simple line cross instead
-        pg.noFill();
-        pg.strokeWeight(1.99f);
-        strokeForegroundBasedOnMouseOver(pg);
-        if (abs(zeroScreenX) >= zeroScreenRangeX || abs(zeroScreenY) >= zeroScreenRangeY) {
-            // the 0 is outside, so we draw an arrow towards it at the border
+        pg.strokeCap(SQUARE);
+        if (abs(zeroScreenX) <= zeroScreenRange && abs(zeroScreenY) <= zeroScreenRange) {
+            // draw zero cross because it was found on screen
+            pg.line(zeroScreenX, zeroScreenY - zeroSize / 2,
+                    zeroScreenX, zeroScreenY + zeroSize / 2);
+            pg.line(zeroScreenX - zeroSize / 2, zeroScreenY,
+                    zeroScreenX + zeroSize / 2, zeroScreenY);
+        } else {
+            // the 0 is outside, so draw an arrow towards it at the border
             float arrowLength = 20;
             float arrowAppendageLength = 6;
             float arrowAppendageAngle = 0.7f;
@@ -107,13 +99,13 @@ class PlotDisplayNode extends AbstractNode {
                 pg.line(0, 0, appendageHuggingArrowLine.x, appendageHuggingArrowLine.y);
                 pg.popMatrix();
             }
-        } else {
-            // draw rounded rectangle 0
-            pg.rectMode(CENTER);
-            pg.rect(zeroScreenX, zeroScreenY, zeroW, zeroH, zeroW / 2f);
-            pg.line(zeroScreenX, zeroScreenY - zeroInnerLineLength / 2,
-                    zeroScreenX, zeroScreenY + zeroInnerLineLength / 2);
         }
+
+        // draw selection marker
+        pg.noStroke();
+        fillForegroundBasedOnMouseOver(pg);
+        pg.ellipse(0, 0, zeroSize+1, zeroSize+1);
+
         pg.popMatrix();
     }
 
