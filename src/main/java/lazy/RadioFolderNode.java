@@ -6,14 +6,14 @@ import processing.core.PGraphics;
 
 import java.util.*;
 
-class StringPickerFolderNode extends FolderNode {
+class RadioFolderNode extends FolderNode {
 
     @Expose
     String valueString;
     Map<String, Boolean> oldValues = new HashMap<>();
     private final String[] options;
 
-    StringPickerFolderNode(String path, FolderNode parent, String[] options, String defaultOption) {
+    RadioFolderNode(String path, FolderNode parent, String[] options, String defaultOption) {
         super(path, parent);
         if(!arrayContainsDefault(options, defaultOption)){
             // gracefully ignore the default when it does not appear in the options and carry on as if no default was specified

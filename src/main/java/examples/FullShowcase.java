@@ -65,10 +65,10 @@ public class FullShowcase extends PApplet {
     }
 
     private int getBlendMode(String path, String defaultMode) {
-        String selectedMode = gui.stringPicker(path + "blend mode",
+        String selectedMode = gui.radio(path + "blend mode",
                 new String[]{"blend", "add", "subtract"}, defaultMode);
         if(gui.button(path + "blend mode reset")){
-            gui.stringPickerSet(path + "blend mode", defaultMode);
+            gui.radioSet(path + "blend mode", defaultMode);
         }
         switch (selectedMode) {
             case "add":

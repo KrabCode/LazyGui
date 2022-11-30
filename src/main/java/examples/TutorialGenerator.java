@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.UUID;
 
-@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class TutorialGenerator extends PApplet {
     LazyGui gui;
     PGraphics pg;
@@ -50,14 +49,24 @@ public class TutorialGenerator extends PApplet {
     private void drawScene() {
         pg.beginDraw();
         pg.background(gui.colorPicker("background").hex);
-        PVector offset = gui.plotXY("circle/translate");
-        pg.fill(gui.colorPicker("circle/fill").hex);
-        pg.stroke(gui.colorPicker("circle/stroke").hex);
-        pg.strokeWeight(gui.slider("circle/weight", 3));
-        pg.pushMatrix();
-        pg.translate(width / 2f + offset.x, width / 2f + offset.y);
-        pg.ellipse(0, 0, 50, 50);
-        pg.popMatrix();
+
+
+        pg.translate(width / 2f, width / 2f);
+
+        gui.pushFolder("text");
+        pg.fill(gui.colorPicker("color").hex);
+        PVector textPos = gui.plotXY("pos");
+        pg.textSize(gui.slider("size", 64));
+        pg.text(gui.textInput("content"), textPos.x, textPos.y);
+        gui.popFolder();
+
+        gui.pushFolder("circle");
+        PVector circlePos = gui.plotXY("translate");
+        pg.fill(gui.colorPicker("color").hex);
+        pg.stroke(gui.colorPicker("stroke").hex);
+        pg.strokeWeight(gui.slider("weight", 3));
+        gui.popFolder();
+        pg.ellipse(circlePos.x, circlePos.y, 50, 50);
         pg.endDraw();
         image(pg, 0, 0, width, height);
     }
@@ -87,6 +96,7 @@ public class TutorialGenerator extends PApplet {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(recDirAbsolute + "\\");
             if (!dir.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 dir.mkdirs();
             }
             try {

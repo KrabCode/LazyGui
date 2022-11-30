@@ -76,7 +76,7 @@ abstract class AbstractNode {
 
     /**
      * Main update function, only called when the parent window containing this node is open.
-     * See update()
+     * @see AbstractNode#updateDrawInlineNodeAbstract(PGraphics)
      * @param pg main PGraphics of the gui of the same size as the main PApplet canvas to draw on
      */
     void updateDrawInlineNode(PGraphics pg) {

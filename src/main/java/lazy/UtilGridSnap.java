@@ -129,7 +129,7 @@ public class UtilGridSnap {
             // cell size must be updated before this for this auto snap to work on startup
             WindowManager.snapAllStaticWindowsToGrid();
         }
-        UtilGridSnap.setSelectedVisibilityMode(State.gui.stringPicker("show grid",
+        UtilGridSnap.setSelectedVisibilityMode(State.gui.radio("show grid",
                 UtilGridSnap.getOptions(), UtilGridSnap.getDefaultVisibilityMode()));
         PickerColor clr = State.gui.colorPicker("point color", State.normColor(0.5f, 1));
 

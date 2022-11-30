@@ -19,6 +19,7 @@ import static processing.core.PApplet.*;
  * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
  * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
  */
+@SuppressWarnings("unused")
 public class LazyGui implements UserInputSubscriber {
 
     private static int lastFrameCountGuiWasShown = -1;
@@ -274,7 +275,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the value of an integer slider control element.
-     * lazily initializes it if needed and uses a specified default value.
+     * lazily initializes it if needed and uses the specified default value.
      *
      * @param path forward slash separated unique path to the control element
      * @param defaultValue default value to set the slider to
@@ -336,34 +337,73 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * // TODO document plot when done
-     *      https://github.com/KrabCode/LazyGui/issues/69
+     * Gets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets all values to 0 by default.
      *
-     * @param path
-     * @return
+     * @param path forward slash separated unique path to the plot control element
+     * @return current xy value with z always set to 0
      */
     public PVector plotXY(String path){
         return plotXYZ(path, null, false);
     }
 
+    /**
+     * Gets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets its values to the parameter defaults.
+     *
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultX default x value
+     * @param defaultY default y value
+     * @return current xy value with z always set to 0
+     */
     public PVector plotXY(String path, float defaultX, float defaultY){
         return plotXYZ(path, new PVector(defaultX, defaultY), false);
     }
 
+    /**
+     * Gets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets its values to the parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultXY default xy values, z value is ignored
+     * @return current xy value with z always set to 0
+     */
     public PVector plotXY(String path, PVector defaultXY){
         return plotXYZ(path, defaultXY == null ? new PVector() : defaultXY, false);
     }
 
+    /**
+     * Gets the vector value of a 2D control element with an extra z slider.
+     * Lazily initializes it if needed and sets its xyz values to 0 by default.
+     * @param path forward slash separated unique path to the plot control element
+     * @return current xyz values
+     */
     public PVector plotXYZ(String path){
         return plotXYZ(path, null, true);
     }
 
-    public PVector plotXYZ(String path, PVector defaultXYZ){
-        return plotXYZ(path, defaultXYZ == null ? new PVector() : defaultXYZ.copy(), true);
-    }
 
+    /**
+     * Gets the vector value of a 2D control element with an extra z slider.
+     * Lazily initializes it if needed and sets its values to the parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultX default x value
+     * @param defaultY default y value
+     * @param defaultZ default z value
+     * @return current xyz values
+     */
     public PVector plotXYZ(String path, float defaultX, float defaultY, float defaultZ){
         return plotXYZ(path, new PVector(defaultX, defaultY, defaultZ), true);
+    }
+
+    /**
+     * Gets the vector value of a 2D control element with an extra z slider.
+     * Lazily initializes it if needed and sets its values to the parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultXYZ default xyz values
+     * @return current xyz values
+     */
+    public PVector plotXYZ(String path, PVector defaultXYZ){
+        return plotXYZ(path, defaultXYZ == null ? new PVector() : defaultXYZ.copy(), true);
     }
 
     PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
@@ -463,20 +503,20 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the currently selected string from a list of options in a gui control element.
-     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
+     * Lazily initializes the radio element if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the first value in the list.
      *
      * @param path forward slash separated unique path to the control element
      * @param options list of options to display
      * @return currently selected string
      */
-    public String stringPicker(String path, List<String> options) {
-        return stringPicker(path, options.toArray(new String[0]), null);
+    public String radio(String path, List<String> options) {
+        return radio(path, options.toArray(new String[0]), null);
     }
 
     /**
      * Gets the currently selected string from a list of options in a gui control element.
-     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
+     * Lazily initializes the radio element if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options list, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element
@@ -484,26 +524,26 @@ public class LazyGui implements UserInputSubscriber {
      * @param defaultOption default option to select, must also be found in options or it is ignored
      * @return currently selected string
      */
-    public String stringPicker(String path, List<String> options, String defaultOption) {
-        return stringPicker(path, options.toArray(new String[0]), defaultOption);
+    public String radio(String path, List<String> options, String defaultOption) {
+        return radio(path, options.toArray(new String[0]), defaultOption);
     }
 
     /**
      * Gets the currently selected string from an array of options in a gui control element.
-     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
+     * Lazily initializes the radio element if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element
      * @param options list of options to display
      * @return currently selected string
      */
-    public String stringPicker(String path, String[] options) {
-        return stringPicker(path, options, null);
+    public String radio(String path, String[] options) {
+        return radio(path, options, null);
     }
 
     /**
      * Gets the currently selected string from an array of options in a gui control element.
-     * Lazily initializes the string picker if needed - any later changes in the options parameter will be ignored.
+     * Lazily initializes the radio element if needed - any later changes in the options parameter will be ignored.
      * Sets the default value to the specified parameter value, which must be contained in the options array, or it will be ignored.
      *
      * @param path forward slash separated unique path to the control element
@@ -511,38 +551,38 @@ public class LazyGui implements UserInputSubscriber {
      * @param defaultOption default option to select, must also be found in options, or it is ignored
      * @return currently selected string
      */
-    public String stringPicker(String path, String[] options, String defaultOption) {
+    public String radio(String path, String[] options, String defaultOption) {
         String fullPath = getFolder() + path;
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
-        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(fullPath);
+        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new StringPickerFolderNode(fullPath, parentFolder, options, defaultOption);
+            node = new RadioFolderNode(fullPath, parentFolder, options, defaultOption);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.valueString;
     }
 
     /**
-     * Sets the string picker value to a given parameter.
-     * Does not lazily initialize the string picker because it doesn't know what all the options should be.
-     * If the option to set is not found in the string picker's list of options it is ignored and a warning message is printed to console.
+     * Sets the radio element value to a given parameter.
+     * Does not lazily initialize the radio element because it doesn't know what all the options should be.
+     * If the option to set is not found in the radio's existing list of options - it is ignored and a warning message is printed to console.
      *
      * @param path forward slash separated unique path to the control element
-     * @param optionToSet string option to set the string picker to
+     * @param optionToSet string option to set the radio element to
      */
-    public void stringPickerSet(String path, String optionToSet){
+    public void radioSet(String path, String optionToSet){
         String fullPath = getFolder() + path;
-        StringPickerFolderNode node = (StringPickerFolderNode) NodeTree.findNode(fullPath);
+        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
         if (node != null) {
             List<String> options = node.getOptions();
             if(options.contains(optionToSet)){
                 node.selectOption(optionToSet);
             }else{
                 println("attempted to set an option: " + optionToSet +
-                    " to a string picker at path: " + fullPath +
+                    " to a radio element at path: " + fullPath +
                     " which does not appear in the options: " + options);
             }
         }
@@ -643,36 +683,6 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the current value of a string input element.
-     * Lazily initializes the string input if needed with its content set to an empty string.
-     *
-     * @param path forward slash separated unique path to the control element
-     * @return current value of a string input element
-     */
-    public String stringInput(String path){
-        return stringInput(path, "");
-    }
-
-    /**
-     * Gets the current value of a string input element.
-     * Lazily initializes the string input if needed with the specified default.
-     *
-     * @param path forward slash separated unique path to the control element
-     * @param content default value for the text content
-     * @return current value of a string input element
-     */
-    public String stringInput(String path, String content){
-        String fullPath = getFolder() + path;
-        StringInputNode node = (StringInputNode) NodeTree.findNode(fullPath);
-        if(node == null){
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new StringInputNode(fullPath, folder, content);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getStringValue();
-    }
-
-    /**
      * Adds hue to the color picker, looping it correctly both in both directions.
      * Lazily initializes the color picker if needed with default color 0xFF000000 (full alpha black).
      * Does not block changing the value in the future in any way.
@@ -690,6 +700,36 @@ public class LazyGui implements UserInputSubscriber {
         } else {
             node.setHue(hueToAdd);
         }
+    }
+
+    /**
+     * Gets the current value of a string input element.
+     * Lazily initializes the string input if needed with its content set to an empty string.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @return current value of a string input element
+     */
+    public String textInput(String path){
+        return textInput(path, "");
+    }
+
+    /**
+     * Gets the current value of a string input element.
+     * Lazily initializes the string input if needed with the specified default.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param content default value for the text content
+     * @return current value of a string input element
+     */
+    public String textInput(String path, String content){
+        String fullPath = getFolder() + path;
+        TextInputNode node = (TextInputNode) NodeTree.findNode(fullPath);
+        if(node == null){
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new TextInputNode(fullPath, folder, content);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        return node.getStringValue();
     }
 
     /**
@@ -771,23 +811,9 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Clears the global path prefix and puts pathToSet into it as the only element.
-     * The path parameter allows internal slashes but adds a slash at the end if missing.
-     * Any GUI control element call will apply this path as a prefix to their own path parameter.
+     * Gets the current path prefix stack.
+     * Mostly used internally by LazyGui, but it can also be useful for debugging.
      *
-     * @param pathToSet path prefix to set
-     */
-    public void setFolder(String pathToSet){
-        clearFolder();
-        String sanitizedPath = pathToSet;
-        if(!sanitizedPath.endsWith("/")){
-            sanitizedPath = sanitizedPath + "/";
-        }
-        pathPrefix.add(sanitizedPath);
-    }
-
-    /**
-     * Gets the current path prefix stack, mostly used internally by LazyGui, but can also be useful for debugging.
      * @return entire path prefix stack concatenated to one string
      */
     public String getFolder(){
@@ -843,7 +869,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private void updateOptionsFolder() {
-        setFolder(optionsNode.path);
+        pushFolder(optionsNode.path);
         WindowManager.updateWindowOptions();
         ThemeStore.updateThemePicker();
         UtilGridSnap.update();

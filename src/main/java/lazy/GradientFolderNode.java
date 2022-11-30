@@ -13,8 +13,8 @@ import static processing.core.PApplet.*;
 
 class GradientFolderNode extends FolderNode {
     PGraphics out;
-    StringPickerFolderNode directionTypePicker;
-    StringPickerFolderNode blendTypePicker;
+    RadioFolderNode directionTypePicker;
+    RadioFolderNode blendTypePicker;
     ArrayList<String> blendTypeOptions = new Utils.ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
     ArrayList<String> directionOptions = new Utils.ArrayListBuilder<String>().add("x").add("y").add("center").build();
 
@@ -24,8 +24,8 @@ class GradientFolderNode extends FolderNode {
 
     GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);
-        directionTypePicker = new StringPickerFolderNode(path + "/direction", this, directionOptions.toArray(new String[0]), directionOptions.get(1));
-        blendTypePicker = new StringPickerFolderNode(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
+        directionTypePicker = new RadioFolderNode(path + "/direction", this, directionOptions.toArray(new String[0]), directionOptions.get(1));
+        blendTypePicker = new RadioFolderNode(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionTypePicker);
         children.add(blendTypePicker);

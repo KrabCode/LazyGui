@@ -6,12 +6,12 @@ import com.google.gson.annotations.Expose;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class StringInputNode extends AbstractNode {
+public class TextInputNode extends AbstractNode {
 
     @Expose
     String content;
 
-    StringInputNode(String path, FolderNode folder, String content) {
+    TextInputNode(String path, FolderNode folder, String content) {
         super(NodeType.VALUE, path, folder);
         this.content = content;
         State.overwriteWithLoadedStateIfAny(this);

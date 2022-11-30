@@ -19,7 +19,7 @@ public class UtilContextLines {
     public static void update(PGraphics pg) {
         State.gui.pushFolder("context lines");
         int showContextLinesMode = contextLinesOptions.indexOf(
-                State.gui.stringPicker("visibility", contextLinesOptions, ON_HOVER));
+                State.gui.radio("visibility", contextLinesOptions, ON_HOVER));
         boolean shouldPickShortestLine = State.gui.toggle("shortest line");
         pg.pushStyle();
         int clr = State.gui.colorPicker("color", State.normColor(0.5f)).hex;

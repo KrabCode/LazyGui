@@ -144,8 +144,8 @@ class Utils {
                             );
                             break;
                         case "StringPickerFolderNode":
-                            ((StringPickerFolderNode) targetChild).selectOption(
-                                    ((StringPickerFolderNode) sourceChild).valueString
+                            ((RadioFolderNode) targetChild).selectOption(
+                                    ((RadioFolderNode) sourceChild).valueString
                             );
                             break;
                         case "FolderNode":

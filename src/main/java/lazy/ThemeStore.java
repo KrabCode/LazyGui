@@ -78,7 +78,7 @@ class ThemeStore {
             Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
             assert defaultTheme != null;
 
-            String userSelection = State.gui.stringPicker("preset", ThemeType.getAllNames(), defaultPaletteName);
+            String userSelection = State.gui.radio("preset", ThemeType.getAllNames(), defaultPaletteName);
             State.gui.pushFolder("editor");
             if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
                 ThemeType newSelectionToCopy = ThemeType.getValue(userSelection);
