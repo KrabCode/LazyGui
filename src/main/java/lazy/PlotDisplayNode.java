@@ -76,7 +76,7 @@ class PlotDisplayNode extends AbstractNode {
         strokeForegroundBasedOnMouseOver(pg);
         pg.strokeWeight(1.99f);
         pg.strokeCap(SQUARE);
-        if (abs(zeroScreenX) <= zeroScreenRange && abs(zeroScreenY) <= zeroScreenRange) {
+        if (abs(zeroScreenX) < zeroScreenRange && abs(zeroScreenY) < zeroScreenRange) {
             // draw zero cross because it was found on screen
             pg.line(zeroScreenX, zeroScreenY - zeroSize / 2,
                     zeroScreenX, zeroScreenY + zeroSize / 2);
