@@ -263,7 +263,12 @@ class SliderNode extends AbstractNode {
             case '.':
             case ',':
                 numberInputIndexAfterFloatingPoint = 0;
+                boolean replaceMode = numpadInputAppendLastFrame == -1 ||
+                        State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
                 numpadInputAppendLastFrame = State.app.frameCount;
+                if(replaceMode){
+                    numpadBufferValue = 0;
+                }
                 // set the precision for it to be ready for increasing precision when appending fractions
                 setWholeNumberPrecision();
                 break;
