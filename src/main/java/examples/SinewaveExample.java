@@ -31,6 +31,7 @@ public class SinewaveExample extends PApplet {
         pg.beginDraw();
         gui.pushFolder("scene");
         drawBackground();
+        pg.translate(width / 2f, height / 2f);
         drawRectangle();
         drawSinewave();
         gui.popFolder();
@@ -45,7 +46,6 @@ public class SinewaveExample extends PApplet {
         pg.stroke(gui.colorPicker("stroke", 0xFFA0A0A0).hex);
         pg.strokeWeight(gui.slider("weight", 6));
         pg.rectMode(CENTER);
-        pg.translate(width/2f, height/2f);
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size", 500, 280);
         pg.rect(pos.x, pos.y, size.x, size.y);
@@ -54,30 +54,31 @@ public class SinewaveExample extends PApplet {
     }
 
     private void drawSinewave() {
+        pg.pushMatrix();
         gui.pushFolder("sinewave");
         int detail = gui.sliderInt("detail", 100);
         float freq = gui.slider("freq", 1);
         time += radians(gui.slider("time", 1));
         PVector pos = gui.plotXY("pos");
-        pg.translate(width/2f + pos.x, height/2f + pos.y);
-        float w = gui.slider("width", 400);
-        float h = gui.slider("height", 200);
+        PVector size = gui.plotXY("size", 400, 200);
+        pg.translate(pos.x, pos.y);
         pg.noFill();
         pg.stroke(gui.colorPicker("stroke", color(255)).hex);
         pg.strokeWeight(gui.slider("weight", 4));
         pg.beginShape();
         for (int i = 0; i < detail; i++) {
-            float norm = norm(i, 0, detail-1);
-            float x = -w/2f + w * norm;
-            float y = h * 0.5f * sin(norm * freq * TAU + time);
-            pg.vertex(x,y);
+            float norm = norm(i, 0, detail - 1);
+            float x = -size.x / 2f + size.x * norm;
+            float y = size.y * 0.5f * sin(norm * freq * TAU + time);
+            pg.vertex(x, y);
         }
         gui.popFolder();
         pg.endShape();
+        pg.popMatrix();
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background", color(255*0.15f)).hex);
+        pg.fill(gui.colorPicker("background", color(255 * 0.15f)).hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);

@@ -228,7 +228,7 @@ class SliderNode extends AbstractNode {
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if (e.getKeyChar() == 'r') {
-            if (Float.isNaN(valueFloatDefault)) {
+            if (!Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
         }
