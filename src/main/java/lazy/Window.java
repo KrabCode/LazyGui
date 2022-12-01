@@ -20,9 +20,7 @@ class Window implements UserInputSubscriber {
     float posY;
     @Expose
     boolean closed = false;
-    @Expose
     float windowSizeX;
-    @Expose
     float windowSizeY;
     protected boolean isCloseable;
     boolean isBeingDraggedAround;
@@ -281,7 +279,6 @@ class Window implements UserInputSubscriber {
             }
             e.setConsumed(true);
         }
-
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
             isBeingDraggedAround = true;
             setFocusOnThis();
@@ -400,13 +397,6 @@ class Window implements UserInputSubscriber {
         return Utils.isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
-    }
-
-    private boolean isPointInBottomRightResizeCorner(float x, float y) {
-        return Utils.isPointInRect(x,y,
-                posX + windowSizeX,
-                posY + windowSizeY,
-                10, 10);
     }
 
     boolean isPointInsideSketchWindow(float x, float y) {

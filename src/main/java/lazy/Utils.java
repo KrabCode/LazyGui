@@ -15,7 +15,6 @@ import java.util.UUID;
 import static processing.core.PApplet.*;
 
 class Utils {
-
     private static FolderNode clipboardFolder;
 
     /**
@@ -191,7 +190,6 @@ class Utils {
         }
     }
 
-
     static String prettyPrintTree() {
         StringBuilder sb = new StringBuilder();
         buildPrettyPrintedTreeString(NodeTree.getRoot(), 1, sb);
@@ -248,5 +246,4 @@ class Utils {
             }
         }
     }
-
 }
