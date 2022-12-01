@@ -12,36 +12,36 @@ import static lazy.State.cell;
 import static processing.core.PApplet.*;
 import static lazy.ThemeColorType.*;
 
-abstract class Window implements UserInputSubscriber {
+class Window implements UserInputSubscriber {
+    final FolderNode folder;
     @Expose
     float posX;
     @Expose
     float posY;
     @Expose
     boolean closed = false;
-    float windowSizeX, windowSizeY;
+    @Expose
+    float windowSizeX;
+    @Expose
+    float windowSizeY;
     protected boolean isCloseable;
-    protected FolderNode owner;
-    boolean isDraggedAround;
+    boolean isBeingDraggedAround;
+    boolean isBeingResized;
     private boolean isTitleHighligted;
     private boolean closeButtonPressInProgress;
 
-    Window(float posX, float posY, FolderNode owner, boolean isCloseable) {
+    Window(float posX, float posY, FolderNode folder, boolean isCloseable) {
         this.posX = posX;
         this.posY = posY;
-        this.owner = owner;
         this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
-    }
-
-
-    boolean isFocused() {
-        return WindowManager.isFocused(this);
+        this.folder = folder;
+        folder.window = this;
     }
 
     void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
-        isTitleHighligted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isDraggedAround) || owner.isMouseOverNode;
+        isTitleHighligted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
         if (closed) {
             return;
         }
@@ -65,7 +65,7 @@ abstract class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
-        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(owner.path);
+        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(folder.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
         float tooltipYOffset = -1;
@@ -122,7 +122,9 @@ abstract class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    protected abstract void drawContent(PGraphics pg);
+    protected void drawContent(PGraphics pg){
+        drawInlineFolderChildren(pg);
+    }
 
     protected void drawTitleBar(PGraphics pg, boolean highlight) {
         pg.pushMatrix();
@@ -134,14 +136,14 @@ abstract class Window implements UserInputSubscriber {
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = Utils.getSubstringFromStartToFit(pg, owner.name, windowSizeX - cell - State.textMarginX);
+        String trimmedName = Utils.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - State.textMarginX);
         pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
         pg.popStyle();
         pg.popMatrix();
     }
 
     void drawContextLineFromTitleBarToInlineNode(PGraphics pg, float endRectSize, boolean pickShortestLine) {
-        AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(owner);
+        AbstractNode firstOpenParent = NodeTree.findFirstOpenParentNodeRecursively(folder);
         if (firstOpenParent == null || !firstOpenParent.isParentWindowVisible()) {
             return;
         }
@@ -200,6 +202,74 @@ abstract class Window implements UserInputSubscriber {
         }
     }
 
+    void drawInlineFolderChildren(PGraphics pg) {
+        float intendedWindowWidthInCells = folder.idealWindowWidthInCells;
+        windowSizeY = cell + heightSumOfChildNodes();
+        windowSizeX = cell * intendedWindowWidthInCells;
+        pg.pushMatrix();
+        pg.translate(posX, posY);
+        pg.translate(0, cell);
+        float y = cell;
+        for (int i = 0; i < folder.children.size(); i++) {
+            AbstractNode node = folder.children.get(i);
+            float nodeHeight = cell * node.idealInlineNodeHeightInCells;
+            node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
+            pg.pushMatrix();
+            pg.pushStyle();
+            node.updateDrawInlineNode(pg);
+            pg.popStyle();
+            pg.popMatrix();
+            y += nodeHeight;
+            pg.translate(0, nodeHeight);
+        }
+        pg.popMatrix();
+    }
+
+    private float heightSumOfChildNodes() {
+        float sum = 0;
+        for (AbstractNode child : folder.children) {
+            sum += child.idealInlineNodeHeightInCells * cell;
+        }
+        return sum;
+    }
+
+
+    @Override
+    public void mouseWheelMoved(LazyMouseEvent e) {
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
+            return;
+        }
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
+            if (clickedNode != null && clickedNode.isParentWindowVisible()) {
+                clickedNode.mouseWheelMovedOverNode(e.getX(), e.getY(), e.getRotation());
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed(LazyKeyEvent keyEvent) {
+        float x = State.app.mouseX;
+        float y = State.app.mouseY;
+        AbstractNode nodeUnderMouse = tryFindChildNodeAt(x, y);
+        if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
+            if (isPointInsideContent(x, y)) {
+                nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
+                keyEvent.consume();
+            }
+        }
+    }
+
+    private AbstractNode tryFindChildNodeAt(float x, float y) {
+        for (AbstractNode node : folder.children) {
+            if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+
     @Override
     public void mousePressed(LazyMouseEvent e) {
         if (isClosed()) {
@@ -211,13 +281,38 @@ abstract class Window implements UserInputSubscriber {
             }
             e.setConsumed(true);
         }
+
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
-            isDraggedAround = true;
+            isBeingDraggedAround = true;
             setFocusOnThis();
-        }
-        if(isPointInsideCloseButton(e.getX(), e.getY())){
+        }else if(isPointInsideCloseButton(e.getX(), e.getY())){
             closeButtonPressInProgress = true;
             e.setConsumed(true);
+        }
+        if (isPointInsideTitleBar(e.getX(), e.getY())) {
+            return;
+        }
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
+            if (node != null && node.isParentWindowVisible()) {
+                node.mousePressedOverNode(e.getX(), e.getY());
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(LazyMouseEvent e) {
+        if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
+            e.setConsumed(true);
+            folder.setIsMouseOverThisNodeOnly();
+        } else if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
+            if (node != null && node.isParentWindowVisible()) {
+                node.setIsMouseOverThisNodeOnly();
+                e.setConsumed(true);
+            }
+        } else {
+            NodeTree.setAllOtherNodesMouseOverToFalse(null);
         }
     }
 
@@ -226,10 +321,18 @@ abstract class Window implements UserInputSubscriber {
         if (isClosed()) {
             return;
         }
-        if (isDraggedAround) {
+        if (isBeingDraggedAround) {
             posX += e.getX() - e.getPrevX();
             posY += e.getY() - e.getPrevY();
             e.setConsumed(true);
+        }else if(isBeingResized){
+            windowSizeX += e.getX() - e.getPrevX();
+            windowSizeY += e.getY() - e.getPrevY();
+        }
+        for (AbstractNode child : folder.children) {
+            if (child.isDragged && child.isParentWindowVisible()) {
+                child.mouseDragNodeContinue(e);
+            }
         }
     }
 
@@ -241,12 +344,24 @@ abstract class Window implements UserInputSubscriber {
         if (isCloseable && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
             close();
             e.setConsumed(true);
-        } else if (isDraggedAround) {
+        } else if (isBeingDraggedAround) {
             e.setConsumed(true);
             trySnapToGrid();
         }
         closeButtonPressInProgress = false;
-        isDraggedAround = false;
+        isBeingDraggedAround = false;
+        isBeingResized = false;
+
+        for (AbstractNode node : folder.children) {
+            node.mouseReleasedAnywhere(e);
+        }
+        if (isPointInsideContent(e.getX(), e.getY())) {
+            AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
+            if (clickedNode != null && clickedNode.isParentWindowVisible()) {
+                clickedNode.mouseReleasedOverNode(e.getX(), e.getY());
+                e.setConsumed(true);
+            }
+        }
     }
 
     private void trySnapToGrid() {
@@ -257,19 +372,23 @@ abstract class Window implements UserInputSubscriber {
 
     void close() {
         closed = true;
-        isDraggedAround = false;
+        isBeingDraggedAround = false;
     }
 
     void open(boolean startDragging) {
         closed = false;
         if (startDragging) {
-            isDraggedAround = true;
+            isBeingDraggedAround = true;
             setFocusOnThis();
         }
     }
 
     private boolean isClosed() {
         return closed || LazyGui.isGuiHidden;
+    }
+
+    boolean isFocused() {
+        return WindowManager.isFocused(this);
     }
 
     void setFocusOnThis() {
@@ -281,6 +400,13 @@ abstract class Window implements UserInputSubscriber {
         return Utils.isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
+    }
+
+    private boolean isPointInBottomRightResizeCorner(float x, float y) {
+        return Utils.isPointInRect(x,y,
+                posX + windowSizeX,
+                posY + windowSizeY,
+                10, 10);
     }
 
     boolean isPointInsideSketchWindow(float x, float y) {

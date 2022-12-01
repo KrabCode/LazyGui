@@ -25,7 +25,7 @@ class FolderNode extends AbstractNode {
     CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     @Expose
-    FolderWindow window;
+    Window window;
 
     float idealWindowWidthInCells = State.defaultWindowWidthInCells;
 

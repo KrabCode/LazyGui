@@ -58,7 +58,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.createSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.createSingleton();
-        WindowManager.addWindow(new FolderWindow(cell, cell, NodeTree.getRoot(),false));
+        WindowManager.addWindow(new Window(cell, cell, NodeTree.getRoot(),false));
         State.loadMostRecentSave();
         createOptionsFolder();
         lazyFollowSketchResolution();
@@ -131,7 +131,7 @@ public class LazyGui implements UserInputSubscriber {
         for(AbstractNode node : allNodes){
             if(node.type == NodeType.FOLDER){
                 FolderNode folder = (FolderNode) node;
-                if(folder.window != null && folder.window.isDraggedAround){
+                if(folder.window != null && folder.window.isBeingDraggedAround){
                     return folder.window;
                 }
             }

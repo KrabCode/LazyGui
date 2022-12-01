@@ -24,7 +24,7 @@ class WindowManager {
         }
     }
 
-    static void addWindow(FolderWindow window) {
+    static void addWindow(Window window) {
         singleton.windows.add(window);
     }
 
@@ -48,7 +48,7 @@ class WindowManager {
         }
         boolean windowFound = false;
         for (Window w : singleton.windows) {
-            if(w.owner.path.equals(folderNode.path)){
+            if(w.folder.path.equals(folderNode.path)){
                 if(w.closed){
                     w.posX = pos.x;
                     w.posY = pos.y;
@@ -59,7 +59,7 @@ class WindowManager {
             }
         }
         if(!windowFound){
-            Window window = new FolderWindow(pos.x, pos.y, folderNode, true);
+            Window window = new Window(pos.x, pos.y, folderNode, true);
             singleton.windows.add(window);
             window.open(setFocus);
         }
@@ -100,7 +100,7 @@ class WindowManager {
 
     public static void snapAllStaticWindowsToGrid() {
         for (Window w : singleton.windows) {
-          if(w.closed || w.isDraggedAround){
+          if(w.closed || w.isBeingDraggedAround){
               continue;
           }
           PVector newPos = UtilGridSnap.trySnapToGrid(w.posX, w.posY);
