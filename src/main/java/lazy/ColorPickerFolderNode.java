@@ -81,9 +81,6 @@ class ColorPickerFolderNode extends FolderNode {
 
     private float getValue(String nodeName) {
         ColorSliderNode node = ((ColorSliderNode) findChildByName(nodeName));
-        if(node.isNumpadInputActive()){
-            return node.numpadBufferValue;
-        }
         return node.valueFloat;
     }
 

@@ -19,9 +19,8 @@ class SliderNode extends AbstractNode {
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastFrame = -1;
-    protected float numpadBufferValue = 0;
+    protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
-    private int numberInputIndexAfterFloatingPoint = -1;
     boolean verticalMouseMode = false;
     private boolean displayShader = true;
 
@@ -46,6 +45,7 @@ class SliderNode extends AbstractNode {
     int currentPrecisionIndex;
     @Expose
     float valueFloatPrecision;
+    float valueFloatPrecisionMin = 0.00001f;
     float valueFloatDefault;
     float valueFloatMin;
     float valueFloatMax;
@@ -76,7 +76,7 @@ class SliderNode extends AbstractNode {
         precisionRange.add(1f);
         precisionRange.add(10.0f);
         precisionRange.add(100.0f);
-        precisionRangeDigitsAfterDot.put(0.00001f, 5);
+        precisionRangeDigitsAfterDot.put(valueFloatPrecisionMin, 5);
         precisionRangeDigitsAfterDot.put(0.0001f, 4);
         precisionRangeDigitsAfterDot.put(0.001f, 3);
         precisionRangeDigitsAfterDot.put(0.01f, 2);
@@ -84,27 +84,20 @@ class SliderNode extends AbstractNode {
         precisionRangeDigitsAfterDot.put(1f, 0);
         precisionRangeDigitsAfterDot.put(10f, 0);
         precisionRangeDigitsAfterDot.put(100f, 0);
-        setSensiblePrecisionForCurrentValue();
+        setSensiblePrecision(String.valueOf(valueFloat));
     }
 
-    private void setSensiblePrecisionForCurrentValue() {
-        float val = valueFloat;
-        if(val == 0){
+    private void setSensiblePrecision(String value) {
+        if(value.equals("0")){
             setPrecisionIndexAndValue(precisionRange.indexOf(1f));
             return;
         }
-        if(val < precisionRange.get(0)){
-            setPrecisionIndexAndValue(0);
+        if(value.matches("[0-9]*\\.[0-9]*")){
+            int fractionalDigitLength = value.split("\\.")[1].length();
+            setPrecisionIndexAndValue(4 - fractionalDigitLength);
             return;
         }
-        for (int i = 0; i < precisionRange.size() - 1; i++) {
-            if(val >= precisionRange.get(i) && val <= precisionRange.get(i + 1)){
-                setPrecisionIndexAndValue(i);
-                return;
-            }
-        }
-        // set default precision if all else fails
-        setPrecisionIndexAndValue(precisionRange.indexOf(1f));
+        setPrecisionIndexAndValue(2 + value.length());
     }
 
     @Override
@@ -114,7 +107,13 @@ class SliderNode extends AbstractNode {
 
     void updateDrawSliderNodeValue(PGraphics pg) {
         if(numpadInputJustFinished()){
-            setValueFloat(numpadBufferValue);
+            if(numpadBufferValue.endsWith(".")){
+                numpadBufferValue += "0";
+            }
+            println("setting buffer: ", numpadBufferValue);
+            if(trySetValueFloat(numpadBufferValue)){
+                setSensiblePrecision(numpadBufferValue);
+            }
         }
         if (isDragged || isMouseOverNode) {
             updateValueMouseInteraction();
@@ -158,18 +157,13 @@ class SliderNode extends AbstractNode {
 
     String getValueToDisplay() {
         int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
-        float value = isNumpadInputActive() ? numpadBufferValue : valueFloat;
-        if (fractionPadding == 0) {
-            String wholeNumber = String.valueOf(floor(value));
-            if(numberInputIndexAfterFloatingPoint == 0 && isNumpadInputActive()){
-                wholeNumber += ".";
-            }
-            return wholeNumber;
+        if(isNumpadInputActive()){
+            return numpadBufferValue;
         }
-        if (Float.isNaN(value)) {
+        if (Float.isNaN(valueFloat)) {
             return "NaN";
         }
-        return nf(value, 0, fractionPadding).replaceAll(",", ".");
+        return nf(valueFloat, 0, fractionPadding).replaceAll(",", ".");
     }
 
     @Override
@@ -200,7 +194,7 @@ class SliderNode extends AbstractNode {
     }
 
     protected void setPrecisionIndexAndValue(int newPrecisionIndex) {
-        currentPrecisionIndex = newPrecisionIndex;
+        currentPrecisionIndex = constrain(newPrecisionIndex, 0, precisionRange.size() - 1);
         valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
         validatePrecision();
     }
@@ -256,30 +250,34 @@ class SliderNode extends AbstractNode {
     }
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
+        boolean inReplaceMode = isNumpadInReplaceMode();
         if(numpadChars.contains(e.getKeyChar())){
-            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())));
+            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())), inReplaceMode);
         }
         switch (e.getKeyChar()) {
             case '.':
             case ',':
-                numberInputIndexAfterFloatingPoint = 0;
-                boolean replaceMode = numpadInputAppendLastFrame == -1 ||
-                        State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
                 numpadInputAppendLastFrame = State.app.frameCount;
-                if(replaceMode){
-                    numpadBufferValue = 0;
+                if(numpadBufferValue.isEmpty()){
+                    numpadBufferValue += "0";
+                }
+                if(!numpadBufferValue.endsWith(".")) {
+                    numpadBufferValue += ".";
                 }
                 // set the precision for it to be ready for increasing precision when appending fractions
-                setWholeNumberPrecision();
                 break;
             case '+':
                 if(valueFloat <= 0){
-                    valueFloat = abs(valueFloat);
+                    setValueFloat(abs(valueFloat));
+                    onValueFloatChanged();
                 }
                 break;
             case '-':
-                if(valueFloat >= 0){
-                    valueFloat = -valueFloat;
+                if(inReplaceMode){
+                    numpadBufferValue = "-";
+                }else if(valueFloat >= 0){
+                    setValueFloat(-valueFloat);
+                    onValueFloatChanged();
                 }
                 break;
             case '*':
@@ -293,40 +291,21 @@ class SliderNode extends AbstractNode {
             }
         }
         State.onUndoableActionEnded();
-        onValueFloatChanged();
     }
 
-    private void tryAppendNumberInputToValue(Integer input) {
-        boolean replaceMode = numpadInputAppendLastFrame == -1 ||
-                State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
+    private void tryAppendNumberInputToValue(Integer input, boolean inReplaceMode) {
+        String inputString = String.valueOf(input);
         numpadInputAppendLastFrame = State.app.frameCount;
-        if (replaceMode) {
-            numberInputIndexAfterFloatingPoint = -1;
-            numpadBufferValue = input;
-            if(numpadBufferValue != 0){
+        if (inReplaceMode) {
+            numpadBufferValue = inputString;
+            if(!numpadBufferValue.equals("0")){
                 // when I only reset a value to 0 I usually want to keep its old precision
                 // when I start typing something other than 0 I usually do want whole number precision
                 setWholeNumberPrecision();
             }
             return;
         }
-        int valueFloored = floor(numpadBufferValue);
-        if (numberInputIndexAfterFloatingPoint == -1) {
-            // append whole number (but floating point can represent only 7 whole digits comfortably)
-            // see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
-            if(String.valueOf(valueFloored).length() <= 7){
-                numpadBufferValue = valueFloored * 10 + input;
-            }
-        } else {
-            // append fraction only
-            float fractionToAdd = input * (pow(0.1f, ++numberInputIndexAfterFloatingPoint));
-            numpadBufferValue = numpadBufferValue + fractionToAdd;
-            // adjust precision to show the new number
-            if(numberInputIndexAfterFloatingPoint > nf(fractionToAdd,0,0).length() - 3){
-                increasePrecision();
-            }
-        }
-
+        numpadBufferValue += inputString;
     }
 
     protected boolean isNumpadInputActive() {
@@ -334,9 +313,26 @@ class SliderNode extends AbstractNode {
                 State.app.frameCount <= numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
     }
 
+    private boolean isNumpadInReplaceMode() {
+        return numpadInputAppendLastFrame == -1 ||
+                State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
+    }
+
     protected boolean numpadInputJustFinished(){
         return numpadInputAppendLastFrame != -1 &&
                 State.app.frameCount == numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
+    }
+
+    private boolean trySetValueFloat(String toParseAsFloat) {
+        float parsed;
+        try{
+             parsed = Float.parseFloat(toParseAsFloat);
+        }catch (NumberFormatException formatException){
+            println(formatException.getMessage(), formatException);
+            return false;
+        }
+        setValueFloat(parsed);
+        return true;
     }
 
     protected void setValueFloat(float floatToSet) {
