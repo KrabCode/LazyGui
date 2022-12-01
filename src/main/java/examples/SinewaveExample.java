@@ -3,6 +3,7 @@ package examples;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
+import processing.core.PVector;
 
 public class SinewaveExample extends PApplet {
     LazyGui gui;
@@ -45,10 +46,9 @@ public class SinewaveExample extends PApplet {
         pg.strokeWeight(gui.slider("weight", 6));
         pg.rectMode(CENTER);
         pg.translate(width/2f, height/2f);
-        pg.rect(gui.slider("x"),
-                gui.slider("y"),
-                gui.slider("w", 500),
-                gui.slider("h", 280));
+        PVector pos = gui.plotXY("pos");
+        PVector size = gui.plotXY("size", 500, 280);
+        pg.rect(pos.x, pos.y, size.x, size.y);
         gui.popFolder();
         pg.popMatrix();
     }
@@ -58,7 +58,8 @@ public class SinewaveExample extends PApplet {
         int detail = gui.sliderInt("detail", 100);
         float freq = gui.slider("freq", 1);
         time += radians(gui.slider("time", 1));
-        pg.translate(width/2f + gui.slider("x"), height/2f +  + gui.slider("y"));
+        PVector pos = gui.plotXY("pos");
+        pg.translate(width/2f + pos.x, height/2f + pos.y);
         float w = gui.slider("width", 400);
         float h = gui.slider("height", 200);
         pg.noFill();

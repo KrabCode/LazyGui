@@ -17,7 +17,7 @@ class PlotDisplayNode extends AbstractNode {
         this.sliderY = sliderY;
         shouldDrawLeftNameText = false;
         //noinspection SuspiciousNameCombination
-        rowHeightInCells = parentFolder.idealWindowWidthInCells;
+        idealInlineNodeHeightInCells = parentFolder.idealWindowWidthInCells;
     }
 
     @Override
@@ -32,8 +32,8 @@ class PlotDisplayNode extends AbstractNode {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
         }
         pg.pushMatrix();
-        int cellCountX = floor(rowHeightInCells);
-        int cellCountY = floor(rowHeightInCells);
+        int cellCountX = floor(idealInlineNodeHeightInCells);
+        int cellCountY = floor(idealInlineNodeHeightInCells);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
         float w = (size.x - 1);
         float h = (size.y - 1);

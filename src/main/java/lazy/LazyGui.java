@@ -350,6 +350,18 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Gets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets its values to the parameter default.
+     *
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultXY default xy value
+     * @return current xy value with z always set to 0
+     */
+    public PVector plotXY(String path, float defaultXY){
+        return plotXYZ(path, new PVector(defaultXY, defaultXY), false);
+    }
+
+    /**
+     * Gets the vector value of a 2D control element.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -380,6 +392,18 @@ public class LazyGui implements UserInputSubscriber {
      */
     public PVector plotXYZ(String path){
         return plotXYZ(path, null, true);
+    }
+
+
+    /**
+     * Gets the vector value of a 2D control element with an extra z slider.
+     * Lazily initializes it if needed and sets its values to the parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param defaultXYZ default xyz values
+     * @return current xyz values
+     */
+    public PVector plotXYZ(String path, float defaultXYZ){
+        return plotXYZ(path, new PVector(defaultXYZ, defaultXYZ, defaultXYZ), true);
     }
 
 
