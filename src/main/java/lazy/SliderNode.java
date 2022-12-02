@@ -267,18 +267,11 @@ class SliderNode extends AbstractNode {
                 // set the precision for it to be ready for increasing precision when appending fractions
                 break;
             case '+':
-                if(valueFloat <= 0){
-                    setValueFloat(abs(valueFloat));
-                    onValueFloatChanged();
-                }
-                break;
             case '-':
                 if(inReplaceMode){
-                    numpadBufferValue = "-";
-                }else if(valueFloat >= 0){
-                    setValueFloat(-valueFloat);
-                    onValueFloatChanged();
+                    numpadBufferValue = "" + e.getKeyChar();
                 }
+                numpadInputAppendLastFrame = State.app.frameCount;
                 break;
             case '*':
                 decreasePrecision();
