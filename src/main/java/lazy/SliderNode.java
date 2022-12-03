@@ -9,20 +9,42 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static processing.core.PApplet.*;
 
 class SliderNode extends AbstractNode {
 
+    @Expose
+    float valueFloat;
+    @Expose
+    int currentPrecisionIndex;
+    @Expose
+    float valueFloatPrecision;
+    float valueFloatDefault;
+    float valueFloatMin;
+    float valueFloatMax;
+    boolean valueFloatConstrained;
+    float backgroundScrollX = 0;
+    float mouseDeltaX, mouseDeltaY;
+    boolean verticalMouseMode = false;
+    protected String numpadBufferValue = "";
+    protected boolean showPercentIndicatorWhenConstrained = true;
+    protected ArrayList<Float> precisionRange = new Utils.ArrayListBuilder<Float>()
+            .add(0.0001f)
+            .add(0.001f)
+            .add(0.01f)
+            .add(0.1f)
+            .add(1f)
+            .add(10.0f)
+            .add(100.0f).build();
+
     ArrayList<Character> numpadChars = new Utils.ArrayListBuilder<Character>()
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastFrame = -1;
-    protected String numpadBufferValue = "";
-    protected boolean showPercentIndicatorWhenConstrained = true;
-    boolean verticalMouseMode = false;
+    private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*\\.[0-9]*";
     private boolean displayShader = true;
+    String shaderPath = "sliderBackground.glsl";
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
@@ -39,26 +61,6 @@ class SliderNode extends AbstractNode {
         State.overwriteWithLoadedStateIfAny(this);
     }
 
-    @Expose
-    float valueFloat;
-    @Expose
-    int currentPrecisionIndex;
-    @Expose
-    float valueFloatPrecision;
-    float valueFloatPrecisionMin = 0.00001f;
-    float valueFloatDefault;
-    float valueFloatMin;
-    float valueFloatMax;
-    boolean valueFloatConstrained;
-    float backgroundScrollX = 0;
-
-
-    float mouseDeltaX, mouseDeltaY;
-    protected ArrayList<Float> precisionRange = new ArrayList<>();
-    HashMap<Float, Integer> precisionRangeDigitsAfterDot = new HashMap<>();
-
-
-    String shaderPath = "sliderBackground.glsl";
 
     private void initSliderPrecisionArrays() {
         initPrecision();
@@ -69,35 +71,27 @@ class SliderNode extends AbstractNode {
     }
 
     private void initPrecision() {
-        precisionRange.add(0.0001f);
-        precisionRange.add(0.001f);
-        precisionRange.add(0.01f);
-        precisionRange.add(0.1f);
-        precisionRange.add(1f);
-        precisionRange.add(10.0f);
-        precisionRange.add(100.0f);
-        precisionRangeDigitsAfterDot.put(valueFloatPrecisionMin, 5);
-        precisionRangeDigitsAfterDot.put(0.0001f, 4);
-        precisionRangeDigitsAfterDot.put(0.001f, 3);
-        precisionRangeDigitsAfterDot.put(0.01f, 2);
-        precisionRangeDigitsAfterDot.put(0.1f, 1);
-        precisionRangeDigitsAfterDot.put(1f, 0);
-        precisionRangeDigitsAfterDot.put(10f, 0);
-        precisionRangeDigitsAfterDot.put(100f, 0);
-        setSensiblePrecision(String.valueOf(valueFloat));
+        setSensiblePrecision(nf(valueFloat, 0, 0));
     }
 
     private void setSensiblePrecision(String value) {
-        if(value.equals("0")){
+        if(value.equals("0") || value.equals("0.0")){
             setPrecisionIndexAndValue(precisionRange.indexOf(1f));
             return;
         }
-        if(value.matches("[0-9]*\\.[0-9]*")){
-            int fractionalDigitLength = value.split("\\.")[1].length();
+        if(value.matches(FRACTIONAL_FLOAT_REGEX)){
+            int fractionalDigitLength = getFractionalDigitLength(value);
             setPrecisionIndexAndValue(4 - fractionalDigitLength);
             return;
         }
-        setPrecisionIndexAndValue(2 + value.length());
+        setPrecisionIndexAndValue(precisionRange.indexOf(1f));
+    }
+
+    private int getFractionalDigitLength(String value) {
+        if(!value.matches(FRACTIONAL_FLOAT_REGEX)){
+            return 0;
+        }
+        return value.split("\\.")[1].length();
     }
 
     @Override
@@ -110,7 +104,6 @@ class SliderNode extends AbstractNode {
             if(numpadBufferValue.endsWith(".")){
                 numpadBufferValue += "0";
             }
-            println("setting buffer: ", numpadBufferValue);
             if(trySetValueFloat(numpadBufferValue)){
                 setSensiblePrecision(numpadBufferValue);
             }
@@ -156,12 +149,15 @@ class SliderNode extends AbstractNode {
     }
 
     String getValueToDisplay() {
-        int fractionPadding = precisionRangeDigitsAfterDot.get(valueFloatPrecision);
         if(isNumpadInputActive()){
             return numpadBufferValue;
         }
         if (Float.isNaN(valueFloat)) {
             return "NaN";
+        }
+        int fractionPadding = 0;
+        if(path.matches(FRACTIONAL_FLOAT_REGEX)){
+            fractionPadding = getFractionalDigitLength(String.valueOf(currentPrecisionIndex));
         }
         return nf(valueFloat, 0, fractionPadding).replaceAll(",", ".");
     }
@@ -264,7 +260,6 @@ class SliderNode extends AbstractNode {
                 if(!numpadBufferValue.endsWith(".")) {
                     numpadBufferValue += ".";
                 }
-                // set the precision for it to be ready for increasing precision when appending fractions
                 break;
             case '+':
             case '-':
@@ -291,7 +286,7 @@ class SliderNode extends AbstractNode {
         numpadInputAppendLastFrame = State.app.frameCount;
         if (inReplaceMode) {
             numpadBufferValue = inputString;
-            if(!numpadBufferValue.equals("0")){
+            if(input != 0){
                 // when I only reset a value to 0 I usually want to keep its old precision
                 // when I start typing something other than 0 I usually do want whole number precision
                 setWholeNumberPrecision();
