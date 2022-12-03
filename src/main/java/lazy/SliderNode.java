@@ -42,7 +42,7 @@ class SliderNode extends AbstractNode {
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastFrame = -1;
-    private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*\\.[0-9]*";
+    private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*[,.][0-9]*";
     private boolean displayShader = true;
     String shaderPath = "sliderBackground.glsl";
 
@@ -57,21 +57,12 @@ class SliderNode extends AbstractNode {
         valueFloatConstrained = constrained &&
                 max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
                 min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
-        initSliderPrecisionArrays();
+        setSensiblePrecision(nf(valueFloat, 0, 0));
         State.overwriteWithLoadedStateIfAny(this);
-    }
-
-
-    private void initSliderPrecisionArrays() {
-        initPrecision();
     }
 
     void initSliderBackgroundShader() {
         InternalShaderStore.getShader(shaderPath);
-    }
-
-    private void initPrecision() {
-        setSensiblePrecision(nf(valueFloat, 0, 0));
     }
 
     private void setSensiblePrecision(String value) {
@@ -88,10 +79,10 @@ class SliderNode extends AbstractNode {
     }
 
     private int getFractionalDigitLength(String value) {
-        if(!value.matches(FRACTIONAL_FLOAT_REGEX)){
-            return 0;
+        if(value.contains(".") || value.contains(",")){
+            return value.split("[.,]")[1].length();
         }
-        return value.split("\\.")[1].length();
+        return 0;
     }
 
     @Override
@@ -155,11 +146,10 @@ class SliderNode extends AbstractNode {
         if (Float.isNaN(valueFloat)) {
             return "NaN";
         }
-        int fractionPadding = 0;
-        if(path.matches(FRACTIONAL_FLOAT_REGEX)){
-            fractionPadding = getFractionalDigitLength(String.valueOf(currentPrecisionIndex));
-        }
-        return nf(valueFloat, 0, fractionPadding).replaceAll(",", ".");
+        int fractionPadding = getFractionalDigitLength(nf(valueFloatPrecision, 0, 0));
+        String value = nf(valueFloat, 0, fractionPadding);
+        // java float literals use . so we also use .
+        return value.replaceAll(",", ".");
     }
 
     @Override
