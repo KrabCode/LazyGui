@@ -146,10 +146,15 @@ class SliderNode extends AbstractNode {
         if (Float.isNaN(valueFloat)) {
             return "NaN";
         }
-        int fractionPadding = getFractionalDigitLength(nf(valueFloatPrecision, 0, 0));
-        String value = nf(valueFloat, 0, fractionPadding);
+        String valueToDisplay;
+        boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
+        if(isFractionalPrecision){
+             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
+        }else{
+            valueToDisplay = nf(floor(valueFloat), 0, 0);
+        }
         // java float literals use . so we also use .
-        return value.replaceAll(",", ".");
+        return valueToDisplay.replaceAll(",", ".");
     }
 
     @Override
