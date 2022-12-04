@@ -152,7 +152,12 @@ class PlotDisplayNode extends AbstractNode {
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        sliderX.keyPressedOverNode(e, x, y);
-        sliderY.keyPressedOverNode(e, x, y);
+        if(e.getKeyCode() == KeyCodes.CTRL_C || e.getKeyCode() == KeyCodes.CTRL_V){
+            parent.keyPressedOverNode(e, x, y);
+        }else{
+            sliderX.keyPressedOverNode(e, x, y);
+            sliderY.keyPressedOverNode(e, x, y);
+        }
+
     }
 }

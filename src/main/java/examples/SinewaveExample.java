@@ -16,7 +16,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void settings() {
-        size(1200, 1000, P2D);
+        size(1500, 500, P2D);
     }
 
     @Override
@@ -37,6 +37,10 @@ public class SinewaveExample extends PApplet {
         gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);
+        gui.draw();
+        if(frameCount < 360 * 4){
+            saveFrame("out/pink/####.jpg");
+        }
     }
 
     private void drawRectangle() {
@@ -57,6 +61,7 @@ public class SinewaveExample extends PApplet {
         pg.pushMatrix();
         gui.pushFolder("sinewave");
         int detail = gui.sliderInt("detail", 100);
+        int waveCount = gui.sliderInt("wave count", 4);
         float freq = gui.slider("freq", 1);
         time += radians(gui.slider("time", 1));
         PVector pos = gui.plotXY("pos");
@@ -65,15 +70,18 @@ public class SinewaveExample extends PApplet {
         pg.noFill();
         pg.stroke(gui.colorPicker("stroke", color(255)).hex);
         pg.strokeWeight(gui.slider("weight", 4));
-        pg.beginShape();
-        for (int i = 0; i < detail; i++) {
-            float norm = norm(i, 0, detail - 1);
-            float x = -size.x / 2f + size.x * norm;
-            float y = size.y * 0.5f * sin(norm * freq * TAU + time);
-            pg.vertex(x, y);
+        for (int j = 0; j < waveCount; j++) {
+            float jNorm = norm(j, 0, waveCount);
+            pg.beginShape();
+            for (int i = 0; i < detail; i++) {
+                float norm = norm(i, 0, detail - 1);
+                float x = -size.x / 2f + size.x * norm;
+                float y = size.y * 0.5f * sin(norm * freq * TAU + time + jNorm * TAU);
+                pg.vertex(x, y);
+            }
+            pg.endShape();
         }
         gui.popFolder();
-        pg.endShape();
         pg.popMatrix();
     }
 

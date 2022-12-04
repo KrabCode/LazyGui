@@ -911,7 +911,7 @@ public class LazyGui implements UserInputSubscriber {
         pushFolder("hotkeys");
         hotkeyHideActive = toggle("h: hide gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close all windows", true);
-        hotkeyScreenshotActive = toggle("s: take screenshot", true);
+        hotkeyScreenshotActive = toggle("i: take screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36
 //        undoHotkeyActive = toggle("ctrl + z: undo", true);
@@ -926,7 +926,7 @@ public class LazyGui implements UserInputSubscriber {
         if (key == 'h' && hotkeyHideActive) {
             isGuiHidden = !isGuiHidden;
         }
-        screenshotRequestedOnMainThread = (key == 's' && hotkeyScreenshotActive);
+        screenshotRequestedOnMainThread = (key == 'i' && hotkeyScreenshotActive);
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
         }
