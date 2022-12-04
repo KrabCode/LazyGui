@@ -100,7 +100,7 @@ class FolderNode extends AbstractNode {
         JsonObject wholeObject = loadedNode.getAsJsonObject();
         if (wholeObject.has("window")) {
             JsonObject winObject = wholeObject.getAsJsonObject("window");
-            if (winObject.has("closed") && winObject.has("posX") && winObject.has("posX")) {
+            if (winObject.has("closed") && winObject.has("posX") && winObject.has("posY")) {
                 boolean isClosed = winObject.get("closed").getAsBoolean();
                 float posX = winObject.get("posX").getAsFloat();
                 float posY = winObject.get("posY").getAsFloat();

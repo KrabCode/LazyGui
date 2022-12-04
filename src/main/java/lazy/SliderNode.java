@@ -41,7 +41,9 @@ class SliderNode extends AbstractNode {
     ArrayList<Character> numpadChars = new Utils.ArrayListBuilder<Character>()
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
-    private int numpadInputAppendLastFrame = -1;
+    private int numpadInputAppendLastMillis = -1;
+    private boolean wasNumpadInputActiveLastFrame = false;
+
     private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*[,.][0-9]*";
     private boolean displayShader = true;
     String shaderPath = "sliderBackground.glsl";
@@ -91,14 +93,7 @@ class SliderNode extends AbstractNode {
     }
 
     void updateDrawSliderNodeValue(PGraphics pg) {
-        if(numpadInputJustFinished()){
-            if(numpadBufferValue.endsWith(".")){
-                numpadBufferValue += "0";
-            }
-            if(trySetValueFloat(numpadBufferValue)){
-                setSensiblePrecision(numpadBufferValue);
-            }
-        }
+        updateNumpad();
         if (isDragged || isMouseOverNode) {
             updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();
@@ -209,6 +204,18 @@ class SliderNode extends AbstractNode {
         return constrained;
     }
 
+    private void updateNumpad() {
+        if(!isNumpadInputActive() && wasNumpadInputActiveLastFrame){
+            if(numpadBufferValue.endsWith(".")){
+                numpadBufferValue += "0";
+            }
+            if(trySetValueFloat(numpadBufferValue)){
+                setSensiblePrecision(numpadBufferValue);
+            }
+        }
+        wasNumpadInputActiveLastFrame = isNumpadInputActive();
+    }
+
     @Override
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
@@ -248,7 +255,7 @@ class SliderNode extends AbstractNode {
         switch (e.getKeyChar()) {
             case '.':
             case ',':
-                numpadInputAppendLastFrame = State.app.frameCount;
+                setNumpadInputActiveStarted();
                 if(numpadBufferValue.isEmpty()){
                     numpadBufferValue += "0";
                 }
@@ -261,7 +268,7 @@ class SliderNode extends AbstractNode {
                 if(inReplaceMode){
                     numpadBufferValue = "" + e.getKeyChar();
                 }
-                numpadInputAppendLastFrame = State.app.frameCount;
+                setNumpadInputActiveStarted();
                 break;
             case '*':
                 decreasePrecision();
@@ -278,7 +285,7 @@ class SliderNode extends AbstractNode {
 
     private void tryAppendNumberInputToValue(Integer input, boolean inReplaceMode) {
         String inputString = String.valueOf(input);
-        numpadInputAppendLastFrame = State.app.frameCount;
+        setNumpadInputActiveStarted();
         if (inReplaceMode) {
             numpadBufferValue = inputString;
             if(input != 0){
@@ -291,19 +298,18 @@ class SliderNode extends AbstractNode {
         numpadBufferValue += inputString;
     }
 
+    protected void setNumpadInputActiveStarted(){
+        numpadInputAppendLastMillis = State.app.millis();
+    }
+
     protected boolean isNumpadInputActive() {
-        return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount <= numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
+        return numpadInputAppendLastMillis != -1 &&
+                State.app.millis() <= numpadInputAppendLastMillis + State.keyboardInputAppendCooldownMillis;
     }
 
     private boolean isNumpadInReplaceMode() {
-        return numpadInputAppendLastFrame == -1 ||
-                State.app.frameCount - numpadInputAppendLastFrame > State.keyboardInputAppendCooldown;
-    }
-
-    protected boolean numpadInputJustFinished(){
-        return numpadInputAppendLastFrame != -1 &&
-                State.app.frameCount == numpadInputAppendLastFrame + State.keyboardInputAppendCooldown;
+        return numpadInputAppendLastMillis == -1 ||
+                State.app.millis() - numpadInputAppendLastMillis > State.keyboardInputAppendCooldownMillis;
     }
 
     private boolean trySetValueFloat(String toParseAsFloat) {
