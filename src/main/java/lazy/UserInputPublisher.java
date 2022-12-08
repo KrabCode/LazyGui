@@ -24,7 +24,7 @@ public class UserInputPublisher {
         State.app.registerMethod("mouseEvent", this);
     }
 
-    static void createSingleton() {
+    static void initSingleton() {
         if (singleton == null) {
             singleton = new UserInputPublisher();
         }

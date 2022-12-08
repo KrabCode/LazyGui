@@ -31,7 +31,8 @@ class State {
     static private int lastFontSize = -1;
     static float textMarginX = 5;
     static float textMarginY = 14;
-    static boolean shouldKeepWindowsInBounds = true;
+    private static boolean shouldKeepWindowsInBounds = true;
+    private static boolean isWindowResizeEnabled = true;
 
     static String sketchName = null;
     static boolean autosaveEnabled = false;
@@ -299,9 +300,6 @@ class State {
         previewRectSize = cell * 0.6f;
     }
 
-    static void setShouldKeepWindowsInBounds(boolean value) {
-        shouldKeepWindowsInBounds = value;
-    }
 
     static int normColor(float br) {
         return normColor(0, 0, br, 1);
@@ -321,5 +319,21 @@ class State {
 
     public static PGraphics getColorStore() {
         return colorStore;
+    }
+
+    static void setShouldKeepWindowsInBounds(boolean valueToSet) {
+        shouldKeepWindowsInBounds = valueToSet;
+    }
+
+    static boolean getShouldKeepWindowsInBounds() {
+        return shouldKeepWindowsInBounds;
+    }
+
+    static void setWindowResizeEnabled(boolean valueToSet) {
+        isWindowResizeEnabled = valueToSet;
+    }
+
+    static boolean getWindowResizeEnabled() {
+        return isWindowResizeEnabled;
     }
 }

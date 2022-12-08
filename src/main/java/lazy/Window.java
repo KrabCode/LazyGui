@@ -196,7 +196,7 @@ class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        if (!State.shouldKeepWindowsInBounds) {
+        if (!State.getShouldKeepWindowsInBounds()) {
             return;
         }
         float rightEdge = pg.width - windowSizeX - 1;
@@ -302,7 +302,7 @@ class Window implements UserInputSubscriber {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if(isPointInsideResizeBorder(e.getX(), e.getY())){
+        if(isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled()){
             isBeingResized = true;
             e.setConsumed(true);
         }else if (isPointInsideContent(e.getX(), e.getY())) {
@@ -360,8 +360,11 @@ class Window implements UserInputSubscriber {
             close();
             e.setConsumed(true);
         } else if (isBeingDraggedAround) {
-            e.setConsumed(true);
             trySnapToGrid();
+            e.setConsumed(true);
+        } else if(isBeingResized && UtilGridSnap.snapToGridEnabled){
+            windowSizeX = UtilGridSnap.trySnapToGrid(windowSizeX, 0).x;
+            e.setConsumed(true);
         }
         closeButtonPressInProgress = false;
         isBeingDraggedAround = false;
@@ -417,11 +420,6 @@ class Window implements UserInputSubscriber {
                 windowSizeX, windowSizeY - cell);
     }
 
-    boolean isPointInsideSketchWindow(float x, float y) {
-        PApplet app = State.app;
-        return Utils.isPointInRect(x, y, 0, 0, app.width, app.height);
-    }
-
     boolean isPointInsideWindow(float x, float y) {
         return Utils.isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
@@ -440,6 +438,9 @@ class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideResizeBorder(float x, float y) {
+        if(!State.getWindowResizeEnabled()){
+            return false;
+        }
         float resizeBorderSize = 6;
         return Utils.isPointInRect(x, y, posX + windowSizeX - resizeBorderSize/2f, posY, resizeBorderSize, posY + windowSizeY);
     }

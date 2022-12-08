@@ -55,7 +55,7 @@ public class LazyGui implements UserInputSubscriber {
         }
         State.init(this, app);
         ThemeStore.initSingleton();
-        UserInputPublisher.createSingleton();
+        UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.addWindow(new Window(NodeTree.getRoot(),false, cell, cell, null));
         State.loadMostRecentSave();
