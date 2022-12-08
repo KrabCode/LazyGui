@@ -3,15 +3,17 @@ package lazy;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
 import static processing.core.PApplet.floor;
+import static processing.core.PApplet.sin;
 
 class WindowManager {
     private static WindowManager singleton;
     private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
-    private Window windowToSetFocusOn = null;
+    private ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
     static boolean showPathTooltips = false;
 
     WindowManager() {
@@ -72,10 +74,12 @@ class WindowManager {
     }
 
     static void updateAndDrawWindows(PGraphics pg) {
-        if(singleton.windowToSetFocusOn != null){
-            singleton.windows.remove(singleton.windowToSetFocusOn);
-            singleton.windows.add(singleton.windowToSetFocusOn);
-            singleton.windowToSetFocusOn = null;
+        if(!singleton.windowsToSetFocusOn.isEmpty()){
+            for (Window w : singleton.windowsToSetFocusOn){
+                singleton.windows.remove(w);
+                singleton.windows.add(w);
+            }
+            singleton.windowsToSetFocusOn.clear();
         }
         for (Window win : singleton.windows) {
             win.drawWindow(pg);
@@ -87,7 +91,7 @@ class WindowManager {
     }
 
     static void setFocus(Window window) {
-        singleton.windowToSetFocusOn = window;
+        singleton.windowsToSetFocusOn.add(window);
     }
 
     static void closeAllWindows() {

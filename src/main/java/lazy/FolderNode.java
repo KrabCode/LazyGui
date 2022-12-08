@@ -67,6 +67,7 @@ class FolderNode extends AbstractNode {
     @Override
     void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
+        WindowManager.setFocus(parent.window);
         WindowManager.uncoverOrCreateWindow(this);
         this.isDragged = false;
 

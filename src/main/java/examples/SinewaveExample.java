@@ -38,9 +38,6 @@ public class SinewaveExample extends PApplet {
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();
-        if(frameCount < 360 * 4){
-            saveFrame("out/pink/####.jpg");
-        }
     }
 
     private void drawRectangle() {
