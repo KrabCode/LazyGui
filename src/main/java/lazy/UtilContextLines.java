@@ -43,7 +43,7 @@ public class UtilContextLines {
                 continue;
             }
             boolean shouldShowLineFromTitleTowardsInlineNode = showContextLinesMode == SHOW_CONTEXT_LINES_ALWAYS ||
-                    (folderNode.window.isTitleHighligted() && showContextLinesMode == SHOW_CONTEXT_LINES_MODE_ON_HOVER);
+                    (folderNode.window.isTitleHighlighted() && showContextLinesMode == SHOW_CONTEXT_LINES_MODE_ON_HOVER);
             if (shouldShowLineFromTitleTowardsInlineNode) {
                 folderNode.window.drawContextLineFromTitleBarToInlineNode(pg, endpointRectSize, shouldPickShortestLine);
             }

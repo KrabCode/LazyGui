@@ -11,30 +11,19 @@ import static processing.core.PApplet.floor;
 import static processing.core.PApplet.sin;
 
 class WindowManager {
-    private static WindowManager singleton;
-    private final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
-    private ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
+    private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
+    private static final ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
     static boolean showPathTooltips = false;
 
-    WindowManager() {
-
-    }
-
-    static void createSingleton() {
-        if (singleton == null) {
-            singleton = new WindowManager();
-        }
-    }
-
     static void addWindow(Window window) {
-        singleton.windows.add(window);
+        windows.add(window);
     }
 
     static void uncoverOrCreateWindow(FolderNode folderNode){
-        uncoverOrCreateWindow(folderNode, null, null, true);
+        uncoverOrCreateWindow(folderNode, true, null, null, null);
     }
 
-    static void uncoverOrCreateWindow(FolderNode folderNode, Float nullablePosX, Float nullablePosY, boolean setFocus) {
+    static void uncoverOrCreateWindow(FolderNode folderNode, boolean setFocus, Float nullablePosX, Float nullablePosY, Float nullableSizeX) {
         PVector pos = new PVector(cell, cell);
         if(folderNode.parent != null){
             Window parentWindow = folderNode.parent.window;
@@ -49,7 +38,7 @@ class WindowManager {
             pos.y = nullablePosY;
         }
         boolean windowFound = false;
-        for (Window w : singleton.windows) {
+        for (Window w : windows) {
             if(w.folder.path.equals(folderNode.path)){
                 if(w.closed){
                     w.posX = pos.x;
@@ -61,8 +50,8 @@ class WindowManager {
             }
         }
         if(!windowFound){
-            Window window = new Window(pos.x, pos.y, folderNode, true);
-            singleton.windows.add(window);
+            Window window = new Window(folderNode, true, pos.x, pos.y, nullableSizeX);
+            windows.add(window);
             window.open(setFocus);
         }
         // the root window will always be initialized before this runs and thus always found,
@@ -74,28 +63,28 @@ class WindowManager {
     }
 
     static void updateAndDrawWindows(PGraphics pg) {
-        if(!singleton.windowsToSetFocusOn.isEmpty()){
-            for (Window w : singleton.windowsToSetFocusOn){
-                singleton.windows.remove(w);
-                singleton.windows.add(w);
+        if(!windowsToSetFocusOn.isEmpty()){
+            for (Window w : windowsToSetFocusOn){
+                windows.remove(w);
+                windows.add(w);
             }
-            singleton.windowsToSetFocusOn.clear();
+            windowsToSetFocusOn.clear();
         }
-        for (Window win : singleton.windows) {
+        for (Window win : windows) {
             win.drawWindow(pg);
         }
     }
 
     static boolean isFocused(Window window) {
-        return singleton.windows.get(singleton.windows.size()-1).equals(window);
+        return windows.get(windows.size()-1).equals(window);
     }
 
     static void setFocus(Window window) {
-        singleton.windowsToSetFocusOn.add(window);
+        windowsToSetFocusOn.add(window);
     }
 
     static void closeAllWindows() {
-        for(Window win : singleton.windows){
+        for(Window win : windows){
             if(win.isCloseable){
                 win.close();
             }
@@ -103,7 +92,7 @@ class WindowManager {
     }
 
     public static void snapAllStaticWindowsToGrid() {
-        for (Window w : singleton.windows) {
+        for (Window w : windows) {
           if(w.closed || w.isBeingDraggedAround){
               continue;
           }

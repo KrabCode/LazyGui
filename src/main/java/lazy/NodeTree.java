@@ -99,6 +99,10 @@ class NodeTree {
         return result;
     }
 
+    static void setAllNodesMouseOverToFalse(){
+        setAllOtherNodesMouseOverToFalse(null);
+    }
+
     static void setAllOtherNodesMouseOverToFalse(AbstractNode nodeToKeep){
         List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){

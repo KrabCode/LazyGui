@@ -20,26 +20,32 @@ class Window implements UserInputSubscriber {
     float posY;
     @Expose
     boolean closed = false;
-    float windowSizeX;
-    float windowSizeY;
+    @Expose
+    float windowSizeX; // can be resized by user
+    float windowSizeY; // set every frame, locked to (cell size * child count) + 1 cell for the title bar
     protected boolean isCloseable;
     boolean isBeingDraggedAround;
     boolean isBeingResized;
-    private boolean isTitleHighligted;
+    private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
 
-    Window(float posX, float posY, FolderNode folder, boolean isCloseable) {
+    Window(FolderNode folder, boolean isCloseable, float posX, float posY, Float nullableSizeX) {
         this.posX = posX;
         this.posY = posY;
         this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
         this.folder = folder;
         folder.window = this;
+        if(nullableSizeX == null){
+            windowSizeX = cell * folder.idealWindowWidthInCells;
+        }else{
+            windowSizeX = nullableSizeX;
+        }
     }
 
     void drawWindow(PGraphics pg) {
         pg.textFont(State.font);
-        isTitleHighligted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
+        isTitleHighlighted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
         if (closed) {
             return;
         }
@@ -49,7 +55,7 @@ class Window implements UserInputSubscriber {
         drawPathTooltipOnHighlight(pg);
         drawContent(pg);
         drawBackgroundWithWindowBorder(pg, false);
-        drawTitleBar(pg, isTitleHighligted);
+        drawTitleBar(pg, isTitleHighlighted);
         if (isCloseable) {
             drawCloseButton(pg);
         }
@@ -66,7 +72,7 @@ class Window implements UserInputSubscriber {
         String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(folder.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
-        float tooltipYOffset = -1;
+        float tooltipYOffset = 0;
         float tooltipXOffset = cell * 0.5f;
         float tooltipWidth = windowSizeX - tooltipXOffset - cell;
 //        pg.stroke(ThemeStore.getColor(WINDOW_BORDER)); // tooltip border maybe?
@@ -94,6 +100,14 @@ class Window implements UserInputSubscriber {
             pg.noFill();
         }
         pg.rect(0, 0, windowSizeX, windowSizeY);
+
+
+        if(!drawBackgroundOnly && isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY)){
+            pg.strokeWeight(1);
+            pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
+            pg.line(windowSizeX, 0, windowSizeX, windowSizeY);
+        }
+
         pg.popMatrix();
     }
 
@@ -120,7 +134,7 @@ class Window implements UserInputSubscriber {
         pg.popMatrix();
     }
 
-    protected void drawContent(PGraphics pg){
+    protected void drawContent(PGraphics pg) {
         drawInlineFolderChildren(pg);
     }
 
@@ -130,6 +144,7 @@ class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
         float titleBarWidth = windowSizeX;
+        pg.strokeWeight(1);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
@@ -157,6 +172,7 @@ class Window implements UserInputSubscriber {
         if (pickShortestLine) {
             class PointDist {
                 final float x0, x1, d;
+
                 public PointDist(float x0, float x1, float d) {
                     this.x0 = x0;
                     this.x1 = x1;
@@ -180,7 +196,7 @@ class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        if(!State.shouldKeepWindowsInBounds){
+        if (!State.shouldKeepWindowsInBounds) {
             return;
         }
         float rightEdge = pg.width - windowSizeX - 1;
@@ -201,9 +217,7 @@ class Window implements UserInputSubscriber {
     }
 
     void drawInlineFolderChildren(PGraphics pg) {
-        float intendedWindowWidthInCells = folder.idealWindowWidthInCells;
         windowSizeY = cell + heightSumOfChildNodes();
-        windowSizeX = cell * intendedWindowWidthInCells;
         pg.pushMatrix();
         pg.translate(posX, posY);
         pg.translate(0, cell);
@@ -281,15 +295,17 @@ class Window implements UserInputSubscriber {
         }
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
             isBeingDraggedAround = true;
+            e.setConsumed(true);
             setFocusOnThis();
-        }else if(isPointInsideCloseButton(e.getX(), e.getY())){
+            return;
+        } else if (isPointInsideCloseButton(e.getX(), e.getY())) {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if (isPointInsideTitleBar(e.getX(), e.getY())) {
-            return;
-        }
-        if (isPointInsideContent(e.getX(), e.getY())) {
+        if(isPointInsideResizeBorder(e.getX(), e.getY())){
+            isBeingResized = true;
+            e.setConsumed(true);
+        }else if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
                 node.mousePressedOverNode(e.getX(), e.getY());
@@ -302,14 +318,14 @@ class Window implements UserInputSubscriber {
         if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
             folder.setIsMouseOverThisNodeOnly();
-        } else if (isPointInsideContent(e.getX(), e.getY())) {
+        }else if (isPointInsideContent(e.getX(), e.getY()) && !isPointInsideResizeBorder(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
                 node.setIsMouseOverThisNodeOnly();
                 e.setConsumed(true);
             }
         } else {
-            NodeTree.setAllOtherNodesMouseOverToFalse(null);
+            NodeTree.setAllNodesMouseOverToFalse();
         }
     }
 
@@ -322,9 +338,11 @@ class Window implements UserInputSubscriber {
             posX += e.getX() - e.getPrevX();
             posY += e.getY() - e.getPrevY();
             e.setConsumed(true);
-        }else if(isBeingResized){
+        } else if (isBeingResized) {
+            float minimumWindowSizeInCells = 4;
+            float maximumWindowSize = State.app.width;
             windowSizeX += e.getX() - e.getPrevX();
-            windowSizeY += e.getY() - e.getPrevY();
+            windowSizeX = constrain(windowSizeX, minimumWindowSizeInCells * cell, maximumWindowSize);
         }
         for (AbstractNode child : folder.children) {
             if (child.isDragged && child.isParentWindowVisible()) {
@@ -421,8 +439,12 @@ class Window implements UserInputSubscriber {
                 cell + 1, cell - 1);
     }
 
-    public boolean isTitleHighligted() {
-        return isTitleHighligted;
+    boolean isPointInsideResizeBorder(float x, float y) {
+        float resizeBorderSize = 6;
+        return Utils.isPointInRect(x, y, posX + windowSizeX - resizeBorderSize/2f, posY, resizeBorderSize, posY + windowSizeY);
     }
 
+    public boolean isTitleHighlighted() {
+        return isTitleHighlighted;
+    }
 }
