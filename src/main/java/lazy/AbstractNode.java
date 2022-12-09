@@ -223,7 +223,6 @@ abstract class AbstractNode {
             State.onUndoableActionEnded();
         }
         isDragged = false;
-        State.app.cursor();
     }
 
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {

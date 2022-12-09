@@ -33,6 +33,8 @@ class State {
     static float textMarginY = 14;
     private static boolean shouldKeepWindowsInBounds = true;
     private static boolean isWindowResizeEnabled = true;
+    private static boolean shouldDrawResizeIndicator = true;
+
 
     static String sketchName = null;
     static boolean autosaveEnabled = false;
@@ -335,5 +337,13 @@ class State {
 
     static boolean getWindowResizeEnabled() {
         return isWindowResizeEnabled;
+    }
+
+    static boolean getShouldDrawResizeIndicator() {
+        return shouldDrawResizeIndicator;
+    }
+
+    static void setShouldDrawResizeIndicator(boolean valueToSet){
+        shouldDrawResizeIndicator = valueToSet;
     }
 }

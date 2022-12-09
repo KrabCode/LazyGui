@@ -59,6 +59,9 @@ class WindowManager {
         if(windowFound && folderNode.parent == null){
             folderNode.window.posX = pos.x;
             folderNode.window.posY = pos.y;
+            if(nullableSizeX != null){
+                folderNode.window.windowSizeX = nullableSizeX;
+            }
         }
     }
 
@@ -106,7 +109,8 @@ class WindowManager {
         State.gui.pushFolder("windows");
         showPathTooltips = State.gui.toggle("show path tooltips", true);
         State.setShouldKeepWindowsInBounds(State.gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
-        State.setWindowResizeEnabled(State.gui.toggle("allow resize", State.getWindowResizeEnabled()));
+        State.setWindowResizeEnabled(State.gui.toggle("allow resize width", State.getWindowResizeEnabled()));
+        State.setShouldDrawResizeIndicator(State.gui.toggle("show resize line", State.getShouldDrawResizeIndicator()));
         State.setCellSize(State.gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         State.tryUpdateFont(
                 State.gui.sliderInt("font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),

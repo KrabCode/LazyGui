@@ -59,6 +59,20 @@ class Window implements UserInputSubscriber {
         if (isCloseable) {
             drawCloseButton(pg);
         }
+        drawResizeIndicator(pg);
+        pg.popMatrix();
+    }
+
+    private void drawResizeIndicator(PGraphics pg) {
+        if(!isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY) || !State.getShouldDrawResizeIndicator()){
+            return;
+        }
+        pg.pushMatrix();
+        pg.translate(posX, posY);
+        pg.strokeWeight(1);
+        pg.strokeCap(SQUARE);
+        pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
+        pg.line(windowSizeX, 0, windowSizeX, windowSizeY);
         pg.popMatrix();
     }
 
@@ -100,14 +114,6 @@ class Window implements UserInputSubscriber {
             pg.noFill();
         }
         pg.rect(0, 0, windowSizeX, windowSizeY);
-
-
-        if(!drawBackgroundOnly && isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY)){
-            pg.strokeWeight(1);
-            pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
-            pg.line(windowSizeX, 0, windowSizeX, windowSizeY);
-        }
-
         pg.popMatrix();
     }
 

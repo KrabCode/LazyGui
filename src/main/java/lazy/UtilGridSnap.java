@@ -49,6 +49,7 @@ public class UtilGridSnap {
         float h = pg.height;
         int step = floor(cell);
         pg.beginShape(POINTS);
+        pg.strokeCap(ROUND);
         int pointColor = pointGridColor != null ? pointGridColor.hex : State.normColor(1);
         pg.stroke(pointColor);
         for (int x = 0; x <= w; x+= step) {
