@@ -10,21 +10,20 @@ import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
 public class UtilGridSnap {
-    public static boolean snapToGridEnabled = false;
-
+    static boolean snapToGridEnabled = false;
+    static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
     private static final String pointShaderPath = "gridPointFrag.glsl";
-    static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static final int VISIBILITY_ALWAYS = 0;
     private static final int VISIBILITY_ON_DRAG = 1;
     private static final int VISIBILITY_NEVER = 2;
     private static final int defaultVisibilityModeIndex = VISIBILITY_ON_DRAG;
     private static int selectedVisibilityModeIndex = defaultVisibilityModeIndex;
-
     private static float dragAlpha = 0;
     private static final float dragAlphaDelta = 0.05f;
     private static PickerColor pointGridColor = null;
     private static float pointWeight = 4;
+    private static float sdfCropDistance = 0.25f;
 
     static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
         if(pointShader == null){
@@ -38,6 +37,7 @@ public class UtilGridSnap {
         }
         pointShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
         pointShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
+        pointShader.set("sdfCropDistance", sdfCropDistance);
         if(draggedWindow != null){
             pointShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
         }
@@ -114,28 +114,22 @@ public class UtilGridSnap {
         return getOptions().get(defaultVisibilityModeIndex);
     }
 
-    public static void setPointColor(PickerColor clr){
-        pointGridColor = clr;
-    }
-
-    public static void setPointWeight(float weight) {
-        pointWeight = weight;
-    }
-
     public static void update() {
         State.gui.pushFolder("grid");
-        boolean previousSnapToGridState = UtilGridSnap.snapToGridEnabled;
-        UtilGridSnap.snapToGridEnabled = State.gui.toggle("snap to grid", true);
-        if(!previousSnapToGridState && UtilGridSnap.snapToGridEnabled){
-            // cell size must be updated before this for this auto snap to work on startup
+        boolean previousSnapToGridEnabled = snapToGridEnabled;
+        snapToGridEnabled = State.gui.toggle("snap to grid", true);
+        if(hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
             WindowManager.snapAllStaticWindowsToGrid();
         }
-        UtilGridSnap.setSelectedVisibilityMode(State.gui.radio("show grid",
-                UtilGridSnap.getOptions(), UtilGridSnap.getDefaultVisibilityMode()));
-        PickerColor clr = State.gui.colorPicker("point color", State.normColor(0.5f, 1));
-
-        UtilGridSnap.setPointColor(clr);
-        UtilGridSnap.setPointWeight(State.gui.slider("point weight", UtilGridSnap.pointWeight));
+        setSelectedVisibilityMode(State.gui.radio("show grid",
+                getOptions(), getDefaultVisibilityMode()));
+        pointGridColor = State.gui.colorPicker("point color", State.normColor(0.5f, 1));
+        pointWeight = State.gui.slider("point weight", pointWeight);
+        sdfCropDistance = State.gui.slider("point range", sdfCropDistance);
         State.gui.popFolder();
+    }
+
+    private static boolean hasJustBeenEnabled(boolean previousState, boolean currentState) {
+        return !previousState && currentState;
     }
 }

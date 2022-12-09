@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.State.saveDir;
 import static processing.core.PApplet.println;
 
 class SaveFolderNode extends FolderNode {
@@ -83,7 +82,7 @@ class SaveFolderNode extends FolderNode {
             Utils.openSaveFolder();
         }
         if(State.gui.button(path + pathPrintFolderPath)){
-            println("LazyGui save folder: " + saveDir.getAbsolutePath());
+            println("LazyGui save folder: " + State.getSaveDir().getAbsolutePath());
         }
 
         State.autosaveEnabled = State.gui.toggle(path + pathAutosaveOnExit, State.autosaveEnabled);

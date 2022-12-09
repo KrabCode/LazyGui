@@ -18,7 +18,8 @@ class PlotFolderNode extends FolderNode {
 
     PlotFolderNode(String path, FolderNode parent, PVector defaultXY, boolean useZ) {
         super(path, parent);
-        idealWindowWidthInCells = 7;
+        idealWindowWidthInCells = 5;
+        isWindowResizable = false;
         PVector defaultPos = new PVector();
         if (defaultXY != null) {
             defaultPos = defaultXY.copy();

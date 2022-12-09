@@ -116,7 +116,7 @@ class Utils {
     static void openSaveFolder() {
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(State.saveDir);
+            desktop.open(State.getSaveDir());
         } catch (IOException e) {
             e.printStackTrace();
         }

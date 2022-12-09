@@ -16,7 +16,7 @@ import static processing.core.PConstants.CORNER;
 /**
  * A node that opens a new window with child nodes when clicked.
  */
-class FolderNode extends AbstractNode implements Serializable {
+class FolderNode extends AbstractNode {
 
     /**
      * CopyOnWriteArrayList is needed to avoid concurrent modification
@@ -28,7 +28,8 @@ class FolderNode extends AbstractNode implements Serializable {
     @Expose
     Window window;
 
-    float idealWindowWidthInCells = State.defaultWindowWidthInCells;
+    protected float idealWindowWidthInCells = State.defaultWindowWidthInCells;
+    protected boolean isWindowResizable = true;
 
     FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);
@@ -54,6 +55,9 @@ class FolderNode extends AbstractNode implements Serializable {
         AbstractNode enabledNode = findChildByName("enabled");
         if(enabledNode == null){
             enabledNode = findChildByName("active");
+        }
+        if(enabledNode == null){
+            enabledNode = findChildByName("visible");
         }
         if (enabledNode != null &&
                 enabledNode.className.contains("ToggleNode") &&

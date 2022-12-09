@@ -19,18 +19,16 @@ class State {
 
     static float cell = 24;
     static float previewRectSize = cell * 0.6f;
-
     static int keyboardInputAppendCooldownMillis = 500;
     static PFont font = null;
     static PApplet app = null;
     static LazyGui gui = null;
-    private static PGraphics colorStore = null;
-
-    private static final String fontPath = "JetBrainsMono-Regular.ttf";
-    static private final int defaultFontSize = 16;
-    static private int lastFontSize = -1;
     static float textMarginX = 5;
     static float textMarginY = 14;
+
+    static private final int defaultFontSize = 16;
+    static private int lastFontSize = -1;
+    private static final String fontPath = "JetBrainsMono-Regular.ttf";
     private static boolean shouldKeepWindowsInBounds = true;
     private static boolean isWindowResizeEnabled = true;
     private static boolean shouldDrawResizeIndicator = true;
@@ -38,11 +36,10 @@ class State {
 
     static String sketchName = null;
     static boolean autosaveEnabled = false;
-    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     static final float defaultWindowWidthInCells = 10;
-    private static ArrayList<File> saveFilesSorted;
     static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
-    static File saveDir;
+    private static File saveDir;
+    private static ArrayList<File> saveFilesSorted;
 
     static ArrayList<String> undoStack = new ArrayList<>();
     static ArrayList<String> redoStack = new ArrayList<>();
@@ -50,6 +47,9 @@ class State {
     private static long lastFrameMillis;
     private static final long lastFrameMillisStuckLimit = 1000;
     private static final int undoStackSizeLimit = 1000;
+
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    private static PGraphics colorStore = null;
 
     static void init(LazyGui gui, PApplet app) {
         State.gui = gui;
@@ -170,14 +170,6 @@ class State {
         }
     }
 
-    private static String getTreeAsJsonString() {
-        return gson.toJson(NodeTree.getRoot());
-    }
-
-    static String getFolderAsJsonString(FolderNode folder){
-        return gson.toJson(folder);
-    }
-
     static ArrayList<File> getSaveFileList() {
         reloadSaveFolderContents();
         return saveFilesSorted;
@@ -195,8 +187,21 @@ class State {
             println("Error loading state from file", e.getMessage());
             return;
         }
-        JsonElement root = gson.fromJson(json, JsonElement.class);
+        JsonElement root = getJsonElementFromString(json);
         loadStateFromJsonElement(root);
+    }
+
+
+    private static String getTreeAsJsonString() {
+        return gson.toJson(NodeTree.getRoot());
+    }
+
+    static String getFolderAsJsonString(FolderNode folder){
+        return gson.toJson(folder);
+    }
+
+    static JsonElement getJsonElementFromString(String json) {
+        return gson.fromJson(json, JsonElement.class);
     }
 
     static void loadStateFromJsonString(String json){
@@ -353,5 +358,9 @@ class State {
 
     static void setShouldDrawResizeIndicator(boolean valueToSet){
         shouldDrawResizeIndicator = valueToSet;
+    }
+
+    static File getSaveDir(){
+        return saveDir;
     }
 }

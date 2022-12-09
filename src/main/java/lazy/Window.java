@@ -2,7 +2,6 @@ package lazy;
 
 import com.google.gson.annotations.Expose;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -28,6 +27,7 @@ class Window implements UserInputSubscriber {
     boolean isBeingResized;
     private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
+    private final float resizeRectangleSize = 4;
 
     Window(FolderNode folder, boolean isCloseable, float posX, float posY, Float nullableSizeX) {
         this.posX = posX;
@@ -69,10 +69,9 @@ class Window implements UserInputSubscriber {
         }
         pg.pushMatrix();
         pg.translate(posX, posY);
-        pg.strokeWeight(1);
-        pg.strokeCap(SQUARE);
-        pg.stroke(ThemeStore.getColor(FOCUS_FOREGROUND));
-        pg.line(windowSizeX, 0, windowSizeX, windowSizeY);
+        pg.noStroke();
+        pg.fill(ThemeStore.getColor(WINDOW_BORDER));
+        pg.rect(windowSizeX-resizeRectangleSize/2f, 0, resizeRectangleSize, windowSizeY);
         pg.popMatrix();
     }
 
@@ -308,7 +307,7 @@ class Window implements UserInputSubscriber {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if(isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled()){
+        if(isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled() && isWindowResizable()){
             isBeingResized = true;
             e.setConsumed(true);
         }else if (isPointInsideContent(e.getX(), e.getY())) {
@@ -444,11 +443,14 @@ class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideResizeBorder(float x, float y) {
-        if(!State.getWindowResizeEnabled()){
+        if(!State.getWindowResizeEnabled() || !isWindowResizable()){
             return false;
         }
-        float resizeBorderSize = 6;
-        return Utils.isPointInRect(x, y, posX + windowSizeX - resizeBorderSize/2f, posY, resizeBorderSize, posY + windowSizeY);
+        return Utils.isPointInRect(x, y, posX + windowSizeX - resizeRectangleSize /2f, posY, resizeRectangleSize, windowSizeY);
+    }
+
+    private boolean isWindowResizable() {
+        return folder.isWindowResizable;
     }
 
     public boolean isTitleHighlighted() {

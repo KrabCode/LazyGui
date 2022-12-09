@@ -3,6 +3,7 @@ uniform float alpha;
 uniform sampler2D texture;
 uniform vec2 resolution;
 uniform bool sdfCropEnabled;
+uniform float sdfCropDistance;
 varying vec4 vertColor;
 
 #ifdef GL_ES
@@ -25,7 +26,7 @@ void main() {
     if(sdfCropEnabled){
         vec4 windowNormalized = vec4(window.xy / m, window.zw / m);
         float sdfResult = sdBox(windowNormalized.xy + windowNormalized.zw / 2. - uv , windowNormalized.zw / 2.);
-        sdfAlpha = smoothstep(0.1, 0., sdfResult);
+        sdfAlpha = smoothstep(sdfCropDistance, 0., sdfResult);
     }
     gl_FragColor = vec4(vertColor.rgb, min(alpha, sdfAlpha));
 }
