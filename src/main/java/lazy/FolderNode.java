@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 
 import processing.core.PGraphics;
 
+import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
@@ -15,7 +16,7 @@ import static processing.core.PConstants.CORNER;
 /**
  * A node that opens a new window with child nodes when clicked.
  */
-class FolderNode extends AbstractNode {
+class FolderNode extends AbstractNode implements Serializable {
 
     /**
      * CopyOnWriteArrayList is needed to avoid concurrent modification
@@ -86,12 +87,11 @@ class FolderNode extends AbstractNode {
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            Utils.setClipboardFolder(this);
+            Utils.setClipboardString(State.getFolderAsJsonString(this));
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            FolderNode toPaste = Utils.getClipboardFolder();
-            Utils.pasteStateFromNode(toPaste, this);
-            State.onUndoableActionEnded();
+            String toPaste = Utils.getClipboardString();
+            State.loadStateFromJsonString(toPaste);
         }
     }
 

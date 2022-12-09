@@ -7,7 +7,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -15,7 +15,6 @@ import java.util.UUID;
 import static processing.core.PApplet.*;
 
 class Utils {
-    private static FolderNode clipboardFolder;
 
     /**
      * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
@@ -44,14 +43,6 @@ class Utils {
             ex.printStackTrace();
         }
         return "";
-    }
-
-    public static void setClipboardFolder(FolderNode folderNode) {
-        clipboardFolder = folderNode;
-    }
-
-    public static FolderNode getClipboardFolder() {
-        return clipboardFolder;
     }
 
     static boolean isPointInRect(float px, float py, float rx, float ry, float rw, float rh) {
@@ -130,43 +121,6 @@ class Utils {
             e.printStackTrace();
         }
     }
-
-    static void pasteStateFromNode(FolderNode sourceFolder, FolderNode targetFolder) {
-            for (AbstractNode sourceChild : sourceFolder.children) {
-                AbstractNode targetChild = targetFolder.findChildByName(sourceChild.name);
-                if(targetChild == null || !targetChild.className.equals(sourceChild.className)){
-                    continue;
-                }
-                if (sourceChild.type == NodeType.VALUE) {
-                    switch(targetChild.className){
-                        case "SliderNode":
-                        case "SliderIntNode":
-                            ((SliderNode) targetChild).valueFloat = ((SliderNode) sourceChild).valueFloat;
-                            ((SliderNode) targetChild).valueFloatPrecision = ((SliderNode) sourceChild).valueFloatPrecision;
-                            break;
-                        case "ToggleNode":
-                            ((ToggleNode) targetChild).valueBoolean = ((ToggleNode) sourceChild).valueBoolean;
-                            break;
-                    }
-                }else if(sourceChild.type == NodeType.FOLDER){
-                    switch (targetChild.className){
-                        case "ColorPickerFolderNode":
-                            ((ColorPickerFolderNode) targetChild).setHex(
-                                    ((ColorPickerFolderNode) sourceChild).getHex()
-                            );
-                            break;
-                        case "StringPickerFolderNode":
-                            ((RadioFolderNode) targetChild).selectOption(
-                                    ((RadioFolderNode) sourceChild).valueString
-                            );
-                            break;
-                        case "FolderNode":
-                            pasteStateFromNode((FolderNode) sourceChild, (FolderNode) targetChild);
-                            break;
-                    }
-                }
-            }
-        }
 
     static class ArrayListBuilder<T> {
         private final ArrayList<T> list = new ArrayList<>();

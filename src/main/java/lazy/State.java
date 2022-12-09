@@ -174,6 +174,10 @@ class State {
         return gson.toJson(NodeTree.getRoot());
     }
 
+    static String getFolderAsJsonString(FolderNode folder){
+        return gson.toJson(folder);
+    }
+
     static ArrayList<File> getSaveFileList() {
         reloadSaveFolderContents();
         return saveFilesSorted;
@@ -193,6 +197,10 @@ class State {
         }
         JsonElement root = gson.fromJson(json, JsonElement.class);
         loadStateFromJsonElement(root);
+    }
+
+    static void loadStateFromJsonString(String json){
+        loadStateFromJsonElement(gson.fromJson(json, JsonElement.class));
     }
 
     static void loadStateFromJsonElement(JsonElement root) {
