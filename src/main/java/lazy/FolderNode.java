@@ -36,6 +36,12 @@ class FolderNode extends AbstractNode {
     }
 
     @Override
+    void updateValuesRegardlessOfParentWindowOpenness() {
+        // if child count changed since last frame
+        // re-assess window width in cells, make it the minimum that can snugly fit
+    }
+
+    @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         drawMiniatureWindowIcon(pg);
     }

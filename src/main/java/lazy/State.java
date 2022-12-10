@@ -17,7 +17,8 @@ import static processing.core.PApplet.*;
 
 class State {
 
-    static float cell = 24;
+
+    static float cell = 22; // cell size but shorter because used everywhere
     static float previewRectSize = cell * 0.6f;
     static int keyboardInputAppendCooldownMillis = 500;
     static PFont font = null;
