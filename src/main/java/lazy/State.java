@@ -25,6 +25,7 @@ class State {
     static LazyGui gui = null;
     static float textMarginX = 5;
     static float textMarginY = 14;
+    private static float resizeRectangleSize = 4;
 
     static private final int defaultFontSize = 16;
     static private int lastFontSize = -1;
@@ -217,6 +218,7 @@ class State {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
             if(outputRootPath != null){
+                // used for copy/pasting sub-folders and not the entire tree
                 loadedPath = loadedPath.replace(inputRootPath, outputRootPath);
             }
             AbstractNode nodeToEdit = NodeTree.findNode(loadedPath);
@@ -366,5 +368,13 @@ class State {
 
     static File getSaveDir(){
         return saveDir;
+    }
+
+    static float getResizeRectangleSize(){
+        return resizeRectangleSize;
+    }
+
+    static void setResizeRectangleSize(float valueToSet){
+        resizeRectangleSize = valueToSet;
     }
 }

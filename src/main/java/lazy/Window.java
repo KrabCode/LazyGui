@@ -27,7 +27,6 @@ class Window implements UserInputSubscriber {
     boolean isBeingResized;
     private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
-    private final float resizeRectangleSize = 4;
 
     Window(FolderNode folder, boolean isCloseable, float posX, float posY, Float nullableSizeX) {
         this.posX = posX;
@@ -36,9 +35,9 @@ class Window implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         this.folder = folder;
         folder.window = this;
-        if(nullableSizeX == null){
+        if (nullableSizeX == null) {
             windowSizeX = cell * folder.idealWindowWidthInCells;
-        }else{
+        } else {
             windowSizeX = nullableSizeX;
         }
     }
@@ -64,14 +63,15 @@ class Window implements UserInputSubscriber {
     }
 
     private void drawResizeIndicator(PGraphics pg) {
-        if(!isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY) || !State.getShouldDrawResizeIndicator()){
+        if (!isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY) || !State.getShouldDrawResizeIndicator()) {
             return;
         }
+        float w = State.getResizeRectangleSize();
         pg.pushMatrix();
         pg.translate(posX, posY);
         pg.noStroke();
         pg.fill(ThemeStore.getColor(WINDOW_BORDER));
-        pg.rect(windowSizeX-resizeRectangleSize/2f, 0, resizeRectangleSize, windowSizeY);
+        pg.rect(windowSizeX - w / 2f, 0, w, windowSizeY);
         pg.popMatrix();
     }
 
@@ -268,7 +268,7 @@ class Window implements UserInputSubscriber {
     public void keyPressed(LazyKeyEvent keyEvent) {
         float x = State.app.mouseX;
         float y = State.app.mouseY;
-        if(isPointInsideTitleBar(x, y)){
+        if (isPointInsideTitleBar(x, y)) {
             folder.keyPressedOverNode(keyEvent, x, y);
             keyEvent.consume();
             return;
@@ -312,10 +312,10 @@ class Window implements UserInputSubscriber {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if(isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled() && isWindowResizable()){
+        if (isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled() && isWindowResizable()) {
             isBeingResized = true;
             e.setConsumed(true);
-        }else if (isPointInsideContent(e.getX(), e.getY())) {
+        } else if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
                 node.mousePressedOverNode(e.getX(), e.getY());
@@ -328,7 +328,7 @@ class Window implements UserInputSubscriber {
         if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
             folder.setIsMouseOverThisNodeOnly();
-        }else if (isPointInsideContent(e.getX(), e.getY()) && !isPointInsideResizeBorder(e.getX(), e.getY())) {
+        } else if (isPointInsideContent(e.getX(), e.getY()) && !isPointInsideResizeBorder(e.getX(), e.getY())) {
             AbstractNode node = tryFindChildNodeAt(e.getX(), e.getY());
             if (node != null && node.isParentWindowVisible()) {
                 node.setIsMouseOverThisNodeOnly();
@@ -372,7 +372,7 @@ class Window implements UserInputSubscriber {
         } else if (isBeingDraggedAround) {
             trySnapToGrid();
             e.setConsumed(true);
-        } else if(isBeingResized && UtilGridSnap.snapToGridEnabled){
+        } else if (isBeingResized && UtilGridSnap.snapToGridEnabled) {
             windowSizeX = UtilGridSnap.trySnapToGrid(windowSizeX, 0).x;
             e.setConsumed(true);
         }
@@ -448,10 +448,11 @@ class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideResizeBorder(float x, float y) {
-        if(!State.getWindowResizeEnabled() || !isWindowResizable()){
+        if (!State.getWindowResizeEnabled() || !isWindowResizable()) {
             return false;
         }
-        return Utils.isPointInRect(x, y, posX + windowSizeX - resizeRectangleSize /2f, posY, resizeRectangleSize, windowSizeY);
+        float w = State.getResizeRectangleSize();
+        return Utils.isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
     }
 
     private boolean isWindowResizable() {

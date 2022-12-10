@@ -107,16 +107,19 @@ class WindowManager {
 
     public static void updateWindowOptions() {
         State.gui.pushFolder("windows");
-        showPathTooltips = State.gui.toggle("show path tooltips", true);
-        State.setShouldKeepWindowsInBounds(State.gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
-        State.setWindowResizeEnabled(State.gui.toggle("allow resize width", State.getWindowResizeEnabled()));
-        State.setShouldDrawResizeIndicator(State.gui.toggle("show resize line", State.getShouldDrawResizeIndicator()));
         State.setCellSize(State.gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         State.tryUpdateFont(
                 State.gui.sliderInt("font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
                 State.gui.slider("font x offset", State.textMarginX),
                 State.gui.slider("font y offset", State.textMarginY)
         );
+        showPathTooltips = State.gui.toggle("show path tooltips", true);
+        State.setShouldKeepWindowsInBounds(State.gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
+        State.gui.pushFolder("resize");
+        State.setWindowResizeEnabled(State.gui.toggle("allow resize", State.getWindowResizeEnabled()));
+        State.setShouldDrawResizeIndicator(State.gui.toggle("show indicator", State.getShouldDrawResizeIndicator()));
+        State.setResizeRectangleSize(State.gui.slider("indicator width", State.getResizeRectangleSize()));
+        State.gui.popFolder();
         State.gui.popFolder();
     }
 }
