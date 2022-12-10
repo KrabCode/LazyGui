@@ -128,8 +128,10 @@ class SliderNode extends AbstractNode {
     protected void updateBackgroundShader(PGraphics pg) {
         PShader shader = InternalShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
-        shader.set("quadPos", pos.x, pos.y);
-        shader.set("quadSize", size.x, size.y);
+        int bgColor = ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND);
+        int fgColor = ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND);
+        shader.set("colorA", State.red(bgColor), State.green(bgColor), State.blue(bgColor));
+        shader.set("colorB", State.red(fgColor), State.green(fgColor), State.blue(fgColor));
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         pg.shader(shader);
     }

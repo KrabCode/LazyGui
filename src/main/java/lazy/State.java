@@ -338,6 +338,18 @@ class State {
         return colorStore.color(hue, sat, br, alpha);
     }
 
+    static float red(int hex){
+        return colorStore.red(hex);
+    }
+
+    static float green(int hex){
+        return colorStore.green(hex);
+    }
+
+    static float blue(int hex){
+        return colorStore.blue(hex);
+    }
+
     public static PGraphics getColorStore() {
         return colorStore;
     }

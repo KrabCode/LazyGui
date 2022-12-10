@@ -5,9 +5,8 @@ uniform vec2 quadSize;
 uniform float time;
 uniform float scrollX;
 uniform float precisionNormalized;
-
-// TODO add percent indicator when min/max is specified
-// https://github.com/KrabCode/LazyGui/issues/25
+uniform vec3 colorA;
+uniform vec3 colorB;
 
 const float PI = 3.14159;
 const float TAU = PI * 2.;
@@ -79,19 +78,16 @@ mat2 rotate2D(float angle){
 }
 
 void main(){
-    vec2 uv = (gl_FragCoord.xy - quadPos.xy) / quadSize.xy;
-    uv *= rotate2D(PI * 0.1);
-    uv.x -= scrollX / quadSize.x; // TODO fix - not completely precise
-    float freq =  pow(30.,precisionNormalized);
-    float x = uv.x * freq * PI;
-    x = 0.5+0.5*sin(x);
-
-    vec3 edge = hexToRgb(0x2F2F2F);
-    vec3 center = hexToRgb(0x5F5F5F);
+    vec2 uv = gl_FragCoord.xy;
+    uv *= rotate2D(PI * 0.25);
+    uv.x -= scrollX;
+    float freq =  pow(50.,precisionNormalized);
+    float x = uv.x * freq * PI * 0.01;
+    x = 0.5+0.5*clamp(sin(x)*30., 0., 1.);
     colorPoint[colorsPerGradient] gradient = colorPoint[](
-        colorPoint(0.,  edge),
-        colorPoint(0.5, center),
-        colorPoint(1.,  edge)
+        colorPoint(0.,  colorA),
+        colorPoint(0.5, colorB),
+        colorPoint(1.,  colorA)
     );
     vec3 color = gradientColorAt(x, gradient);
     gl_FragColor = vec4(color, 1.);
