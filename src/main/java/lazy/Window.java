@@ -268,6 +268,11 @@ class Window implements UserInputSubscriber {
     public void keyPressed(LazyKeyEvent keyEvent) {
         float x = State.app.mouseX;
         float y = State.app.mouseY;
+        if(isPointInsideTitleBar(x, y)){
+            folder.keyPressedOverNode(keyEvent, x, y);
+            keyEvent.consume();
+            return;
+        }
         AbstractNode nodeUnderMouse = tryFindChildNodeAt(x, y);
         if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
             if (isPointInsideContent(x, y)) {
