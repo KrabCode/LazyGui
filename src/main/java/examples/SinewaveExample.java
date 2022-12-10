@@ -1,5 +1,6 @@
 package examples;
 
+import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -83,7 +84,8 @@ public class SinewaveExample extends PApplet {
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background", color(255 * 0.15f)).hex);
+        PickerColor clr = gui.colorPicker("background", color(255 * 0.15f));
+        pg.fill(clr.hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);

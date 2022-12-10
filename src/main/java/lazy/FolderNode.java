@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
 
 import processing.core.PGraphics;
 
-import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
@@ -95,7 +94,7 @@ class FolderNode extends AbstractNode {
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             String toPaste = Utils.getClipboardString();
-            State.loadStateFromJsonString(toPaste);
+            State.loadStateFromJsonString(toPaste, path);
         }
     }
 

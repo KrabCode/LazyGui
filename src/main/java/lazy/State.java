@@ -188,7 +188,7 @@ class State {
             return;
         }
         JsonElement root = getJsonElementFromString(json);
-        loadStateFromJsonElement(root);
+        loadStateFromJsonElement(root, null);
     }
 
 
@@ -204,17 +204,21 @@ class State {
         return gson.fromJson(json, JsonElement.class);
     }
 
-    static void loadStateFromJsonString(String json){
-        loadStateFromJsonElement(gson.fromJson(json, JsonElement.class));
+    static void loadStateFromJsonString(String json, String path){
+        loadStateFromJsonElement(gson.fromJson(json, JsonElement.class), path);
     }
 
-    static void loadStateFromJsonElement(JsonElement root) {
+    static void loadStateFromJsonElement(JsonElement root, String outputRootPath) {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(root);
+        String inputRootPath = root.getAsJsonObject().get("path").getAsString();
         while (!queue.isEmpty()) {
             JsonElement loadedNode = queue.poll();
             String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
+            if(outputRootPath != null){
+                loadedPath = loadedPath.replace(inputRootPath, outputRootPath);
+            }
             AbstractNode nodeToEdit = NodeTree.findNode(loadedPath);
             if (nodeToEdit != null) {
                 overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
@@ -293,7 +297,7 @@ class State {
         }
         String poppedJson = undoStack.remove(undoStack.size() - 1);
         redoStack.add(poppedJson);
-        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class));
+        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class), null);
     }
 
     private static void popFromRedoStack() {
@@ -302,7 +306,7 @@ class State {
         }
         String poppedJson = redoStack.remove(redoStack.size() - 1);
         undoStack.add(poppedJson);
-        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class));
+        loadStateFromJsonElement(gson.fromJson(poppedJson, JsonElement.class), null);
     }
 
     static void createNewSaveWithRandomName() {

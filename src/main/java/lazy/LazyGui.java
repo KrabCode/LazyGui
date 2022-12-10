@@ -902,7 +902,7 @@ public class LazyGui implements UserInputSubscriber {
         UtilGridSnap.update();
         UtilContextLines.update(pg);
         updateHotkeyToggles();
-        State.keyboardInputAppendCooldownMillis = sliderInt("numpad input millis", keyboardInputAppendCooldownMillis, 100, 5000);
+        State.keyboardInputAppendCooldownMillis = sliderInt("numpad input (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
         popFolder();
     }
 
