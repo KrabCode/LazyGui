@@ -80,9 +80,8 @@ mat2 rotate2D(float angle){
 void main(){
     vec2 uv = gl_FragCoord.xy;
     uv *= rotate2D(PI * 0.25);
-    uv.x -= scrollX;
     float freq =  pow(50.,precisionNormalized);
-    float x = uv.x * freq * PI * 0.01;
+    float x = (uv.x - scrollX) * freq * PI * 0.01;
     x = 0.5+0.5*clamp(sin(x)*30., 0., 1.);
     colorPoint[colorsPerGradient] gradient = colorPoint[](
         colorPoint(0.,  colorA),
