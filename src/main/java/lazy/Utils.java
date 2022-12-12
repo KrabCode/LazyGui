@@ -14,6 +14,8 @@ import java.util.UUID;
 
 import static processing.core.PApplet.*;
 
+// TODO remove Utils and State class, put things in their respective places
+// https://github.com/KrabCode/LazyGui/issues/84
 class Utils {
 
     /**
