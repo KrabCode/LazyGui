@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 
 class ColorPickerHexNode extends AbstractNode {
 
-    ColorPickerFolderNode parentColorPickerFolder;
+    final ColorPickerFolderNode parentColorPickerFolder;
 
     ColorPickerHexNode(String path, ColorPickerFolderNode parentFolder) {
         super(NodeType.VALUE, path, parentFolder);

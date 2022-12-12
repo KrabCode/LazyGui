@@ -11,7 +11,7 @@ import static processing.core.PApplet.*;
 
 public class UtilGridSnap {
     static boolean snapToGridEnabled = false;
-    static List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
+    static final List<String> availableVisibilityModes = new Utils.ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
     private static final String pointShaderPath = "gridPointFrag.glsl";
     private static final int VISIBILITY_ALWAYS = 0;
@@ -118,7 +118,8 @@ public class UtilGridSnap {
         State.gui.pushFolder("grid");
         boolean previousSnapToGridEnabled = snapToGridEnabled;
         snapToGridEnabled = State.gui.toggle("snap to grid", true);
-        if(hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
+
+        if(hasCellSizeJustChanged() || hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
             WindowManager.snapAllStaticWindowsToGrid();
         }
         setSelectedVisibilityMode(State.gui.radio("show grid",
@@ -127,6 +128,14 @@ public class UtilGridSnap {
         pointWeight = State.gui.slider("point weight", pointWeight);
         sdfCropDistance = State.gui.slider("point range", sdfCropDistance);
         State.gui.popFolder();
+    }
+
+    static float cellSizeLastFrame = -1;
+
+    private static boolean hasCellSizeJustChanged() {
+        boolean result = cellSizeLastFrame != State.cell;
+        cellSizeLastFrame = State.cell;
+        return result;
     }
 
     private static boolean hasJustBeenEnabled(boolean previousState, boolean currentState) {

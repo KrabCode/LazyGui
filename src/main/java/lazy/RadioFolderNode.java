@@ -10,7 +10,7 @@ class RadioFolderNode extends FolderNode {
 
     @Expose
     String valueString;
-    Map<String, Boolean> oldValues = new HashMap<>();
+    final Map<String, Boolean> oldValues = new HashMap<>();
     private final String[] options;
 
     RadioFolderNode(String path, FolderNode parent, String[] options, String defaultOption) {

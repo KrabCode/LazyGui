@@ -9,10 +9,10 @@ import java.util.List;
 import static processing.core.PApplet.println;
 
 class SaveFolderNode extends FolderNode {
-    String pathPrintFolderPath = "/print folder path";
-    String pathOpenSaveFolder  = "/open save folder";
-    String pathAutosaveOnExit  = "/autosave on exit";
-    String pathCreateNewSave   = "/create new save";
+    final String pathPrintFolderPath = "/print folder path";
+    final String pathOpenSaveFolder  = "/open save folder";
+    final String pathAutosaveOnExit  = "/autosave on exit";
+    final String pathCreateNewSave   = "/create new save";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     SaveFolderNode(String path, FolderNode parent) {
@@ -43,7 +43,7 @@ class SaveFolderNode extends FolderNode {
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
             if(NodeTree.findNode(childNodePath) == null){
-                children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename, file.getAbsolutePath()));
+                children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename));
             }
         }
     }

@@ -21,15 +21,15 @@ class SliderNode extends AbstractNode {
     @Expose
     float valueFloatPrecision;
     float valueFloatDefault;
-    float valueFloatMin;
-    float valueFloatMax;
-    boolean valueFloatConstrained;
+    final float valueFloatMin;
+    final float valueFloatMax;
+    final boolean valueFloatConstrained;
     float backgroundScrollX = 0;
     float mouseDeltaX, mouseDeltaY;
     boolean verticalMouseMode = false;
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
-    protected ArrayList<Float> precisionRange = new Utils.ArrayListBuilder<Float>()
+    protected final ArrayList<Float> precisionRange = new Utils.ArrayListBuilder<Float>()
             .add(0.0001f)
             .add(0.001f)
             .add(0.01f)
@@ -38,7 +38,7 @@ class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    ArrayList<Character> numpadChars = new Utils.ArrayListBuilder<Character>()
+    final ArrayList<Character> numpadChars = new Utils.ArrayListBuilder<Character>()
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastMillis = -1;
@@ -46,7 +46,7 @@ class SliderNode extends AbstractNode {
 
     private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*[,.][0-9]*";
     private boolean displayShader = true;
-    String shaderPath = "sliderBackground.glsl";
+    private final String shaderPath = "sliderBackground.glsl";
 
     SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);

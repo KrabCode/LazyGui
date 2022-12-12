@@ -22,7 +22,7 @@ class FolderNode extends AbstractNode {
      * because the children get drawn by one thread and user input changes the list from another thread
      */
     @Expose
-    CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
+    final CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     @Expose
     Window window;

@@ -8,7 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.State.cell;
 import static processing.core.PApplet.floor;
-import static processing.core.PApplet.sin;
 
 class WindowManager {
     private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
@@ -102,6 +101,7 @@ class WindowManager {
           PVector newPos = UtilGridSnap.trySnapToGrid(w.posX, w.posY);
           w.posX = newPos.x;
           w.posY = newPos.y;
+          w.windowSizeX = UtilGridSnap.trySnapToGrid(w.windowSizeX, 0).x;
         }
     }
 

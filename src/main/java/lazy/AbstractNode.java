@@ -19,19 +19,18 @@ import static processing.core.PApplet.*;
  */
 abstract class AbstractNode {
     @Expose
-    String className = this.getClass().getSimpleName();
+    final String className = this.getClass().getSimpleName();
     @Expose
     String path;
     @Expose
     NodeType type;
 
     final FolderNode parent;
-    PVector pos = new PVector();
-    PVector size = new PVector();
+    final PVector pos = new PVector();
+    final PVector size = new PVector();
+    final String name;
 
-    String name;
     float idealInlineNodeHeightInCells = 1;
-
     boolean isDragged = false;
     boolean isMouseOverNode = false;
 
@@ -130,6 +129,7 @@ abstract class AbstractNode {
         }
     }
 
+    @SuppressWarnings("unused")
     protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
         if (isMouseOverNode) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
@@ -203,14 +203,6 @@ abstract class AbstractNode {
         }
         float innerButtonSize = cell * 0.35f;
         pg.rect(0,0, innerButtonSize, innerButtonSize);
-    }
-
-    private boolean isFocused(){
-        return parent.window.isFocused();
-    }
-
-    private boolean isFocusedAndMouseOver() {
-        return parent.window.isFocused() && isMouseOverNode;
     }
 
     void mousePressedOverNode(float x, float y) {

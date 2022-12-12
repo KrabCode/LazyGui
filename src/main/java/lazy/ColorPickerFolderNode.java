@@ -104,10 +104,6 @@ class ColorPickerFolderNode extends FolderNode {
         return hexString;
     }
 
-    int getHex() {
-        return hex;
-    }
-
     void setHex(int hex) {
         if (hex == 0) {
             hex = unhex("00010101");

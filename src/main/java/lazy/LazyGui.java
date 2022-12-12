@@ -908,8 +908,8 @@ public class LazyGui implements UserInputSubscriber {
 
     private void updateHotkeyToggles() {
         pushFolder("hotkeys");
-        hotkeyHideActive = toggle("h: hide gui", true);
-        hotkeyCloseAllWindowsActive = toggle("d: close all windows", true);
+        hotkeyHideActive = toggle("h: toggle visibility", true);
+        hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
         hotkeyScreenshotActive = toggle("i: take screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36

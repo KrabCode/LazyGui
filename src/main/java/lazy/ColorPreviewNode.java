@@ -8,8 +8,8 @@ import static processing.core.PConstants.CORNER;
 
 class ColorPreviewNode extends AbstractNode {
 
-    ColorPickerFolderNode parentColorPickerFolder;
-    String checkerboardShaderPath = "checkerboard.glsl";
+    final ColorPickerFolderNode parentColorPickerFolder;
+    final String checkerboardShaderPath = "checkerboard.glsl";
 
     ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);

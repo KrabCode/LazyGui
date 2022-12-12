@@ -10,6 +10,7 @@ public class Theme {
     int normalForeground;
     int focusForeground;
 
+    @SuppressWarnings("unused")
     private Theme(){
 
     }

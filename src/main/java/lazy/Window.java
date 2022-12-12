@@ -22,7 +22,7 @@ class Window implements UserInputSubscriber {
     @Expose
     float windowSizeX; // can be resized by user
     float windowSizeY; // set every frame, locked to (cell size * child count) + 1 cell for the title bar
-    protected boolean isCloseable;
+    protected final boolean isCloseable;
     boolean isBeingDraggedAround;
     boolean isBeingResized;
     private boolean isTitleHighlighted;

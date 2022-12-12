@@ -3,12 +3,11 @@ package lazy;
 import processing.core.PGraphics;
 
 class SaveNode extends AbstractNode {
-    String fileName, fullPath;
+    final String fileName;
 
-    SaveNode(String path, FolderNode parent, String fileName, String fullPath) {
+    SaveNode(String path, FolderNode parent, String fileName) {
         super(NodeType.TRANSIENT, path, parent);
         this.fileName = fileName;
-        this.fullPath = fullPath;
     }
 
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {

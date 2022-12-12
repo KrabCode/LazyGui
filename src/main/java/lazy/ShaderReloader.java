@@ -16,6 +16,7 @@ import static processing.core.PApplet.println;
  * This saving the shader in your text editor is needed to actually recompile it and display the results.
  * No sketch restarting needed unless you want to set a new uniform.
  */
+@SuppressWarnings("unused")
 public class ShaderReloader {
     private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
@@ -153,9 +154,9 @@ public class ShaderReloader {
     }
 
     private static class ShaderSnapshot {
-        String fragPath;
-        String vertPath;
-        File fragFile;
+        final String fragPath;
+        final String vertPath;
+        final File fragFile;
         File vertFile;
         PShader compiledShader;
         long fragLastKnownModified, vertLastKnownModified, lastChecked;

@@ -11,7 +11,7 @@ import static processing.core.PConstants.*;
 abstract class ColorSliderNode extends SliderNode {
 
     final ColorPickerFolderNode parentColorPickerFolder;
-    float maximumFloatPrecision = 1;
+    final float maximumFloatPrecision = 1;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 

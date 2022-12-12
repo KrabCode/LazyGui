@@ -2,7 +2,7 @@ package lazy;
 
 class StringPickerItem extends ToggleNode {
 
-    String valueString;
+    final String valueString;
 
     StringPickerItem(String path, FolderNode folder, boolean valueBoolean, String valueString) {
         super(path, folder, valueBoolean);

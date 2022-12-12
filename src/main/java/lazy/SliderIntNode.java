@@ -4,7 +4,7 @@ import processing.core.PApplet;
 
 class SliderIntNode extends SliderNode {
 
-    float minimumIntPrecision = 0.1f;
+    final float minimumIntPrecision = 0.1f;
 
     SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, boolean constrained) {
         super(path, parentFolder, defaultValue, min, max, constrained);

@@ -39,12 +39,12 @@ class State {
     static String sketchName = null;
     static boolean autosaveEnabled = false;
     static final float defaultWindowWidthInCells = 10;
-    static Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
+    static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
 
-    static ArrayList<String> undoStack = new ArrayList<>();
-    static ArrayList<String> redoStack = new ArrayList<>();
+    static final ArrayList<String> undoStack = new ArrayList<>();
+    static final ArrayList<String> redoStack = new ArrayList<>();
 
     private static long lastFrameMillis;
     private static final long lastFrameMillisStuckLimit = 1000;
@@ -327,10 +327,12 @@ class State {
         return normColor(0, 0, br, 1);
     }
 
+    @SuppressWarnings("SameParameterValue")
     static int normColor(float br, float alpha) {
         return normColor(0, 0, br, alpha);
     }
 
+    @SuppressWarnings("unused")
     static int normColor(float hue, float sat, float br) {
         return normColor(hue, sat, br, 1);
     }

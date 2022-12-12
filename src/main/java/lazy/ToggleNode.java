@@ -9,15 +9,11 @@ class ToggleNode extends AbstractNode {
 
     @Expose
     boolean valueBoolean;
-    boolean valueBooleanDefault;
     protected boolean armed = false;
-    float handlePosNorm;
 
     ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
-        valueBooleanDefault = defaultValue;
         valueBoolean = defaultValue;
-        handlePosNorm = valueBoolean ? 1 : 0;
         State.overwriteWithLoadedStateIfAny(this);
     }
 
@@ -51,7 +47,6 @@ class ToggleNode extends AbstractNode {
         JsonElement booleanElement = loadedNode.getAsJsonObject().get("valueBoolean");
         if(booleanElement != null){
             valueBoolean = booleanElement.getAsBoolean();
-            valueBooleanDefault = valueBoolean;
         }
     }
 
