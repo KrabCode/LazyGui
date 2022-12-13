@@ -790,11 +790,12 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Pushes a folder name to the global path prefix stack.
      * Can be used multiple times in pairs just like pushMatrix and popMatrix().
-     * Removes all slashes from the parameter and adds a slash at the end to enforce consistency and ease of path retrieval.
+     * Removes leading and trailing slashes to enforce consistency, but allows slashes to appear either escaped or anywhere else inside of the string.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.
      *
      * @param folderName one folder's name to push to the stack
+     * @see LazyGui#getFolder()
      */
     public void pushFolder(String folderName){
         if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
@@ -802,11 +803,16 @@ public class LazyGui implements UserInputSubscriber {
                     ", possibly due to runaway recursion");
             printedPushWarningAlready = true;
         }
-        String sanitizedFolderName = folderName.replaceAll("/", "");
-        if(!sanitizedFolderName.endsWith("/")){
-            sanitizedFolderName += "/";
+        String slashSafeFolderName = folderName;
+        if(slashSafeFolderName.startsWith("/")){
+            // remove leading slash
+            slashSafeFolderName = slashSafeFolderName.substring(1);
         }
-        pathPrefix.add(0, sanitizedFolderName);
+        if(slashSafeFolderName.endsWith("/") && !slashSafeFolderName.endsWith("\\/")){
+            // remove trailing slash if un-escaped
+            slashSafeFolderName = slashSafeFolderName.substring(0, slashSafeFolderName.length()-1);
+        }
+        pathPrefix.add(0, slashSafeFolderName);
     }
 
     /**
@@ -838,7 +844,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the current path prefix stack.
+     * Gets the current path prefix stack, inserting a forward slash after each folder name in the stack.
      * Mostly used internally by LazyGui, but it can also be useful for debugging.
      *
      * @return entire path prefix stack concatenated to one string
@@ -851,6 +857,7 @@ public class LazyGui implements UserInputSubscriber {
         for (int i = pathPrefix.size() - 1; i >= 0; i--) {
             String folder = pathPrefix.get(i);
             sb.append(folder);
+            sb.append("/");
         }
         return sb.toString();
     }
