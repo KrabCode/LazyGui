@@ -42,7 +42,7 @@ class SaveFolderNode extends FolderNode {
             }
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
-            if(NodeTree.findNode(childNodePath) == null){
+            if(findChildByName(saveDisplayName) == null){
                 children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename));
             }
         }

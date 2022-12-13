@@ -1,5 +1,7 @@
 package lazy;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.*;
 
 import static processing.core.PApplet.println;
@@ -21,6 +23,22 @@ class NodeTree {
         lazyInitFolderPath(folderPath);
         AbstractNode pathParent = findNode(folderPath);
         return (FolderNode) pathParent;
+    }
+
+    //TODO
+    static AbstractNode findNodeAndCheckCasting(String path, String targetClassName){
+        throw new NotImplementedException();
+        /*
+        AbstractNode node = findNode(path);
+        if(node != null && node.className.equals(targetClassName)){
+            return node;
+        }
+        // print error once for every path - type combination
+        // return the default value for that control in case of error
+
+        println("upsi wupsi hihi uwu");
+        return node;
+        */
     }
 
     static AbstractNode findNode(String path) {
