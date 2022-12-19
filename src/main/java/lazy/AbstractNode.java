@@ -52,7 +52,7 @@ abstract class AbstractNode {
         if ("".equals(path)) {
             return "root";
         }
-        String[] split = path.split("/");
+        String[] split = UtilsPathEscapes.splitByNaiveSlashes(path);
         if (split.length == 0) {
             return "";
         }

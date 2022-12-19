@@ -1,7 +1,5 @@
 package lazy;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.*;
 
 import static processing.core.PApplet.println;
@@ -23,22 +21,6 @@ class NodeTree {
         lazyInitFolderPath(folderPath);
         AbstractNode pathParent = findNode(folderPath);
         return (FolderNode) pathParent;
-    }
-
-    //TODO
-    static AbstractNode findNodeAndCheckCasting(String path, String targetClassName){
-        throw new NotImplementedException();
-        /*
-        AbstractNode node = findNode(path);
-        if(node != null && node.className.equals(targetClassName)){
-            return node;
-        }
-        // print error once for every path - type combination
-        // return the default value for that control in case of error
-
-        println("upsi wupsi hihi uwu");
-        return node;
-        */
     }
 
     static AbstractNode findNode(String path) {
@@ -66,7 +48,7 @@ class NodeTree {
     // TODO find some way to escape the slash in path params
     // https://github.com/KrabCode/LazyGui/issues/6
     static void lazyInitFolderPath(String path) {
-        String[] split = path.split("/");
+        String[] split = UtilsPathEscapes.splitByNaiveSlashes(path);
         String runningPath = split[0];
         FolderNode parentFolder = null;
         for (int i = 0; i < split.length; i++) {
