@@ -1,6 +1,5 @@
 package lazy;
 
-import static processing.core.PApplet.println;
 
 @SuppressWarnings("RegExpRedundantEscape")
 public class UtilPaths {
