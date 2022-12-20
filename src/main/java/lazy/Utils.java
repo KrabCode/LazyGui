@@ -52,7 +52,7 @@ class Utils {
     }
 
     static String getPathWithoutName(String pathWithName) {
-        String[] split = UtilsPathEscapes.splitByNaiveSlashes(pathWithName);
+        String[] split = UtilsPathEscapes.splitByUnescapedSlashes(pathWithName);
         StringBuilder sum = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {
             sum.append(split[i]);
@@ -107,7 +107,7 @@ class Utils {
     }
 
     static String[] splitFullPathWithoutEndAndRoot(String fullPath){
-        String[] pathWithEnd = UtilsPathEscapes.splitByNaiveSlashes(fullPath);
+        String[] pathWithEnd = UtilsPathEscapes.splitByUnescapedSlashes(fullPath);
         return Arrays.copyOf(pathWithEnd, pathWithEnd.length-1);
     }
 

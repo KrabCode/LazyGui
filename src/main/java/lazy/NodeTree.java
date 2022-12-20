@@ -48,7 +48,7 @@ class NodeTree {
     // TODO find some way to escape the slash in path params
     // https://github.com/KrabCode/LazyGui/issues/6
     static void lazyInitFolderPath(String path) {
-        String[] split = UtilsPathEscapes.splitByNaiveSlashes(path);
+        String[] split = UtilsPathEscapes.splitByUnescapedSlashes(path);
         String runningPath = split[0];
         FolderNode parentFolder = null;
         for (int i = 0; i < split.length; i++) {
