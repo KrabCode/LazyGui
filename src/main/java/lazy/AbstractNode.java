@@ -52,11 +52,11 @@ abstract class AbstractNode {
         if ("".equals(path)) {
             return "root";
         }
-        String[] split = UtilsPathEscapes.splitByUnescapedSlashes(path);
+        String[] split = UtilPaths.splitByUnescapedSlashes(path);
         if (split.length == 0) {
             return "";
         }
-        return UtilsPathEscapes.getDisplayStringWithoutEscapes(split[split.length - 1]);
+        return UtilPaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
     }
 
     /**
@@ -148,16 +148,16 @@ abstract class AbstractNode {
 
 
     void drawLeftText(PGraphics pg, String text) {
-        String trimmedText = Utils.getSubstringFromStartToFit(pg, text, size.x - cell - State.textMarginX * 2);
+        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - cell - FontStore.textMarginX * 2);
         pg.textAlign(LEFT, CENTER);
-        pg.text(trimmedText, State.textMarginX, size.y - State.textMarginY);
+        pg.text(trimmedText, FontStore.textMarginX, size.y - FontStore.textMarginY);
     }
 
     void drawRightText(PGraphics pg, String text) {
         pg.textAlign(RIGHT, CENTER);
         pg.text(text,
-                size.x - State.textMarginX,
-                size.y - State.textMarginY
+                size.x - FontStore.textMarginX,
+                size.y - FontStore.textMarginY
         );
     }
 
@@ -261,4 +261,5 @@ abstract class AbstractNode {
     public String toString() {
         return "Folder @ " + path + " | " + (isParentWindowOpen() ? "open" : "closed");
     }
+
 }

@@ -126,10 +126,10 @@ class ColorPickerFolderNode extends FolderNode {
 //        super.keyPressedOverNode(e, x, y);
 //        - we don't want to copy the contents of the folder itself... let this ColorPickerFolderNode handle it
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            Utils.setClipboardString(getHexString());
+            UtilClipboard.setClipboardString(getHexString());
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            String pastedString = Utils.getClipboardString();
+            String pastedString = UtilClipboard.getClipboardString();
             if(pastedString.length() == 6){
                 // ensure full alpha if the pasted hex is without alpha
                 pastedString = "FF" + pastedString;
@@ -147,7 +147,7 @@ class ColorPickerFolderNode extends FolderNode {
 
     void setHue(float hueToAdd) {
         ColorSliderNode hueSlider = (ColorSliderNode) findChildByName(HUE_NODE_NAME);
-        hueSlider.valueFloat = Utils.hueModulo(hueSlider.valueFloat + hueToAdd);
+        hueSlider.valueFloat = LazyGui.hueModulo(hueSlider.valueFloat + hueToAdd);
         loadValuesFromHSBA();
     }
 }

@@ -29,7 +29,7 @@ class SliderNode extends AbstractNode {
     boolean verticalMouseMode = false;
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
-    protected final ArrayList<Float> precisionRange = new Utils.ArrayListBuilder<Float>()
+    protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
             .add(0.0001f)
             .add(0.001f)
             .add(0.01f)
@@ -38,7 +38,7 @@ class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    final ArrayList<Character> numpadChars = new Utils.ArrayListBuilder<Character>()
+    final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastMillis = -1;
@@ -64,7 +64,7 @@ class SliderNode extends AbstractNode {
     }
 
     void initSliderBackgroundShader() {
-        InternalShaderStore.getShader(shaderPath);
+        ShaderStore.getShader(shaderPath);
     }
 
     private void setSensiblePrecision(String value) {
@@ -126,7 +126,7 @@ class SliderNode extends AbstractNode {
     }
 
     protected void updateBackgroundShader(PGraphics pg) {
-        PShader shader = InternalShaderStore.getShader(shaderPath);
+        PShader shader = ShaderStore.getShader(shaderPath);
         shader.set("scrollX", backgroundScrollX);
         int bgColor = ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND);
         int fgColor = ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND);
@@ -232,10 +232,10 @@ class SliderNode extends AbstractNode {
             if(value.endsWith(".")){
                 value += "0";
             }
-            Utils.setClipboardString(value);
+            UtilClipboard.setClipboardString(value);
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            String clipboardString = Utils.getClipboardString();
+            String clipboardString = UtilClipboard.getClipboardString();
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);
                 if (!Float.isNaN(clipboardValue)) {

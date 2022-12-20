@@ -15,8 +15,8 @@ class GradientFolderNode extends FolderNode {
     PGraphics out;
     final RadioFolderNode directionTypePicker;
     final RadioFolderNode blendTypePicker;
-    final ArrayList<String> blendTypeOptions = new Utils.ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
-    final ArrayList<String> directionOptions = new Utils.ArrayListBuilder<String>().add("x").add("y").add("center").build();
+    final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
+    final ArrayList<String> directionOptions = new ArrayListBuilder<String>().add("x").add("y").add("center").build();
 
     final String gradientShader = "gradient.glsl";
     private final int colorCount;
@@ -74,7 +74,7 @@ class GradientFolderNode extends FolderNode {
             }
             return 0;
         });
-        PShader shader = InternalShaderStore.getShader(gradientShader);
+        PShader shader = ShaderStore.getShader(gradientShader);
         int activeColorCount = getColorCount();
         shader.set("colorCount", activeColorCount);
         shader.set("colorValues", getColorValues(activeColorCount), 4);

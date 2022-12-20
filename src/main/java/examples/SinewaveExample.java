@@ -1,6 +1,5 @@
 package examples;
 
-import lazy.UtilsPathEscapes;
 import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -26,7 +25,6 @@ public class SinewaveExample extends PApplet {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         pg.smooth(16);
-        UtilsPathEscapes.check("testing/yes\\/no");
     }
 
     @Override

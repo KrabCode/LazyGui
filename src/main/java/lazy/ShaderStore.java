@@ -5,11 +5,11 @@ import processing.opengl.PShader;
 import java.util.HashMap;
 import java.util.Map;
 
-class InternalShaderStore {
+class ShaderStore {
     private static final Map<String, PShader> shaders = new HashMap<>();
     private static final String shaderFolder = "shaders/";
 
-    private InternalShaderStore() {
+    private ShaderStore() {
 
     }
 

@@ -2,7 +2,9 @@ package lazy;
 
 import processing.core.PGraphics;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +81,7 @@ class SaveFolderNode extends FolderNode {
             State.createNewSaveWithRandomName();
         }
         if(State.gui.button(path + pathOpenSaveFolder)){
-            Utils.openSaveFolder();
+            openSaveFolder();
         }
         if(State.gui.button(path + pathPrintFolderPath)){
             println("LazyGui save folder: " + State.getSaveDir().getAbsolutePath());
@@ -89,4 +91,12 @@ class SaveFolderNode extends FolderNode {
         updateStateList();
     }
 
+    static void openSaveFolder() {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.open(State.getSaveDir());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

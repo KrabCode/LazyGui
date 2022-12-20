@@ -43,7 +43,7 @@ class Window implements UserInputSubscriber {
     }
 
     void drawWindow(PGraphics pg) {
-        pg.textFont(State.font);
+        pg.textFont(FontStore.getFont());
         isTitleHighlighted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
         if (closed) {
             return;
@@ -82,7 +82,7 @@ class Window implements UserInputSubscriber {
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
-        String[] pathSplit = Utils.splitFullPathWithoutEndAndRoot(folder.path);
+        String[] pathSplit = splitFullPathWithoutEndAndRoot(folder.path);
         int lineCount = pathSplit.length;
         float tooltipHeight = lineCount * cell;
         float tooltipYOffset = 0;
@@ -95,10 +95,15 @@ class Window implements UserInputSubscriber {
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
         for (int i = 0; i < lineCount; i++) {
-            pg.text(pathSplit[lineCount - 1 - i], State.textMarginX + tooltipXOffset, tooltipYOffset - i * cell - State.textMarginY);
+            pg.text(pathSplit[lineCount - 1 - i], FontStore.textMarginX + tooltipXOffset, tooltipYOffset - i * cell - FontStore.textMarginY);
         }
         pg.popMatrix();
         pg.popStyle();
+    }
+
+    static String[] splitFullPathWithoutEndAndRoot(String fullPath){
+        String[] pathWithEnd = UtilPaths.splitByUnescapedSlashes(fullPath);
+        return Arrays.copyOf(pathWithEnd, pathWithEnd.length-1);
     }
 
     protected void drawBackgroundWithWindowBorder(PGraphics pg, boolean drawBackgroundOnly) {
@@ -154,8 +159,8 @@ class Window implements UserInputSubscriber {
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = Utils.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - State.textMarginX);
-        pg.text(trimmedName, State.textMarginX, cell - State.textMarginY);
+        String trimmedName = FontStore.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - FontStore.textMarginX);
+        pg.text(trimmedName, FontStore.textMarginX, cell - FontStore.textMarginY);
         pg.popStyle();
         pg.popMatrix();
     }
@@ -284,7 +289,7 @@ class Window implements UserInputSubscriber {
 
     private AbstractNode tryFindChildNodeAt(float x, float y) {
         for (AbstractNode node : folder.children) {
-            if (Utils.isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
+            if (isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
                 return node;
             }
         }
@@ -425,24 +430,24 @@ class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideContent(float x, float y) {
-        return Utils.isPointInRect(x, y,
+       return isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
     }
 
     boolean isPointInsideWindow(float x, float y) {
-        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
+       return isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
 
     boolean isPointInsideTitleBar(float x, float y) {
         if (isCloseable) {
-            return Utils.isPointInRect(x, y, posX, posY, windowSizeX - cell, cell);
+           return isPointInRect(x, y, posX, posY, windowSizeX - cell, cell);
         }
-        return Utils.isPointInRect(x, y, posX, posY, windowSizeX, cell);
+       return isPointInRect(x, y, posX, posY, windowSizeX, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
-        return Utils.isPointInRect(x, y,
+        return isPointInRect(x, y,
                 posX + windowSizeX - cell - 1, posY,
                 cell + 1, cell - 1);
     }
@@ -452,7 +457,7 @@ class Window implements UserInputSubscriber {
             return false;
         }
         float w = State.getResizeRectangleSize();
-        return Utils.isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
+        return isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
     }
 
     private boolean isWindowResizable() {
@@ -462,4 +467,10 @@ class Window implements UserInputSubscriber {
     public boolean isTitleHighlighted() {
         return isTitleHighlighted;
     }
+
+
+    static boolean isPointInRect(float px, float py, float rx, float ry, float rw, float rh) {
+        return px > rx && px < rx + rw && py >= ry && py <= ry + rh;
+    }
+
 }

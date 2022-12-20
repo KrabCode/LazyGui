@@ -116,13 +116,21 @@ public class LazyGui implements UserInputSubscriber {
             WindowManager.updateAndDrawWindows(pg);
         }
         pg.endDraw();
-        Utils.resetSketchMatrixInAnyRenderer();
+        resetSketchMatrixInAnyRenderer();
         canvas.pushStyle();
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
         State.updateEndlessLoopDetection();
         takeScreenshotIfRequested();
+    }
+
+    static void resetSketchMatrixInAnyRenderer() {
+        if (State.app.sketchRenderer().equals(P3D)) {
+            State.app.camera();
+        } else {
+            State.app.resetMatrix();
+        }
     }
 
     private Window getWindowBeingDraggedIfAny() {
@@ -727,7 +735,20 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the current value of a string input element.
+     * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
+     * @param hue value to transfer to the [0-1] range without changing apparent color value
+     * @return hue in the range between 0-1
+     */
+    public static float hueModulo(float hue){
+        if (hue < 0.f){
+            return hue % 1f + 1f;
+        } else {
+            return hue % 1f;
+        }
+    }
+
+    /**
+     * Gets the current value of a text input element.
      * Lazily initializes the string input if needed with its content set to an empty string.
      *
      * @param path forward slash separated unique path to the control element
@@ -738,7 +759,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the current value of a string input element.
+     * Gets the current value of a text input element.
      * Lazily initializes the string input if needed with the specified default.
      *
      * @param path forward slash separated unique path to the control element
@@ -878,7 +899,7 @@ public class LazyGui implements UserInputSubscriber {
         if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
             return;
         }
-        String randomId = Utils.generateRandomShortId();
+        String randomId = UtilShortId.generateRandomShortId();
         String folderPath = "out/screenshots/";
         String filetype = ".png";
         String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;

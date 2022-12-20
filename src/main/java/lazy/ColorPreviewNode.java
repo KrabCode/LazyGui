@@ -16,7 +16,7 @@ class ColorPreviewNode extends AbstractNode {
         this.parentColorPickerFolder = parentColorPickerFolder;
         shouldDrawLeftNameText = false;
         idealInlineNodeHeightInCells = 3;
-        InternalShaderStore.getShader(checkerboardShaderPath);
+        ShaderStore.getShader(checkerboardShaderPath);
     }
 
     @Override
@@ -26,7 +26,7 @@ class ColorPreviewNode extends AbstractNode {
     }
 
     private void drawCheckerboard(PGraphics pg) {
-        PShader checkerboardShader = InternalShaderStore.getShader(checkerboardShaderPath);
+        PShader checkerboardShader = ShaderStore.getShader(checkerboardShaderPath);
         checkerboardShader.set("quadPos", pos.x, pos.y);
         pg.shader(checkerboardShader);
         pg.rectMode(CORNER);

@@ -108,10 +108,10 @@ class WindowManager {
     public static void updateWindowOptions() {
         State.gui.pushFolder("windows");
         State.setCellSize(State.gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
-        State.tryUpdateFont(
-                State.gui.sliderInt("font size", State.getLastFontSize(), 1, Integer.MAX_VALUE),
-                State.gui.slider("font x offset", State.textMarginX),
-                State.gui.slider("font y offset", State.textMarginY)
+        FontStore.tryUpdateFont(
+                State.gui.sliderInt("font size", FontStore.getLastFontSize(), 1, Integer.MAX_VALUE),
+                State.gui.slider("font x offset", FontStore.textMarginX),
+                State.gui.slider("font y offset", FontStore.textMarginY)
         );
         showPathTooltips = State.gui.toggle("show path tooltips", true);
         State.setShouldKeepWindowsInBounds(State.gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));

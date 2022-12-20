@@ -21,7 +21,7 @@ abstract class ColorSliderNode extends SliderNode {
         showPercentIndicatorWhenConstrained = false;
         setPrecisionIndexAndValue(precisionRange.indexOf(0.01f));
         initSliderBackgroundShader();
-        InternalShaderStore.getShader(colorShaderPath);
+        ShaderStore.getShader(colorShaderPath);
     }
 
     @Override
@@ -70,7 +70,7 @@ abstract class ColorSliderNode extends SliderNode {
 
     @Override
     protected void updateBackgroundShader(PGraphics pg) {
-        PShader bgShader = InternalShaderStore.getShader(colorShaderPath);
+        PShader bgShader = ShaderStore.getShader(colorShaderPath);
         bgShader.set("quadPos", pos.x, pos.y);
         bgShader.set("quadSize", size.x, size.y);
         bgShader.set("hueValue", parentColorPickerFolder.hue());
@@ -92,7 +92,7 @@ abstract class ColorSliderNode extends SliderNode {
     void drawRightText(PGraphics pg, String text) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
         pg.textAlign(RIGHT, CENTER);
-        pg.text(text,size.x - State.textMarginX, size.y - State.textMarginY);
+        pg.text(text,size.x - FontStore.textMarginX, size.y - FontStore.textMarginY);
     }
 
     protected int foregroundMouseOverBrightnessAwareColor(){

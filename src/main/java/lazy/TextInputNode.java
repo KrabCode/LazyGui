@@ -36,9 +36,9 @@ public class TextInputNode extends AbstractNode {
             } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKeyChar() == PConstants.DELETE) {
                 content = "";
             } else if (e.getKeyCode() == KeyCodes.CTRL_C && e.getKeyChar() != 'c') {
-                Utils.setClipboardString(this.content);
+                UtilClipboard.setClipboardString(this.content);
             } else if (e.getKeyCode() == KeyCodes.CTRL_V && e.getKeyChar() != 'v') {
-                content = Utils.getClipboardString();
+                content = UtilClipboard.getClipboardString();
             } else if (e.getKeyCode() != PConstants.SHIFT && e.getKeyCode() != PConstants.CONTROL && e.getKeyCode() != PConstants.ALT) {
                 content = content + e.getKeyChar();
             }
@@ -62,13 +62,13 @@ public class TextInputNode extends AbstractNode {
         if(content.endsWith("\n")){
             return "";
         }
-        float availableWidth = parent.window.windowSizeX - pg.textWidth(name + " ") - State.textMarginX * 2;
+        float availableWidth = parent.window.windowSizeX - pg.textWidth(name + " ") - FontStore.textMarginX * 2;
         if(!content.contains("\n")){
-            return Utils.getSubstringFromEndToFit(pg, content, availableWidth);
+            return FontStore.getSubstringFromEndToFit(pg, content, availableWidth);
         }
         String[] lines = content.split("[\\r\\n]+");
         String lastLine = lines[lines.length-1];
-        return Utils.getSubstringFromEndToFit(pg, lastLine, availableWidth);
+        return FontStore.getSubstringFromEndToFit(pg, lastLine, availableWidth);
     }
 
     @Override
