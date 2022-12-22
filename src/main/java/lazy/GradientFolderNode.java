@@ -36,7 +36,7 @@ class GradientFolderNode extends FolderNode {
             // default A alpha is 1 for some reason even though I set 0 here
             children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), iNorm, alpha, iNorm, i % 2 == 0));
         }
-        State.overwriteWithLoadedStateIfAny(this);
+        UtilSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

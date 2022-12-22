@@ -40,6 +40,9 @@ public class LazyGui implements UserInputSubscriber {
     FolderNode optionsNode;
     PApplet app;
 
+    private static long lastFrameMillis;
+    static final long lastFrameMillisStuckLimit = 1000;
+
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
@@ -54,13 +57,15 @@ public class LazyGui implements UserInputSubscriber {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
         State.init(this, app);
+        FontStore.tryUpdateFont();
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.addWindow(new Window(NodeTree.getRoot(),false, cell, cell, null));
-        State.loadMostRecentSave();
         createOptionsFolder();
+        UtilSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
+        registerExitHandler();
         app.registerMethod("draw", this);
     }
 
@@ -121,7 +126,7 @@ public class LazyGui implements UserInputSubscriber {
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
-        State.updateEndlessLoopDetection();
+        updateEndlessLoopDetection();
         takeScreenshotIfRequested();
     }
 
@@ -957,14 +962,42 @@ public class LazyGui implements UserInputSubscriber {
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
         }
-        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
-            State.undo();
-        }
-        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
-            State.redo();
-        }
+//        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
+//            State.undo();
+//        }
+//        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
+//            State.redo();
+//        }
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
-            State.createNewSaveWithRandomName();
+            UtilSaves.createNewSaveWithRandomName();
         }
     }
+
+    static void updateEndlessLoopDetection() {
+        lastFrameMillis = State.app.millis();
+    }
+
+    static boolean isSketchStuckInEndlessLoop() {
+        long timeSinceLastFrame = State.app.millis() - lastFrameMillis;
+        return timeSinceLastFrame > lastFrameMillisStuckLimit;
+    }
+
+    private static void registerExitHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(LazyGui::createAutosave));
+    }
+
+    static void createAutosave() {
+        if (!autosaveEnabled) {
+            return;
+        }
+        if (LazyGui.isSketchStuckInEndlessLoop()) {
+            println("NOT autosaving," +
+                    " because the last frame took more than " + LazyGui.lastFrameMillisStuckLimit + " ms," +
+                    " which looks like the program stopped due to an exception or reached an endless loop");
+            return;
+        }
+        UtilSaves.createTreeSaveFiles("auto");
+    }
+    static boolean autosaveEnabled = false;
+
 }

@@ -60,7 +60,7 @@ class SliderNode extends AbstractNode {
                 max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
                 min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
         setSensiblePrecision(nf(valueFloat, 0, 0));
-        State.overwriteWithLoadedStateIfAny(this);
+        UtilSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     void initSliderBackgroundShader() {
@@ -278,11 +278,7 @@ class SliderNode extends AbstractNode {
             case '/':
                 increasePrecision();
                 break;
-            default: {
-                return;
-            }
         }
-        State.onUndoableActionEnded();
     }
 
     private void tryAppendNumberInputToValue(Integer input, boolean inReplaceMode) {

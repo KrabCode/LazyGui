@@ -114,7 +114,6 @@ abstract class ColorSliderNode extends SliderNode {
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             // reflect the value change in the resulting color
             updateColorInParentFolder();
-            State.onUndoableActionEnded();
         }
     }
 

@@ -212,7 +212,6 @@ abstract class AbstractNode {
     void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isDragged){
             e.setConsumed(true);
-            State.onUndoableActionEnded();
         }
         isDragged = false;
     }

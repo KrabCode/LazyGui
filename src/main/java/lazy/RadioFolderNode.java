@@ -36,7 +36,7 @@ class RadioFolderNode extends FolderNode {
         if(defaultOption != null){
             valueString = defaultOption;
         }
-        State.overwriteWithLoadedStateIfAny(this);
+        UtilSaves.overwriteWithLoadedStateIfAny(this);
         checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
         rememberCurrentValues();
     }

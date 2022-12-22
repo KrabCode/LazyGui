@@ -25,7 +25,7 @@ class ColorPickerFolderNode extends FolderNode {
         setHex(hex);
         lazyInitNodes();
         idealWindowWidthInCells = 7;
-        State.overwriteWithLoadedStateIfAny(this);
+        UtilSaves.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
 
@@ -138,7 +138,6 @@ class ColorPickerFolderNode extends FolderNode {
                 int pastedHex = (int) Long.parseLong(pastedString, 16);
                 setHex(pastedHex);
                 loadValuesFromHex(false);
-                State.onUndoableActionEnded();
             } catch (NumberFormatException nfe) {
                 println("Could not parse hex color from input string: \"" + pastedString + "\"");
             }
