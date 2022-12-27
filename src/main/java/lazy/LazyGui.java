@@ -5,12 +5,16 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.*;
+import static lazy.UtilJsonSaves.getGuiDataFolderPath;
+import static lazy.UtilJsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
 
 /**
@@ -30,7 +34,7 @@ public class LazyGui implements UserInputSubscriber {
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomFilePath = "";
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
-            hotkeyCloseAllWindowsActive, hotkeySaveActive;
+            hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyOpenSketchFolderActive;
 
     ArrayList<String> pathPrefix = new ArrayList<>();
     int stackSizeWarningLevel = 64;
@@ -110,7 +114,6 @@ public class LazyGui implements UserInputSubscriber {
         if(lastFrameCountGuiWasShown == State.app.frameCount){
             return;
         }
-        takeScreenshotIfRequested();
         lastFrameCountGuiWasShown = State.app.frameCount;
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
@@ -128,6 +131,7 @@ public class LazyGui implements UserInputSubscriber {
         canvas.imageMode(CORNER);
         canvas.image(pg, 0, 0);
         canvas.popStyle();
+        takeScreenshotIfRequested();
         updateEndlessLoopDetection();
     }
 
@@ -901,17 +905,22 @@ public class LazyGui implements UserInputSubscriber {
         }
     }
 
+    /**
+     * Should be called at the end of LazyGui.draw().
+     * Calling this at the start of draw() would not allow the user to take a screenshot of the gui.
+     * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay before taking the screenshot.
+     */
     private void takeScreenshotIfRequested() {
         if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
             return;
         }
-        String folderPath = State.app.dataPath(State.app.getClass().getSimpleName() + "/screenshots");
+        String folderPath = getGuiDataFolderPath("/screenshots");
         File folder = new File(folderPath);
         if(!folder.isDirectory()){
             //noinspection ResultOfMethodCallIgnored
             folder.mkdirs();
         }
-        String fileName = UtilJsonSaves.getNextUnusedIntegerFileNameInFolder(folder);
+        String fileName = getNextUnusedIntegerFileNameInFolder(folder);
         String fileType = ".png";
         String filePath = folderPath + "/" + fileName + fileType;
 
@@ -949,12 +958,14 @@ public class LazyGui implements UserInputSubscriber {
         pushFolder("hotkeys");
         hotkeyHideActive = toggle("h: hide\\/show gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
+
         hotkeyScreenshotActive = toggle("i: screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36
 //        undoHotkeyActive = toggle("ctrl + z: undo", true);
 //        redoHotkeyActive = toggle("ctrl + y: redo", true);
         hotkeySaveActive = toggle("ctrl + s: new save", true);
+        hotkeyOpenSketchFolderActive = toggle("k: open sketch folder", true);
         popFolder();
     }
 
@@ -967,6 +978,14 @@ public class LazyGui implements UserInputSubscriber {
         screenshotRequestedOnMainThread = (key == 'i' && hotkeyScreenshotActive);
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
+        }
+        if(key == 'k' && hotkeyOpenSketchFolderActive){
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.open(new File(State.app.dataPath("")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 //        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
 //            State.undo();
