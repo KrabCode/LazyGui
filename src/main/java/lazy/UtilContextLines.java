@@ -12,7 +12,7 @@ public class UtilContextLines {
     public static final int SHOW_CONTEXT_LINES_MODE_NEVER = 0;
     public static final int SHOW_CONTEXT_LINES_MODE_ON_HOVER = 1;
     public static final int SHOW_CONTEXT_LINES_ALWAYS = 2;
-    public static final List<String> contextLinesOptions = new ArrayListBuilder<String>()
+    public static final List<String> contextLinesOptions = new UtilArrayListBuilder<String>()
             .add(NEVER, ON_HOVER, ALWAYS).build();
 
 

@@ -29,7 +29,7 @@ class SliderNode extends AbstractNode {
     boolean verticalMouseMode = false;
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
-    protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
+    protected final ArrayList<Float> precisionRange = new UtilArrayListBuilder<Float>()
             .add(0.0001f)
             .add(0.001f)
             .add(0.01f)
@@ -38,7 +38,7 @@ class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
+    final ArrayList<Character> numpadChars = new UtilArrayListBuilder<Character>()
             .add('0','1','2','3','4','5','6','7','8','9')
             .build();
     private int numpadInputAppendLastMillis = -1;
@@ -60,7 +60,7 @@ class SliderNode extends AbstractNode {
                 max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
                 min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
         setSensiblePrecision(nf(valueFloat, 0, 0));
-        UtilSaves.overwriteWithLoadedStateIfAny(this);
+        UtilJsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     void initSliderBackgroundShader() {

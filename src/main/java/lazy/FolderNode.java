@@ -32,7 +32,7 @@ class FolderNode extends AbstractNode {
 
     FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);
-        UtilSaves.overwriteWithLoadedStateIfAny(this);
+        UtilJsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override
@@ -96,11 +96,11 @@ class FolderNode extends AbstractNode {
     void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            UtilClipboard.setClipboardString(UtilSaves.getFolderAsJsonString(this));
+            UtilClipboard.setClipboardString(UtilJsonSaves.getFolderAsJsonString(this));
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
             String toPaste = UtilClipboard.getClipboardString();
-            UtilSaves.loadStateFromJsonString(toPaste, path);
+            UtilJsonSaves.loadStateFromJsonString(toPaste, path);
         }
     }
 

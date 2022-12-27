@@ -28,7 +28,7 @@ class SaveFolderNode extends FolderNode {
     }
 
     void updateStateList() {
-        List<File> filenames = UtilSaves.getSaveFileList();
+        List<File> filenames = UtilJsonSaves.getSaveFileList();
         if(filenames == null){
             return;
         }
@@ -78,13 +78,13 @@ class SaveFolderNode extends FolderNode {
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         super.updateDrawInlineNodeAbstract(pg);
         if(State.gui.button(path + pathCreateNewSave)){
-            UtilSaves.createNewSaveWithRandomName();
+            UtilJsonSaves.createNewSaveWithRandomName();
         }
         if(State.gui.button(path + pathOpenSaveFolder)){
             openSaveFolder();
         }
         if(State.gui.button(path + pathPrintFolderPath)){
-            println("LazyGui save folder: " + UtilSaves.getSaveDir().getAbsolutePath());
+            println("LazyGui save folder: " + UtilJsonSaves.getSaveDir().getAbsolutePath());
         }
 
         LazyGui.autosaveEnabled = State.gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
@@ -94,7 +94,7 @@ class SaveFolderNode extends FolderNode {
     static void openSaveFolder() {
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(UtilSaves.getSaveDir());
+            desktop.open(UtilJsonSaves.getSaveDir());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -38,7 +38,7 @@ public class SinewaveExample extends PApplet {
         gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
+//        gui.draw();
     }
 
     private void drawRectangle() {

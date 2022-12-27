@@ -25,7 +25,7 @@ class ColorPickerFolderNode extends FolderNode {
         setHex(hex);
         lazyInitNodes();
         idealWindowWidthInCells = 7;
-        UtilSaves.overwriteWithLoadedStateIfAny(this);
+        UtilJsonSaves.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
 

@@ -16,6 +16,6 @@ class SaveNode extends AbstractNode {
     }
 
     void mousePressedOverNode(float x, float y) {
-        UtilSaves.loadStateFromFile(fileName);
+        UtilJsonSaves.loadStateFromFile(fileName);
     }
 }

@@ -102,7 +102,7 @@ class Window implements UserInputSubscriber {
     }
 
     static String[] splitFullPathWithoutEndAndRoot(String fullPath){
-        String[] pathWithEnd = UtilPaths.splitByUnescapedSlashes(fullPath);
+        String[] pathWithEnd = UtilTreePaths.splitByUnescapedSlashes(fullPath);
         return Arrays.copyOf(pathWithEnd, pathWithEnd.length-1);
     }
 

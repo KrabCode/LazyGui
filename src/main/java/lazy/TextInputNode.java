@@ -14,7 +14,7 @@ public class TextInputNode extends AbstractNode {
     TextInputNode(String path, FolderNode folder, String content) {
         super(NodeType.VALUE, path, folder);
         this.content = content;
-        UtilSaves.overwriteWithLoadedStateIfAny(this);
+        UtilJsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

@@ -52,11 +52,11 @@ abstract class AbstractNode {
         if ("".equals(path)) {
             return "root";
         }
-        String[] split = UtilPaths.splitByUnescapedSlashes(path);
+        String[] split = UtilTreePaths.splitByUnescapedSlashes(path);
         if (split.length == 0) {
             return "";
         }
-        return UtilPaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
+        return UtilTreePaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
     }
 
     /**

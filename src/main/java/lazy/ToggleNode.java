@@ -14,7 +14,7 @@ class ToggleNode extends AbstractNode {
     ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
         valueBoolean = defaultValue;
-        UtilSaves.overwriteWithLoadedStateIfAny(this);
+        UtilJsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

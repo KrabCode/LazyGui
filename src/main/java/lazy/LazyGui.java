@@ -5,6 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.addWindow(new Window(NodeTree.getRoot(),false, cell, cell, null));
         createOptionsFolder();
-        UtilSaves.loadMostRecentSave();
+        UtilJsonSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
         registerExitHandler();
         app.registerMethod("draw", this);
@@ -109,6 +110,7 @@ public class LazyGui implements UserInputSubscriber {
         if(lastFrameCountGuiWasShown == State.app.frameCount){
             return;
         }
+        takeScreenshotIfRequested();
         lastFrameCountGuiWasShown = State.app.frameCount;
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
@@ -127,7 +129,6 @@ public class LazyGui implements UserInputSubscriber {
         canvas.image(pg, 0, 0);
         canvas.popStyle();
         updateEndlessLoopDetection();
-        takeScreenshotIfRequested();
     }
 
     static void resetSketchMatrixInAnyRenderer() {
@@ -904,10 +905,14 @@ public class LazyGui implements UserInputSubscriber {
         if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
             return;
         }
-        String randomId = UtilShortId.generateRandomShortId();
-        String folderPath = "out/screenshots/";
-        String filetype = ".png";
-        String filePath = folderPath + State.app.getClass().getSimpleName() + " " + randomId + filetype;
+        String folderPath = State.app.dataPath(State.app.getClass().getSimpleName() + "/screenshots");
+        File folder = new File(folderPath);
+        if(!folder.isDirectory()){
+            folder.mkdirs();
+        }
+        String fileName = UtilJsonSaves.getNextUnusedIntegerFileNameInFolder(folder);
+        String fileType = ".png";
+        String filePath = folderPath + "/" + fileName + fileType;
 
         if(screenshotRequestedOnMainThreadWithCustomPath){
             filePath = requestedScreenshotCustomFilePath;
@@ -941,9 +946,9 @@ public class LazyGui implements UserInputSubscriber {
 
     private void updateHotkeyToggles() {
         pushFolder("hotkeys");
-        hotkeyHideActive = toggle("h: toggle visibility", true);
+        hotkeyHideActive = toggle("h: hide\\/show gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
-        hotkeyScreenshotActive = toggle("i: take screenshot", true);
+        hotkeyScreenshotActive = toggle("i: screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36
 //        undoHotkeyActive = toggle("ctrl + z: undo", true);
@@ -969,7 +974,7 @@ public class LazyGui implements UserInputSubscriber {
 //            State.redo();
 //        }
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
-            UtilSaves.createNewSaveWithRandomName();
+            UtilJsonSaves.createNewSaveWithRandomName();
         }
     }
 
@@ -996,7 +1001,7 @@ public class LazyGui implements UserInputSubscriber {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        UtilSaves.createTreeSaveFiles("auto");
+        UtilJsonSaves.createTreeSaveFiles("auto");
     }
     static boolean autosaveEnabled = false;
 

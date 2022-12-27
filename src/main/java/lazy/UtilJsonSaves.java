@@ -12,16 +12,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 
-public class UtilSaves {
+class UtilJsonSaves {
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
     private static void lazyInitSaveDir() {
-        saveDir = new File(State.app.sketchPath() + "/saves/" + State.app.getClass().getSimpleName());
+        saveDir = new File(State.app.dataPath("/" + State.app.getClass().getSimpleName() + "/saves/"));
         if (!saveDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             saveDir.mkdirs();
@@ -181,7 +182,7 @@ public class UtilSaves {
 
 
     static void createNewSaveWithRandomName() {
-        String newName = UtilShortId.generateRandomShortId();
+        String newName = getNextUnusedIntegerFileNameInFolder(saveDir);
         createTreeSaveFiles(newName);
     }
 
@@ -189,4 +190,24 @@ public class UtilSaves {
         return saveDir;
     }
 
+    static String getNextUnusedIntegerFileNameInFolder(File folder){
+        if(!folder.isDirectory()){
+            return null;
+        }
+        String[] existingFiles = folder.list();
+        if(existingFiles == null || existingFiles.length == 0){
+            return "1";
+        }
+        int highestNumber = -1;
+        for(String existingFileName : existingFiles){
+            String filenameWithoutSuffix = existingFileName.split("\\.")[0];
+            try{
+                int filenameInteger = Integer.parseInt(filenameWithoutSuffix);
+                highestNumber = max(filenameInteger, highestNumber);
+            }catch(Exception ex){
+                println("did not expect a non-integer filename in the save folder", ex.getMessage());
+            }
+        }
+        return String.valueOf(highestNumber + 1);
+    }
 }

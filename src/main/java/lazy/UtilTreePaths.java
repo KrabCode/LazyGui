@@ -2,7 +2,7 @@ package lazy;
 
 
 @SuppressWarnings("RegExpRedundantEscape")
-public class UtilPaths {
+public class UtilTreePaths {
 
     static final String REGEX_UNESCAPED_SLASH = "(?<!\\\\)\\/";
 
@@ -15,7 +15,7 @@ public class UtilPaths {
     }
 
     static String getPathWithoutName(String pathWithName) {
-        String[] split = UtilPaths.splitByUnescapedSlashes(pathWithName);
+        String[] split = UtilTreePaths.splitByUnescapedSlashes(pathWithName);
         StringBuilder sum = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {
             sum.append(split[i]);
