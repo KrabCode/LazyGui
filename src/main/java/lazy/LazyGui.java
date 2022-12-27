@@ -908,6 +908,7 @@ public class LazyGui implements UserInputSubscriber {
         String folderPath = State.app.dataPath(State.app.getClass().getSimpleName() + "/screenshots");
         File folder = new File(folderPath);
         if(!folder.isDirectory()){
+            //noinspection ResultOfMethodCallIgnored
             folder.mkdirs();
         }
         String fileName = UtilJsonSaves.getNextUnusedIntegerFileNameInFolder(folder);
