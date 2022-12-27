@@ -8,6 +8,7 @@ import processing.core.PVector;
 public class PlotTest extends PApplet {
     LazyGui gui;
     PGraphics pg;
+    private float rotation;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -31,9 +32,11 @@ public class PlotTest extends PApplet {
         gui.pushFolder("test");
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size");
+        rotation += radians(gui.slider("rotation +"));
         pg.fill(gui.colorPicker("fill").hex);
         pg.noStroke();
         pg.translate(pos.x, pos.y);
+        pg.rotate(rotation);
         pg.rectMode(CENTER);
         pg.rect(0,0,size.x,size.y);
         gui.popFolder();

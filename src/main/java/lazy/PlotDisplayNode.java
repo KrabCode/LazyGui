@@ -67,7 +67,7 @@ class PlotDisplayNode extends AbstractNode {
         pg.translate(0.5f, 0.5f);
 
         // find zero position on screen
-        float zeroSize = w * 0.08f;
+        float zeroSize = min(w,h) * 0.08f;
         float zeroScreenRange = w / 2 - zeroSize / 2;
         float zeroScreenX = constrain(map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRange, zeroScreenRange);
         float zeroScreenY = constrain(map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRange, zeroScreenRange);

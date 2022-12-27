@@ -8,3 +8,6 @@
 
 src/test/Camera.java
 /.fleet/
+
+# save and screenshot folder, let's not clog the repo with huge png
+/data/gui/

@@ -231,12 +231,12 @@ public class ShaderReloader {
                 compiledShader = candidate;
                 compiledOk = true;
                 fragLastKnownModified = lastModified;
-                println("Compiled", fragPath != null ? fragFile.getName() : "",
-                        vertPath != null ? vertFile.getName() : "");
+                println("Compiled", fragPath != null ? fragPath : "",
+                        vertPath != null ? vertPath : "");
             } catch (Exception ex) {
                 lastKnownUncompilable = lastModified;
-                println((fragPath != null ? " " + fragFile.getName() : ""),
-                        (vertPath != null ? " or " + (vertFile != null ? vertFile.getName() : null) : "") + ":");
+                println((fragPath != null ? " " + fragPath : ""),
+                        (vertPath != null ? " or " + (vertFile != null ? vertPath : null) : "") + ":");
                 println(ex.getMessage());
             }
         }
