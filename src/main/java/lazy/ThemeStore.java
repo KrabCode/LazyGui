@@ -3,6 +3,8 @@ package lazy;
 import java.util.HashMap;
 import java.util.Map;
 
+import static lazy.Globals.gui;
+
 
 class ThemeStore {
 
@@ -73,33 +75,33 @@ class ThemeStore {
     }
 
     public static void updateThemePicker() {
-            State.gui.pushFolder("themes");
+            gui.pushFolder("themes");
             String defaultPaletteName = "dark";
             Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
             assert defaultTheme != null;
 
-            String userSelection = State.gui.radio("preset", ThemeType.getAllNames(), defaultPaletteName);
-            State.gui.pushFolder("editor");
+            String userSelection = gui.radio("preset", ThemeType.getAllNames(), defaultPaletteName);
+            gui.pushFolder("editor");
             if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
                 ThemeType newSelectionToCopy = ThemeType.getValue(userSelection);
-                State.gui.colorPickerSet("focus foreground", ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND, newSelectionToCopy));
-                State.gui.colorPickerSet("focus background", ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND, newSelectionToCopy));
-                State.gui.colorPickerSet("normal foreground", ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND, newSelectionToCopy));
-                State.gui.colorPickerSet("normal background", ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND, newSelectionToCopy));
-                State.gui.colorPickerSet("window border", ThemeStore.getColor(ThemeColorType.WINDOW_BORDER, newSelectionToCopy));
+                gui.colorPickerSet("focus foreground", ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND, newSelectionToCopy));
+                gui.colorPickerSet("focus background", ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND, newSelectionToCopy));
+                gui.colorPickerSet("normal foreground", ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND, newSelectionToCopy));
+                gui.colorPickerSet("normal background", ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND, newSelectionToCopy));
+                gui.colorPickerSet("window border", ThemeStore.getColor(ThemeColorType.WINDOW_BORDER, newSelectionToCopy));
                 ThemeStore.currentSelection = newSelectionToCopy;
             }
             ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
-                    State.gui.colorPicker("focus foreground", defaultTheme.focusForeground).hex);
+                    gui.colorPicker("focus foreground", defaultTheme.focusForeground).hex);
             ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,
-                    State.gui.colorPicker("focus background", defaultTheme.focusBackground).hex);
+                    gui.colorPicker("focus background", defaultTheme.focusBackground).hex);
             ThemeStore.setCustomColor(ThemeColorType.NORMAL_FOREGROUND,
-                    State.gui.colorPicker("normal foreground", defaultTheme.normalForeground).hex);
+                    gui.colorPicker("normal foreground", defaultTheme.normalForeground).hex);
             ThemeStore.setCustomColor(ThemeColorType.NORMAL_BACKGROUND,
-                    State.gui.colorPicker("normal background", defaultTheme.normalBackground).hex);
+                    gui.colorPicker("normal background", defaultTheme.normalBackground).hex);
             ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
-                    State.gui.colorPicker("window border", defaultTheme.windowBorder).hex);
-            State.gui.popFolder();
-            State.gui.popFolder();
+                    gui.colorPicker("window border", defaultTheme.windowBorder).hex);
+            gui.popFolder();
+            gui.popFolder();
     }
 }

@@ -6,6 +6,7 @@ import processing.opengl.PShader;
 
 import java.util.List;
 
+import static lazy.Globals.gui;
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
 
@@ -115,19 +116,19 @@ public class UtilGridSnap {
     }
 
     public static void update() {
-        State.gui.pushFolder("grid");
+        gui.pushFolder("grid");
         boolean previousSnapToGridEnabled = snapToGridEnabled;
-        snapToGridEnabled = State.gui.toggle("snap to grid", true);
+        snapToGridEnabled = gui.toggle("snap to grid", true);
 
         if(hasCellSizeJustChanged() || hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
             WindowManager.snapAllStaticWindowsToGrid();
         }
-        setSelectedVisibilityMode(State.gui.radio("show grid",
+        setSelectedVisibilityMode(gui.radio("show grid",
                 getOptions(), getDefaultVisibilityMode()));
-        pointGridColor = State.gui.colorPicker("point color", State.normColor(0.5f, 1));
-        pointWeight = State.gui.slider("point weight", pointWeight);
-        sdfCropDistance = State.gui.slider("point range", sdfCropDistance);
-        State.gui.popFolder();
+        pointGridColor = gui.colorPicker("point color", State.normColor(0.5f, 1));
+        pointWeight = gui.slider("point weight", pointWeight);
+        sdfCropDistance = gui.slider("point range", sdfCropDistance);
+        gui.popFolder();
     }
 
     static float cellSizeLastFrame = -1;

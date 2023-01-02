@@ -3,6 +3,7 @@ package lazy;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
+import static lazy.Globals.app;
 import static processing.core.PApplet.println;
 
 public class FontStore {
@@ -30,7 +31,7 @@ public class FontStore {
             return;
         }
         try {
-            font = State.app.createFont(fontPath, _fontSize);
+            font = app.createFont(fontPath, _fontSize);
         } catch (RuntimeException ex) {
             if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                 throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");

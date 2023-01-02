@@ -9,8 +9,6 @@ class State {
     static float cell = 22; // cell size but shorter because used everywhere
     static float previewRectSize = cell * 0.6f;
     static int keyboardInputAppendCooldownMillis = 500;
-    static PApplet app = null;
-    static LazyGui gui = null;
     static final float defaultWindowWidthInCells = 10;
     private static float resizeRectangleSize = 4;
     private static boolean shouldKeepWindowsInBounds = true;
@@ -18,10 +16,8 @@ class State {
     private static boolean shouldDrawResizeIndicator = true;
     private static PGraphics colorStore = null;
 
-    static void init(LazyGui gui, PApplet app) {
-        State.gui = gui;
-        State.app = app;
-        colorStore = app.createGraphics(256, 256, P2D);
+    static void init() {
+        colorStore = Globals.app.createGraphics(256, 256, P2D);
         colorStore.colorMode(HSB, 1, 1, 1, 1);
     }
 

@@ -7,6 +7,7 @@ import processing.core.PVector;
 
 import java.util.Arrays;
 
+import static lazy.Globals.app;
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
 import static lazy.ThemeColorType.*;
@@ -44,7 +45,7 @@ class Window implements UserInputSubscriber {
 
     void drawWindow(PGraphics pg) {
         pg.textFont(FontStore.getFont());
-        isTitleHighlighted = !closed && (isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
+        isTitleHighlighted = !closed && (isPointInsideTitleBar(app.mouseX, app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
         if (closed) {
             return;
         }
@@ -63,7 +64,7 @@ class Window implements UserInputSubscriber {
     }
 
     private void drawResizeIndicator(PGraphics pg) {
-        if (!isPointInsideResizeBorder(State.app.mouseX, State.app.mouseY) || !State.getShouldDrawResizeIndicator()) {
+        if (!isPointInsideResizeBorder(app.mouseX, app.mouseY) || !State.getShouldDrawResizeIndicator()) {
             return;
         }
         float w = State.getResizeRectangleSize();
@@ -76,7 +77,7 @@ class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!isPointInsideTitleBar(State.app.mouseX, State.app.mouseY) || !WindowManager.showPathTooltips) {
+        if (!isPointInsideTitleBar(app.mouseX, app.mouseY) || !WindowManager.showPathTooltips) {
             return;
         }
         pg.pushMatrix();
@@ -127,7 +128,7 @@ class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.strokeWeight(1);
         pg.line(windowSizeX - cell, 0, windowSizeX - cell, cell - 1);
-        if (isPointInsideCloseButton(State.app.mouseX, State.app.mouseY) || closeButtonPressInProgress) {
+        if (isPointInsideCloseButton(app.mouseX, app.mouseY) || closeButtonPressInProgress) {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             pg.noStroke();
             pg.rectMode(CORNER);
@@ -271,8 +272,8 @@ class Window implements UserInputSubscriber {
 
     @Override
     public void keyPressed(LazyKeyEvent keyEvent) {
-        float x = State.app.mouseX;
-        float y = State.app.mouseY;
+        float x = app.mouseX;
+        float y = app.mouseY;
         if (isPointInsideTitleBar(x, y)) {
             folder.keyPressedOverNode(keyEvent, x, y);
             keyEvent.consume();
@@ -355,7 +356,7 @@ class Window implements UserInputSubscriber {
             e.setConsumed(true);
         } else if (isBeingResized) {
             float minimumWindowSizeInCells = 4;
-            float maximumWindowSize = State.app.width;
+            float maximumWindowSize = app.width;
             windowSizeX += e.getX() - e.getPrevX();
             windowSizeX = constrain(windowSizeX, minimumWindowSizeInCells * cell, maximumWindowSize);
         }

@@ -229,7 +229,7 @@ abstract class AbstractNode {
     }
 
     void mouseDragNodeContinue(LazyMouseEvent e) {
-//        State.app.noCursor();
+//        app.noCursor();
 //        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
     }
 

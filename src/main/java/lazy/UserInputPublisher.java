@@ -5,6 +5,8 @@ import processing.event.MouseEvent;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static lazy.Globals.app;
+
 /**
  * Internal LazyGui class used to register with PApplet user input events.
  * Must be public for PApplet to be able to reach it, but not meant to be used or even looked at by library users.
@@ -20,8 +22,8 @@ public class UserInputPublisher {
     }
 
     private void registerListeners() {
-        State.app.registerMethod("keyEvent", this);
-        State.app.registerMethod("mouseEvent", this);
+        app.registerMethod("keyEvent", this);
+        app.registerMethod("mouseEvent", this);
     }
 
     static void initSingleton() {

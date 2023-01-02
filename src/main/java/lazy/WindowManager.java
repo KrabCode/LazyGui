@@ -6,6 +6,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static lazy.Globals.gui;
 import static lazy.State.cell;
 import static processing.core.PApplet.floor;
 
@@ -106,20 +107,20 @@ class WindowManager {
     }
 
     public static void updateWindowOptions() {
-        State.gui.pushFolder("windows");
-        State.setCellSize(State.gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
+        gui.pushFolder("windows");
+        State.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         FontStore.tryUpdateFont(
-                State.gui.sliderInt("font size", FontStore.getLastFontSize(), 1, Integer.MAX_VALUE),
-                State.gui.slider("font x offset", FontStore.textMarginX),
-                State.gui.slider("font y offset", FontStore.textMarginY)
+                gui.sliderInt("font size", FontStore.getLastFontSize(), 1, Integer.MAX_VALUE),
+                gui.slider("font x offset", FontStore.textMarginX),
+                gui.slider("font y offset", FontStore.textMarginY)
         );
-        showPathTooltips = State.gui.toggle("show path tooltips", true);
-        State.setShouldKeepWindowsInBounds(State.gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
-        State.gui.pushFolder("resize");
-        State.setWindowResizeEnabled(State.gui.toggle("allow resize", State.getWindowResizeEnabled()));
-        State.setShouldDrawResizeIndicator(State.gui.toggle("show indicator", State.getShouldDrawResizeIndicator()));
-        State.setResizeRectangleSize(State.gui.slider("indicator width", State.getResizeRectangleSize()));
-        State.gui.popFolder();
-        State.gui.popFolder();
+        showPathTooltips = gui.toggle("show path tooltips", true);
+        State.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
+        gui.pushFolder("resize");
+        State.setWindowResizeEnabled(gui.toggle("allow resize", State.getWindowResizeEnabled()));
+        State.setShouldDrawResizeIndicator(gui.toggle("show indicator", State.getShouldDrawResizeIndicator()));
+        State.setResizeRectangleSize(gui.slider("indicator width", State.getResizeRectangleSize()));
+        gui.popFolder();
+        gui.popFolder();
     }
 }

@@ -10,6 +10,7 @@ import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
+import static lazy.Globals.app;
 import static processing.core.PApplet.*;
 
 class SliderNode extends AbstractNode {
@@ -297,17 +298,17 @@ class SliderNode extends AbstractNode {
     }
 
     protected void setNumpadInputActiveStarted(){
-        numpadInputAppendLastMillis = State.app.millis();
+        numpadInputAppendLastMillis = app.millis();
     }
 
     protected boolean isNumpadInputActive() {
         return numpadInputAppendLastMillis != -1 &&
-                State.app.millis() <= numpadInputAppendLastMillis + State.keyboardInputAppendCooldownMillis;
+                app.millis() <= numpadInputAppendLastMillis + State.keyboardInputAppendCooldownMillis;
     }
 
     private boolean isNumpadInReplaceMode() {
         return numpadInputAppendLastMillis == -1 ||
-                State.app.millis() - numpadInputAppendLastMillis > State.keyboardInputAppendCooldownMillis;
+                app.millis() - numpadInputAppendLastMillis > State.keyboardInputAppendCooldownMillis;
     }
 
     private boolean trySetValueFloat(String toParseAsFloat) {

@@ -7,6 +7,7 @@ import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
+import static lazy.Globals.app;
 import static lazy.State.cell;
 import static lazy.State.previewRectSize;
 import static processing.core.PApplet.*;
@@ -57,11 +58,10 @@ class GradientFolderNode extends FolderNode {
     }
 
     private void updateOutGraphics() {
-        if(lastUpdatedFrame == State.app.frameCount){
+        if(lastUpdatedFrame == app.frameCount){
             return; // weird bugs when updated more than once per frame
         }
-        lastUpdatedFrame = State.app.frameCount;
-        PApplet app = State.app;
+        lastUpdatedFrame = app.frameCount;
         if (out == null || out.width != app.width || out.height != app.height) {
             out = app.createGraphics(app.width, app.height, P2D);
         }

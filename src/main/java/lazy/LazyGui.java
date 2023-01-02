@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.Globals.app;
 import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.*;
 import static lazy.UtilJsonSaves.getGuiDataFolderPath;
@@ -43,7 +44,6 @@ public class LazyGui implements UserInputSubscriber {
 
     private PGraphics pg;
     FolderNode optionsNode;
-    PApplet app;
 
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
@@ -57,11 +57,11 @@ public class LazyGui implements UserInputSubscriber {
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
     public LazyGui(PApplet sketch) {
-        this.app = sketch;
+        Globals.init(this, sketch);
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
-        State.init(this, app);
+        State.init();
         FontStore.tryUpdateFont();
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();
@@ -99,7 +99,7 @@ public class LazyGui implements UserInputSubscriber {
      * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
      */
     public void draw() {
-        draw(State.app.g);
+        draw(app.g);
     }
 
     /**
@@ -111,10 +111,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param canvas canvas to draw the GUI on
      */
     public void draw(PGraphics canvas) {
-        if(lastFrameCountGuiWasShown == State.app.frameCount){
+        if(lastFrameCountGuiWasShown == app.frameCount){
             return;
         }
-        lastFrameCountGuiWasShown = State.app.frameCount;
+        lastFrameCountGuiWasShown = app.frameCount;
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
@@ -136,10 +136,10 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     static void resetSketchMatrixInAnyRenderer() {
-        if (State.app.sketchRenderer().equals(P3D)) {
-            State.app.camera();
+        if (app.sketchRenderer().equals(P3D)) {
+            app.camera();
         } else {
-            State.app.resetMatrix();
+            app.resetMatrix();
         }
     }
 
@@ -175,7 +175,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return whether you should use this mouse press in the processing sketch
      */
     public boolean mousePressedOutsideGui() {
-        return State.app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
+        return app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
     }
 
     /**
@@ -928,7 +928,7 @@ public class LazyGui implements UserInputSubscriber {
             filePath = requestedScreenshotCustomFilePath;
         }
 
-        State.app.save(filePath);
+        app.save(filePath);
         screenshotRequestedOnMainThread = false;
         screenshotRequestedOnMainThreadWithCustomPath = false;
     }
@@ -982,7 +982,7 @@ public class LazyGui implements UserInputSubscriber {
         if(key == 'k' && hotkeyOpenSketchFolderActive){
             Desktop desktop = Desktop.getDesktop();
             try {
-                desktop.open(new File(State.app.dataPath("")));
+                desktop.open(new File(app.dataPath("")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -999,11 +999,11 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     static void updateEndlessLoopDetection() {
-        lastFrameMillis = State.app.millis();
+        lastFrameMillis = app.millis();
     }
 
     static boolean isSketchStuckInEndlessLoop() {
-        long timeSinceLastFrame = State.app.millis() - lastFrameMillis;
+        long timeSinceLastFrame = app.millis() - lastFrameMillis;
         return timeSinceLastFrame > lastFrameMillisStuckLimit;
     }
 

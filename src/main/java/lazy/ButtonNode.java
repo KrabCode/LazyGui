@@ -3,6 +3,8 @@ package lazy;
 
 import processing.core.PGraphics;
 
+import static lazy.Globals.app;
+
 class ButtonNode extends AbstractNode {
     ButtonNode(String path, FolderNode folder) {
         super(NodeType.TRANSIENT, path, folder);
@@ -14,7 +16,7 @@ class ButtonNode extends AbstractNode {
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         drawRightButton(pg);
-        boolean mousePressed = State.app.mousePressed;
+        boolean mousePressed = app.mousePressed;
         valueBoolean = isMouseOverNode && mousePressedLastFrame && !mousePressed;
         mousePressedLastFrame = mousePressed;
     }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.Globals.gui;
 import static processing.core.PApplet.println;
 
 class SaveFolderNode extends FolderNode {
@@ -77,17 +78,17 @@ class SaveFolderNode extends FolderNode {
 
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         super.updateDrawInlineNodeAbstract(pg);
-        if(State.gui.button(path + pathCreateNewSave)){
+        if(gui.button(path + pathCreateNewSave)){
             UtilJsonSaves.createNewSaveWithRandomName();
         }
-        if(State.gui.button(path + pathOpenSaveFolder)){
+        if(gui.button(path + pathOpenSaveFolder)){
             openSaveFolder();
         }
-        if(State.gui.button(path + pathPrintFolderPath)){
+        if(gui.button(path + pathPrintFolderPath)){
             println("LazyGui save folder: " + UtilJsonSaves.getSaveDir().getAbsolutePath());
         }
 
-        LazyGui.autosaveEnabled = State.gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
+        LazyGui.autosaveEnabled = gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
         updateStateList();
     }
 

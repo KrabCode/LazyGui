@@ -5,6 +5,8 @@ import processing.core.PGraphics;
 
 import java.util.List;
 
+import static lazy.Globals.gui;
+
 public class UtilContextLines {
     public static final String NEVER = "never";
     public static final String ON_HOVER = "on hover";
@@ -17,18 +19,18 @@ public class UtilContextLines {
 
 
     public static void update(PGraphics pg) {
-        State.gui.pushFolder("context lines");
+        gui.pushFolder("context lines");
         int showContextLinesMode = contextLinesOptions.indexOf(
-                State.gui.radio("visibility", contextLinesOptions, ON_HOVER));
-        boolean shouldPickShortestLine = State.gui.toggle("shortest line");
+                gui.radio("visibility", contextLinesOptions, ON_HOVER));
+        boolean shouldPickShortestLine = gui.toggle("shortest line");
         pg.pushStyle();
-        int clr = State.gui.colorPicker("color", State.normColor(0.5f)).hex;
+        int clr = gui.colorPicker("color", State.normColor(0.5f)).hex;
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);
-        pg.strokeWeight(State.gui.slider("weight", 1.2f));
-        float endpointRectSize = State.gui.slider("end size", 3.5f);
-        State.gui.popFolder();
+        pg.strokeWeight(gui.slider("weight", 1.2f));
+        float endpointRectSize = gui.slider("end size", 3.5f);
+        gui.popFolder();
 
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {

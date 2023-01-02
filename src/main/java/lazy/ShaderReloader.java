@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
+import static lazy.Globals.app;
 import static processing.core.PApplet.println;
 
 /**
@@ -60,7 +61,7 @@ public class ShaderReloader {
      * @param fragPath path to fragment shader
      */
     public static void filter(String fragPath) {
-        shader(fragPath, null, true, State.app.g);
+        shader(fragPath, null, true, app.g);
     }
 
     /**
@@ -90,7 +91,7 @@ public class ShaderReloader {
      * @param fragPath path to fragment shader
      */
     public static void shader(String fragPath) {
-        shader(fragPath, null, false, State.app.g);
+        shader(fragPath, null, false, app.g);
     }
 
     /**
@@ -100,7 +101,7 @@ public class ShaderReloader {
      * @param vertPath path to vertex shader
      */
     public static void shader(String fragPath, String vertPath) {
-        shader(fragPath, vertPath, false, State.app.g);
+        shader(fragPath, vertPath, false, app.g);
     }
 
     /**
@@ -165,16 +166,16 @@ public class ShaderReloader {
 
         ShaderSnapshot(String fragPath, String vertPath) {
             if (vertPath != null) {
-                compiledShader = State.app.loadShader(fragPath, vertPath);
-                vertFile = State.app.dataFile(vertPath);
+                compiledShader = app.loadShader(fragPath, vertPath);
+                vertFile = app.dataFile(vertPath);
                 vertLastKnownModified = vertFile.lastModified();
                 if (!vertFile.isFile()) {
                     println("Could not find shader at " + vertFile.getPath());
                 }
             } else {
-                compiledShader = State.app.loadShader(fragPath);
+                compiledShader = app.loadShader(fragPath);
             }
-            fragFile = State.app.dataFile(fragPath);
+            fragFile = app.dataFile(fragPath);
             if (!fragFile.isFile()) {
                 println("Could not find shader at " + fragFile.getPath());
             }
@@ -223,9 +224,9 @@ public class ShaderReloader {
             try {
                 PShader candidate;
                 if (vertFile == null) {
-                    candidate = State.app.loadShader(fragPath);
+                    candidate = app.loadShader(fragPath);
                 } else {
-                    candidate = State.app.loadShader(fragPath, vertPath);
+                    candidate = app.loadShader(fragPath, vertPath);
                 }
                 candidate.init();
                 compiledShader = candidate;

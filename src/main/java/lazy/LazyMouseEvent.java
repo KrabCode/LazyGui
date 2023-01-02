@@ -1,5 +1,7 @@
 package lazy;
 
+import static lazy.Globals.app;
+
 class LazyMouseEvent {
     private boolean consumed;
     private final float x, y, px, py;
@@ -15,10 +17,10 @@ class LazyMouseEvent {
 
     LazyMouseEvent(int scrollWheelRotation) {
         this.scrollWheelRotation = scrollWheelRotation;
-        x = State.app.mouseX;
-        y = State.app.mouseY;
-        px = State.app.pmouseX;
-        py = State.app.pmouseY;
+        x = app.mouseX;
+        y = app.mouseY;
+        px = app.pmouseX;
+        py = app.pmouseY;
     }
 
     boolean isConsumed() {

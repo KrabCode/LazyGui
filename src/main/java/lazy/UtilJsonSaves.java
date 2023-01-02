@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+import static lazy.Globals.app;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 
@@ -44,7 +45,7 @@ class UtilJsonSaves {
         String prettyTree = UtilTreePrinter.prettyPrintTree();
         overwriteFile(prettyPrintPath, treeViewNotice + prettyTree);
 //        println("Saved current state preview to: " + prettyPrintPath);
-//        State.gui.requestScreenshot(getFullFilePathWithSuffix(filenameWithoutSuffix, ".jpg"));
+//        gui.requestScreenshot(getFullFilePathWithSuffix(filenameWithoutSuffix, ".jpg"));
     }
 
     static void loadMostRecentSave() {
@@ -212,6 +213,6 @@ class UtilJsonSaves {
     }
 
     static String getGuiDataFolderPath(String innerPath) {
-        return State.app.dataPath("gui/" + State.app.getClass().getSimpleName() + innerPath);
+        return app.dataPath("gui/" + app.getClass().getSimpleName() + innerPath);
     }
 }
