@@ -1,16 +1,15 @@
 package lazy;
 
 import com.google.gson.JsonElement;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
-import static lazy.ColorStore.normColor;
+import static lazy.NormColorStore.color;
 import static lazy.Globals.app;
-import static lazy.State.cell;
-import static lazy.State.previewRectSize;
+import static lazy.LayoutStore.cell;
+import static lazy.LayoutStore.previewRectSize;
 import static processing.core.PApplet.*;
 
 class GradientFolderNode extends FolderNode {
@@ -151,7 +150,7 @@ class GradientFolderNode extends FolderNode {
 
     GradientColorPickerFolderNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
                                                             float pos, boolean active) {
-        int hex = normColor(0, 0, brightnessNorm, alphaNorm);
+        int hex = color(0, 0, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 

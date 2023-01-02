@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 /**
@@ -229,8 +229,7 @@ abstract class AbstractNode {
     }
 
     void mouseDragNodeContinue(LazyMouseEvent e) {
-//        app.noCursor();
-//        State.robot.mouseMove(State.window.getX() + floor(dragStartPos.x), State.window.getY() + floor(dragStartPos.y));
+
     }
 
     boolean isParentWindowVisible(){

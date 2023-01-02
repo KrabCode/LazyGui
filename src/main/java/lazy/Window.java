@@ -8,7 +8,7 @@ import processing.core.PVector;
 import java.util.Arrays;
 
 import static lazy.Globals.app;
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.*;
 import static lazy.ThemeColorType.*;
 
@@ -64,10 +64,10 @@ class Window implements UserInputSubscriber {
     }
 
     private void drawResizeIndicator(PGraphics pg) {
-        if (!isPointInsideResizeBorder(app.mouseX, app.mouseY) || !State.getShouldDrawResizeIndicator()) {
+        if (!isPointInsideResizeBorder(app.mouseX, app.mouseY) || !LayoutStore.getShouldDrawResizeIndicator()) {
             return;
         }
-        float w = State.getResizeRectangleSize();
+        float w = LayoutStore.getResizeRectangleSize();
         pg.pushMatrix();
         pg.translate(posX, posY);
         pg.noStroke();
@@ -207,7 +207,7 @@ class Window implements UserInputSubscriber {
     }
 
     private void constrainPosition(PGraphics pg) {
-        if (!State.getShouldKeepWindowsInBounds()) {
+        if (!LayoutStore.getShouldKeepWindowsInBounds()) {
             return;
         }
         float rightEdge = pg.width - windowSizeX - 1;
@@ -318,7 +318,7 @@ class Window implements UserInputSubscriber {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if (isPointInsideResizeBorder(e.getX(), e.getY()) && State.getWindowResizeEnabled() && isWindowResizable()) {
+        if (isPointInsideResizeBorder(e.getX(), e.getY()) && LayoutStore.getWindowResizeEnabled() && isWindowResizable()) {
             isBeingResized = true;
             e.setConsumed(true);
         } else if (isPointInsideContent(e.getX(), e.getY())) {
@@ -454,10 +454,10 @@ class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideResizeBorder(float x, float y) {
-        if (!State.getWindowResizeEnabled() || !isWindowResizable()) {
+        if (!LayoutStore.getWindowResizeEnabled() || !isWindowResizable()) {
             return false;
         }
-        float w = State.getResizeRectangleSize();
+        float w = LayoutStore.getResizeRectangleSize();
         return isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
     }
 

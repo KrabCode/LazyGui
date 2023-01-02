@@ -5,8 +5,8 @@ import com.google.gson.annotations.Expose;
 
 import processing.core.PGraphics;
 
-import static lazy.ColorStore.getColorStore;
-import static lazy.State.cell;
+import static lazy.NormColorStore.getColorStore;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 class ColorPickerFolderNode extends FolderNode {

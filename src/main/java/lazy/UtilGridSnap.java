@@ -6,9 +6,9 @@ import processing.opengl.PShader;
 
 import java.util.List;
 
-import static lazy.ColorStore.normColor;
+import static lazy.NormColorStore.color;
 import static lazy.Globals.gui;
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 public class UtilGridSnap {
@@ -52,7 +52,7 @@ public class UtilGridSnap {
         int step = floor(cell);
         pg.beginShape(POINTS);
         pg.strokeCap(ROUND);
-        int pointColor = pointGridColor != null ? pointGridColor.hex : normColor(1);
+        int pointColor = pointGridColor != null ? pointGridColor.hex : NormColorStore.color(1);
         pg.stroke(pointColor);
         for (int x = 0; x <= w; x+= step) {
             for (int y = 0; y <= h; y+= step) {
@@ -125,7 +125,7 @@ public class UtilGridSnap {
             WindowManager.snapAllStaticWindowsToGrid();
         }
         setSelectedVisibilityMode(gui.radio("show grid", getOptions(), getDefaultVisibilityMode()));
-        pointGridColor = gui.colorPicker("point color", normColor(0.5f, 1));
+        pointGridColor = gui.colorPicker("point color", NormColorStore.color(0.5f, 1));
         pointWeight = gui.slider("point weight", pointWeight);
         sdfCropDistance = gui.slider("point range", sdfCropDistance);
         gui.popFolder();
@@ -134,8 +134,8 @@ public class UtilGridSnap {
     static float cellSizeLastFrame = -1;
 
     private static boolean hasCellSizeJustChanged() {
-        boolean result = cellSizeLastFrame != State.cell;
-        cellSizeLastFrame = State.cell;
+        boolean result = cellSizeLastFrame != LayoutStore.cell;
+        cellSizeLastFrame = LayoutStore.cell;
         return result;
     }
 

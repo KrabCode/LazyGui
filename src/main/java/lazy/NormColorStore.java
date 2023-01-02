@@ -5,7 +5,7 @@ import processing.core.PGraphics;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.P2D;
 
-public class ColorStore {
+public class NormColorStore {
 
     private static PGraphics colorStore = null;
 
@@ -14,21 +14,19 @@ public class ColorStore {
         colorStore.colorMode(HSB, 1, 1, 1, 1);
     }
 
-    static int normColor(float br) {
-        return normColor(0, 0, br, 1);
+    static int color(float br) {
+        return color(0, 0, br, 1);
     }
 
-    @SuppressWarnings("SameParameterValue")
-    static int normColor(float br, float alpha) {
-        return normColor(0, 0, br, alpha);
+    static int color(float br, float alpha) {
+        return color(0, 0, br, alpha);
     }
 
-    @SuppressWarnings("unused")
-    static int normColor(float hue, float sat, float br) {
-        return normColor(hue, sat, br, 1);
+    static int color(float hue, float sat, float br) {
+        return color(hue, sat, br, 1);
     }
 
-    static int normColor(float hue, float sat, float br, float alpha) {
+    static int color(float hue, float sat, float br, float alpha) {
         return colorStore.color(hue, sat, br, alpha);
     }
 

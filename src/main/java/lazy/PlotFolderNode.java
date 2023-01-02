@@ -3,7 +3,7 @@ package lazy;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.map;
 
 class PlotFolderNode extends FolderNode {

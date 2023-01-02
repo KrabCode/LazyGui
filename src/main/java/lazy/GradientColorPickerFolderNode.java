@@ -3,7 +3,7 @@ package lazy;
 import com.google.gson.JsonElement;
 import processing.core.PGraphics;
 
-import static lazy.State.previewRectSize;
+import static lazy.LayoutStore.previewRectSize;
 import static processing.core.PConstants.ROUND;
 
 class GradientColorPickerFolderNode extends ColorPickerFolderNode {

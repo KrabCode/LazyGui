@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.Globals.gui;
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PApplet.floor;
 
 class WindowManager {
@@ -108,18 +108,18 @@ class WindowManager {
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
-        State.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
+        LayoutStore.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         FontStore.tryUpdateFont(
                 gui.sliderInt("font size", FontStore.getLastFontSize(), 1, Integer.MAX_VALUE),
                 gui.slider("font x offset", FontStore.textMarginX),
                 gui.slider("font y offset", FontStore.textMarginY)
         );
         showPathTooltips = gui.toggle("show path tooltips", true);
-        State.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", State.getShouldKeepWindowsInBounds()));
+        LayoutStore.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
         gui.pushFolder("resize");
-        State.setWindowResizeEnabled(gui.toggle("allow resize", State.getWindowResizeEnabled()));
-        State.setShouldDrawResizeIndicator(gui.toggle("show indicator", State.getShouldDrawResizeIndicator()));
-        State.setResizeRectangleSize(gui.slider("indicator width", State.getResizeRectangleSize()));
+        LayoutStore.setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
+        LayoutStore.setShouldDrawResizeIndicator(gui.toggle("show indicator", LayoutStore.getShouldDrawResizeIndicator()));
+        LayoutStore.setResizeRectangleSize(gui.slider("indicator width", LayoutStore.getResizeRectangleSize()));
         gui.popFolder();
         gui.popFolder();
     }

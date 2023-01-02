@@ -8,7 +8,7 @@ import processing.core.PGraphics;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static lazy.State.cell;
+import static lazy.LayoutStore.cell;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -27,7 +27,7 @@ class FolderNode extends AbstractNode {
     @Expose
     Window window;
 
-    protected float idealWindowWidthInCells = State.defaultWindowWidthInCells;
+    protected float idealWindowWidthInCells = LayoutStore.defaultWindowWidthInCells;
     protected boolean isWindowResizable = true;
 
     FolderNode(String path, FolderNode parent) {

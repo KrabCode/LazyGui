@@ -1,11 +1,6 @@
 package lazy;
 
-import processing.core.PApplet;
-import processing.core.PGraphics;
-
-import static processing.core.PApplet.*;
-
-class State {
+class LayoutStore {
     static float cell = 22; // cell size but shorter because used everywhere
     static float previewRectSize = cell * 0.6f;
     static int keyboardInputAppendCooldownMillis = 500;

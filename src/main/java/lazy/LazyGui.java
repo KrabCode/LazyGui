@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.ColorStore.normColor;
+import static lazy.NormColorStore.color;
 import static lazy.Globals.app;
 import static lazy.NodeTree.getAllNodesAsList;
-import static lazy.State.*;
+import static lazy.LayoutStore.*;
 import static lazy.UtilJsonSaves.getGuiDataFolderPath;
 import static lazy.UtilJsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
@@ -62,7 +62,7 @@ public class LazyGui implements UserInputSubscriber {
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
-        ColorStore.init();
+        NormColorStore.init();
         FontStore.tryUpdateFont();
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();
@@ -682,7 +682,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current hex and hsba values in a PickerColor object
      */
     public PickerColor colorPicker(String path, float hueNorm, float saturationNorm, float brightnessNorm, float alphaNorm) {
-        return colorPicker(path, normColor(hueNorm, saturationNorm, brightnessNorm, alphaNorm));
+        return colorPicker(path, color(hueNorm, saturationNorm, brightnessNorm, alphaNorm));
     }
 
     /**
@@ -738,7 +738,7 @@ public class LazyGui implements UserInputSubscriber {
         ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new ColorPickerFolderNode(path, folder, normColor(0,1));
+            node = new ColorPickerFolderNode(path, folder, NormColorStore.color(0,1));
             NodeTree.insertNodeAtItsPath(node);
         } else {
             node.setHue(hueToAdd);
@@ -951,7 +951,7 @@ public class LazyGui implements UserInputSubscriber {
         UtilGridSnap.update();
         UtilContextLines.update(pg);
         updateHotkeyToggles();
-        State.keyboardInputAppendCooldownMillis = sliderInt("numpad input (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
+        LayoutStore.keyboardInputAppendCooldownMillis = sliderInt("numpad input (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
         popFolder();
     }
 
@@ -989,10 +989,10 @@ public class LazyGui implements UserInputSubscriber {
             }
         }
 //        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
-//            State.undo();
+//            LayoutStore.undo();
 //        }
 //        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
-//            State.redo();
+//            LayoutStore.redo();
 //        }
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
             UtilJsonSaves.createNewSaveWithRandomName();
