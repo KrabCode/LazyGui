@@ -1,9 +1,11 @@
 package lazy;
 
+import lazy.nodes.ColorPickerFolderNode;
+
 /**
  * Data transfer object for ColorPicker value.
  * Hue, saturation, brightness and alpha are normalized to a range of [0,1].
- * The hex value can be used in any processing colorMode, and it will show the correct color.
+ * The hex value can be used in any processing colorMode, it will always show the correct color.
  * This object's fields are final, if you want to change the ColorPicker from code, use LazyGui.colorPickerSet instead.
  * Please note that ColorPicker tries to avoid hex values of exactly 0 because
  * they are not transparent in processing even though the alpha is 0, which is probably a bug.
@@ -37,7 +39,7 @@ public class PickerColor {
      */
     public final float alpha;
 
-    PickerColor(int hex, float hue, float sat, float br, float alpha){
+    public PickerColor(int hex, float hue, float sat, float br, float alpha){
         this.hex = hex;
         this.hue = hue;
         this.saturation = sat;

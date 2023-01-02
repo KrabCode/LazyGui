@@ -1,6 +1,19 @@
 package lazy;
 
 
+import lazy.input.LazyKeyEvent;
+import lazy.input.UserInputPublisher;
+import lazy.input.UserInputSubscriber;
+import lazy.nodes.*;
+import lazy.stores.*;
+import lazy.themes.Theme;
+import lazy.themes.ThemeStore;
+import lazy.themes.ThemeType;
+import lazy.utils.ContextLines;
+import lazy.utils.SnapToGrid;
+import lazy.utils.JsonSaves;
+import lazy.windows.Window;
+import lazy.windows.WindowManager;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -11,12 +24,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.NormColorStore.color;
-import static lazy.Globals.app;
-import static lazy.NodeTree.getAllNodesAsList;
-import static lazy.LayoutStore.*;
-import static lazy.UtilJsonSaves.getGuiDataFolderPath;
-import static lazy.UtilJsonSaves.getNextUnusedIntegerFileNameInFolder;
+import static lazy.stores.NormColorStore.color;
+import static lazy.stores.Globals.app;
+import static lazy.stores.NodeTree.getAllNodesAsList;
+import static lazy.stores.LayoutStore.*;
+import static lazy.utils.JsonSaves.getGuiDataFolderPath;
+import static lazy.utils.JsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
 
 /**
@@ -31,7 +44,7 @@ import static processing.core.PApplet.*;
 public class LazyGui implements UserInputSubscriber {
 
     private static int lastFrameCountGuiWasShown = -1;
-    static boolean isGuiHidden = false;
+    public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
     private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
     private static String requestedScreenshotCustomFilePath = "";
@@ -69,7 +82,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.addWindow(new Window(NodeTree.getRoot(),false, cell, cell, null));
         createOptionsFolder();
-        UtilJsonSaves.loadMostRecentSave();
+        JsonSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
         registerExitHandler();
         app.registerMethod("draw", this);
@@ -122,7 +135,7 @@ public class LazyGui implements UserInputSubscriber {
         pg.clear();
         clearFolder();
         updateOptionsFolder();
-        UtilGridSnap.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
+        SnapToGrid.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
             WindowManager.updateAndDrawWindows(pg);
         }
@@ -948,8 +961,8 @@ public class LazyGui implements UserInputSubscriber {
         pushFolder(optionsNode.path);
         WindowManager.updateWindowOptions();
         ThemeStore.updateThemePicker();
-        UtilGridSnap.update();
-        UtilContextLines.update(pg);
+        SnapToGrid.update();
+        ContextLines.update(pg);
         updateHotkeyToggles();
         LayoutStore.keyboardInputAppendCooldownMillis = sliderInt("numpad input (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
         popFolder();
@@ -995,7 +1008,7 @@ public class LazyGui implements UserInputSubscriber {
 //            LayoutStore.redo();
 //        }
         if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
-            UtilJsonSaves.createNewSaveWithRandomName();
+            JsonSaves.createNewSaveWithRandomName();
         }
     }
 
@@ -1022,8 +1035,8 @@ public class LazyGui implements UserInputSubscriber {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        UtilJsonSaves.createTreeSaveFiles("auto");
+        JsonSaves.createTreeSaveFiles("auto");
     }
-    static boolean autosaveEnabled = false;
+    public static boolean autosaveEnabled = false;
 
 }

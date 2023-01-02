@@ -17,12 +17,14 @@ public class PlotTest extends PApplet {
     @Override
     public void settings() {
         size(800, 800, P2D);
+//        smooth(16);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        pg.smooth(16);
     }
 
     @Override

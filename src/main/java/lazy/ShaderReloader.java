@@ -8,13 +8,13 @@ import java.util.ArrayList;
 
 import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
-import static lazy.Globals.app;
+import static lazy.stores.Globals.app;
 import static processing.core.PApplet.println;
 
 /**
  * Utility class for live-coding shaders
  * Based on a string path to shader and re-compiling when needed using the shader file's last modified time.
- * This saving the shader in your text editor is needed to actually recompile it and display the results.
+ * Saving the shader file in your text editor is needed to actually recompile it and display the results.
  * No sketch restarting needed unless you want to set a new uniform.
  */
 @SuppressWarnings("unused")
