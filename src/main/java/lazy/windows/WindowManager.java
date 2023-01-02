@@ -54,7 +54,7 @@ public class WindowManager {
             }
         }
         if(!windowFound){
-            Window window = new Window(folderNode, true, pos.x, pos.y, nullableSizeX);
+            Window window = new Window(folderNode, pos.x, pos.y, nullableSizeX);
             windows.add(window);
             window.open(setFocus);
         }
@@ -92,7 +92,7 @@ public class WindowManager {
 
     public static void closeAllWindows() {
         for(Window win : windows){
-            if(win.isCloseable){
+            if(!win.isRoot()){
                 win.close();
             }
         }

@@ -40,16 +40,14 @@ public class Window implements UserInputSubscriber {
     public
     float windowSizeX; // can be resized by user
     public float windowSizeY; // set every frame, locked to (cell size * child count) + 1 cell for the title bar
-    protected final boolean isCloseable;
     public boolean isBeingDraggedAround;
     boolean isBeingResized;
     private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
 
-    public Window(FolderNode folder, boolean isCloseable, float posX, float posY, Float nullableSizeX) {
+    public Window(FolderNode folder, float posX, float posY, Float nullableSizeX) {
         this.posX = posX;
         this.posY = posY;
-        this.isCloseable = isCloseable;
         UserInputPublisher.subscribe(this);
         this.folder = folder;
         folder.window = this;
@@ -73,7 +71,7 @@ public class Window implements UserInputSubscriber {
         drawContent(pg);
         drawBackgroundWithWindowBorder(pg, false);
         drawTitleBar(pg, isTitleHighlighted);
-        if (isCloseable) {
+        if (!isRoot()) {
             drawCloseButton(pg);
         }
         drawResizeIndicator(pg);
@@ -167,18 +165,22 @@ public class Window implements UserInputSubscriber {
     }
 
     protected void drawTitleBar(PGraphics pg, boolean highlight) {
+        String leftText = FontStore.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - FontStore.textMarginX);
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
+        if(!app.focused && isRoot()){
+            pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
+            leftText = "not in focus";
+        }
         float titleBarWidth = windowSizeX;
         pg.strokeWeight(1);
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.rect(0, 0, titleBarWidth, cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
         pg.textAlign(LEFT, CENTER);
-        String trimmedName = FontStore.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - FontStore.textMarginX);
-        pg.text(trimmedName, FontStore.textMarginX, cell - FontStore.textMarginY);
+        pg.text(leftText, FontStore.textMarginX, cell - FontStore.textMarginY);
         pg.popStyle();
         pg.popMatrix();
     }
@@ -390,7 +392,7 @@ public class Window implements UserInputSubscriber {
         if (isClosed()) {
             return;
         }
-        if (isCloseable && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
+        if (!isRoot() && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
             close();
             e.setConsumed(true);
         } else if (isBeingDraggedAround) {
@@ -459,10 +461,10 @@ public class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideTitleBar(float x, float y) {
-        if (isCloseable) {
-           return isPointInRect(x, y, posX, posY, windowSizeX - cell, cell);
+        if (isRoot()) {
+            return isPointInRect(x, y, posX, posY, windowSizeX, cell);
         }
-       return isPointInRect(x, y, posX, posY, windowSizeX, cell);
+        return isPointInRect(x, y, posX, posY, windowSizeX - cell, cell);
     }
 
     protected boolean isPointInsideCloseButton(float x, float y) {
@@ -491,4 +493,7 @@ public class Window implements UserInputSubscriber {
         return px > rx && px < rx + rw && py >= ry && py <= ry + rh;
     }
 
+    boolean isRoot() {
+        return folder.equals(NodeTree.getRoot());
+    }
 }

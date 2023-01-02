@@ -80,7 +80,7 @@ public class LazyGui implements UserInputSubscriber {
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
-        WindowManager.addWindow(new Window(NodeTree.getRoot(),false, cell, cell, null));
+        WindowManager.addWindow(new Window(NodeTree.getRoot(), cell, cell, null));
         createOptionsFolder();
         JsonSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
@@ -119,8 +119,8 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Updates and draws the GUI on the specified parameter canvas, assuming its size is identical to the main sketch size.
      * Gets called automatically at the end of draw().
-     * LazyGui will enforce itself being drawn only once per frame internally, which can be useful for gui recording.
-     * If it does get called manually, it will skip execution until the next frameCount.
+     * LazyGui will enforce itself being drawn only once per frame internally, which can be useful for including the gui in a recording.
+     * If it does get called manually, it will get drawn when requested and then skip its automatic execution for that frame.
      *
      * @param canvas canvas to draw the GUI on
      */

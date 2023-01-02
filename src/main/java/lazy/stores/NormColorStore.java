@@ -45,5 +45,4 @@ public class NormColorStore {
     public static PGraphics getColorStore() {
         return colorStore;
     }
-
 }

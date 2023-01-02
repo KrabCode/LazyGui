@@ -37,6 +37,7 @@ public class NodeTree {
         while (!queue.isEmpty()) {
             AbstractNode node = queue.poll();
             if (node.path.equals(path)) {
+                // do type cast collision detection here
                 nodesByPath.put(path, node);
                 return node;
             }

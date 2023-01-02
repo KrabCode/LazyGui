@@ -60,7 +60,7 @@ public abstract class AbstractNode {
 
     private String getNameFromPath(String path) {
         if ("".equals(path)) {
-            return "root";
+            return "gui";
         }
         String[] split = NodePaths.splitByUnescapedSlashes(path);
         if (split.length == 0) {
