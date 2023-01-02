@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.ColorStore.normColor;
 import static lazy.Globals.app;
 import static lazy.NodeTree.getAllNodesAsList;
 import static lazy.State.*;
@@ -61,7 +62,7 @@ public class LazyGui implements UserInputSubscriber {
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
-        State.init();
+        ColorStore.init();
         FontStore.tryUpdateFont();
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();

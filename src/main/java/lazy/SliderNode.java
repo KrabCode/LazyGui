@@ -10,6 +10,7 @@ import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
+import static lazy.ColorStore.*;
 import static lazy.Globals.app;
 import static processing.core.PApplet.*;
 
@@ -131,8 +132,8 @@ class SliderNode extends AbstractNode {
         shader.set("scrollX", backgroundScrollX);
         int bgColor = ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND);
         int fgColor = ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND);
-        shader.set("colorA", State.red(bgColor), State.green(bgColor), State.blue(bgColor));
-        shader.set("colorB", State.red(fgColor), State.green(fgColor), State.blue(fgColor));
+        shader.set("colorA", red(bgColor), green(bgColor), blue(bgColor));
+        shader.set("colorB", red(fgColor), green(fgColor), blue(fgColor));
         shader.set("precisionNormalized", norm(currentPrecisionIndex, 0, precisionRange.size()));
         pg.shader(shader);
     }

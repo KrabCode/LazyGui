@@ -5,6 +5,7 @@ import processing.core.PGraphics;
 
 import java.util.List;
 
+import static lazy.ColorStore.normColor;
 import static lazy.Globals.gui;
 
 public class UtilContextLines {
@@ -24,7 +25,7 @@ public class UtilContextLines {
                 gui.radio("visibility", contextLinesOptions, ON_HOVER));
         boolean shouldPickShortestLine = gui.toggle("shortest line");
         pg.pushStyle();
-        int clr = gui.colorPicker("color", State.normColor(0.5f)).hex;
+        int clr = gui.colorPicker("color", normColor(0.5f)).hex;
         pg.stroke(clr);
         pg.fill(clr);
         pg.strokeCap(PConstants.SQUARE);

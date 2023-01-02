@@ -7,6 +7,7 @@ import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
+import static lazy.ColorStore.normColor;
 import static lazy.Globals.app;
 import static lazy.State.cell;
 import static lazy.State.previewRectSize;
@@ -150,7 +151,7 @@ class GradientFolderNode extends FolderNode {
 
     GradientColorPickerFolderNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
                                                             float pos, boolean active) {
-        int hex = State.normColor(0, 0, brightnessNorm, alphaNorm);
+        int hex = normColor(0, 0, brightnessNorm, alphaNorm);
         return new GradientColorPickerFolderNode(path, this, hex, pos, active);
     }
 

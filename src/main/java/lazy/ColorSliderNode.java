@@ -5,6 +5,7 @@ package lazy;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
+import static lazy.ColorStore.normColor;
 import static processing.core.PApplet.norm;
 import static processing.core.PConstants.*;
 
@@ -98,9 +99,9 @@ abstract class ColorSliderNode extends SliderNode {
     protected int foregroundMouseOverBrightnessAwareColor(){
         if(isMouseOverNode){
             if(parentColorPickerFolder.brightness() > 0.7f){
-                return State.normColor(0);
+                return normColor(0);
             }else{
-                return State.normColor(1);
+                return normColor(1);
             }
         }else{
             return ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);

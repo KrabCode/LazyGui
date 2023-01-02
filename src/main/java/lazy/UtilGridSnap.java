@@ -6,6 +6,7 @@ import processing.opengl.PShader;
 
 import java.util.List;
 
+import static lazy.ColorStore.normColor;
 import static lazy.Globals.gui;
 import static lazy.State.cell;
 import static processing.core.PApplet.*;
@@ -51,7 +52,7 @@ public class UtilGridSnap {
         int step = floor(cell);
         pg.beginShape(POINTS);
         pg.strokeCap(ROUND);
-        int pointColor = pointGridColor != null ? pointGridColor.hex : State.normColor(1);
+        int pointColor = pointGridColor != null ? pointGridColor.hex : normColor(1);
         pg.stroke(pointColor);
         for (int x = 0; x <= w; x+= step) {
             for (int y = 0; y <= h; y+= step) {
@@ -123,9 +124,8 @@ public class UtilGridSnap {
         if(hasCellSizeJustChanged() || hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
             WindowManager.snapAllStaticWindowsToGrid();
         }
-        setSelectedVisibilityMode(gui.radio("show grid",
-                getOptions(), getDefaultVisibilityMode()));
-        pointGridColor = gui.colorPicker("point color", State.normColor(0.5f, 1));
+        setSelectedVisibilityMode(gui.radio("show grid", getOptions(), getDefaultVisibilityMode()));
+        pointGridColor = gui.colorPicker("point color", normColor(0.5f, 1));
         pointWeight = gui.slider("point weight", pointWeight);
         sdfCropDistance = gui.slider("point range", sdfCropDistance);
         gui.popFolder();
