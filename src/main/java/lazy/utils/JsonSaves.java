@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 

@@ -3,7 +3,7 @@ package lazy.themes;
 import java.util.HashMap;
 import java.util.Map;
 
-import static lazy.stores.Globals.gui;
+import static lazy.stores.GlobalReferences.gui;
 
 
 public class ThemeStore {

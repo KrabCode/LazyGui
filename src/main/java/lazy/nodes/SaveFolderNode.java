@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.stores.Globals.gui;
+import static lazy.stores.GlobalReferences.gui;
 import static processing.core.PApplet.println;
 
 public class SaveFolderNode extends FolderNode {

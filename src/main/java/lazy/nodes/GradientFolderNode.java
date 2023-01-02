@@ -11,7 +11,7 @@ import processing.opengl.PShader;
 import java.util.ArrayList;
 
 import static lazy.stores.NormColorStore.color;
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static lazy.stores.LayoutStore.previewRectSize;
 import static processing.core.PApplet.*;

@@ -1,4 +1,4 @@
-package lazy.stores;
+package lazy.utils;
 
 
 @SuppressWarnings("CommentedOutCode")

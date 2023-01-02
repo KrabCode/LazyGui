@@ -10,7 +10,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static lazy.stores.Globals.gui;
+import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.floor;
 

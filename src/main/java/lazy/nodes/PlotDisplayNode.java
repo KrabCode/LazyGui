@@ -2,7 +2,7 @@ package lazy.nodes;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
-import lazy.stores.KeyCodes;
+import lazy.utils.KeyCodes;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import processing.core.PGraphics;

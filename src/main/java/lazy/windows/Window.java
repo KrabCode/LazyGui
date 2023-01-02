@@ -20,7 +20,7 @@ import processing.core.PVector;
 
 import java.util.Arrays;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 import static lazy.themes.ThemeColorType.*;

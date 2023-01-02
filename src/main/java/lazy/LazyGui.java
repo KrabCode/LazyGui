@@ -10,6 +10,7 @@ import lazy.themes.Theme;
 import lazy.themes.ThemeStore;
 import lazy.themes.ThemeType;
 import lazy.utils.ContextLines;
+import lazy.utils.KeyCodes;
 import lazy.utils.SnapToGrid;
 import lazy.utils.JsonSaves;
 import lazy.windows.Window;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static lazy.stores.NormColorStore.color;
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.NodeTree.getAllNodesAsList;
 import static lazy.stores.LayoutStore.*;
 import static lazy.utils.JsonSaves.getGuiDataFolderPath;
@@ -71,7 +72,7 @@ public class LazyGui implements UserInputSubscriber {
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
     public LazyGui(PApplet sketch) {
-        Globals.init(this, sketch);
+        GlobalReferences.init(this, sketch);
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }

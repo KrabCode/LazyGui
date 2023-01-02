@@ -5,7 +5,7 @@ import processing.event.MouseEvent;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 
 /**
  * Internal LazyGui class used to register with PApplet user input events.

@@ -10,7 +10,7 @@ public class NormColorStore {
     private static PGraphics colorStore = null;
 
     public static void init() {
-        colorStore = Globals.app.createGraphics(256, 256, P2D);
+        colorStore = GlobalReferences.app.createGraphics(256, 256, P2D);
         colorStore.colorMode(HSB, 1, 1, 1, 1);
     }
 

@@ -10,7 +10,7 @@ import processing.core.PGraphics;
 
 import java.util.List;
 
-import static lazy.stores.Globals.gui;
+import static lazy.stores.GlobalReferences.gui;
 
 public class ContextLines {
     public static final String NEVER = "never";

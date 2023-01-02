@@ -4,7 +4,7 @@ package lazy.nodes;
 import lazy.input.LazyMouseEvent;
 import processing.core.PGraphics;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, FolderNode folder) {

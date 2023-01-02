@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.println;
 
 /**

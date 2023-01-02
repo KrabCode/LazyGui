@@ -12,7 +12,7 @@ import processing.opengl.PShader;
 
 import java.util.List;
 
-import static lazy.stores.Globals.gui;
+import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 

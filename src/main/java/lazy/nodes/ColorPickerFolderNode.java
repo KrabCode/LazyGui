@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import lazy.*;
 import lazy.input.LazyKeyEvent;
-import lazy.stores.KeyCodes;
+import lazy.utils.KeyCodes;
 import lazy.utils.EasyClipboard;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;

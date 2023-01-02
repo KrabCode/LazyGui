@@ -1,6 +1,6 @@
 package lazy.input;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 
 public class LazyMouseEvent {
     private boolean consumed;

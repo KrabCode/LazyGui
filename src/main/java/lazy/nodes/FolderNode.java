@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
-import lazy.stores.KeyCodes;
+import lazy.utils.KeyCodes;
 import lazy.stores.LayoutStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;

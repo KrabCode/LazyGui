@@ -5,7 +5,7 @@ import processing.opengl.PShader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static lazy.stores.Globals.app;
+import static lazy.stores.GlobalReferences.app;
 
 public class ShaderStore {
     private static final Map<String, PShader> shaders = new HashMap<>();
