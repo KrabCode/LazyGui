@@ -5,8 +5,8 @@ import processing.core.PApplet;
 
 public class GlobalReferences {
 
-    public static PApplet app = null;
-    public static LazyGui gui = null;
+    public static PApplet app;
+    public static LazyGui gui;
 
     public static void init(LazyGui gui, PApplet app){
         GlobalReferences.app = app;
