@@ -10,6 +10,6 @@ public class GlobalReferences {
 
     public static void init(LazyGui gui, PApplet app){
         GlobalReferences.app = app;
-        GlobalReferences.gui = gui;
+        GlobalReferences.gui = gui; asdf
     }
 }
