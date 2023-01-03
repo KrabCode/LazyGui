@@ -15,6 +15,7 @@ import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
@@ -56,17 +57,6 @@ public abstract class AbstractNode {
         this.name = getNameFromPath(path);
         this.type = type;
         this.parent = parentFolder;
-    }
-
-    private String getNameFromPath(String path) {
-        if ("".equals(path)) {
-            return "gui";
-        }
-        String[] split = NodePaths.splitByUnescapedSlashes(path);
-        if (split.length == 0) {
-            return "";
-        }
-        return NodePaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
     }
 
     /**
@@ -268,6 +258,38 @@ public abstract class AbstractNode {
     @Override
     public String toString() {
         return "Folder @ " + path + " | " + (isParentWindowOpen() ? "open" : "closed");
+    }
+
+    private String getNameFromPath(String path) {
+        if ("".equals(path)) { // this is the root node
+            return getClassNameAsSpaceSeparatedLowerCase(app.getClass().getSimpleName());
+        }
+        String[] split = NodePaths.splitByUnescapedSlashes(path);
+        if (split.length == 0) {
+            return "";
+        }
+        return NodePaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
+    }
+
+    private String getClassNameAsSpaceSeparatedLowerCase(String className){
+        if(className.trim().length() == 0){
+            return "";
+        }
+        String wordSplitRegex = "(?<=.)(?=[A-Z])";
+        /*  Regex explanation
+            (?<=.)      look behind, find any character that is not the beginning of a line
+            (?=[A-Z])   look ahead, find any upper case character
+            together this matches the space between words and thus splits the string without removing any chars
+            example input: OofTestBingo
+            split result: [Oof,Test,Bingo]
+        */
+        String[] split = className.split(wordSplitRegex);
+        StringBuilder sb = new StringBuilder();
+        for (String s : split) {
+            sb.append(s.toLowerCase());
+            sb.append(" ");
+        }
+        return sb.toString().trim();
     }
 
 }
