@@ -165,7 +165,8 @@ public class Window implements UserInputSubscriber {
     }
 
     protected void drawTitleBar(PGraphics pg, boolean highlight) {
-        String leftText = FontStore.getSubstringFromStartToFit(pg, folder.name, windowSizeX - cell - FontStore.textMarginX);
+        float availableWidthForText = windowSizeX - FontStore.textMarginX + (isRoot() ? 0 : -cell);
+        String leftText = FontStore.getSubstringFromStartToFit(pg, folder.name, availableWidthForText);
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
