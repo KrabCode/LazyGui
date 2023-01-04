@@ -21,8 +21,8 @@ public class TextNode extends AbstractNode {
     @Expose
     String content;
     private final boolean isEditable;
+
     String regexNewLineSplit = "(?<=\\n)";
-    private float contentMarginLeftInCells = 0.5f;
 
     public TextNode(String path, FolderNode folder, String content, boolean isEditable) {
         super(NodeType.VALUE, path, folder);
@@ -35,26 +35,26 @@ public class TextNode extends AbstractNode {
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
         int lineCount = content.split(regexNewLineSplit).length + (content.endsWith("\n") ? 1 : 0);
-        idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text header
-
+        idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
         drawRightText(pg, content);
     }
 
-    protected void drawRightText(PGraphics pg, String text){
+    protected void drawRightText(PGraphics pg, String text) {
         fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(LEFT, CENTER);
         String[] lines = content.split(regexNewLineSplit);
         pg.pushMatrix();
-        float marginLeft = contentMarginLeftInCells*cell;
+        float marginLeftInCells = 0.5f;
+        float marginLeft = marginLeftInCells * cell;
         pg.translate(marginLeft, cell);
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             String lineWithoutNewline = line.replace("\n", "");
             float availableWidth = size.x - marginLeft - FontStore.textMarginX;
             String lineThatFits;
-            if(i == lines.length - 1 && isEditable){
+            if (i == lines.length - 1 && isEditable) {
                 lineThatFits = getSubstringFromEndToFit(pg, lineWithoutNewline, availableWidth);
-            }else{
+            } else {
                 lineThatFits = getSubstringFromStartToFit(pg, lineWithoutNewline, availableWidth);
             }
             pg.translate(0, cell);
@@ -65,7 +65,7 @@ public class TextNode extends AbstractNode {
 
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
-        if(!isEditable){
+        if (!isEditable) {
             return;
         }
         // based on tip #13 in here:
@@ -101,7 +101,7 @@ public class TextNode extends AbstractNode {
         return content;
     }
 
-    public void setStringValue(String newValue){
+    public void setStringValue(String newValue) {
         content = newValue;
     }
 
