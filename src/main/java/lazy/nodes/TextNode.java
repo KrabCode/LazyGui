@@ -11,25 +11,63 @@ import lazy.utils.JsonSaves;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class TextInputNode extends AbstractNode {
+import static lazy.stores.FontStore.getSubstringFromEndToFit;
+import static lazy.stores.FontStore.getSubstringFromStartToFit;
+import static lazy.stores.LayoutStore.cell;
+import static processing.core.PConstants.*;
+
+public class TextNode extends AbstractNode {
 
     @Expose
     String content;
+    private final boolean isEditable;
+    String regexNewLineSplit = "(?<=\\n)";
+    private float contentMarginLeftInCells = 0.5f;
 
-    public TextInputNode(String path, FolderNode folder, String content) {
+    public TextNode(String path, FolderNode folder, String content, boolean isEditable) {
         super(NodeType.VALUE, path, folder);
         this.content = content;
+        this.isEditable = isEditable;
         JsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, getDisplayValue(pg));
+        int lineCount = content.split(regexNewLineSplit).length + (content.endsWith("\n") ? 1 : 0);
+        idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text header
+
+        drawRightText(pg, content);
+    }
+
+    protected void drawRightText(PGraphics pg, String text){
+        fillForegroundBasedOnMouseOver(pg);
+        pg.textAlign(LEFT, CENTER);
+        String[] lines = content.split(regexNewLineSplit);
+        pg.pushMatrix();
+        float marginLeft = contentMarginLeftInCells*cell;
+        pg.translate(marginLeft, cell);
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            String lineWithoutNewline = line.replace("\n", "");
+            float availableWidth = size.x - marginLeft - FontStore.textMarginX;
+            String lineThatFits;
+            if(i == lines.length - 1 && isEditable){
+                lineThatFits = getSubstringFromEndToFit(pg, lineWithoutNewline, availableWidth);
+            }else{
+                lineThatFits = getSubstringFromStartToFit(pg, lineWithoutNewline, availableWidth);
+            }
+            pg.translate(0, cell);
+            pg.text(lineThatFits, FontStore.textMarginX, -FontStore.textMarginY);
+        }
+        pg.popMatrix();
     }
 
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+        if(!isEditable){
+            return;
+        }
         // based on tip #13 in here:
         // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
@@ -63,17 +101,8 @@ public class TextInputNode extends AbstractNode {
         return content;
     }
 
-    private String getDisplayValue(PGraphics pg) {
-        if(content.endsWith("\n")){
-            return "";
-        }
-        float availableWidth = parent.window.windowSizeX - pg.textWidth(name + " ") - FontStore.textMarginX * 2;
-        if(!content.contains("\n")){
-            return FontStore.getSubstringFromEndToFit(pg, content, availableWidth);
-        }
-        String[] lines = content.split("[\\r\\n]+");
-        String lastLine = lines[lines.length-1];
-        return FontStore.getSubstringFromEndToFit(pg, lastLine, availableWidth);
+    public void setStringValue(String newValue){
+        content = newValue;
     }
 
     @Override

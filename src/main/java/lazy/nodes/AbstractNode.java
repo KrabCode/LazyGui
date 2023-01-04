@@ -148,9 +148,9 @@ public abstract class AbstractNode {
 
 
     protected void drawLeftText(PGraphics pg, String text) {
-        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - cell - FontStore.textMarginX * 2);
+        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
-        pg.text(trimmedText, FontStore.textMarginX, size.y - FontStore.textMarginY);
+        pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
     }
 
     protected void drawRightText(PGraphics pg, String text) {

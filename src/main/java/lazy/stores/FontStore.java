@@ -14,7 +14,7 @@ public class FontStore {
     static PFont font = null;
 
     public static float textMarginX = 5;
-    public static float textMarginY = 14;
+    public static float textMarginY = 13;
 
     public static PFont getFont() {
         return font;
