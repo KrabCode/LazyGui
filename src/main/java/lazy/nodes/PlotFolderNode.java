@@ -60,4 +60,12 @@ public class PlotFolderNode extends FolderNode {
                 sliderZ == null ? 0 : sliderZ.valueFloat
         );
     }
+
+    public void setVectorValue(float x, float y, float z) {
+        sliderX.valueFloat = x;
+        sliderY.valueFloat = y;
+        if(sliderZ != null){
+            sliderZ.valueFloat = z;
+        }
+    }
 }

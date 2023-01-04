@@ -463,7 +463,7 @@ public class LazyGui implements UserInputSubscriber {
         return plotXYZ(path, defaultXYZ == null ? new PVector() : defaultXYZ.copy(), true);
     }
 
-    PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
+    private PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
         String fullPath = getFolder() + path;
         PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
         if(node == null){
@@ -471,6 +471,28 @@ public class LazyGui implements UserInputSubscriber {
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getVectorValue();
+    }
+
+    public void plotSet(String path, float xyz){
+        plotSet(path, new PVector(xyz, xyz, xyz));
+    }
+
+    public void plotSet(String path, float x, float y){
+        plotSet(path, new PVector(x,y));
+    }
+
+    public void plotSet(String path, float x, float y, float z){
+        plotSet(path, new PVector(x,y,z));
+    }
+
+    public void plotSet(String path, PVector valueToSet){
+        String fullPath = getFolder() + path;
+        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        if(node == null){
+            node = createPlotNode(fullPath, valueToSet, true);
+            NodeTree.insertNodeAtItsPath(node);
+        }
+        node.setVectorValue(valueToSet.x, valueToSet.y, valueToSet.z);
     }
 
     private PlotFolderNode createPlotNode(String fullPath, PVector defaultXY, boolean useZ) {
