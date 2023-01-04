@@ -9,7 +9,7 @@ import lazy.utils.KeyCodes;
 import lazy.stores.LayoutStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
-import lazy.utils.EasyClipboard;
+import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
@@ -100,10 +100,10 @@ public class FolderNode extends AbstractNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            EasyClipboard.setClipboardString(JsonSaves.getFolderAsJsonString(this));
+            ClipboardUtils.setClipboardString(JsonSaves.getFolderAsJsonString(this));
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            String toPaste = EasyClipboard.getClipboardString();
+            String toPaste = ClipboardUtils.getClipboardString();
             JsonSaves.loadStateFromJsonString(toPaste, path);
         }
     }

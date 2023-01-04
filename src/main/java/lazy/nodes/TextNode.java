@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
 import lazy.stores.FontStore;
-import lazy.utils.EasyClipboard;
+import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -79,9 +79,9 @@ public class TextNode extends AbstractNode {
             } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKeyChar() == PConstants.DELETE) {
                 content = "";
             } else if (e.getKeyCode() == KeyCodes.CTRL_C && e.getKeyChar() != 'c') {
-                EasyClipboard.setClipboardString(this.content);
+                ClipboardUtils.setClipboardString(this.content);
             } else if (e.getKeyCode() == KeyCodes.CTRL_V && e.getKeyChar() != 'v') {
-                content = EasyClipboard.getClipboardString();
+                content = ClipboardUtils.getClipboardString();
             } else if (e.getKeyCode() != PConstants.SHIFT && e.getKeyCode() != PConstants.CONTROL && e.getKeyCode() != PConstants.ALT) {
                 content = content + e.getKeyChar();
             }

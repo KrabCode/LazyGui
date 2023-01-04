@@ -7,7 +7,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.*;
 
-public class EasyClipboard {
+public class ClipboardUtils {
 
     public static void setClipboardString(String data) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

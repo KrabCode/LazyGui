@@ -13,7 +13,7 @@ import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.ArrayListBuilder;
-import lazy.utils.EasyClipboard;
+import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
@@ -247,10 +247,10 @@ public class SliderNode extends AbstractNode {
             if(value.endsWith(".")){
                 value += "0";
             }
-            EasyClipboard.setClipboardString(value);
+            ClipboardUtils.setClipboardString(value);
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            String clipboardString = EasyClipboard.getClipboardString();
+            String clipboardString = ClipboardUtils.getClipboardString();
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);
                 if (!Float.isNaN(clipboardValue)) {

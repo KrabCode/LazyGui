@@ -473,6 +473,11 @@ public class LazyGui implements UserInputSubscriber {
         return node.getVectorValue();
     }
 
+    /**
+     * TODO javadocs
+     * @param path
+     * @param xyz
+     */
     public void plotSet(String path, float xyz){
         plotSet(path, new PVector(xyz, xyz, xyz));
     }

@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import lazy.*;
 import lazy.input.LazyKeyEvent;
 import lazy.utils.KeyCodes;
-import lazy.utils.EasyClipboard;
+import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -132,10 +132,10 @@ public class ColorPickerFolderNode extends FolderNode {
 //        super.keyPressedOverNode(e, x, y);
 //        - we don't want to copy the contents of the folder itself... let this ColorPickerFolderNode handle it
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
-            EasyClipboard.setClipboardString(getHexString());
+            ClipboardUtils.setClipboardString(getHexString());
         }
         if (e.getKeyCode() == KeyCodes.CTRL_V) {
-            String pastedString = EasyClipboard.getClipboardString();
+            String pastedString = ClipboardUtils.getClipboardString();
             if(pastedString.length() == 6){
                 // ensure full alpha if the pasted hex is without alpha
                 pastedString = "FF" + pastedString;
