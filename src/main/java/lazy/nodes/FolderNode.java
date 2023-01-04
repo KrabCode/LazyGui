@@ -38,7 +38,6 @@ public class FolderNode extends AbstractNode {
     Window window;
 
     public float idealWindowWidthInCells = LayoutStore.defaultWindowWidthInCells;
-    public boolean isWindowResizable = true;
 
     public FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);

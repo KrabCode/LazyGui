@@ -339,7 +339,7 @@ public class Window implements UserInputSubscriber {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
         }
-        if (isPointInsideResizeBorder(e.getX(), e.getY()) && LayoutStore.getWindowResizeEnabled() && isWindowResizable()) {
+        if (isPointInsideResizeBorder(e.getX(), e.getY()) && LayoutStore.getWindowResizeEnabled()) {
             isBeingResized = true;
             e.setConsumed(true);
         } else if (isPointInsideContent(e.getX(), e.getY())) {
@@ -475,15 +475,11 @@ public class Window implements UserInputSubscriber {
     }
 
     boolean isPointInsideResizeBorder(float x, float y) {
-        if (!LayoutStore.getWindowResizeEnabled() || !isWindowResizable()) {
+        if (!LayoutStore.getWindowResizeEnabled()) {
             return false;
         }
         float w = LayoutStore.getResizeRectangleSize();
         return isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
-    }
-
-    private boolean isWindowResizable() {
-        return folder.isWindowResizable;
     }
 
     public boolean isTitleHighlighted() {

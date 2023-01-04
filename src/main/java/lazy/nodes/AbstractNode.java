@@ -44,19 +44,25 @@ public abstract class AbstractNode {
     public float idealInlineNodeHeightInCells = 1;
     public boolean isDragged = false;
     public boolean isMouseOverNode = false;
+    protected boolean shouldDrawLeftNameText = true;
+
 
     public void setIsMouseOverThisNodeOnly(){
         isMouseOverNode = true;
         NodeTree.setAllOtherNodesMouseOverToFalse(this);
     }
 
-    protected boolean shouldDrawLeftNameText = true;
-
     protected AbstractNode(NodeType type, String path, FolderNode parentFolder) {
         this.path = path;
         this.name = getNameFromPath(path);
         this.type = type;
         this.parent = parentFolder;
+    }
+
+    @SuppressWarnings("unused")
+    private AbstractNode(){
+        parent = null;
+        name = null;
     }
 
     /**

@@ -22,7 +22,7 @@ public class TextNode extends AbstractNode {
     String content;
     private final boolean isEditable;
 
-    String regexNewLineSplit = "(?<=\\n)";
+    String regexLookBehindForNewLine = "(?<=\\n)";
 
     public TextNode(String path, FolderNode folder, String content, boolean isEditable) {
         super(NodeType.VALUE, path, folder);
@@ -34,7 +34,7 @@ public class TextNode extends AbstractNode {
     @Override
     protected void updateDrawInlineNodeAbstract(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
-        int lineCount = content.split(regexNewLineSplit).length + (content.endsWith("\n") ? 1 : 0);
+        int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
         idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
         drawRightText(pg, content);
     }
@@ -42,20 +42,23 @@ public class TextNode extends AbstractNode {
     protected void drawRightText(PGraphics pg, String text) {
         fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(LEFT, CENTER);
-        String[] lines = content.split(regexNewLineSplit);
+        String[] lines = content.split(regexLookBehindForNewLine);
         pg.pushMatrix();
         float marginLeftInCells = 0.5f;
         float marginLeft = marginLeftInCells * cell;
         pg.translate(marginLeft, cell);
+        pg.textSize(FontStore.getLastFontSize() - 2);
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String lineWithoutNewline = line.replace("\n", "");
+            String lineTrimmed = line.replace("\n", "");
             float availableWidth = size.x - marginLeft - FontStore.textMarginX;
             String lineThatFits;
             if (i == lines.length - 1 && isEditable) {
-                lineThatFits = getSubstringFromEndToFit(pg, lineWithoutNewline, availableWidth);
+                // because you want to see what you're typing
+                lineThatFits = getSubstringFromEndToFit(pg, lineTrimmed, availableWidth);
             } else {
-                lineThatFits = getSubstringFromStartToFit(pg, lineWithoutNewline, availableWidth);
+                // because you want to read everything else from the start
+                lineThatFits = getSubstringFromStartToFit(pg, lineTrimmed, availableWidth);
             }
             pg.translate(0, cell);
             pg.text(lineThatFits, FontStore.textMarginX, -FontStore.textMarginY);
