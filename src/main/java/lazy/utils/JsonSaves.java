@@ -209,8 +209,10 @@ public class JsonSaves {
             try{
                 int filenameInteger = Integer.parseInt(filenameWithoutSuffix);
                 highestNumber = max(filenameInteger, highestNumber);
-            }catch(Exception ex){
-                println("did not expect a non-integer filename in the save folder", ex.getMessage());
+            } catch(NumberFormatException nfex){
+                // just ignore files that do not match a simple integer numbering scheme
+            } catch(Exception ex){
+                println(ex);
             }
         }
         return String.valueOf(highestNumber + 1);
