@@ -87,7 +87,7 @@ public abstract class AbstractNode {
     public final void updateDrawInlineNode(PGraphics pg) {
         // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         if(isMouseOverNode){
-            highlightNodeOnMouseOver(pg);
+            highlightNodeBackground(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
@@ -107,7 +107,7 @@ public abstract class AbstractNode {
 
     }
 
-    protected void highlightNodeOnMouseOver(PGraphics pg) {
+    protected void highlightNodeBackground(PGraphics pg) {
         pg.noStroke();
         pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         pg.rect(0,0,size.x,size.y);
