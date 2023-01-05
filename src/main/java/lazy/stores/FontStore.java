@@ -13,25 +13,28 @@ public class FontStore {
     public static float textMarginX = 5;
     public static float textMarginY = 13;
 
-    private static final int defaultFontSize = 16;
-    private static int lastFontSize = -1;
-    private static PFont mainFont = null;
-    private static PFont sideFont = null;
+    private final static String sideFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
     private final static String mainFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
-    private final static String sideFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Light.ttf";
+    private static final int mainFontSizeDefault = 16;
+    private static final int sideFontSizeDefault = 14;
     private static String lastMainFontPath = "";
     private static String lastSideFontPath = "";
+    private static int lastMainFontSize = -1;
+    private static int lastSideFontSize = -1;
+    private static PFont mainFont = null;
+    private static PFont sideFont = null;
 
     public static void updateFontOptions() {
         gui.pushFolder("font");
         lazyUpdateFont(
-                gui.textInput("side font path", mainFontPathDefault),
-                gui.textInput("main font path", sideFontPathDefault),
-                gui.sliderInt("font size", getLastFontSize(), 1, Integer.MAX_VALUE)
+                gui.textInput("main font", mainFontPathDefault),
+                gui.textInput("side font", sideFontPathDefault),
+                gui.sliderInt("main size", mainFontSizeDefault, 1, Integer.MAX_VALUE),
+                gui.sliderInt("side size", sideFontSizeDefault, 1, Integer.MAX_VALUE)
         );
-        textMarginX = gui.slider("font x offset", textMarginX);
-        textMarginY = gui.slider("font y offset", textMarginY);
-        if(gui.button("print fonts")){
+        textMarginX = gui.slider("x offset", textMarginX);
+        textMarginY = gui.slider("y offset", textMarginY);
+        if(gui.button("print font list")){
             printAvailableFonts();
         }
         gui.popFolder();
@@ -46,40 +49,36 @@ public class FontStore {
     }
 
     public static void lazyUpdateFont() {
-        lazyUpdateFont(mainFontPathDefault, sideFontPathDefault, defaultFontSize);
+        lazyUpdateFont(mainFontPathDefault, sideFontPathDefault, mainFontSizeDefault, sideFontSizeDefault);
     }
 
-    private static void lazyUpdateFont(String _mainFontPath, String _sideFontPath, int _fontSize) {
+    private static void lazyUpdateFont(String _mainFontPath, String _sideFontPath, int _mainFontSize, int _sideFontSize) {
         boolean mainFontPathChanged = !lastMainFontPath.equals(_mainFontPath);
         boolean sideFontPathChanged = !lastSideFontPath.equals(_sideFontPath);
-        boolean sizeChanged = lastFontSize != _fontSize;
-        lastFontSize = _fontSize;
-        if(sizeChanged || mainFontPathChanged){
+        boolean mainSizeChanged = lastMainFontSize != _mainFontSize;
+        boolean sideSizeChanged = lastSideFontSize != _sideFontSize;
+        lastMainFontSize = _mainFontSize;
+        lastSideFontSize = _sideFontSize;
+        if(mainSizeChanged || mainFontPathChanged){
             lastMainFontPath = _mainFontPath;
             try {
-                println("main font rebuilt at " + lastFontSize);
-                mainFont = app.createFont(lastMainFontPath, lastFontSize);
+                mainFont = app.createFont(lastMainFontPath, lastMainFontSize);
             } catch (RuntimeException ex) {
                 if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                     throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
                 }
             }
         }
-        if(sizeChanged || sideFontPathChanged){
+        if(sideSizeChanged || sideFontPathChanged){
             lastSideFontPath = _sideFontPath;
             try {
-                println("side font rebuilt at " + lastFontSize);
-                sideFont = app.createFont(lastSideFontPath, lastFontSize);
+                sideFont = app.createFont(lastSideFontPath, lastSideFontSize);
             } catch (RuntimeException ex) {
                 if (ex.getMessage().contains("createFont() can only be used inside setup() or after setup() has been called")) {
                     throw new RuntimeException("the new Gui(this) constructor can only be used inside setup() or after setup() has been called");
                 }
             }
         }
-    }
-
-    private static int getLastFontSize() {
-        return lastFontSize;
     }
 
     @SuppressWarnings("unused")
