@@ -78,8 +78,8 @@ public class SaveFolderNode extends FolderNode {
         return filenameWithSuffix.substring(0, filenameWithSuffix.indexOf(".json"));
     }
 
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        super.updateDrawInlineNodeAbstract(pg);
+    protected void drawNodeBackground(PGraphics pg) {
+        super.drawNodeBackground(pg);
         if(gui.button(path + pathCreateNewSave)){
             JsonSaves.createNewSaveWithRandomName();
         }

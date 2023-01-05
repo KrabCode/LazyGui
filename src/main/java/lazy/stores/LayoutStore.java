@@ -2,7 +2,6 @@ package lazy.stores;
 
 public class LayoutStore {
     public static float cell = 22; // cell size but shorter because used everywhere
-    public static float previewRectSize = cell * 0.6f;
     public static int keyboardInputAppendCooldownMillis = 500;
     public static final float defaultWindowWidthInCells = 10;
     private static float resizeRectangleSize = 4;
@@ -12,7 +11,6 @@ public class LayoutStore {
 
     public static void setCellSize(float inputCellSize) {
         cell = inputCellSize;
-        previewRectSize = cell * 0.6f;
     }
 
     public static void setShouldKeepWindowsInBounds(boolean valueToSet) {

@@ -3,25 +3,19 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import processing.core.PGraphics;
 
-import static lazy.stores.LayoutStore.previewRectSize;
-import static processing.core.PConstants.ROUND;
+class GradientColorNode extends ColorPickerFolderNode {
 
-class GradientColorPickerFolderNode extends ColorPickerFolderNode {
-
-    GradientColorPickerFolderNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
+    GradientColorNode(String path, FolderNode parentFolder, int hex, float gradientPos, boolean active) {
         super(path, parentFolder, hex);
         this.children.add(new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,true));
         this.children.add(new ToggleNode(path + "/active", parentFolder, active));
     }
 
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        super.updateDrawInlineNodeAbstract(pg);
-        if(isSkipped()){
-            pg.strokeCap(ROUND);
-            pg.strokeWeight(1.99f);
-            float n = previewRectSize * 0.25f;
-            pg.line(-n,-n,n,n);
-            pg.line(n,-n,-n,n);
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+        if(!isSkipped()){
+            drawPreviewRect(pg);
         }
     }
 

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import static lazy.stores.NormColorStore.color;
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
-import static lazy.stores.LayoutStore.previewRectSize;
 import static processing.core.PApplet.*;
 
 public class GradientFolderNode extends FolderNode {
@@ -45,15 +44,25 @@ public class GradientFolderNode extends FolderNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        updateOutGraphics();
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+        drawGradientPreviewIcon(pg);
+    }
+
+    void drawGradientPreviewIcon(PGraphics pg){
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
-        pg.image(out, 1, 0, previewRectSize-1, previewRectSize);
+        float previewRectSize = cell * 0.6f;
+        pg.image(out, 0, 0, previewRectSize, previewRectSize);
         strokeForegroundBasedOnMouseOver(pg);
         pg.rectMode(CENTER);
         pg.noFill();
-        pg.rect(1, 0, previewRectSize-1, previewRectSize);
-        updateOutGraphics();
+        pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 
     String getColorNameByIndex(int index) {
@@ -73,8 +82,8 @@ public class GradientFolderNode extends FolderNode {
         children.sort((o1, o2) -> {
             assert o1 != null;
             assert o2 != null;
-            if (o1.className.equals("GradientColorPickerFolderNode") && o2.className.equals("GradientColorPickerFolderNode")) {
-                return Float.compare(((GradientColorPickerFolderNode) o1).getGradientPos(), ((GradientColorPickerFolderNode) o2).getGradientPos());
+            if (o1.className.equals(GradientColorNode.class.getSimpleName()) && o2.className.equals(GradientColorNode.class.getSimpleName())) {
+                return Float.compare(((GradientColorNode) o1).getGradientPos(), ((GradientColorNode) o2).getGradientPos());
             }
             return 0;
         });
@@ -93,8 +102,8 @@ public class GradientFolderNode extends FolderNode {
 
     private int getColorCount() {
         int activeColorCount = colorCount;
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
-        for (GradientColorPickerFolderNode colorPicker : colorPickers) {
+        ArrayList<GradientColorNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        for (GradientColorNode colorPicker : colorPickers) {
             if (colorPicker.isSkipped()) {
                 activeColorCount--;
             }
@@ -103,10 +112,10 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private float[] getColorValues(int activeCount) {
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        ArrayList<GradientColorNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount * 4];
         int i = 0;
-        for (GradientColorPickerFolderNode colorPicker : colorPickers) {
+        for (GradientColorNode colorPicker : colorPickers) {
             if (colorPicker.isSkipped()) {
                 continue;
             }
@@ -121,10 +130,10 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private float[] getColorPositions(int activeCount) {
-        ArrayList<GradientColorPickerFolderNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
+        ArrayList<GradientColorNode> colorPickers = getAllGradientColorPickerChildrenInPositionOrder();
         float[] result = new float[activeCount];
         int i = 0;
-        for (GradientColorPickerFolderNode colorPicker : colorPickers) {
+        for (GradientColorNode colorPicker : colorPickers) {
             if (colorPicker.isSkipped()) {
                 continue;
             }
@@ -138,11 +147,11 @@ public class GradientFolderNode extends FolderNode {
         return out;
     }
 
-    ArrayList<GradientColorPickerFolderNode> getAllGradientColorPickerChildrenInPositionOrder() {
-        ArrayList<GradientColorPickerFolderNode> result = new ArrayList<>();
+    ArrayList<GradientColorNode> getAllGradientColorPickerChildrenInPositionOrder() {
+        ArrayList<GradientColorNode> result = new ArrayList<>();
         for (AbstractNode node : children) {
-            if (node.className.contains("GradientColorPickerFolderNode")) {
-                result.add((GradientColorPickerFolderNode) node);
+            if (node.className.contains(GradientColorNode.class.getSimpleName())) {
+                result.add((GradientColorNode) node);
             }
         }
         return result;
@@ -152,10 +161,10 @@ public class GradientFolderNode extends FolderNode {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorPickerFolderNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
-                                                            float pos, boolean active) {
+    GradientColorNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm,
+                                                float pos, boolean active) {
         int hex = color(0, 0, brightnessNorm, alphaNorm);
-        return new GradientColorPickerFolderNode(path, this, hex, pos, active);
+        return new GradientColorNode(path, this, hex, pos, active);
     }
 
     private static class GradientPreviewNode extends AbstractNode {
@@ -170,7 +179,7 @@ public class GradientFolderNode extends FolderNode {
         }
 
         @Override
-        protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+        protected void drawNodeBackground(PGraphics pg) {
             pg.image(parent.getOutputGraphics(), 1, 1, size.x-1, size.y-1);
         }
 

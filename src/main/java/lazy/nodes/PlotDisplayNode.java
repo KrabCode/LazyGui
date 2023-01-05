@@ -26,7 +26,7 @@ class PlotDisplayNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    protected void drawNodeBackground(PGraphics pg) {
         pg.noFill();
         drawPlotGrid(pg);
     }
@@ -128,8 +128,6 @@ class PlotDisplayNode extends AbstractNode {
     public void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
         sliderY.verticalMouseMode = true;
-        sliderX.disableShader();
-        sliderY.disableShader();
         sliderX.mousePressedOverNode(x, y);
         sliderY.mousePressedOverNode(x, y);
     }
@@ -144,8 +142,6 @@ class PlotDisplayNode extends AbstractNode {
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         super.mouseReleasedAnywhere(e);
         sliderY.verticalMouseMode = false;
-        sliderX.enableShader();
-        sliderY.enableShader();
     }
 
     @Override

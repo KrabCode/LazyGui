@@ -33,7 +33,7 @@ public class ColorPickerExample extends PApplet {
         translate(pos.x, pos.y);
         gui.pushFolder("rect");
         fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
-        gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
+        gui.colorPickerHueAdd("fill", radians(gui.slider("fill hue +", 0.1f)));
         stroke(gui.colorPicker("stroke").hex);
         strokeWeight(gui.slider("weight", 10));
         rectMode(CENTER);

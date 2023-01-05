@@ -35,8 +35,17 @@ public class PlotFolderNode extends FolderNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        // super.updateDrawInlineNodeAbstract(pg); // do not draw miniature window icon
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+        drawRightBackdrop(pg, cell);
+        String vectorToDisplay = sliderX.getValueToDisplay() + "," + sliderY.getValueToDisplay();
+        if(sliderZ != null){
+            vectorToDisplay += "," + sliderZ.getValueToDisplay();
+        }
+        drawRightText(pg, vectorToDisplay, true);
+    }
+
+    private void drawPlotIcon(PGraphics pg){
         float n = cell * 0.3f;
         pg.pushMatrix();
         pg.translate(size.x - cell * 0.5f, size.y * 0.5f);

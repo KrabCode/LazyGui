@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
-import lazy.themes.Theme;
 import lazy.utils.KeyCodes;
 import lazy.stores.LayoutStore;
 import lazy.stores.ShaderStore;
@@ -61,7 +60,6 @@ public class SliderNode extends AbstractNode {
     private boolean wasNumpadInputActiveLastFrame = false;
 
     private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*[,.][0-9]*";
-    private boolean displayShader = true;
     private final String shaderPath = "sliderBackground.glsl";
 
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
@@ -85,7 +83,7 @@ public class SliderNode extends AbstractNode {
 
     private void setSensiblePrecision(String value) {
         if(value.equals("0") || value.equals("0.0")){
-            setPrecisionIndexAndValue(precisionRange.indexOf(1f));
+            setPrecisionIndexAndValue(precisionRange.indexOf(0.1f));
             return;
         }
         if(value.matches(FRACTIONAL_FLOAT_REGEX)){
@@ -104,11 +102,11 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        updateDrawSliderNodeValue(pg);
+    protected void drawNodeBackground(PGraphics pg) {
+        updateDrawSliderNodeBackground(pg);
     }
 
-    void updateDrawSliderNodeValue(PGraphics pg) {
+    void updateDrawSliderNodeBackground(PGraphics pg) {
         updateNumpad();
         if (isDragged || isMouseOverNode) {
             updateValueMouseInteraction();
@@ -117,8 +115,13 @@ public class SliderNode extends AbstractNode {
             mouseDeltaX = 0;
             mouseDeltaY = 0;
         }
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        super.drawNodeForeground(pg, name);
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""));
+        drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""), false);
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
@@ -130,17 +133,14 @@ public class SliderNode extends AbstractNode {
         if (shouldShowPercentIndicator) {
             percentIndicatorNorm = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
             backgroundScrollX = 0;
+        }
 
-        }
-        if(displayShader){
-            updateBackgroundShader(pg);
-        }
-        pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
+        updateBackgroundShader(pg);
+        pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         pg.noStroke();
         pg.rect(1, 0, (size.x - 1) * percentIndicatorNorm, size.y);
-        if(displayShader){
-            pg.resetShader();
-        }
+        pg.resetShader();
+
         if(shouldShowPercentIndicator){
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.strokeWeight(2);
@@ -382,11 +382,4 @@ public class SliderNode extends AbstractNode {
         return getValueToDisplay();
     }
 
-    public void enableShader() {
-        displayShader = true;
-    }
-
-    public void disableShader() {
-        displayShader = false;
-    }
 }

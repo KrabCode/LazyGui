@@ -81,22 +81,22 @@ public abstract class AbstractNode {
 
     /**
      * Main update function, only called when the parent window containing this node is open.
-     * @see AbstractNode#updateDrawInlineNodeAbstract(PGraphics)
+     * @see AbstractNode#drawNodeBackground(PGraphics)
      * @param pg main PGraphics of the gui of the same size as the main PApplet canvas to draw on
      */
-    public void updateDrawInlineNode(PGraphics pg) {
+    public final void updateDrawInlineNode(PGraphics pg) {
         // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
         if(isMouseOverNode){
             highlightNodeOnMouseOver(pg);
         }
         pg.pushMatrix();
         pg.pushStyle();
-        updateDrawInlineNodeAbstract(pg);
+        drawNodeBackground(pg);
         pg.popMatrix();
         pg.popStyle();
         if(shouldDrawLeftNameText){
             fillForegroundBasedOnMouseOver(pg);
-            drawLeftNameText(pg, name);
+            drawNodeForeground(pg, name);
         }
     }
 
@@ -112,8 +112,6 @@ public abstract class AbstractNode {
         pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         pg.rect(0,0,size.x,size.y);
     }
-
-    protected abstract void updateDrawInlineNodeAbstract(PGraphics pg);
 
     protected void validatePrecision() {
 
@@ -153,19 +151,41 @@ public abstract class AbstractNode {
     }
 
 
-    protected void drawLeftNameText(PGraphics pg, String text) {
+    protected void drawNodeBackground(PGraphics pg){
+
+    }
+
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+    }
+
+    protected void drawLeftText(PGraphics pg, String text){
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
     }
 
-    protected void drawRightText(PGraphics pg, String text) {
+    protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
+        if(fillBackground){
+            float w = pg.textWidth(text) + FontStore.textMarginX * 2;
+            drawRightBackdrop(pg, w);
+        }
         pg.textAlign(RIGHT, CENTER);
         pg.text(text,
                 size.x - FontStore.textMarginX,
                 size.y - FontStore.textMarginY
         );
     }
+
+    protected void drawRightBackdrop(PGraphics pg, float width) {
+        pg.pushStyle();
+        fillBackgroundBasedOnMouseOver(pg);
+        pg.noStroke();
+        pg.rectMode(CORNER);
+        pg.rect(size.x-width, 0, width, size.y);
+        pg.popStyle();
+    }
+
 
     protected void drawRightToggleHandle(PGraphics pg, boolean valueBoolean) {
         float rectWidth = cell * 0.3f;
@@ -213,6 +233,7 @@ public abstract class AbstractNode {
 
     public void mousePressedOverNode(float x, float y) {
         isDragged = true;
+        isMouseOverNode = true;
     }
 
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
@@ -235,7 +256,7 @@ public abstract class AbstractNode {
     }
 
     public void mouseDragNodeContinue(LazyMouseEvent e) {
-
+        isMouseOverNode = true;
     }
 
     public boolean isParentWindowVisible(){

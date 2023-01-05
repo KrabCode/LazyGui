@@ -32,11 +32,35 @@ public class TextNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    protected void drawNodeBackground(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
+        if(content.length() == 0){
+            idealInlineNodeHeightInCells = 1;
+            return;
+        }
         int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
         idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
         drawContent(pg);
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+        strokeForegroundBasedOnMouseOver(pg);
+        pg.noFill();
+        if(!isEditable){
+            drawRightEyeIcon(pg);
+        }else{
+            drawRightKeyboardIcon(pg);
+        }
+    }
+
+    private void drawRightEyeIcon(PGraphics pg) {
+
+    }
+
+    private void drawRightKeyboardIcon(PGraphics pg) {
+
     }
 
     protected void drawContent(PGraphics pg) {

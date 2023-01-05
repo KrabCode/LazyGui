@@ -11,9 +11,9 @@ class SaveNode extends AbstractNode {
         this.fileName = fileName;
     }
 
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    protected void drawNodeBackground(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, "load");
+        drawRightText(pg, "load", true);
     }
 
     public void mousePressedOverNode(float x, float y) {

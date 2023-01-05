@@ -30,9 +30,8 @@ public class SliderDebugger extends PApplet {
         gui.pushFolder("sliders");
         int intVal = gui.sliderInt("integer slider", 12);
         float floatVal = gui.slider("float slider", 3.14159f);
-        float constrained = gui.slider("constrained slider", 0.5f, 0,  1);
-        gui.textDisplay("~~ slider tutorial ~~", "sliders are very nice\nthey come in different forms\nand all are super cool");
-        gui.textInput("notes", "edit meeee");
+        gui.textDisplay("constrained slider in range [0, 1]", "");
+        float constrained = gui.slider("constrained", 0.5f, 0,  1);
         gui.popFolder();
         pg.fill(255);
         pg.textSize(64);

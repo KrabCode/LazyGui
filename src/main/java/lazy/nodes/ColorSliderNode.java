@@ -5,7 +5,6 @@ package lazy.nodes;
 import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
-import lazy.stores.FontStore;
 import lazy.stores.NormColorStore;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
@@ -14,7 +13,6 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import static processing.core.PApplet.norm;
-import static processing.core.PConstants.*;
 
 abstract class ColorSliderNode extends SliderNode {
 
@@ -67,8 +65,8 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        super.updateDrawInlineNodeAbstract(pg);
+    protected void drawNodeBackground(PGraphics pg) {
+        super.drawNodeBackground(pg);
         if(isDragged){
             pg.stroke(foregroundMouseOverBrightnessAwareColor());
             pg.strokeWeight(1);
@@ -91,16 +89,10 @@ abstract class ColorSliderNode extends SliderNode {
     }
 
     @Override
-    protected void drawLeftNameText(PGraphics pg, String text) {
+    protected void drawNodeForeground(PGraphics pg, String name) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
-        super.drawLeftNameText(pg, text);
-    }
-
-    @Override
-    protected void drawRightText(PGraphics pg, String text) {
-        pg.fill(foregroundMouseOverBrightnessAwareColor());
-        pg.textAlign(RIGHT, CENTER);
-        pg.text(text,size.x - FontStore.textMarginX, size.y - FontStore.textMarginY);
+        drawLeftText(pg, name);
+        drawRightText(pg, getValueToDisplay(), false);
     }
 
     protected int foregroundMouseOverBrightnessAwareColor(){

@@ -7,6 +7,8 @@ import lazy.input.LazyMouseEvent;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
+import static lazy.stores.LayoutStore.cell;
+
 public class ToggleNode extends AbstractNode {
 
     @Expose
@@ -21,10 +23,11 @@ public class ToggleNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        super.drawNodeForeground(pg, name);
+        drawRightBackdrop(pg, cell);
         drawRightToggleHandle(pg, valueBoolean);
     }
-
 
     @Override
     public void mousePressedOverNode(float x, float y) {

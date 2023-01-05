@@ -7,6 +7,8 @@ import processing.core.PGraphics;
 
 import java.util.*;
 
+import static lazy.stores.LayoutStore.cell;
+
 public class RadioFolderNode extends FolderNode {
 
     @Expose
@@ -57,8 +59,11 @@ public class RadioFolderNode extends FolderNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        // don't draw folder icon
+    protected void drawNodeForeground(PGraphics pg, String name) {
+     // don't draw folder icon - do not call super.drawNodeForeground(pg, name)
+        drawLeftText(pg, name);
+        drawRightBackdrop(pg, cell);
+        drawRightText(pg, valueString, true);
     }
 
     @Override
@@ -92,7 +97,6 @@ public class RadioFolderNode extends FolderNode {
             setAllOtherOptionsToFalse(optionToSet);
         }
     }
-
     void setAllOtherOptionsToFalse(StringPickerItemNode optionToKeepTrue) {
         for (AbstractNode child : children) {
             StringPickerItemNode option = (StringPickerItemNode) child;
@@ -101,6 +105,7 @@ public class RadioFolderNode extends FolderNode {
             }
         }
     }
+
     void setAllOtherOptionsToFalse(String optionToKeepTrue) {
         for (AbstractNode child : children) {
             StringPickerItemNode option = (StringPickerItemNode) child;
@@ -115,12 +120,6 @@ public class RadioFolderNode extends FolderNode {
             StringPickerItemNode option = (StringPickerItemNode) child;
             oldValues.put(option.path, option.valueBoolean);
         }
-    }
-
-    @Override
-    protected void drawLeftNameText(PGraphics pg, String text) {
-        super.drawLeftNameText(pg, text);
-        drawRightText(pg, valueString);
     }
 
     @Override

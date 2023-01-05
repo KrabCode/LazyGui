@@ -174,6 +174,7 @@ public class Window implements UserInputSubscriber {
         if(!app.focused && isRoot()){
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             leftText = "not in focus";
+            highlight = true;
         }
         float titleBarWidth = windowSizeX;
         pg.strokeWeight(1);

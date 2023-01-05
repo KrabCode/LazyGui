@@ -15,11 +15,16 @@ public class ButtonNode extends AbstractNode {
     private boolean mousePressedLastFrame = false;
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
-        drawRightButton(pg);
+    protected void drawNodeBackground(PGraphics pg) {
         boolean mousePressed = app.mousePressed;
         valueBoolean = isMouseOverNode && mousePressedLastFrame && !mousePressed;
         mousePressedLastFrame = mousePressed;
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        super.drawNodeForeground(pg, name);
+        drawRightButton(pg);
     }
 
     @Override

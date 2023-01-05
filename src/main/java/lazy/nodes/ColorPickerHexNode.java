@@ -16,9 +16,15 @@ class ColorPickerHexNode extends AbstractNode {
     }
 
     @Override
-    protected void updateDrawInlineNodeAbstract(PGraphics pg) {
+    protected void drawNodeBackground(PGraphics pg) {
+
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        super.drawNodeForeground(pg, name);
         fillForegroundBasedOnMouseOver(pg);
-        drawRightText(pg, parentColorPickerFolder.hexString);
+        drawRightText(pg, parentColorPickerFolder.hexString, false);
     }
 
     @Override
