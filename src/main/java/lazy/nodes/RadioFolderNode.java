@@ -118,8 +118,8 @@ public class RadioFolderNode extends FolderNode {
     }
 
     @Override
-    protected void drawLeftText(PGraphics pg, String text) {
-        super.drawLeftText(pg, text);
+    protected void drawLeftNameText(PGraphics pg, String text) {
+        super.drawLeftNameText(pg, text);
         drawRightText(pg, valueString);
     }
 

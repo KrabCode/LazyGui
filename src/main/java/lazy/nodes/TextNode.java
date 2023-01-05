@@ -36,10 +36,10 @@ public class TextNode extends AbstractNode {
         fillForegroundBasedOnMouseOver(pg);
         int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
         idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
-        drawRightText(pg, content);
+        drawContent(pg);
     }
 
-    protected void drawRightText(PGraphics pg, String text) {
+    protected void drawContent(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(LEFT, CENTER);
         String[] lines = content.split(regexLookBehindForNewLine);
@@ -47,7 +47,7 @@ public class TextNode extends AbstractNode {
         float marginLeftInCells = 0.5f;
         float marginLeft = marginLeftInCells * cell;
         pg.translate(marginLeft, cell);
-        pg.textSize(FontStore.getLastFontSize() - 2);
+        pg.textFont(FontStore.getSideFont());
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             String lineTrimmed = line.replace("\n", "");

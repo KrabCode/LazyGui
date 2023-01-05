@@ -113,17 +113,12 @@ public class WindowManager {
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
         LayoutStore.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
-        FontStore.tryUpdateFont(
-                gui.sliderInt("font size", FontStore.getLastFontSize(), 1, Integer.MAX_VALUE),
-                gui.slider("font x offset", FontStore.textMarginX),
-                gui.slider("font y offset", FontStore.textMarginY)
-        );
         showPathTooltips = gui.toggle("show path tooltips", true);
         LayoutStore.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
         gui.pushFolder("resize");
         LayoutStore.setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
-        LayoutStore.setShouldDrawResizeIndicator(gui.toggle("show indicator", LayoutStore.getShouldDrawResizeIndicator()));
-        LayoutStore.setResizeRectangleSize(gui.slider("indicator width", LayoutStore.getResizeRectangleSize()));
+        LayoutStore.setShouldDrawResizeIndicator(gui.toggle("show handle", LayoutStore.getShouldDrawResizeIndicator()));
+        LayoutStore.setResizeRectangleSize(gui.slider("handle width", LayoutStore.getResizeRectangleSize()));
         gui.popFolder();
         gui.popFolder();
     }

@@ -59,7 +59,7 @@ public class Window implements UserInputSubscriber {
     }
 
     void drawWindow(PGraphics pg) {
-        pg.textFont(FontStore.getFont());
+        pg.textFont(FontStore.getMainFont());
         isTitleHighlighted = !closed && (isPointInsideTitleBar(app.mouseX, app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
         if (closed) {
             return;

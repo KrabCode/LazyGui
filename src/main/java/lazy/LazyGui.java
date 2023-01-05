@@ -77,7 +77,7 @@ public class LazyGui implements UserInputSubscriber {
             println("The LazyGui library requires the P2D or P3D renderer.");
         }
         NormColorStore.init();
-        FontStore.tryUpdateFont();
+        FontStore.lazyUpdateFont();
         ThemeStore.initSingleton();
         UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
@@ -1024,6 +1024,7 @@ public class LazyGui implements UserInputSubscriber {
     private void updateOptionsFolder() {
         pushFolder(optionsNode.path);
         WindowManager.updateWindowOptions();
+        FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
         ContextLines.update(pg);
