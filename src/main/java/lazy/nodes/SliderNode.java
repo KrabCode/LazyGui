@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
+import lazy.themes.Theme;
 import lazy.utils.KeyCodes;
 import lazy.stores.LayoutStore;
 import lazy.stores.ShaderStore;
@@ -124,19 +125,27 @@ public class SliderNode extends AbstractNode {
         if (!constrainedThisFrame) {
             backgroundScrollX -= verticalMouseMode ? mouseDeltaY : mouseDeltaX;
         }
-        float widthMult = 1f;
-        if (valueFloatConstrained && showPercentIndicatorWhenConstrained) {
-            widthMult = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
+        float percentIndicatorNorm = 1f;
+        boolean shouldShowPercentIndicator = valueFloatConstrained && showPercentIndicatorWhenConstrained;
+        if (shouldShowPercentIndicator) {
+            percentIndicatorNorm = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
             backgroundScrollX = 0;
+
         }
         if(displayShader){
             updateBackgroundShader(pg);
         }
-        pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+        pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
         pg.noStroke();
-        pg.rect(1, 0, (size.x - 1) * widthMult, size.y);
+        pg.rect(1, 0, (size.x - 1) * percentIndicatorNorm, size.y);
         if(displayShader){
             pg.resetShader();
+        }
+        if(shouldShowPercentIndicator){
+            pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
+            pg.strokeWeight(2);
+            float lineX = (size.x-1)*percentIndicatorNorm;
+            pg.line(lineX, 0, lineX, size.y);
         }
     }
 

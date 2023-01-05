@@ -5,7 +5,6 @@ import processing.core.PGraphics;
 
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.GlobalReferences.gui;
-import static processing.core.PApplet.main;
 import static processing.core.PApplet.println;
 
 public class FontStore {
