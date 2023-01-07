@@ -1,5 +1,7 @@
 package lazy.nodes;
 
+import lazy.input.LazyKeyEvent;
+import lazy.utils.KeyCodes;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -75,5 +77,10 @@ public class PlotFolderNode extends FolderNode {
         if(sliderZ != null){
             sliderZ.valueFloat = z;
         }
+    }
+
+    public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+            sliderX.keyPressedOverNode(e, x, y);
+            sliderY.keyPressedOverNode(e, x, y);
     }
 }

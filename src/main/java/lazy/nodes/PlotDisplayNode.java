@@ -165,6 +165,5 @@ class PlotDisplayNode extends AbstractNode {
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);
         }
-
     }
 }

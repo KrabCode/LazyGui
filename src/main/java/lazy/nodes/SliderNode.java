@@ -106,8 +106,12 @@ public class SliderNode extends AbstractNode {
         updateDrawSliderNodeBackground(pg);
     }
 
-    void updateDrawSliderNodeBackground(PGraphics pg) {
+    @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
         updateNumpad();
+    }
+
+    void updateDrawSliderNodeBackground(PGraphics pg) {
         if (isDragged || isMouseOverNode) {
             updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();

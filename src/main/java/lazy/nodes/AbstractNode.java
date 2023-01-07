@@ -96,7 +96,6 @@ public abstract class AbstractNode {
         pg.popStyle();
         pg.pushMatrix();
         pg.pushStyle();
-        fillForegroundBasedOnMouseOver(pg);
         drawNodeForeground(pg, name);
         pg.popMatrix();
         pg.popStyle();
@@ -124,6 +123,7 @@ public abstract class AbstractNode {
     protected abstract void drawNodeForeground(PGraphics pg, String name);
 
     protected void drawLeftText(PGraphics pg, String text){
+        fillForegroundBasedOnMouseOver(pg);
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
