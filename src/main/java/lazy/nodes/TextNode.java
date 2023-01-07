@@ -47,21 +47,21 @@ public class TextNode extends AbstractNode {
             drawLeftText(pg, name);
             lineCount += 1;
         }
-        idealInlineNodeHeightInCells = lineCount;
+        masterInlineNodeHeightInCells = lineCount;
         String contentToDraw = content.length() == 0 ? "..." : content;
         fillForegroundBasedOnMouseOver(pg);
         drawContent(pg, contentToDraw);
     }
 
     private void drawLeftIndentBox(PGraphics pg) {
-        if(idealInlineNodeHeightInCells == 0){
+        if(masterInlineNodeHeightInCells == 0){
             return;
         }
         pg.fill(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
         pg.noStroke();
         float boxX = 0;
         float boxY = 0;
-        float boxHeight = idealInlineNodeHeightInCells * cell;
+        float boxHeight = masterInlineNodeHeightInCells * cell;
         float boxWidth = marginLeftInCells * cell;
         if(shouldDisplayHeaderRow){
             boxY = cell;

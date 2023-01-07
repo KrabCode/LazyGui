@@ -16,7 +16,7 @@ class ColorPreviewNode extends AbstractNode {
     ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
-        idealInlineNodeHeightInCells = 3;
+        masterInlineNodeHeightInCells = 3;
         ShaderStore.getShader(checkerboardShaderPath);
     }
 

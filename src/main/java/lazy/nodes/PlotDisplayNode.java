@@ -25,7 +25,7 @@ class PlotDisplayNode extends AbstractNode {
 
     @Override
     protected void drawNodeBackground(PGraphics pg) {
-        idealInlineNodeHeightInCells = floor(size.x / cell);
+        masterInlineNodeHeightInCells = floor(size.x / cell);
         drawPlotGrid(pg);
         if(isMouseOverNode){
             sliderX.isMouseOverNode = true;
@@ -45,8 +45,8 @@ class PlotDisplayNode extends AbstractNode {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
         }
         pg.pushMatrix();
-        int cellCountX = floor(idealInlineNodeHeightInCells);
-        int cellCountY = floor(idealInlineNodeHeightInCells);
+        int cellCountX = floor(masterInlineNodeHeightInCells);
+        int cellCountY = floor(masterInlineNodeHeightInCells);
         // cell count is kept odd on purpose for the line to always go through rounded numbers and not skip around
         float w = (size.x - 1);
         float h = (size.y - 1);

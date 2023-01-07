@@ -174,7 +174,7 @@ public class GradientFolderNode extends FolderNode {
         GradientPreviewNode(String path, GradientFolderNode parent) {
             super(NodeType.VALUE, path, parent);
             this.parent = parent;
-            idealInlineNodeHeightInCells = 6;
+            masterInlineNodeHeightInCells = 6;
         }
 
         @Override

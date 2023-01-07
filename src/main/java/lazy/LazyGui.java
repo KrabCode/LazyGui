@@ -16,6 +16,7 @@ import lazy.utils.JsonSaves;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -948,6 +949,22 @@ public class LazyGui implements UserInputSubscriber {
             sb.append("/");
         }
         return sb.toString();
+    }
+
+    /**
+     * Gets the main font as currently used by the GUI.
+     * @return main gui font
+     */
+    public PFont getMainFont(){
+        return FontStore.getMainFont();
+    }
+
+    /**
+     * Gets the side font as currently used by the GUI.
+     * @return side gui font
+     */
+    public PFont getSideFont(){
+        return FontStore.getSideFont();
     }
 
     void requestScreenshot(String customFilePath){

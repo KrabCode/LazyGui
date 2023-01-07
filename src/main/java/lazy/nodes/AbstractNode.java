@@ -15,8 +15,6 @@ import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import java.util.Objects;
-
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
@@ -43,7 +41,7 @@ public abstract class AbstractNode {
     public final PVector size = new PVector();
     public final String name;
 
-    public float idealInlineNodeHeightInCells = 1;
+    public float masterInlineNodeHeightInCells = 1;
     public boolean isDragged = false;
     public boolean isMouseOverNode = false;
 

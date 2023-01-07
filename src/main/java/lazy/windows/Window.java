@@ -21,6 +21,7 @@ import processing.core.PVector;
 import java.util.Arrays;
 
 import static lazy.stores.GlobalReferences.app;
+import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 import static lazy.themes.ThemeColorType.*;
@@ -256,23 +257,42 @@ public class Window implements UserInputSubscriber {
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
-            float nodeHeight = cell * node.idealInlineNodeHeightInCells;
+            float nodeHeight = cell * node.masterInlineNodeHeightInCells;
             node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
             pg.pushMatrix();
             pg.pushStyle();
             node.updateDrawInlineNode(pg);
             pg.popStyle();
             pg.popMatrix();
+
+            if(i > 0){
+                // separator
+                pg.pushStyle();
+                drawHorizontalSeparator(pg);
+                pg.popStyle();
+            }
+
             y += nodeHeight;
             pg.translate(0, nodeHeight);
         }
         pg.popMatrix();
     }
 
+    private void drawHorizontalSeparator(PGraphics pg) {
+        boolean show = gui.toggle("options/separators/show");
+        float weight = gui.slider("options/separators/weight", 0.5f);
+        if(show){
+            pg.strokeCap(SQUARE);
+            pg.strokeWeight(weight);
+            pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
+            pg.line(0,0,windowSizeX,0);
+        }
+    }
+
     private float heightSumOfChildNodes() {
         float sum = 0;
         for (AbstractNode child : folder.children) {
-            sum += child.idealInlineNodeHeightInCells * cell;
+            sum += child.masterInlineNodeHeightInCells * cell;
         }
         return sum;
     }
