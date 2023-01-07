@@ -183,6 +183,11 @@ public class GradientFolderNode extends FolderNode {
             pg.image(parent.getOutputGraphics(), 1, 1, size.x-1, size.y-1);
         }
 
+        @Override
+        protected void drawNodeForeground(PGraphics pg, String name) {
+            drawLeftText(pg, name);
+        }
+
     }
 
 }

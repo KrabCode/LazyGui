@@ -32,6 +32,9 @@ public class PlotTest extends PApplet {
         pg.beginDraw();
         drawBackground();
         gui.pushFolder("test");
+        gui.pushFolder("factual information");
+        gui.textInput("the default renderer sucks");
+        gui.popFolder();
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size");
         rotation += radians(gui.slider("rotation +"));

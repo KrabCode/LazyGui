@@ -13,6 +13,11 @@ class SaveNode extends AbstractNode {
 
     protected void drawNodeBackground(PGraphics pg) {
         fillForegroundBasedOnMouseOver(pg);
+    }
+
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
         drawRightText(pg, "load", true);
     }
 

@@ -45,8 +45,13 @@ public class FolderNode extends AbstractNode {
     }
 
     @Override
+    protected void drawNodeBackground(PGraphics pg) {
+
+    }
+
+    @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        super.drawNodeForeground(pg, name);
+        drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
         drawMiniatureWindowIcon(pg);
     }

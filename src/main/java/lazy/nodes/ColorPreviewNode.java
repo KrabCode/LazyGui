@@ -27,6 +27,11 @@ class ColorPreviewNode extends AbstractNode {
         drawColorPreview(pg);
     }
 
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+    }
+
     private void drawCheckerboard(PGraphics pg) {
         PShader checkerboardShader = ShaderStore.getShader(checkerboardShaderPath);
         checkerboardShader.set("quadPos", pos.x, pos.y);

@@ -15,7 +15,7 @@ public class FontStore {
     private final static String sideFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
     private final static String mainFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
     private static final int mainFontSizeDefault = 16;
-    private static final int sideFontSizeDefault = 14;
+    private static final int sideFontSizeDefault = 15;
     private static String lastMainFontPath = "";
     private static String lastSideFontPath = "";
     private static int lastMainFontSize = -1;
@@ -26,6 +26,7 @@ public class FontStore {
     public static void updateFontOptions() {
         gui.pushFolder("font");
         lazyUpdateFont(
+
                 gui.textInput("main font", mainFontPathDefault),
                 gui.textInput("side font", sideFontPathDefault),
                 gui.sliderInt("main size", mainFontSizeDefault, 1, Integer.MAX_VALUE),

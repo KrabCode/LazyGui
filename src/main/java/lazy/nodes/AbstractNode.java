@@ -117,47 +117,9 @@ public abstract class AbstractNode {
 
     }
 
-    protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
-        if (isMouseOverNode) {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-        } else {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        }
-    }
+    protected abstract void drawNodeBackground(PGraphics pg);
 
-    protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
-        if(isMouseOverNode){
-            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-        } else {
-            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        }
-    }
-
-    @SuppressWarnings("unused")
-    protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
-        if (isMouseOverNode) {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
-        } else {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-        }
-    }
-
-    protected void fillBackgroundBasedOnMouseOver(PGraphics pg) {
-        if(isMouseOverNode){
-            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
-        } else {
-            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-        }
-    }
-
-
-    protected void drawNodeBackground(PGraphics pg){
-
-    }
-
-    protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftText(pg, name);
-    }
+    protected abstract void drawNodeForeground(PGraphics pg, String name);
 
     protected void drawLeftText(PGraphics pg, String text){
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
@@ -317,6 +279,40 @@ public abstract class AbstractNode {
             sb.append(" ");
         }
         return sb.toString().trim();
+    }
+
+
+    protected void strokeForegroundBasedOnMouseOver(PGraphics pg) {
+        if (isMouseOverNode) {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+        } else {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
+        }
+    }
+
+    protected void fillForegroundBasedOnMouseOver(PGraphics pg) {
+        if(isMouseOverNode){
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+        } else {
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
+        }
+    }
+
+    @SuppressWarnings("unused")
+    protected void strokeBackgroundBasedOnMouseOver(PGraphics pg) {
+        if (isMouseOverNode) {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
+        } else {
+            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+        }
+    }
+
+    protected void fillBackgroundBasedOnMouseOver(PGraphics pg) {
+        if(isMouseOverNode){
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
+        } else {
+            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+        }
     }
 
 }

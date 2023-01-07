@@ -31,6 +31,11 @@ class PlotDisplayNode extends AbstractNode {
         drawPlotGrid(pg);
     }
 
+    @Override
+    protected void drawNodeForeground(PGraphics pg, String name) {
+        drawLeftText(pg, name);
+    }
+
     private void drawPlotGrid(PGraphics pg) {
         pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         if (shouldHighlightGrid()) {
@@ -154,7 +159,9 @@ class PlotDisplayNode extends AbstractNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
         if(e.getKeyCode() == KeyCodes.CTRL_C || e.getKeyCode() == KeyCodes.CTRL_V){
-            parent.keyPressedOverNode(e, x, y);
+            if(parent != null){
+                parent.keyPressedOverNode(e, x, y);
+            }
         }else{
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);

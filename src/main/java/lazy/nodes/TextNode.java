@@ -3,6 +3,8 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import lazy.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
 import lazy.stores.FontStore;
@@ -11,8 +13,8 @@ import lazy.utils.JsonSaves;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-import static lazy.stores.FontStore.getSubstringFromEndToFit;
-import static lazy.stores.FontStore.getSubstringFromStartToFit;
+
+import static lazy.stores.FontStore.*;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PConstants.*;
 
@@ -21,6 +23,7 @@ public class TextNode extends AbstractNode {
     @Expose
     String content;
     private final boolean isEditable;
+    float marginLeftInCells = 0.2f;
 
     String regexLookBehindForNewLine = "(?<=\\n)";
 
@@ -33,14 +36,18 @@ public class TextNode extends AbstractNode {
 
     @Override
     protected void drawNodeBackground(PGraphics pg) {
-        fillForegroundBasedOnMouseOver(pg);
-        if(content.length() == 0){
-            idealInlineNodeHeightInCells = 1;
+        if(idealInlineNodeHeightInCells - 1 < 0){
             return;
         }
-        int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
-        idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
-        drawContent(pg);
+        pg.fill(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
+        pg.noStroke();
+        float boxMarginLeft = marginLeftInCells * cell;
+        float boxX = 0;
+        float boxY = cell;
+        float boxHeight = (idealInlineNodeHeightInCells - 1) * cell;
+        float boxWidth = boxMarginLeft;
+        pg.rectMode(CORNER);
+        pg.rect(boxX, boxY, boxWidth, boxHeight);
     }
 
     @Override
@@ -53,6 +60,11 @@ public class TextNode extends AbstractNode {
         }else{
             drawRightKeyboardIcon(pg);
         }
+        int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
+        idealInlineNodeHeightInCells = lineCount + 1; // + 1 for the node name left text (kind of serving as a header here)
+        String contentToDraw = content.length() == 0 ? "..." : content;
+        fillForegroundBasedOnMouseOver(pg);
+        drawContent(pg, contentToDraw);
     }
 
     private void drawRightEyeIcon(PGraphics pg) {
@@ -63,31 +75,31 @@ public class TextNode extends AbstractNode {
 
     }
 
-    protected void drawContent(PGraphics pg) {
+    protected void drawContent(PGraphics pg, String content) {
         fillForegroundBasedOnMouseOver(pg);
         pg.textAlign(LEFT, CENTER);
         String[] lines = content.split(regexLookBehindForNewLine);
         pg.pushMatrix();
-        float marginLeftInCells = 0.5f;
         float marginLeft = marginLeftInCells * cell;
         pg.translate(marginLeft, cell);
         pg.textFont(FontStore.getSideFont());
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             String lineTrimmed = line.replace("\n", "");
-            float availableWidth = size.x - marginLeft - FontStore.textMarginX;
+            float availableWidth = size.x - marginLeft * 2 - FontStore.textMarginX;
             String lineThatFits;
             if (i == lines.length - 1 && isEditable) {
-                // because you want to see what you're typing
+                // FromEnd because you want to see what you're typing
                 lineThatFits = getSubstringFromEndToFit(pg, lineTrimmed, availableWidth);
             } else {
-                // because you want to read everything else from the start
+                // FromStart because you want to read everything else from the start
                 lineThatFits = getSubstringFromStartToFit(pg, lineTrimmed, availableWidth);
             }
             pg.translate(0, cell);
             pg.text(lineThatFits, FontStore.textMarginX, -FontStore.textMarginY);
         }
         pg.popMatrix();
+
     }
 
     @Override
@@ -98,7 +110,10 @@ public class TextNode extends AbstractNode {
         // based on tip #13 in here:
         // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
-//            println(e.toString());
+//            println("key code" + e.getKeyCode());
+            if(KeyCodes.isKeyCodeIgnored(e.getKeyCode())){
+                return;
+            }
             if (e.getKeyCode() == PConstants.BACKSPACE) {
                 if (content.length() > 0) {
                     content = content.substring(0, content.length() - 1);
@@ -113,7 +128,6 @@ public class TextNode extends AbstractNode {
                 content = content + e.getKeyChar();
             }
         }
-//        println(content.replaceAll("\\n", "(newline)"));
     }
 
     @Override
