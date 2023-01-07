@@ -26,13 +26,13 @@ public class SliderDebugger extends PApplet {
     @Override
     public void draw() {
         pg.beginDraw();
-        drawBackground();
         gui.pushFolder("sliders");
         int intVal = gui.sliderInt("integer slider", 12);
         float floatVal = gui.slider("float slider", 3.14159f);
-        gui.textDisplay("constrained slider in range [0, 1]", "");
+        gui.text("", "i need to be able to put an empty path here");
         float constrained = gui.slider("constrained", 0.5f, 0,  1);
         gui.popFolder();
+        drawBackground();
         pg.fill(255);
         pg.textSize(64);
         pg.textAlign(CENTER, CENTER);

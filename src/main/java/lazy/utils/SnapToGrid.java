@@ -17,7 +17,7 @@ import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 public class SnapToGrid {
-    public static boolean snapToGridEnabled = false;
+    public static boolean snapToGridEnabled = true;
     static final List<String> availableVisibilityModes = new ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
     private static final String pointShaderPath = "gridPointFrag.glsl";
@@ -28,7 +28,7 @@ public class SnapToGrid {
     private static int selectedVisibilityModeIndex = defaultVisibilityModeIndex;
     private static float dragAlpha = 0;
     private static final float dragAlphaDelta = 0.05f;
-    private static PickerColor pointGridColor = null;
+    private static PickerColor pointGridColor = new PickerColor(0xFF7F7F7F, 1,1,0.5f,1);
     private static float pointWeight = 4;
     private static float sdfCropDistance = 0.25f;
 
@@ -130,7 +130,7 @@ public class SnapToGrid {
             WindowManager.snapAllStaticWindowsToGrid();
         }
         setSelectedVisibilityMode(gui.radio("show grid", getOptions(), getDefaultVisibilityMode()));
-        pointGridColor = gui.colorPicker("point color", NormColorStore.color(0.5f, 1));
+        pointGridColor = gui.colorPicker("point color", pointGridColor.hex);
         pointWeight = gui.slider("point weight", pointWeight);
         sdfCropDistance = gui.slider("point range", sdfCropDistance);
         gui.popFolder();

@@ -33,7 +33,10 @@ public class PlotTest extends PApplet {
         drawBackground();
         gui.pushFolder("test");
         gui.pushFolder("factual information");
-        gui.textInput("the default renderer sucks");
+        gui.text("this is a header", "content under header\nhello :3");
+        gui.slider("random slider", 0);
+        gui.text("", "");
+
         gui.popFolder();
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size");

@@ -57,7 +57,7 @@ public class TutorialGenerator extends PApplet {
         pg.fill(gui.colorPicker("color").hex);
         PVector textPos = gui.plotXY("pos");
         pg.textSize(gui.slider("size", 64));
-        pg.text(gui.textInput("content"), textPos.x, textPos.y);
+        pg.text(gui.text("content"), textPos.x, textPos.y);
         gui.popFolder();
 
         gui.pushFolder("circle");

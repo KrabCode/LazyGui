@@ -806,60 +806,42 @@ public class LazyGui implements UserInputSubscriber {
      * @param path forward slash separated unique path to the control element
      * @return current value of a string input element
      */
-    public String textInput(String path){
-        return textInput(path, "");
+    public String text(String path){
+        return text(path, "");
     }
 
     /**
-     * Gets the current value of a text input element.
+     * Gets the current value of an editable text field element.
      * Lazily initializes the string input if needed with the specified default.
      *
      * @param path forward slash separated unique path to the control element
      * @param content default value for the text content
      * @return current value of a string input element
      */
-    public String textInput(String path, String content){
+    public String text(String path, String content){
         String fullPath = getFolder() + path;
         TextNode node = (TextNode) NodeTree.findNode(fullPath);
         if(node == null){
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new TextNode(fullPath, folder, content, true);
+            node = new TextNode(fullPath, folder, content);
             NodeTree.insertNodeAtItsPath(node);
         }
         return node.getStringValue();
     }
 
     /**
-     * Sets the current value of a text input element.
+     * Sets the current value of an editable text field element.
      * Lazily initializes the text input element if needed and then sets its value to the specified content value.
      *
      * @param path forward slash separated unique path to the control element
      * @param content default value for the text content
      */
-    public void textInputSet(String path, String content){
+    public void textSet(String path, String content){
         String fullPath = getFolder() + path;
         TextNode node = (TextNode) NodeTree.findNode(fullPath);
         if(node == null){
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new TextNode(fullPath, folder, content, true);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        node.setStringValue(content);
-    }
-
-    /**
-     * Sets the current value of a text display element.
-     * Lazily initializes the read-only text element if needed and then sets its value to the specified content value.
-     *
-     * @param path forward slash separated unique path to the control element
-     * @param content text to display
-     */
-    public void textDisplay(String path, String content){
-        String fullPath = getFolder() + path;
-        TextNode node = (TextNode) NodeTree.findNode(fullPath);
-        if(node == null){
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new TextNode(fullPath, folder, content, false);
+            node = new TextNode(fullPath, folder, content);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.setStringValue(content);

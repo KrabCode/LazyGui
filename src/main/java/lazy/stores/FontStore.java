@@ -27,8 +27,8 @@ public class FontStore {
         gui.pushFolder("font");
         lazyUpdateFont(
 
-                gui.textInput("main font", mainFontPathDefault),
-                gui.textInput("side font", sideFontPathDefault),
+                gui.text("main font", mainFontPathDefault),
+                gui.text("side font", sideFontPathDefault),
                 gui.sliderInt("main size", mainFontSizeDefault, 1, Integer.MAX_VALUE),
                 gui.sliderInt("side size", sideFontSizeDefault, 1, Integer.MAX_VALUE)
         );

@@ -15,6 +15,8 @@ import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.util.Objects;
+
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
@@ -127,6 +129,12 @@ public abstract class AbstractNode {
         pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
     }
 
+    protected void drawMiddleText(PGraphics pg, String text){
+        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
+        pg.textAlign(CENTER, CENTER);
+        pg.text(trimmedText, size.x / 2f, cell - FontStore.textMarginY);
+    }
+
     protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
         if(fillBackground){
             float w = pg.textWidth(text) + FontStore.textMarginX * 2;
@@ -139,12 +147,12 @@ public abstract class AbstractNode {
         );
     }
 
-    protected void drawRightBackdrop(PGraphics pg, float width) {
+    protected void drawRightBackdrop(PGraphics pg, float backdropSize) {
         pg.pushStyle();
         fillBackgroundBasedOnMouseOver(pg);
         pg.noStroke();
         pg.rectMode(CORNER);
-        pg.rect(size.x-width, 0, width, size.y);
+        pg.rect(size.x-backdropSize, 0, backdropSize, size.y);
         pg.popStyle();
     }
 
@@ -253,11 +261,15 @@ public abstract class AbstractNode {
         if ("".equals(path)) { // this is the root node
             return getClassNameAsSpaceSeparatedLowerCase(app.getClass().getSimpleName());
         }
-        String[] split = NodePaths.splitByUnescapedSlashes(path);
+        if(path.equals("sliders/")) {
+            int i = 0;
+        }
+        String[] split = NodePaths.splitByUnescapesSlashesWithoutRemovingThem(path);
         if (split.length == 0) {
             return "";
         }
-        return NodePaths.getDisplayStringWithoutEscapes(split[split.length - 1]);
+        String nameWithoutPrefixSlash = NodePaths.getNameWithoutPrefixSlash(split[split.length - 1]);
+        return NodePaths.getDisplayStringWithoutEscapes(nameWithoutPrefixSlash);
     }
 
     private String getClassNameAsSpaceSeparatedLowerCase(String className){
