@@ -47,22 +47,6 @@ public class PlotFolderNode extends FolderNode {
         drawRightText(pg, vectorToDisplay, true);
     }
 
-    private void drawPlotIcon(PGraphics pg){
-        float n = cell * 0.3f;
-        pg.pushMatrix();
-        pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
-        strokeForegroundBasedOnMouseOver(pg);
-        pg.strokeWeight(1);
-        int count = 3;
-        for (int i = 0; i < count; i++) {
-            float x = map(i, 0, count-1, -n, n);
-            //noinspection SuspiciousNameCombination
-            pg.line(-n, x, n, x);
-            pg.line(x, -n, x, n);
-        }
-        pg.popMatrix();
-    }
-
     public PVector getVectorValue() {
         return new PVector(
                 sliderX.valueFloat,
@@ -80,7 +64,12 @@ public class PlotFolderNode extends FolderNode {
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
+
+        if(e.getKeyCode() == KeyCodes.CTRL_C || e.getKeyCode() == KeyCodes.CTRL_V){
+            super.keyPressedOverNode(e, x, y);
+        }else{
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);
+        }
     }
 }

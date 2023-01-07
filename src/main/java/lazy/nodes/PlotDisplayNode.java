@@ -8,6 +8,7 @@ import lazy.themes.ThemeStore;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 
@@ -20,14 +21,16 @@ class PlotDisplayNode extends AbstractNode {
         super(NodeType.TRANSIENT, path, parentFolder);
         this.sliderX = sliderX;
         this.sliderY = sliderY;
-        //noinspection SuspiciousNameCombination
-        idealInlineNodeHeightInCells = parentFolder.idealWindowWidthInCells;
     }
 
     @Override
     protected void drawNodeBackground(PGraphics pg) {
-        pg.noFill();
+        idealInlineNodeHeightInCells = floor(size.x / cell);
         drawPlotGrid(pg);
+        if(isMouseOverNode){
+            sliderX.isMouseOverNode = true;
+            sliderY.isMouseOverNode = true;
+        }
     }
 
     @Override
@@ -36,6 +39,7 @@ class PlotDisplayNode extends AbstractNode {
     }
 
     private void drawPlotGrid(PGraphics pg) {
+        pg.noFill();
         pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_BACKGROUND));
         if (shouldHighlightGrid()) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
@@ -141,6 +145,7 @@ class PlotDisplayNode extends AbstractNode {
         sliderX.mouseDragNodeContinue(e);
         sliderY.mouseDragNodeContinue(e);
     }
+
 
     @Override
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
