@@ -36,7 +36,6 @@ public class PlotTest extends PApplet {
         gui.text("this is a header", "content under header\nhello :3");
         gui.slider("random slider", 0);
         gui.text("", "");
-
         gui.popFolder();
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size");

@@ -16,7 +16,6 @@ class ColorPreviewNode extends AbstractNode {
     ColorPreviewNode(String path, ColorPickerFolderNode parentColorPickerFolder) {
         super(NodeType.TRANSIENT, path, parentColorPickerFolder);
         this.parentColorPickerFolder = parentColorPickerFolder;
-        shouldDrawLeftNameText = false;
         idealInlineNodeHeightInCells = 3;
         ShaderStore.getShader(checkerboardShaderPath);
     }
@@ -29,7 +28,7 @@ class ColorPreviewNode extends AbstractNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftText(pg, name);
+
     }
 
     private void drawCheckerboard(PGraphics pg) {

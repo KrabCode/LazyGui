@@ -46,8 +46,6 @@ public abstract class AbstractNode {
     public float idealInlineNodeHeightInCells = 1;
     public boolean isDragged = false;
     public boolean isMouseOverNode = false;
-    protected boolean shouldDrawLeftNameText = true;
-
 
     public void setIsMouseOverThisNodeOnly(){
         isMouseOverNode = true;
@@ -96,10 +94,12 @@ public abstract class AbstractNode {
         drawNodeBackground(pg);
         pg.popMatrix();
         pg.popStyle();
-        if(shouldDrawLeftNameText){
-            fillForegroundBasedOnMouseOver(pg);
-            drawNodeForeground(pg, name);
-        }
+        pg.pushMatrix();
+        pg.pushStyle();
+        fillForegroundBasedOnMouseOver(pg);
+        drawNodeForeground(pg, name);
+        pg.popMatrix();
+        pg.popStyle();
     }
 
     /**

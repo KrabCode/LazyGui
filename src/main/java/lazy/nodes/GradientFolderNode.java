@@ -175,7 +175,6 @@ public class GradientFolderNode extends FolderNode {
             super(NodeType.VALUE, path, parent);
             this.parent = parent;
             idealInlineNodeHeightInCells = 6;
-            shouldDrawLeftNameText = false;
         }
 
         @Override
@@ -185,7 +184,7 @@ public class GradientFolderNode extends FolderNode {
 
         @Override
         protected void drawNodeForeground(PGraphics pg, String name) {
-            drawLeftText(pg, name);
+
         }
 
     }

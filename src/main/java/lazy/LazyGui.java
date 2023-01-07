@@ -819,14 +819,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of a string input element
      */
     public String text(String path, String content){
-        String fullPath = getFolder() + path;
-        TextNode node = (TextNode) NodeTree.findNode(fullPath);
-        if(node == null){
-            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new TextNode(fullPath, folder, content);
-            NodeTree.insertNodeAtItsPath(node);
-        }
-        return node.getStringValue();
+        return getText(path, content).getStringValue();
     }
 
     /**
@@ -837,6 +830,10 @@ public class LazyGui implements UserInputSubscriber {
      * @param content default value for the text content
      */
     public void textSet(String path, String content){
+        getText(path, content).setStringValue(content);
+    }
+
+    public TextNode getText(String path, String content){
         String fullPath = getFolder() + path;
         TextNode node = (TextNode) NodeTree.findNode(fullPath);
         if(node == null){
@@ -844,7 +841,7 @@ public class LazyGui implements UserInputSubscriber {
             node = new TextNode(fullPath, folder, content);
             NodeTree.insertNodeAtItsPath(node);
         }
-        node.setStringValue(content);
+        return node;
     }
 
     /**

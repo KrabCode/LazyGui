@@ -20,7 +20,6 @@ class PlotDisplayNode extends AbstractNode {
         super(NodeType.TRANSIENT, path, parentFolder);
         this.sliderX = sliderX;
         this.sliderY = sliderY;
-        shouldDrawLeftNameText = false;
         //noinspection SuspiciousNameCombination
         idealInlineNodeHeightInCells = parentFolder.idealWindowWidthInCells;
     }
@@ -33,7 +32,7 @@ class PlotDisplayNode extends AbstractNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftText(pg, name);
+
     }
 
     private void drawPlotGrid(PGraphics pg) {
