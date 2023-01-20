@@ -12,8 +12,8 @@ public class FontStore {
     public static float textMarginX = 5;
     public static float textMarginY = 13;
 
-    private final static String sideFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
-    private final static String mainFontPathDefault = "JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf";
+    private final static String sideFontPathDefault = "JetBrainsMono-Regular.ttf";
+    private final static String mainFontPathDefault = "JetBrainsMono-Regular.ttf";
     private static final int mainFontSizeDefault = 16;
     private static final int sideFontSizeDefault = 15;
     private static String lastMainFontPath = "";
