@@ -15,21 +15,28 @@ import processing.core.PGraphics;
 
 
 import static lazy.stores.FontStore.*;
+import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
+import static lazy.stores.LayoutStore.keyboardInputAppendCooldownMillis;
 import static processing.core.PConstants.*;
 
 public class TextNode extends AbstractNode {
 
     @Expose
     String content;
-    float marginLeftInCells = 0.2f;
+    String buffer;
 
+    int millisInputDelay = keyboardInputAppendCooldownMillis;
+    int millisInputStarted = -millisInputDelay * 2;
+
+    float marginLeftInCells = 0.2f;
     String regexLookBehindForNewLine = "(?<=\\n)";
     private final boolean shouldDisplayHeaderRow;
 
     public TextNode(String path, FolderNode folder, String content) {
         super(NodeType.VALUE, path, folder);
         this.content = content;
+        this.buffer = content;
         shouldDisplayHeaderRow = !name.trim().isEmpty();
         JsonSaves.overwriteWithLoadedStateIfAny(this);
     }
@@ -42,13 +49,14 @@ public class TextNode extends AbstractNode {
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
         fillForegroundBasedOnMouseOver(pg);
-        int lineCount = content.split(regexLookBehindForNewLine).length + (content.endsWith("\n") ? 1 : 0);
+        String toDisplay = buffer;
+        int lineCount = toDisplay.split(regexLookBehindForNewLine).length + (toDisplay.endsWith("\n") ? 1 : 0);
         if(shouldDisplayHeaderRow){
             drawLeftText(pg, name);
             lineCount += 1;
         }
         masterInlineNodeHeightInCells = lineCount;
-        String contentToDraw = content.length() == 0 ? "..." : content;
+        String contentToDraw = toDisplay.length() == 0 ? "..." : toDisplay;
         fillForegroundBasedOnMouseOver(pg);
         drawContent(pg, contentToDraw);
     }
@@ -98,7 +106,17 @@ public class TextNode extends AbstractNode {
             pg.text(lineThatFits, FontStore.textMarginX, -FontStore.textMarginY);
         }
         pg.popMatrix();
+    }
 
+    @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        updateInputBuffer();
+    }
+
+    private void updateInputBuffer() {
+        if(!content.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
+            content = buffer;
+        }
     }
 
     @Override
@@ -110,18 +128,19 @@ public class TextNode extends AbstractNode {
             if(KeyCodes.isKeyCodeIgnored(e.getKeyCode())){
                 return;
             }
+            millisInputStarted = app.millis();
             if (e.getKeyCode() == PConstants.BACKSPACE) {
-                if (content.length() > 0) {
-                    content = content.substring(0, content.length() - 1);
+                if (buffer.length() > 0) {
+                    buffer = buffer.substring(0, buffer.length() - 1);
                 }
             } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKeyChar() == PConstants.DELETE) {
-                content = "";
+                buffer = "";
             } else if (e.getKeyCode() == KeyCodes.CTRL_C && e.getKeyChar() != 'c') {
-                ClipboardUtils.setClipboardString(this.content);
+                ClipboardUtils.setClipboardString(this.buffer);
             } else if (e.getKeyCode() == KeyCodes.CTRL_V && e.getKeyChar() != 'v') {
-                content = ClipboardUtils.getClipboardString();
+                buffer = ClipboardUtils.getClipboardString();
             } else if (e.getKeyCode() != PConstants.SHIFT && e.getKeyCode() != PConstants.CONTROL && e.getKeyCode() != PConstants.ALT) {
-                content = content + e.getKeyChar();
+                buffer = buffer + e.getKeyChar();
             }
         }
     }
@@ -131,6 +150,7 @@ public class TextNode extends AbstractNode {
         JsonObject json = loadedNode.getAsJsonObject();
         if (json.has("content")) {
             content = json.get("content").getAsString();
+            buffer = content;
         }
     }
 
@@ -140,6 +160,7 @@ public class TextNode extends AbstractNode {
 
     public void setStringValue(String newValue) {
         content = newValue;
+        buffer = newValue;
     }
 
     @Override
