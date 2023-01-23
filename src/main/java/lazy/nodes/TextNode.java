@@ -110,10 +110,10 @@ public class TextNode extends AbstractNode {
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        updateInputBuffer();
+        trySetContentToBufferAfterDelay();
     }
 
-    private void updateInputBuffer() {
+    private void trySetContentToBufferAfterDelay() {
         if(!content.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
             content = buffer;
         }
