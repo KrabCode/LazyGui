@@ -140,7 +140,7 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 //        super.keyPressedOverNode(e, x, y);
-//        - we don't want to copy the contents of the folder itself... let this ColorPickerFolderNode handle it
+//        - we don't want to copy the contents of the folder itself - we only want to copy the hex code to clipboard
         if (e.getKeyCode() == KeyCodes.CTRL_C) {
             ClipboardUtils.setClipboardString(getHexString());
         }
