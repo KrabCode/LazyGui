@@ -65,7 +65,7 @@ if(gui.button("say hello once")){
 
 ```java
 if(gui.toggle("spam every frame")){
-    println("I'm trapped in a string factory")
+    println("I'm trapped in a string factory");
 }
 ```
 
