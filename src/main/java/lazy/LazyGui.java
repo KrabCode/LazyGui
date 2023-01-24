@@ -1025,7 +1025,9 @@ public class LazyGui implements UserInputSubscriber {
         SnapToGrid.update();
         ContextLines.update(pg);
         updateHotkeyToggles();
-        LayoutStore.keyboardInputAppendCooldownMillis = sliderInt("numpad input (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
+        // TODO explain this some more,
+        //   https://github.com/KrabCode/LazyGui/issues/119
+        LayoutStore.keyboardInputAppendCooldownMillis = sliderInt("input buffer (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
         popFolder();
     }
 
