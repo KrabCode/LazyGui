@@ -102,7 +102,7 @@ image(gradient, 0, 0);
 
 The **path**  is the first string parameter to every control element function and it must be unique.
 It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
-The forward slash `/` is a reserved character used to make folders, but it can be escaped with '\\' like this: '\\/' which won't separate folders.
+The forward slash `/` is a reserved character used to make folders, but it can be escaped with `\\` like this: `\\/` which won't separate folders.
 
 #### Keep the sliders called "x" and "y" in a folder called "pos"
 ```java
@@ -124,7 +124,7 @@ popFolder() doesn't have a parameter - it just goes up by one level
 You can nest a pushFolder() inside another pushFolder() - your path stack can be many levels deep.
 Just remember to call popFolder() the same number of times when done!
 
-#### Same result as the last code example, only using pushFolder() and popFolder() instead of spelling out the whole path every time
+#### Keep the sliders called "x" and "y" in a folder called "pos" by using the stack
 ```java
 gui.pushFolder("pos");
 float x = gui.slider("x");
