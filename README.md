@@ -44,14 +44,13 @@ void draw(){
     background(100);
 }
 ```
- Then during `draw()` you can do this:
+ After you create the LazyGui object you can use it to ask for values of control elements at their unique paths:
 
 #### Slider
 ```java
-float x = gui.slider("folder/x");
+float x = gui.slider("x");
 ellipse(x, height/2, 50, 50);
 ```
-[slider visual](https://i.imgur.com/MrPaF6x.mp4)
 
 #### Button
 
@@ -65,8 +64,15 @@ if(gui.button("say hello once")){
 
 ```java
 if(gui.toggle("spam every frame")){
-    println("I'm trapped in a string factory")
+    println("I'm trapped in a string factory");
 }
+```
+
+#### Text input
+
+```java
+  String userInput = gui.text("text header", "this default text can be edited");
+  text(userInput, width/2, height/2);
 ```
 
 #### Pick one option from a list
@@ -92,13 +98,36 @@ PGraphics gradient = gui.gradient("background");
 image(gradient, 0, 0);
 ```
 
-### Folders
+### Path
 
-You may have noticed the string parameter to every control, I call that the **path** and it must be unique.
-The forward slash `/` is a reserved character used to make folders.
+The **path**  is the first string parameter to every control element function and it must be unique.
+It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
+The forward slash `/` is a reserved character used to make folders, but it can be escaped with '\\' like this: '\\/' which won't separate folders.
 
 #### Keep the sliders called "x" and "y" in a folder called "pos"
 ```java
 float x = gui.slider("pos/x");
 float y = gui.slider("pos/y");
-``` 
+```
+
+#### Global path prefix stack
+
+Repeating the whole path in every control element call can get tiresome, especially with multiple nested levels.
+Which is why there is a helpful path stack that you can interact with using pushFolder() and popFolder().
+
+Just like using pushMatrix() and popMatrix() in Processing, you can change your "current directory"
+by pushing a new folder name to a stack with gui.pushFolder("folder name") and have every control element called after that be placed into that folder automatically
+    - as if the contents of the whole current stack got prefixed to the path parameter in every control element call.
+
+popFolder() doesn't have a parameter - it just goes up by one level
+
+You can nest a pushFolder() inside another pushFolder() - your path stack can be many levels deep.
+Just remember to call popFolder() the same number of times when done!
+
+#### Same result as the last code example, only using pushFolder() and popFolder() instead of spelling out the whole path every time
+```java
+gui.pushFolder("pos");
+float x = gui.slider("x");
+float y = gui.slider("y");
+gui.popFolder();
+```
