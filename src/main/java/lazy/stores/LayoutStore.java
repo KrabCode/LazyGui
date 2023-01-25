@@ -2,8 +2,8 @@ package lazy.stores;
 
 public class LayoutStore {
     public static float cell = 22; // cell size but shorter because used everywhere
-    public static int keyboardInputAppendCooldownMillis = 500;
     public static final float defaultWindowWidthInCells = 10;
+    private static int keyboardBufferDelayMillis = 500;
     private static float resizeRectangleSize = 4;
     private static boolean shouldKeepWindowsInBounds = true;
     private static boolean isWindowResizeEnabled = true;
@@ -43,5 +43,13 @@ public class LayoutStore {
 
     public static void setResizeRectangleSize(float valueToSet){
         resizeRectangleSize = valueToSet;
+    }
+
+    public static int getKeyboardBufferDelayMillis() {
+        return keyboardBufferDelayMillis;
+    }
+
+    public static void setKeyboardBufferDelayMillis(int keyboardBufferDelayMillis) {
+        LayoutStore.keyboardBufferDelayMillis = keyboardBufferDelayMillis;
     }
 }

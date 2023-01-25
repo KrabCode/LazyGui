@@ -330,12 +330,12 @@ public class SliderNode extends AbstractNode {
 
     protected boolean isNumpadInputActive() {
         return numpadInputAppendLastMillis != -1 &&
-                app.millis() <= numpadInputAppendLastMillis + LayoutStore.keyboardInputAppendCooldownMillis;
+                app.millis() <= numpadInputAppendLastMillis + LayoutStore.getKeyboardBufferDelayMillis();
     }
 
     private boolean isNumpadInReplaceMode() {
         return numpadInputAppendLastMillis == -1 ||
-                app.millis() - numpadInputAppendLastMillis > LayoutStore.keyboardInputAppendCooldownMillis;
+                app.millis() - numpadInputAppendLastMillis > LayoutStore.getKeyboardBufferDelayMillis();
     }
 
     private boolean trySetValueFloat(String toParseAsFloat) {
