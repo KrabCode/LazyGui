@@ -1047,7 +1047,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
-        char key = keyEvent.getKeyChar();
+        char key = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {
             isGuiHidden = !isGuiHidden;

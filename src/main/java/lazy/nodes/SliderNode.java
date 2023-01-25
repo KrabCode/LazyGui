@@ -249,7 +249,7 @@ public class SliderNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        if (e.getKeyChar() == 'r') {
+        if (e.getKey() == 'r') {
             if (!Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
@@ -279,10 +279,10 @@ public class SliderNode extends AbstractNode {
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
         boolean inReplaceMode = isNumpadInReplaceMode();
-        if(numpadChars.contains(e.getKeyChar())){
-            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())), inReplaceMode);
+        if(numpadChars.contains(e.getKey())){
+            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
         }
-        switch (e.getKeyChar()) {
+        switch (e.getKey()) {
             case '.':
             case ',':
                 setNumpadInputActiveStarted();
@@ -296,7 +296,7 @@ public class SliderNode extends AbstractNode {
             case '+':
             case '-':
                 if(inReplaceMode){
-                    numpadBufferValue = "" + e.getKeyChar();
+                    numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
                 break;

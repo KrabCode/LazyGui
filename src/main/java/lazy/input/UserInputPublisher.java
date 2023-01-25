@@ -58,7 +58,7 @@ public class UserInputPublisher {
     }
 
     void keyPressed(KeyEvent event) {
-        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
+        LazyKeyEvent e = new LazyKeyEvent(event);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyPressed(e);
             if (e.isConsumed()) {
@@ -68,7 +68,7 @@ public class UserInputPublisher {
     }
 
     void keyReleased(KeyEvent event) {
-        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
+        LazyKeyEvent e = new LazyKeyEvent(event);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyReleased(e);
             if (e.isConsumed()) {

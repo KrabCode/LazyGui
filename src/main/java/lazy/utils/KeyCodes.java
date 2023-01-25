@@ -13,7 +13,7 @@ class KeyCodes {
     static final int CTRL_Y = 90;
     public static final int CTRL_S = 83;
 
-    private static final ArrayList<Integer> ignoredKeyCodes = new ArrayListBuilder<Integer>().add(157).build();
+    private static final ArrayList<Integer> ignoredKeyCodes = new ArrayListBuilder<Integer>().add(157).add(17).add(19).build();
 
     public static boolean isKeyCodeIgnored(int keyCode){
         return ignoredKeyCodes.contains(keyCode);

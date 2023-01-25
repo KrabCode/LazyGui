@@ -133,14 +133,15 @@ public class TextNode extends AbstractNode {
                 if (buffer.length() > 0) {
                     buffer = buffer.substring(0, buffer.length() - 1);
                 }
-            } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKeyChar() == PConstants.DELETE) {
+            } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKey() == PConstants.DELETE) {
                 buffer = "";
-            } else if (e.getKeyCode() == KeyCodes.CTRL_C && e.getKeyChar() != 'c') {
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.CTRL_C) {
                 ClipboardUtils.setClipboardString(this.buffer);
-            } else if (e.getKeyCode() == KeyCodes.CTRL_V && e.getKeyChar() != 'v') {
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.CTRL_V) {
                 buffer = ClipboardUtils.getClipboardString();
-            } else if (e.getKeyCode() != PConstants.SHIFT && e.getKeyCode() != PConstants.CONTROL && e.getKeyCode() != PConstants.ALT) {
-                buffer = buffer + e.getKeyChar();
+                content = buffer;
+            } else {
+                buffer = buffer + e.getKey();
             }
         }
     }
