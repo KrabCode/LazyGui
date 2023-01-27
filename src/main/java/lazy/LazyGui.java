@@ -247,7 +247,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, SliderNode.class)){
+        if(isPathTypeConflict(fullPath, SliderNode.class)){
             return defaultValue;
         }
         SliderNode node = (SliderNode) findNode(fullPath);
@@ -275,7 +275,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderSet(String path, float value){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, SliderNode.class)){
+        if(isPathTypeConflict(fullPath, SliderNode.class)){
             return;
         }
         SliderNode node = (SliderNode) findNode(fullPath);
@@ -296,7 +296,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderAdd(String path, float amountToAdd){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, SliderNode.class)){
+        if(isPathTypeConflict(fullPath, SliderNode.class)){
             return;
         }
         SliderNode node = (SliderNode) findNode(fullPath);
@@ -347,7 +347,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, SliderNode.class)){
+        if(isPathTypeConflict(fullPath, SliderNode.class)){
             return defaultValue;
         }
         SliderIntNode node = (SliderIntNode) findNode(fullPath);
@@ -376,7 +376,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderIntSet(String path, int value){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, SliderNode.class)){
+        if(isPathTypeConflict(fullPath, SliderNode.class)){
             return;
         }
         SliderIntNode node = (SliderIntNode) findNode(fullPath);
@@ -483,7 +483,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, PlotFolderNode.class)){
+        if(isPathTypeConflict(fullPath, PlotFolderNode.class)){
             return defaultXYZ == null ? new PVector() : defaultXYZ.copy();
         }
         PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
@@ -540,7 +540,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private void plotSet(String path, PVector valueToSet, boolean useZ){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, PlotFolderNode.class)){
+        if(isPathTypeConflict(fullPath, PlotFolderNode.class)){
             return;
         }
         PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
@@ -577,7 +577,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public boolean toggle(String path, boolean defaultValue) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ToggleNode.class)){
+        if(isPathTypeConflict(fullPath, ToggleNode.class)){
             return defaultValue;
         }
         ToggleNode node = (ToggleNode) findNode(fullPath);
@@ -598,7 +598,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void toggleSet(String path, boolean value) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ToggleNode.class)){
+        if(isPathTypeConflict(fullPath, ToggleNode.class)){
             return;
         }
         ToggleNode node = (ToggleNode) findNode(fullPath);
@@ -629,7 +629,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public boolean button(String path) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ButtonNode.class)){
+        if(isPathTypeConflict(fullPath, ButtonNode.class)){
             return false;
         }
         ButtonNode node = (ButtonNode) findNode(fullPath);
@@ -697,7 +697,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public String radio(String path, String[] options, String defaultOption) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, RadioFolderNode.class)){
+        if(isPathTypeConflict(fullPath, RadioFolderNode.class)){
             return defaultOption == null ? options[0] : defaultOption;
         }
         if (options == null || options.length == 0) {
@@ -722,7 +722,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void radioSet(String path, String optionToSet){
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, RadioFolderNode.class)){
+        if(isPathTypeConflict(fullPath, RadioFolderNode.class)){
             return;
         }
         RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
@@ -802,7 +802,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public PickerColor colorPicker(String path, int hex) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
+        if(isPathTypeConflict(fullPath, ColorPickerFolderNode.class)){
             return new PickerColor(hex);
         }
         ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
@@ -824,7 +824,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void colorPickerSet(String path, int hex) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
+        if(isPathTypeConflict(fullPath, ColorPickerFolderNode.class)){
             return;
         }
         ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
@@ -848,7 +848,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void colorPickerHueAdd(String path, float hueToAdd) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
+        if(isPathTypeConflict(fullPath, ColorPickerFolderNode.class)){
             return;
         }
         ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
@@ -899,7 +899,7 @@ public class LazyGui implements UserInputSubscriber {
 
     private String getTextNodeValue(String path, String content){
         String fullPath = getFolder() + path;
-        if(NodeTree.isPathConflict(fullPath, TextNode.class)){
+        if(NodeTree.isPathTypeConflict(fullPath, TextNode.class)){
             return content;
         }
         TextNode node = (TextNode) findNode(fullPath);
@@ -925,7 +925,7 @@ public class LazyGui implements UserInputSubscriber {
     public void setTextNodeContent(String path, String content){
         String fullPath = getFolder() + path;
         TextNode node = (TextNode) findNode(fullPath);
-        if(NodeTree.isPathConflict(fullPath, TextNode.class)){
+        if(NodeTree.isPathTypeConflict(fullPath, TextNode.class)){
             return;
         }
         if (node == null) {
@@ -957,7 +957,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public PGraphics gradient(String path, float alpha) {
         String fullPath = getFolder() + path;
-        if(isPathConflict(fullPath, GradientFolderNode.class)){
+        if(isPathTypeConflict(fullPath, GradientFolderNode.class)){
             return null;
         }
         GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
