@@ -371,7 +371,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets all values to 0 by default.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -382,7 +382,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter default.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -394,7 +394,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -407,7 +407,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXY default xy values, z value is ignored
@@ -418,7 +418,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its xyz values to 0 by default.
      * @param path forward slash separated unique path to the plot control element
      * @return current xyz values
@@ -429,7 +429,7 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXYZ default xyz values
@@ -441,7 +441,7 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultX default x value
@@ -454,7 +454,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXYZ default xyz values
@@ -475,27 +475,54 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * TODO javadocs
-     * @param path
-     * @param xyz
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the parameter default.
+     * @param path forward slash separated unique path to the plot control element
+     * @param xyz value to set to each axis
      */
     public void plotSet(String path, float xyz){
-        plotSet(path, new PVector(xyz, xyz, xyz));
+        plotSet(path, new PVector(xyz, xyz, xyz), true);
     }
 
+    /**
+     * Sets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets its x,y values to the parameter defaults.
+     * The extra z slider will not be shown if the plot is initialized in this way.
+     * @param path forward slash separated unique path to the plot control element
+     * @param x x value to set
+     * @param y y value to set
+     */
     public void plotSet(String path, float x, float y){
-        plotSet(path, new PVector(x,y));
+        plotSet(path, new PVector(x,y), false);
     }
 
+    /**
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the separate parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param x x value to set
+     * @param y y value to set
+     * @param z z value to set
+     */
     public void plotSet(String path, float x, float y, float z){
-        plotSet(path, new PVector(x,y,z));
+        plotSet(path, new PVector(x,y,z), true);
     }
 
+    /**
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the separate parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param valueToSet vector value to set
+     */
     public void plotSet(String path, PVector valueToSet){
+        plotSet(path, valueToSet, true);
+    }
+
+    private void plotSet(String path, PVector valueToSet, boolean useZ){
         String fullPath = getFolder() + path;
         PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
         if(node == null){
-            node = createPlotNode(fullPath, valueToSet, valueToSet.z != 0);
+            node = createPlotNode(fullPath, valueToSet, useZ);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.setVectorValue(valueToSet.x, valueToSet.y, valueToSet.z);
