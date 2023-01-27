@@ -1,8 +1,6 @@
 package lazy.windows;
 
 import lazy.nodes.FolderNode;
-import lazy.stores.FontStore;
-import lazy.stores.LayoutStore;
 import lazy.utils.SnapToGrid;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -10,14 +8,11 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.LayoutStore.cell;
-import static processing.core.PApplet.floor;
 
 public class WindowManager {
     private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private static final ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
-    static boolean showPathTooltips = false;
 
     public static void addWindow(Window window) {
         windows.add(window);
@@ -110,16 +105,4 @@ public class WindowManager {
         }
     }
 
-    public static void updateWindowOptions() {
-        gui.pushFolder("windows");
-        LayoutStore.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
-        showPathTooltips = gui.toggle("show path tooltips", true);
-        LayoutStore.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
-        gui.pushFolder("resize");
-        LayoutStore.setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
-        LayoutStore.setShouldDrawResizeIndicator(gui.toggle("show handle", LayoutStore.getShouldDrawResizeIndicator()));
-        LayoutStore.setResizeRectangleSize(gui.slider("handle width", LayoutStore.getResizeRectangleSize()));
-        gui.popFolder();
-        gui.popFolder();
-    }
 }

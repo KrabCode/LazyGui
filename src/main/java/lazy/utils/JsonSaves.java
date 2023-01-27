@@ -29,8 +29,10 @@ public class JsonSaves {
     private static void lazyInitSaveDir() {
         saveDir = new File(getGuiDataFolderPath("/saves/"));
         if (!saveDir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            saveDir.mkdirs();
+            boolean dirCreationResult = saveDir.mkdirs();
+            if(!dirCreationResult){
+                println("could not create save folder at path: " + saveDir.getPath());
+            }
         }
     }
 

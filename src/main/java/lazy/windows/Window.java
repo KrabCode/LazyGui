@@ -21,7 +21,6 @@ import processing.core.PVector;
 import java.util.Arrays;
 
 import static lazy.stores.GlobalReferences.app;
-import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 import static lazy.themes.ThemeColorType.*;
@@ -93,7 +92,7 @@ public class Window implements UserInputSubscriber {
     }
 
     private void drawPathTooltipOnHighlight(PGraphics pg) {
-        if (!isPointInsideTitleBar(app.mouseX, app.mouseY) || !WindowManager.showPathTooltips) {
+        if (!isPointInsideTitleBar(app.mouseX, app.mouseY) || !LayoutStore.getShowPathTooltips()) {
             return;
         }
         pg.pushMatrix();
@@ -101,18 +100,19 @@ public class Window implements UserInputSubscriber {
         pg.translate(posX, posY);
         String[] pathSplit = splitFullPathWithoutEndAndRoot(folder.path);
         int lineCount = pathSplit.length;
-        float tooltipHeight = lineCount * cell;
-        float tooltipYOffset = 0;
         float tooltipXOffset = cell * 0.5f;
-        float tooltipWidth = windowSizeX - tooltipXOffset - cell;
+        float tooltipWidthMinimum = windowSizeX - tooltipXOffset - cell;
 //        pg.stroke(ThemeStore.getColor(WINDOW_BORDER)); // tooltip border maybe?
         pg.noStroke();
-        pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-        pg.rect(tooltipXOffset, tooltipYOffset - tooltipHeight, tooltipWidth, tooltipHeight);
-        pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
+        pg.rectMode(CORNER);
         pg.textAlign(LEFT, CENTER);
         for (int i = 0; i < lineCount; i++) {
-            pg.text(pathSplit[lineCount - 1 - i], FontStore.textMarginX + tooltipXOffset, tooltipYOffset - i * cell - FontStore.textMarginY);
+            String line = pathSplit[lineCount - 1 - i];
+            float tooltipWidth = max(tooltipWidthMinimum, pg.textWidth(line) + FontStore.textMarginX * 2);
+            pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
+            pg.rect(tooltipXOffset,  -  i * cell - cell, tooltipWidth, cell);
+            pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
+            pg.text(line, FontStore.textMarginX + tooltipXOffset, - i * cell - FontStore.textMarginY);
         }
         pg.popMatrix();
         pg.popStyle();

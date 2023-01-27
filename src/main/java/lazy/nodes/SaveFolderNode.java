@@ -30,6 +30,11 @@ public class SaveFolderNode extends FolderNode {
         updateStateList();
     }
 
+    @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        LazyGui.autosaveEnabled = gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
+    }
+
     void updateStateList() {
         List<File> filenames = JsonSaves.getSaveFileList();
         if(filenames == null){
@@ -90,7 +95,6 @@ public class SaveFolderNode extends FolderNode {
             println("LazyGui save folder: " + JsonSaves.getSaveDir().getAbsolutePath());
         }
 
-        LazyGui.autosaveEnabled = gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
         updateStateList();
     }
 

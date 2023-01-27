@@ -31,7 +31,8 @@ public class PlotTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        gui.pushFolder("test");
+        gui.pushFolder("ok we are on test");
+        gui.pushFolder("test aaa testing pls");
         PVector pos = gui.plotXY("pos");
         PVector size = gui.plotXY("size", 50);
         rotation += radians(gui.slider("rotation +"));
@@ -42,6 +43,7 @@ public class PlotTest extends PApplet {
         pg.rotate(rotation);
         pg.rectMode(CENTER);
         pg.rect(0,0,size.x,size.y);
+        gui.popFolder();
         gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);

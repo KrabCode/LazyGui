@@ -64,6 +64,8 @@ public class LazyGui implements UserInputSubscriber {
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
 
+    public static boolean autosaveEnabled = false;
+
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
@@ -1046,14 +1048,13 @@ public class LazyGui implements UserInputSubscriber {
 
     private void updateOptionsFolder() {
         pushFolder(optionsNode.path);
-        WindowManager.updateWindowOptions();
+        LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
         ContextLines.update(pg);
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
-        LayoutStore.updateSeparators();
         popFolder();
     }
 
@@ -1061,7 +1062,6 @@ public class LazyGui implements UserInputSubscriber {
         pushFolder("hotkeys");
         hotkeyHideActive = toggle("h: hide\\/show gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
-
         hotkeyScreenshotActive = toggle("i: screenshot", true);
         // TODO fix
         //  https://github.com/KrabCode/LazyGui/issues/36
@@ -1126,6 +1126,5 @@ public class LazyGui implements UserInputSubscriber {
         }
         JsonSaves.createTreeSaveFiles("auto");
     }
-    public static boolean autosaveEnabled = false;
 
 }
