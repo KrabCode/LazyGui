@@ -3,6 +3,7 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import lazy.stores.DelayStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
@@ -17,7 +18,6 @@ import processing.core.PGraphics;
 import static lazy.stores.FontStore.*;
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
-import static lazy.stores.LayoutStore.keyboardInputAppendCooldownMillis;
 import static processing.core.PConstants.*;
 
 public class TextNode extends AbstractNode {
@@ -26,11 +26,11 @@ public class TextNode extends AbstractNode {
     String content;
     String buffer;
 
-    int millisInputDelay = keyboardInputAppendCooldownMillis;
-    int millisInputStarted = -millisInputDelay * 2;
+    private final int millisInputDelay;
+    private int millisInputStarted;
 
-    float marginLeftInCells = 0.2f;
-    String regexLookBehindForNewLine = "(?<=\\n)";
+    private final float marginLeftInCells = 0.2f;
+    private final String regexLookBehindForNewLine = "(?<=\\n)";
     private final boolean shouldDisplayHeaderRow;
 
     public TextNode(String path, FolderNode folder, String content) {
@@ -38,6 +38,8 @@ public class TextNode extends AbstractNode {
         this.content = content;
         this.buffer = content;
         shouldDisplayHeaderRow = !name.trim().isEmpty();
+        millisInputDelay = DelayStore.getKeyboardBufferDelayMillis();
+        millisInputStarted = -millisInputDelay * 2;
         JsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 

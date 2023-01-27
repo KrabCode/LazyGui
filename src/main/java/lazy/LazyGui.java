@@ -495,7 +495,7 @@ public class LazyGui implements UserInputSubscriber {
         String fullPath = getFolder() + path;
         PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
         if(node == null){
-            node = createPlotNode(fullPath, valueToSet, true);
+            node = createPlotNode(fullPath, valueToSet, valueToSet.z != 0);
             NodeTree.insertNodeAtItsPath(node);
         }
         node.setVectorValue(valueToSet.x, valueToSet.y, valueToSet.z);
@@ -1025,20 +1025,8 @@ public class LazyGui implements UserInputSubscriber {
         SnapToGrid.update();
         ContextLines.update(pg);
         updateHotkeyToggles();
-        updateInputBuffer();
-        popFolder();
-    }
-
-    private void updateInputBuffer() {
-        pushFolder("input buffer");
-        textSet("readme", "the buffer delay slider sets the time\n" +
-                "that must elapse after the last keyboard input has been made\n" +
-                "before the new value overwrites any previous content\n" +
-                "in the currently moused over text / slider\n" +
-                "in order to avoid jarring sketch changes with each keystroke"
-        );
-        LayoutStore.setKeyboardBufferDelayMillis(
-                sliderInt("buffer delay (ms)", getKeyboardBufferDelayMillis(), 100, 5000));
+        DelayStore.updateInputDelay();
+        LayoutStore.updateSeparators();
         popFolder();
     }
 

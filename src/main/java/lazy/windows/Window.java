@@ -279,8 +279,8 @@ public class Window implements UserInputSubscriber {
     }
 
     private void drawHorizontalSeparator(PGraphics pg) {
-        boolean show = gui.toggle("options/separators/show");
-        float weight = gui.slider("options/separators/weight", 0.5f);
+        boolean show = LayoutStore.isShowHorizontalSeparators();
+        float weight = LayoutStore.getHorizontalSeparatorStrokeWeight();
         if(show){
             pg.strokeCap(SQUARE);
             pg.strokeWeight(weight);

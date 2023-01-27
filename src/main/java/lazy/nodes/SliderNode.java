@@ -7,8 +7,8 @@ import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
+import lazy.stores.DelayStore;
 import lazy.utils.KeyCodes;
-import lazy.stores.LayoutStore;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
@@ -330,12 +330,12 @@ public class SliderNode extends AbstractNode {
 
     protected boolean isNumpadInputActive() {
         return numpadInputAppendLastMillis != -1 &&
-                app.millis() <= numpadInputAppendLastMillis + LayoutStore.getKeyboardBufferDelayMillis();
+                app.millis() <= numpadInputAppendLastMillis + DelayStore.getKeyboardBufferDelayMillis();
     }
 
     private boolean isNumpadInReplaceMode() {
         return numpadInputAppendLastMillis == -1 ||
-                app.millis() - numpadInputAppendLastMillis > LayoutStore.getKeyboardBufferDelayMillis();
+                app.millis() - numpadInputAppendLastMillis > DelayStore.getKeyboardBufferDelayMillis();
     }
 
     private boolean trySetValueFloat(String toParseAsFloat) {
