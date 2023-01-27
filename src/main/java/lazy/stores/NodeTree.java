@@ -30,12 +30,11 @@ public class NodeTree {
     public static <T extends AbstractNode> boolean isPathTakenByUnexpectedType(String path, Class<T> expectedType){
         AbstractNode foundNode = findNode(path);
         if(foundNode == null){
-            // nothing found at this path, so it's free to use by any type
             return false;
         }
         String uniquePathAndTypeQuery = path + " - " + expectedType.getSimpleName();
         if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
-            // we return early when this is a known conflict, no reason to spam the error or do the expensive exception
+            // return early when this is a known conflict, no reason to spam the error or do the expensive exception
             return true;
         }
         try{
