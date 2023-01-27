@@ -252,7 +252,7 @@ public abstract class AbstractNode {
 
     @Override
     public String toString() {
-        return "Folder @ " + path + " | " + (isParentWindowOpen() ? "open" : "closed");
+        return className + " @ " + path;
     }
 
     private String getNameFromPath(String path) {
@@ -324,5 +324,4 @@ public abstract class AbstractNode {
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
     }
-
 }

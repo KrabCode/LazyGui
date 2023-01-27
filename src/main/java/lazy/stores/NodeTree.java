@@ -1,8 +1,6 @@
 package lazy.stores;
 
-import lazy.nodes.NodeType;
-import lazy.nodes.AbstractNode;
-import lazy.nodes.FolderNode;
+import lazy.nodes.*;
 import lazy.utils.NodePaths;
 
 import java.util.*;
@@ -11,7 +9,8 @@ import static processing.core.PApplet.println;
 
 public class NodeTree {
     private static final FolderNode root = new FolderNode("", null);
-    private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
+    private static final Map<String, AbstractNode> nodesByPath = new HashMap<>();
+//    private static final Map<String, Class> knownConflictingPaths = new HashMap<>();
 
     private NodeTree() {
 
@@ -26,6 +25,21 @@ public class NodeTree {
         lazyInitFolderPath(folderPath);
         AbstractNode pathParent = findNode(folderPath);
         return (FolderNode) pathParent;
+    }
+
+    public static <T extends AbstractNode> boolean isPathConflict(String path, Class<T> targetType){
+        AbstractNode foundNode = findNode(path);
+        if(foundNode == null){
+            return false;
+        }
+        try{
+            targetType.cast(foundNode);
+        }catch(Exception ex){
+            println("Path conflict error: this path (" + path + ") is already taken by a " + foundNode.className +
+                    " and you tried to use it as " + targetType.getSimpleName());
+            return true;
+        }
+        return false;
     }
 
     public static AbstractNode findNode(String path) {
