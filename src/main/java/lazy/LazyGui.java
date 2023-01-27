@@ -26,10 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.stores.NodeTree.isPathConflict;
+import static lazy.stores.NodeTree.*;
 import static lazy.stores.NormColorStore.color;
 import static lazy.stores.GlobalReferences.app;
-import static lazy.stores.NodeTree.getAllNodesAsList;
 import static lazy.stores.LayoutStore.*;
 import static lazy.utils.JsonSaves.getGuiDataFolderPath;
 import static lazy.utils.JsonSaves.getNextUnusedIntegerFileNameInFolder;
@@ -251,10 +250,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, SliderNode.class)){
             return defaultValue;
         }
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueFloat;
     }
@@ -279,10 +278,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, SliderNode.class)){
             return;
         }
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
     }
@@ -300,10 +299,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, SliderNode.class)){
             return;
         }
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat += amountToAdd;
     }
@@ -351,10 +350,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, SliderNode.class)){
             return defaultValue;
         }
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
+        SliderIntNode node = (SliderIntNode) findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getIntValue();
     }
@@ -380,10 +379,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, SliderNode.class)){
             return;
         }
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
+        SliderIntNode node = (SliderIntNode) findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
     }
@@ -487,10 +486,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, PlotFolderNode.class)){
             return defaultXYZ == null ? new PVector() : defaultXYZ.copy();
         }
-        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
         if(node == null){
             node = createPlotNode(fullPath, defaultXYZ, useZ);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getVectorValue();
     }
@@ -544,10 +543,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, PlotFolderNode.class)){
             return;
         }
-        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
         if(node == null){
             node = createPlotNode(fullPath, valueToSet, useZ);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.setVectorValue(valueToSet.x, valueToSet.y, valueToSet.z);
     }
@@ -581,10 +580,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ToggleNode.class)){
             return defaultValue;
         }
-        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
+        ToggleNode node = (ToggleNode) findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, defaultValue);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
@@ -602,10 +601,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ToggleNode.class)){
             return;
         }
-        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
+        ToggleNode node = (ToggleNode) findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, value);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueBoolean = value;
     }
@@ -633,10 +632,10 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ButtonNode.class)){
             return false;
         }
-        ButtonNode node = (ButtonNode) NodeTree.findNode(fullPath);
+        ButtonNode node = (ButtonNode) findNode(fullPath);
         if (node == null) {
             node = createButtonNode(fullPath);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getBooleanValueAndSetItToFalse();
     }
@@ -704,11 +703,11 @@ public class LazyGui implements UserInputSubscriber {
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
-        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
+        RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new RadioFolderNode(fullPath, parentFolder, options, defaultOption);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueString;
     }
@@ -726,7 +725,7 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, RadioFolderNode.class)){
             return;
         }
-        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
+        RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
         if (node != null) {
             List<String> options = node.getOptions();
             if(options.contains(optionToSet)){
@@ -806,11 +805,11 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
             return new PickerColor(hex);
         }
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(fullPath, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
@@ -828,11 +827,11 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
             return;
         }
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(fullPath, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
             node.loadValuesFromHex(false);
@@ -852,11 +851,11 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, ColorPickerFolderNode.class)){
             return;
         }
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(path, folder, NormColorStore.color(0,1));
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         } else {
             node.setHue(hueToAdd);
         }
@@ -903,11 +902,11 @@ public class LazyGui implements UserInputSubscriber {
         if(NodeTree.isPathConflict(fullPath, TextNode.class)){
             return content;
         }
-        TextNode node = (TextNode) NodeTree.findNode(fullPath);
+        TextNode node = (TextNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new TextNode(fullPath, folder, content);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getStringValue();
     }
@@ -925,14 +924,14 @@ public class LazyGui implements UserInputSubscriber {
 
     public void setTextNodeContent(String path, String content){
         String fullPath = getFolder() + path;
-        TextNode node = (TextNode) NodeTree.findNode(fullPath);
+        TextNode node = (TextNode) findNode(fullPath);
         if(NodeTree.isPathConflict(fullPath, TextNode.class)){
             return;
         }
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new TextNode(fullPath, folder, content);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.setStringValue(content);
     }
@@ -961,11 +960,11 @@ public class LazyGui implements UserInputSubscriber {
         if(isPathConflict(fullPath, GradientFolderNode.class)){
             return null;
         }
-        GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(fullPath);
+        GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new GradientFolderNode(fullPath, parentFolder, alpha);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
     }
@@ -1105,9 +1104,9 @@ public class LazyGui implements UserInputSubscriber {
     void createOptionsFolder() {
         String path = "options";
         optionsNode = new FolderNode(path, NodeTree.getRoot());
-        NodeTree.insertNodeAtItsPath((optionsNode));
+        insertNodeAtItsPath((optionsNode));
         pushFolder("options");
-        NodeTree.insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
+        insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
         ThemeStore.updateThemePicker();
         popFolder();
     }
