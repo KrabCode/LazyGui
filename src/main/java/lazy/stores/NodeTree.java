@@ -10,7 +10,7 @@ import static processing.core.PApplet.println;
 public class NodeTree {
     private static final FolderNode root = new FolderNode("", null);
     private static final Map<String, AbstractNode> nodesByPath = new HashMap<>();
-    static ArrayList<String> knownConflictingQueries = new ArrayList<>();
+    static ArrayList<String> knownUnexpectedQueries = new ArrayList<>();
 
     private NodeTree() {
 
@@ -27,26 +27,26 @@ public class NodeTree {
         return (FolderNode) pathParent;
     }
 
-    public static <T extends AbstractNode> boolean isPathTypeConflict(String path, Class<T> targetType){
+    public static <T extends AbstractNode> boolean isPathTakenByUnexpectedType(String path, Class<T> expectedType){
         AbstractNode foundNode = findNode(path);
         if(foundNode == null){
             // nothing found at this path, so it's free to use by any type
             return false;
         }
-        String uniquePathAndTypeQuery = path + " - " + targetType.getSimpleName();
-        if(knownConflictingQueries.contains(uniquePathAndTypeQuery)){
+        String uniquePathAndTypeQuery = path + " - " + expectedType.getSimpleName();
+        if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
             // we return early when this is a known conflict, no reason to spam the error or do the expensive exception
             return true;
         }
         try{
-            targetType.cast(foundNode);
+            expectedType.cast(foundNode);
         }catch(Exception ex){
             println("Path conflict error: The path \"" + path + "\"" +
                     " is already in use by a " + foundNode.className +
-                    " and you tried to use it as a " + targetType.getSimpleName() + "." +
+                    " and you tried to use it as a " + expectedType.getSimpleName() + "." +
                     "\n\tThe original element will still work as expected, but the new conflicting element will not be shown and it will always return a default value." +
                     "\n\tLazyGui paths must be unique, so please use a different path for one of them.");
-            knownConflictingQueries.add(uniquePathAndTypeQuery);
+            knownUnexpectedQueries.add(uniquePathAndTypeQuery);
             return true;
         }
         return false;
