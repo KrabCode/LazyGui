@@ -166,6 +166,8 @@ public class SliderNode extends AbstractNode {
     }
 
     protected String getValueToDisplay() {
+        // the display value flickers back to the "valueFloat" for one frame if we just rely on "isNumpadActive()"
+        // so we keep displaying the buffer for 1 more frame with "wasNumpadInputActiveLastFrame"
         if (isNumpadInputActive() || wasNumpadInputActiveLastFrame) {
             return numpadBufferValue;
         }

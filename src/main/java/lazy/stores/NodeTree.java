@@ -27,30 +27,6 @@ public class NodeTree {
         return (FolderNode) pathParent;
     }
 
-    public static <T extends AbstractNode> boolean isPathTakenByUnexpectedType(String path, Class<T> expectedType){
-        AbstractNode foundNode = findNode(path);
-        if(foundNode == null){
-            return false;
-        }
-        String uniquePathAndTypeQuery = path + " - " + expectedType.getSimpleName();
-        if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
-            // return early when this is a known conflict, no reason to spam the error or do the expensive exception
-            return true;
-        }
-        try{
-            expectedType.cast(foundNode);
-        }catch(Exception ex){
-            println("Path conflict error: The path \"" + path + "\"" +
-                    " is already in use by a " + foundNode.className +
-                    " and you tried to use it as a " + expectedType.getSimpleName() + "." +
-                    "\n\tThe original element will still work as expected, but the new conflicting element will not be shown and it will always return a default value." +
-                    "\n\tLazyGui paths must be unique, so please use a different path for one of them.");
-            knownUnexpectedQueries.add(uniquePathAndTypeQuery);
-            return true;
-        }
-        return false;
-    }
-
     public static AbstractNode findNode(String path) {
         if (nodesByPath.containsKey(path)) {
             return nodesByPath.get(path);
@@ -148,6 +124,30 @@ public class NodeTree {
             return node;
         }
         return findFirstOpenParentNodeRecursively(node.parent);
+    }
+
+    public static <T extends AbstractNode> boolean isPathTakenByUnexpectedType(String path, Class<T> expectedType){
+        AbstractNode foundNode = findNode(path);
+        if(foundNode == null){
+            return false;
+        }
+        String uniquePathAndTypeQuery = path + " - " + expectedType.getSimpleName();
+        if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
+            // return early when this is a known conflict, no reason to spam the error or do the expensive exception
+            return true;
+        }
+        try{
+            expectedType.cast(foundNode);
+        }catch(Exception ex){
+            println("Path conflict error: The path \"" + path + "\"" +
+                    " is already in use by a " + foundNode.className +
+                    " and you tried to use it as a " + expectedType.getSimpleName() + "." +
+                    "\n\tThe original element will still work as expected, but the new conflicting element will not be shown and it will always return a default value." +
+                    "\n\tLazyGui paths must be unique, so please use a different path for one of them.");
+            knownUnexpectedQueries.add(uniquePathAndTypeQuery);
+            return true;
+        }
+        return false;
     }
 }
 
