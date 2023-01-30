@@ -48,8 +48,6 @@ public class LazyGui implements UserInputSubscriber {
     private static int lastFrameCountGuiWasShown = -1;
     public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
-    private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
-    private static String requestedScreenshotCustomFilePath = "";
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyOpenSketchFolderActive;
 
@@ -1061,11 +1059,6 @@ public class LazyGui implements UserInputSubscriber {
         return FontStore.getSideFont();
     }
 
-    void requestScreenshot(String customFilePath){
-        screenshotRequestedOnMainThreadWithCustomPath = true;
-        requestedScreenshotCustomFilePath = customFilePath;
-    }
-
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
@@ -1076,10 +1069,10 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Should be called at the end of LazyGui.draw().
      * Calling this at the start of draw() would not allow the user to take a screenshot of the gui.
-     * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay before taking the screenshot.
+     * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay inside the sketch before taking the screenshot.
      */
     private void takeScreenshotIfRequested() {
-        if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
+        if (!screenshotRequestedOnMainThread) {
             return;
         }
         String folderPath = getGuiDataFolderPath("/screenshots");
@@ -1090,15 +1083,10 @@ public class LazyGui implements UserInputSubscriber {
         }
         String fileName = getNextUnusedIntegerFileNameInFolder(folder);
         String fileType = ".png";
-        String filePath = folderPath + "/" + fileName + fileType;
-
-        if(screenshotRequestedOnMainThreadWithCustomPath){
-            filePath = requestedScreenshotCustomFilePath;
-        }
-
+        String filePath = folderPath + "\\" + fileName + fileType;
         app.save(filePath);
+        println("screenshot saved as " + filePath);
         screenshotRequestedOnMainThread = false;
-        screenshotRequestedOnMainThreadWithCustomPath = false;
     }
 
     void createOptionsFolder() {
