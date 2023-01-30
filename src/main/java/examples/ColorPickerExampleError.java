@@ -35,7 +35,7 @@ public class ColorPickerExampleError extends PApplet {
         fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
         gui.colorPickerHueAdd("fill", gui.slider("fill hue +", 0.005f));
         stroke(gui.colorPicker("stroke").hex);
-        strokeWeight(gui.slider("stroke", 10));
+        strokeWeight(gui.slider("weight", 10));
         rectMode(CENTER);
         rect(width/2f, height/2f, 150, 150);
     }

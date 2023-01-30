@@ -94,6 +94,9 @@ public class FolderNode extends AbstractNode {
     }
 
     protected AbstractNode findChildByName(String name) {
+        if(name.startsWith("/")){
+            name = name.substring(1);
+        }
         for (AbstractNode node : children) {
             if (node.name.equals(name)) {
                 return node;

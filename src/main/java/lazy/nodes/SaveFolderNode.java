@@ -1,6 +1,5 @@
 package lazy.nodes;
 
-import lazy.LazyGui;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.LazyGui.*;
 import static lazy.stores.GlobalReferences.gui;
 import static processing.core.PApplet.println;
 
@@ -32,7 +32,7 @@ public class SaveFolderNode extends FolderNode {
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        LazyGui.autosaveEnabled = gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
+        autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExit)).valueBoolean;
     }
 
     void updateStateList() {
