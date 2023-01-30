@@ -64,7 +64,7 @@ public class LazyGui implements UserInputSubscriber {
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
 
-    public static boolean autosaveEnabled = false;
+    public static boolean autosaveEnabled = true;
 
 
     /**

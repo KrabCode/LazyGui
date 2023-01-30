@@ -24,7 +24,7 @@ public class ColorPickerExampleError extends PApplet {
         gui.pushFolder("scene");
         gui.pushFolder("background");
         if(gui.toggle("solidly", true)){
-            background(gui.colorPicker("solid", color(0xFF252525)).hex);
+            background(gui.colorPicker("solid color", color(0xFF252525)).hex);
         }else{
             image(gui.gradient("gradient"), 0, 0);
         }

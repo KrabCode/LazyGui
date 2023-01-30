@@ -1,5 +1,6 @@
 package lazy.nodes;
 
+import lazy.LazyGui;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -24,8 +25,8 @@ public class SaveFolderNode extends FolderNode {
         super(path, parent);
         children.add(new ButtonNode(path + pathCreateNewSave, this));
         children.add(new ButtonNode(path + pathPrintFolderPath, this));
-        children.add(new ButtonNode(path + pathOpenSaveFolder , this));
-        children.add(new ToggleNode(path + pathAutosaveOnExit  , this, false));
+        children.add(new ButtonNode(path + pathOpenSaveFolder, this));
+        children.add(new ToggleNode(path + pathAutosaveOnExit , this, autosaveEnabled));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
