@@ -127,7 +127,7 @@ public class TextNode extends AbstractNode {
         // based on tip #13 in here:
         // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
-            PApplet.println("key code" + e.getKeyCode());
+//            PApplet.println("key code" + e.getKeyCode());
             if(KeyCodes.shouldIgnoreForTextInput(e.getKeyCode())){
                 return;
             }
@@ -143,7 +143,7 @@ public class TextNode extends AbstractNode {
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
                 buffer = ClipboardUtils.getClipboardString();
                 content = buffer;
-            } else {
+            } else if(!e.isControlDown() && !e.isAltDown()){
                 buffer = buffer + e.getKey();
             }
         }
