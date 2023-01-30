@@ -13,10 +13,14 @@ class KeyCodes {
     static final int CTRL_Y = 90;
     public static final int CTRL_S = 83;
 
-    private static final ArrayList<Integer> ignoredKeyCodes = new ArrayListBuilder<Integer>().add(157).add(17).add(19).build();
+    public static final int SHIFT = 16;
+    public static final int CTRL = 17;
+    public static final int ALT = 18;
 
-    public static boolean isKeyCodeIgnored(int keyCode){
-        return ignoredKeyCodes.contains(keyCode);
+    private static final ArrayList<Integer> textInputIgnoredKeyCodes = new ArrayListBuilder<Integer>().add(SHIFT).add(CTRL).add(ALT).build();
+
+    public static boolean shouldIgnoreForTextInput(int keyCode){
+        return textInputIgnoredKeyCodes.contains(keyCode);
     }
 /*
  // find keycodes in processing:

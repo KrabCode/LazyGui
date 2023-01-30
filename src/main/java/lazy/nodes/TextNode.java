@@ -11,6 +11,7 @@ import lazy.input.LazyKeyEvent;
 import lazy.stores.FontStore;
 import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
+import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -126,8 +127,8 @@ public class TextNode extends AbstractNode {
         // based on tip #13 in here:
         // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
-//            println("key code" + e.getKeyCode());
-            if(KeyCodes.isKeyCodeIgnored(e.getKeyCode())){
+            PApplet.println("key code" + e.getKeyCode());
+            if(KeyCodes.shouldIgnoreForTextInput(e.getKeyCode())){
                 return;
             }
             millisInputStarted = app.millis();
