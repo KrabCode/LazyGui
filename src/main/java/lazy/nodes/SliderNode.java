@@ -255,14 +255,14 @@ public class SliderNode extends AbstractNode {
             }
         }
         tryReadNumpadInput(e);
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.getKeyCode() == KeyCodes.C) {
             String value = getValueToDisplay();
             if(value.endsWith(".")){
                 value += "0";
             }
             ClipboardUtils.setClipboardString(value);
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);

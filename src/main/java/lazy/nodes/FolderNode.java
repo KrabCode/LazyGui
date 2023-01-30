@@ -108,10 +108,10 @@ public class FolderNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.getKeyCode() == KeyCodes.C) {
             ClipboardUtils.setClipboardString(JsonSaves.getFolderAsJsonString(this));
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.V) {
             String toPaste = ClipboardUtils.getClipboardString();
             JsonSaves.loadStateFromJsonString(toPaste, path);
         }

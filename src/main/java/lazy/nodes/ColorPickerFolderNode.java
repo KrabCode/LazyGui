@@ -141,10 +141,10 @@ public class ColorPickerFolderNode extends FolderNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 //        super.keyPressedOverNode(e, x, y);
 //        - we don't want to copy the contents of the folder itself - we only want to copy the hex code to clipboard
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.getKeyCode() == KeyCodes.C) {
             ClipboardUtils.setClipboardString(getHexString());
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.V) {
             String pastedString = ClipboardUtils.getClipboardString();
             if(pastedString.length() == 6){
                 // ensure full alpha if the pasted hex is without alpha

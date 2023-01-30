@@ -138,9 +138,9 @@ public class TextNode extends AbstractNode {
                 }
             } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKey() == PConstants.DELETE) {
                 buffer = "";
-            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.CTRL_C) {
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
                 ClipboardUtils.setClipboardString(this.buffer);
-            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.CTRL_V) {
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
                 buffer = ClipboardUtils.getClipboardString();
                 content = buffer;
             } else {

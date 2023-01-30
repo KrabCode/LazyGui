@@ -111,7 +111,7 @@ abstract class ColorSliderNode extends SliderNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y); // handle the value change inside SliderNode
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.getKeyCode() == KeyCodes.V) {
             // reflect the value change in the resulting color
             updateColorInParentFolder();
         }

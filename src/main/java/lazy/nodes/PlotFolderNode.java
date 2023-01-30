@@ -6,7 +6,6 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 import static lazy.stores.LayoutStore.cell;
-import static processing.core.PApplet.map;
 
 public class PlotFolderNode extends FolderNode {
     static final String PLOT_DISPLAY_NAME = "_";
@@ -65,7 +64,7 @@ public class PlotFolderNode extends FolderNode {
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 
-        if(e.getKeyCode() == KeyCodes.CTRL_C || e.getKeyCode() == KeyCodes.CTRL_V){
+        if(e.getKeyCode() == KeyCodes.C || e.getKeyCode() == KeyCodes.V){
             super.keyPressedOverNode(e, x, y);
         }else{
             sliderX.keyPressedOverNode(e, x, y);

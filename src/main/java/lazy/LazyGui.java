@@ -178,7 +178,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     @Override
     public void keyPressed(LazyKeyEvent keyEvent) {
-        tryHandleHotkeyInteraction(keyEvent);
+        handleHotkeyInteraction(keyEvent);
     }
 
     /**
@@ -1116,16 +1116,14 @@ public class LazyGui implements UserInputSubscriber {
         hotkeyHideActive = toggle("h: hide\\/show gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
         hotkeyScreenshotActive = toggle("i: screenshot", true);
-        // TODO fix
-        //  https://github.com/KrabCode/LazyGui/issues/36
-//        undoHotkeyActive = toggle("ctrl + z: undo", true);
-//        redoHotkeyActive = toggle("ctrl + y: redo", true);
+        hotkeyUndoActive = toggle("ctrl + z: undo", true);
+        hotkeyRedoActive = toggle("ctrl + y: redo", true);
         hotkeySaveActive = toggle("ctrl + s: new save", true);
         hotkeyOpenSketchFolderActive = toggle("k: open sketch folder", true);
         popFolder();
     }
 
-    private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
+    private void handleHotkeyInteraction(LazyKeyEvent keyEvent) {
         char key = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {
@@ -1143,13 +1141,17 @@ public class LazyGui implements UserInputSubscriber {
                 e.printStackTrace();
             }
         }
-//        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
-//            LayoutStore.undo();
-//        }
-//        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
-//            LayoutStore.redo();
-//        }
-        if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.Z && hotkeyUndoActive){
+            UndoRedoStore.undo();
+        }
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.Y && hotkeyRedoActive){
+            UndoRedoStore.redo();
+        }
+        println("" + key);
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.F){
+            UndoRedoStore.onUndoableActionEnded();
+        }
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
             JsonSaves.createNewSaveWithRandomName();
         }
     }
