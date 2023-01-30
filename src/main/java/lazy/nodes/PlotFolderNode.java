@@ -64,7 +64,7 @@ public class PlotFolderNode extends FolderNode {
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 
-        if(e.getKeyCode() == KeyCodes.C || e.getKeyCode() == KeyCodes.V){
+        if((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)){
             super.keyPressedOverNode(e, x, y);
         }else{
             sliderX.keyPressedOverNode(e, x, y);

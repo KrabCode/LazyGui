@@ -162,7 +162,7 @@ class PlotDisplayNode extends AbstractNode {
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        if(e.getKeyCode() == KeyCodes.C || e.getKeyCode() == KeyCodes.V){
+        if((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)){
             if(parent != null){
                 parent.keyPressedOverNode(e, x, y);
             }
