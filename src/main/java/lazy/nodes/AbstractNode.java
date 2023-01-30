@@ -112,10 +112,6 @@ public abstract class AbstractNode {
         pg.rect(0,0,size.x,size.y);
     }
 
-    protected void validatePrecision() {
-
-    }
-
     protected abstract void drawNodeBackground(PGraphics pg);
 
     protected abstract void drawNodeForeground(PGraphics pg, String name);
@@ -125,12 +121,6 @@ public abstract class AbstractNode {
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
-    }
-
-    protected void drawMiddleText(PGraphics pg, String text){
-        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
-        pg.textAlign(CENTER, CENTER);
-        pg.text(trimmedText, size.x / 2f, cell - FontStore.textMarginY);
     }
 
     protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
@@ -258,9 +248,6 @@ public abstract class AbstractNode {
     private String getNameFromPath(String path) {
         if ("".equals(path)) { // this is the root node
             return getClassNameAsSpaceSeparatedLowerCase(app.getClass().getSimpleName());
-        }
-        if(path.equals("sliders/")) {
-            int i = 0;
         }
         String[] split = NodePaths.splitByUnescapesSlashesWithoutRemovingThem(path);
         if (split.length == 0) {

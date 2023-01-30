@@ -215,6 +215,10 @@ public class SliderNode extends AbstractNode {
         validatePrecision();
     }
 
+    protected void validatePrecision() {
+
+    }
+
     private void updateValueMouseInteraction() {
         float mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
         if(mouseDelta != 0){
