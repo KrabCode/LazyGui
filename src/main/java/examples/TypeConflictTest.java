@@ -4,7 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
 
-public class CrowdedPathTest extends PApplet {
+public class TypeConflictTest extends PApplet {
     LazyGui gui;
     PGraphics pg;
 
