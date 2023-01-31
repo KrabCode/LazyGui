@@ -1,5 +1,7 @@
 package lazy.input;
 
+import lazy.stores.UndoRedoStore;
+import lazy.utils.KeyCodes;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -59,6 +61,16 @@ public class UserInputPublisher {
 
     void keyPressed(KeyEvent event) {
         LazyKeyEvent e = new LazyKeyEvent(event);
+        if(e.isControlDown() && e.getKeyCode() == KeyCodes.Z){
+            UndoRedoStore.undo();
+            e.consume();
+            return;
+        }
+        if(e.isControlDown() && e.getKeyCode() == KeyCodes.Y){
+            UndoRedoStore.redo();
+            e.consume();
+            return;
+        }
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyPressed(e);
             if (e.isConsumed()) {

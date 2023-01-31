@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import lazy.stores.DelayStore;
+import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
@@ -11,7 +12,6 @@ import lazy.input.LazyKeyEvent;
 import lazy.stores.FontStore;
 import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -24,7 +24,7 @@ import static processing.core.PConstants.*;
 public class TextNode extends AbstractNode {
 
     @Expose
-    String content;
+    String stringValue;
     String buffer;
 
     private final int millisInputDelay;
@@ -36,7 +36,7 @@ public class TextNode extends AbstractNode {
 
     public TextNode(String path, FolderNode folder, String content) {
         super(NodeType.VALUE, path, folder);
-        this.content = content;
+        this.stringValue = content;
         this.buffer = content;
         shouldDisplayHeaderRow = !name.trim().isEmpty();
         millisInputDelay = DelayStore.getKeyboardBufferDelayMillis();
@@ -117,8 +117,9 @@ public class TextNode extends AbstractNode {
     }
 
     private void trySetContentToBufferAfterDelay() {
-        if(!content.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
-            content = buffer;
+        if(!stringValue.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
+            setStringValue(buffer);
+            UndoRedoStore.addCurrentStateToUndoStack();
         }
     }
 
@@ -142,7 +143,8 @@ public class TextNode extends AbstractNode {
                 ClipboardUtils.setClipboardString(this.buffer);
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
                 buffer = ClipboardUtils.getClipboardString();
-                content = buffer;
+                stringValue = buffer;
+                UndoRedoStore.addCurrentStateToUndoStack();
             } else if(!e.isControlDown() && !e.isAltDown()){
                 buffer = buffer + e.getKey();
             }
@@ -152,23 +154,23 @@ public class TextNode extends AbstractNode {
     @Override
     public void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
-        if (json.has("content")) {
-            content = json.get("content").getAsString();
-            buffer = content;
+        if (json.has("stringValue")) {
+            stringValue = json.get("stringValue").getAsString();
+            buffer = stringValue;
         }
     }
 
     public String getStringValue() {
-        return content;
+        return stringValue;
     }
 
     public void setStringValue(String newValue) {
-        content = newValue;
+        stringValue = newValue;
         buffer = newValue;
     }
 
     @Override
     public String getConsolePrintableValue() {
-        return content;
+        return stringValue;
     }
 }

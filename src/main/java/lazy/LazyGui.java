@@ -131,6 +131,9 @@ public class LazyGui implements UserInputSubscriber {
             return;
         }
         lastFrameCountGuiWasShown = app.frameCount;
+        if(app.frameCount == 1){
+            UndoRedoStore.init();
+        }
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
@@ -1148,7 +1151,7 @@ public class LazyGui implements UserInputSubscriber {
             UndoRedoStore.redo();
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.F){
-            UndoRedoStore.onUndoableActionEnded();
+            UndoRedoStore.addCurrentStateToUndoStack();
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
             JsonSaves.createNewSaveWithRandomName();

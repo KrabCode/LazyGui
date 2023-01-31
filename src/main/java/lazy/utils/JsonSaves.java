@@ -133,7 +133,7 @@ public class JsonSaves {
     }
 
 
-    private static String getTreeAsJsonString() {
+    public static String getTreeAsJsonString() {
         return gson.toJson(NodeTree.getRoot());
     }
 
@@ -143,6 +143,10 @@ public class JsonSaves {
 
     static JsonElement getJsonElementFromString(String json) {
         return gson.fromJson(json, JsonElement.class);
+    }
+
+    public static void loadStateFromJsonString(String json){
+        loadStateFromJsonString(json, NodeTree.getRoot().path);
     }
 
     public static void loadStateFromJsonString(String json, String path){
