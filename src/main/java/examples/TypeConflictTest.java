@@ -30,9 +30,10 @@ public class TypeConflictTest extends PApplet {
         pg.beginDraw();
         drawBackground();
         gui.pushFolder("hello");
+        gui.pushFolder("world");
         gui.slider("testing");
         gui.text("testing");
-        gui.popFolder();
+        gui.colorPicker("testing");
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();

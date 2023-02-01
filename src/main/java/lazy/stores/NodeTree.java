@@ -131,7 +131,8 @@ public class NodeTree {
         if(foundNode == null){
             return false;
         }
-        String uniquePathAndTypeQuery = path + " - " + expectedType.getSimpleName();
+        String expectedTypeName = expectedType.getSimpleName();
+        String uniquePathAndTypeQuery = path + " - " + expectedTypeName;
         if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
             // return early when this is a known conflict, no reason to spam the error or do the expensive exception
             return true;
@@ -139,11 +140,13 @@ public class NodeTree {
         try{
             expectedType.cast(foundNode);
         }catch(Exception ex){
-            println("Path conflict error: The path \"" + path + "\"" +
-                    " is already in use by a " + foundNode.className +
-                    " and you tried to use it as a " + expectedType.getSimpleName() + "." +
-                    "\n\tThe original element will still work as expected, but the new conflicting element will not be shown and it will always return a default value." +
-                    "\n\tLazyGui paths must be unique, so please use a different path for one of them.");
+            boolean printExtendedHelp = knownUnexpectedQueries.isEmpty();
+            println("Path conflict warning: You tried to register a new " + expectedTypeName + " at \"" + path + "\"" +
+                    " but that path is already in use by a " + foundNode.className + "." +
+                (printExtendedHelp ? "\n\tThe original " + foundNode.className + " will still work as expected," +
+                            " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
+                            "\n\tLazyGui paths must be unique, so please use a different path for one of them." : "")
+            );
             knownUnexpectedQueries.add(uniquePathAndTypeQuery);
             return true;
         }
