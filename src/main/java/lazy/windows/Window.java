@@ -28,18 +28,14 @@ import static lazy.themes.ThemeColorType.*;
 public class Window implements UserInputSubscriber {
     final FolderNode folder;
     @Expose
-    public
-    float posX;
+    public float posX;
     @Expose
-    public
-    float posY;
+    public float posY;
     @Expose
-    public
-    boolean closed = false;
+    public boolean closed = false;
     @Expose
-    public
-    float windowSizeX; // can be resized by user
-    public float windowSizeY; // set every frame, locked to (cell size * child count) + 1 cell for the title bar
+    public float windowSizeX; // can be resized by user
+    public float windowSizeY; // set every frame automatically based on individual node heights
     public boolean isBeingDraggedAround;
     boolean isBeingResized;
     private boolean isTitleHighlighted;

@@ -19,7 +19,7 @@ import static processing.core.PApplet.println;
  *      sets stateIndex to 0 and then inserts the new action at index 0.
  */
 public class UndoRedoStore {
-    private static final boolean debugPrint = true;
+    private static final boolean debugPrint = false;
     private static final String debugTopLevelTextNodeName = "font size";
     private static final String debugNodeValueKey = "valueFloat";
 

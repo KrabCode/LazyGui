@@ -131,6 +131,8 @@ public class FolderNode extends AbstractNode {
                 if (!isClosed) {
                     WindowManager.uncoverOrCreateWindow(this, false, posX, posY, sizeX);
                     // open it at this spot
+                }else {
+                    window.closed = true;
                 }
             }
         }
