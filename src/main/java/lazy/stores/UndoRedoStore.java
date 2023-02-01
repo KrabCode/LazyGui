@@ -39,25 +39,6 @@ public class UndoRedoStore {
         }
     }
 
-    private static void printStack() {
-        for(int i = 0; i < stateStack.size(); i++){
-            println(i == stateIndex ? "(" + i + ")" : " " + i + " ",
-                    "\"" + parseTextValue(stateStack.get(i)) + "\"");
-        }
-        println("---\n");
-    }
-
-    private static String parseTextValue(String fullJsonSave) {
-        JsonElement root = JsonSaves.getJsonElementFromString(fullJsonSave);
-        JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
-        for (int i = 0; i < children.size(); i++) {
-            if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){
-                return children.get(i).getAsJsonObject().get("stringValue").getAsString();
-            }
-        }
-        return "not found";
-    }
-
     private static void trimStack(int stateStackCurrentIndex) {
         if(stateStack.size() <= 1){
             return;
@@ -105,4 +86,24 @@ public class UndoRedoStore {
         }
         return true;
     }
+
+    private static void printStack() {
+        for(int i = 0; i < stateStack.size(); i++){
+            println(i == stateIndex ? "(" + i + ")" : " " + i + " ",
+                    "\"" + parseTextValue(stateStack.get(i)) + "\"");
+        }
+        println("---\n");
+    }
+
+    private static String parseTextValue(String fullJsonSave) {
+        JsonElement root = JsonSaves.getJsonElementFromString(fullJsonSave);
+        JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
+        for (int i = 0; i < children.size(); i++) {
+            if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){
+                return children.get(i).getAsJsonObject().get("stringValue").getAsString();
+            }
+        }
+        return "not found";
+    }
+
 }
