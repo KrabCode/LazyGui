@@ -1,6 +1,7 @@
 package lazy.nodes;
 
 import lazy.input.LazyKeyEvent;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -63,9 +64,9 @@ public class PlotFolderNode extends FolderNode {
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
-
         if((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)){
             super.keyPressedOverNode(e, x, y);
+            UndoRedoStore.onUndoableActionEnded();
         }else{
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);

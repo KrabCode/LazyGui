@@ -123,9 +123,9 @@ class PlotDisplayNode extends AbstractNode {
     }
 
     private boolean shouldHighlightGrid() {
-        return isDragged ||
-                sliderX.isDragged ||
-                sliderY.isDragged ||
+        return isInlineNodeDragged ||
+                sliderX.isInlineNodeDragged ||
+                sliderY.isInlineNodeDragged ||
                 isMouseOverNode ||
                 sliderX.isMouseOverNode ||
                 sliderY.isMouseOverNode;

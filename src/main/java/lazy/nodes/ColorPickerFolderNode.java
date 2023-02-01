@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import lazy.*;
 import lazy.input.LazyKeyEvent;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
@@ -154,6 +155,7 @@ public class ColorPickerFolderNode extends FolderNode {
                 int pastedHex = (int) Long.parseLong(pastedString, 16);
                 setHex(pastedHex);
                 loadValuesFromHex(false);
+                UndoRedoStore.onUndoableActionEnded();
             } catch (NumberFormatException nfe) {
                 println("Could not parse hex color from input string: \"" + pastedString + "\"");
             }

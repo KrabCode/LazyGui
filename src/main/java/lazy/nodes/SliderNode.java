@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.DelayStore;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
@@ -113,7 +114,7 @@ public class SliderNode extends AbstractNode {
     }
 
     void updateDrawSliderNodeBackground(PGraphics pg) {
-        if (isDragged || isMouseOverNode) {
+        if (isInlineNodeDragged || isMouseOverNode) {
             updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
@@ -246,7 +247,7 @@ public class SliderNode extends AbstractNode {
             if (numpadBufferValue.endsWith(".")) {
                 numpadBufferValue += "0";
             }
-            if (trySetValueFloat(numpadBufferValue)) {
+            if (tryParseAndSetValueFloat(numpadBufferValue)) {
                 setSensiblePrecision(numpadBufferValue);
             }
         }
@@ -345,7 +346,7 @@ public class SliderNode extends AbstractNode {
                 app.millis() - numpadInputAppendLastMillis > DelayStore.getKeyboardBufferDelayMillis();
     }
 
-    private boolean trySetValueFloat(String toParseAsFloat) {
+    private boolean tryParseAndSetValueFloat(String toParseAsFloat) {
         float parsed;
         try {
             parsed = Float.parseFloat(toParseAsFloat);
@@ -354,6 +355,7 @@ public class SliderNode extends AbstractNode {
             return false;
         }
         setValueFloat(parsed);
+        UndoRedoStore.onUndoableActionEnded();
         return true;
     }
 

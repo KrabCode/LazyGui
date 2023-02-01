@@ -89,7 +89,7 @@ public class FolderNode extends AbstractNode {
         super.mousePressedOverNode(x, y);
         WindowManager.setFocus(parent.window);
         WindowManager.uncoverOrCreateWindow(this);
-        this.isDragged = false;
+        this.isInlineNodeDragged = false;
 
     }
 

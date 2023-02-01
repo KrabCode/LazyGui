@@ -1150,9 +1150,6 @@ public class LazyGui implements UserInputSubscriber {
         if(keyEvent.isControlDown() && keyCode == KeyCodes.Y && hotkeyRedoActive){
             UndoRedoStore.redo();
         }
-        if(keyEvent.isControlDown() && keyCode == KeyCodes.F){
-            UndoRedoStore.onUndoableActionEnded();
-        }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
             JsonSaves.createNewSaveWithRandomName();
         }

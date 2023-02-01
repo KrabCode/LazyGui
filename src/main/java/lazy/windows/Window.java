@@ -12,9 +12,7 @@ import lazy.nodes.FolderNode;
 import lazy.stores.FontStore;
 import lazy.stores.LayoutStore;
 import lazy.stores.NodeTree;
-import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeStore;
-import lazy.utils.KeyCodes;
 import lazy.utils.SnapToGrid;
 import lazy.utils.NodePaths;
 import processing.core.PGraphics;
@@ -405,7 +403,7 @@ public class Window implements UserInputSubscriber {
             windowSizeX = constrain(windowSizeX, minimumWindowSizeInCells * cell, maximumWindowSize);
         }
         for (AbstractNode child : folder.children) {
-            if (child.isDragged && child.isParentWindowVisible()) {
+            if (child.isInlineNodeDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e);
             }
         }

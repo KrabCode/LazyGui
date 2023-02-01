@@ -9,6 +9,7 @@ import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.FontStore;
 import lazy.stores.NodeTree;
+import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.NodePaths;
@@ -42,7 +43,7 @@ public abstract class AbstractNode {
     public final String name;
 
     public float masterInlineNodeHeightInCells = 1;
-    public boolean isDragged = false;
+    public boolean isInlineNodeDragged = false;
     public boolean isMouseOverNode = false;
 
     public void setIsMouseOverThisNodeOnly(){
@@ -177,9 +178,9 @@ public abstract class AbstractNode {
         pg.rectMode(CENTER);
         float outerButtonSize = cell * 0.6f;
         pg.rect(0,0, outerButtonSize, outerButtonSize);
-        pg.stroke(ThemeStore.getColor(isDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
+        pg.stroke(ThemeStore.getColor(isInlineNodeDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
         if(isMouseOverNode){
-            if (isDragged){
+            if (isInlineNodeDragged){
                 pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
             }else{
                 pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
@@ -190,15 +191,16 @@ public abstract class AbstractNode {
     }
 
     public void mousePressedOverNode(float x, float y) {
-        isDragged = true;
+        isInlineNodeDragged = true;
         isMouseOverNode = true;
     }
 
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
-        if(isDragged){
+        if(isInlineNodeDragged){
             e.setConsumed(true);
+            UndoRedoStore.onUndoableActionEnded();
         }
-        isDragged = false;
+        isInlineNodeDragged = false;
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {

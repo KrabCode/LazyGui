@@ -2,6 +2,7 @@ package lazy.nodes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -34,7 +35,7 @@ public class RadioFolderNode extends FolderNode {
                 valueBoolean = option.equals(defaultOption);
             }
             String childPath = path + "/" + option;
-            children.add(new StringPickerItemNode(childPath, this, valueBoolean, option));
+            children.add(new RadioItemNode(childPath, this, valueBoolean, option));
             oldValues.put(childPath, valueBoolean);
         }
         if(defaultOption != null){
@@ -74,7 +75,7 @@ public class RadioFolderNode extends FolderNode {
 
     private void checkForChildValueChange() {
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             boolean oldValue = oldValues.get(option.path);
             if (option.valueBoolean && !oldValue) {
                 valueString = option.valueString;
@@ -87,7 +88,7 @@ public class RadioFolderNode extends FolderNode {
     public void selectOption(String optionToSet) {
         boolean success = false;
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             if(option.valueString.equals(optionToSet)){
                 option.valueBoolean = true;
                 success = true;
@@ -95,11 +96,13 @@ public class RadioFolderNode extends FolderNode {
         }
         if(success){
             setAllOtherOptionsToFalse(optionToSet);
+            UndoRedoStore.onUndoableActionEnded();
         }
     }
-    void setAllOtherOptionsToFalse(StringPickerItemNode optionToKeepTrue) {
+
+    void setAllOtherOptionsToFalse(RadioItemNode optionToKeepTrue) {
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             if(!option.path.equals(optionToKeepTrue.path)){
                 option.valueBoolean = false;
             }
@@ -108,7 +111,7 @@ public class RadioFolderNode extends FolderNode {
 
     void setAllOtherOptionsToFalse(String optionToKeepTrue) {
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             if(!option.valueString.equals(optionToKeepTrue)){
                 option.valueBoolean = false;
             }
@@ -117,7 +120,7 @@ public class RadioFolderNode extends FolderNode {
 
     private void rememberCurrentValues(){
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             oldValues.put(option.path, option.valueBoolean);
         }
     }
@@ -136,7 +139,7 @@ public class RadioFolderNode extends FolderNode {
         }
         String oldValue = loadedString.getAsString();
         for (AbstractNode child : children) {
-            StringPickerItemNode option = (StringPickerItemNode) child;
+            RadioItemNode option = (RadioItemNode) child;
             if(option.valueString.equals(oldValue)){
                 option.valueBoolean = true;
                 setAllOtherOptionsToFalse(option);

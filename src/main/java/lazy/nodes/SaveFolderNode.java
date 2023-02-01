@@ -1,6 +1,5 @@
 package lazy.nodes;
 
-import lazy.LazyGui;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -54,7 +53,7 @@ public class SaveFolderNode extends FolderNode {
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
             if(findChildByName(saveDisplayName) == null){
-                children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename));
+                children.add(childrenThatAreNotSaveFiles.size(), new SaveItemNode(childNodePath, this, filename));
             }
         }
     }

@@ -19,8 +19,9 @@ import static processing.core.PApplet.println;
  *      sets stateIndex to 0 and then inserts the new action at index 0.
  */
 public class UndoRedoStore {
-    private static final boolean debugPrint = false;
-    private static final String debugTopLevelTextNodeName = "main text";
+    private static final boolean debugPrint = true;
+    private static final String debugTopLevelTextNodeName = "font size";
+    private static final String debugNodeValueKey = "valueFloat";
 
     static ArrayList<String> stateStack = new ArrayList<>();
     static int stateIndex = 0;
@@ -30,8 +31,12 @@ public class UndoRedoStore {
     }
 
     public static void onUndoableActionEnded(){
+        String newState = JsonSaves.getTreeAsJsonString();
+        if(!somethingActuallyChanged(newState)){
+            return;
+        }
         trimStack(stateIndex);
-        stateStack.add(0, JsonSaves.getTreeAsJsonString());
+        stateStack.add(0, newState);
         stateIndex = 0;
         if(debugPrint){
             println("new action added at 0, current list:");
@@ -39,11 +44,18 @@ public class UndoRedoStore {
         }
     }
 
-    private static void trimStack(int stateStackCurrentIndex) {
-        if(stateStack.size() <= 1){
+    private static boolean somethingActuallyChanged(String newState) {
+        if(stateStack.isEmpty()){
+            return true;
+        }
+        return !stateStack.get(stateIndex).equals(newState);
+    }
+
+    private static void trimStack(int stateIndex) {
+        if(stateStack.isEmpty()){
             return;
         }
-        stateStack.removeAll(stateStack.subList(0, stateStackCurrentIndex));
+        stateStack.removeAll(stateStack.subList(0, stateIndex));
     }
 
     public static void undo(){
@@ -100,7 +112,7 @@ public class UndoRedoStore {
         JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
         for (int i = 0; i < children.size(); i++) {
             if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){
-                return children.get(i).getAsJsonObject().get("stringValue").getAsString();
+                return children.get(i).getAsJsonObject().get(debugNodeValueKey).getAsString();
             }
         }
         return "not found";
