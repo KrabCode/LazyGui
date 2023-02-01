@@ -118,8 +118,7 @@ public class TextNode extends AbstractNode {
 
     private void trySetContentToBufferAfterDelay() {
         if(!stringValue.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
-            setStringValue(buffer);
-            UndoRedoStore.addCurrentStateToUndoStack();
+            setStringValueUndoably(buffer);
         }
     }
 
@@ -142,9 +141,7 @@ public class TextNode extends AbstractNode {
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
                 ClipboardUtils.setClipboardString(this.buffer);
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
-                buffer = ClipboardUtils.getClipboardString();
-                stringValue = buffer;
-                UndoRedoStore.addCurrentStateToUndoStack();
+                setStringValueUndoably(ClipboardUtils.getClipboardString());
             } else if(!e.isControlDown() && !e.isAltDown()){
                 buffer = buffer + e.getKey();
             }
@@ -162,6 +159,11 @@ public class TextNode extends AbstractNode {
 
     public String getStringValue() {
         return stringValue;
+    }
+
+    private void setStringValueUndoably(String newValue) {
+        setStringValue(newValue);
+        UndoRedoStore.onUndoableActionEnded();
     }
 
     public void setStringValue(String newValue) {

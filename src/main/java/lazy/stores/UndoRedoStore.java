@@ -1,44 +1,108 @@
 package lazy.stores;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import lazy.utils.JsonSaves;
 
 import java.util.ArrayList;
 
-public class UndoRedoStore {
+import static processing.core.PApplet.println;
 
-    static ArrayList<String> undoStack = new ArrayList<>();
-    static ArrayList<String> redoStack = new ArrayList<>();
+/**
+ * For internal use by LazyGui, it's fed new states by nodes after a change and also triggered manually by the undo/redo hotkeys.
+ * The stateStack is an ordered list of full json saves of the GUI state, which combines undo and redo into one stack
+ *      and the stateIndex keeps track of the where we currently are inside the combined stack.
+ * Indexes in the stack larger than stateIndex are for undo, indexes before it are redo.
+ * undo() increments the index by 1 and tries to apply the state it found there.
+ * redo() decrements the index by 1 and tries to apply the state it found there.
+ * onUndoableActionEnded() clears the redo by removing all elements before the stateIndex,
+ *      sets stateIndex to 0 and then inserts the new action at index 0.
+ */
+public class UndoRedoStore {
+    private static final boolean debugPrint = false;
+    private static final String debugTopLevelTextNodeName = "main text";
+
+    static ArrayList<String> stateStack = new ArrayList<>();
+    static int stateIndex = 0;
 
     public static void init(){
-        addCurrentStateToUndoStack();
+        onUndoableActionEnded();
     }
 
-    public static void addCurrentStateToUndoStack(){
-        redoStack.clear();
-        undoStack.add(0, JsonSaves.getTreeAsJsonString());
+    public static void onUndoableActionEnded(){
+        trimStack(stateIndex);
+        stateStack.add(0, JsonSaves.getTreeAsJsonString());
+        stateIndex = 0;
+        if(debugPrint){
+            println("new action added at 0, current list:");
+            printStack();
+        }
+    }
+
+    private static void printStack() {
+        for(int i = 0; i < stateStack.size(); i++){
+            println(i == stateIndex ? "(" + i + ")" : " " + i + " ",
+                    "\"" + parseTextValue(stateStack.get(i)) + "\"");
+        }
+        println("---\n");
+    }
+
+    private static String parseTextValue(String fullJsonSave) {
+        JsonElement root = JsonSaves.getJsonElementFromString(fullJsonSave);
+        JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
+        for (int i = 0; i < children.size(); i++) {
+            if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){
+                return children.get(i).getAsJsonObject().get("stringValue").getAsString();
+            }
+        }
+        return "not found";
+    }
+
+    private static void trimStack(int stateStackCurrentIndex) {
+        if(stateStack.size() <= 1){
+            return;
+        }
+        stateStack.removeAll(stateStack.subList(0, stateStackCurrentIndex));
     }
 
     public static void undo(){
-        String newState = transplantHead(undoStack, redoStack);
-        if(newState != null){
-            JsonSaves.loadStateFromJsonString(newState);
+        tryLoadStateAtIndex(stateIndex + 1);
+        if(debugPrint) {
+            println("undo (+1)", stateIndex, "/", stateStack.size() - 1);
+            printStack();
         }
     }
 
     public static void redo(){
-        String newState = transplantHead(redoStack, undoStack);
-        if(newState != null){
-            JsonSaves.loadStateFromJsonString(newState);
+        tryLoadStateAtIndex(stateIndex - 1);
+        if(debugPrint) {
+            println("redo (-1)", stateIndex, "/", stateStack.size() - 1);
+            printStack();
         }
     }
 
-    private static String transplantHead(ArrayList<String> sourceStack, ArrayList<String> targetStack){
-        if(sourceStack.isEmpty()){
-            return null;
+    private static void tryLoadStateAtIndex(int newIndex) {
+        if(!validateNewIndex(newIndex)){
+            return;
         }
-        if(sourceStack.size() >= 2){
-            targetStack.add(0, sourceStack.remove(0));
+        String newState = stateStack.get(newIndex);
+        JsonSaves.loadStateFromJsonString(newState);
+        stateIndex = newIndex;
+    }
+
+    private static boolean validateNewIndex(int newIndex) {
+        if(newIndex == stateIndex){
+            if(debugPrint){
+                println("validation failed: can't apply the same index as is already selected (" + newIndex + ")");
+            }
+            return false;
         }
-        return sourceStack.get(0);
+        if(newIndex < 0 || newIndex > stateStack.size() - 1){
+            if(debugPrint) {
+                println("validation failed: new index out of bounds (" + newIndex + ")");
+            }
+            return false;
+        }
+        return true;
     }
 }

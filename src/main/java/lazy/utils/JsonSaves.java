@@ -141,7 +141,7 @@ public class JsonSaves {
         return gson.toJson(folder);
     }
 
-    static JsonElement getJsonElementFromString(String json) {
+    public static JsonElement getJsonElementFromString(String json) {
         return gson.fromJson(json, JsonElement.class);
     }
 
