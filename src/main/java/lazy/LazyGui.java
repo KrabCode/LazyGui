@@ -79,6 +79,7 @@ public class LazyGui implements UserInputSubscriber {
         NormColorStore.init();
         FontStore.lazyUpdateFont();
         ThemeStore.init();
+        UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
         WindowManager.addRootWindow();
         createOptionsFolder();
@@ -181,6 +182,8 @@ public class LazyGui implements UserInputSubscriber {
     public void keyPressed(LazyKeyEvent keyEvent) {
         handleHotkeyInteraction(keyEvent);
     }
+
+
 
     /**
      * Utility function to tell if a mouse press collided and interacted with the GUI.

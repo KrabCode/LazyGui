@@ -170,26 +170,6 @@ public abstract class AbstractNode {
         }
     }
 
-    protected void drawRightButton(PGraphics pg) {
-        pg.noFill();
-        pg.translate(size.x - cell *0.5f, cell * 0.5f);
-        fillBackgroundBasedOnMouseOver(pg);
-        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        pg.rectMode(CENTER);
-        float outerButtonSize = cell * 0.6f;
-        pg.rect(0,0, outerButtonSize, outerButtonSize);
-        pg.stroke(ThemeStore.getColor(isInlineNodeDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
-        if(isMouseOverNode){
-            if (isInlineNodeDragged){
-                pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-            }else{
-                pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-            }
-        }
-        float innerButtonSize = cell * 0.35f;
-        pg.rect(0,0, innerButtonSize, innerButtonSize);
-    }
-
     public void mousePressedOverNode(float x, float y) {
         isInlineNodeDragged = true;
         isMouseOverNode = true;
