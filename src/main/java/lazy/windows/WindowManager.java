@@ -1,6 +1,7 @@
 package lazy.windows;
 
 import lazy.nodes.FolderNode;
+import lazy.stores.NodeTree;
 import lazy.utils.SnapToGrid;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -13,6 +14,10 @@ import static lazy.stores.LayoutStore.cell;
 public class WindowManager {
     private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private static final ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
+
+    public static void addRootWindow() {
+        addWindow(new Window(NodeTree.getRoot(), cell, cell, null));
+    }
 
     public static void addWindow(Window window) {
         windows.add(window);

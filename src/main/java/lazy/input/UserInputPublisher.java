@@ -15,8 +15,7 @@ import static lazy.stores.GlobalReferences.app;
  */
 public class UserInputPublisher {
     public static boolean mouseFallsThroughThisFrame = false;
-    private static UserInputPublisher singleton;
-    private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
     private float prevX = -1, prevY = -1;
 
     private UserInputPublisher() {
@@ -28,19 +27,13 @@ public class UserInputPublisher {
         app.registerMethod("mouseEvent", this);
     }
 
-    public static void initSingleton() {
-        if (singleton == null) {
-            singleton = new UserInputPublisher();
-        }
-    }
-
     public static void subscribe(UserInputSubscriber subscriber) {
-        singleton.subscribers.add(0, subscriber);
+        subscribers.add(0, subscriber);
     }
 
     public static void setFocus(UserInputSubscriber subscriber){
-        singleton.subscribers.remove(subscriber);
-        singleton.subscribers.add(0, subscriber);
+        subscribers.remove(subscriber);
+        subscribers.add(0, subscriber);
     }
 
     /**

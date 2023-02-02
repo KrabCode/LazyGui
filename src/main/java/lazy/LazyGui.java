@@ -29,7 +29,6 @@ import java.util.List;
 import static lazy.stores.NodeTree.*;
 import static lazy.stores.NormColorStore.color;
 import static lazy.stores.GlobalReferences.app;
-import static lazy.stores.LayoutStore.*;
 import static lazy.utils.JsonSaves.getGuiDataFolderPath;
 import static lazy.utils.JsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
@@ -79,10 +78,9 @@ public class LazyGui implements UserInputSubscriber {
         }
         NormColorStore.init();
         FontStore.lazyUpdateFont();
-        ThemeStore.initSingleton();
-        UserInputPublisher.initSingleton();
+        ThemeStore.init();
         UserInputPublisher.subscribe(this);
-        WindowManager.addWindow(new Window(NodeTree.getRoot(), cell, cell, null));
+        WindowManager.addRootWindow();
         createOptionsFolder();
         JsonSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
