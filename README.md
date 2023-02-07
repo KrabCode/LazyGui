@@ -4,7 +4,7 @@
 ![LazyGui looks like this](readme_assets/header.png)
 ---
 
-### What?
+## What?
 
 **Problem**: You're making a processing sketch, and you want to tweak some values. But restarting the sketch slows you
 down. So you use one of the dozen other processing GUI libraries, register its control elements in `setup()` and then ask for their values in
@@ -31,7 +31,7 @@ down.
   - individual windows have resizable width 
 ---
 
-### How?
+## How?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
@@ -106,7 +106,7 @@ int pickedColor = gui.colorPicker("background").hex;
 background(pickedColor);
 ```
 - HSBA color picker with a hex string display
-- Copy and paste using the hex field
+- you can copy and paste using the hex field
 
 #### Gradient picker
 
@@ -117,7 +117,7 @@ image(gradient, 0, 0);
 - allows you to set the position and value of individual colors or disable them entirely
 - blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
 
-### Path
+## Path
 
 The **path**  is the first string parameter to every control element function and it must be unique.
 It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
@@ -130,7 +130,7 @@ float x = gui.slider("pos/x");
 float y = gui.slider("pos/y");
 ```
 
-#### Global path prefix stack
+### Global path prefix stack
 
 Repeating the whole path in every control element call can get tiresome, especially with multiple nested levels.
 Which is why there is a helpful path stack that you can interact with using pushFolder() and popFolder().
