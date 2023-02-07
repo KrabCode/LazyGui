@@ -1,5 +1,0 @@
-Cursor.png
-
-author: Luc Chaissac
-license: CC Attribution
-source: https://icon-icons.com/icon/default-cursor/100165

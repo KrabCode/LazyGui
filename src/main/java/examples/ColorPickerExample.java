@@ -12,7 +12,7 @@ public class ColorPickerExample extends PApplet {
     }
 
     public void settings() {
-        size(1000, 1000, P2D);
+        size(1100, 1000, P2D);
     }
 
     public void setup() {
