@@ -9,6 +9,7 @@ import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.FontStore;
 import lazy.stores.NodeTree;
+import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.NodePaths;
@@ -42,7 +43,7 @@ public abstract class AbstractNode {
     public final String name;
 
     public float masterInlineNodeHeightInCells = 1;
-    public boolean isDragged = false;
+    public boolean isInlineNodeDragged = false;
     public boolean isMouseOverNode = false;
 
     public void setIsMouseOverThisNodeOnly(){
@@ -112,10 +113,6 @@ public abstract class AbstractNode {
         pg.rect(0,0,size.x,size.y);
     }
 
-    protected void validatePrecision() {
-
-    }
-
     protected abstract void drawNodeBackground(PGraphics pg);
 
     protected abstract void drawNodeForeground(PGraphics pg, String name);
@@ -125,12 +122,6 @@ public abstract class AbstractNode {
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
         pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
-    }
-
-    protected void drawMiddleText(PGraphics pg, String text){
-        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
-        pg.textAlign(CENTER, CENTER);
-        pg.text(trimmedText, size.x / 2f, cell - FontStore.textMarginY);
     }
 
     protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
@@ -179,36 +170,17 @@ public abstract class AbstractNode {
         }
     }
 
-    protected void drawRightButton(PGraphics pg) {
-        pg.noFill();
-        pg.translate(size.x - cell *0.5f, cell * 0.5f);
-        fillBackgroundBasedOnMouseOver(pg);
-        pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        pg.rectMode(CENTER);
-        float outerButtonSize = cell * 0.6f;
-        pg.rect(0,0, outerButtonSize, outerButtonSize);
-        pg.stroke(ThemeStore.getColor(isDragged ? ThemeColorType.FOCUS_FOREGROUND : ThemeColorType.NORMAL_FOREGROUND));
-        if(isMouseOverNode){
-            if (isDragged){
-                pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-            }else{
-                pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-            }
-        }
-        float innerButtonSize = cell * 0.35f;
-        pg.rect(0,0, innerButtonSize, innerButtonSize);
-    }
-
     public void mousePressedOverNode(float x, float y) {
-        isDragged = true;
+        isInlineNodeDragged = true;
         isMouseOverNode = true;
     }
 
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
-        if(isDragged){
+        if(isInlineNodeDragged){
             e.setConsumed(true);
+            UndoRedoStore.onUndoableActionEnded();
         }
-        isDragged = false;
+        isInlineNodeDragged = false;
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
@@ -252,15 +224,12 @@ public abstract class AbstractNode {
 
     @Override
     public String toString() {
-        return "Folder @ " + path + " | " + (isParentWindowOpen() ? "open" : "closed");
+        return className + " @ " + path;
     }
 
     private String getNameFromPath(String path) {
         if ("".equals(path)) { // this is the root node
             return getClassNameAsSpaceSeparatedLowerCase(app.getClass().getSimpleName());
-        }
-        if(path.equals("sliders/")) {
-            int i = 0;
         }
         String[] split = NodePaths.splitByUnescapesSlashesWithoutRemovingThem(path);
         if (split.length == 0) {
@@ -324,5 +293,4 @@ public abstract class AbstractNode {
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
     }
-
 }

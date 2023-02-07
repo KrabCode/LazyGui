@@ -42,6 +42,16 @@ public class NormColorStore {
         return colorStore.blue(hex);
     }
 
+    public static float hue(int hex){ return colorStore.hue(hex); }
+
+    public static float sat(int hex){ return colorStore.saturation(hex); }
+
+    public static float br(int hex){ return colorStore.brightness(hex); }
+
+    public static float alpha(int hex) {
+        return colorStore.alpha(hex);
+    }
+
     public static PGraphics getColorStore() {
         return colorStore;
     }

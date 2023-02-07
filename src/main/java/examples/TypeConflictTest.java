@@ -1,14 +1,12 @@
 package examples;
 
-import lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
+import lazy.LazyGui;
 
-public class PlotTest extends PApplet {
+public class TypeConflictTest extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    private float rotation;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -16,37 +14,29 @@ public class PlotTest extends PApplet {
 
     @Override
     public void settings() {
-        size(800, 800, P2D);
-//        smooth(16);
+        size(1080, 1080, P2D);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        pg.smooth(16);
+        colorMode(HSB, 1, 1, 1, 1);
+        frameRate(144);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        gui.pushFolder("ok we are on test");
-        gui.pushFolder("test aaa testing pls");
-        PVector pos = gui.plotXY("pos");
-        PVector size = gui.plotXY("size", 50);
-        rotation += radians(gui.slider("rotation +"));
-        pg.fill(gui.colorPicker("fill", 0xFFFF00FF).hex);
-        pg.noStroke();
-        pg.translate(width/2f, height/2f);
-        pg.translate(pos.x, pos.y);
-        pg.rotate(rotation);
-        pg.rectMode(CENTER);
-        pg.rect(0,0,size.x,size.y);
-        gui.popFolder();
-        gui.popFolder();
+        gui.pushFolder("hello");
+        gui.pushFolder("world");
+        gui.slider("testing");
+        gui.text("testing");
+        gui.colorPicker("testing");
         pg.endDraw();
         image(pg, 0, 0);
+        gui.draw();
     }
 
     private void drawBackground() {
@@ -56,3 +46,4 @@ public class PlotTest extends PApplet {
         pg.rect(0, 0, width, height);
     }
 }
+

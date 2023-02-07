@@ -26,10 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.stores.NodeTree.*;
 import static lazy.stores.NormColorStore.color;
 import static lazy.stores.GlobalReferences.app;
-import static lazy.stores.NodeTree.getAllNodesAsList;
-import static lazy.stores.LayoutStore.*;
 import static lazy.utils.JsonSaves.getGuiDataFolderPath;
 import static lazy.utils.JsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
@@ -48,8 +47,6 @@ public class LazyGui implements UserInputSubscriber {
     private static int lastFrameCountGuiWasShown = -1;
     public static boolean isGuiHidden = false;
     private static boolean screenshotRequestedOnMainThread = false;
-    private static boolean screenshotRequestedOnMainThreadWithCustomPath = false;
-    private static String requestedScreenshotCustomFilePath = "";
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
             hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyOpenSketchFolderActive;
 
@@ -63,6 +60,8 @@ public class LazyGui implements UserInputSubscriber {
 
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
+
+    public static boolean autosaveEnabled = true;
 
 
     /**
@@ -79,10 +78,10 @@ public class LazyGui implements UserInputSubscriber {
         }
         NormColorStore.init();
         FontStore.lazyUpdateFont();
-        ThemeStore.initSingleton();
+        ThemeStore.init();
         UserInputPublisher.initSingleton();
         UserInputPublisher.subscribe(this);
-        WindowManager.addWindow(new Window(NodeTree.getRoot(), cell, cell, null));
+        WindowManager.addRootWindow();
         createOptionsFolder();
         JsonSaves.loadMostRecentSave();
         lazyFollowSketchResolution();
@@ -131,6 +130,9 @@ public class LazyGui implements UserInputSubscriber {
             return;
         }
         lastFrameCountGuiWasShown = app.frameCount;
+        if(app.frameCount == 1){
+            UndoRedoStore.init();
+        }
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         pg.beginDraw();
@@ -178,8 +180,10 @@ public class LazyGui implements UserInputSubscriber {
      */
     @Override
     public void keyPressed(LazyKeyEvent keyEvent) {
-        tryHandleHotkeyInteraction(keyEvent);
+        handleHotkeyInteraction(keyEvent);
     }
+
+
 
     /**
      * Utility function to tell if a mouse press collided and interacted with the GUI.
@@ -245,10 +249,13 @@ public class LazyGui implements UserInputSubscriber {
 
     private float slider(String path, float defaultValue, float min, float max, boolean constrained) {
         String fullPath = getFolder() + path;
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, SliderNode.class)){
+            return defaultValue;
+        }
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueFloat;
     }
@@ -270,10 +277,13 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderSet(String path, float value){
         String fullPath = getFolder() + path;
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, SliderNode.class)){
+            return;
+        }
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, value, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
     }
@@ -288,10 +298,13 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderAdd(String path, float amountToAdd){
         String fullPath = getFolder() + path;
-        SliderNode node = (SliderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, SliderNode.class)){
+            return;
+        }
+        SliderNode node = (SliderNode) findNode(fullPath);
         if (node == null) {
             node = createSliderNode(fullPath, 0, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat += amountToAdd;
     }
@@ -336,10 +349,13 @@ public class LazyGui implements UserInputSubscriber {
 
     private int sliderInt(String path, int defaultValue, int min, int max, boolean constrained) {
         String fullPath = getFolder() + path;
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, SliderNode.class)){
+            return defaultValue;
+        }
+        SliderIntNode node = (SliderIntNode) findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, defaultValue, min, max, constrained);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getIntValue();
     }
@@ -362,16 +378,19 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void sliderIntSet(String path, int value){
         String fullPath = getFolder() + path;
-        SliderIntNode node = (SliderIntNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, SliderNode.class)){
+            return;
+        }
+        SliderIntNode node = (SliderIntNode) findNode(fullPath);
         if (node == null) {
             node = createSliderIntNode(fullPath, value, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueFloat = value;
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets all values to 0 by default.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -382,7 +401,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter default.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -394,7 +413,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      *
      * @param path forward slash separated unique path to the plot control element
@@ -407,7 +426,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element.
+     * Gets the vector value of a 2D grid control element.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXY default xy values, z value is ignored
@@ -418,7 +437,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its xyz values to 0 by default.
      * @param path forward slash separated unique path to the plot control element
      * @return current xyz values
@@ -429,7 +448,7 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXYZ default xyz values
@@ -441,7 +460,7 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultX default x value
@@ -454,7 +473,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Gets the vector value of a 2D control element with an extra z slider.
+     * Gets the vector value of a 2D grid control element with an extra z slider.
      * Lazily initializes it if needed and sets its values to the parameter defaults.
      * @param path forward slash separated unique path to the plot control element
      * @param defaultXYZ default xyz values
@@ -466,37 +485,70 @@ public class LazyGui implements UserInputSubscriber {
 
     private PVector plotXYZ(String path, PVector defaultXYZ, boolean useZ){
         String fullPath = getFolder() + path;
-        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, PlotFolderNode.class)){
+            return defaultXYZ == null ? new PVector() : defaultXYZ.copy();
+        }
+        PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
         if(node == null){
             node = createPlotNode(fullPath, defaultXYZ, useZ);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getVectorValue();
     }
 
     /**
-     * TODO javadocs
-     * @param path
-     * @param xyz
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the parameter default.
+     * @param path forward slash separated unique path to the plot control element
+     * @param xyz value to set to each axis
      */
     public void plotSet(String path, float xyz){
-        plotSet(path, new PVector(xyz, xyz, xyz));
+        plotSet(path, new PVector(xyz, xyz, xyz), true);
     }
 
+    /**
+     * Sets the vector value of a 2D control element.
+     * Lazily initializes it if needed and sets its x,y values to the parameter defaults.
+     * The extra z slider will not be shown if the plot is initialized in this way.
+     * @param path forward slash separated unique path to the plot control element
+     * @param x x value to set
+     * @param y y value to set
+     */
     public void plotSet(String path, float x, float y){
-        plotSet(path, new PVector(x,y));
+        plotSet(path, new PVector(x,y), false);
     }
 
+    /**
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the separate parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param x x value to set
+     * @param y y value to set
+     * @param z z value to set
+     */
     public void plotSet(String path, float x, float y, float z){
-        plotSet(path, new PVector(x,y,z));
+        plotSet(path, new PVector(x,y,z), true);
     }
 
+    /**
+     * Sets the vector value of a 2D grid control element with an extra z slider.
+     * Lazily initializes it if needed and sets each of its x,y,z values to the separate parameter defaults.
+     * @param path forward slash separated unique path to the plot control element
+     * @param valueToSet vector value to set
+     */
     public void plotSet(String path, PVector valueToSet){
+        plotSet(path, valueToSet, true);
+    }
+
+    private void plotSet(String path, PVector valueToSet, boolean useZ){
         String fullPath = getFolder() + path;
-        PlotFolderNode node = (PlotFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, PlotFolderNode.class)){
+            return;
+        }
+        PlotFolderNode node = (PlotFolderNode) findNode(fullPath);
         if(node == null){
-            node = createPlotNode(fullPath, valueToSet, true);
-            NodeTree.insertNodeAtItsPath(node);
+            node = createPlotNode(fullPath, valueToSet, useZ);
+            insertNodeAtItsPath(node);
         }
         node.setVectorValue(valueToSet.x, valueToSet.y, valueToSet.z);
     }
@@ -527,10 +579,13 @@ public class LazyGui implements UserInputSubscriber {
      */
     public boolean toggle(String path, boolean defaultValue) {
         String fullPath = getFolder() + path;
-        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ToggleNode.class)){
+            return defaultValue;
+        }
+        ToggleNode node = (ToggleNode) findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, defaultValue);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueBoolean;
     }
@@ -545,10 +600,13 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void toggleSet(String path, boolean value) {
         String fullPath = getFolder() + path;
-        ToggleNode node = (ToggleNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ToggleNode.class)){
+            return;
+        }
+        ToggleNode node = (ToggleNode) findNode(fullPath);
         if (node == null) {
             node = createToggleNode(fullPath, value);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         node.valueBoolean = value;
     }
@@ -573,10 +631,13 @@ public class LazyGui implements UserInputSubscriber {
      */
     public boolean button(String path) {
         String fullPath = getFolder() + path;
-        ButtonNode node = (ButtonNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ButtonNode.class)){
+            return false;
+        }
+        ButtonNode node = (ButtonNode) findNode(fullPath);
         if (node == null) {
             node = createButtonNode(fullPath);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getBooleanValueAndSetItToFalse();
     }
@@ -638,14 +699,17 @@ public class LazyGui implements UserInputSubscriber {
      */
     public String radio(String path, String[] options, String defaultOption) {
         String fullPath = getFolder() + path;
+        if(isPathTakenByUnexpectedType(fullPath, RadioFolderNode.class)){
+            return defaultOption == null ? options[0] : defaultOption;
+        }
         if (options == null || options.length == 0) {
             throw new IllegalArgumentException("options parameter must not be null nor empty");
         }
-        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
+        RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new RadioFolderNode(fullPath, parentFolder, options, defaultOption);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.valueString;
     }
@@ -660,7 +724,10 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void radioSet(String path, String optionToSet){
         String fullPath = getFolder() + path;
-        RadioFolderNode node = (RadioFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, RadioFolderNode.class)){
+            return;
+        }
+        RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
         if (node != null) {
             List<String> options = node.getOptions();
             if(options.contains(optionToSet)){
@@ -737,11 +804,14 @@ public class LazyGui implements UserInputSubscriber {
      */
     public PickerColor colorPicker(String path, int hex) {
         String fullPath = getFolder() + path;
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ColorPickerFolderNode.class)){
+            return new PickerColor(hex);
+        }
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(fullPath, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getColor();
     }
@@ -756,11 +826,14 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void colorPickerSet(String path, int hex) {
         String fullPath = getFolder() + path;
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ColorPickerFolderNode.class)){
+            return;
+        }
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(fullPath, folder, hex);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         } else {
             node.setHex(hex);
             node.loadValuesFromHex(false);
@@ -777,11 +850,14 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void colorPickerHueAdd(String path, float hueToAdd) {
         String fullPath = getFolder() + path;
-        ColorPickerFolderNode node = (ColorPickerFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, ColorPickerFolderNode.class)){
+            return;
+        }
+        ColorPickerFolderNode node = (ColorPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new ColorPickerFolderNode(path, folder, NormColorStore.color(0,1));
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         } else {
             node.setHue(hueToAdd);
         }
@@ -820,7 +896,21 @@ public class LazyGui implements UserInputSubscriber {
      * @return current value of a string input element
      */
     public String text(String path, String content){
-        return getText(path, content).getStringValue();
+        return getTextNodeValue(path, content);
+    }
+
+    private String getTextNodeValue(String path, String content){
+        String fullPath = getFolder() + path;
+        if(NodeTree.isPathTakenByUnexpectedType(fullPath, TextNode.class)){
+            return content;
+        }
+        TextNode node = (TextNode) findNode(fullPath);
+        if (node == null) {
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new TextNode(fullPath, folder, content);
+            insertNodeAtItsPath(node);
+        }
+        return node.getStringValue();
     }
 
     /**
@@ -831,18 +921,21 @@ public class LazyGui implements UserInputSubscriber {
      * @param content default value for the text content
      */
     public void textSet(String path, String content){
-        getText(path, content).setStringValue(content);
+        setTextNodeContent(path, content);
     }
 
-    public TextNode getText(String path, String content){
+    public void setTextNodeContent(String path, String content){
         String fullPath = getFolder() + path;
-        TextNode node = (TextNode) NodeTree.findNode(fullPath);
-        if(node == null){
+        TextNode node = (TextNode) findNode(fullPath);
+        if(NodeTree.isPathTakenByUnexpectedType(fullPath, TextNode.class)){
+            return;
+        }
+        if (node == null) {
             FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new TextNode(fullPath, folder, content);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
-        return node;
+        node.setStringValue(content);
     }
 
     /**
@@ -866,11 +959,14 @@ public class LazyGui implements UserInputSubscriber {
      */
     public PGraphics gradient(String path, float alpha) {
         String fullPath = getFolder() + path;
-        GradientFolderNode node = (GradientFolderNode) NodeTree.findNode(fullPath);
+        if(isPathTakenByUnexpectedType(fullPath, GradientFolderNode.class)){
+            return null;
+        }
+        GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
             node = new GradientFolderNode(fullPath, parentFolder, alpha);
-            NodeTree.insertNodeAtItsPath(node);
+            insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
     }
@@ -967,11 +1063,6 @@ public class LazyGui implements UserInputSubscriber {
         return FontStore.getSideFont();
     }
 
-    void requestScreenshot(String customFilePath){
-        screenshotRequestedOnMainThreadWithCustomPath = true;
-        requestedScreenshotCustomFilePath = customFilePath;
-    }
-
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
@@ -982,10 +1073,10 @@ public class LazyGui implements UserInputSubscriber {
     /**
      * Should be called at the end of LazyGui.draw().
      * Calling this at the start of draw() would not allow the user to take a screenshot of the gui.
-     * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay before taking the screenshot.
+     * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay inside the sketch before taking the screenshot.
      */
     private void takeScreenshotIfRequested() {
-        if (!screenshotRequestedOnMainThread && !screenshotRequestedOnMainThreadWithCustomPath) {
+        if (!screenshotRequestedOnMainThread) {
             return;
         }
         String folderPath = getGuiDataFolderPath("/screenshots");
@@ -996,38 +1087,31 @@ public class LazyGui implements UserInputSubscriber {
         }
         String fileName = getNextUnusedIntegerFileNameInFolder(folder);
         String fileType = ".png";
-        String filePath = folderPath + "/" + fileName + fileType;
-
-        if(screenshotRequestedOnMainThreadWithCustomPath){
-            filePath = requestedScreenshotCustomFilePath;
-        }
-
+        String filePath = folderPath + "\\" + fileName + fileType;
         app.save(filePath);
+        println("screenshot saved as " + filePath);
         screenshotRequestedOnMainThread = false;
-        screenshotRequestedOnMainThreadWithCustomPath = false;
     }
 
     void createOptionsFolder() {
         String path = "options";
         optionsNode = new FolderNode(path, NodeTree.getRoot());
-        NodeTree.insertNodeAtItsPath((optionsNode));
+        insertNodeAtItsPath((optionsNode));
         pushFolder("options");
-        NodeTree.insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
+        insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
         ThemeStore.updateThemePicker();
         popFolder();
     }
 
     private void updateOptionsFolder() {
         pushFolder(optionsNode.path);
-        WindowManager.updateWindowOptions();
+        LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
         ContextLines.update(pg);
         updateHotkeyToggles();
-        // TODO explain this some more,
-        //   https://github.com/KrabCode/LazyGui/issues/119
-        LayoutStore.keyboardInputAppendCooldownMillis = sliderInt("input buffer (ms)", keyboardInputAppendCooldownMillis, 100, 5000);
+        DelayStore.updateInputDelay();
         popFolder();
     }
 
@@ -1035,19 +1119,16 @@ public class LazyGui implements UserInputSubscriber {
         pushFolder("hotkeys");
         hotkeyHideActive = toggle("h: hide\\/show gui", true);
         hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
-
         hotkeyScreenshotActive = toggle("i: screenshot", true);
-        // TODO fix
-        //  https://github.com/KrabCode/LazyGui/issues/36
-//        undoHotkeyActive = toggle("ctrl + z: undo", true);
-//        redoHotkeyActive = toggle("ctrl + y: redo", true);
+        hotkeyUndoActive = toggle("ctrl + z: undo", true);
+        hotkeyRedoActive = toggle("ctrl + y: redo", true);
         hotkeySaveActive = toggle("ctrl + s: new save", true);
         hotkeyOpenSketchFolderActive = toggle("k: open sketch folder", true);
         popFolder();
     }
 
-    private void tryHandleHotkeyInteraction(LazyKeyEvent keyEvent) {
-        char key = keyEvent.getKeyChar();
+    private void handleHotkeyInteraction(LazyKeyEvent keyEvent) {
+        char key = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {
             isGuiHidden = !isGuiHidden;
@@ -1064,13 +1145,13 @@ public class LazyGui implements UserInputSubscriber {
                 e.printStackTrace();
             }
         }
-//        if(keyCode == KeyCodes.CTRL_Z && hotkeyUndoActive){
-//            LayoutStore.undo();
-//        }
-//        if(keyCode == KeyCodes.CTRL_Y && hotkeyRedoActive){
-//            LayoutStore.redo();
-//        }
-        if(keyCode == KeyCodes.CTRL_S && hotkeySaveActive){
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.Z && hotkeyUndoActive){
+            UndoRedoStore.undo();
+        }
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.Y && hotkeyRedoActive){
+            UndoRedoStore.redo();
+        }
+        if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
             JsonSaves.createNewSaveWithRandomName();
         }
     }
@@ -1100,6 +1181,5 @@ public class LazyGui implements UserInputSubscriber {
         }
         JsonSaves.createTreeSaveFiles("auto");
     }
-    public static boolean autosaveEnabled = false;
 
 }

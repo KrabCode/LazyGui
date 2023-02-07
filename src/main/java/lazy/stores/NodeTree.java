@@ -1,8 +1,6 @@
 package lazy.stores;
 
-import lazy.nodes.NodeType;
-import lazy.nodes.AbstractNode;
-import lazy.nodes.FolderNode;
+import lazy.nodes.*;
 import lazy.utils.NodePaths;
 
 import java.util.*;
@@ -11,7 +9,8 @@ import static processing.core.PApplet.println;
 
 public class NodeTree {
     private static final FolderNode root = new FolderNode("", null);
-    private static final HashMap<String, AbstractNode> nodesByPath = new HashMap<>();
+    private static final Map<String, AbstractNode> nodesByPath = new HashMap<>();
+    static ArrayList<String> knownUnexpectedQueries = new ArrayList<>();
 
     private NodeTree() {
 
@@ -51,8 +50,6 @@ public class NodeTree {
         return null;
     }
 
-    // TODO find some way to escape the slash in path params
-    // https://github.com/KrabCode/LazyGui/issues/6
     static void lazyInitFolderPath(String path) {
         String[] split = NodePaths.splitByUnescapedSlashes(path);
         String runningPath = split[0];
@@ -127,6 +124,33 @@ public class NodeTree {
             return node;
         }
         return findFirstOpenParentNodeRecursively(node.parent);
+    }
+
+    public static <T extends AbstractNode> boolean isPathTakenByUnexpectedType(String path, Class<T> expectedType){
+        AbstractNode foundNode = findNode(path);
+        if(foundNode == null){
+            return false;
+        }
+        String expectedTypeName = expectedType.getSimpleName();
+        String uniquePathAndTypeQuery = path + " - " + expectedTypeName;
+        if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
+            // return early when this is a known conflict, no reason to spam the error or do the expensive exception
+            return true;
+        }
+        try{
+            expectedType.cast(foundNode);
+        }catch(Exception ex){
+            boolean printExtendedHelp = knownUnexpectedQueries.isEmpty();
+            println("Path conflict warning: You tried to register a new " + expectedTypeName + " at \"" + path + "\"" +
+                    " but that path is already in use by a " + foundNode.className + "." +
+                (printExtendedHelp ? "\n\tThe original " + foundNode.className + " will still work as expected," +
+                            " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
+                            "\n\tLazyGui paths must be unique, so please use a different path for one of them." : "")
+            );
+            knownUnexpectedQueries.add(uniquePathAndTypeQuery);
+            return true;
+        }
+        return false;
     }
 }
 

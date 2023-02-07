@@ -1,5 +1,7 @@
 package lazy.input;
 
+import lazy.stores.UndoRedoStore;
+import lazy.utils.KeyCodes;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -17,19 +19,20 @@ public class UserInputPublisher {
     private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
     private float prevX = -1, prevY = -1;
 
+    public static void initSingleton() {
+        if (singleton == null) {
+            singleton = new UserInputPublisher();
+        }
+    }
+
     private UserInputPublisher() {
         registerListeners();
     }
 
     private void registerListeners() {
+        // the reference passed here is the only reason to have this be a singleton instance rather than a fully static class with no instance
         app.registerMethod("keyEvent", this);
         app.registerMethod("mouseEvent", this);
-    }
-
-    public static void initSingleton() {
-        if (singleton == null) {
-            singleton = new UserInputPublisher();
-        }
     }
 
     public static void subscribe(UserInputSubscriber subscriber) {
@@ -58,7 +61,17 @@ public class UserInputPublisher {
     }
 
     void keyPressed(KeyEvent event) {
-        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
+        LazyKeyEvent e = new LazyKeyEvent(event);
+        if(e.isControlDown() && e.getKeyCode() == KeyCodes.Z){
+            UndoRedoStore.undo();
+            e.consume();
+            return;
+        }
+        if(e.isControlDown() && e.getKeyCode() == KeyCodes.Y){
+            UndoRedoStore.redo();
+            e.consume();
+            return;
+        }
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyPressed(e);
             if (e.isConsumed()) {
@@ -68,7 +81,7 @@ public class UserInputPublisher {
     }
 
     void keyReleased(KeyEvent event) {
-        LazyKeyEvent e = new LazyKeyEvent(event.getKeyCode(), event.getKey());
+        LazyKeyEvent e = new LazyKeyEvent(event);
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.keyReleased(e);
             if (e.isConsumed()) {

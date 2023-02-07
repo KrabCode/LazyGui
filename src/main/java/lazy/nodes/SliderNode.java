@@ -7,8 +7,9 @@ import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
+import lazy.stores.DelayStore;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
-import lazy.stores.LayoutStore;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
@@ -27,14 +28,12 @@ import static processing.core.PApplet.*;
 public class SliderNode extends AbstractNode {
 
     @Expose
-    public
-    float valueFloat;
+    public float valueFloat;
     @Expose
-    protected
-    int currentPrecisionIndex;
+    protected int currentPrecisionIndex;
     @Expose
-    protected
-    float valueFloatPrecision;
+    protected float valueFloatPrecision;
+
     float valueFloatDefault;
     final float valueFloatMin;
     final float valueFloatMax;
@@ -54,12 +53,15 @@ public class SliderNode extends AbstractNode {
             .add(100.0f).build();
 
     final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
-            .add('0','1','2','3','4','5','6','7','8','9')
+            .add('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
             .build();
     private int numpadInputAppendLastMillis = -1;
     private boolean wasNumpadInputActiveLastFrame = false;
 
-    private static final String FRACTIONAL_FLOAT_REGEX = "[0-9]*[,.][0-9]*";
+
+    private static final String REGEX_FRACTION_SEPARATOR = "[.,]";
+    private static final String REGEX_ANY_NUMBER_SERIES = "[0-9]*";
+    private static final String FRACTIONAL_FLOAT_REGEX = REGEX_ANY_NUMBER_SERIES + REGEX_FRACTION_SEPARATOR + REGEX_ANY_NUMBER_SERIES;
     private final String shaderPath = "sliderBackground.glsl";
 
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
@@ -82,11 +84,11 @@ public class SliderNode extends AbstractNode {
     }
 
     private void setSensiblePrecision(String value) {
-        if(value.equals("0") || value.equals("0.0")){
+        if (value.equals("0") || value.equals("0.0")) {
             setPrecisionIndexAndValue(precisionRange.indexOf(0.1f));
             return;
         }
-        if(value.matches(FRACTIONAL_FLOAT_REGEX)){
+        if (value.matches(FRACTIONAL_FLOAT_REGEX)) {
             int fractionalDigitLength = getFractionalDigitLength(value);
             setPrecisionIndexAndValue(4 - fractionalDigitLength);
             return;
@@ -95,8 +97,8 @@ public class SliderNode extends AbstractNode {
     }
 
     private int getFractionalDigitLength(String value) {
-        if(value.contains(".") || value.contains(",")){
-            return value.split("[.,]")[1].length();
+        if (value.contains(".") || value.contains(",")) {
+            return value.split(REGEX_FRACTION_SEPARATOR)[1].length();
         }
         return 0;
     }
@@ -112,7 +114,7 @@ public class SliderNode extends AbstractNode {
     }
 
     void updateDrawSliderNodeBackground(PGraphics pg) {
-        if (isDragged || isMouseOverNode) {
+        if (isInlineNodeDragged || isMouseOverNode) {
             updateValueMouseInteraction();
             boolean constrainedThisFrame = tryConstrainValue();
             drawBackgroundScroller(pg, constrainedThisFrame);
@@ -145,10 +147,10 @@ public class SliderNode extends AbstractNode {
         pg.rect(1, 0, (size.x - 1) * percentIndicatorNorm, size.y);
         pg.resetShader();
 
-        if(shouldShowPercentIndicator){
+        if (shouldShowPercentIndicator) {
             pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
             pg.strokeWeight(2);
-            float lineX = (size.x-1)*percentIndicatorNorm;
+            float lineX = (size.x - 1) * percentIndicatorNorm;
             pg.line(lineX, 0, lineX, size.y);
         }
     }
@@ -165,7 +167,9 @@ public class SliderNode extends AbstractNode {
     }
 
     protected String getValueToDisplay() {
-        if(isNumpadInputActive()){
+        // the display value flickers back to the "valueFloat" for one frame if we just rely on "isNumpadActive()"
+        // so we keep displaying the buffer for 1 more frame with "wasNumpadInputActiveLastFrame"
+        if (isNumpadInputActive() || wasNumpadInputActiveLastFrame) {
             return numpadBufferValue;
         }
         if (Float.isNaN(valueFloat)) {
@@ -173,9 +177,9 @@ public class SliderNode extends AbstractNode {
         }
         String valueToDisplay;
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
-        if(isFractionalPrecision){
-             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
-        }else{
+        if (isFractionalPrecision) {
+            valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
+        } else {
             valueToDisplay = nf(floor(valueFloat), 0, 0);
         }
         // java float literals use . so we also use .
@@ -192,9 +196,9 @@ public class SliderNode extends AbstractNode {
         }
     }
 
-    private void setWholeNumberPrecision(){
+    private void setWholeNumberPrecision() {
         for (int i = 0; i < precisionRange.size(); i++) {
-            if(precisionRange.get(i) >= 1f){
+            if (precisionRange.get(i) >= 1f) {
                 setPrecisionIndexAndValue(i);
                 break;
             }
@@ -215,9 +219,13 @@ public class SliderNode extends AbstractNode {
         validatePrecision();
     }
 
+    protected void validatePrecision() {
+
+    }
+
     private void updateValueMouseInteraction() {
         float mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
-        if(mouseDelta != 0){
+        if (mouseDelta != 0) {
             float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
         }
@@ -235,11 +243,11 @@ public class SliderNode extends AbstractNode {
     }
 
     private void updateNumpad() {
-        if(!isNumpadInputActive() && wasNumpadInputActiveLastFrame){
-            if(numpadBufferValue.endsWith(".")){
+        if (!isNumpadInputActive() && wasNumpadInputActiveLastFrame) {
+            if (numpadBufferValue.endsWith(".")) {
                 numpadBufferValue += "0";
             }
-            if(trySetValueFloat(numpadBufferValue)){
+            if (tryParseAndSetValueFloat(numpadBufferValue)) {
                 setSensiblePrecision(numpadBufferValue);
             }
         }
@@ -249,20 +257,20 @@ public class SliderNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        if (e.getKeyChar() == 'r') {
+        if (e.getKey() == 'r') {
             if (!Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
         }
         tryReadNumpadInput(e);
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
             String value = getValueToDisplay();
-            if(value.endsWith(".")){
+            if (value.endsWith(".")) {
                 value += "0";
             }
             ClipboardUtils.setClipboardString(value);
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);
@@ -279,24 +287,24 @@ public class SliderNode extends AbstractNode {
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
         boolean inReplaceMode = isNumpadInReplaceMode();
-        if(numpadChars.contains(e.getKeyChar())){
-            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKeyChar())), inReplaceMode);
+        if (numpadChars.contains(e.getKey())) {
+            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
         }
-        switch (e.getKeyChar()) {
+        switch (e.getKey()) {
             case '.':
             case ',':
                 setNumpadInputActiveStarted();
-                if(numpadBufferValue.isEmpty()){
+                if (numpadBufferValue.isEmpty()) {
                     numpadBufferValue += "0";
                 }
-                if(!numpadBufferValue.endsWith(".")) {
+                if (!numpadBufferValue.endsWith(".")) {
                     numpadBufferValue += ".";
                 }
                 break;
             case '+':
             case '-':
-                if(inReplaceMode){
-                    numpadBufferValue = "" + e.getKeyChar();
+                if (inReplaceMode) {
+                    numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
                 break;
@@ -314,7 +322,7 @@ public class SliderNode extends AbstractNode {
         setNumpadInputActiveStarted();
         if (inReplaceMode) {
             numpadBufferValue = inputString;
-            if(input != 0){
+            if (input != 0) {
                 // when I only reset a value to 0 I usually want to keep its old precision
                 // when I start typing something other than 0 I usually do want whole number precision
                 setWholeNumberPrecision();
@@ -324,29 +332,30 @@ public class SliderNode extends AbstractNode {
         numpadBufferValue += inputString;
     }
 
-    protected void setNumpadInputActiveStarted(){
+    protected void setNumpadInputActiveStarted() {
         numpadInputAppendLastMillis = app.millis();
     }
 
     protected boolean isNumpadInputActive() {
         return numpadInputAppendLastMillis != -1 &&
-                app.millis() <= numpadInputAppendLastMillis + LayoutStore.keyboardInputAppendCooldownMillis;
+                app.millis() <= numpadInputAppendLastMillis + DelayStore.getKeyboardBufferDelayMillis();
     }
 
     private boolean isNumpadInReplaceMode() {
         return numpadInputAppendLastMillis == -1 ||
-                app.millis() - numpadInputAppendLastMillis > LayoutStore.keyboardInputAppendCooldownMillis;
+                app.millis() - numpadInputAppendLastMillis > DelayStore.getKeyboardBufferDelayMillis();
     }
 
-    private boolean trySetValueFloat(String toParseAsFloat) {
+    private boolean tryParseAndSetValueFloat(String toParseAsFloat) {
         float parsed;
-        try{
-             parsed = Float.parseFloat(toParseAsFloat);
-        }catch (NumberFormatException formatException){
+        try {
+            parsed = Float.parseFloat(toParseAsFloat);
+        } catch (NumberFormatException formatException) {
             println(formatException.getMessage(), formatException);
             return false;
         }
         setValueFloat(parsed);
+        UndoRedoStore.onUndoableActionEnded();
         return true;
     }
 

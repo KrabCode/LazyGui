@@ -3,6 +3,8 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import lazy.stores.DelayStore;
+import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
@@ -17,27 +19,28 @@ import processing.core.PGraphics;
 import static lazy.stores.FontStore.*;
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
-import static lazy.stores.LayoutStore.keyboardInputAppendCooldownMillis;
 import static processing.core.PConstants.*;
 
 public class TextNode extends AbstractNode {
 
     @Expose
-    String content;
+    String stringValue;
     String buffer;
 
-    int millisInputDelay = keyboardInputAppendCooldownMillis;
-    int millisInputStarted = -millisInputDelay * 2;
+    private final int millisInputDelay;
+    private int millisInputStarted;
 
-    float marginLeftInCells = 0.2f;
-    String regexLookBehindForNewLine = "(?<=\\n)";
+    private final float marginLeftInCells = 0.2f;
+    private final String regexLookBehindForNewLine = "(?<=\\n)";
     private final boolean shouldDisplayHeaderRow;
 
     public TextNode(String path, FolderNode folder, String content) {
         super(NodeType.VALUE, path, folder);
-        this.content = content;
+        this.stringValue = content;
         this.buffer = content;
         shouldDisplayHeaderRow = !name.trim().isEmpty();
+        millisInputDelay = DelayStore.getKeyboardBufferDelayMillis();
+        millisInputStarted = -millisInputDelay * 2;
         JsonSaves.overwriteWithLoadedStateIfAny(this);
     }
 
@@ -114,8 +117,8 @@ public class TextNode extends AbstractNode {
     }
 
     private void trySetContentToBufferAfterDelay() {
-        if(!content.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
-            content = buffer;
+        if(!stringValue.equals(buffer) && app.millis() > millisInputStarted + millisInputDelay){
+            setStringValueUndoably(buffer);
         }
     }
 
@@ -124,8 +127,8 @@ public class TextNode extends AbstractNode {
         // based on tip #13 in here:
         // https://amnonp5.wordpress.com/2012/01/28/25-life-saving-tips-for-processing/
         if (isMouseOverNode) {
-//            println("key code" + e.getKeyCode());
-            if(KeyCodes.isKeyCodeIgnored(e.getKeyCode())){
+//            PApplet.println("key code" + e.getKeyCode());
+            if(KeyCodes.shouldIgnoreForTextInput(e.getKeyCode())){
                 return;
             }
             millisInputStarted = app.millis();
@@ -133,14 +136,14 @@ public class TextNode extends AbstractNode {
                 if (buffer.length() > 0) {
                     buffer = buffer.substring(0, buffer.length() - 1);
                 }
-            } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKeyChar() == PConstants.DELETE) {
+            } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKey() == PConstants.DELETE) {
                 buffer = "";
-            } else if (e.getKeyCode() == KeyCodes.CTRL_C && e.getKeyChar() != 'c') {
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
                 ClipboardUtils.setClipboardString(this.buffer);
-            } else if (e.getKeyCode() == KeyCodes.CTRL_V && e.getKeyChar() != 'v') {
-                buffer = ClipboardUtils.getClipboardString();
-            } else if (e.getKeyCode() != PConstants.SHIFT && e.getKeyCode() != PConstants.CONTROL && e.getKeyCode() != PConstants.ALT) {
-                buffer = buffer + e.getKeyChar();
+            } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
+                setStringValueUndoably(ClipboardUtils.getClipboardString());
+            } else if(!e.isControlDown() && !e.isAltDown()){
+                buffer = buffer + e.getKey();
             }
         }
     }
@@ -148,23 +151,28 @@ public class TextNode extends AbstractNode {
     @Override
     public void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
-        if (json.has("content")) {
-            content = json.get("content").getAsString();
-            buffer = content;
+        if (json.has("stringValue")) {
+            stringValue = json.get("stringValue").getAsString();
+            buffer = stringValue;
         }
     }
 
     public String getStringValue() {
-        return content;
+        return stringValue;
+    }
+
+    private void setStringValueUndoably(String newValue) {
+        setStringValue(newValue);
+        UndoRedoStore.onUndoableActionEnded();
     }
 
     public void setStringValue(String newValue) {
-        content = newValue;
+        stringValue = newValue;
         buffer = newValue;
     }
 
     @Override
     public String getConsolePrintableValue() {
-        return content;
+        return stringValue;
     }
 }

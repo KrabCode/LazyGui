@@ -123,9 +123,9 @@ class PlotDisplayNode extends AbstractNode {
     }
 
     private boolean shouldHighlightGrid() {
-        return isDragged ||
-                sliderX.isDragged ||
-                sliderY.isDragged ||
+        return isInlineNodeDragged ||
+                sliderX.isInlineNodeDragged ||
+                sliderY.isInlineNodeDragged ||
                 isMouseOverNode ||
                 sliderX.isMouseOverNode ||
                 sliderY.isMouseOverNode;
@@ -162,7 +162,7 @@ class PlotDisplayNode extends AbstractNode {
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y);
-        if(e.getKeyCode() == KeyCodes.CTRL_C || e.getKeyCode() == KeyCodes.CTRL_V){
+        if((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)){
             if(parent != null){
                 parent.keyPressedOverNode(e, x, y);
             }

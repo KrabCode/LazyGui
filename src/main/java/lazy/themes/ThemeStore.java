@@ -11,7 +11,7 @@ public class ThemeStore {
     private static final Map<ThemeType, Theme> paletteMap = new HashMap<>();
     public static ThemeType currentSelection = ThemeType.CUSTOM;
 
-    public static void initSingleton() {
+    public static void init() {
         ThemeType[] allTypes = ThemeType.getAllValues();
         for (ThemeType type : allTypes) {
             paletteMap.put(type, ThemeType.getPalette(type));

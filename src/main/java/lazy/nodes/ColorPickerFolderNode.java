@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import lazy.*;
 import lazy.input.LazyKeyEvent;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.utils.ClipboardUtils;
 import lazy.utils.JsonSaves;
@@ -141,10 +142,10 @@ public class ColorPickerFolderNode extends FolderNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
 //        super.keyPressedOverNode(e, x, y);
 //        - we don't want to copy the contents of the folder itself - we only want to copy the hex code to clipboard
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
             ClipboardUtils.setClipboardString(getHexString());
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String pastedString = ClipboardUtils.getClipboardString();
             if(pastedString.length() == 6){
                 // ensure full alpha if the pasted hex is without alpha
@@ -154,6 +155,7 @@ public class ColorPickerFolderNode extends FolderNode {
                 int pastedHex = (int) Long.parseLong(pastedString, 16);
                 setHex(pastedHex);
                 loadValuesFromHex(false);
+                UndoRedoStore.onUndoableActionEnded();
             } catch (NumberFormatException nfe) {
                 println("Could not parse hex color from input string: \"" + pastedString + "\"");
             }

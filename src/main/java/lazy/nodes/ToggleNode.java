@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyMouseEvent;
+import lazy.stores.UndoRedoStore;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -45,6 +46,7 @@ public class ToggleNode extends AbstractNode {
         super.mouseReleasedOverNode(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
+            UndoRedoStore.onUndoableActionEnded();
         }
         armed = false;
     }

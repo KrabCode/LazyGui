@@ -67,7 +67,7 @@ abstract class ColorSliderNode extends SliderNode {
     @Override
     protected void drawNodeBackground(PGraphics pg) {
         super.drawNodeBackground(pg);
-        if(isDragged){
+        if(isInlineNodeDragged){
             pg.stroke(foregroundMouseOverBrightnessAwareColor());
             pg.strokeWeight(1);
             pg.line(size.x / 2f, 0f, size.x / 2f, size.y-1f);
@@ -111,7 +111,7 @@ abstract class ColorSliderNode extends SliderNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         super.keyPressedOverNode(e, x, y); // handle the value change inside SliderNode
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             // reflect the value change in the resulting color
             updateColorInParentFolder();
         }

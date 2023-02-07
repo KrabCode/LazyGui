@@ -89,11 +89,14 @@ public class FolderNode extends AbstractNode {
         super.mousePressedOverNode(x, y);
         WindowManager.setFocus(parent.window);
         WindowManager.uncoverOrCreateWindow(this);
-        this.isDragged = false;
+        this.isInlineNodeDragged = false;
 
     }
 
     protected AbstractNode findChildByName(String name) {
+        if(name.startsWith("/")){
+            name = name.substring(1);
+        }
         for (AbstractNode node : children) {
             if (node.name.equals(name)) {
                 return node;
@@ -105,10 +108,10 @@ public class FolderNode extends AbstractNode {
     @Override
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
-        if (e.getKeyCode() == KeyCodes.CTRL_C) {
+        if ((e.isControlDown() && e.getKeyCode() == KeyCodes.C)) {
             ClipboardUtils.setClipboardString(JsonSaves.getFolderAsJsonString(this));
         }
-        if (e.getKeyCode() == KeyCodes.CTRL_V) {
+        if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String toPaste = ClipboardUtils.getClipboardString();
             JsonSaves.loadStateFromJsonString(toPaste, path);
         }
@@ -128,6 +131,8 @@ public class FolderNode extends AbstractNode {
                 if (!isClosed) {
                     WindowManager.uncoverOrCreateWindow(this, false, posX, posY, sizeX);
                     // open it at this spot
+                }else if(window != null){
+                    window.closed = true;
                 }
             }
         }

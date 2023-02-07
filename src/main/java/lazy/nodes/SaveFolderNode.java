@@ -1,6 +1,5 @@
 package lazy.nodes;
 
-import lazy.LazyGui;
 import lazy.utils.JsonSaves;
 import processing.core.PGraphics;
 
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.LazyGui.*;
 import static lazy.stores.GlobalReferences.gui;
 import static processing.core.PApplet.println;
 
@@ -24,10 +24,15 @@ public class SaveFolderNode extends FolderNode {
         super(path, parent);
         children.add(new ButtonNode(path + pathCreateNewSave, this));
         children.add(new ButtonNode(path + pathPrintFolderPath, this));
-        children.add(new ButtonNode(path + pathOpenSaveFolder , this));
-        children.add(new ToggleNode(path + pathAutosaveOnExit  , this, false));
+        children.add(new ButtonNode(path + pathOpenSaveFolder, this));
+        children.add(new ToggleNode(path + pathAutosaveOnExit , this, autosaveEnabled));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
+    }
+
+    @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExit)).valueBoolean;
     }
 
     void updateStateList() {
@@ -48,7 +53,7 @@ public class SaveFolderNode extends FolderNode {
             String saveDisplayName = getSaveDisplayName(filename);
             String childNodePath = path + "/" + saveDisplayName;
             if(findChildByName(saveDisplayName) == null){
-                children.add(childrenThatAreNotSaveFiles.size(), new SaveNode(childNodePath, this, filename));
+                children.add(childrenThatAreNotSaveFiles.size(), new SaveItemNode(childNodePath, this, filename));
             }
         }
     }
@@ -90,7 +95,6 @@ public class SaveFolderNode extends FolderNode {
             println("LazyGui save folder: " + JsonSaves.getSaveDir().getAbsolutePath());
         }
 
-        LazyGui.autosaveEnabled = gui.toggle(path + pathAutosaveOnExit, LazyGui.autosaveEnabled);
         updateStateList();
     }
 

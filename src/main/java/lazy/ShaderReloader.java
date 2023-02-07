@@ -28,8 +28,8 @@ public class ShaderReloader {
 
     /**
      * Gets the current snapshot of a vertex + fragment shader for uniform setting purposes.
-     * Only attempts to compile at lazy initialization time,
-     * it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
+     * Only attempts to compile the first time it's called during lazy initialization,
+     * then it relies on the user calling ShaderReloader.filter() or ShaderReloader.shader() to attempt to re-compile.
      *
      * @param fragPath path to the shader, either absolute or relative from the data folder
      * @return PShader to set uniforms on
