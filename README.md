@@ -4,6 +4,13 @@
 ![LazyGui looks like this](readme_assets/header.png)
 ---
 
+//  TODO answer these questions at the top here:
+- What is this repo or project?
+- How does it work?
+- Who will use this repo or project?
+- What is the goal of this project?
+
+
 ## What?
 
 **Problem**: You're making a processing sketch, and you want to tweak some values. But restarting the sketch slows you
@@ -54,8 +61,8 @@ void setup(){
 float x = gui.slider("x");
 ellipse(x, height/2, 50, 50);
 ```
-- mouse wheel changes the selected precision
-- click and drag mouse - change value by pixels moved times precision
+- mouse wheel changes the selected precision when mouse is over the slider
+- click and drag mouse horizontally - change value by (pixels * precision)
 - keyboard input ints or floats with mouse over the slider
 
 #### Button
