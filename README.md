@@ -1,44 +1,36 @@
 # LazyGUI
-### easy to code GUI for Processing 3+
 
 ![LazyGui looks like this](readme_assets/header.png)
----
 
-//  TODO answer these questions at the top here:
-- What is this repo or project?
-- How does it work?
-- Who will use this repo or project?
-- What is the goal of this project?
+## A GUI for Processing 3+ with..
 
+- all the basic control elements for floats, colors, vectors, strings and booleans in a folder structure 
+- absolutely minimal boilerplate in `setup()` because control elements have unique string paths which allows lazy initialization when a value is requested
 
-## What?
-
-**Problem**: You're making a processing sketch, and you want to tweak some values. But restarting the sketch slows you
-down. So you use one of the dozen other processing GUI libraries, register its control elements in `setup()` and then ask for their values in
-`draw()`. But now when you want to add a new control element you need to add code to two unrelated places. This slows you
-down.
-
-- **Solution**: Do not mention any control elements in `setup()`. Only ask for their values in `draw()` using unique paths and have the GUI seamlessly initialize your control element when needed.
-
-**Problem**: You just tweaked some values in your GUI, but now you need to change the code and restart the program. Your GUI changes are lost forever.
-
-- **Solution**: Save the GUI state as a JSON file. Load the most recently saved values at control element initialization. This allows you to seamlessly change your code and continue where you left off.
-
-#### Other features:
+### Other features:
 - infinite sliders with variable precision
 - keyboard input for text and slider values
-- copy / paste any value or folder
-- undo and redo recent changes with hotkeys
+- copy / paste any value or whole folders
+- undo / redo any change
+- load / save your gui state to disk as json
 - autosave on program exit
+- [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java) 
 - configurable look and feel
   - pre-made and custom color themes
   - custom fonts (JetBrains Mono by default)
   - background dot grid for windows to snap to
   - context guide lines between a child folder and its parent
-  - individual windows have resizable width 
+  - individual windows have resizable width
+  
+### Who will use this?
+Any creative coders using Processing looking to
+- get values from their GUI using a few simple but powerful functions
+- change sketch code and re-run it without losing the gui state
+- make tools for non-programmers with user-friendly controls
+
 ---
 
-## How?
+## How do I run this?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
@@ -54,9 +46,11 @@ void setup(){
 }
 ```
 
-### Get values from the GUI
+---
 
-#### Slider
+## How do I get values from the GUI?
+
+### Slider
 ```java
 float x = gui.slider("x");
 ellipse(x, height/2, 50, 50);
@@ -65,7 +59,7 @@ ellipse(x, height/2, 50, 50);
 - click and drag mouse horizontally - change value by (pixels * precision)
 - keyboard input ints or floats with mouse over the slider
 
-#### Button
+### Button
 
 ```java
 if(gui.button("say hello once")){
@@ -74,7 +68,7 @@ if(gui.button("say hello once")){
 ```
 - is only true once after being clicked - returning true switches the value back to false
 
-#### Toggle
+### Toggle
 
 ```java
 if(gui.toggle("spam every frame")){
@@ -83,7 +77,7 @@ if(gui.toggle("spam every frame")){
 ```
 - click to change boolean state n to !n
 
-#### Text input
+### Text input
 
 ```java
 String userInput = gui.text("text header", "this default text can be edited");
@@ -94,7 +88,7 @@ String userInput = gui.text("text header", "this default text can be edited");
 - DELETE  - delete the whole text
 - BACKSPACE - delete the last character
 
-#### Pick one option from a list
+### Pick one option from a list
 
 ```java
 String mode = gui.stringPicker("mode", new String[]{"square", "circle"});
@@ -106,7 +100,7 @@ if (mode.equals("square")) {
 ```
 - opens a window of toggles named after the options where setting one to true sets all others to false
 
-#### Color picker
+### Color picker
 
 ```java
 int pickedColor = gui.colorPicker("background").hex;
@@ -115,7 +109,7 @@ background(pickedColor);
 - HSBA color picker with a hex string display
 - you can copy and paste using the hex field
 
-#### Gradient picker
+### Gradient picker
 
 ```java
 PGraphics gradient = gui.gradient("background");
@@ -130,11 +124,16 @@ The **path**  is the first string parameter to every control element function an
 It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
 The forward slash `/` is a reserved character used to make folders, but it can be escaped with `\\` like this: `\\/` which won't separate folders.
 
-#### Keep the sliders called "x" and "y" in a folder called "pos" inside another folder called "test"
+#### Keep the sliders called "x" and "y" in a folder called "pos"
 
 ```java
 float x = gui.slider("pos/x");
 float y = gui.slider("pos/y");
+```
+
+#### Make a toggle that says "off/on"
+```java
+boolean state = gui.toggle("off\\/on");
 ```
 
 ### Global path prefix stack
@@ -161,3 +160,6 @@ float y = gui.slider("y");
 gui.popFolder();
 ```
 
+## More example code:
+- basic examples in this repo at [src/main/java/examples](src/main/java/examples)
+- bigger sketches using this GUI in my other repo: [LazySketches](https://github.com/KrabCode/LazySketches) 
