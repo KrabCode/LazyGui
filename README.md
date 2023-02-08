@@ -28,8 +28,6 @@ Any creative coders using Processing looking to
 - change sketch code and re-run it without losing the gui state
 - make tools for non-programmers with user-friendly controls
 
----
-
 ## How do I run this?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
@@ -45,8 +43,6 @@ void setup(){
     gui = new LazyGui(this);
 }
 ```
-
----
 
 ## How do I get values from the GUI?
 
