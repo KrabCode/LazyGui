@@ -2,10 +2,12 @@
 
 ![LazyGui looks like this](readme_assets/header.png)
 
-## A GUI for Processing 3+ with..
+GUI for Processing 3+ with all the basic control elements for floats, colors, vectors, strings and booleans 
 
-- all the basic control elements for floats, colors, vectors, strings and booleans in a folder structure 
-- absolutely minimal boilerplate in `setup()` because control elements have unique string paths which allows lazy initialization when a value is requested
+### Main ideas:
+- absolutely minimal boilerplate in `setup()`
+- lazy initialization when a value is requested
+- control elements have unique string [paths](#Path)
 
 ### Other features:
 - infinite sliders with variable precision
@@ -44,7 +46,7 @@ void setup(){
 }
 ```
 
-## How do I get values from the GUI?
+## Get values from the GUI
 
 ### Slider
 ```java
