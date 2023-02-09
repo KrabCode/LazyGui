@@ -3,7 +3,7 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import lazy.stores.UndoRedoStore;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class RadioFolderNode extends FolderNode {
         if(defaultOption != null){
             valueString = defaultOption;
         }
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
         checkForChildValueChange(); // loading from json may have changed the child booleans, so we need to reflect this in valueString and oldValues
         rememberCurrentValues();
     }

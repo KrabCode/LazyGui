@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyMouseEvent;
 import lazy.stores.UndoRedoStore;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
 import static lazy.stores.LayoutStore.cell;
@@ -20,7 +20,7 @@ public class ToggleNode extends AbstractNode {
     public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
         valueBoolean = defaultValue;
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import lazy.PickerColor;
 import lazy.stores.ShaderStore;
 import lazy.utils.ArrayListBuilder;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -40,7 +40,7 @@ public class GradientFolderNode extends FolderNode {
             // default A alpha is 1 for some reason even though I set 0 here
             children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), iNorm, alpha, iNorm, i % 2 == 0));
         }
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

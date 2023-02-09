@@ -84,7 +84,7 @@ public abstract class AbstractNode {
      * @param pg main PGraphics of the gui of the same size as the main PApplet canvas to draw on
      */
     public final void updateDrawInlineNode(PGraphics pg) {
-        // the node knows its absolute position but here it is already translated to it for more readable relative drawing code
+        // the node knows its absolute position but here the current matrix is already translated to it
         if(isMouseOverNode){
             highlightNodeBackground(pg);
         }

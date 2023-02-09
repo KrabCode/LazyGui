@@ -12,7 +12,7 @@ import lazy.themes.ThemeType;
 import lazy.utils.ContextLines;
 import lazy.utils.KeyCodes;
 import lazy.utils.SnapToGrid;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
 import processing.core.PApplet;
@@ -26,11 +26,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.stores.JsonSaveStore.*;
 import static lazy.stores.NodeTree.*;
 import static lazy.stores.NormColorStore.color;
 import static lazy.stores.GlobalReferences.app;
-import static lazy.utils.JsonSaves.getGuiDataFolderPath;
-import static lazy.utils.JsonSaves.getNextUnusedIntegerFileNameInFolder;
 import static processing.core.PApplet.*;
 
 /**
@@ -39,7 +38,7 @@ import static processing.core.PApplet.*;
  * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
  * Allows the library user to get the value of a gui control element at any time inside draw(), even repeatedly inside loops.
  * If the control element does not exist yet at the time its value is requested it gets newly created just in time.
- * Please note that only one LazyGui object is expected to exist in any given sketch, which is not enforced, it just won't work.
+ * Please note that only one LazyGui object is expected to exist in any given sketch, due to internal static classes.
  */
 @SuppressWarnings("unused")
 public class LazyGui implements UserInputSubscriber {
@@ -61,8 +60,6 @@ public class LazyGui implements UserInputSubscriber {
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
 
-    public static boolean autosaveEnabled = true;
-
 
     /**
      * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
@@ -83,7 +80,7 @@ public class LazyGui implements UserInputSubscriber {
         UserInputPublisher.subscribe(this);
         WindowManager.addRootWindow();
         createOptionsFolder();
-        JsonSaves.loadMostRecentSave();
+        JsonSaveStore.loadMostRecentSave();
         lazyFollowSketchResolution();
         registerExitHandler();
         app.registerMethod("draw", this);
@@ -1152,7 +1149,7 @@ public class LazyGui implements UserInputSubscriber {
             UndoRedoStore.redo();
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
-            JsonSaves.createNewSaveWithRandomName();
+            JsonSaveStore.createNewSave();
         }
     }
 
@@ -1179,7 +1176,7 @@ public class LazyGui implements UserInputSubscriber {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        JsonSaves.createTreeSaveFiles("auto");
+        JsonSaveStore.createTreeSaveFiles("auto");
     }
 
 }

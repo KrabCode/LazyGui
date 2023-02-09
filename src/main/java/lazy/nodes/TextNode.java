@@ -11,7 +11,7 @@ import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
 import lazy.stores.FontStore;
 import lazy.utils.ClipboardUtils;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -41,7 +41,7 @@ public class TextNode extends AbstractNode {
         shouldDisplayHeaderRow = !name.trim().isEmpty();
         millisInputDelay = DelayStore.getKeyboardBufferDelayMillis();
         millisInputStarted = -millisInputDelay * 2;
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override

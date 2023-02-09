@@ -2,7 +2,6 @@ package lazy.stores;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import lazy.utils.JsonSaves;
 
 import java.util.ArrayList;
 
@@ -31,7 +30,7 @@ public class UndoRedoStore {
     }
 
     public static void onUndoableActionEnded(){
-        String newState = JsonSaves.getTreeAsJsonString();
+        String newState = JsonSaveStore.getTreeAsJsonString();
         if(!somethingActuallyChanged(newState)){
             return;
         }
@@ -79,7 +78,7 @@ public class UndoRedoStore {
             return;
         }
         String newState = stateStack.get(newIndex);
-        JsonSaves.loadStateFromJsonString(newState);
+        JsonSaveStore.loadStateFromJsonString(newState);
         stateIndex = newIndex;
     }
 
@@ -108,7 +107,7 @@ public class UndoRedoStore {
     }
 
     private static String parseTextValue(String fullJsonSave) {
-        JsonElement root = JsonSaves.getJsonElementFromString(fullJsonSave);
+        JsonElement root = JsonSaveStore.getJsonElementFromString(fullJsonSave);
         JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
         for (int i = 0; i < children.size(); i++) {
             if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){

@@ -13,9 +13,8 @@ import static processing.core.PApplet.println;
 
 /**
  * Utility class for live-coding shaders
- * Based on a string path to shader and re-compiling when needed using the shader file's last modified time.
+ * Takes a string path to the shader and re-compiles it when needed using the shader file's last modified time.
  * Saving the shader file in your text editor is needed to actually recompile it and display the results.
- * No sketch restarting needed unless you want to set a new uniform.
  */
 @SuppressWarnings("unused")
 public class ShaderReloader {

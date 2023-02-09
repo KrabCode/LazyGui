@@ -7,7 +7,7 @@ import lazy.nodes.NodeType;
 
 public class TreePrinter {
 
-    static String prettyPrintTree() {
+    public static String prettyPrintTree() {
         StringBuilder sb = new StringBuilder();
         buildPrettyPrintedTreeString(NodeTree.getRoot(), 1, sb);
         return sb.toString();

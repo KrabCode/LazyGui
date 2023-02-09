@@ -10,7 +10,7 @@ import lazy.stores.LayoutStore;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.ClipboardUtils;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
 import processing.core.PGraphics;
@@ -41,7 +41,7 @@ public class FolderNode extends AbstractNode {
 
     public FolderNode(String path, FolderNode parent) {
         super(NodeType.FOLDER, path, parent);
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
     @Override
@@ -109,11 +109,11 @@ public class FolderNode extends AbstractNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         // copy + paste whole folders of controls
         if ((e.isControlDown() && e.getKeyCode() == KeyCodes.C)) {
-            ClipboardUtils.setClipboardString(JsonSaves.getFolderAsJsonString(this));
+            ClipboardUtils.setClipboardString(JsonSaveStore.getFolderAsJsonString(this));
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String toPaste = ClipboardUtils.getClipboardString();
-            JsonSaves.loadStateFromJsonString(toPaste, path);
+            JsonSaveStore.loadStateFromJsonString(toPaste, path);
         }
     }
 

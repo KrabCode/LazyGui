@@ -15,7 +15,7 @@ import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.ArrayListBuilder;
 import lazy.utils.ClipboardUtils;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -76,7 +76,7 @@ public class SliderNode extends AbstractNode {
                 max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
                 min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
         setSensiblePrecision(nf(valueFloat, 0, 0));
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
     public void initSliderBackgroundShader() {

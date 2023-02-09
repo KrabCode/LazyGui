@@ -8,7 +8,7 @@ import lazy.input.LazyKeyEvent;
 import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.utils.ClipboardUtils;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
 import static lazy.stores.NormColorStore.getColorStore;
@@ -32,7 +32,7 @@ public class ColorPickerFolderNode extends FolderNode {
         setHex(hex);
         lazyInitNodes();
         idealWindowWidthInCells = 7;
-        JsonSaves.overwriteWithLoadedStateIfAny(this);
+        JsonSaveStore.overwriteWithLoadedStateIfAny(this);
         loadValuesFromHex(true);
     }
 

@@ -1,6 +1,6 @@
 package lazy.nodes;
 
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
 import java.awt.*;
@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lazy.LazyGui.*;
 import static lazy.stores.GlobalReferences.gui;
+import static lazy.stores.JsonSaveStore.*;
 import static processing.core.PApplet.println;
 
 public class SaveFolderNode extends FolderNode {
@@ -18,6 +18,7 @@ public class SaveFolderNode extends FolderNode {
     final String pathOpenSaveFolder  = "/open save folder";
     final String pathAutosaveOnExit  = "/autosave on exit";
     final String pathCreateNewSave   = "/create new save";
+    final String pathIncludePrettyTree = "/also save pretty tree";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     public SaveFolderNode(String path, FolderNode parent) {
@@ -26,6 +27,7 @@ public class SaveFolderNode extends FolderNode {
         children.add(new ButtonNode(path + pathPrintFolderPath, this));
         children.add(new ButtonNode(path + pathOpenSaveFolder, this));
         children.add(new ToggleNode(path + pathAutosaveOnExit , this, autosaveEnabled));
+        children.add(new ToggleNode(path + pathIncludePrettyTree, this, false));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
@@ -33,10 +35,11 @@ public class SaveFolderNode extends FolderNode {
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
         autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExit)).valueBoolean;
+        includePrettyTreeInSaves = ((ToggleNode) findChildByName(pathIncludePrettyTree)).valueBoolean;
     }
 
     void updateStateList() {
-        List<File> filenames = JsonSaves.getSaveFileList();
+        List<File> filenames = JsonSaveStore.getSaveFileList();
         if(filenames == null){
             return;
         }
@@ -86,13 +89,13 @@ public class SaveFolderNode extends FolderNode {
     protected void drawNodeBackground(PGraphics pg) {
         super.drawNodeBackground(pg);
         if(gui.button(path + pathCreateNewSave)){
-            JsonSaves.createNewSaveWithRandomName();
+            JsonSaveStore.createNewSave();
         }
         if(gui.button(path + pathOpenSaveFolder)){
             openSaveFolder();
         }
         if(gui.button(path + pathPrintFolderPath)){
-            println("LazyGui save folder: " + JsonSaves.getSaveDir().getAbsolutePath());
+            println("LazyGui save folder: " + JsonSaveStore.getSaveDir().getAbsolutePath());
         }
 
         updateStateList();
@@ -101,7 +104,7 @@ public class SaveFolderNode extends FolderNode {
     static void openSaveFolder() {
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(JsonSaves.getSaveDir());
+            desktop.open(JsonSaveStore.getSaveDir());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,7 @@
 package lazy.nodes;
 
 import lazy.stores.UndoRedoStore;
-import lazy.utils.JsonSaves;
+import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
 class SaveItemNode extends AbstractNode {
@@ -23,7 +23,7 @@ class SaveItemNode extends AbstractNode {
     }
 
     public void mousePressedOverNode(float x, float y) {
-        JsonSaves.loadStateFromFile(fileName);
+        JsonSaveStore.loadStateFromFile(fileName);
         UndoRedoStore.onUndoableActionEnded();
     }
 }
