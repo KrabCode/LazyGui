@@ -99,18 +99,18 @@ if (mode.equals("square")) {
 - opens a window of toggles named after the options where setting one to true sets all others to false
 
 ### Color picker
-
+![a color picker looks like this](readme_assets/colorpicker.png)
 ```java
-int pickedColor = gui.colorPicker("background").hex;
+int pickedColor = gui.colorPicker("color name").hex;
 background(pickedColor);
 ```
 - HSBA color picker with a hex string display
 - you can copy and paste using the hex field
 
 ### Gradient picker
-
+![a gradient picker looks like this](readme_assets/gradient.png)
 ```java
-PGraphics gradient = gui.gradient("background");
+PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
 ```
 - allows you to set the position and value of individual colors or disable them entirely
