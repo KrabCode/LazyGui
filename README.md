@@ -4,6 +4,12 @@
 
 GUI for Processing 3+ with all the basic control elements for floats, colors, vectors, strings and booleans 
 
+### Who should use this?
+Any creative coders using Processing looking to
+- get values from their GUI using a few simple but powerful functions
+- change sketch code and re-run it without losing the gui state
+- make tools for non-programmers with user-friendly controls
+
 ### Main ideas:
 - absolutely minimal boilerplate in `setup()`
 - lazy initialization when a value is requested
@@ -16,27 +22,25 @@ GUI for Processing 3+ with all the basic control elements for floats, colors, ve
 - undo / redo any change
 - load / save your gui state to disk as json
 - autosave on program exit
-- [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java) 
+- [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java)
 - configurable look and feel
   - pre-made and custom color themes
   - custom fonts (JetBrains Mono by default)
   - background dot grid for windows to snap to
   - context guide lines between a child folder and its parent
   - individual windows have resizable width
-  
-### Who will use this?
-Any creative coders using Processing looking to
-- get values from their GUI using a few simple but powerful functions
-- change sketch code and re-run it without losing the gui state
-- make tools for non-programmers with user-friendly controls
 
 ## How do I run this?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
 
-### Initialize the GUI in `setup()`:
+### Initialize the GUI
+- make a global LazyGui variable outside of any function: `LazyGui gui;`
+- then initialize it inside setup() after calling size() or fullScreen() with P2D or P3D: 
+  - `gui = new LazyGui(this);`
 
+#### Runnable basic example:
 ```java
 LazyGui gui;
 
@@ -44,7 +48,16 @@ void setup(){
     size(800,800,P2D);
     gui = new LazyGui(this);
 }
+
+void draw(){
+    background(16);
+}
 ```
+The gui displays itself at the end of draw() and by default it shows the root window with an "options" folder for tweaking the various gui settings. 
+
+A sketch with the above code should look like this:
+
+![root and options look like this](readme_assets/root_and_options.png)
 
 ## Get values from the GUI
 ![a slider looks like this](readme_assets/slider.png)
@@ -75,7 +88,7 @@ if(gui.button("do the thing!")){
     println("it is done");
 }
 ```
-- is only true once after being clicked - returning true switches the value back to false
+- is only true once after being clicked (returning true switches the value back to false)
 
 ### Toggle
 ![a toggle looks like this](readme_assets/toggle.png)
@@ -84,7 +97,7 @@ if(gui.toggle("spam every frame")){
     println("I'm trapped in a string factory");
 }
 ```
-- click to change boolean state n to !n
+- click to flip the boolean state
 
 ### Text input
 ![text input looks like this](readme_assets/text.png)
@@ -171,5 +184,5 @@ gui.popFolder();
 
 ## More example code:
 - [processing examples](src/main/java/examples) 
-- [pure java examples](src/main/java/examples-intellij) for use in a proper IDE like IntelliJ IDEA
+- [pure java examples](src/main/java/examples_intellij) for use in a proper IDE like IntelliJ IDEA
 - bigger sketches using this GUI in my other repo: [LazySketches](https://github.com/KrabCode/LazySketches) 
