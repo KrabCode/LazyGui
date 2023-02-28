@@ -7,8 +7,7 @@
       gui = new LazyGui(this);
     }
 
-    @SuppressWarnings("DuplicatedCode")
-      public void draw() {
+    public void draw() {
       gui.pushFolder("scene");
       drawBackground();
       drawForegroundShape();
