@@ -18,7 +18,6 @@ public class SaveFolderNode extends FolderNode {
     final String pathOpenSaveFolder  = "/open save folder";
     final String pathAutosaveOnExit  = "/autosave on exit";
     final String pathCreateNewSave   = "/create new save";
-    final String pathIncludePrettyTree = "/also save pretty tree";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     public SaveFolderNode(String path, FolderNode parent) {
@@ -27,7 +26,6 @@ public class SaveFolderNode extends FolderNode {
         children.add(new ButtonNode(path + pathPrintFolderPath, this));
         children.add(new ButtonNode(path + pathOpenSaveFolder, this));
         children.add(new ToggleNode(path + pathAutosaveOnExit , this, autosaveEnabled));
-        children.add(new ToggleNode(path + pathIncludePrettyTree, this, false));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
@@ -35,7 +33,6 @@ public class SaveFolderNode extends FolderNode {
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
         autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExit)).valueBoolean;
-        includePrettyTreeInSaves = ((ToggleNode) findChildByName(pathIncludePrettyTree)).valueBoolean;
     }
 
     void updateStateList() {

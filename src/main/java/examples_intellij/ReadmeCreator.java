@@ -1,10 +1,10 @@
-package examples;
+package examples_intellij;
 
+import lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
 
-public class TypeConflictTest extends PApplet {
+public class ReadmeCreator extends PApplet {
     LazyGui gui;
     PGraphics pg;
 
@@ -14,36 +14,27 @@ public class TypeConflictTest extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+        size(800, 800, P2D);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        colorMode(HSB, 1, 1, 1, 1);
-        frameRate(144);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        gui.pushFolder("hello");
-        gui.pushFolder("world");
-        gui.slider("testing");
-        gui.text("testing");
-        gui.colorPicker("testing");
+        gui.pushFolder("example folder");
+        gui.radio("mode", new String[]{"square", "circle"});
+        gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background").hex);
-        pg.noStroke();
-        pg.rectMode(CORNER);
-        pg.rect(0, 0, width, height);
+        background(gui.colorPicker("background").hex);
     }
 }
-

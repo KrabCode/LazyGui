@@ -47,27 +47,38 @@ void setup(){
 ```
 
 ## Get values from the GUI
-
+![a slider looks like this](readme_assets/slider.png)
 ### Slider
 ```java
 float x = gui.slider("x");
-ellipse(x, height/2, 50, 50);
 ```
 - mouse wheel changes the selected precision when mouse is over the slider
 - click and drag mouse horizontally - change value by (pixels * precision)
-- keyboard input ints or floats with mouse over the slider
+- supports keyboard input with mouse over the slider - tries to parse the string as Float or Int
+- there is a `sliderInt()` variant that returns `int`
+
+### Plot
+![a plot looks like this](readme_assets/plotXY.png)
+```java
+PVector pos = gui.plotXY("position");
+```
+- drag the grid with your mouse to change both X and Y at the same time
+- keyboard input for both values with mouse over the grid
+- change both of their precisions at the same time with the mouse wheel over the grid
+  - change just one of their precisions with mouse over one of the x,y sliders
+- there is a `plotXYZ()` variant with an extra Z slider (not connected to the grid)
 
 ### Button
-
+![a button looks like this](readme_assets/button.png)
 ```java
-if(gui.button("say hello once")){
-    println("hello");
+if(gui.button("do the thing!")){
+    println("it is done");
 }
 ```
 - is only true once after being clicked - returning true switches the value back to false
 
 ### Toggle
-
+![a toggle looks like this](readme_assets/toggle.png)
 ```java
 if(gui.toggle("spam every frame")){
     println("I'm trapped in a string factory");
@@ -76,27 +87,27 @@ if(gui.toggle("spam every frame")){
 - click to change boolean state n to !n
 
 ### Text input
-
+![text input looks like this](readme_assets/text.png)
 ```java
 String userInput = gui.text("text header", "this default text can be edited");
-  text(userInput, width/2, height/2);
 ```
 - type with mouse over the text field
 - ENTER - insert new line 
 - DELETE  - delete the whole text
 - BACKSPACE - delete the last character
 
-### Pick one option from a list
-
+### Radio
+![radio looks like this](readme_assets/radio.png)
 ```java
-String mode = gui.stringPicker("mode", new String[]{"square", "circle"});
+String mode = gui.radio("mode", new String[]{"square", "circle"});
 if (mode.equals("square")) {
     rect(175, 175, 50, 50);
 } else {
     ellipse(200, 200, 50, 50);
 }
 ```
-- opens a window of toggles named after the options where setting one to true sets all others to false
+- opens a window of toggles where setting one to true sets all others to false
+- returns the selected option as a string
 
 ### Color picker
 ![a color picker looks like this](readme_assets/colorpicker.png)
@@ -159,5 +170,6 @@ gui.popFolder();
 ```
 
 ## More example code:
-- basic examples in this repo at [src/main/java/examples](src/main/java/examples)
+- [processing examples](src/main/java/examples) 
+- [pure java examples](src/main/java/examples-intellij) for use in a proper IDE like IntelliJ IDEA
 - bigger sketches using this GUI in my other repo: [LazySketches](https://github.com/KrabCode/LazySketches) 

@@ -54,7 +54,7 @@ public class LazyGui implements UserInputSubscriber {
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
 
-    private PGraphics pg;
+    private PGraphics guiCanvas;
     FolderNode optionsNode;
 
     private static long lastFrameMillis;
@@ -62,7 +62,7 @@ public class LazyGui implements UserInputSubscriber {
 
 
     /**
-     * Constructor for the LazyGui object which acts as an entry point to the entire LazyGui library.
+     * Constructor for the LazyGui object which acts as a central hub for all GUI related methods.
      * Meant to be initialized in setup() with <code>new LazyGui(this)</code>.
      * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
      *
@@ -87,11 +87,11 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     void lazyFollowSketchResolution() {
-        if (pg == null || pg.width != app.width || pg.height != app.height) {
-            pg = app.createGraphics(app.width, app.height, P2D);
-            pg.colorMode(HSB, 1, 1, 1, 1);
+        if (guiCanvas == null || guiCanvas.width != app.width || guiCanvas.height != app.height) {
+            guiCanvas = app.createGraphics(app.width, app.height, P2D);
+            guiCanvas.colorMode(HSB, 1, 1, 1, 1);
 //            pg.noSmooth();
-            pg.smooth(8);
+            guiCanvas.smooth(8);
         }
     }
 
@@ -102,7 +102,7 @@ public class LazyGui implements UserInputSubscriber {
      * @return previous frame's gui canvas
      */
     public PGraphics getGuiCanvas() {
-        return pg;
+        return guiCanvas;
     }
 
     /**
@@ -120,9 +120,9 @@ public class LazyGui implements UserInputSubscriber {
      * LazyGui will enforce itself being drawn only once per frame internally, which can be useful for including the gui in a recording.
      * If it does get called manually, it will get drawn when requested and then skip its automatic execution for that frame.
      *
-     * @param canvas canvas to draw the GUI on
+     * @param targetCanvas canvas to draw the GUI on
      */
-    public void draw(PGraphics canvas) {
+    public void draw(PGraphics targetCanvas) {
         if(lastFrameCountGuiWasShown == app.frameCount){
             return;
         }
@@ -132,20 +132,20 @@ public class LazyGui implements UserInputSubscriber {
         }
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
-        pg.beginDraw();
-        pg.clear();
+        guiCanvas.beginDraw();
+        guiCanvas.clear();
         clearFolder();
         updateOptionsFolder();
-        SnapToGrid.displayGuideAndApplyFilter(pg, getWindowBeingDraggedIfAny());
+        SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
-            WindowManager.updateAndDrawWindows(pg);
+            WindowManager.updateAndDrawWindows(guiCanvas);
         }
-        pg.endDraw();
+        guiCanvas.endDraw();
         resetSketchMatrixInAnyRenderer();
-        canvas.pushStyle();
-        canvas.imageMode(CORNER);
-        canvas.image(pg, 0, 0);
-        canvas.popStyle();
+        targetCanvas.pushStyle();
+        targetCanvas.imageMode(CORNER);
+        targetCanvas.image(guiCanvas, 0, 0);
+        targetCanvas.popStyle();
         takeScreenshotIfRequested();
         updateEndlessLoopDetection();
     }
@@ -1106,7 +1106,7 @@ public class LazyGui implements UserInputSubscriber {
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
-        ContextLines.update(pg);
+        ContextLines.update(guiCanvas);
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
         popFolder();
@@ -1121,6 +1121,12 @@ public class LazyGui implements UserInputSubscriber {
         hotkeyRedoActive = toggle("ctrl + y: redo", true);
         hotkeySaveActive = toggle("ctrl + s: new save", true);
         hotkeyOpenSketchFolderActive = toggle("k: open sketch folder", true);
+        textSet("mouseover specific hotkeys",
+        "r: reset control element to default value\n" +
+                "ctrl + c: copy from (single value or folder)\n" +
+                "ctrl + v: paste to (single value or a whole folder, which overwrites the values of matching element names)\n" +
+                "these hotkeys cannot be turned off for now"
+        );
         popFolder();
     }
 
