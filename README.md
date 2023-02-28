@@ -60,8 +60,9 @@ A sketch with the above code should look like this:
 ![root and options look like this](readme_assets/root_and_options.png)
 
 ## Get values from the GUI
-![a slider looks like this](readme_assets/slider.png)
+
 ### Slider
+![a slider looks like this](readme_assets/slider.png)
 ```java
 float x = gui.slider("x");
 ```
