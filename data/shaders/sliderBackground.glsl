@@ -65,14 +65,6 @@ vec3 hexToRgb(int color)
     return vec3(rValue / 255.0, gValue / 255.0, bValue / 255.0);
 }
 
-vec3 gammaCorrection(vec3 rgb){
-    return pow(smoothstep(0., 1., rgb), vec3(1.0/2.2));
-}
-
-vec4 gammaCorrection(vec4 rgba){
-    return vec4(gammaCorrection(rgba.rgb), 1.);
-}
-
 mat2 rotate2D(float angle){
     return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
 }

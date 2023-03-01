@@ -42,14 +42,6 @@ float norm(float value, float start, float stop)
     return map(value, start, stop, 0., 1.);
 }
 
-vec3 gammaCorrection(vec3 rgb){
-    return pow(smoothstep(0., 1., rgb), vec3(1.0/2.2));
-}
-
-vec4 gammaCorrection(vec4 rgba){
-    return vec4(gammaCorrection(rgba.rgb), 1.);
-}
-
 mat2 rotate2D(float angle){
     return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
 }
@@ -70,14 +62,6 @@ vec3 hsv2rgb(vec3 c)
     vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
     vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-float hueModulo(float hue){
-    while(hue < 0.){
-        hue += 1.;
-    }
-    hue = mod(hue, 1.);
-    return hue;
 }
 
 void main(){

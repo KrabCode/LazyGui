@@ -20,7 +20,7 @@ public class SnapToGrid {
     public static boolean snapToGridEnabled = true;
     static final List<String> availableVisibilityModes = new ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
-    private static final String pointShaderPath = "gridPointFrag.glsl";
+    private static final String pointShaderPath = "gridPoint.glsl";
     private static final int VISIBILITY_ALWAYS = 0;
     private static final int VISIBILITY_ON_DRAG = 1;
     private static final int VISIBILITY_NEVER = 2;
