@@ -5,42 +5,47 @@ void setup() {
   size(1200, 800, P2D);
   smooth(8);
   rectMode(CENTER);
-  textAlign(LEFT, TOP);
+  textAlign(CENTER, CENTER);
   textSize(32);
   gui = new LazyGui(this);
 }
 
 void draw() {
-  gui.pushFolder("scene");
   background(gui.colorPicker("background", color(0xFF252525)).hex);
   drawForeground();
-  gui.popFolder();
 }
 
 void drawForeground() {
   gui.pushFolder("foreground");
-  int rectCount = gui.sliderInt("rect count", 8, 2, 100);
-  float groupWidth = gui.slider("group width", 800, 20, 2400);
-  float rectSize = gui.slider("rect size", 50);
+  int rectCount = gui.sliderInt("rect count", 6, 2, 12);
   translate(width/2, height/2);
   for (int i = 0; i < rectCount; i++) {
-    float x = map(i, 0, rectCount-1, -groupWidth/2, groupWidth/2);
     pushMatrix();
-    translate(x, 0);
+    gui.pushFolder("global settings");
 
-    // you can always ask for the same control element inside loops
+    // you can ask for the same control element inside loops
     // like in "rect fill" here, which applies the same color to all rectangles
-    fill(gui.colorPicker("rect fill", color(255)).hex);
+    fill(gui.colorPicker("rect fill", color(0xFFB2B0B0)).hex);
+    float groupWidth = gui.slider("total width", 900, 20, 2400);
+    float rectSize = gui.slider("rect size", 100);
+    float x = map(i, 0, rectCount-1, -groupWidth/2, groupWidth/2);
+    translate(x, 0);
     rect(0, 0, rectSize, rectSize);
+    PVector globalTextPos = gui.plotXY("global offset");
+    translate(globalTextPos.x, globalTextPos.y);
+    gui.popFolder();
 
-    fill(gui.colorPicker("text fill", color(24)).hex);
-    gui.pushFolder("labels");
-
-    // or you can change the path using i
-    // to make a new control element (or a whole folder) for each of them
-    String label = gui.text("label " + i, String.valueOf(i));
-
-    text(label, -rectSize*0.35, -rectSize*0.5);
+    // or you can put 'i' inside the path to make a new folder for each of them
+    // with new folders growing automatically as you increase the rect count
+    gui.pushFolder("#" + i);
+    float rotation = gui.slider("rotation");
+    rotate(rotation);
+    PVector localTextPos = gui.plotXY("local offset");
+    translate(localTextPos.x, localTextPos.y);
+    int defaultLabel = floor(pow(2, i+1));
+    String label = gui.text("label text", "" + defaultLabel);
+    fill(gui.colorPicker("text color", color(24)).hex);
+    text(label, 0, 0);
     popMatrix();
     gui.popFolder();
   }

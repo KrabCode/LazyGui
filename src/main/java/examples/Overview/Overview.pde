@@ -1,12 +1,9 @@
 
-// keep one main reference to the GUI as a global variable
 LazyGui gui;
 
 void setup() {
   size(1200, 800, P2D);
   smooth(8);
-
-  // initialize the GUI inside setup()
   gui = new LazyGui(this);
 }
 
@@ -55,7 +52,7 @@ void drawForegroundShape() {
   translate(pos.x, pos.y);
   rotate(radians(rotationAngle));
 
-  // pick one string from a list or an array using gui.radio()
+  // pick one string from an array using gui.radio()
   String selectedShape = gui.radio("shape type", new String[]{"rectangle", "ellipse"});
   boolean shouldDrawEllipse = selectedShape.equals("ellipse");
   if (shouldDrawEllipse) {
@@ -83,20 +80,17 @@ void drawForegroundText() {
 
 void drawBackground() {
   gui.pushFolder("background");
-
   // the controls are ordered on screen by which gets called first
   // so it can be better to ask for all the values before any if-statement branching
   // because this way you can enforce any given ordering of them in the GUI
   // and avoid control elements appearing suddenly at runtime at unexpected places
-  boolean useGradient = gui.toggle("solid\\/gradient");
   int solidBackgroundColor = gui.colorPicker("solid", color(0xFF252525)).hex;
   PGraphics gradient = gui.gradient("gradient");
-
+  boolean useGradient = gui.toggle("solid\\/gradient"); // here '\\' escapes the '/' path separator
   if (useGradient) {
     image(gradient, 0, 0);
   } else {
     background(solidBackgroundColor);
   }
-
   gui.popFolder();
 }
