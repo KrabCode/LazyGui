@@ -19,8 +19,6 @@ void draw() {
 
 void drawForeground() {
   gui.pushFolder("foreground");
-
-  // set a minimum and maximum values for sliders with the third and fourth parameters
   int rectCount = gui.sliderInt("rect count", 8, 2, 100);
   float groupWidth = gui.slider("group width", 800, 20, 2400);
   float rectSize = gui.slider("rect size", 50);

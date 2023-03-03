@@ -11,3 +11,5 @@ src/test/Camera.java
 
 # save and screenshot folder, let's not clog the repo with huge png
 /data/gui/
+/library/
+/deploy/
