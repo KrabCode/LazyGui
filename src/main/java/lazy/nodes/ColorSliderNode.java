@@ -17,7 +17,7 @@ import static processing.core.PApplet.norm;
 abstract class ColorSliderNode extends SliderNode {
 
     final ColorPickerFolderNode parentColorPickerFolder;
-    final float maximumFloatPrecision = 1;
+    float maximumFloatPrecision = 1;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
@@ -122,6 +122,7 @@ abstract class ColorSliderNode extends SliderNode {
         HueNode(String path, ColorPickerFolderNode parentFolder) {
             super(path, parentFolder);
             shaderColorMode = 0;
+            maximumFloatPrecision = 0.1f;
         }
 
         @Override
