@@ -36,7 +36,7 @@ void drawForeground() {
     gui.popFolder();
 
     // or you can put 'i' inside the path to make a new folder for each of them
-    // with new folders growing automatically as you increase the rect count
+    // with new folders growing automatically as you increase the i limit
     gui.pushFolder("#" + i);
     float rotation = gui.slider("rotation");
     rotate(rotation);
