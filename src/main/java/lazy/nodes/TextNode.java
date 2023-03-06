@@ -3,15 +3,12 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import lazy.stores.DelayStore;
-import lazy.stores.UndoRedoStore;
+import lazy.stores.*;
 import lazy.themes.ThemeColorType;
 import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
-import lazy.stores.FontStore;
 import lazy.utils.ClipboardUtils;
-import lazy.stores.JsonSaveStore;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -30,7 +27,7 @@ public class TextNode extends AbstractNode {
     private final int millisInputDelay;
     private int millisInputStarted;
 
-    private final float marginLeftInCells = 0.2f;
+    private final float marginLeftInCells = 0.3f;
     private final String regexLookBehindForNewLine = "(?<=\\n)";
     private final boolean shouldDisplayHeaderRow;
 
@@ -46,7 +43,7 @@ public class TextNode extends AbstractNode {
 
     @Override
     protected void drawNodeBackground(PGraphics pg) {
-        drawLeftIndentBox(pg);
+        drawLeftIndentLine(pg);
     }
 
     @Override
@@ -64,22 +61,22 @@ public class TextNode extends AbstractNode {
         drawContent(pg, contentToDraw);
     }
 
-    private void drawLeftIndentBox(PGraphics pg) {
+    private void drawLeftIndentLine(PGraphics pg) {
         if(masterInlineNodeHeightInCells == 0){
             return;
         }
-        pg.fill(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
-        pg.noStroke();
-        float boxX = 0;
+        pg.stroke(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
+        float n = marginLeftInCells * cell;
+        float verticalMargin = n;
+        float boxX = n;
         float boxY = 0;
         float boxHeight = masterInlineNodeHeightInCells * cell;
-        float boxWidth = marginLeftInCells * cell;
         if(shouldDisplayHeaderRow){
             boxY = cell;
             boxHeight -= cell;
         }
         pg.rectMode(CORNER);
-        pg.rect(boxX, boxY, boxWidth, boxHeight);
+        pg.line(boxX, boxY + verticalMargin, boxX, boxY + boxHeight - verticalMargin);
     }
 
     protected void drawContent(PGraphics pg, String contentToDraw) {
@@ -87,27 +84,52 @@ public class TextNode extends AbstractNode {
         pg.textAlign(LEFT, CENTER);
         String[] lines = contentToDraw.split(regexLookBehindForNewLine);
         pg.pushMatrix();
-        float marginLeft = marginLeftInCells * cell;
+        float contentMarginLeft = marginLeftInCells * cell;
         if(shouldDisplayHeaderRow){
             pg.translate(0, cell);
         }
-        pg.translate(marginLeft, 0);
+        pg.translate(0, 0);
         pg.textFont(FontStore.getSideFont());
         for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            String lineTrimmed = line.replace("\n", "");
-            float availableWidth = size.x - marginLeft * 2 - FontStore.textMarginX;
-            String lineThatFits;
-            if (i == lines.length - 1) {
-                // FromEnd because you want to see what you're typing
-                lineThatFits = getSubstringFromEndToFit(pg, lineTrimmed, availableWidth);
-            } else {
-                // FromStart because you want to read everything else from the start
-                lineThatFits = getSubstringFromStartToFit(pg, lineTrimmed, availableWidth);
+            String line = lines[i].replace("\n", "");
+            float textFieldWidth = size.x - contentMarginLeft - FontStore.textMarginX;
+            float indicatorWidth = cell * 0.5f;
+            float textFieldWidthMinusIndicator = textFieldWidth - indicatorWidth;
+            String lineThatFits = getSubstringFromStartToFit(pg, line, textFieldWidth);
+            boolean wasLineTrimmed = lineThatFits.length() < line.length();
+            if(wasLineTrimmed){
+                // trim it further to give indicator some space
+                lineThatFits = getSubstringFromStartToFit(pg, line, textFieldWidthMinusIndicator);
+            }
+            boolean isLastLine = i == lines.length - 1;
+            if (isLastLine) {
+                // last line is displayed "fromEnd" because you want to see what you're typing,
+                // and you never want to draw the right indicator there
+                lineThatFits = getSubstringFromEndToFit(pg, line, textFieldWidth);
+            }else if(wasLineTrimmed){
+                drawRightTrimIndicator(pg, indicatorWidth);
             }
             pg.translate(0, cell);
-            pg.text(lineThatFits, FontStore.textMarginX, -FontStore.textMarginY);
+
+            pg.text(lineThatFits, contentMarginLeft + FontStore.textMarginX, -FontStore.textMarginY);
         }
+        pg.popMatrix();
+    }
+
+    private void drawRightTrimIndicator(PGraphics pg, float trimIndicatorWidth) {
+        pg.pushMatrix();
+        pg.pushStyle();
+        pg.translate(size.x-trimIndicatorWidth, 0);
+        fillBackgroundBasedOnMouseOver(pg);
+        pg.beginShape();
+        pg.vertex(0,0);
+        pg.fill(ThemeStore.getColor(ThemeColorType.WINDOW_BORDER));
+        pg.vertex(trimIndicatorWidth, 0);
+        pg.vertex(trimIndicatorWidth, cell);
+        fillBackgroundBasedOnMouseOver(pg);
+        pg.vertex(0, cell);
+        pg.endShape();
+        pg.popStyle();
         pg.popMatrix();
     }
 
