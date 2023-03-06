@@ -1124,7 +1124,7 @@ public class LazyGui implements UserInputSubscriber {
         textSet("mouseover specific hotkeys",
         "r: reset control element to default value\n" +
                 "ctrl + c: copy from (single value or folder)\n" +
-                "ctrl + v: paste to (single value or a whole folder, which overwrites the values of matching element names)\n" +
+                "ctrl + v: paste to (single value or folder)\n" +
                 "these hotkeys cannot be turned off for now"
         );
         popFolder();
