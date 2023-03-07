@@ -146,14 +146,19 @@ public class TextNode extends AbstractNode {
                 if (buffer.length() > 0) {
                     buffer = buffer.substring(0, buffer.length() - 1);
                 }
+                e.consume();
             } else if (e.getKeyCode() == KeyCodes.DELETE || e.getKey() == PConstants.DELETE) {
                 buffer = "";
+                e.consume();
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
                 ClipboardUtils.setClipboardString(this.buffer);
+                e.consume();
             } else if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
                 setStringValueUndoably(ClipboardUtils.getClipboardString());
+                e.consume();
             } else if(!e.isControlDown() && !e.isAltDown()){
                 buffer = buffer + e.getKey();
+                e.consume();
             }
         }
     }

@@ -110,13 +110,14 @@ public class FolderNode extends AbstractNode {
         // copy + paste whole folders of controls
         if ((e.isControlDown() && e.getKeyCode() == KeyCodes.C)) {
             ClipboardUtils.setClipboardString(JsonSaveStore.getFolderAsJsonString(this));
+            e.consume();
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String toPaste = ClipboardUtils.getClipboardString();
             JsonSaveStore.loadStateFromJsonString(toPaste, path);
+            e.consume();
         }
     }
-
 
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);

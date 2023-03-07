@@ -314,14 +314,12 @@ public class Window implements UserInputSubscriber {
         float y = app.mouseY;
         if (isPointInsideTitleBar(x, y)) {
             folder.keyPressedOverNode(keyEvent, x, y);
-            keyEvent.consume();
             return;
         }
         AbstractNode nodeUnderMouse = tryFindChildNodeAt(x, y);
         if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
             if (isPointInsideContent(x, y)) {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
-                keyEvent.consume();
             }
         }
     }

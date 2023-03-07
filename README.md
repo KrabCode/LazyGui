@@ -172,7 +172,7 @@ by pushing a new folder name to a stack with gui.pushFolder("folder name") and h
 popFolder() doesn't have a parameter - it just goes up by one level
 
 You can nest a pushFolder() inside another pushFolder() - your path stack can be many levels deep.
-Just remember to call popFolder() the same number of times when done!
+Just remember to call popFolder() the same number of times when done - the stack does get cleared after the end of draw() before the GUI starts drawing itself, but it's better not to rely on that.
 
 #### Keep the sliders called "x" and "y" in a folder called "pos" by using the stack
 

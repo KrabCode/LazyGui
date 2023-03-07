@@ -261,6 +261,7 @@ public class SliderNode extends AbstractNode {
             if (!Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
+            e.consume();
         }
         tryReadNumpadInput(e);
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
@@ -269,6 +270,7 @@ public class SliderNode extends AbstractNode {
                 value += "0";
             }
             ClipboardUtils.setClipboardString(value);
+            e.consume();
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
@@ -282,13 +284,15 @@ public class SliderNode extends AbstractNode {
             } catch (NumberFormatException nfe) {
                 println("Could not parse float from this clipboard string: " + clipboardString);
             }
+            e.consume();
         }
     }
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
         boolean inReplaceMode = isNumpadInReplaceMode();
         if (numpadChars.contains(e.getKey())) {
-            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
+            tryAppendNumberInputToBufferValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
+            e.consume();
         }
         switch (e.getKey()) {
             case '.':
@@ -300,6 +304,7 @@ public class SliderNode extends AbstractNode {
                 if (!numpadBufferValue.endsWith(".")) {
                     numpadBufferValue += ".";
                 }
+                e.consume();
                 break;
             case '+':
             case '-':
@@ -307,17 +312,20 @@ public class SliderNode extends AbstractNode {
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
+                e.consume();
                 break;
             case '*':
                 decreasePrecision();
+                e.consume();
                 break;
             case '/':
                 increasePrecision();
+                e.consume();
                 break;
         }
     }
 
-    private void tryAppendNumberInputToValue(Integer input, boolean inReplaceMode) {
+    private void tryAppendNumberInputToBufferValue(Integer input, boolean inReplaceMode) {
         String inputString = String.valueOf(input);
         setNumpadInputActiveStarted();
         if (inReplaceMode) {
