@@ -103,24 +103,6 @@ public class TextNode extends AbstractNode {
         pg.popMatrix();
     }
 
-    private void drawRightTextFade(PGraphics pg, float trimIndicatorWidth) {
-        pg.pushMatrix();
-        pg.pushStyle();
-        pg.translate(size.x-trimIndicatorWidth, -cell);
-        pg.noStroke();
-        pg.beginShape();
-        pg.fill(1, 0);
-        pg.vertex(0,0);
-        fillBackgroundBasedOnMouseOver(pg);
-        pg.vertex(trimIndicatorWidth, 0);
-        pg.vertex(trimIndicatorWidth, cell);
-        pg.fill(1, 0);
-        pg.vertex(0, cell);
-        pg.endShape(CLOSE);
-        pg.popStyle();
-        pg.popMatrix();
-    }
-
     void drawGradientRectangle(PGraphics pg, float x, float y, float w, float h, int colorLeft, int colorRight){
         pg.pushMatrix();
         pg.pushStyle();
