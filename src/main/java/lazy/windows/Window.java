@@ -303,7 +303,7 @@ public class Window implements UserInputSubscriber {
             AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
             if (clickedNode != null && clickedNode.isParentWindowVisible()) {
                 clickedNode.mouseWheelMovedOverNode(e.getX(), e.getY(), e.getRotation());
-//                e.setConsumed(true);
+                e.setConsumed(true);
             }
         }
     }
