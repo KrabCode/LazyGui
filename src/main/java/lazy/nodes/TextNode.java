@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import lazy.stores.*;
+import lazy.themes.ThemeColorType;
+import lazy.themes.ThemeStore;
 import lazy.utils.KeyCodes;
 import lazy.input.LazyKeyEvent;
 import lazy.utils.ClipboardUtils;
@@ -71,10 +73,10 @@ public class TextNode extends AbstractNode {
         pg.textFont(FontStore.getSideFont());
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].replace("\n", "");
-            float textFieldWidth = size.x - contentMarginLeft - FontStore.textMarginX;
+            boolean isLastLine = i == lines.length - 1;
+            float textFieldWidth = size.x - contentMarginLeft - FontStore.textMarginX + (isLastLine ? -cell : 0);
             float fadeoutWidth = cell * 1.5f;
             String lineThatFitsWindow = getSubstringFromStartToFit(pg, line, textFieldWidth);
-            boolean isLastLine = i == lines.length - 1;
             if (isLastLine) {
                 // last line is displayed "fromEnd" because you want to see what you're typing,
                 // and you never want to draw the right indicator there
@@ -83,8 +85,19 @@ public class TextNode extends AbstractNode {
             pg.translate(0, cell);
             pg.text(lineThatFitsWindow, contentMarginLeft + FontStore.textMarginX, -FontStore.textMarginY);
 
-            if(!isLastLine && !isMouseOverNode){
-                drawRightTextFade(pg, fadeoutWidth);
+            if(!isMouseOverNode){
+                int bgColor = ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND);
+                if(isLastLine){
+                    boolean isTrimmedToFit = lineThatFitsWindow.length() < line.length();
+                    if(isTrimmedToFit){
+                        drawGradientRectangle(pg, 0, -cell, fadeoutWidth, cell,
+                                bgColor, NormColorStore.toTransparent(bgColor));
+                    }
+                }else{
+                    drawGradientRectangle(pg, size.x-fadeoutWidth, -cell, fadeoutWidth, cell,
+                            NormColorStore.toTransparent(bgColor), bgColor);
+
+                }
             }
         }
         pg.popMatrix();
@@ -103,6 +116,24 @@ public class TextNode extends AbstractNode {
         pg.vertex(trimIndicatorWidth, cell);
         pg.fill(1, 0);
         pg.vertex(0, cell);
+        pg.endShape(CLOSE);
+        pg.popStyle();
+        pg.popMatrix();
+    }
+
+    void drawGradientRectangle(PGraphics pg, float x, float y, float w, float h, int colorLeft, int colorRight){
+        pg.pushMatrix();
+        pg.pushStyle();
+        pg.translate(x, y);
+        pg.noStroke();
+        pg.beginShape();
+        pg.fill(colorLeft);
+        pg.vertex(0,0);
+        pg.fill(colorRight);
+        pg.vertex(w, 0);
+        pg.vertex(w, h);
+        pg.fill(colorLeft);
+        pg.vertex(0, h);
         pg.endShape(CLOSE);
         pg.popStyle();
         pg.popMatrix();
