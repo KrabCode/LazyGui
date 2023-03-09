@@ -154,7 +154,8 @@ public class NodeTree {
 
     public static void hide(String path) {
         AbstractNode node = findNode(path);
-        if(node == null){
+//        println("hide(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
+        if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }
         node.hide();
@@ -162,10 +163,16 @@ public class NodeTree {
 
     public static void show(String path) {
         AbstractNode node = findNode(path);
-        if(node == null){
+//        println("show(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
+        if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }
         node.show();
+    }
+
+    public static List<AbstractNode> getParentChain(AbstractNode abstractNode) {
+        // TODO implement for https://github.com/KrabCode/LazyGui/issues/158
+        return new ArrayList<>();
     }
 }
 

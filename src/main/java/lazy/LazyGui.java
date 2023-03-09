@@ -147,8 +147,8 @@ public class LazyGui implements UserInputSubscriber {
         guiCanvas.clear();
         clearFolder();
         updateOptionsFolder();
-        SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
+            SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
             WindowManager.updateAndDrawWindows(guiCanvas);
         }
         guiCanvas.endDraw();
@@ -183,25 +183,58 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Hide any chosen element or folder except the root window. Hides any affected opened windows.
+     * Hide any chosen element or folder except the root window. Hides both the row and any affected opened windows under that node.
      * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
      * Can be called once in `setup()` or repeatedly every frame, the result is the same.
      * Does not initialize a control and has no effect on controls that have not been initialized yet.
-     * @param path path to the control or folder being hidden
+     * @param path path to the control or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
      */
     public void hide(String path){
+        if(path.equals("") || path.equals("/")){
+            hideCurrentFolder();
+            return;
+        }
         String fullPath = getFolder() + path;
         NodeTree.hide(fullPath);
     }
 
     /**
+     * Hides the folder at the current path prefix stack.
+     * See {@link #hide hide(String path)}
+     */
+    public void hideCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
+        NodeTree.hide(fullPath);
+    }
+
+
+    /**
      * Makes any control element or folder visible again if it has been hidden by the hide() function.
-     * Has no effect on visible elements. Does not open any windows except for those previously hidden by the hide() function.
+     * Has no effect on visible elements. Does not reveal any windows except for those that were open and then hidden by the hide() function.
      * Does not initialize a control and has no effect on controls that have not been initialized yet.
-     * @param path path to the control element or folder being hidden
+     * @param path path to the control element or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
      */
     public void show(String path){
+        if(path.equals("") || path.equals("/")){
+            showCurrentFolder();
+            return;
+        }
         String fullPath = getFolder() + path;
+        NodeTree.show(fullPath);
+    }
+
+    /**
+     * Shows the folder at the current path prefix stack.
+     * See {@link #show show(String path)}
+     */
+    public void showCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
         NodeTree.show(fullPath);
     }
 
@@ -1004,7 +1037,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void pushFolder(String folderName){
         if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
-            println("Too many calls to pushFolder() - stack size reached " + stackSizeWarningLevel +
+            println("Too many calls to pushFolder() - stack size reached the warning limit of " + stackSizeWarningLevel +
                     ", possibly due to runaway recursion");
             printedPushWarningAlready = true;
         }
@@ -1129,7 +1162,9 @@ public class LazyGui implements UserInputSubscriber {
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
-        ContextLines.update(guiCanvas);
+        if(!isGuiHidden){
+            ContextLines.update(guiCanvas);
+        }
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
         popFolder();

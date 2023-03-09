@@ -16,6 +16,8 @@ import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.util.List;
+
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
@@ -309,6 +311,13 @@ public abstract class AbstractNode {
     }
 
     public boolean isVisible(){
+        // if any parent is not visible then this is also not visible
+        List<AbstractNode> parentChain = NodeTree.getParentChain(this);
+        for(AbstractNode parent : parentChain){
+            if(!parent.isVisible){
+                return false;
+            }
+        }
         return isVisible;
     }
 }
