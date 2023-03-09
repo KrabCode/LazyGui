@@ -72,9 +72,11 @@ public class LazyGui implements UserInputSubscriber {
      */
     public LazyGui(PApplet sketch) {
         if(singleton != null && singleton != this){
-            throw new IllegalStateException("You already initialized a LazyGui object, please don't create any more with new LazyGui(this)." +
-                    " It's meant to work as a singleton, there cannot be more than 1 instance running in any given program," +
-                    " because it breaks mouse and key events and it would be confusing to work with multiple GUI instances.\n");
+            throw new IllegalStateException("You already initialized a LazyGui object, please don't create any more with 'new LazyGui(this)'." +
+                    " It's meant to work similar to a singleton, there cannot be more than 1 instance running in any given program," +
+                    " because it breaks mouse and key events and it would be confusing to work with multiple GUI instances." +
+                    " The control element separation and grouping you're probably looking for can be achieved by using more folders rather than creating a whole new GUI object." +
+                    "\n");
         }
         singleton = this;
 
