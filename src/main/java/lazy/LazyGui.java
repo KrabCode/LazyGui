@@ -172,15 +172,27 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Method subscribed to PApplet input events, not meant for library users.
-     * @param keyEvent current key event
+     * Hide any chosen element or folder except the root window.
+     * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
+     * Can be called once in `setup()` or repeatedly every frame, the result is the same.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control or folder being hidden
      */
-    @Override
-    public void keyPressed(LazyKeyEvent keyEvent) {
-        handleHotkeyInteraction(keyEvent);
+    public void hide(String path){
+        String fullPath = getFolder() + path;
+        NodeTree.hide(fullPath);
     }
 
-
+    /**
+     * Makes any control element or folder visible again if it has been hidden by the hide() function.
+     * Has no effect on visible elements.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control element or folder being hidden
+     */
+    public void show(String path){
+        String fullPath = getFolder() + path;
+        NodeTree.show(fullPath);
+    }
 
     /**
      * Utility function to tell if a mouse press collided and interacted with the GUI.
@@ -1128,6 +1140,16 @@ public class LazyGui implements UserInputSubscriber {
                 "these hotkeys cannot be turned off for now"
         );
         popFolder();
+    }
+
+
+    /**
+     * Method subscribed to PApplet input events, not meant for library users.
+     * @param keyEvent current key event
+     */
+    @Override
+    public void keyPressed(LazyKeyEvent keyEvent) {
+        handleHotkeyInteraction(keyEvent);
     }
 
     private void handleHotkeyInteraction(LazyKeyEvent keyEvent) {

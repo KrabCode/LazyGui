@@ -46,6 +46,8 @@ public abstract class AbstractNode {
     public boolean isInlineNodeDragged = false;
     public boolean isMouseOverNode = false;
 
+    private boolean isVisible = true;
+
     public void setIsMouseOverThisNodeOnly(){
         isMouseOverNode = true;
         NodeTree.setAllOtherNodesMouseOverToFalse(this);
@@ -218,6 +220,7 @@ public abstract class AbstractNode {
 
     }
 
+    @SuppressWarnings("unused")
     public String getConsolePrintableValue(){
         return "";
     }
@@ -292,5 +295,20 @@ public abstract class AbstractNode {
         } else {
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
+    }
+
+    public void hide() {
+        if(this.equals(NodeTree.getRoot())){
+            return;
+        }
+        isVisible = false;
+    }
+
+    public void show() {
+        isVisible = true;
+    }
+
+    public boolean isVisible(){
+        return isVisible;
     }
 }

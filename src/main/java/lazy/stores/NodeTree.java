@@ -140,17 +140,32 @@ public class NodeTree {
         try{
             expectedType.cast(foundNode);
         }catch(Exception ex){
-            boolean printExtendedHelp = knownUnexpectedQueries.isEmpty();
             println("Path conflict warning: You tried to register a new " + expectedTypeName + " at \"" + path + "\"" +
                     " but that path is already in use by a " + foundNode.className + "." +
-                (printExtendedHelp ? "\n\tThe original " + foundNode.className + " will still work as expected," +
-                            " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
-                            "\n\tLazyGui paths must be unique, so please use a different path for one of them." : "")
+                    "\n\tThe original " + foundNode.className + " will still work as expected," +
+                    " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
+                    "\n\tLazyGui paths must be unique, so please use a different path for one of them."
             );
             knownUnexpectedQueries.add(uniquePathAndTypeQuery);
             return true;
         }
         return false;
+    }
+
+    public static void hide(String path) {
+        AbstractNode node = findNode(path);
+        if(node == null){
+            return;
+        }
+        node.hide();
+    }
+
+    public static void show(String path) {
+        AbstractNode node = findNode(path);
+        if(node == null){
+            return;
+        }
+        node.show();
     }
 }
 

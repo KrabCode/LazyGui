@@ -57,7 +57,7 @@ public class Window implements UserInputSubscriber {
     void drawWindow(PGraphics pg) {
         pg.textFont(FontStore.getMainFont());
         isTitleHighlighted = !closed && (isPointInsideTitleBar(app.mouseX, app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
-        if (closed) {
+        if (closed || !folder.isVisible()) {
             return;
         }
         constrainPosition(pg);
@@ -253,6 +253,9 @@ public class Window implements UserInputSubscriber {
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
+            if(!node.isVisible()){
+                continue;
+            }
             float nodeHeight = cell * node.masterInlineNodeHeightInCells;
             node.updateInlineNodeCoordinates(posX, posY + y, windowSizeX, nodeHeight);
             pg.pushMatrix();
@@ -288,6 +291,9 @@ public class Window implements UserInputSubscriber {
     private float heightSumOfChildNodes() {
         float sum = 0;
         for (AbstractNode child : folder.children) {
+            if(!child.isVisible()){
+                continue;
+            }
             sum += child.masterInlineNodeHeightInCells * cell;
         }
         return sum;
@@ -326,6 +332,9 @@ public class Window implements UserInputSubscriber {
 
     private AbstractNode tryFindChildNodeAt(float x, float y) {
         for (AbstractNode node : folder.children) {
+            if(!node.isVisible()){
+                continue;
+            }
             if (isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
                 return node;
             }
@@ -427,7 +436,7 @@ public class Window implements UserInputSubscriber {
         }
         if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
-            if (clickedNode != null && clickedNode.isParentWindowVisible()) {
+            if (clickedNode != null && clickedNode.isParentWindowVisible() && clickedNode.isVisible()) {
                 clickedNode.mouseReleasedOverNode(e.getX(), e.getY());
                 e.setConsumed(true);
             }
