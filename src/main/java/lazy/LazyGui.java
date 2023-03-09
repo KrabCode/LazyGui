@@ -172,7 +172,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Hide any chosen element or folder except the root window.
+     * Hide any chosen element or folder except the root window. Hides any affected opened windows.
      * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
      * Can be called once in `setup()` or repeatedly every frame, the result is the same.
      * Does not initialize a control and has no effect on controls that have not been initialized yet.
@@ -185,7 +185,7 @@ public class LazyGui implements UserInputSubscriber {
 
     /**
      * Makes any control element or folder visible again if it has been hidden by the hide() function.
-     * Has no effect on visible elements.
+     * Has no effect on visible elements. Does not open any windows except for those previously hidden by the hide() function.
      * Does not initialize a control and has no effect on controls that have not been initialized yet.
      * @param path path to the control element or folder being hidden
      */
