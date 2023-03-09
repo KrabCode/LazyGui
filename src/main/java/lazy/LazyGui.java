@@ -60,15 +60,24 @@ public class LazyGui implements UserInputSubscriber {
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
 
+    private static LazyGui singleton;
 
     /**
      * Constructor for the LazyGui object which acts as a central hub for all GUI related methods.
      * Meant to be initialized in setup() with <code>new LazyGui(this)</code>.
+     * Not meant to be initialized more than once.
      * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
      *
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
     public LazyGui(PApplet sketch) {
+        if(singleton != null && singleton != this){
+            throw new IllegalStateException("You already initialized a LazyGui object, please don't create any more with new LazyGui(this)." +
+                    " It's meant to work as a singleton, there cannot be more than 1 instance running in any given program," +
+                    " because it breaks mouse and key events and it would be confusing to work with multiple GUI instances.\n");
+        }
+        singleton = this;
+
         GlobalReferences.init(this, sketch);
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
