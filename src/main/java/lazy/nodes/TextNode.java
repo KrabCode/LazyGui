@@ -178,7 +178,7 @@ public class TextNode extends AbstractNode {
 
     private void setStringValueUndoably(String newValue) {
         setStringValue(newValue);
-        UndoRedoStore.onUndoableActionEnded();
+        onActionEnded();
     }
 
     public void setStringValue(String newValue) {

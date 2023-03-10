@@ -183,62 +183,6 @@ public class LazyGui implements UserInputSubscriber {
     }
 
     /**
-     * Hide any chosen element or folder except the root window. Hides both the row and any affected opened windows under that node.
-     * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
-     * Can be called once in `setup()` or repeatedly every frame, the result is the same.
-     * Does not initialize a control and has no effect on controls that have not been initialized yet.
-     * @param path path to the control or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
-     */
-    public void hide(String path){
-        if(path.equals("") || path.equals("/")){
-            hideCurrentFolder();
-            return;
-        }
-        String fullPath = getFolder() + path;
-        NodeTree.hide(fullPath);
-    }
-
-    /**
-     * Hides the folder at the current path prefix stack.
-     * See {@link #hide hide(String path)}
-     */
-    public void hideCurrentFolder(){
-        String fullPath = getFolder();
-        if(fullPath.endsWith("/")){
-            fullPath = fullPath.substring(0, fullPath.length() - 1);
-        }
-        NodeTree.hide(fullPath);
-    }
-
-
-    /**
-     * Makes any control element or folder visible again if it has been hidden by the hide() function.
-     * Has no effect on visible elements. Does not reveal any windows except for those that were open and then hidden by the hide() function.
-     * Does not initialize a control and has no effect on controls that have not been initialized yet.
-     * @param path path to the control element or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
-     */
-    public void show(String path){
-        if(path.equals("") || path.equals("/")){
-            showCurrentFolder();
-            return;
-        }
-        String fullPath = getFolder() + path;
-        NodeTree.show(fullPath);
-    }
-
-    /**
-     * Shows the folder at the current path prefix stack.
-     * See {@link #show show(String path)}
-     */
-    public void showCurrentFolder(){
-        String fullPath = getFolder();
-        if(fullPath.endsWith("/")){
-            fullPath = fullPath.substring(0, fullPath.length() - 1);
-        }
-        NodeTree.show(fullPath);
-    }
-
-    /**
      * Utility function to tell if a mouse press collided and interacted with the GUI.
      * For example with a mouse controlled brush you might not want to keep drawing on the main canvas
      * when you just want to adjust its properties in the GUI and you don't expect that to affect the artwork.
@@ -1098,6 +1042,61 @@ public class LazyGui implements UserInputSubscriber {
             sb.append("/");
         }
         return sb.toString();
+    }
+
+    /**
+     * Hide any chosen element or folder except the root window. Hides both the row and any affected opened windows under that node.
+     * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
+     * Can be called once in `setup()` or repeatedly every frame, the result is the same.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
+     */
+    public void hide(String path){
+        if(path.equals("") || path.equals("/")){
+            hideCurrentFolder();
+            return;
+        }
+        String fullPath = getFolder() + path;
+        NodeTree.hide(fullPath);
+    }
+
+    /**
+     * Hides the folder at the current path prefix stack.
+     * See {@link #hide hide(String path)}
+     */
+    public void hideCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
+        NodeTree.hide(fullPath);
+    }
+
+    /**
+     * Makes any control element or folder visible again if it has been hidden by the hide() function.
+     * Has no effect on visible elements. Does not reveal any windows except for those that were open and then hidden by the hide() function.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control element or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
+     */
+    public void show(String path){
+        if(path.equals("") || path.equals("/")){
+            showCurrentFolder();
+            return;
+        }
+        String fullPath = getFolder() + path;
+        NodeTree.show(fullPath);
+    }
+
+    /**
+     * Shows the folder at the current path prefix stack.
+     * See {@link #show show(String path)}
+     */
+    public void showCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
+        NodeTree.show(fullPath);
     }
 
     /**

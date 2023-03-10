@@ -32,6 +32,7 @@ public class VisibilityTest extends PApplet {
     public void draw() {
         background(gui.colorPicker("background", color(50)).hex);
         drawRects();
+        drawText();
     }
 
     void drawRects() {
@@ -43,14 +44,19 @@ public class VisibilityTest extends PApplet {
         for (int i = 0; i < rectCount; i++) {
             // make a dynamic list of rects each with its own folder
             gui.pushFolder(dynamicFolderPrefix + i);
-            PVector pos = gui.plotXY("pos", 200 + i * 10);
+            PVector pos = gui.plotXY("pos", 600, 80 + i * 22);
             PVector size = gui.plotXY("size", 5);
             fill(gui.colorPicker("fill", color(200)).hex);
             noStroke();
             rect(pos.x, pos.y, size.x, size.y);
-
-            gui.showCurrentFolder(); // show the current folder in case it was hidden by lower rectCount but then the count went back up again
+            // show the current folder in case it was hidden by lower rectCount but then the count went back up again
+            gui.showCurrentFolder();
             gui.popFolder();
+        }
+
+        for (int i = 0; i < rectCount; i++) {
+            // alternative way to show the folders without going into them with pushFolder()
+            gui.show(dynamicFolderPrefix + i);
         }
 
         // hide any unused folders when the count gets lowered
@@ -64,6 +70,21 @@ public class VisibilityTest extends PApplet {
         for (int i = rectCount; i < maxRectCount; i++) {
             gui.hide(dynamicFolderPrefix + i);
         }
+
+        gui.popFolder();
+    }
+
+    private void drawText() {
+        boolean show = gui.toggle("text folder");
+        gui.pushFolder("text");
+        String content = gui.text("content", "hello");
+        text(content, 800, 800);
+        if (show) {
+            gui.showCurrentFolder();
+        } else {
+            gui.hideCurrentFolder();
+        }
+        gui.popFolder();
     }
 
 }

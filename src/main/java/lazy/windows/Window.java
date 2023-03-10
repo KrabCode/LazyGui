@@ -57,7 +57,7 @@ public class Window implements UserInputSubscriber {
     void drawWindow(PGraphics pg) {
         pg.textFont(FontStore.getMainFont());
         isTitleHighlighted = !closed && (isPointInsideTitleBar(app.mouseX, app.mouseY) && isBeingDraggedAround) || folder.isMouseOverNode;
-        if (closed || !folder.isVisible()) {
+        if (closed || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }
         constrainPosition(pg);
@@ -253,7 +253,7 @@ public class Window implements UserInputSubscriber {
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
-            if(!node.isVisible()){
+            if(!node.isInlineNodeVisible()){
                 continue;
             }
             float nodeHeight = cell * node.masterInlineNodeHeightInCells;
@@ -291,7 +291,7 @@ public class Window implements UserInputSubscriber {
     private float heightSumOfChildNodes() {
         float sum = 0;
         for (AbstractNode child : folder.children) {
-            if(!child.isVisible()){
+            if(!child.isInlineNodeVisible()){
                 continue;
             }
             sum += child.masterInlineNodeHeightInCells * cell;
@@ -323,7 +323,7 @@ public class Window implements UserInputSubscriber {
             return;
         }
         AbstractNode nodeUnderMouse = tryFindChildNodeAt(x, y);
-        if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible()) {
+        if (nodeUnderMouse != null && nodeUnderMouse.isParentWindowVisible() && folder.isInlineNodeVisibleParentAware()) {
             if (isPointInsideContent(x, y)) {
                 nodeUnderMouse.keyPressedOverNode(keyEvent, x, y);
             }
@@ -332,7 +332,7 @@ public class Window implements UserInputSubscriber {
 
     private AbstractNode tryFindChildNodeAt(float x, float y) {
         for (AbstractNode node : folder.children) {
-            if(!node.isVisible()){
+            if(!node.isInlineNodeVisible()){
                 continue;
             }
             if (isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
@@ -345,7 +345,7 @@ public class Window implements UserInputSubscriber {
 
     @Override
     public void mousePressed(LazyMouseEvent e) {
-        if (isClosed()) {
+        if (isClosed() || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }
         if (isPointInsideWindow(e.getX(), e.getY())) {
@@ -376,7 +376,7 @@ public class Window implements UserInputSubscriber {
 
     @Override
     public void mouseMoved(LazyMouseEvent e) {
-        if (!closed && isPointInsideTitleBar(e.getX(), e.getY())) {
+        if (!closed && folder.isInlineNodeVisibleParentAware() && isPointInsideTitleBar(e.getX(), e.getY())) {
             e.setConsumed(true);
             folder.setIsMouseOverThisNodeOnly();
         } else if (isPointInsideContent(e.getX(), e.getY()) && !isPointInsideResizeBorder(e.getX(), e.getY())) {
@@ -414,7 +414,7 @@ public class Window implements UserInputSubscriber {
 
     @Override
     public void mouseReleased(LazyMouseEvent e) {
-        if (isClosed()) {
+        if (isClosed() || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }
         if (!isRoot() && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
@@ -436,7 +436,7 @@ public class Window implements UserInputSubscriber {
         }
         if (isPointInsideContent(e.getX(), e.getY())) {
             AbstractNode clickedNode = tryFindChildNodeAt(e.getX(), e.getY());
-            if (clickedNode != null && clickedNode.isParentWindowVisible() && clickedNode.isVisible()) {
+            if (clickedNode != null && clickedNode.isParentWindowVisible() && clickedNode.isInlineNodeVisible()) {
                 clickedNode.mouseReleasedOverNode(e.getX(), e.getY());
                 e.setConsumed(true);
             }

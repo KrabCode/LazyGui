@@ -16,8 +16,6 @@ import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import java.util.List;
-
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
@@ -48,7 +46,7 @@ public abstract class AbstractNode {
     public boolean isInlineNodeDragged = false;
     public boolean isMouseOverNode = false;
 
-    private boolean isVisible = true;
+    private boolean isInlineNodeVisible = true;
 
     public void setIsMouseOverThisNodeOnly(){
         isMouseOverNode = true;
@@ -182,9 +180,13 @@ public abstract class AbstractNode {
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isInlineNodeDragged){
             e.setConsumed(true);
-            UndoRedoStore.onUndoableActionEnded();
+            onActionEnded();
         }
         isInlineNodeDragged = false;
+    }
+
+    public void onActionEnded(){
+        UndoRedoStore.onUndoableActionEnded();
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
@@ -299,25 +301,22 @@ public abstract class AbstractNode {
         }
     }
 
-    public void hide() {
+    public void hideInlineNode() {
         if(this.equals(NodeTree.getRoot())){
             return;
         }
-        isVisible = false;
+        isInlineNodeVisible = false;
     }
 
-    public void show() {
-        isVisible = true;
+    public void showInlineNode() {
+        isInlineNodeVisible = true;
     }
 
-    public boolean isVisible(){
-        // if any parent is not visible then this is also not visible
-        List<AbstractNode> parentChain = NodeTree.getParentChain(this);
-        for(AbstractNode parent : parentChain){
-            if(!parent.isVisible){
-                return false;
-            }
-        }
-        return isVisible;
+    public boolean isInlineNodeVisible(){
+        return isInlineNodeVisible;
+    }
+
+    public boolean isInlineNodeVisibleParentAware(){
+        return NodeTree.areAllParentsInlineVisible(this) && isInlineNodeVisible;
     }
 }

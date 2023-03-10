@@ -120,7 +120,7 @@ public class NodeTree {
         if(node == getRoot()){
             return null;
         }
-        if(node.isParentWindowOpen()){
+        if(node.isParentWindowOpen() && node.isInlineNodeVisible()){
             return node;
         }
         return findFirstOpenParentNodeRecursively(node.parent);
@@ -158,7 +158,7 @@ public class NodeTree {
         if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }
-        node.hide();
+        node.hideInlineNode();
     }
 
     public static void show(String path) {
@@ -167,12 +167,17 @@ public class NodeTree {
         if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }
-        node.show();
+        node.showInlineNode();
     }
 
-    public static List<AbstractNode> getParentChain(AbstractNode abstractNode) {
-        // TODO implement for https://github.com/KrabCode/LazyGui/issues/158
-        return new ArrayList<>();
+    public static boolean areAllParentsInlineVisible(AbstractNode node) {
+        if(!node.isInlineNodeVisible()){
+            return false;
+        }
+        if(node.equals(getRoot())){
+            return true;
+        }
+        return areAllParentsInlineVisible(node.parent);
     }
 }
 

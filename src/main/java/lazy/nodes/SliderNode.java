@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.DelayStore;
-import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
@@ -363,7 +362,7 @@ public class SliderNode extends AbstractNode {
             return false;
         }
         setValueFloat(parsed);
-        UndoRedoStore.onUndoableActionEnded();
+        onActionEnded();
         return true;
     }
 
