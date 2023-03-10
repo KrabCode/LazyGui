@@ -26,11 +26,10 @@ public class FontStore {
     public static void updateFontOptions() {
         gui.pushFolder("font");
         lazyUpdateFont(
-
                 gui.text("main font", mainFontPathDefault),
                 gui.text("side font", sideFontPathDefault),
-                gui.sliderInt("main size", mainFontSizeDefault, 1, Integer.MAX_VALUE),
-                gui.sliderInt("side size", sideFontSizeDefault, 1, Integer.MAX_VALUE)
+                gui.sliderInt("main font size", mainFontSizeDefault, 2, Integer.MAX_VALUE),
+                gui.sliderInt("side font size", sideFontSizeDefault, 2, Integer.MAX_VALUE)
         );
         textMarginX = gui.slider("x offset", textMarginX);
         textMarginY = gui.slider("y offset", textMarginY);

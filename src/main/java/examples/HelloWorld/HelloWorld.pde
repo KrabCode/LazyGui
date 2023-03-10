@@ -8,8 +8,8 @@ void setup() {
 }
 
 void draw() {
-  int value = gui.sliderInt("pick a number");
-  background(50);
+  background(gui.colorPicker("background").hex);
+  int number = gui.sliderInt("pick a number");
   fill(255);
-  text(value, 400, 500);
+  text(number, 400, 500);
 }

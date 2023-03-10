@@ -1,7 +1,5 @@
 package lazy.nodes;
 
-import lazy.stores.UndoRedoStore;
-
 class RadioItemNode extends ToggleNode {
 
     final String valueString;
@@ -16,7 +14,7 @@ class RadioItemNode extends ToggleNode {
     public void mouseReleasedOverNode(float x, float y){
         if(armed && !valueBoolean){ // can only toggle manually to true, toggle to false happens automatically
             valueBoolean = true;
-            UndoRedoStore.onUndoableActionEnded();
+            onActionEnded();
         }
         armed = false;
     }

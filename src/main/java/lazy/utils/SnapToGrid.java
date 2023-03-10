@@ -131,7 +131,7 @@ public class SnapToGrid {
         }
         setSelectedVisibilityMode(gui.radio("show grid", getOptions(), getDefaultVisibilityMode()));
         pointGridColor = gui.colorPicker("point color", pointGridColor.hex);
-        pointWeight = gui.slider("point weight", pointWeight);
+        pointWeight = gui.slider("point size", pointWeight);
         sdfCropDistance = gui.slider("point range", sdfCropDistance);
         gui.popFolder();
     }

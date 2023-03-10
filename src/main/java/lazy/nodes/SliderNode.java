@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.DelayStore;
-import lazy.stores.UndoRedoStore;
 import lazy.utils.KeyCodes;
 import lazy.stores.ShaderStore;
 import lazy.themes.ThemeColorType;
@@ -73,8 +72,8 @@ public class SliderNode extends AbstractNode {
         valueFloatMin = min;
         valueFloatMax = max;
         valueFloatConstrained = constrained &&
-                max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
-                min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
+                max != Float.MAX_VALUE &&
+                min != -Float.MAX_VALUE ;
         setSensiblePrecision(nf(valueFloat, 0, 0));
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
@@ -180,7 +179,11 @@ public class SliderNode extends AbstractNode {
         if (isFractionalPrecision) {
             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
-            valueToDisplay = nf(floor(valueFloat), 0, 0);
+            valueToDisplay = nf(round(valueFloat), 0, 0);
+            if(!valueToDisplay.equals(nf(valueFloat, 0, 0))){
+                // the display value was rounded into an integer and that made it misleading, so we indicate that with ≈
+                return "≈ " + valueToDisplay;
+            }
         }
         // java float literals use . so we also use .
         return valueToDisplay.replaceAll(",", ".");
@@ -261,6 +264,7 @@ public class SliderNode extends AbstractNode {
             if (!Float.isNaN(valueFloatDefault)) {
                 setValueFloat(valueFloatDefault);
             }
+            e.consume();
         }
         tryReadNumpadInput(e);
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
@@ -269,6 +273,7 @@ public class SliderNode extends AbstractNode {
                 value += "0";
             }
             ClipboardUtils.setClipboardString(value);
+            e.consume();
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
@@ -282,13 +287,15 @@ public class SliderNode extends AbstractNode {
             } catch (NumberFormatException nfe) {
                 println("Could not parse float from this clipboard string: " + clipboardString);
             }
+            e.consume();
         }
     }
 
     private void tryReadNumpadInput(LazyKeyEvent e) {
         boolean inReplaceMode = isNumpadInReplaceMode();
         if (numpadChars.contains(e.getKey())) {
-            tryAppendNumberInputToValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
+            tryAppendNumberInputToBufferValue(Integer.valueOf(String.valueOf(e.getKey())), inReplaceMode);
+            e.consume();
         }
         switch (e.getKey()) {
             case '.':
@@ -300,6 +307,7 @@ public class SliderNode extends AbstractNode {
                 if (!numpadBufferValue.endsWith(".")) {
                     numpadBufferValue += ".";
                 }
+                e.consume();
                 break;
             case '+':
             case '-':
@@ -307,17 +315,20 @@ public class SliderNode extends AbstractNode {
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
+                e.consume();
                 break;
             case '*':
                 decreasePrecision();
+                e.consume();
                 break;
             case '/':
                 increasePrecision();
+                e.consume();
                 break;
         }
     }
 
-    private void tryAppendNumberInputToValue(Integer input, boolean inReplaceMode) {
+    private void tryAppendNumberInputToBufferValue(Integer input, boolean inReplaceMode) {
         String inputString = String.valueOf(input);
         setNumpadInputActiveStarted();
         if (inReplaceMode) {
@@ -355,7 +366,7 @@ public class SliderNode extends AbstractNode {
             return false;
         }
         setValueFloat(parsed);
-        UndoRedoStore.onUndoableActionEnded();
+        onActionEnded();
         return true;
     }
 

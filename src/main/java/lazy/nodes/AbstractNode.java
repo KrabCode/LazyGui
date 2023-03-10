@@ -46,6 +46,8 @@ public abstract class AbstractNode {
     public boolean isInlineNodeDragged = false;
     public boolean isMouseOverNode = false;
 
+    private boolean isInlineNodeVisible = true;
+
     public void setIsMouseOverThisNodeOnly(){
         isMouseOverNode = true;
         NodeTree.setAllOtherNodesMouseOverToFalse(this);
@@ -178,9 +180,13 @@ public abstract class AbstractNode {
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isInlineNodeDragged){
             e.setConsumed(true);
-            UndoRedoStore.onUndoableActionEnded();
+            onActionEnded();
         }
         isInlineNodeDragged = false;
+    }
+
+    public void onActionEnded(){
+        UndoRedoStore.onUndoableActionEnded();
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
@@ -218,6 +224,7 @@ public abstract class AbstractNode {
 
     }
 
+    @SuppressWarnings("unused")
     public String getConsolePrintableValue(){
         return "";
     }
@@ -292,5 +299,24 @@ public abstract class AbstractNode {
         } else {
             pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         }
+    }
+
+    public void hideInlineNode() {
+        if(this.equals(NodeTree.getRoot())){
+            return;
+        }
+        isInlineNodeVisible = false;
+    }
+
+    public void showInlineNode() {
+        isInlineNodeVisible = true;
+    }
+
+    public boolean isInlineNodeVisible(){
+        return isInlineNodeVisible;
+    }
+
+    public boolean isInlineNodeVisibleParentAware(){
+        return NodeTree.areAllParentsInlineVisible(this) && isInlineNodeVisible;
     }
 }

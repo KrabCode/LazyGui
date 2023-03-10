@@ -60,15 +60,26 @@ public class LazyGui implements UserInputSubscriber {
     private static long lastFrameMillis;
     static final long lastFrameMillisStuckLimit = 1000;
 
+    private static LazyGui singleton;
 
     /**
      * Constructor for the LazyGui object which acts as a central hub for all GUI related methods.
      * Meant to be initialized in setup() with <code>new LazyGui(this)</code>.
+     * Not meant to be initialized more than once.
      * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
      *
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
      */
     public LazyGui(PApplet sketch) {
+        if(singleton != null && singleton != this){
+            throw new IllegalStateException("You already initialized a LazyGui object, please don't create any more with 'new LazyGui(this)'." +
+                    " It's meant to work similar to a singleton, there cannot be more than 1 instance running in any given program," +
+                    " because it breaks mouse and key events and it would be confusing to work with multiple GUI instances." +
+                    " The control element separation and grouping you're probably looking for can be achieved by using more folders rather than creating a whole new GUI object." +
+                    "\n");
+        }
+        singleton = this;
+
         GlobalReferences.init(this, sketch);
         if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
             println("The LazyGui library requires the P2D or P3D renderer.");
@@ -136,8 +147,8 @@ public class LazyGui implements UserInputSubscriber {
         guiCanvas.clear();
         clearFolder();
         updateOptionsFolder();
-        SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
         if (!isGuiHidden) {
+            SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
             WindowManager.updateAndDrawWindows(guiCanvas);
         }
         guiCanvas.endDraw();
@@ -170,17 +181,6 @@ public class LazyGui implements UserInputSubscriber {
         }
         return null;
     }
-
-    /**
-     * Method subscribed to PApplet input events, not meant for library users.
-     * @param keyEvent current key event
-     */
-    @Override
-    public void keyPressed(LazyKeyEvent keyEvent) {
-        handleHotkeyInteraction(keyEvent);
-    }
-
-
 
     /**
      * Utility function to tell if a mouse press collided and interacted with the GUI.
@@ -981,7 +981,7 @@ public class LazyGui implements UserInputSubscriber {
      */
     public void pushFolder(String folderName){
         if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
-            println("Too many calls to pushFolder() - stack size reached " + stackSizeWarningLevel +
+            println("Too many calls to pushFolder() - stack size reached the warning limit of " + stackSizeWarningLevel +
                     ", possibly due to runaway recursion");
             printedPushWarningAlready = true;
         }
@@ -1042,6 +1042,61 @@ public class LazyGui implements UserInputSubscriber {
             sb.append("/");
         }
         return sb.toString();
+    }
+
+    /**
+     * Hide any chosen element or folder except the root window. Hides both the row and any affected opened windows under that node.
+     * The GUI then skips it while drawing, but still returns its values and allows interaction from code as if it was still visible.
+     * Can be called once in `setup()` or repeatedly every frame, the result is the same.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
+     */
+    public void hide(String path){
+        if(path.equals("") || path.equals("/")){
+            hideCurrentFolder();
+            return;
+        }
+        String fullPath = getFolder() + path;
+        NodeTree.hide(fullPath);
+    }
+
+    /**
+     * Hides the folder at the current path prefix stack.
+     * See {@link #hide hide(String path)}
+     */
+    public void hideCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
+        NodeTree.hide(fullPath);
+    }
+
+    /**
+     * Makes any control element or folder visible again if it has been hidden by the hide() function.
+     * Has no effect on visible elements. Does not reveal any windows except for those that were open and then hidden by the hide() function.
+     * Does not initialize a control and has no effect on controls that have not been initialized yet.
+     * @param path path to the control element or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
+     */
+    public void show(String path){
+        if(path.equals("") || path.equals("/")){
+            showCurrentFolder();
+            return;
+        }
+        String fullPath = getFolder() + path;
+        NodeTree.show(fullPath);
+    }
+
+    /**
+     * Shows the folder at the current path prefix stack.
+     * See {@link #show show(String path)}
+     */
+    public void showCurrentFolder(){
+        String fullPath = getFolder();
+        if(fullPath.endsWith("/")){
+            fullPath = fullPath.substring(0, fullPath.length() - 1);
+        }
+        NodeTree.show(fullPath);
     }
 
     /**
@@ -1106,7 +1161,9 @@ public class LazyGui implements UserInputSubscriber {
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
-        ContextLines.update(guiCanvas);
+        if(!isGuiHidden){
+            ContextLines.update(guiCanvas);
+        }
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
         popFolder();
@@ -1124,10 +1181,20 @@ public class LazyGui implements UserInputSubscriber {
         textSet("mouseover specific hotkeys",
         "r: reset control element to default value\n" +
                 "ctrl + c: copy from (single value or folder)\n" +
-                "ctrl + v: paste to (single value or a whole folder, which overwrites the values of matching element names)\n" +
+                "ctrl + v: paste to (single value or folder)\n" +
                 "these hotkeys cannot be turned off for now"
         );
         popFolder();
+    }
+
+
+    /**
+     * Method subscribed to PApplet input events, not meant for library users.
+     * @param keyEvent current key event
+     */
+    @Override
+    public void keyPressed(LazyKeyEvent keyEvent) {
+        handleHotkeyInteraction(keyEvent);
     }
 
     private void handleHotkeyInteraction(LazyKeyEvent keyEvent) {

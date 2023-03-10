@@ -2,7 +2,6 @@ package lazy.nodes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-import lazy.stores.UndoRedoStore;
 import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 
@@ -96,7 +95,7 @@ public class RadioFolderNode extends FolderNode {
         }
         if(success){
             setAllOtherOptionsToFalse(optionToSet);
-            UndoRedoStore.onUndoableActionEnded();
+            onActionEnded();
         }
     }
 
