@@ -7,7 +7,7 @@ GUI library for creative coding with Processing 3+ with a focus on easy iteratio
 ### Main features:
 - no gui logic in `setup()`
 - lazy initialization of folders and controls when a value is first requested
-- control elements have unique string [paths](#Paths and folders) 
+- control elements have unique string paths
 - this lets you keep all the gui logic in `draw()` next to the code that uses it
 
 ### Supporting features:
