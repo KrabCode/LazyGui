@@ -87,10 +87,13 @@ public class FolderNode extends AbstractNode {
     @Override
     public void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
-        WindowManager.setFocus(parent.window);
-        WindowManager.uncoverOrCreateWindow(this);
+        if(window != null && !window.closed){
+            window.closed = true;
+        }else{
+            WindowManager.setFocus(parent.window);
+            WindowManager.uncoverOrCreateWindow(this);
+        }
         this.isInlineNodeDragged = false;
-
     }
 
     protected AbstractNode findChildByName(String name) {
