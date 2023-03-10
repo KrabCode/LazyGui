@@ -179,7 +179,11 @@ public class SliderNode extends AbstractNode {
         if (isFractionalPrecision) {
             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
-            valueToDisplay = nf(floor(valueFloat), 0, 0);
+            valueToDisplay = nf(round(valueFloat), 0, 0);
+            if(!valueToDisplay.equals(nf(valueFloat, 0, 0))){
+                // the display value was rounded into an integer and that made it misleading, so we indicate that with ≈
+                return "≈ " + valueToDisplay;
+            }
         }
         // java float literals use . so we also use .
         return valueToDisplay.replaceAll(",", ".");
