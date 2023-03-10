@@ -16,7 +16,7 @@ public class DelayStore {
     public static void updateInputDelay() {
         gui.pushFolder("keyboard delay");
         DelayStore.setKeyboardBufferDelayMillis(
-                gui.sliderInt("keyboard delay (ms)", DelayStore.getKeyboardBufferDelayMillis(), 100, 5000));
+                gui.sliderInt("delay (ms)", DelayStore.getKeyboardBufferDelayMillis(), 100, 5000));
 
         if( gui.button("read more")){
             gui.textSet("", "the buffer delay slider sets the time\n" +
