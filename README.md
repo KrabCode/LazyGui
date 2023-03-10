@@ -2,26 +2,22 @@
 
 ![LazyGui looks like this](readme_assets/header.png)
 
-GUI for Processing 3+ with all the basic control elements for floats, colors, vectors, strings and booleans 
+GUI library for creative coding with Processing 3+ with a focus on easy iteration. 
 
-### Who should use this?
-Any creative coders using Processing looking to
-- get values from their GUI using a few simple but powerful functions
-- change sketch code and re-run it without losing the gui state
-- make tools for non-programmers with user-friendly controls
-
-### Main ideas:
-- absolutely minimal boilerplate in `setup()`
-- lazy initialization when a value is requested
+### Main features:
+- no gui logic in `setup()`
+- lazy initialization of controls when a value is first requested
 - control elements have unique string [paths](#Path)
+- this lets you keep all the gui logic in `draw()` next to the code that uses it
 
-### Other features:
+### Supporting features:
 - infinite sliders with variable precision
 - keyboard input for text and slider values
 - copy / paste any value or whole folders
 - undo / redo any change
 - load / save your gui state to disk as json
 - autosave on program exit
+- utility methods for gui paths
 - [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java)
 - configurable look and feel
   - pre-made and custom color themes
