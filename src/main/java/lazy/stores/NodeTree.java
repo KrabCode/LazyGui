@@ -120,7 +120,7 @@ public class NodeTree {
         if(node == getRoot()){
             return null;
         }
-        if(node.isParentWindowOpen()){
+        if(node.isParentWindowOpen() && node.isInlineNodeVisible()){
             return node;
         }
         return findFirstOpenParentNodeRecursively(node.parent);
@@ -140,17 +140,44 @@ public class NodeTree {
         try{
             expectedType.cast(foundNode);
         }catch(Exception ex){
-            boolean printExtendedHelp = knownUnexpectedQueries.isEmpty();
             println("Path conflict warning: You tried to register a new " + expectedTypeName + " at \"" + path + "\"" +
                     " but that path is already in use by a " + foundNode.className + "." +
-                (printExtendedHelp ? "\n\tThe original " + foundNode.className + " will still work as expected," +
-                            " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
-                            "\n\tLazyGui paths must be unique, so please use a different path for one of them." : "")
+                    "\n\tThe original " + foundNode.className + " will still work as expected," +
+                    " but the new " + expectedTypeName + " will not be shown and it will always return a default value." +
+                    "\n\tLazyGui paths must be unique, so please use a different path for one of them."
             );
             knownUnexpectedQueries.add(uniquePathAndTypeQuery);
             return true;
         }
         return false;
+    }
+
+    public static void hide(String path) {
+        AbstractNode node = findNode(path);
+//        println("hide(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
+        if(node == null || node.equals(NodeTree.getRoot())){
+            return;
+        }
+        node.hideInlineNode();
+    }
+
+    public static void show(String path) {
+        AbstractNode node = findNode(path);
+//        println("show(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
+        if(node == null || node.equals(NodeTree.getRoot())){
+            return;
+        }
+        node.showInlineNode();
+    }
+
+    public static boolean areAllParentsInlineVisible(AbstractNode node) {
+        if(!node.isInlineNodeVisible()){
+            return false;
+        }
+        if(node.equals(getRoot())){
+            return true;
+        }
+        return areAllParentsInlineVisible(node.parent);
     }
 }
 

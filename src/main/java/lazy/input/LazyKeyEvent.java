@@ -2,8 +2,6 @@ package lazy.input;
 
 import processing.event.KeyEvent;
 
-import static processing.core.PApplet.println;
-
 @SuppressWarnings("unused")
 public class LazyKeyEvent {
     private boolean consumed = false;
@@ -22,7 +20,7 @@ public class LazyKeyEvent {
 //        println(toString());
     }
 
-    boolean isConsumed() {
+    public boolean isConsumed() {
         return consumed;
     }
 

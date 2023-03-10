@@ -20,3 +20,4 @@ src/test/Camera.java
 .project
 .classpath
 /.settings/
+/data/recording_assets/

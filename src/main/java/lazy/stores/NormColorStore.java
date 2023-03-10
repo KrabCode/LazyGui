@@ -55,4 +55,11 @@ public class NormColorStore {
     public static PGraphics getColorStore() {
         return colorStore;
     }
+
+    public static int toTransparent(int hex) {
+        if(hex == 0x00000000){
+            hex = 0xFF010101;
+        }
+        return colorStore.color(hex, 0);
+    }
 }
