@@ -72,8 +72,8 @@ public class SliderNode extends AbstractNode {
         valueFloatMin = min;
         valueFloatMax = max;
         valueFloatConstrained = constrained &&
-                max != Float.MAX_VALUE && max != Integer.MAX_VALUE &&
-                min != -Float.MAX_VALUE && min != -Integer.MAX_VALUE;
+                max != Float.MAX_VALUE &&
+                min != -Float.MAX_VALUE ;
         setSensiblePrecision(nf(valueFloat, 0, 0));
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }

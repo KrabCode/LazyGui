@@ -35,11 +35,6 @@ Any creative coders using Processing looking to
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
 
-### Initialize the GUI
-- make a global LazyGui variable outside of any function: `LazyGui gui;`
-- then initialize it inside setup() after calling size() or fullScreen() with P2D or P3D: 
-  - `gui = new LazyGui(this);`
-
 #### Runnable basic example:
 ```java
 LazyGui gui;
@@ -50,14 +45,14 @@ void setup(){
 }
 
 void draw(){
-    background(16);
+    background(gui.colorPicker("bg").hex);
 }
 ```
 The gui displays itself at the end of draw() and by default it shows the root window with an "options" folder for tweaking the various gui settings. 
 
 A sketch with the above code should look like this:
 
-![root and options look like this](readme_assets/root_and_options.png)
+![root and options look like this](readme_assets/basic_example.png)
 
 ## Get values from the GUI
 
@@ -182,6 +177,9 @@ float x = gui.slider("x");
 float y = gui.slider("y");
 gui.popFolder();
 ```
+
+### Hide/show path
+- TODO
 
 ## More example code:
 - [processing examples](src/main/java/examples) 
