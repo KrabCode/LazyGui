@@ -15,3 +15,8 @@ src/test/Camera.java
 /deploy/
 /deploy_resources/
 /deploy_resources/*
+/target/
+/bin/
+.project
+.classpath
+/.settings/
