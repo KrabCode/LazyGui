@@ -199,3 +199,4 @@ gui.showCurrentFolder() // show the folder at the current path prefix stack if i
 ### How to contribute
 - For questions or suggestions please [create a new issue](https://github.com/KrabCode/LazyGui/issues)
 - Feel free to fork the repository and submit a pull request
+- Join the [discord server](https://discord.gg/VBTCsnYMzd)
