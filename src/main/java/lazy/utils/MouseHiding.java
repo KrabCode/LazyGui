@@ -4,13 +4,16 @@ import static lazy.stores.GlobalReferences.*;
 
 public class MouseHiding {
     private static boolean shouldHideWhenDragging = false;
+    private static boolean shouldConfineToWindow = false;
     private static int mouseHidePosX;
     private static int mouseHidePosY;
     private static boolean isMouseHidden = false;
 
     public static void updateSettings() {
-        gui.pushFolder("mouse visibility");
-        shouldHideWhenDragging = gui.toggle("hide on drag", shouldHideWhenDragging);
+        gui.pushFolder("mouse");
+        shouldHideWhenDragging = gui.toggle("hide when dragged", shouldHideWhenDragging);
+        shouldConfineToWindow = gui.toggle("confine to window", shouldConfineToWindow);
+        appWindow.confinePointer(shouldConfineToWindow);
         gui.popFolder();
         if(isMouseHidden){
             app.mouseX = mouseHidePosX;
