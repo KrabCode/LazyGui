@@ -1,6 +1,7 @@
 package lazy.windows;
 
 import lazy.nodes.FolderNode;
+import lazy.stores.LayoutStore;
 import lazy.stores.NodeTree;
 import lazy.utils.SnapToGrid;
 import processing.core.PGraphics;
@@ -44,7 +45,7 @@ public class WindowManager {
         boolean windowFound = false;
         for (Window w : windows) {
             if(w.folder.path.equals(folderNode.path)){
-                if(w.closed){
+                if(w.closed && LayoutStore.getShouldResetWindowPosOnReopen()){
                     w.posX = pos.x;
                     w.posY = pos.y;
                 }

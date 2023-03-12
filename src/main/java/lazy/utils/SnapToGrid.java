@@ -1,11 +1,11 @@
 package lazy.utils;
 
 import lazy.PickerColor;
+import lazy.stores.ShaderStore;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
 import lazy.stores.LayoutStore;
 import lazy.stores.NormColorStore;
-import lazy.stores.ShaderStore;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
@@ -20,7 +20,7 @@ public class SnapToGrid {
     public static boolean snapToGridEnabled = true;
     static final List<String> availableVisibilityModes = new ArrayListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
-    private static final String pointShaderPath = "gridPoint.glsl";
+    private static final String pointShaderPath = "guideGridPoints.glsl";
     private static final int VISIBILITY_ALWAYS = 0;
     private static final int VISIBILITY_ON_DRAG = 1;
     private static final int VISIBILITY_NEVER = 2;
@@ -29,8 +29,12 @@ public class SnapToGrid {
     private static float dragAlpha = 0;
     private static final float dragAlphaDelta = 0.05f;
     private static PickerColor pointGridColor = new PickerColor(0xFF7F7F7F, 1,1,0.5f,1);
-    private static float pointWeight = 4;
-    private static float sdfCropDistance = 0.25f;
+    private static float pointWeight = 3f;
+    private static float sdfCropDistance = 100;
+    private static boolean shouldCenterPoints = true;
+    static float cellSizeLastFrame = -1;
+    private static int pointColorPrev = -1;
+    private static float pointColorRed, pointColorGreen, pointColorBlue;
 
     public static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
         if(pointShader == null){
@@ -44,30 +48,22 @@ public class SnapToGrid {
         }
         pointShader.set("alpha", selectedVisibilityModeIndex == VISIBILITY_ALWAYS ? pointGridColor.alpha : dragAlpha);
         pointShader.set("sdfCropEnabled", selectedVisibilityModeIndex == VISIBILITY_ON_DRAG);
+        pointShader.set("shouldCenterPoints", shouldCenterPoints);
         pointShader.set("sdfCropDistance", sdfCropDistance);
+        pointShader.set("gridCellSize", (float) floor(cell));
+        int pointColor = pointGridColor.hex;
+        if(pointColorPrev == -1 || pointColor != pointColorPrev){
+            pointColorPrev = pointColor;
+            pointColorRed = NormColorStore.red(pointColor);
+            pointColorGreen = NormColorStore.green(pointColor);
+            pointColorBlue = NormColorStore.blue(pointColor);
+        }
+        pointShader.set("pointColor", pointColorRed, pointColorGreen, pointColorBlue);
+        pointShader.set("pointWeight", pointWeight);
         if(draggedWindow != null){
             pointShader.set("window", draggedWindow.posX, draggedWindow.posY, draggedWindow.windowSizeX, draggedWindow.windowSizeY);
         }
-        pg.shader(pointShader);
-
-        pg.pushStyle();
-        pg.strokeWeight(pointWeight);
-        float w = pg.width;
-        float h = pg.height;
-        int step = floor(cell);
-        pg.beginShape(POINTS);
-        pg.strokeCap(ROUND);
-        int pointColor = pointGridColor != null ? pointGridColor.hex : NormColorStore.color(1);
-        pg.stroke(pointColor);
-        for (int x = 0; x <= w; x+= step) {
-            for (int y = 0; y <= h; y+= step) {
-                pg.vertex(x+0.5f,y+0.5f);
-            }
-        }
-        pg.endShape();
-        pg.popStyle();
-
-
+        pg.filter(pointShader);
         pg.resetShader();
     }
 
@@ -130,13 +126,12 @@ public class SnapToGrid {
             WindowManager.snapAllStaticWindowsToGrid();
         }
         setSelectedVisibilityMode(gui.radio("show grid", getOptions(), getDefaultVisibilityMode()));
+        sdfCropDistance = gui.slider("drag range", sdfCropDistance);
         pointGridColor = gui.colorPicker("point color", pointGridColor.hex);
         pointWeight = gui.slider("point size", pointWeight);
-        sdfCropDistance = gui.slider("point range", sdfCropDistance);
+        shouldCenterPoints = gui.toggle("points centered", shouldCenterPoints);
         gui.popFolder();
     }
-
-    static float cellSizeLastFrame = -1;
 
     private static boolean hasCellSizeJustChanged() {
         boolean result = cellSizeLastFrame != LayoutStore.cell;

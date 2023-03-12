@@ -10,6 +10,7 @@ import lazy.themes.ThemeStore;
 import lazy.themes.ThemeType;
 import lazy.utils.ContextLines;
 import lazy.utils.KeyCodes;
+import lazy.utils.MouseHiding;
 import lazy.utils.SnapToGrid;
 import lazy.stores.JsonSaveStore;
 import lazy.windows.Window;
@@ -148,6 +149,7 @@ public class LazyGui  {
         updateOptionsFolder();
         if (!isGuiHidden) {
             SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
+            ContextLines.drawLines(guiCanvas);
             WindowManager.updateAndDrawWindows(guiCanvas);
         }
         guiCanvas.endDraw();
@@ -1160,11 +1162,10 @@ public class LazyGui  {
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
-        if(!isGuiHidden){
-            ContextLines.update(guiCanvas);
-        }
+        ContextLines.updateSettings();
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
+        MouseHiding.updateSettings();
         popFolder();
     }
 

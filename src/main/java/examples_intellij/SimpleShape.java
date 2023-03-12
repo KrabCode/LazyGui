@@ -40,7 +40,7 @@ public class SimpleShape extends PApplet {
         PVector size = gui.plotXY("size", 250);
         translate(width/2f, height/2f);
         float rotationAngle = gui.slider("rotation");
-        float rotationAngleDelta = gui.slider("rotation ++");
+        float rotationAngleDelta = gui.slider("rotation ++", 0.1f);
         gui.sliderSet("rotation", rotationAngle + rotationAngleDelta);
         fill(gui.colorPicker("fill", color(0xFF689FC8)).hex);
         gui.colorPickerHueAdd("fill", radians(gui.slider("fill hue ++", 0.1f)));

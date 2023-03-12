@@ -21,24 +21,32 @@ public class ContextLines {
     public static final int SHOW_CONTEXT_LINES_ALWAYS = 2;
     public static final List<String> contextLinesOptions = new ArrayListBuilder<String>()
             .add(NEVER, ON_HOVER, ALWAYS).build();
+    private static int showContextLinesMode;
+    private static boolean shouldPickShortestLine;
+    private static int lineStroke;
+    private static float weight;
+    private static float endpointRectSize;
 
-
-    public static void update(PGraphics pg) {
+    public static void updateSettings() {
         gui.pushFolder("context lines");
-        int showContextLinesMode = contextLinesOptions.indexOf(
+        showContextLinesMode = contextLinesOptions.indexOf(
                 gui.radio("visibility", contextLinesOptions, ON_HOVER));
-        boolean shouldPickShortestLine = gui.toggle("shortest line");
-        pg.pushStyle();
-        int clr = gui.colorPicker("color", NormColorStore.color(0.5f)).hex;
-        pg.stroke(clr);
-        pg.fill(clr);
-        pg.strokeCap(PConstants.SQUARE);
-        pg.strokeWeight(gui.slider("weight", 1.2f));
-        float endpointRectSize = gui.slider("end size", 3.5f);
+        shouldPickShortestLine = gui.toggle("shortest line");
+        lineStroke = gui.colorPicker("color", NormColorStore.color(0.5f)).hex;
+        weight = gui.slider("weight", 1.2f);
+        endpointRectSize = gui.slider("end size", 3.5f);
         gui.popFolder();
+    }
 
+    public static void drawLines(PGraphics pg){
+        pg.pushStyle();
+        pg.stroke(lineStroke);
+        pg.fill(lineStroke);
+        pg.strokeCap(PConstants.SQUARE);
+        pg.strokeWeight(weight);
         List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
         if (showContextLinesMode == SHOW_CONTEXT_LINES_MODE_NEVER) {
+            pg.popStyle();
             return;
         }
         for (AbstractNode node : allNodes) {
