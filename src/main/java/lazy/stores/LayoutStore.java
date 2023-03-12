@@ -14,22 +14,34 @@ public class LayoutStore {
     private static float horizontalSeparatorStrokeWeight = 1;
 
     private static boolean showPathTooltips = false;
+    private static boolean shouldResetWindowPosOnReopen = true;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
-        LayoutStore.setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
-        LayoutStore.setShowPathTooltips(gui.toggle("show path tooltips", LayoutStore.getShowPathTooltips()));
-        LayoutStore.setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
+        setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
+        setShowPathTooltips(gui.toggle("show path tooltips", LayoutStore.getShowPathTooltips()));
+        setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
+        setShouldResetWindowPosOnReopen(gui.toggle("opening resets pos", LayoutStore.getShouldResetWindowPosOnReopen()));
+
         gui.pushFolder("resize");
-        LayoutStore.setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
-        LayoutStore.setShouldDrawResizeIndicator(gui.toggle("show handle", LayoutStore.getShouldDrawResizeIndicator()));
-        LayoutStore.setResizeRectangleSize(gui.slider("handle width", LayoutStore.getResizeRectangleSize()));
+        setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
+        setShouldDrawResizeIndicator(gui.toggle("show handle", LayoutStore.getShouldDrawResizeIndicator()));
+        setResizeRectangleSize(gui.slider("handle width", LayoutStore.getResizeRectangleSize()));
         gui.popFolder();
+
         gui.pushFolder("separators");
         setShowHorizontalSeparators(gui.toggle("show"));
         setHorizontalSeparatorStrokeWeight(gui.slider("weight", 0.5f));
         gui.popFolder();
         gui.popFolder();
+    }
+
+    private static void setShouldResetWindowPosOnReopen(boolean value) {
+        shouldResetWindowPosOnReopen = value;
+    }
+
+    public static boolean getShouldResetWindowPosOnReopen() {
+        return shouldResetWindowPosOnReopen;
     }
 
     public static void setCellSize(float inputCellSize) {
@@ -56,15 +68,15 @@ public class LayoutStore {
         return shouldDrawResizeIndicator;
     }
 
-    public static void setShouldDrawResizeIndicator(boolean valueToSet){
+    public static void setShouldDrawResizeIndicator(boolean valueToSet) {
         shouldDrawResizeIndicator = valueToSet;
     }
 
-    public static float getResizeRectangleSize(){
+    public static float getResizeRectangleSize() {
         return resizeRectangleSize;
     }
 
-    public static void setResizeRectangleSize(float valueToSet){
+    public static void setResizeRectangleSize(float valueToSet) {
         resizeRectangleSize = valueToSet;
     }
 

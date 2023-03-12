@@ -149,6 +149,7 @@ public class LazyGui implements UserInputSubscriber {
         updateOptionsFolder();
         if (!isGuiHidden) {
             SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
+            ContextLines.drawLines(guiCanvas);
             WindowManager.updateAndDrawWindows(guiCanvas);
         }
         guiCanvas.endDraw();
@@ -1161,9 +1162,7 @@ public class LazyGui implements UserInputSubscriber {
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
         SnapToGrid.update();
-        if(!isGuiHidden){
-            ContextLines.update(guiCanvas);
-        }
+        ContextLines.updateSettings();
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
         popFolder();
