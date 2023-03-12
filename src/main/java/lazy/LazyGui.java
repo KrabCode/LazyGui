@@ -11,6 +11,7 @@ import lazy.themes.ThemeStore;
 import lazy.themes.ThemeType;
 import lazy.utils.ContextLines;
 import lazy.utils.KeyCodes;
+import lazy.utils.MouseHiding;
 import lazy.utils.SnapToGrid;
 import lazy.stores.JsonSaveStore;
 import lazy.windows.Window;
@@ -1165,6 +1166,7 @@ public class LazyGui implements UserInputSubscriber {
         ContextLines.updateSettings();
         updateHotkeyToggles();
         DelayStore.updateInputDelay();
+        MouseHiding.updateSettings();
         popFolder();
     }
 

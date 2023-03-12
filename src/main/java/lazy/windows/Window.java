@@ -13,12 +13,14 @@ import lazy.stores.FontStore;
 import lazy.stores.LayoutStore;
 import lazy.stores.NodeTree;
 import lazy.themes.ThemeStore;
+import lazy.utils.MouseHiding;
 import lazy.utils.SnapToGrid;
 import lazy.utils.NodePaths;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
@@ -302,6 +304,17 @@ public class Window implements UserInputSubscriber {
 
     @Override
     public void mouseWheelMoved(LazyMouseEvent e) {
+        // scrolling while dragging should scale the dragged inline node as opposed to whatever the cursor is hovering
+        if(app.mousePressed){
+            List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
+            for(AbstractNode node : allNodes){
+                if(node.isInlineNodeDragged){
+                    node.mouseWheelMovedOverNode(e.getX(), e.getY(), e.getRotation());
+                    e.setConsumed(true);
+                    return;
+                }
+            }
+        }
         if (isPointInsideTitleBar(e.getX(), e.getY())) {
             return;
         }
@@ -408,12 +421,16 @@ public class Window implements UserInputSubscriber {
         for (AbstractNode child : folder.children) {
             if (child.isInlineNodeDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e);
+                if(e.isConsumed()){
+                    MouseHiding.tryHideMouseForDragging();
+                }
             }
         }
     }
 
     @Override
     public void mouseReleased(LazyMouseEvent e) {
+        MouseHiding.tryRevealMouseAfterDragging();
         if (isClosed() || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }

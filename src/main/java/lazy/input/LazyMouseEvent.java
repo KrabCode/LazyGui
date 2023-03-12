@@ -23,7 +23,7 @@ public class LazyMouseEvent {
         py = app.pmouseY;
     }
 
-    boolean isConsumed() {
+    public boolean isConsumed() {
         return consumed;
     }
 
