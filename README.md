@@ -22,7 +22,7 @@ GUI library for creative coding with Processing 3+ with a focus on easy iteratio
 - configurable look and feel
   - pre-made and custom color themes
   - custom fonts (JetBrains Mono by default)
-  - background dot grid for windows to snap to
+  - background dot grid
   - context guide lines between a child folder and its parent
   - individual windows have resizable width
 
@@ -44,7 +44,7 @@ void draw(){
     background(gui.colorPicker("bg").hex);
 }
 ```
-The gui displays itself at the end of draw() and by default it shows the root window with an "options" folder for tweaking the various gui settings. 
+The gui displays itself at the end of `draw()` and by default it shows the root folder with an inner "options" folder for tweaking the various gui settings. 
 
 A sketch with the above code should look like this:
 
@@ -111,7 +111,7 @@ if (mode.equals("square")) {
     ellipse(200, 200, 50, 50);
 }
 ```
-- opens a window of toggles where setting one to true sets all others to false
+- opens a folder of toggles where setting one to true sets all others to false
 - returns the selected option as a string
 
 ### Color picker
@@ -153,17 +153,17 @@ boolean state = gui.toggle("off\\/on");
 ### Global path prefix stack
 
 Repeating the whole path in every control element call can get tiresome, especially with multiple nested levels.
-Which is why there is a helpful path stack that you can interact with using pushFolder() and popFolder().
+Which is why there is a helpful path stack that you can interact with using `pushFolder()` and `popFolder()`.
 
-Just like using pushMatrix() and popMatrix() in Processing, you can change your "current directory"
-by pushing a new folder name to a stack with gui.pushFolder("folder name") and have every control element called after that be placed into that folder automatically
+Just like using `pushMatrix()` and `popMatrix()` in Processing, you can change your "current directory"
+by pushing a new folder name to a stack with `gui.pushFolder("folder name")` and have every control element called after that be placed into that folder automatically
 
 - as if the contents of the whole current stack got prefixed to the path parameter in every control element call.
 
-popFolder() doesn't have a parameter - it just goes up by one level
+`popFolder()` doesn't have a parameter - it just goes up by one level
 
-You can nest a pushFolder() inside another pushFolder() - your path stack can be many levels deep.
-Just remember to call popFolder() the same number of times when done - the stack does get cleared after the end of draw() before the GUI starts drawing itself, but it's better not to rely on that.
+You can nest a `pushFolder()` inside another `pushFolder()` - your path stack can be many levels deep.
+Just remember to call `popFolder()` the same number of times - the stack does get cleared after the end of draw() before the GUI starts drawing itself, but it's better not to rely on that.
 
 #### Keep the sliders called "x" and "y" in a folder called "pos" by using the stack
 
