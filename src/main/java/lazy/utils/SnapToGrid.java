@@ -29,7 +29,7 @@ public class SnapToGrid {
     private static float dragAlpha = 0;
     private static final float dragAlphaDelta = 0.05f;
     private static PickerColor pointGridColor = new PickerColor(0xFF7F7F7F, 1,1,0.5f,1);
-    private static float pointWeight = 4;
+    private static float pointWeight = 2.5f;
     private static float sdfCropDistance = 0.25f;
 
     public static void displayGuideAndApplyFilter(PGraphics pg, Window draggedWindow){
