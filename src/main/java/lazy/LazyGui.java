@@ -3,7 +3,6 @@ package lazy;
 
 import lazy.input.LazyKeyEvent;
 import lazy.input.UserInputPublisher;
-import lazy.input.UserInputSubscriber;
 import lazy.nodes.*;
 import lazy.stores.*;
 import lazy.themes.Theme;
@@ -42,7 +41,7 @@ import static processing.core.PApplet.*;
  * Please note that only one LazyGui object is expected to exist in any given sketch, due to internal static classes.
  */
 @SuppressWarnings("unused")
-public class LazyGui implements UserInputSubscriber {
+public class LazyGui  {
 
     private static int lastFrameCountGuiWasShown = -1;
     public static boolean isGuiHidden = false;
@@ -89,7 +88,7 @@ public class LazyGui implements UserInputSubscriber {
         FontStore.lazyUpdateFont();
         ThemeStore.init();
         UserInputPublisher.initSingleton();
-        UserInputPublisher.subscribe(this);
+        HiddenEventSubscriber.initSingleton();
         WindowManager.addRootWindow();
         createOptionsFolder();
         JsonSaveStore.loadMostRecentSave();
@@ -1189,16 +1188,7 @@ public class LazyGui implements UserInputSubscriber {
     }
 
 
-    /**
-     * Method subscribed to PApplet input events, not meant for library users.
-     * @param keyEvent current key event
-     */
-    @Override
-    public void keyPressed(LazyKeyEvent keyEvent) {
-        handleHotkeyInteraction(keyEvent);
-    }
-
-    private void handleHotkeyInteraction(LazyKeyEvent keyEvent) {
+    void handleHotkeyInteraction(LazyKeyEvent keyEvent) {
         char key = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         if (key == 'h' && hotkeyHideActive) {
