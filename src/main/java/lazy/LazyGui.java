@@ -914,6 +914,7 @@ public class LazyGui  {
     /**
      * Sets the current value of an editable text field element.
      * Lazily initializes the text input element if needed and then sets its value to the specified content value.
+     * Setting it every frame will result in the text field effectively being read-only.
      *
      * @param path forward slash separated unique path to the control element
      * @param content default value for the text content
