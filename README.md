@@ -76,18 +76,54 @@ gui.sliderSet("x", 2.4f);
 PVector pos = gui.plotXY("position");
 PVector pos = gui.plotXY("position", defaultFloat);
 PVector pos = gui.plotXY("position", defaultX, defaultY);
-PVector pos = gui.plotXY("position", new PVector());
+PVector pos = gui.plotXY("position", defaultVector);
 
 //setters
 gui.plotSet("position", floatValue);
 gui.plotSet("position", floatValueX, floatValueY);
-gui.plotSet("position", new PVector());
+gui.plotSet("position", vectorValue);
 ```
 - drag the grid with your mouse to change both X and Y at the same time
 - keyboard input for both values with mouse over the grid
 - change both of their precisions at the same time with the mouse wheel over the grid
   - change just one of their precisions with mouse over one of the x,y sliders
 - there is a `plotXYZ()` variant with an extra Z slider (not connected to the grid)
+
+### Color picker
+![a color picker looks like this](readme_assets/colorpicker.png)
+```java
+// example getter
+PickerColor myColor = gui.colorPicker("color name");
+background(myColor.hex);
+
+// other getters that specify the default color
+gui.colorPicker("color name", color(36));
+gui.colorPicker("color name", grayNorm); // 'norm' meaning float in range [0-1]
+gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm);
+gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+
+// setters
+gui.colorPickerSet("color name", color(36));
+gui.colorPickerHueAdd("color name", hueToAdd);
+```
+- HSBA color picker with a hex string display
+- returns a read-only PickerColor object with an integer 'hex' field 
+  - this hex integer is the same thing as the Processing [color datatype](https://processing.org/reference/color_datatype.html)
+- copy and paste the hex with mouse over either the hex field or the color preview block
+
+### Gradient picker
+![a gradient picker looks like this](readme_assets/gradient.png)
+```java
+// getter example
+PGraphics gradient = gui.gradient("gradient name");
+image(gradient, 0, 0);
+
+// alternative getter
+gui.gradient("gradient name", defaultAlpha);
+```
+- allows you to set the position and value of individual colors or disable them entirely
+- blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
+
 
 ### Button
 ![a button looks like this](readme_assets/button.png)
@@ -147,28 +183,6 @@ gui.radioSet("mode", "square");
 ```
 - opens a folder of toggles where setting one to true sets all others to false
 - returns the selected option as a string
-
-### Color picker
-![a color picker looks like this](readme_assets/colorpicker.png)
-```java
-int pickedColor = gui.colorPicker("color name").hex;
-background(pickedColor);
-```
-- HSBA color picker with a hex string display
-- you can copy and paste using the hex field
-
-### Gradient picker
-![a gradient picker looks like this](readme_assets/gradient.png)
-```java
-// getter example
-PGraphics gradient = gui.gradient("gradient name");
-image(gradient, 0, 0);
-
-// alternative getter
-gui.gradient("gradient name", defaultAlpha);
-```
-- allows you to set the position and value of individual colors or disable them entirely
-- blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
 
 ## Paths and folders
 

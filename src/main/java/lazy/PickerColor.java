@@ -2,6 +2,7 @@ package lazy;
 
 import lazy.nodes.ColorPickerFolderNode;
 import lazy.stores.NormColorStore;
+import processing.core.PApplet;
 
 /**
  * Data transfer object for ColorPicker value.
@@ -54,5 +55,16 @@ public class PickerColor {
         this.saturation = NormColorStore.sat(hex);
         this.brightness = NormColorStore.br(hex);
         this.alpha = NormColorStore.alpha(hex);
+    }
+
+    public String toString() {
+        return "PickerColor{" +
+                "hexInt=" + hex +
+                ", hexString=" + PApplet.hex(hex) +
+                ", hue=" + hue +
+                ", saturation=" + saturation +
+                ", brightness=" + brightness +
+                ", alpha=" + alpha +
+                '}';
     }
 }
