@@ -75,13 +75,13 @@ gui.sliderSet("x", 2.4f);
 // getters
 PVector pos = gui.plotXY("position");
 PVector pos = gui.plotXY("position", defaultFloat);
-PVector pos = gui.plotXY("position", defaultX, defaultY);
-PVector pos = gui.plotXY("position", defaultVector);
+PVector pos = gui.plotXY("position", defaultFloatX, defaultFloatY);
+PVector pos = gui.plotXY("position", defaultPVector);
 
 //setters
-gui.plotSet("position", floatValue);
-gui.plotSet("position", floatValueX, floatValueY);
-gui.plotSet("position", vectorValue);
+gui.plotSet("position", valueFloat);
+gui.plotSet("position", valueFloatX, valueFloatY);
+gui.plotSet("position", valuePVector);
 ```
 - drag the grid with your mouse to change both X and Y at the same time
 - keyboard input for both values with mouse over the grid
@@ -119,7 +119,7 @@ PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
 
 // alternative getter
-gui.gradient("gradient name", defaultAlpha);
+gui.gradient("gradient name", alphaDefault);
 ```
 - allows you to set the position and value of individual colors or disable them entirely
 - blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
@@ -142,10 +142,14 @@ if(gui.toggle("spam every frame")){
     println("I'm trapped in a string factory");
 }
 
+// getter with a default value
+gui.toggle("spam every frame", booleanDefault)
+        
 // setter
 gui.toggleSet("spam every frame", booleanValue)
 ```
 - click to flip the boolean state
+- off by default
 
 ### Text input
 ![text input looks like this](readme_assets/text.png)
