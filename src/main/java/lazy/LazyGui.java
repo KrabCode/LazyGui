@@ -922,7 +922,7 @@ public class LazyGui  {
         setTextNodeContent(path, content);
     }
 
-    public void setTextNodeContent(String path, String content){
+    private void setTextNodeContent(String path, String content){
         String fullPath = getFolder() + path;
         TextNode node = (TextNode) findNode(fullPath);
         if(NodeTree.isPathTakenByUnexpectedType(fullPath, TextNode.class)){

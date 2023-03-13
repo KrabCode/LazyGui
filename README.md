@@ -50,22 +50,38 @@ A sketch with the above code should look like this:
 
 ![root and options look like this](readme_assets/basic_example.png)
 
-## Get values from the GUI
+## How do I get values from the GUI?
 
 ### Slider
 ![a slider looks like this](readme_assets/slider.png)
 ```java
+// getters
 float x = gui.slider("x");
+float x = gui.slider("x", defaultValue);
+float x = gui.slider("x", defaultValue, minimumValue, maximumValue);
+
+// setters
+gui.sliderAdd("x", 0.1f);
+gui.sliderSet("x", 2.4f);
 ```
 - mouse wheel changes the selected precision when mouse is over the slider
 - click and drag mouse horizontally - change value by (pixels * precision)
 - supports keyboard input with mouse over the slider - tries to parse the string as Float or Int
-- there is a `sliderInt()` variant that returns `int`
+- there is a `sliderInt()` alternative that uses and returns `int`
 
 ### Plot
 ![a plot looks like this](readme_assets/plotXY.png)
 ```java
+// getters
 PVector pos = gui.plotXY("position");
+PVector pos = gui.plotXY("position", defaultFloat);
+PVector pos = gui.plotXY("position", defaultX, defaultY);
+PVector pos = gui.plotXY("position", new PVector());
+
+//setters
+gui.plotSet("position", floatValue);
+gui.plotSet("position", floatValueX, floatValueY);
+gui.plotSet("position", new PVector());
 ```
 - drag the grid with your mouse to change both X and Y at the same time
 - keyboard input for both values with mouse over the grid
@@ -85,16 +101,25 @@ if(gui.button("do the thing!")){
 ### Toggle
 ![a toggle looks like this](readme_assets/toggle.png)
 ```java
+// getter example
 if(gui.toggle("spam every frame")){
     println("I'm trapped in a string factory");
 }
+
+// setter
+gui.toggleSet("spam every frame", booleanValue)
 ```
 - click to flip the boolean state
 
 ### Text input
 ![text input looks like this](readme_assets/text.png)
 ```java
+// getters
+String userInput = gui.text("text header");
 String userInput = gui.text("text header", "this default text can be edited");
+
+// setters
+textSet("text header", "content")
 ```
 - type with mouse over the text field
 - ENTER - insert new line 
@@ -104,12 +129,21 @@ String userInput = gui.text("text header", "this default text can be edited");
 ### Radio
 ![radio looks like this](readme_assets/radio.png)
 ```java
+// getter example
 String mode = gui.radio("mode", new String[]{"square", "circle"});
 if (mode.equals("square")) {
     rect(175, 175, 50, 50);
 } else {
     ellipse(200, 200, 50, 50);
 }
+
+// other getters
+String mode = gui.radio("mode", stringArray, defaultOption);
+String mode = gui.radio("mode", stringList);
+String mode = gui.radio("mode", stringList, defaultOption);
+
+// setter
+gui.radioSet("mode", "square");
 ```
 - opens a folder of toggles where setting one to true sets all others to false
 - returns the selected option as a string
@@ -126,8 +160,12 @@ background(pickedColor);
 ### Gradient picker
 ![a gradient picker looks like this](readme_assets/gradient.png)
 ```java
+// getter example
 PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
+
+// alternative getter
+gui.gradient("gradient name", defaultAlpha);
 ```
 - allows you to set the position and value of individual colors or disable them entirely
 - blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
@@ -191,12 +229,13 @@ gui.hideCurrentFolder() // hide the folder at the current path prefix stack
 gui.showCurrentFolder() // show the folder at the current path prefix stack if it has been previously hidden 
 ``` 
 
-### More example code
-- [processing examples](src/main/java/examples) 
-- [pure java examples](src/main/java/examples_intellij) for use in a proper IDE like IntelliJ IDEA
-- bigger sketches using this GUI in my other repo: [LazySketches](https://github.com/KrabCode/LazySketches) 
+## Further reading
+- [javadocs](https://krabcode.github.io/LazyGui/) on github pages
+- [processing examples](src/main/java/examples)
+- [pure java examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
+- [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo 
 
-### How to contribute
+## How to contribute
 - For questions or suggestions please [create a new issue](https://github.com/KrabCode/LazyGui/issues)
 - Feel free to fork the repository and submit a pull request
 - Join this library's [discord server](https://discord.gg/VBTCsnYMzd)
