@@ -1,6 +1,7 @@
 package lazy;
 
 
+import lazy.input.HotkeySubscriber;
 import lazy.input.UserInputPublisher;
 import lazy.nodes.*;
 import lazy.stores.*;
