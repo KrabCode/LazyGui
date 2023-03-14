@@ -123,6 +123,9 @@ public class LazyGui  {
      * Gets called automatically at the end of draw().
      * LazyGui will enforce itself being drawn only once per frame internally, which can be useful for including the gui in a recording.
      * If it does get called manually, it will get drawn when requested and then skip its automatic execution for that frame.
+     * <p>
+     *  Resets any potential hint(DISABLE_DEPTH_TEST) to the default hint(ENABLE_DEPTH_TEST) when done,
+     *  because it needs the DISABLE_DEPTH_TEST to draw the GUI over 3D scenes and has currently no way to save or query the original hint state.
      *
      * @param targetCanvas canvas to draw the GUI on
      */
