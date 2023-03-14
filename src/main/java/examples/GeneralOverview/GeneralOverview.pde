@@ -77,7 +77,6 @@ void drawForegroundText() {
   text(labelText, pos.x, pos.y);
 }
 
-
 void drawBackground() {
   gui.pushFolder("background");
   // the controls are ordered on screen by which gets called first
