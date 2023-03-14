@@ -15,6 +15,7 @@ public class LayoutStore {
 
     private static boolean showPathTooltips = false;
     private static boolean shouldResetWindowPosOnReopen = true;
+    private static boolean isGuiHidden = false;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -104,4 +105,11 @@ public class LayoutStore {
         LayoutStore.showPathTooltips = showPathTooltips;
     }
 
+    public static boolean isGuiHidden() {
+        return isGuiHidden;
+    }
+
+    public static void hideGuiToggle(){
+        isGuiHidden = !isGuiHidden;
+    }
 }

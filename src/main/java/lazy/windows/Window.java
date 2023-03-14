@@ -2,7 +2,6 @@ package lazy.windows;
 
 import com.google.gson.annotations.Expose;
 
-import lazy.LazyGui;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.input.UserInputPublisher;
@@ -480,7 +479,7 @@ public class Window implements UserInputSubscriber {
     }
 
     private boolean isClosed() {
-        return closed || LazyGui.isGuiHidden;
+        return closed || LayoutStore.isGuiHidden();
     }
 
     boolean isFocused() {

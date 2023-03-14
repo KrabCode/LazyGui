@@ -1,7 +1,6 @@
 package lazy;
 
 
-import lazy.input.LazyKeyEvent;
 import lazy.input.UserInputPublisher;
 import lazy.nodes.*;
 import lazy.stores.*;
@@ -9,7 +8,6 @@ import lazy.themes.Theme;
 import lazy.themes.ThemeStore;
 import lazy.themes.ThemeType;
 import lazy.utils.ContextLines;
-import lazy.utils.KeyCodes;
 import lazy.utils.MouseHiding;
 import lazy.utils.SnapToGrid;
 import lazy.stores.JsonSaveStore;
@@ -20,9 +18,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,10 +40,6 @@ import static processing.core.PApplet.*;
 public class LazyGui  {
 
     private static int lastFrameCountGuiWasShown = -1;
-    public static boolean isGuiHidden = false;
-    private static boolean screenshotRequestedOnMainThread = false;
-    private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
-            hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyOpenSketchFolderActive;
 
     ArrayList<String> pathPrefix = new ArrayList<>();
     int stackSizeWarningLevel = 64;
@@ -88,7 +80,7 @@ public class LazyGui  {
         FontStore.lazyUpdateFont();
         ThemeStore.init();
         UserInputPublisher.initSingleton();
-        HiddenEventSubscriber.initSingleton();
+        HotkeySubscriber.initSingleton();
         WindowManager.addRootWindow();
         createOptionsFolder();
         JsonSaveStore.loadMostRecentSave();
@@ -118,8 +110,9 @@ public class LazyGui  {
 
     /**
      * Updates and draws the GUI on the main processing canvas.
-     * Gets called automatically at the end of draw().
+     * Gets called automatically at the end of draw(),
      * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
+     * @see LazyGui#draw(PGraphics)
      */
     public void draw() {
         draw(app.g);
@@ -147,7 +140,7 @@ public class LazyGui  {
         guiCanvas.clear();
         clearFolder();
         updateOptionsFolder();
-        if (!isGuiHidden) {
+        if (!LayoutStore.isGuiHidden()) {
             SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
             ContextLines.drawLines(guiCanvas);
             WindowManager.updateAndDrawWindows(guiCanvas);
@@ -1130,7 +1123,7 @@ public class LazyGui  {
      * When it's called at the end of draw() the user can choose whether to show or to hide the gui overlay inside the sketch before taking the screenshot.
      */
     private void takeScreenshotIfRequested() {
-        if (!screenshotRequestedOnMainThread) {
+        if (!HotkeyStore.isScreenshotRequestedOnMainThread()) {
             return;
         }
         String folderPath = getGuiDataFolderPath("/screenshots");
@@ -1144,7 +1137,7 @@ public class LazyGui  {
         String filePath = folderPath + "\\" + fileName + fileType;
         app.save(filePath);
         println("screenshot saved as " + filePath);
-        screenshotRequestedOnMainThread = false;
+        HotkeyStore.setScreenshotRequestedOnMainThread(false);
     }
 
     void createOptionsFolder() {
@@ -1162,60 +1155,12 @@ public class LazyGui  {
         LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
-        SnapToGrid.update();
+        SnapToGrid.updateSettings();
         ContextLines.updateSettings();
-        updateHotkeyToggles();
+        HotkeyStore.updateHotkeyToggles();
         DelayStore.updateInputDelay();
         MouseHiding.updateSettings();
         popFolder();
-    }
-
-    private void updateHotkeyToggles() {
-        pushFolder("hotkeys");
-        hotkeyHideActive = toggle("h: hide\\/show gui", true);
-        hotkeyCloseAllWindowsActive = toggle("d: close windows", true);
-        hotkeyScreenshotActive = toggle("i: screenshot", true);
-        hotkeyUndoActive = toggle("ctrl + z: undo", true);
-        hotkeyRedoActive = toggle("ctrl + y: redo", true);
-        hotkeySaveActive = toggle("ctrl + s: new save", true);
-        hotkeyOpenSketchFolderActive = toggle("k: open sketch folder", true);
-        textSet("mouseover specific hotkeys",
-        "r: reset control element to default value\n" +
-                "ctrl + c: copy from (single value or folder)\n" +
-                "ctrl + v: paste to (single value or folder)\n" +
-                "these hotkeys cannot be turned off for now"
-        );
-        popFolder();
-    }
-
-
-    void handleHotkeyInteraction(LazyKeyEvent keyEvent) {
-        char key = keyEvent.getKey();
-        int keyCode = keyEvent.getKeyCode();
-        if (key == 'h' && hotkeyHideActive) {
-            isGuiHidden = !isGuiHidden;
-        }
-        screenshotRequestedOnMainThread = (key == 'i' && hotkeyScreenshotActive);
-        if(key == 'd' && hotkeyCloseAllWindowsActive){
-            WindowManager.closeAllWindows();
-        }
-        if(key == 'k' && hotkeyOpenSketchFolderActive){
-            Desktop desktop = Desktop.getDesktop();
-            try {
-                desktop.open(new File(app.dataPath("")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if(keyEvent.isControlDown() && keyCode == KeyCodes.Z && hotkeyUndoActive){
-            UndoRedoStore.undo();
-        }
-        if(keyEvent.isControlDown() && keyCode == KeyCodes.Y && hotkeyRedoActive){
-            UndoRedoStore.redo();
-        }
-        if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
-            JsonSaveStore.createNewSave();
-        }
     }
 
     static void updateEndlessLoopDetection() {

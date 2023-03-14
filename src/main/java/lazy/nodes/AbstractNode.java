@@ -4,10 +4,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 
 
-import lazy.*;
 import lazy.input.LazyKeyEvent;
 import lazy.input.LazyMouseEvent;
 import lazy.stores.FontStore;
+import lazy.stores.LayoutStore;
 import lazy.stores.NodeTree;
 import lazy.stores.UndoRedoStore;
 import lazy.themes.ThemeColorType;
@@ -207,7 +207,7 @@ public abstract class AbstractNode {
 
     public boolean isParentWindowVisible(){
         if(parent == null || parent.window == null){
-            return !LazyGui.isGuiHidden;
+            return !LayoutStore.isGuiHidden();
         }
         return !parent.window.closed;
     }

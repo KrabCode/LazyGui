@@ -117,11 +117,10 @@ public class SnapToGrid {
         return getOptions().get(defaultVisibilityModeIndex);
     }
 
-    public static void update() {
+    public static void updateSettings() {
         gui.pushFolder("grid");
         boolean previousSnapToGridEnabled = snapToGridEnabled;
         snapToGridEnabled = gui.toggle("snap to grid", true);
-
         if(hasCellSizeJustChanged() || hasJustBeenEnabled(previousSnapToGridEnabled, snapToGridEnabled)){
             WindowManager.snapAllStaticWindowsToGrid();
         }
