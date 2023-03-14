@@ -55,14 +55,16 @@ A sketch with the above code should look like this:
 ### Slider
 ![a slider looks like this](readme_assets/slider.png)
 ```java
-// getters
+// simplest getter
 float x = gui.slider("x");
-float x = gui.slider("x", defaultValue);
-float x = gui.slider("x", defaultValue, minimumValue, maximumValue);
+
+// alternative getters that specify defaults
+gui.slider("x", defaultFloat);
+gui.slider("x", defaultFloat, minimumFloat, maximumFloat);
 
 // setters
-gui.sliderAdd("x", 0.1f);
-gui.sliderSet("x", 2.4f);
+gui.sliderAdd("x", floatToAdd);
+gui.sliderSet("x", floatToSet);
 ```
 - mouse wheel changes the selected precision when mouse is over the slider
 - click and drag mouse horizontally - change value by (pixels * precision)
@@ -72,11 +74,13 @@ gui.sliderSet("x", 2.4f);
 ### Plot
 ![a plot looks like this](readme_assets/plotXY.png)
 ```java
-// getters
+// simplest getter
 PVector pos = gui.plotXY("position");
-PVector pos = gui.plotXY("position", defaultFloat);
-PVector pos = gui.plotXY("position", defaultFloatX, defaultFloatY);
-PVector pos = gui.plotXY("position", defaultPVector);
+
+// alternative getters that specify defaults
+gui.plotXY("position", defaultFloatXYZ);
+gui.plotXY("position", defaultFloatX, defaultFloatY);
+gui.plotXY("position", defaultPVector);
 
 //setters
 gui.plotSet("position", valueFloat);
@@ -92,11 +96,11 @@ gui.plotSet("position", valuePVector);
 ### Color picker
 ![a color picker looks like this](readme_assets/colorpicker.png)
 ```java
-// example getter
+// simplest getter
 PickerColor myColor = gui.colorPicker("color name");
 background(myColor.hex);
 
-// other getters that specify the default color
+// alternative getters that specify the default color
 gui.colorPicker("color name", color(36));
 gui.colorPicker("color name", grayNorm); // 'norm' meaning float in range [0-1]
 gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm);
@@ -114,11 +118,11 @@ gui.colorPickerHueAdd("color name", hueToAdd);
 ### Gradient picker
 ![a gradient picker looks like this](readme_assets/gradient.png)
 ```java
-// getter example
+// simple getter
 PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
 
-// alternative getter
+// alternative getter that specifies a default alpha value
 gui.gradient("gradient name", alphaDefault);
 ```
 - allows you to set the position and value of individual colors or disable them entirely
@@ -128,6 +132,7 @@ gui.gradient("gradient name", alphaDefault);
 ### Button
 ![a button looks like this](readme_assets/button.png)
 ```java
+// getter
 if(gui.button("do the thing!")){
     println("it is done");
 }
@@ -137,12 +142,13 @@ if(gui.button("do the thing!")){
 ### Toggle
 ![a toggle looks like this](readme_assets/toggle.png)
 ```java
-// getter example
-if(gui.toggle("spam every frame")){
+// simple getter
+boolean isToggledOn = gui.toggle("spam every frame")
+if(isToggledOn){
     println("I'm trapped in a string factory");
 }
 
-// getter with a default value
+// alternative getter that specifies a default
 gui.toggle("spam every frame", booleanDefault)
         
 // setter
@@ -154,9 +160,12 @@ gui.toggleSet("spam every frame", booleanValue)
 ### Text input
 ![text input looks like this](readme_assets/text.png)
 ```java
-// getters
+// simple getter
 String userInput = gui.text("text header");
-String userInput = gui.text("text header", "this default text can be edited");
+
+// alternative getters
+gui.text("text header", "this default text can be edited");
+gui.text("", "this text won't have a header row above it");
 
 // setters
 textSet("text header", "content")
@@ -169,7 +178,7 @@ textSet("text header", "content")
 ### Radio
 ![radio looks like this](readme_assets/radio.png)
 ```java
-// getter example
+// simplest getter
 String mode = gui.radio("mode", new String[]{"square", "circle"});
 if (mode.equals("square")) {
     rect(175, 175, 50, 50);
@@ -177,16 +186,16 @@ if (mode.equals("square")) {
     ellipse(200, 200, 50, 50);
 }
 
-// other getters
-String mode = gui.radio("mode", stringArray, defaultOption);
-String mode = gui.radio("mode", stringList);
-String mode = gui.radio("mode", stringList, defaultOption);
+// getter that specifies a default
+gui.radio("mode", stringArray, defaultOption);
 
 // setter
 gui.radioSet("mode", "square");
 ```
 - opens a folder of toggles where setting one to true sets all others to false
 - returns the selected option as a string
+- any changes to the available options will be ignored after the radio is first initialized
+- instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
 ## Paths and folders
 
@@ -248,12 +257,13 @@ gui.showCurrentFolder() // show the folder at the current path prefix stack if i
 ``` 
 
 ## Further reading
-- [javadocs](https://krabcode.github.io/LazyGui/) on github pages
-- [processing examples](src/main/java/examples)
-- [pure java examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
-- [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo 
+- [Javadocs](https://krabcode.github.io/LazyGui/) on github pages
+- [Processing examples](src/main/java/examples)
+- [IntelliJ examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
+- [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo
+- [Guide on running this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
-- For questions or suggestions please [create a new issue](https://github.com/KrabCode/LazyGui/issues)
-- Feel free to fork the repository and submit a pull request
-- Join this library's [discord server](https://discord.gg/VBTCsnYMzd)
+- Join this library's [discord server](https://discord.gg/VBTCsnYMzd) to get help and report bugs
+- Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues)
+- Fork the repository and submit a pull request

@@ -14,7 +14,6 @@ public class LayoutStore {
     private static float horizontalSeparatorStrokeWeight = 1;
 
     private static boolean showPathTooltips = false;
-    private static boolean shouldResetWindowPosOnReopen = true;
     private static boolean isGuiHidden = false;
 
     public static void updateWindowOptions() {
@@ -22,7 +21,6 @@ public class LayoutStore {
         setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         setShowPathTooltips(gui.toggle("show path tooltips", LayoutStore.getShowPathTooltips()));
         setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
-        setShouldResetWindowPosOnReopen(gui.toggle("opening resets pos", LayoutStore.getShouldResetWindowPosOnReopen()));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -35,14 +33,6 @@ public class LayoutStore {
         setHorizontalSeparatorStrokeWeight(gui.slider("weight", 0.5f));
         gui.popFolder();
         gui.popFolder();
-    }
-
-    private static void setShouldResetWindowPosOnReopen(boolean value) {
-        shouldResetWindowPosOnReopen = value;
-    }
-
-    public static boolean getShouldResetWindowPosOnReopen() {
-        return shouldResetWindowPosOnReopen;
     }
 
     public static void setCellSize(float inputCellSize) {

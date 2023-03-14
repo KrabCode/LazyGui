@@ -106,12 +106,8 @@ public class FolderNode extends AbstractNode {
     @Override
     public void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
-        if(window != null && !window.closed){
-            window.closed = true;
-        }else{
-            WindowManager.setFocus(parent.window);
-            WindowManager.uncoverOrCreateWindow(this);
-        }
+        WindowManager.setFocus(parent.window);
+        WindowManager.uncoverOrCreateWindow(this);
         this.isInlineNodeDragged = false;
     }
 
