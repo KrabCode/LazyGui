@@ -51,9 +51,24 @@ public class FolderNode extends AbstractNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftText(pg, name);
+        drawLeftTextOverridableByInnerTextNode(pg, name);
         drawRightBackdrop(pg, cell);
         drawMiniatureWindowIcon(pg);
+    }
+
+    private void drawLeftTextOverridableByInnerTextNode(PGraphics pg, String name) {
+        String overridableName = name;
+        AbstractNode renamingNode = findChildByName("");
+        if(renamingNode == null){
+            renamingNode = findChildByName("label");
+        }
+        if(renamingNode == null){
+            renamingNode = findChildByName("name");
+        }
+        if(renamingNode != null && renamingNode.className.contains("TextNode")){
+            overridableName = ((TextNode) renamingNode).stringValue;
+        }
+        drawLeftText(pg, overridableName);
     }
 
     private void drawMiniatureWindowIcon(PGraphics pg) {
@@ -67,6 +82,15 @@ public class FolderNode extends AbstractNode {
         pg.rectMode(CORNER);
         pg.translate(-previewRectSize * 0.5f, -previewRectSize * 0.5f);
         pg.pushStyle();
+        if(isFolderActiveJudgingByContents()){
+            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+        }
+        pg.rect(0, 0, previewRectSize, miniCell); // handle
+        pg.popStyle();
+        pg.rect(previewRectSize - miniCell, 0, miniCell, miniCell); // close button
+    }
+
+    boolean isFolderActiveJudgingByContents(){
         AbstractNode enabledNode = findChildByName("enabled");
         if(enabledNode == null){
             enabledNode = findChildByName("active");
@@ -74,14 +98,9 @@ public class FolderNode extends AbstractNode {
         if(enabledNode == null){
             enabledNode = findChildByName("visible");
         }
-        if (enabledNode != null &&
+        return enabledNode != null &&
                 enabledNode.className.contains("ToggleNode") &&
-                ((ToggleNode) enabledNode).valueBoolean) {
-            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-        }
-        pg.rect(0, 0, previewRectSize, miniCell); // handle
-        pg.popStyle();
-        pg.rect(previewRectSize - miniCell, 0, miniCell, miniCell); // close button
+                ((ToggleNode) enabledNode).valueBoolean;
     }
 
     @Override
