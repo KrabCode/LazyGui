@@ -51,24 +51,10 @@ public class FolderNode extends AbstractNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftTextOverridableByInnerTextNode(pg, name);
+        String displayName = getInlineDisplayNameOverridableByContents(name);
+        drawLeftText(pg, displayName);
         drawRightBackdrop(pg, cell);
         drawMiniatureWindowIcon(pg);
-    }
-
-    private void drawLeftTextOverridableByInnerTextNode(PGraphics pg, String name) {
-        String overridableName = name;
-        AbstractNode renamingNode = findChildByName("");
-        if(renamingNode == null){
-            renamingNode = findChildByName("label");
-        }
-        if(renamingNode == null){
-            renamingNode = findChildByName("name");
-        }
-        if(renamingNode != null && renamingNode.className.contains("TextNode")){
-            overridableName = ((TextNode) renamingNode).stringValue;
-        }
-        drawLeftText(pg, overridableName);
     }
 
     private void drawMiniatureWindowIcon(PGraphics pg) {
@@ -90,16 +76,36 @@ public class FolderNode extends AbstractNode {
         pg.rect(previewRectSize - miniCell, 0, miniCell, miniCell); // close button
     }
 
-    boolean isFolderActiveJudgingByContents(){
-        AbstractNode enabledNode = findChildByName("enabled");
-        if(enabledNode == null){
-            enabledNode = findChildByName("active");
+    private String getInlineDisplayNameOverridableByContents(String name) {
+        String overridableName = name;
+        String desiredClassName = TextNode.class.getSimpleName();
+        AbstractNode renamingNode = findChildByName("");
+        if(renamingNode == null || !renamingNode.className.contains(desiredClassName)){
+            renamingNode = findChildByNameStartsWith("label");
         }
-        if(enabledNode == null){
-            enabledNode = findChildByName("visible");
+        if(renamingNode == null || !renamingNode.className.contains(desiredClassName)){
+            renamingNode = findChildByNameStartsWith("name");
+        }
+        if(renamingNode != null && renamingNode.className.contains(desiredClassName)){
+            overridableName = ((TextNode) renamingNode).stringValue;
+        }
+        return overridableName;
+    }
+
+    boolean isFolderActiveJudgingByContents(){
+        String desiredClassName = ToggleNode.class.getSimpleName();
+        AbstractNode enabledNode = findChildByName("");
+        if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
+            enabledNode = findChildByNameStartsWith("active");
+        }
+        if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
+            enabledNode = findChildByNameStartsWith("enabled");
+        }
+        if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
+            enabledNode = findChildByNameStartsWith("visible");
         }
         return enabledNode != null &&
-                enabledNode.className.contains("ToggleNode") &&
+                enabledNode.className.contains(desiredClassName) &&
                 ((ToggleNode) enabledNode).valueBoolean;
     }
 
@@ -117,6 +123,18 @@ public class FolderNode extends AbstractNode {
         }
         for (AbstractNode node : children) {
             if (node.name.equals(name)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    protected AbstractNode findChildByNameStartsWith(String nameStartsWith) {
+        if(name.startsWith("/")){
+            nameStartsWith = name.substring(1);
+        }
+        for (AbstractNode node : children) {
+            if (node.name.startsWith(nameStartsWith)) {
                 return node;
             }
         }

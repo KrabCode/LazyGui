@@ -4,7 +4,7 @@ import lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class VisibilityTest extends PApplet {
+public class PathHiding extends PApplet {
 
     LazyGui gui;
 
@@ -37,8 +37,8 @@ public class VisibilityTest extends PApplet {
 
     private void drawText() {
         gui.pushFolder("text");
-        boolean show = gui.toggle("editable?");
-        String content = gui.text("content", "lorem ipsum");
+        boolean show = gui.toggle("edit mode");
+        String content = gui.text("content", "lorem ipsum ");
         text(content, 200, 600);
 
         // You can also hide any single control element by path
