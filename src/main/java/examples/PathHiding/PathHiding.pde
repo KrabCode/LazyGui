@@ -25,7 +25,7 @@ private void drawText() {
     gui.pushFolder("text");
     boolean show = gui.toggle("editable?");
     String content = gui.text("content", "hello");
-    text(content, 800, 600);
+    text(content, 200, 600);
 
     // You can also hide any single control element by path
     if (show) {

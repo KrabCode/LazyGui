@@ -39,7 +39,7 @@ public class VisibilityTest extends PApplet {
         gui.pushFolder("text");
         boolean show = gui.toggle("editable?");
         String content = gui.text("content", "lorem ipsum");
-        text(content, 800, 600);
+        text(content, 200, 600);
 
         // You can also hide any single control element by path
         if (show) {
