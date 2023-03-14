@@ -147,10 +147,12 @@ public class LazyGui  {
         }
         guiCanvas.endDraw();
         resetSketchMatrixInAnyRenderer();
+        targetCanvas.hint(DISABLE_DEPTH_TEST);
         targetCanvas.pushStyle();
         targetCanvas.imageMode(CORNER);
         targetCanvas.image(guiCanvas, 0, 0);
         targetCanvas.popStyle();
+        targetCanvas.hint(ENABLE_DEPTH_TEST);
         takeScreenshotIfRequested();
         updateEndlessLoopDetection();
     }
