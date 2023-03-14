@@ -72,11 +72,10 @@ public class LazyGui  {
                     "\n");
         }
         singleton = this;
-
-        GlobalReferences.init(this, sketch);
-        if (!app.sketchRenderer().equals(P2D) && !app.sketchRenderer().equals(P3D)) {
-            println("The LazyGui library requires the P2D or P3D renderer.");
+        if (!sketch.sketchRenderer().equals(P2D) && !sketch.sketchRenderer().equals(P3D)) {
+            println("The LazyGui library requires the P2D or P3D renderer and it will now crash because this condition was not met.");
         }
+        GlobalReferences.init(this, sketch);
         NormColorStore.init();
         FontStore.lazyUpdateFont();
         ThemeStore.init();
