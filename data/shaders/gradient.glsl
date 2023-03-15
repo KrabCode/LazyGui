@@ -4,8 +4,9 @@ uniform vec2 resolution;
 uniform int directionType;
 uniform int blendType;
 uniform int colorCount;
-uniform vec4[100] colorValues;
-uniform float[100] colorPositions;
+const int maxColorCount = 100;
+uniform vec4[maxColorCount] colorValues;
+uniform float[maxColorCount] colorPositions;
 
 //---------------------------------------------------------------------------------
 //--------------------------------Color Functions----------------------------------
@@ -223,7 +224,7 @@ float getPosByDirectionType(vec2 uv, vec2 cv){
 }
 
 int findClosestLeftNeighbourIndex(float pos){
-    for(int i = 0; i < 100; i++){
+    for(int i = 0; i < maxColorCount; i++){
         if(pos >= colorPositions[i] && pos <= colorPositions[i+1]){
             return i;
         }
@@ -233,7 +234,6 @@ int findClosestLeftNeighbourIndex(float pos){
     }
     return 0;
 }
-
 
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;

@@ -2,10 +2,9 @@ package lazy.nodes;
 
 import com.google.gson.JsonElement;
 import lazy.PickerColor;
-import lazy.stores.NodeTree;
-import lazy.stores.ShaderStore;
+import lazy.ShaderReloader;
+import lazy.stores.*;
 import lazy.utils.ArrayListBuilder;
-import lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -24,29 +23,29 @@ public class GradientFolderNode extends FolderNode {
     final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
     final ArrayList<String> directionOptions = new ArrayListBuilder<String>().add("x").add("y").add("center").build();
 
-    final String gradientShader = "gradient.glsl";
-    private final int maxColorCount = 10;
-    private int colorCount;
-    private int lastUpdatedFrame = -1;
+    final String gradientShaderPath = "gradient.glsl";
+    int colorCount;
+    int maxColorCount = 8;
+    private int frameLastUpdatedOutputGraphics = -1;
 
     // TODO constructor that allows n input colors...
     public GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);
-        colorCount = 3;
+        colorCount = 4;
+        maxColorCount = max(colorCount, maxColorCount);
         directionTypePicker = new RadioFolderNode(path + "/direction", this, directionOptions.toArray(new String[0]), directionOptions.get(1));
-        blendTypePicker = new RadioFolderNode(path + "/blend type", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
-        colorCountSlider = new SliderIntNode(path + "/color count", this, colorCount, 2, maxColorCount, true);
+        blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
+        colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, 2, maxColorCount, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionTypePicker);
         children.add(blendTypePicker);
         children.add(colorCountSlider);
-        idealWindowWidthInCells = 9;
         for (int i = 0; i < maxColorCount; i++) {
+            float br = 1 - map(i%colorCount, 0, colorCount, 0.2f, 0.9f);
             float iNorm = norm(i, 0, maxColorCount - 1);
-            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i),  1-iNorm, alpha, iNorm));
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i),  br, alpha, iNorm));
         }
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
-
     }
 
     @Override
@@ -77,43 +76,35 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private void updateOutGraphics() {
-        if(lastUpdatedFrame == app.frameCount){
+        if(frameLastUpdatedOutputGraphics == app.frameCount){
             return; // weird bugs when updated more than once per frame
         }
-        lastUpdatedFrame = app.frameCount;
+        frameLastUpdatedOutputGraphics = app.frameCount;
         if (out == null || out.width != app.width || out.height != app.height) {
             out = app.createGraphics(app.width, app.height, P2D);
         }
-
         colorCount = colorCountSlider.getIntValue();
-        updateColorStopChildren();
+        maxColorCount = max(colorCount, maxColorCount);
+        updateColorStopVisibility();
 
-        PShader shader = ShaderStore.getShader(gradientShader);
+        // ShaderStore.getShader(gradientShaderPath);
+        PShader shader = ShaderReloader.getShader("shaders/" + gradientShaderPath);
+
         shader.set("colorCount", colorCount);
-        // add fake copied neighbour colors on each(?) end of the gradient to not have to require it from the user
-        float[] colorValues = surroundWithColorPadding(getColorValuesInPositionOrder());
-        float[] colorPositions = surroundWithPositionPadding(getColorPositionsInPositionOrder());
+        float[] colorValues = getColorValuesInPositionOrder();
+        float[] colorPositions = getColorPositionsInPositionOrder();
         shader.set("colorValues", colorValues, 4);
         shader.set("colorPositions", colorPositions, 1);
-        shader.set("directionType", directionOptions.indexOf(directionTypePicker.valueString));
-        shader.set("blendType", blendTypeOptions.indexOf(blendTypePicker.valueString));
+        shader.set("directionType", getDirectionIndex());
+        shader.set("blendType", getBlendTypeIndex());
         out.beginDraw();
         out.clear();
-        out.filter(shader);
+//        out.filter(shader);
+        ShaderReloader.filter("shaders/" + gradientShaderPath, out);
         out.endDraw();
     }
 
-    private float[] surroundWithPositionPadding(float[] positions) {
-        // TODO implement using array copying
-        return positions;
-    }
-
-    private float[] surroundWithColorPadding(float[] colors) {
-        // TODO implement using array copying
-        return colors;
-    }
-
-    private void updateColorStopChildren() {
+    private void updateColorStopVisibility() {
         for (int i = 0; i <= maxColorCount; i++) {
             if(i < colorCount){
                 NodeTree.show(path + "/" + getColorNameByIndex(i));
@@ -123,11 +114,19 @@ public class GradientFolderNode extends FolderNode {
         }
     }
 
+    private int getDirectionIndex() {
+        return directionOptions.indexOf(directionTypePicker.valueString);
+    }
+
+    private int getBlendTypeIndex(){
+        return blendTypeOptions.indexOf(blendTypePicker.valueString);
+    }
+
     private float[] getColorValuesInPositionOrder() {
-        ArrayList<GradientColorNode> colorPickers = getAllColorStopsInPositionOrder();
+        ArrayList<GradientColorStopNode> colorPickers = getAllColorStopsInPositionOrder();
         float[] result = new float[colorPickers.size() * 4];
         int i = 0;
-        for (GradientColorNode colorPicker : colorPickers) {
+        for (GradientColorStopNode colorPicker : colorPickers) {
             PickerColor color = colorPicker.getColor();
             result[i] = color.hue;
             result[i + 1] = color.saturation;
@@ -139,10 +138,10 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private float[] getColorPositionsInPositionOrder() {
-        ArrayList<GradientColorNode> colorPickers = getAllColorStopsInPositionOrder();
+        ArrayList<GradientColorStopNode> colorPickers = getAllColorStopsInPositionOrder();
         float[] result = new float[colorPickers.size()];
         int i = 0;
-        for (GradientColorNode colorPicker : colorPickers) {
+        for (GradientColorStopNode colorPicker : colorPickers) {
             result[i++] = colorPicker.getGradientPos();
         }
         // enforce that positions reach both ends
@@ -156,51 +155,45 @@ public class GradientFolderNode extends FolderNode {
         return out;
     }
 
-    ArrayList<GradientColorNode> getAllColorStopsInPositionOrder() {
-        ArrayList<GradientColorNode> colorStops = new ArrayList<>();
+    ArrayList<GradientColorStopNode> getAllColorStopsInPositionOrder() {
+        ArrayList<GradientColorStopNode> colorStops = new ArrayList<>();
         for (int i = 0; i < colorCount; i++) {
-            colorStops.add((GradientColorNode) findChildByName(getColorNameByIndex(i)));
+            colorStops.add(findColorStopByIndex(i));
         }
         // sort them by position
         colorStops.sort((o1, o2) -> Float.compare(o1.getGradientPos(), o2.getGradientPos()));
         return colorStops;
     }
 
+    GradientColorStopNode findColorStopByIndex(int i){
+        return (GradientColorStopNode) findChildByName(getColorNameByIndex(i));
+    }
+
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorNode createGradientColorPicker(String path, float brightnessNorm, float alphaNorm, float pos) {
-        int hex = color(0, 0, brightnessNorm, alphaNorm);
-        return new GradientColorNode(path, this, hex, pos);
+    GradientColorStopNode createGradientColorPicker(String path, float brightnessNorm, float alpha, float pos) {
+        int hex = color(0, 0, brightnessNorm, alpha);
+        return new GradientColorStopNode(path, this, hex, pos);
     }
 
     public PickerColor getGradientColorAt(float position) {
         // TODO implement
         position = constrain(position, 0, 1);
-        return new PickerColor(0,0,0,0,1);
+        int selectedDirection = getDirectionIndex();
+        int resultHexColor = NormColorStore.color(0);
+        if(selectedDirection == directionOptions.indexOf("x")){
+            int x = constrain(round(position * out.width), 1, out.width-1);
+            resultHexColor = out.get(x, out.height/2);
+        }
+        if(selectedDirection == directionOptions.indexOf("y")){
+            int y = constrain(round(position * out.height), 1, out.height-1);
+            resultHexColor = out.get(out.width/2, y);
+        }
+        if(selectedDirection == directionOptions.indexOf("center")){
+            resultHexColor = out.get(out.width/2, out.height / 2 + round(0.5f * position * out.height));
+        }
+        return new PickerColor(resultHexColor);
     }
-
-    private static class GradientPreviewNode extends AbstractNode {
-
-        final GradientFolderNode parent;
-
-        GradientPreviewNode(String path, GradientFolderNode parent) {
-            super(NodeType.VALUE, path, parent);
-            this.parent = parent;
-            masterInlineNodeHeightInCells = 6;
-        }
-
-        @Override
-        protected void drawNodeBackground(PGraphics pg) {
-            pg.image(parent.getOutputGraphics(), 1, 1, size.x-1, size.y-1);
-        }
-
-        @Override
-        protected void drawNodeForeground(PGraphics pg, String name) {
-
-        }
-
-    }
-
 }
