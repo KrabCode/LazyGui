@@ -50,7 +50,7 @@ public class GradientFolderNode extends FolderNode {
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        updateOutGraphics();
+        lazyUpdateOutGraphics();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GradientFolderNode extends FolderNode {
         return String.valueOf(a.charAt(index));
     }
 
-    private void updateOutGraphics() {
+    private void lazyUpdateOutGraphics() {
         if(frameLastUpdatedOutputGraphics == app.frameCount){
             return; // weird bugs when updated more than once per frame
         }
@@ -151,7 +151,7 @@ public class GradientFolderNode extends FolderNode {
     }
 
     public PGraphics getOutputGraphics() {
-        updateOutGraphics();
+        lazyUpdateOutGraphics();
         return out;
     }
 
@@ -179,7 +179,7 @@ public class GradientFolderNode extends FolderNode {
     }
 
     public PickerColor getGradientColorAt(float position) {
-        // TODO implement
+        lazyUpdateOutGraphics();
         position = constrain(position, 0, 1);
         int selectedDirection = getDirectionIndex();
         int resultHexColor = NormColorStore.color(0);

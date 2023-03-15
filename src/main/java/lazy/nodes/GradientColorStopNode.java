@@ -8,7 +8,7 @@ class GradientColorStopNode extends ColorPickerFolderNode {
 
     GradientColorStopNode(String path, FolderNode parentFolder, int hex, float gradientPos) {
         super(path, parentFolder, hex);
-        posSlider = new SliderNode(path + "/pos", parentFolder, gradientPos, 0,1,true);
+        posSlider = new SliderNode(path + "/pos", this, gradientPos, 0,1,true);
         this.children.add(posSlider);
     }
 
