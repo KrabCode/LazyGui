@@ -13,18 +13,13 @@ GUI library for creative coding with Processing 3+ with a focus on easy iteratio
 ### Supporting features:
 - infinite sliders with variable precision
 - keyboard input for text and slider values
+- hotkeys for common actions
 - copy / paste any value or whole folders
 - undo / redo any change
 - load / save your gui state to disk as json
 - autosave on program exit
-- utility methods for gui paths
+- look and feel customizable in code or at runtime
 - [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java)
-- configurable look and feel
-  - pre-made and custom color themes
-  - custom fonts (JetBrains Mono by default)
-  - background dot grid
-  - contextual guidelines between a child folder and its parent
-  - individual windows have resizable width
 
 ## How do I run this?
 
@@ -261,7 +256,7 @@ gui.showCurrentFolder() // show the folder at the current path prefix stack if i
 - [Processing examples](src/main/java/examples)
 - [IntelliJ examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
 - [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo
-- [Guide on running this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
+- [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
 - Join this library's [discord server](https://discord.gg/VBTCsnYMzd) to get help and report bugs
