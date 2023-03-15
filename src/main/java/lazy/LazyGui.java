@@ -952,7 +952,7 @@ public class LazyGui  {
      *
      * @param path forward slash separated unique path to the control element
      * @param alpha default alpha of all the colors in the gradient
-     * @return PGraphics after endDraw() - ready to be displayed as an image
+     * @return PGraphics ready to be displayed as an image
      */
     public PGraphics gradient(String path, float alpha) {
         String fullPath = getFolder() + path;
@@ -968,6 +968,27 @@ public class LazyGui  {
         return node.getOutputGraphics();
     }
 
+    /**
+     * Gets a single color from a gradient at the specified position in the range [0, 1].
+     * Lazily initializes the gradient picker if needed.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param position normalized position in the [0, 1] range you'd like to know the color of
+     * @return PickerColor color at the specified position in the gradient
+     */
+    public PickerColor gradientColorAt(String path, float position) {
+        String fullPath = getFolder() + path;
+        if(isPathTakenByUnexpectedType(fullPath, GradientFolderNode.class)){
+            return null;
+        }
+        GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
+        if (node == null) {
+            FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new GradientFolderNode(fullPath, parentFolder, 1);
+            insertNodeAtItsPath(node);
+        }
+        return node.getGradientColorAt(position);
+    }
 
     /**
      * Pushes a folder name to the global path prefix stack.

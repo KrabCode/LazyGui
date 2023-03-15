@@ -6,8 +6,8 @@ GUI library for creative coding with Processing 3+ with a focus on easy iteratio
 
 ### Main features:
 - no gui logic in `setup()`
-- lazy initialization of folders and controls when a value is first requested
 - control elements have unique string paths
+- lazy initialization of controls when a path is first mentioned in a getter or a setter
 - this lets you keep all the gui logic in `draw()` next to the code that uses it
 
 ### Supporting features:
@@ -46,7 +46,10 @@ A sketch with the above code should look like this:
 ![root and options look like this](readme_assets/basic_example.png)
 
 ## How do I get values from the GUI?
-
+- getters initialize controls when first called
+- setters also initialize controls when first called
+- optional default parameters are used when first called and then ignored
+- visually, rows of controls are ordered by when they were first initialized
 ### Slider
 ![a slider looks like this](readme_assets/slider.png)
 ```java
@@ -97,7 +100,7 @@ background(myColor.hex);
 
 // alternative getters that specify the default color
 gui.colorPicker("color name", color(36));
-gui.colorPicker("color name", grayNorm); // 'norm' meaning float in range [0-1]
+gui.colorPicker("color name", grayNorm); // 'norm' meaning float in the range [0, 1]
 gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm);
 gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm, alphaNorm);
 
