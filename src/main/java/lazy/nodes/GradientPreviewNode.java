@@ -32,21 +32,31 @@ class GradientPreviewNode extends AbstractNode {
     private void drawColorStops(PGraphics pg) {
         pg.textAlign(RIGHT, CENTER);
         pg.textFont(FontStore.getSideFont());
+        boolean isGradientVertical = parent.isGradientDirectionVertical();
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
             if(colorStop.isPosSliderBeingUsed()){
-                float pointerLineY = map(colorStop.getGradientPos(), 0, 1, 1, size.y-2);
-                float pointerLineWidth = cell;
-                pg.strokeWeight(1);
-                pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+                float pointerLineLength = cell;
                 pg.pushMatrix();
-                pg.translate(size.x, pointerLineY);
-                pg.line(-pointerLineWidth, 0, 0, 0);
-                pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-                pg.line(-pointerLineWidth, 1, 0, 1);
+                if(isGradientVertical){
+                    float pointerLineY = map(colorStop.getGradientPos(), 0, 1, 1, size.y-2);
+                    pg.translate(size.x, pointerLineY);
+                    pg.strokeWeight(1);
+                    pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+                    pg.line(-pointerLineLength, 0, 0, 0);
+                    pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+                    pg.line(-pointerLineLength, 1, 0, 1);
+                }else{
+                    float pointerLineX = map(colorStop.getGradientPos(), 0, 1, 1, size.x-2);
+                    pg.translate(pointerLineX, size.y);
+                    pg.strokeWeight(1);
+                    pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
+                    pg.line(0, -pointerLineLength, 0, 0);
+                    pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
+                    pg.line(1, -pointerLineLength, 1, 0);
+                }
                 pg.popMatrix();
             }
         }
     }
-
 }
