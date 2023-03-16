@@ -24,9 +24,8 @@ public class JsonSaveStore {
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-
     public static boolean autosaveEnabled = true;
-    public static boolean includePrettyTreeInSaves = false;
+    private final static String JSON_FILE_TYPE_SUFFIX = ".json";
 
     private static void lazyInitSaveDir() {
         saveDir = new File(getGuiDataFolderPath("/saves/"));
@@ -40,7 +39,7 @@ public class JsonSaveStore {
 
     public static void createTreeSaveFiles(String filenameWithoutSuffix) {
         // save main json
-        String jsonPath = getFullFilePathWithSuffix(filenameWithoutSuffix, ".json");
+        String jsonPath = getFullJsonFilePathWithFileTypeSuffix(filenameWithoutSuffix);
         overwriteFile(jsonPath, getTreeAsJsonString());
 //        println("Saved current state to: " + jsonPath);
     }
@@ -83,8 +82,8 @@ public class JsonSaveStore {
         return sb.toString();
     }
 
-    private static String getFullFilePathWithSuffix(String filenameWithoutSuffix, String suffix) {
-        return getFullFilePathWithoutTypeSuffix(filenameWithoutSuffix + suffix);
+    private static String getFullJsonFilePathWithFileTypeSuffix(String filenameWithoutSuffix) {
+        return getFullFilePathWithoutTypeSuffix(filenameWithoutSuffix + JSON_FILE_TYPE_SUFFIX);
     }
 
     private static String getFullFilePathWithoutTypeSuffix(String filenameWithSuffix) {

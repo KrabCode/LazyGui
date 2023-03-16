@@ -30,7 +30,7 @@ public class GradientFolderNode extends FolderNode {
         super(path, parent);
         colorCount = 4;
         maxColorCount = max(colorCount, maxColorCount);
-        directionToggle = new ToggleNode(path + "/x\\/y", this, true);
+        directionToggle = new ToggleNode(path + "/vertical", this, true);
         blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
         colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, 2, maxColorCount, true);
         children.add(new GradientPreviewNode(path + "/preview", this));

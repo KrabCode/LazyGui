@@ -1,14 +1,13 @@
 package lazy.nodes;
 
 import lazy.stores.FontStore;
-import lazy.themes.ThemeColorType;
-import lazy.themes.ThemeStore;
+import lazy.stores.NormColorStore;
 import processing.core.PGraphics;
 
 import static lazy.stores.LayoutStore.cell;
+import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.RIGHT;
+import static processing.core.PApplet.radians;
 
 class GradientPreviewNode extends AbstractNode {
     final GradientFolderNode parent;
@@ -32,31 +31,53 @@ class GradientPreviewNode extends AbstractNode {
     private void drawColorStops(PGraphics pg) {
         pg.textAlign(RIGHT, CENTER);
         pg.textFont(FontStore.getSideFont());
-        boolean isGradientVertical = parent.isGradientDirectionVertical();
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
-            if(colorStop.isPosSliderBeingUsed()){
-                float pointerLineLength = cell;
-                pg.pushMatrix();
-                if(isGradientVertical){
-                    float pointerLineY = map(colorStop.getGradientPos(), 0, 1, 1, size.y-2);
-                    pg.translate(size.x, pointerLineY);
-                    pg.strokeWeight(1);
-                    pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-                    pg.line(-pointerLineLength, 0, 0, 0);
-                    pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-                    pg.line(-pointerLineLength, 1, 0, 1);
-                }else{
-                    float pointerLineX = map(colorStop.getGradientPos(), 0, 1, 1, size.x-2);
-                    pg.translate(pointerLineX, size.y);
-                    pg.strokeWeight(1);
-                    pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-                    pg.line(0, -pointerLineLength, 0, 0);
-                    pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
-                    pg.line(1, -pointerLineLength, 1, 0);
-                }
-                pg.popMatrix();
+            if (colorStop.isPosSliderBeingUsed()) {
+                continue;
+            }
+            drawColorStop(pg, colorStop, false);
+        }
+        for (int i = 0; i < parent.colorCount; i++) {
+            GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
+            if (colorStop.isPosSliderBeingUsed()) {
+                drawColorStop(pg, colorStop, true);
             }
         }
+    }
+
+    private void drawColorStop(PGraphics pg, GradientColorStopNode colorStop, boolean highlight) {
+        boolean isGradientVertical = parent.isGradientDirectionVertical();
+        pg.pushMatrix();
+        float side = cell * 0.5f;
+        if (isGradientVertical) {
+            float pointerLineY = map(colorStop.getGradientPos(), 0, 1, 0, size.y);
+            pg.translate(size.x, pointerLineY);
+        } else {
+            float pointerLineX = map(colorStop.getGradientPos(), 0, 1, 0, size.x);
+            pg.translate(pointerLineX, size.y);
+            pg.rotate(HALF_PI);
+        }
+        pg.translate(-5, 0);
+        int hex = colorStop.getColor().hex;
+        if (!highlight) {
+            pg.noStroke();
+        } else if (NormColorStore.br(hex) > 0.5f) {
+            pg.stroke(NormColorStore.color(0));
+        } else {
+            pg.stroke(NormColorStore.color(1));
+        }
+        pg.noFill();
+        drawEquilateralTrianglePointingLeft(pg, side);
+        pg.popMatrix();
+    }
+
+    private void drawEquilateralTrianglePointingLeft(PGraphics pg, float side) {
+        float theta = radians(30);
+        pg.beginShape();
+        pg.vertex(0, side * sin(theta));
+        pg.vertex(-side, 0);
+        pg.vertex(0, side * sin(-theta));
+        pg.endShape(CLOSE);
     }
 }

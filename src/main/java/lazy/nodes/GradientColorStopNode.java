@@ -3,6 +3,8 @@ package lazy.nodes;
 import com.google.gson.JsonElement;
 import processing.core.PGraphics;
 
+import static lazy.stores.GlobalReferences.app;
+
 class GradientColorStopNode extends ColorPickerFolderNode {
     final SliderNode posSlider;
 
@@ -28,6 +30,7 @@ class GradientColorStopNode extends ColorPickerFolderNode {
     }
 
     public boolean isPosSliderBeingUsed() {
-        return isMouseOverNode || posSlider.isInlineNodeDragged || posSlider.isMouseOverNode;
+        return isMouseOverNode || posSlider.isInlineNodeDragged ||
+            (window != null && window.isFocused() && window.isPointInsideContent(app.mouseX, app.mouseY));
     }
 }

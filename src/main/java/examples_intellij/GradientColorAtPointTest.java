@@ -50,7 +50,6 @@ public class GradientColorAtPointTest extends PApplet {
             pg.point(x,y);
         }
         gui.popFolder();
-        println(round(frameRate) + " fps");
     }
 
     private void drawBackground() {

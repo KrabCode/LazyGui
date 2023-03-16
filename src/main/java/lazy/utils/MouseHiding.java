@@ -3,7 +3,7 @@ package lazy.utils;
 import static lazy.stores.GlobalReferences.*;
 
 public class MouseHiding {
-    private static boolean shouldHideWhenDragging = false;
+    private static boolean shouldHideWhenDragging = true;
     private static boolean shouldConfineToWindow = false;
     private static int mouseHidePosX;
     private static int mouseHidePosY;

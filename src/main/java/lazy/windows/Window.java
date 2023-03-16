@@ -482,7 +482,7 @@ public class Window implements UserInputSubscriber {
         return closed || LayoutStore.isGuiHidden();
     }
 
-    boolean isFocused() {
+    public boolean isFocused() {
         return WindowManager.isFocused(this);
     }
 
@@ -491,13 +491,13 @@ public class Window implements UserInputSubscriber {
         UserInputPublisher.setFocus(this);
     }
 
-    boolean isPointInsideContent(float x, float y) {
+    public boolean isPointInsideContent(float x, float y) {
        return isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
     }
 
-    boolean isPointInsideWindow(float x, float y) {
+    public boolean isPointInsideWindow(float x, float y) {
        return isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
 
