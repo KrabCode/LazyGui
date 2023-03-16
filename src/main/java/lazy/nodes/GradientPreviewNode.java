@@ -59,15 +59,12 @@ class GradientPreviewNode extends AbstractNode {
             pg.rotate(HALF_PI);
         }
         pg.translate(-5, 0);
-        int hex = colorStop.getColor().hex;
         if (!highlight) {
             pg.noStroke();
-        } else if (NormColorStore.br(hex) > 0.5f) {
-            pg.stroke(NormColorStore.color(0));
+            fillBackgroundBasedOnMouseOver(pg);
         } else {
             pg.stroke(NormColorStore.color(1));
         }
-        pg.noFill();
         drawEquilateralTrianglePointingLeft(pg, side);
         pg.popMatrix();
     }
