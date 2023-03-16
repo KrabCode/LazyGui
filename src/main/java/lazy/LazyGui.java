@@ -50,8 +50,6 @@ public class LazyGui  {
     private PGraphics guiCanvas;
     FolderNode optionsNode;
 
-    private static long lastFrameMillis;
-    static final long lastFrameMillisStuckLimit = 1000;
 
     private static LazyGui singleton;
 
@@ -84,8 +82,8 @@ public class LazyGui  {
         WindowManager.addRootWindow();
         createOptionsFolder();
         JsonSaveStore.loadMostRecentSave();
+        JsonSaveStore.registerExitHandler();
         lazyFollowSketchResolution();
-        registerExitHandler();
         app.registerMethod("draw", this);
     }
 
@@ -157,7 +155,7 @@ public class LazyGui  {
         targetCanvas.popStyle();
         targetCanvas.hint(ENABLE_DEPTH_TEST);
         takeScreenshotIfRequested();
-        updateEndlessLoopDetection();
+        JsonSaveStore.updateEndlessLoopDetection();
     }
 
     static void resetSketchMatrixInAnyRenderer() {
@@ -993,7 +991,7 @@ public class LazyGui  {
     /**
      * Pushes a folder name to the global path prefix stack.
      * Can be used multiple times in pairs just like pushMatrix and popMatrix().
-     * Removes leading and trailing slashes to enforce consistency, but allows slashes to appear either escaped or anywhere else inside of the string.
+     * Removes leading and trailing slashes to enforce consistency, but allows slashes to appear either escaped or anywhere else inside the string.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.
      *
@@ -1187,32 +1185,6 @@ public class LazyGui  {
         DelayStore.updateInputDelay();
         MouseHiding.updateSettings();
         popFolder();
-    }
-
-    static void updateEndlessLoopDetection() {
-        lastFrameMillis = app.millis();
-    }
-
-    static boolean isSketchStuckInEndlessLoop() {
-        long timeSinceLastFrame = app.millis() - lastFrameMillis;
-        return timeSinceLastFrame > lastFrameMillisStuckLimit;
-    }
-
-    private static void registerExitHandler() {
-        Runtime.getRuntime().addShutdownHook(new Thread(LazyGui::createAutosave));
-    }
-
-    static void createAutosave() {
-        if (!autosaveEnabled) {
-            return;
-        }
-        if (autosaveLockGuardEnabled && LazyGui.isSketchStuckInEndlessLoop()) {
-            println("NOT autosaving," +
-                    " because the last frame took more than " + LazyGui.lastFrameMillisStuckLimit + " ms," +
-                    " which looks like the program stopped due to an exception or reached an endless loop");
-            return;
-        }
-        JsonSaveStore.createTreeSaveFiles("auto");
     }
 
 }

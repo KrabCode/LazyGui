@@ -17,7 +17,7 @@ public class SaveFolderNode extends FolderNode {
     final String pathPrintFolderPathButton = "/print folder path";
     final String pathOpenSaveFolderButton = "/open save folder";
     final String pathAutosaveOnExitToggle = "/autosave on exit";
-    final String pathAutosaveGuardToggle = "/autosave freeze guard";
+    final String pathAutosaveGuardToggle = "/autosave guard";
     final String pathCreateNewSaveButton = "/create new save";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 

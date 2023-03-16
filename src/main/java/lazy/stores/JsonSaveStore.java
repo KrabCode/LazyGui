@@ -28,6 +28,37 @@ public class JsonSaveStore {
     public static boolean autosaveLockGuardEnabled = true;
     private final static String JSON_FILE_TYPE_SUFFIX = ".json";
 
+    private static long lastFrameMillis;
+    static final long lastFrameMillisStuckLimit = 1000;
+
+    public static void registerExitHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createAutosave));
+    }
+
+    static void createAutosave() {
+        if (!autosaveEnabled) {
+            return;
+        }
+        if (autosaveLockGuardEnabled && isSketchStuckInEndlessLoop()) {
+            println("not autosaving," +
+                    " because autosave lock guard was enabled and" +
+                    " the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
+                    " which looks like the program stopped due to an exception or reached an endless loop");
+            return;
+        }
+        JsonSaveStore.createTreeSaveFiles("auto");
+        println("auto-saved gui");
+    }
+
+    public static void updateEndlessLoopDetection() {
+        lastFrameMillis = app.millis();
+    }
+
+    public static boolean isSketchStuckInEndlessLoop() {
+        long timeSinceLastFrame = app.millis() - lastFrameMillis;
+        return timeSinceLastFrame > lastFrameMillisStuckLimit;
+    }
+
     private static void lazyInitSaveDir() {
         saveDir = new File(getGuiDataFolderPath("/saves/"));
         if (!saveDir.exists()) {

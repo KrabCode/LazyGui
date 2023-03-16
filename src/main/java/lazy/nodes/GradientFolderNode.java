@@ -16,26 +16,28 @@ import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 public class GradientFolderNode extends FolderNode {
-    PGraphics out;
-    final ToggleNode directionToggle;
-    final RadioFolderNode blendTypePicker;
-    final SliderIntNode colorCountSlider;
-    final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
-    final String gradientShaderPath = "gradient.glsl";
     int colorCount;
-    int maxColorCount = 8;
+    private PGraphics out;
+    private final ToggleNode wrapAtEdgesToggle;
+    private final ToggleNode directionToggle;
+    private final RadioFolderNode blendTypePicker;
+    private final SliderIntNode colorCountSlider;
+    private final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
+    private int maxColorCount = 8;
     private int frameLastUpdatedOutputGraphics = -1;
-    int[] LUT;
+    private int[] LUT;
 
     public GradientFolderNode(String path, FolderNode parent, float alpha) {
         super(path, parent);
         colorCount = 4;
         maxColorCount = max(colorCount, maxColorCount);
         directionToggle = new ToggleNode(path + "/vertical", this, true);
+        wrapAtEdgesToggle = new ToggleNode(path + "/edge wrap", this, false);
         blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
         colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, 2, maxColorCount, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionToggle);
+        children.add(wrapAtEdgesToggle);
         children.add(blendTypePicker);
         children.add(colorCountSlider);
         for (int i = 0; i < maxColorCount; i++) {
@@ -85,6 +87,7 @@ public class GradientFolderNode extends FolderNode {
         maxColorCount = max(colorCount, maxColorCount);
         updateColorStopVisibility();
 
+        String gradientShaderPath = "gradient.glsl";
 //         PShader shader = ShaderStore.getShader(gradientShaderPath);
         PShader shader = ShaderReloader.getShader("shaders/" + gradientShaderPath);
 
@@ -96,6 +99,7 @@ public class GradientFolderNode extends FolderNode {
         shader.set("colorPositions", colorPositions, 1);
         shader.set("directionType", getDirectionIndex());
         shader.set("blendType", getBlendTypeIndex());
+        shader.set("wrapAtEdges", wrapAtEdgesToggle.valueBoolean);
         out.beginDraw();
         out.clear();
 //        out.filter(shader);

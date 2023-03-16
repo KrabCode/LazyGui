@@ -14,7 +14,7 @@ public class GradientColorAt extends PApplet {
     }
 
     public void settings() {
-        size(800, 800, P2D);
+        size(1200, 1200, P2D);
         smooth(8);
     }
 
@@ -37,7 +37,7 @@ public class GradientColorAt extends PApplet {
         };
         String selectedShape = gui.radio("shape type", shapeTypeOptions);
         PVector pos = gui.plotXY("position", 0, height / 2f);
-        PVector size = gui.plotXY("size", 250);
+        PVector size = gui.plotXY("size", 50);
         float rotationAngle = gui.slider("rotation");
         float rotationAngleDelta = gui.slider("rotation ++", 0.1f);
         gui.sliderSet("rotation", rotationAngle + rotationAngleDelta);
