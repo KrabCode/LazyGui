@@ -25,6 +25,7 @@ public class JsonSaveStore {
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static boolean autosaveEnabled = true;
+    public static boolean autosaveLockGuardEnabled = true;
     private final static String JSON_FILE_TYPE_SUFFIX = ".json";
 
     private static void lazyInitSaveDir() {

@@ -2,6 +2,7 @@ package lazy.nodes;
 
 import com.google.gson.JsonElement;
 import lazy.PickerColor;
+import lazy.ShaderReloader;
 import lazy.stores.*;
 import lazy.utils.ArrayListBuilder;
 import processing.core.PGraphics;
@@ -84,20 +85,21 @@ public class GradientFolderNode extends FolderNode {
         maxColorCount = max(colorCount, maxColorCount);
         updateColorStopVisibility();
 
-         PShader shader = ShaderStore.getShader(gradientShaderPath);
-//        PShader shader = ShaderReloader.getShader("shaders/" + gradientShaderPath);
+//         PShader shader = ShaderStore.getShader(gradientShaderPath);
+        PShader shader = ShaderReloader.getShader("shaders/" + gradientShaderPath);
 
         shader.set("colorCount", colorCount);
-        float[] colorValues = getColorValuesInPositionOrder();
-        float[] colorPositions = getColorPositionsInPositionOrder();
+        ArrayList<GradientColorStopNode> colorStopsInPositionOrder = getAllColorStopsInPositionOrder();
+        float[] colorValues = getColorValuesAsFloatArray(colorStopsInPositionOrder);
+        float[] colorPositions = getColorPositionsAsFloatArray(colorStopsInPositionOrder);
         shader.set("colorValues", colorValues, 4);
         shader.set("colorPositions", colorPositions, 1);
         shader.set("directionType", getDirectionIndex());
         shader.set("blendType", getBlendTypeIndex());
         out.beginDraw();
         out.clear();
-        out.filter(shader);
-//        ShaderReloader.filter("shaders/" + gradientShaderPath, out);
+//        out.filter(shader);
+        ShaderReloader.filter("shaders/" + gradientShaderPath, out);
         out.endDraw();
         updateLookUpTable(out);
     }
@@ -144,11 +146,10 @@ public class GradientFolderNode extends FolderNode {
         return blendTypeOptions.indexOf(blendTypePicker.valueString);
     }
 
-    private float[] getColorValuesInPositionOrder() {
-        ArrayList<GradientColorStopNode> colorPickers = getAllColorStopsInPositionOrder();
-        float[] result = new float[colorPickers.size() * 4];
+    private float[] getColorValuesAsFloatArray(ArrayList<GradientColorStopNode> colorStops) {
+        float[] result = new float[colorStops.size() * 4];
         int i = 0;
-        for (GradientColorStopNode colorPicker : colorPickers) {
+        for (GradientColorStopNode colorPicker : colorStops) {
             PickerColor color = colorPicker.getColor();
             result[i] = color.hue;
             result[i + 1] = color.saturation;
@@ -159,16 +160,12 @@ public class GradientFolderNode extends FolderNode {
         return result;
     }
 
-    private float[] getColorPositionsInPositionOrder() {
-        ArrayList<GradientColorStopNode> colorPickers = getAllColorStopsInPositionOrder();
-        float[] result = new float[colorPickers.size()];
+    private float[] getColorPositionsAsFloatArray(ArrayList<GradientColorStopNode> colorStops) {
+        float[] result = new float[colorStops.size()];
         int i = 0;
-        for (GradientColorStopNode colorPicker : colorPickers) {
+        for (GradientColorStopNode colorPicker : colorStops) {
             result[i++] = colorPicker.getGradientPos();
         }
-        // enforce that positions reach both ends
-        result[0] = 0;
-        result[result.length-1] = 1;
         return result;
     }
 

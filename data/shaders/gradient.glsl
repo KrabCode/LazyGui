@@ -223,13 +223,17 @@ float getPosByDirectionType(vec2 uv, vec2 cv){
     return 0;
 }
 
+
 int findClosestLeftNeighbourIndex(float pos){
+    if(pos <= colorPositions[0]){
+        return 0;
+    }
+    if(pos >= colorPositions[colorCount - 1]){
+        return colorCount - 1;
+    }
     for(int i = 0; i < maxColorCount; i++){
         if(pos >= colorPositions[i] && pos <= colorPositions[i+1]){
             return i;
-        }
-        if(i >= colorCount){
-            return 0;
         }
     }
     return 0;
@@ -240,12 +244,16 @@ void main(){
     vec2 cv = (gl_FragCoord.xy-.5*resolution.xy) / resolution.y;
     float pos = clamp(getPosByDirectionType(uv, cv), 0., 1.);
     int leftIndex = findClosestLeftNeighbourIndex(pos);
-    int rightIndex = leftIndex+1;
+    int rightIndex = min(colorCount - 1, leftIndex+1);
     vec4 colorA = vec4(hsb2rgb(colorValues[leftIndex].xyz), colorValues[leftIndex].a);
     vec4 colorB = vec4(hsb2rgb(colorValues[rightIndex].xyz), colorValues[rightIndex].a);
     float posA = colorPositions[leftIndex];
     float posB = colorPositions[rightIndex];
     float normalizedPosBetweenNeighbours = norm(pos, posA, posB);
+    if(leftIndex == rightIndex){
+        // at the right edge beyond any stops
+        normalizedPosBetweenNeighbours = 0.;
+    }
     vec4 mixedColor = lerpByBlendType(colorA, colorB, normalizedPosBetweenNeighbours);
     gl_FragColor = mixedColor;
 }

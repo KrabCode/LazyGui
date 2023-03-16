@@ -14,25 +14,28 @@ import static lazy.stores.JsonSaveStore.*;
 import static processing.core.PApplet.println;
 
 public class SaveFolderNode extends FolderNode {
-    final String pathPrintFolderPath = "/print folder path";
-    final String pathOpenSaveFolder  = "/open save folder";
-    final String pathAutosaveOnExit  = "/autosave on exit";
-    final String pathCreateNewSave   = "/create new save";
+    final String pathPrintFolderPathButton = "/print folder path";
+    final String pathOpenSaveFolderButton = "/open save folder";
+    final String pathAutosaveOnExitToggle = "/autosave on exit";
+    final String pathAutosaveGuardToggle = "/autosave freeze guard";
+    final String pathCreateNewSaveButton = "/create new save";
     ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
 
     public SaveFolderNode(String path, FolderNode parent) {
         super(path, parent);
-        children.add(new ButtonNode(path + pathCreateNewSave, this));
-        children.add(new ButtonNode(path + pathPrintFolderPath, this));
-        children.add(new ButtonNode(path + pathOpenSaveFolder, this));
-        children.add(new ToggleNode(path + pathAutosaveOnExit , this, autosaveEnabled));
+        children.add(new ButtonNode(path + pathCreateNewSaveButton, this));
+        children.add(new ButtonNode(path + pathPrintFolderPathButton, this));
+        children.add(new ButtonNode(path + pathOpenSaveFolderButton, this));
+        children.add(new ToggleNode(path + pathAutosaveOnExitToggle, this, autosaveEnabled));
+        children.add(new ToggleNode(path + pathAutosaveGuardToggle , this, autosaveLockGuardEnabled));
         childrenThatAreNotSaveFiles.addAll(children);
         updateStateList();
     }
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExit)).valueBoolean;
+        autosaveEnabled = ((ToggleNode) findChildByName(pathAutosaveOnExitToggle)).valueBoolean;
+        autosaveLockGuardEnabled = ((ToggleNode) findChildByName(pathAutosaveGuardToggle)).valueBoolean;
     }
 
     void updateStateList() {
@@ -85,13 +88,13 @@ public class SaveFolderNode extends FolderNode {
 
     protected void drawNodeBackground(PGraphics pg) {
         super.drawNodeBackground(pg);
-        if(gui.button(path + pathCreateNewSave)){
+        if(gui.button(path + pathCreateNewSaveButton)){
             JsonSaveStore.createNewSave();
         }
-        if(gui.button(path + pathOpenSaveFolder)){
+        if(gui.button(path + pathOpenSaveFolderButton)){
             openSaveFolder();
         }
-        if(gui.button(path + pathPrintFolderPath)){
+        if(gui.button(path + pathPrintFolderPathButton)){
             println("LazyGui save folder: " + JsonSaveStore.getSaveDir().getAbsolutePath());
         }
 

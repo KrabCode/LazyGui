@@ -1206,7 +1206,7 @@ public class LazyGui  {
         if (!autosaveEnabled) {
             return;
         }
-        if (LazyGui.isSketchStuckInEndlessLoop()) {
+        if (autosaveLockGuardEnabled && LazyGui.isSketchStuckInEndlessLoop()) {
             println("NOT autosaving," +
                     " because the last frame took more than " + LazyGui.lastFrameMillisStuckLimit + " ms," +
                     " which looks like the program stopped due to an exception or reached an endless loop");
