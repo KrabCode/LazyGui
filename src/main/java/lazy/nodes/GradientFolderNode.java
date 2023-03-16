@@ -27,23 +27,34 @@ public class GradientFolderNode extends FolderNode {
     private int frameLastUpdatedOutputGraphics = -1;
     private int[] LUT;
 
-    public GradientFolderNode(String path, FolderNode parent, float alpha) {
+    public GradientFolderNode(String path, FolderNode parent, int[] defaultColors) {
         super(path, parent);
         colorCount = 4;
+        int minColorCount = 2;
+        if(defaultColors != null){
+            colorCount = max(minColorCount, defaultColors.length);
+        }
         maxColorCount = max(colorCount, maxColorCount);
         directionToggle = new ToggleNode(path + "/vertical", this, true);
         wrapAtEdgesToggle = new ToggleNode(path + "/edge wrap", this, false);
         blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
-        colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, 2, maxColorCount, true);
+        colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, minColorCount, maxColorCount, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionToggle);
         children.add(wrapAtEdgesToggle);
         children.add(blendTypePicker);
         children.add(colorCountSlider);
         for (int i = 0; i < maxColorCount; i++) {
-            float br = 1 - map(i%colorCount, 0, colorCount, 0.2f, 0.9f);
-            float iNorm = norm(i, 0, maxColorCount - 1);
-            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i),  br, alpha, iNorm));
+            float br = 1 - map(i%colorCount,0, colorCount, 0.2f, 0.9f);
+            float colorPosition = norm(i%colorCount, 0, colorCount - 1);
+            boolean shouldUseDefaultColor = defaultColors != null && i < defaultColors.length;
+            int colorHex;
+            if (shouldUseDefaultColor) {
+                colorHex = defaultColors[i];
+            } else {
+                colorHex = color(0, 0, br, 1);
+            }
+            children.add(createGradientColorPicker(path + "/" + getColorNameByIndex(i), colorHex, colorPosition));
         }
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
@@ -196,8 +207,7 @@ public class GradientFolderNode extends FolderNode {
         super.overwriteState(loadedNode);
     }
 
-    GradientColorStopNode createGradientColorPicker(String path, float brightnessNorm, float alpha, float pos) {
-        int hex = color(0, 0, brightnessNorm, alpha);
+    GradientColorStopNode createGradientColorPicker(String path, int hex, float pos) {
         return new GradientColorStopNode(path, this, hex, pos);
     }
 

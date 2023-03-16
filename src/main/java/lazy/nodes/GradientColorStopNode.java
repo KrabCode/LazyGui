@@ -6,11 +6,11 @@ import processing.core.PGraphics;
 import static lazy.stores.GlobalReferences.app;
 
 class GradientColorStopNode extends ColorPickerFolderNode {
-    final SliderNode posSlider;
+    final GradientColorStopPositionSlider posSlider;
 
     GradientColorStopNode(String path, FolderNode parentFolder, int hex, float gradientPos) {
         super(path, parentFolder, hex);
-        posSlider = new SliderNode(path + "/pos", this, gradientPos, 0,1,true);
+        posSlider = new GradientColorStopPositionSlider(path + "/pos", this, gradientPos, 0,1,true);
         this.children.add(posSlider);
     }
 
@@ -33,4 +33,6 @@ class GradientColorStopNode extends ColorPickerFolderNode {
         return isMouseOverNode || posSlider.isInlineNodeDragged ||
             (window != null && window.isFocused() && window.isPointInsideContent(app.mouseX, app.mouseY));
     }
+
+
 }

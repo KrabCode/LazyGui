@@ -147,6 +147,7 @@ public class ColorPickerFolderNode extends FolderNode {
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String pastedString = ClipboardUtils.getClipboardString();
+            pastedString = pastedString.replaceAll("#", "");
             if(pastedString.length() == 6){
                 // ensure full alpha if the pasted hex is without alpha
                 pastedString = "FF" + pastedString;

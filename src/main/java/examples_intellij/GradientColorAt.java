@@ -68,7 +68,11 @@ public class GradientColorAt extends PApplet {
     private void drawBackground() {
         gui.pushFolder("background");
         int solidBackgroundColor = gui.colorPicker("solid", color(0xFF252525)).hex;
-        PGraphics gradient = gui.gradient("gradient");
+        PGraphics gradient = gui.gradient("gradient",
+                new int[]{
+                        0xFF108dc7,
+                        0xFFef8e38
+                });
         background(solidBackgroundColor);
         image(gradient, 0, 0);
         gui.popFolder();

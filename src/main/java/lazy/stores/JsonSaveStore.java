@@ -46,8 +46,8 @@ public class JsonSaveStore {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        JsonSaveStore.createTreeSaveFiles("auto");
-        println("auto-saved gui");
+        String path = JsonSaveStore.createTreeSaveFiles("auto");
+        println("Autosaved at " + path);
     }
 
     public static void updateEndlessLoopDetection() {
@@ -69,11 +69,12 @@ public class JsonSaveStore {
         }
     }
 
-    public static void createTreeSaveFiles(String filenameWithoutSuffix) {
+    public static String createTreeSaveFiles(String filenameWithoutSuffix) {
         // save main json
         String jsonPath = getFullJsonFilePathWithFileTypeSuffix(filenameWithoutSuffix);
         overwriteFile(jsonPath, getTreeAsJsonString());
 //        println("Saved current state to: " + jsonPath);
+        return jsonPath;
     }
 
     public static void loadMostRecentSave() {
@@ -179,26 +180,31 @@ public class JsonSaveStore {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(root);
-        String inputRootPath = root.getAsJsonObject().get("path").getAsString();
-        while (!queue.isEmpty()) {
-            JsonElement loadedNode = queue.poll();
-            String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
-            if(outputRootPath != null){
-                // used for copy/pasting sub-folders and not the entire tree
-                loadedPath = loadedPath.replace(inputRootPath, outputRootPath);
-            }
-            AbstractNode nodeToEdit = NodeTree.findNode(loadedPath);
-            if (nodeToEdit != null) {
-                overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
-            }
-            lastLoadedStateMap.put(loadedPath, loadedNode);
-            String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
-            if (Objects.equals(loadedType, NodeType.FOLDER.toString())) {
-                JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
-                for (JsonElement child : loadedChildren) {
-                    queue.offer(child);
+        try{
+
+            String inputRootPath = root.getAsJsonObject().get("path").getAsString();
+            while (!queue.isEmpty()) {
+                JsonElement loadedNode = queue.poll();
+                String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
+                if(outputRootPath != null){
+                    // used for copy/pasting sub-folders and not the entire tree
+                    loadedPath = loadedPath.replace(inputRootPath, outputRootPath);
+                }
+                AbstractNode nodeToEdit = NodeTree.findNode(loadedPath);
+                if (nodeToEdit != null) {
+                    overwriteWithLoadedStateIfAny(nodeToEdit, loadedNode);
+                }
+                lastLoadedStateMap.put(loadedPath, loadedNode);
+                String loadedType = loadedNode.getAsJsonObject().get("type").getAsString();
+                if (Objects.equals(loadedType, NodeType.FOLDER.toString())) {
+                    JsonArray loadedChildren = loadedNode.getAsJsonObject().get("children").getAsJsonArray();
+                    for (JsonElement child : loadedChildren) {
+                        queue.offer(child);
+                    }
                 }
             }
+        }catch (Exception ex){
+            println("Loading gui state from json failed with: " + ex.getClass().getSimpleName() + "");
         }
     }
 
