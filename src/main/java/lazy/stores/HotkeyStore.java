@@ -60,7 +60,7 @@ public class HotkeyStore {
             UndoRedoStore.redo();
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
-            JsonSaveStore.createNewSave();
+            JsonSaveStore.createNewManualSave();
         }
     }
 

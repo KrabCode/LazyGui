@@ -138,9 +138,9 @@ public class GradientFolderNode extends FolderNode {
     private void updateColorStopVisibility() {
         for (int i = 0; i <= maxColorCount; i++) {
             if(i < colorCount){
-                NodeTree.show(path + "/" + getColorNameByIndex(i));
+                NodeTree.showAtFullPath(path + "/" + getColorNameByIndex(i));
             }else{
-                NodeTree.hide(path + "/" + getColorNameByIndex(i));
+                NodeTree.hideAtFullPath(path + "/" + getColorNameByIndex(i));
             }
         }
     }

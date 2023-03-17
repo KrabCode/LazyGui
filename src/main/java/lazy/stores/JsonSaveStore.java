@@ -20,43 +20,46 @@ import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 
 public class JsonSaveStore {
-    private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
-    private static File saveDir;
-    private static ArrayList<File> saveFilesSorted;
-    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     public static boolean autosaveEnabled = true;
     public static boolean autosaveLockGuardEnabled = true;
+    public static long autosaveLockGuardMillisLimit = 1000;
+    private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
+    private static File saveDir;
     private final static String JSON_FILE_TYPE_SUFFIX = ".json";
-
-    private static long lastFrameMillis;
-    static final long lastFrameMillisStuckLimit = 1000;
+    private static ArrayList<File> saveFilesSorted;
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    private static long lastFrameMillisForLockGuard;
 
     public static void registerExitHandler() {
-        Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createAutosave));
+        Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createNewAutosave));
     }
 
-    static void createAutosave() {
+    static void createNewAutosave() {
         if (!autosaveEnabled) {
             return;
         }
         if (autosaveLockGuardEnabled && isSketchStuckInEndlessLoop()) {
-            println("not autosaving," +
-                    " because autosave lock guard was enabled and" +
-                    " the last frame took more than " + lastFrameMillisStuckLimit + " ms," +
+            println("save guard prevented autosave, because the last frame took more than " + autosaveLockGuardMillisLimit + " ms," +
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        String path = JsonSaveStore.createTreeSaveFiles("auto");
+        String path = JsonSaveStore.createTreeSaveFile("auto");
         println("Autosaved at " + path);
     }
 
+    public static void createNewManualSave() {
+        String newName = getNextUnusedIntegerFileNameInFolder(saveDir);
+        String path = createTreeSaveFile(newName);
+        println("Created new save: " + path);
+    }
+
     public static void updateEndlessLoopDetection() {
-        lastFrameMillis = app.millis();
+        lastFrameMillisForLockGuard = app.millis();
     }
 
     public static boolean isSketchStuckInEndlessLoop() {
-        long timeSinceLastFrame = app.millis() - lastFrameMillis;
-        return timeSinceLastFrame > lastFrameMillisStuckLimit;
+        long timeSinceLastFrame = app.millis() - lastFrameMillisForLockGuard;
+        return timeSinceLastFrame > autosaveLockGuardMillisLimit;
     }
 
     private static void lazyInitSaveDir() {
@@ -69,11 +72,10 @@ public class JsonSaveStore {
         }
     }
 
-    public static String createTreeSaveFiles(String filenameWithoutSuffix) {
+    public static String createTreeSaveFile(String filenameWithoutSuffix) {
         // save main json
         String jsonPath = getFullJsonFilePathWithFileTypeSuffix(filenameWithoutSuffix);
         overwriteFile(jsonPath, getTreeAsJsonString());
-//        println("Saved current state to: " + jsonPath);
         return jsonPath;
     }
 
@@ -217,12 +219,6 @@ public class JsonSaveStore {
             return;
         }
         abstractNode.overwriteState(loadedNodeState);
-    }
-
-
-    public static void createNewSave() {
-        String newName = getNextUnusedIntegerFileNameInFolder(saveDir);
-        createTreeSaveFiles(newName);
     }
 
     public static File getSaveDir(){

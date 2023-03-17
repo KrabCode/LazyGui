@@ -152,18 +152,16 @@ public class NodeTree {
         return false;
     }
 
-    public static void hide(String path) {
+    public static void hideAtFullPath(String path) {
         AbstractNode node = findNode(path);
-//        println("hide(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
         if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }
         node.hideInlineNode();
     }
 
-    public static void show(String path) {
+    public static void showAtFullPath(String path) {
         AbstractNode node = findNode(path);
-//        println("show(" + path + ") called and node is " + (node == null ? "missing" : "found to be a " + node.type.name()));
         if(node == null || node.equals(NodeTree.getRoot())){
             return;
         }

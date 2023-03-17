@@ -1088,7 +1088,7 @@ public class LazyGui  {
             return;
         }
         String fullPath = getFolder() + path;
-        NodeTree.hide(fullPath);
+        NodeTree.hideAtFullPath(fullPath);
     }
 
     /**
@@ -1100,7 +1100,7 @@ public class LazyGui  {
         if(fullPath.endsWith("/")){
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
-        NodeTree.hide(fullPath);
+        NodeTree.hideAtFullPath(fullPath);
     }
 
     /**
@@ -1115,7 +1115,7 @@ public class LazyGui  {
             return;
         }
         String fullPath = getFolder() + path;
-        NodeTree.show(fullPath);
+        NodeTree.showAtFullPath(fullPath);
     }
 
     /**
@@ -1127,7 +1127,7 @@ public class LazyGui  {
         if(fullPath.endsWith("/")){
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
-        NodeTree.show(fullPath);
+        NodeTree.showAtFullPath(fullPath);
     }
 
     /**
