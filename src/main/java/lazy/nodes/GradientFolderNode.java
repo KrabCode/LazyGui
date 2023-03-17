@@ -2,7 +2,6 @@ package lazy.nodes;
 
 import com.google.gson.JsonElement;
 import lazy.PickerColor;
-import lazy.ShaderReloader;
 import lazy.stores.*;
 import lazy.utils.ArrayListBuilder;
 import processing.core.PGraphics;
@@ -99,9 +98,7 @@ public class GradientFolderNode extends FolderNode {
         updateColorStopVisibility();
 
         String gradientShaderPath = "gradient.glsl";
-//         PShader shader = ShaderStore.getShader(gradientShaderPath);
-        PShader shader = ShaderReloader.getShader("shaders/" + gradientShaderPath);
-
+        PShader shader = ShaderStore.getShader(gradientShaderPath);
         shader.set("colorCount", colorCount);
         ArrayList<GradientColorStopNode> colorStopsInPositionOrder = getAllColorStopsInPositionOrder();
         float[] colorValues = getColorValuesAsFloatArray(colorStopsInPositionOrder);
@@ -113,8 +110,7 @@ public class GradientFolderNode extends FolderNode {
         shader.set("wrapAtEdges", wrapAtEdgesToggle.valueBoolean);
         out.beginDraw();
         out.clear();
-//        out.filter(shader);
-        ShaderReloader.filter("shaders/" + gradientShaderPath, out);
+        out.filter(shader);
         out.endDraw();
         updateLookUpTable(out);
     }
