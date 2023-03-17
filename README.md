@@ -114,7 +114,8 @@ gui.colorPickerHueAdd("color name", hueToAdd);
 - copy and paste the hex with mouse over either the hex field or the color preview block
 
 ### Gradient picker
-![a gradient picker looks like this](https://i.imgur.com/mnMVfcu.gif)
+![a gradient picker looks like this](https://user-images.githubusercontent.com/25923016/226010168-edbd112a-bec6-4246-a0df-4c61e43774cc.mp4)
+
 ```java
 // simple getter
 PGraphics gradient = gui.gradient("gradient name");
