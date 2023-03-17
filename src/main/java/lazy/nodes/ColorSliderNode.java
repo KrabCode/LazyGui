@@ -33,8 +33,7 @@ abstract class ColorSliderNode extends SliderNode {
     @Override
     protected void validatePrecision() {
         if (valueFloatPrecision >= maximumFloatPrecision) {
-            valueFloatPrecision = maximumFloatPrecision;
-            currentPrecisionIndex = precisionRange.indexOf(maximumFloatPrecision);
+            setPrecisionIndexAndValueWithoutValidation(precisionRange.indexOf(maximumFloatPrecision));
         }
     }
 

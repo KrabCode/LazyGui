@@ -1181,9 +1181,9 @@ public class LazyGui  {
         optionsNode = new FolderNode(path, NodeTree.getRoot());
         insertNodeAtItsPath((optionsNode));
         pushFolder("options");
-        insertNodeAtItsPath(new SaveFolderNode(getFolder() + "saves", optionsNode));
         ThemeStore.updateThemePicker();
         popFolder();
+        insertNodeAtItsPath(new SaveFolderNode("saves", NodeTree.getRoot()));
     }
 
     private void updateOptionsFolder() {

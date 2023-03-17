@@ -27,8 +27,7 @@ public class SliderIntNode extends SliderNode {
     @Override
     protected void validatePrecision() {
         if (valueFloatPrecision <= minimumIntPrecision) {
-            valueFloatPrecision = minimumIntPrecision;
-            currentPrecisionIndex = precisionRange.indexOf(minimumIntPrecision);
+            setPrecisionIndexAndValueWithoutValidation(precisionRange.indexOf(minimumIntPrecision));
         }
     }
 }

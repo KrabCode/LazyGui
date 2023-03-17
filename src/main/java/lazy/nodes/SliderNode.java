@@ -222,6 +222,11 @@ public class SliderNode extends AbstractNode {
         validatePrecision();
     }
 
+    protected void setPrecisionIndexAndValueWithoutValidation(int newPrecisionIndex){
+        currentPrecisionIndex = constrain(newPrecisionIndex, 0, precisionRange.size() - 1);
+        valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
+    }
+
     protected void validatePrecision() {
 
     }
