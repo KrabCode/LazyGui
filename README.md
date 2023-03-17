@@ -121,8 +121,10 @@ gui.colorPickerHueAdd("color name", hueToAdd);
 PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
 
-// alternative getter that specifies a default alpha value
-gui.gradient("gradient name", alphaDefault);
+// alternative getter that specifies a default color
+gui.gradient("gradient name", color(255,0,150));
+// yet another getter with a default color list
+gui.gradient("gradient name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
 ```
 - allows you to set the position and value of individual colors or disable them entirely
 - blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
