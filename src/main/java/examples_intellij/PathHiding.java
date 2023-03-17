@@ -23,9 +23,6 @@ public class PathHiding extends PApplet {
         // hide the gui options if you don't need to see them
         gui.hide("options");
 
-        // change the gui options by setting their values from code
-        gui.toggleSet("options/saves/autosave on exit", false);
-
         textSize(64);
     }
 
