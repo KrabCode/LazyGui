@@ -258,13 +258,11 @@ void main(){
     float posB = colorPositions[rightIndex];
     float normalizedPosBetweenNeighbours = norm(pos, posA, posB);
     bool isWrappable = rightIndex == 0 && leftIndex == lastIndex;
-    if (isWrappable) {
-        if(wrapAtEdges){
-            if(pos > colorPositions[lastIndex]){
-                normalizedPosBetweenNeighbours = norm(pos, posA , posB + 1.);
-            }else{
-                normalizedPosBetweenNeighbours = norm(pos, posA - 1., posB);
-            }
+    if (isWrappable && wrapAtEdges) {
+        if(pos > colorPositions[lastIndex]){
+            normalizedPosBetweenNeighbours = norm(pos, posA , posB + 1.);
+        }else{
+            normalizedPosBetweenNeighbours = norm(pos, posA - 1., posB);
         }
     }
     vec4 mixedColor = lerpByBlendType(colorA, colorB, clamp(normalizedPosBetweenNeighbours, 0., 1.));
