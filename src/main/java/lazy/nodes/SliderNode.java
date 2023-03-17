@@ -62,6 +62,8 @@ public class SliderNode extends AbstractNode {
     private static final String REGEX_ANY_NUMBER_SERIES = "[0-9]*";
     private static final String FRACTIONAL_FLOAT_REGEX = REGEX_ANY_NUMBER_SERIES + REGEX_FRACTION_SEPARATOR + REGEX_ANY_NUMBER_SERIES;
     private final String shaderPath = "sliderBackground.glsl";
+    protected int maximumFloatPrecisionIndex = -1;
+    protected int minimumFloatPrecisionIndex = -1;
 
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
@@ -217,18 +219,16 @@ public class SliderNode extends AbstractNode {
     }
 
     protected void setPrecisionIndexAndValue(int newPrecisionIndex) {
-        currentPrecisionIndex = constrain(newPrecisionIndex, 0, precisionRange.size() - 1);
-        valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
-        validatePrecision();
-    }
-
-    protected void setPrecisionIndexAndValueWithoutValidation(int newPrecisionIndex){
+        if(!validatePrecision(newPrecisionIndex)){
+            return;
+        }
         currentPrecisionIndex = constrain(newPrecisionIndex, 0, precisionRange.size() - 1);
         valueFloatPrecision = precisionRange.get(currentPrecisionIndex);
     }
 
-    protected void validatePrecision() {
-
+    protected boolean validatePrecision(int newPrecisionIndex) {
+        return  (maximumFloatPrecisionIndex == -1 || newPrecisionIndex <= maximumFloatPrecisionIndex) &&
+                (minimumFloatPrecisionIndex == -1 || newPrecisionIndex >= minimumFloatPrecisionIndex);
     }
 
     private void updateValueMouseInteraction() {

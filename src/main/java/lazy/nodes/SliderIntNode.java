@@ -4,10 +4,9 @@ import processing.core.PApplet;
 
 public class SliderIntNode extends SliderNode {
 
-    final float minimumIntPrecision = 0.1f;
-
     public SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, boolean constrained) {
         super(path, parentFolder, defaultValue, min, max, constrained);
+        minimumFloatPrecisionIndex = precisionRange.indexOf(0.01f);
     }
 
     public int getIntValue(){
@@ -22,12 +21,5 @@ public class SliderIntNode extends SliderNode {
             return floatDisplay.split("\\.")[0];
         }
         return floatDisplay;
-    }
-
-    @Override
-    protected void validatePrecision() {
-        if (valueFloatPrecision <= minimumIntPrecision) {
-            setPrecisionIndexAndValueWithoutValidation(precisionRange.indexOf(minimumIntPrecision));
-        }
     }
 }

@@ -17,7 +17,6 @@ import static processing.core.PApplet.norm;
 abstract class ColorSliderNode extends SliderNode {
 
     final ColorPickerFolderNode parentColorPickerFolder;
-    final float maximumFloatPrecision = 0.1f;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
 
@@ -26,15 +25,9 @@ abstract class ColorSliderNode extends SliderNode {
         this.parentColorPickerFolder = parentFolder;
         showPercentIndicatorWhenConstrained = false;
         setPrecisionIndexAndValue(precisionRange.indexOf(0.01f));
+        maximumFloatPrecisionIndex = precisionRange.indexOf(0.01f);
         initSliderBackgroundShader();
         ShaderStore.getShader(colorShaderPath);
-    }
-
-    @Override
-    protected void validatePrecision() {
-        if (valueFloatPrecision >= maximumFloatPrecision) {
-            setPrecisionIndexAndValueWithoutValidation(precisionRange.indexOf(maximumFloatPrecision));
-        }
     }
 
     @Override

@@ -21,7 +21,8 @@ public class GradientFolderNode extends FolderNode {
     private final ToggleNode directionToggle;
     private final RadioFolderNode blendTypePicker;
     private final SliderIntNode colorCountSlider;
-    private final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>().add("mix").add("rgb").add("hsv").build();
+    private final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>()
+            .add("mix").add("rgb").add("hsv").build();
     private int maxColorCount = 8;
     private int frameLastUpdatedOutputGraphics = -1;
     private int[] LUT;
@@ -80,11 +81,6 @@ public class GradientFolderNode extends FolderNode {
         pg.rect(0, 0, previewRectSize, previewRectSize);
     }
 
-    String getColorNameByIndex(int index) {
-        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        return String.valueOf(a.charAt(index));
-    }
-
     private void lazyUpdateOutGraphics() {
         if(frameLastUpdatedOutputGraphics == app.frameCount){
             return; // weird bugs when updated more than once per frame
@@ -98,6 +94,8 @@ public class GradientFolderNode extends FolderNode {
         updateColorStopVisibility();
 
         String gradientShaderPath = "gradient.glsl";
+//        String shaderPathLong = "shaders/gradient.glsl";
+//        PShader shader = ShaderReloader.getShader(shaderPathLong);
         PShader shader = ShaderStore.getShader(gradientShaderPath);
         shader.set("colorCount", colorCount);
         ArrayList<GradientColorStopNode> colorStopsInPositionOrder = getAllColorStopsInPositionOrder();
@@ -111,6 +109,7 @@ public class GradientFolderNode extends FolderNode {
         out.beginDraw();
         out.clear();
         out.filter(shader);
+//        ShaderReloader.filter(shaderPathLong, out);
         out.endDraw();
         updateLookUpTable(out);
     }
@@ -143,6 +142,11 @@ public class GradientFolderNode extends FolderNode {
                 NodeTree.hideAtFullPath(path + "/" + getColorNameByIndex(i));
             }
         }
+    }
+
+    String getColorNameByIndex(int index) {
+        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return String.valueOf(a.charAt(index));
     }
 
     boolean isGradientDirectionVertical(){
