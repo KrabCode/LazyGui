@@ -4,17 +4,12 @@ import lazy.input.LazyKeyEvent;
 import lazy.utils.KeyCodes;
 import lazy.windows.WindowManager;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.GlobalReferences.gui;
 
 public class HotkeyStore {
 
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
-            hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyOpenSketchFolderActive;
+            hotkeyCloseAllWindowsActive, hotkeySaveActive;
     private static boolean isScreenshotRequestedOnMainThread = false;
 
     public static void  updateHotkeyToggles() {
@@ -25,7 +20,6 @@ public class HotkeyStore {
         hotkeyUndoActive = gui.toggle("ctrl + z: undo", true);
         hotkeyRedoActive = gui.toggle("ctrl + y: redo", true);
         hotkeySaveActive = gui.toggle("ctrl + s: new save", true);
-        hotkeyOpenSketchFolderActive = gui.toggle("k: open sketch folder", true);
         gui.textSet("mouseover specific hotkeys",
                 "r: reset control element to default value\n" +
                         "ctrl + c: copy from (single value or folder)\n" +
@@ -44,14 +38,6 @@ public class HotkeyStore {
         isScreenshotRequestedOnMainThread = (key == 'i' && hotkeyScreenshotActive);
         if(key == 'd' && hotkeyCloseAllWindowsActive){
             WindowManager.closeAllWindows();
-        }
-        if(key == 'k' && hotkeyOpenSketchFolderActive){
-            Desktop desktop = Desktop.getDesktop();
-            try {
-                desktop.open(new File(app.dataPath("")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.Z && hotkeyUndoActive){
             UndoRedoStore.undo();

@@ -1,32 +1,51 @@
-# LazyGUI
+<!-- TOC -->
+  * [LazyGui is a GUI library for Processing 3+](#lazygui-is-a-gui-library-for-processing-3)
+  * [How do I run this?](#how-do-i-run-this)
+      * [Minimal example](#minimal-example)
+  * [How do I get values from the GUI?](#how-do-i-get-values-from-the-gui)
+    * [Slider](#slider)
+    * [Plot](#plot)
+    * [Color picker](#color-picker)
+    * [Gradient picker](#gradient-picker)
+    * [Button](#button)
+    * [Toggle](#toggle)
+    * [Text input](#text-input)
+    * [Radio](#radio)
+  * [Paths and folders](#paths-and-folders)
+      * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
+      * [Escaping the forward slash](#escaping-the-forward-slash)
+  * [Global path prefix stack](#global-path-prefix-stack)
+      * [Folder made by using the stack](#folder-made-by-using-the-stack)
+      * [See the current stack for debugging](#see-the-current-stack-for-debugging)
+  * [Hide and show anything](#hide-and-show-anything)
+  * [Hotkeys](#hotkeys)
+  * [Constructor settings](#constructor-settings)
+  * [Further reading](#further-reading)
+  * [How to contribute](#how-to-contribute)
+<!-- TOC -->
 
-![LazyGui looks like this](readme_assets/header.png)
-
-GUI library for creative coding with Processing 3+ with a focus on easy iteration. 
-
-### Main features:
-- no gui logic in `setup()`
-- control elements have unique string paths
-- lazy initialization of controls when a path is first mentioned in a getter or a setter
-- this lets you keep all the gui logic in `draw()` next to the code that uses it
-
-### Supporting features:
-- infinite sliders with variable precision
-- keyboard input for text and slider values
-- hotkeys for common actions
-- copy / paste any value or whole folders
-- undo / redo any change
-- load / save your gui state to disk as json
-- autosave on program exit
-- look and feel customizable in code or at runtime
-- [reload shaders at runtime](src/main/java/lazy/ShaderReloader.java)
-
+## LazyGui is a GUI library for Processing 3+
+- **focusing on flexibility**
+  - almost no gui logic in `setup()`
+  - just ask for values at unique string paths in `draw()`
+  - this lets you keep related gui code together in the middle of the action
+- **and ease of use**
+  - keyboard input for string, float and vector controls
+  - customizable look and feel
+  - load / save your gui state to disk as json
+      - autosave on program exit
+      - autoload on program start
+  - [hotkeys](#hotkeys) for common actions
+      - copy / paste any value or whole folders
+      - undo / redo any change
+  - [reloading shaders](src/main/java/lazy/ShaderReloader.java) at runtime
+  
 ## How do I run this?
 
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
 
-#### Minimal runnable example:
+#### Minimal example
 ```java
 LazyGui gui;
 
@@ -44,9 +63,6 @@ The gui displays itself at the end of `draw()` and by default it shows the root 
 A sketch with the above code should look like this:
 
 ![root and options look like this](readme_assets/basic_example.png)
-
-## Hotkeys
-
 
 ## How do I get values from the GUI?
 - getters initialize controls when first called
@@ -133,21 +149,24 @@ gui.gradient("gradient name", new int[]{color(255,0,150), color(0,150,0), color(
 PickerColor myColor = gui.gradientColorAt("gradient name", positionNorm);
 ```
 - allows you to set the position and value of individual colors and get the result as a PGraphics
-- gradient texture size is always kept equal to sketch size
+- output texture size is always kept equal to sketch size
+- try the edge wrapping!
 
 
 ### Button
 ![a button looks like this](readme_assets/button.png)
 ```java
-// getter
+// getter that is only true once after being clicked then and switches to false 
 if(gui.button("do the thing!")){
     println("it is done");
 }
 ```
-- is only true once after being clicked (returning true switches the value back to false)
 
 ### Toggle
 ![a toggle looks like this](readme_assets/toggle.png)
+- click to flip the boolean state
+- off by default
+
 ```java
 // simple getter
 boolean isToggledOn = gui.toggle("spam every frame")
@@ -161,11 +180,10 @@ gui.toggle("spam every frame", booleanDefault)
 // setter
 gui.toggleSet("spam every frame", booleanValue)
 ```
-- click to flip the boolean state
-- off by default
 
 ### Text input
 ![text input looks like this](readme_assets/text.png)
+- typing with mouse over the text appends to its last line
 ```java
 // simple getter
 String userInput = gui.text("text header");
@@ -177,10 +195,13 @@ gui.text("", "this text won't have a header row above it");
 // setters
 textSet("text header", "content")
 ```
-- type with mouse over the text field
-- ENTER - insert new line 
-- DELETE  - delete the whole text
-- BACKSPACE - delete the last character
+
+
+| Mouse Hotkey | Action under mouse    |
+|--------------|-----------------------|
+| Enter        | insert new line       |
+| Delete       | delete entire string  |
+| Backspace    | delete last character |
 
 ### Radio
 ![radio looks like this](readme_assets/radio.png)
@@ -210,7 +231,7 @@ The **path**  is the first string parameter to every control element function, a
 It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
 The forward slash `/` is a reserved character used to make folders, but it can be escaped with `\\` like this: `\\/` which won't separate folders.
 
-##### Creating a folder with the forward slash
+#### Creating a folder with the forward slash
 ![wave folder example](readme_assets/wave_folder.png)
 ```java
 float frq = gui.slider("wave/frequency");
@@ -246,12 +267,12 @@ float amp = gui.slider("amplitude");
 gui.popFolder();
 ```
 
-##### See the current stack for debugging
+#### See the current stack for debugging
 ```java
 println(gui.getFolder());
 ```
 
-### Hide and show anything
+## Hide and show anything
 You can hide folders and single elements from code, while still receiving their values in code - the only change is visual. 
 This is helpful when you have a list of autogenerated folders whose paths differ only by the 'i' in a loop, and you create 10 folders and then decrease the limit - you want to extra folders to go away to not clutter up your screen when unused.
 You can also use this to hide the default 'options' folder.
@@ -263,17 +284,35 @@ gui.hideCurrentFolder() // hide the folder at the current path prefix stack
 gui.showCurrentFolder() // show the folder at the current path prefix stack if it has been previously hidden 
 ```
 
+## Hotkeys
+
+|   Global hotkey   | Action under mouse     |     
+|:-----------------:|:-----------------------|
+|         H         | Hide/Show GUI          |     
+|         D         | Close windows          |     
+|         I         | Save screenshot        | 
+|     CTRL + Z      | Undo                   | 
+|     CTRL + Y      | Redo                   |        
+|     CTRL + S      | Save gui state to json |   
+
+| Mouse hotkey | Action on element under mouse |
+|:------------:|:------------------------------|
+|      R       | Reset value to default        |
+|   CTRL + C   | Copy value or folder          |
+|   CTRL + V   | Paste to value or folder      |
+
 ## Constructor settings
-You can initialize your gui with a settings object to set various global defaults and affect startup and exit behavior.
+You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
+Loading a save overwrites these, but you can also disable loading on startup here.
 
 See all the options below:
 
 ```java
 gui = new LazyGui(this, new LazyGuiSettings()
   // LOADING ON STARTUP
-  .setLoadLatestSaveOnStartup(true) // set as false to not load anything on startup
-  .setLoadSpecificSaveOnStartup(null) // expects string file names like: "auto" or "1.json"
-  // 'specific' overrides 'latest' when not null
+  .setLoadLatestSaveOnStartup(true) // set as false to disable loading on startup
+  .setLoadSpecificSaveOnStartup("2") // expects string file names like: "auto" or "1.json"
+  
 
   // AUTOSAVE
   .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
@@ -301,7 +340,6 @@ gui = new LazyGui(this, new LazyGuiSettings()
   )) // custom theme overrides preset when not null
 );
 ```
-
 
 ## Further reading
 - [Javadocs](https://krabcode.github.io/LazyGui/) on github pages

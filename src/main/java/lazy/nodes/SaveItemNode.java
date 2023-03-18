@@ -30,6 +30,7 @@ class SaveItemNode extends AbstractNode {
         JsonSaveStore.loadStateFromFile(fileName);
         saveFolderParent.window.posX = unmovingWindowX;
         saveFolderParent.window.posY = unmovingWindowY;
+        saveFolderParent.window.closed = false;
         WindowManager.setFocus(saveFolderParent.window);
         onActionEnded();
     }

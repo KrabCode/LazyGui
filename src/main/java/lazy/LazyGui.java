@@ -1180,7 +1180,7 @@ public class LazyGui  {
         String fileType = ".png";
         String filePath = folderPath + "\\" + fileName + fileType;
         app.save(filePath);
-        println("screenshot saved as " + filePath);
+        println("Screenshot saved to: " + filePath);
         HotkeyStore.setScreenshotRequestedOnMainThread(false);
     }
 

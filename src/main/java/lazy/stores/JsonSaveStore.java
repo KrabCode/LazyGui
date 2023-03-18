@@ -101,7 +101,7 @@ public class JsonSaveStore {
 
     public static void loadStateFromFile(String filename) {
         for (File saveFile : saveFilesSorted) {
-            if (saveFile.getName().equals(filename)) {
+            if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + ".json")) {
                 loadStateFromFile(saveFile);
                 return;
             }
