@@ -32,7 +32,7 @@ public class SaveFolderNode extends FolderNode {
         buttonOpenSaveFolder = new ButtonNode(path + "/open save folder", this);
         String autosaveFolderPath = "/autosave rules";
         FolderNode autosaveFolder = new FolderNode(path + autosaveFolderPath, this);
-        autosaveEnabledToggle = new ToggleNode(path + autosaveFolderPath + "/autosave enabled", autosaveFolder, autosaveEnabled);
+        autosaveEnabledToggle = new ToggleNode(path + autosaveFolderPath + "/autosave enabled", autosaveFolder, autosaveOnExitEnabled);
         autosaveGuardToggle = new ToggleNode(path + autosaveFolderPath + "/save guard", autosaveFolder, autosaveLockGuardEnabled);
         autosaveMillisSlider = new SliderIntNode(path + autosaveFolderPath + "/save guard (ms)", autosaveFolder, 1000, 1, 1000 * 60 * 60, true);
         readAutosaveExplanationToggle = new ToggleNode(path + autosaveFolderPath + "/read more", autosaveFolder, false);
@@ -53,7 +53,7 @@ public class SaveFolderNode extends FolderNode {
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        autosaveEnabled = autosaveEnabledToggle.valueBoolean;
+        autosaveOnExitEnabled = autosaveEnabledToggle.valueBoolean;
         autosaveLockGuardEnabled = autosaveGuardToggle.valueBoolean;
         autosaveLockGuardMillisLimit = autosaveMillisSlider.getIntValue();
         if(buttonCreateNewSave.getBooleanValueAndSetItToFalse()){

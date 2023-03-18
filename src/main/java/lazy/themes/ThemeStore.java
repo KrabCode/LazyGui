@@ -9,12 +9,19 @@ import static lazy.stores.GlobalReferences.gui;
 public class ThemeStore {
 
     private static final Map<ThemeType, Theme> paletteMap = new HashMap<>();
-    public static ThemeType currentSelection = ThemeType.CUSTOM;
+    public static ThemeType currentSelection = ThemeType.DARK;
+    private static String defaultThemeType = currentSelection.name();
 
+    public static void setCustomPaletteAndMakeDefaultBeforeInit(Theme theme) {
+        defaultThemeType = ThemeType.getName(ThemeType.CUSTOM);
+        paletteMap.put(ThemeType.CUSTOM, theme);
+    }
     public static void init() {
         ThemeType[] allTypes = ThemeType.getAllValues();
         for (ThemeType type : allTypes) {
-            paletteMap.put(type, ThemeType.getPalette(type));
+            if(!paletteMap.containsKey(type)){
+                paletteMap.put(type, ThemeType.getPalette(type));
+            }
         }
     }
 
@@ -70,17 +77,9 @@ public class ThemeStore {
         }
     }
 
-    public static void setCustomPalette(Theme theme) {
-        paletteMap.put(ThemeType.CUSTOM, theme);
-    }
-
     public static void updateThemePicker() {
             gui.pushFolder("themes");
-            String defaultPaletteName = "dark";
-            Theme defaultTheme = ThemeType.getPalette(ThemeType.DARK);
-            assert defaultTheme != null;
-
-            String userSelection = gui.radio("preset", ThemeType.getAllNames(), defaultPaletteName);
+            String userSelection = gui.radio("preset", ThemeType.getAllNames(), defaultThemeType);
             gui.pushFolder("editor");
             if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
                 ThemeType newSelectionToCopy = ThemeType.getValue(userSelection);
@@ -91,6 +90,9 @@ public class ThemeStore {
                 gui.colorPickerSet("window border", ThemeStore.getColor(ThemeColorType.WINDOW_BORDER, newSelectionToCopy));
                 ThemeStore.currentSelection = newSelectionToCopy;
             }
+            assert currentSelection != null;
+            Theme defaultTheme = ThemeType.getPalette(currentSelection);
+            assert defaultTheme != null;
             ThemeStore.setCustomColor(ThemeColorType.FOCUS_FOREGROUND,
                     gui.colorPicker("focus foreground", defaultTheme.focusForeground).hex);
             ThemeStore.setCustomColor(ThemeColorType.FOCUS_BACKGROUND,

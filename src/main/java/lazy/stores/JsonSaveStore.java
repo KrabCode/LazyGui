@@ -20,22 +20,22 @@ import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 
 public class JsonSaveStore {
-    public static boolean autosaveEnabled = true;
+    public static boolean autosaveOnExitEnabled = true;
     public static boolean autosaveLockGuardEnabled = true;
     public static long autosaveLockGuardMillisLimit = 1000;
+    private static long lastFrameMillisForLockGuard;
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
     private final static String JSON_FILE_TYPE_SUFFIX = ".json";
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-    private static long lastFrameMillisForLockGuard;
 
     public static void registerExitHandler() {
         Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createNewAutosave));
     }
 
     static void createNewAutosave() {
-        if (!autosaveEnabled) {
+        if (!autosaveOnExitEnabled) {
             return;
         }
         if (autosaveLockGuardEnabled && isSketchStuckInEndlessLoop()) {
@@ -79,13 +79,12 @@ public class JsonSaveStore {
         return jsonPath;
     }
 
-    public static void loadMostRecentSave() {
+    public static void loadLatestSave() {
         reloadSaveFolderContents();
         if (saveFilesSorted.size() > 0) {
             loadStateFromFile(saveFilesSorted.get(0));
         }
     }
-
 
     private static void reloadSaveFolderContents() {
         lazyInitSaveDir();
@@ -155,6 +154,7 @@ public class JsonSaveStore {
         }
         JsonElement root = getJsonElementFromString(json);
         loadStateFromJsonElement(root, null);
+        println("Loaded gui state from: " + file.getPath());
     }
 
 

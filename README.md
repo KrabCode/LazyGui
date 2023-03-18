@@ -121,13 +121,16 @@ gui.colorPickerHueAdd("color name", hueToAdd);
 PGraphics gradient = gui.gradient("gradient name");
 image(gradient, 0, 0);
 
-// alternative getter that specifies a default color
+// alternative getter that specifies default color(s)
 gui.gradient("gradient name", color(255,0,150));
-// yet another getter with a default color list
 gui.gradient("gradient name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
+
+// special getter for a color inside the gradient at a position in range [0, 1]
+// faster than texture.get(x, y) thanks to a color look up table
+PickerColor myColor = gui.gradientColorAt("gradient name", positionNorm);
 ```
-- allows you to set the position and value of individual colors or disable them entirely
-- blend type supports three color mixing algorithms (mix, rgb, hsv - see [gradient.glsl](data/shaders/gradient.glsl))
+- allows you to set the position and value of individual colors and get the result as a PGraphics
+- gradient texture size is always kept equal to sketch size
 
 
 ### Button

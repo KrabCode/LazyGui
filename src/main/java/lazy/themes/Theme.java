@@ -19,17 +19,17 @@ public class Theme {
      * The only available constructor for this class.
      * Enforces specifying all the available values as parameters.
      *
-     * @param windowBorder color of the border lines
-     * @param normalBackground background of idle elements
-     * @param focusBackground background of currently selected elements
-     * @param normalForeground foreground of idle elements
-     * @param focusForeground foreground of currently selected elements
+     * @param windowBorderColor color of the border lines
+     * @param normalBackgroundColor background of idle elements
+     * @param focusBackgroundColor background of currently selected elements
+     * @param normalForegroundColor foreground of idle elements
+     * @param focusForegroundColor foreground of currently selected elements
      */
-    public Theme(int windowBorder, int normalBackground, int focusBackground, int normalForeground, int focusForeground) {
-        this.windowBorder = windowBorder;
-        this.normalBackground = normalBackground;
-        this.focusBackground = focusBackground;
-        this.normalForeground = normalForeground;
-        this.focusForeground = focusForeground;
+    public Theme(int windowBorderColor, int normalBackgroundColor, int focusBackgroundColor, int normalForegroundColor, int focusForegroundColor) {
+        this.windowBorder = windowBorderColor;
+        this.normalBackground = normalBackgroundColor;
+        this.focusBackground = focusBackgroundColor;
+        this.normalForeground = normalForegroundColor;
+        this.focusForeground = focusForegroundColor;
     }
 }
