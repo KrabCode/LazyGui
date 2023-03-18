@@ -349,6 +349,6 @@ gui = new LazyGui(this, new LazyGuiSettings()
 - [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
-- Talk to me on [discord server](https://discord.gg/VBTCsnYMzd)
-- Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues)
+- Talk to the author on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
+- Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues) if you don't find your problem already in there
 - Fork the repository and submit a pull request
