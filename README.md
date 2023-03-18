@@ -183,7 +183,6 @@ gui.toggleSet("spam every frame", booleanValue)
 
 ### Text input
 ![text input looks like this](readme_assets/text.png)
-- typing with mouse over the text appends to its last line
 ```java
 // simple getter
 String userInput = gui.text("text header");
@@ -195,13 +194,12 @@ gui.text("", "this text won't have a header row above it");
 // setters
 textSet("text header", "content")
 ```
-
-
 | Mouse Hotkey | Action under mouse    |
 |--------------|-----------------------|
 | Enter        | insert new line       |
 | Delete       | delete entire string  |
 | Backspace    | delete last character |
+- typing with mouse over the text appends to its last line
 
 ### Radio
 ![radio looks like this](readme_assets/radio.png)
