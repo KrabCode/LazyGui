@@ -1,5 +1,5 @@
 <!-- TOC -->
-  * [LazyGui is a GUI library for Processing 3+](#lazygui-is-a-gui-library-for-processing-3)
+  * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
       * [Minimal example](#minimal-example)
   * [How do I get values from the GUI?](#how-do-i-get-values-from-the-gui)
@@ -24,7 +24,7 @@
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
 
-## LazyGui is a GUI library for Processing 3+
+## LazyGui is a GUI library for Processing
 - **focusing on flexibility**
   - almost no gui logic in `setup()`
   - just ask for values at unique string paths in `draw()`
