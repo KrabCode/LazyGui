@@ -86,7 +86,7 @@ public class LazyGuiSettings {
         return this;
     }
 
-    public LazyGuiSettings setLoadSpecificSave(String fileName) {
+    public LazyGuiSettings setLoadSpecificSaveOnStartup(String fileName) {
         this.pathToSpecificSaveToLoadOnStartup = fileName;
         return this;
     }
@@ -145,7 +145,7 @@ public class LazyGuiSettings {
         return loadLatestSaveOnStartup;
     }
 
-    public String getSpecificSaveToLoadOnStartup() {
+    String getSpecificSaveToLoadOnStartup() {
         return pathToSpecificSaveToLoadOnStartup;
     }
 }

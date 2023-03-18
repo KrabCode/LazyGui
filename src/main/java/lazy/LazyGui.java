@@ -90,14 +90,19 @@ public class LazyGui  {
         WindowManager.addRootWindow();
         createOptionsFolder();
         createSavesFolder();
-        if(settings.getSpecificSaveToLoadOnStartup() != null){
-            JsonSaveStore.loadStateFromFile(settings.getSpecificSaveToLoadOnStartup());
-        }else if(settings.getShouldLoadLatestSaveOnStartup()){
-            JsonSaveStore.loadLatestSave();
-        }
+        loadGuiStateFromExistingFiles(settings);
         JsonSaveStore.registerExitHandler();
         lazyFollowSketchResolution();
         app.registerMethod("draw", this);
+    }
+
+    private void loadGuiStateFromExistingFiles(LazyGuiSettings settings) {
+        if(settings.getSpecificSaveToLoadOnStartup() != null){
+            String filename = settings.getSpecificSaveToLoadOnStartup();
+            JsonSaveStore.loadStateFromFile(filename);
+        }else if(settings.getShouldLoadLatestSaveOnStartup()){
+            JsonSaveStore.loadLatestSave();
+        }
     }
 
     void lazyFollowSketchResolution() {

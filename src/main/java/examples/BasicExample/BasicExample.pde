@@ -2,14 +2,14 @@
 LazyGui gui;
 
 void setup() {
-  size(600, 600, P2D);
+  size(800, 800, P2D);
   gui = new LazyGui(this);
-  textSize(64);
 }
 
 void draw() {
   background(gui.colorPicker("background").hex);
-  int number = gui.sliderInt("pick a number");
+  int number = gui.sliderInt("pick a number", 7);
   fill(255);
+  textSize(64);
   text(number, 400, 500);
 }

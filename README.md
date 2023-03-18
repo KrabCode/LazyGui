@@ -26,7 +26,7 @@ GUI library for creative coding with Processing 3+ with a focus on easy iteratio
 First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
 editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
 
-#### Runnable basic example:
+#### Minimal runnable example:
 ```java
 LazyGui gui;
 
@@ -44,6 +44,9 @@ The gui displays itself at the end of `draw()` and by default it shows the root 
 A sketch with the above code should look like this:
 
 ![root and options look like this](readme_assets/basic_example.png)
+
+## Hotkeys
+
 
 ## How do I get values from the GUI?
 - getters initialize controls when first called
@@ -258,7 +261,47 @@ gui.hide("myPath") // hide anything at this path (the prefix stack applies here 
 gui.show("myPath") // reveal anything previously hidden at this path
 gui.hideCurrentFolder() // hide the folder at the current path prefix stack
 gui.showCurrentFolder() // show the folder at the current path prefix stack if it has been previously hidden 
-``` 
+```
+
+## Constructor settings
+You can initialize your gui with a settings object to set various global defaults and affect startup and exit behavior.
+
+See all the options below:
+
+```java
+gui = new LazyGui(this, new LazyGuiSettings()
+  // LOADING ON STARTUP
+  .setLoadLatestSaveOnStartup(true) // set as false to not load anything on startup
+  .setLoadSpecificSaveOnStartup(null) // expects string file names like: "auto" or "1.json"
+  // 'specific' overrides 'latest' when not null
+
+  // AUTOSAVE
+  .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
+  .setAutosaveLockGuardEnabled(true) // for not autosaving settings that locked the sketch in an endless loop
+  .setAutosaveLockGuardMillisLimit(1000) // millis the last frame must be rendered faster than for autosave to work
+
+  // MOUSE
+  .setMouseShouldHideWhenDragging(true) // when dragging a slider for example
+  .setMouseShouldConfineToWindow(false)
+
+  // LAYOUT
+  .setCellSize(22) // affects the size of the whole gui
+  .setMainFontSize(16)
+  .setSideFontSize(15)
+  .setStartGuiHidden(false) // uncover hidden gui with the 'h' hotkey
+
+  // THEME
+  .setThemePreset(ThemeType.PINK)
+  .setThemeCustom(new Theme(
+        color(150, 0, 255), // window border color
+        color(16), // normal background color
+        color(0, 0, 0), // focused background color
+        color(200), // normal foreground color
+        color(255)          // focused foreground color
+  )) // custom theme overrides preset when not null
+);
+```
+
 
 ## Further reading
 - [Javadocs](https://krabcode.github.io/LazyGui/) on github pages
@@ -268,6 +311,6 @@ gui.showCurrentFolder() // show the folder at the current path prefix stack if i
 - [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
-- Join this library's [discord server](https://discord.gg/VBTCsnYMzd) to get help and report bugs
+- Talk to me on [discord server](https://discord.gg/VBTCsnYMzd)
 - Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues)
 - Fork the repository and submit a pull request
