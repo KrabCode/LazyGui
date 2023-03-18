@@ -1,7 +1,6 @@
 package examples_intellij;
 
 import lazy.LazyGuiSettings;
-import lazy.themes.Theme;
 import lazy.themes.ThemeType;
 import processing.core.PApplet;
 import lazy.LazyGui;
@@ -22,8 +21,8 @@ public class SettingsTest extends PApplet {
         gui = new LazyGui(this, new LazyGuiSettings()
 
                 // LOADING ON STARTUP
-                .setLoadLatestSaveOnStartup(true) // set as false to not load anything on startup
-                .setLoadSpecificSaveOnStartup("2") // expects filenames like "1" or "auto.json"
+                .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
+//                .setLoadSpecificSaveOnStartup(null) // expects filenames like "1" or "auto.json"
 
                 // AUTOSAVE
                 .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
@@ -41,14 +40,14 @@ public class SettingsTest extends PApplet {
                 .setStartGuiHidden(false) // uncover hidden gui with the 'h' hotkey
 
                 // THEME
-                .setThemePreset(ThemeType.PINK)
-                .setThemeCustom(new Theme(
-                        color(150, 0, 255), // window border color
-                        color(16), // normal background color
-                        color(0, 0, 0), // focused background color
-                        color(200), // normal foreground color
-                        color(255)          // focused foreground color
-                )) // custom theme overrides preset when not null
+                .setThemePreset(ThemeType.DARK)
+//                .setThemeCustom(new Theme(
+//                        color(150, 0, 255), // window border color
+//                        color(16), // normal background color
+//                        color(0, 0, 0), // focused background color
+//                        color(200), // normal foreground color
+//                        color(255)))          // focused foreground color
+                 // custom theme overrides preset when not null
         );
 
 

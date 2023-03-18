@@ -7,8 +7,7 @@ void setup() {
 
     // LOADING ON STARTUP
     .setLoadLatestSaveOnStartup(true) // set as false to not load anything on startup
-    .setLoadSpecificSaveOnStartup(null) // expects string file names like: "auto" or "1.json"
-    // 'specific' overrides 'latest' when not null
+    // .setLoadSpecificSaveOnStartup("1") // expects string file names like: "auto" or "1.json"
 
     // AUTOSAVE
     .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
