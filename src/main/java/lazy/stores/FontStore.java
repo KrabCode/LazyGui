@@ -14,8 +14,8 @@ public class FontStore {
 
     private final static String sideFontPathDefault = "JetBrainsMono-Regular.ttf";
     private final static String mainFontPathDefault = "JetBrainsMono-Regular.ttf";
-    private static final int mainFontSizeDefault = 16;
-    private static final int sideFontSizeDefault = 15;
+    public static int mainFontSizeDefault = 16;
+    public static int sideFontSizeDefault = 15;
     private static String lastMainFontPath = "";
     private static String lastSideFontPath = "";
     private static int lastMainFontSize = -1;

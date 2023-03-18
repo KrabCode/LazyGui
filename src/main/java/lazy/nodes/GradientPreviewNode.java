@@ -13,7 +13,7 @@ class GradientPreviewNode extends AbstractNode {
     final GradientFolderNode parent;
 
     GradientPreviewNode(String path, GradientFolderNode parent) {
-        super(NodeType.VALUE, path, parent);
+        super(NodeType.TRANSIENT, path, parent);
         this.parent = parent;
         masterInlineNodeHeightInCells = 6;
     }

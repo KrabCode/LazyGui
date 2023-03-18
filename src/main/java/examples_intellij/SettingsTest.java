@@ -1,7 +1,6 @@
 package examples_intellij;
 
 import lazy.LazyGuiSettings;
-import lazy.themes.Theme;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -23,10 +22,13 @@ public class SettingsTest extends PApplet {
     public void setup() {
 
         gui = new LazyGui(this, new LazyGuiSettings()
-                .setMouseConfinedToWindow(true)
-                .setMouseHidesWhenDragging(true)
-                .setLoadLatestSaveOnStartup(false)
-                .setAutosaveOnExitEnabled(false)
+            .setMouseConfinedToWindow(true)
+            .setMouseHidesWhenDragging(true)
+            .setLoadLatestSaveOnStartup(false)
+            .setAutosaveOnExitEnabled(false)
+                .setCellSize(28)
+                .setMainFontSize(18)
+                .setSideFontSize(16)
         );
 
         /*
