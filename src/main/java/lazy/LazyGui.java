@@ -82,7 +82,7 @@ public class LazyGui  {
         if(settings == null){
             settings = new LazyGuiSettings();
         }
-        settings.overwriteGlobalConstantsWithTheseSettings();
+        settings.applySettingsOntoGui();
         ThemeStore.init();
         FontStore.lazyUpdateFont();
         UserInputPublisher.initSingleton();
@@ -90,7 +90,9 @@ public class LazyGui  {
         WindowManager.addRootWindow();
         createOptionsFolder();
         createSavesFolder();
-        if(settings.getShouldLoadLatestSaveOnStartup()){
+        if(settings.getSpecificSaveToLoadOnStartup() != null){
+            JsonSaveStore.loadStateFromFile(settings.getSpecificSaveToLoadOnStartup());
+        }else if(settings.getShouldLoadLatestSaveOnStartup()){
             JsonSaveStore.loadLatestSave();
         }
         JsonSaveStore.registerExitHandler();
@@ -967,13 +969,13 @@ public class LazyGui  {
      */
     public PGraphics gradient(String path, int[] defaultColors) {
         String fullPath = getFolder() + path;
-        if(isPathTakenByUnexpectedType(fullPath, GradientFolderNode.class)){
+        if(isPathTakenByUnexpectedType(fullPath, GradientPickerFolderNode.class)){
             return null;
         }
-        GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
+        GradientPickerFolderNode node = (GradientPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new GradientFolderNode(fullPath, parentFolder, defaultColors);
+            node = new GradientPickerFolderNode(fullPath, parentFolder, defaultColors);
             insertNodeAtItsPath(node);
         }
         return node.getOutputGraphics();
@@ -989,13 +991,13 @@ public class LazyGui  {
      */
     public PickerColor gradientColorAt(String path, float position) {
         String fullPath = getFolder() + path;
-        if(isPathTakenByUnexpectedType(fullPath, GradientFolderNode.class)){
+        if(isPathTakenByUnexpectedType(fullPath, GradientPickerFolderNode.class)){
             return null;
         }
-        GradientFolderNode node = (GradientFolderNode) findNode(fullPath);
+        GradientPickerFolderNode node = (GradientPickerFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
-            node = new GradientFolderNode(fullPath, parentFolder, null);
+            node = new GradientPickerFolderNode(fullPath, parentFolder, null);
             insertNodeAtItsPath(node);
         }
         return node.getGradientColorAt(position);

@@ -1,6 +1,7 @@
 package examples_intellij;
 
 import lazy.LazyGuiSettings;
+import lazy.themes.ThemeType;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -20,27 +21,12 @@ public class SettingsTest extends PApplet {
 
     @Override
     public void setup() {
-
         gui = new LazyGui(this, new LazyGuiSettings()
-            .setMouseConfinedToWindow(true)
-            .setMouseHidesWhenDragging(true)
+            .setMouseShouldHideWhenDragging(true)
             .setLoadLatestSaveOnStartup(false)
-            .setAutosaveOnExitEnabled(false)
-                .setCellSize(28)
-                .setMainFontSize(18)
-                .setSideFontSize(16)
+            .setAutosaveOnExit(false)
+            .setThemePreset(ThemeType.LIGHT)
         );
-
-        /*
-        *
-                .setCustomTheme(new Theme(
-                        color(0),
-                        color(20),
-                        color(50),
-                        color(200, 0, 50),
-                        color(255)
-                )
-        * */
         pg = createGraphics(width, height, P2D);
         colorMode(HSB, 1, 1, 1, 1);
         frameRate(144);
@@ -49,7 +35,12 @@ public class SettingsTest extends PApplet {
     @Override
     public void draw() {
         pg.beginDraw();
-        image(gui.gradient("background"), 0, 0);
+        image(gui.gradient("background", new int[]{
+               unhex("FFFFF4E0"),
+               unhex("FFFFBF9B"),
+               unhex("FFB46060"),
+               unhex("FF4D4D4D")
+        }), 0, 0);
 
         pg.endDraw();
         image(pg, 0, 0);

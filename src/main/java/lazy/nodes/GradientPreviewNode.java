@@ -10,9 +10,9 @@ import static processing.core.PApplet.map;
 import static processing.core.PApplet.radians;
 
 class GradientPreviewNode extends AbstractNode {
-    final GradientFolderNode parent;
+    final GradientPickerFolderNode parent;
 
-    GradientPreviewNode(String path, GradientFolderNode parent) {
+    GradientPreviewNode(String path, GradientPickerFolderNode parent) {
         super(NodeType.TRANSIENT, path, parent);
         this.parent = parent;
         masterInlineNodeHeightInCells = 6;
@@ -33,14 +33,14 @@ class GradientPreviewNode extends AbstractNode {
         pg.textFont(FontStore.getSideFont());
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
-            if (colorStop.isPosSliderBeingUsed()) {
+            if (colorStop == null || colorStop.isPosSliderBeingUsed()) {
                 continue;
             }
             drawColorStop(pg, colorStop, false);
         }
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
-            if (colorStop.isPosSliderBeingUsed()) {
+            if (colorStop != null && colorStop.isPosSliderBeingUsed()) {
                 drawColorStop(pg, colorStop, true);
             }
         }

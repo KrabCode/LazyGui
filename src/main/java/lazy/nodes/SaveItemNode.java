@@ -1,13 +1,16 @@
 package lazy.nodes;
 
 import lazy.stores.JsonSaveStore;
+import lazy.windows.WindowManager;
 import processing.core.PGraphics;
 
 class SaveItemNode extends AbstractNode {
     final String fileName;
+    final SaveFolderNode saveFolderParent;
 
-    SaveItemNode(String path, FolderNode parent, String fileName) {
+    SaveItemNode(String path, SaveFolderNode parent, String fileName) {
         super(NodeType.TRANSIENT, path, parent);
+        saveFolderParent = parent;
         this.fileName = fileName;
     }
 
@@ -22,7 +25,12 @@ class SaveItemNode extends AbstractNode {
     }
 
     public void mousePressedOverNode(float x, float y) {
+        float unmovingWindowX = saveFolderParent.window.posX;
+        float unmovingWindowY = saveFolderParent.window.posY;
         JsonSaveStore.loadStateFromFile(fileName);
+        saveFolderParent.window.posX = unmovingWindowX;
+        saveFolderParent.window.posY = unmovingWindowY;
+        WindowManager.setFocus(saveFolderParent.window);
         onActionEnded();
     }
 }

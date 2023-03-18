@@ -22,6 +22,7 @@ import static processing.core.PApplet.println;
 public class JsonSaveStore {
     public static boolean autosaveOnExitEnabled = true;
     public static boolean autosaveLockGuardEnabled = true;
+    public static boolean shouldLoadLatestSaveOnStartupByDefault = true;
     public static long autosaveLockGuardMillisLimit = 1000;
     private static long lastFrameMillisForLockGuard;
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
@@ -101,6 +102,12 @@ public class JsonSaveStore {
     public static void loadStateFromFile(String filename) {
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename)) {
+                loadStateFromFile(saveFile);
+                return;
+            }
+        }
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().startsWith(filename)) {
                 loadStateFromFile(saveFile);
                 return;
             }

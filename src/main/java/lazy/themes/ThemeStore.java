@@ -7,7 +7,6 @@ import static lazy.stores.GlobalReferences.gui;
 
 
 public class ThemeStore {
-
     private static final Map<ThemeType, Theme> paletteMap = new HashMap<>();
     public static ThemeType currentSelection = ThemeType.DARK;
     private static String defaultThemeType = currentSelection.name();
@@ -16,6 +15,10 @@ public class ThemeStore {
         defaultThemeType = ThemeType.getName(ThemeType.CUSTOM);
         paletteMap.put(ThemeType.CUSTOM, theme);
     }
+    public static void selectThemeByTypeBeforeInit(ThemeType typeToSelect){
+        defaultThemeType = ThemeType.getName(typeToSelect);
+    }
+
     public static void init() {
         ThemeType[] allTypes = ThemeType.getAllValues();
         for (ThemeType type : allTypes) {

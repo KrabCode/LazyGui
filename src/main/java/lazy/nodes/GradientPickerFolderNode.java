@@ -14,7 +14,7 @@ import static lazy.stores.GlobalReferences.app;
 import static lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
-public class GradientFolderNode extends FolderNode {
+public class GradientPickerFolderNode extends FolderNode {
     int colorCount;
     private PGraphics out;
     private final ToggleNode wrapAtEdgesToggle;
@@ -23,34 +23,35 @@ public class GradientFolderNode extends FolderNode {
     private final SliderIntNode colorCountSlider;
     private final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>()
             .add("mix").add("rgb").add("hsv").build();
-    private int maxColorCount = 8;
+    private final int maxColorCountDefault = 8;
+    private int maxColorCount = maxColorCountDefault;
     private int frameLastUpdatedOutputGraphics = -1;
     private int[] LUT;
 
-    public GradientFolderNode(String path, FolderNode parent, int[] defaultColors) {
+    public GradientPickerFolderNode(String path, FolderNode parent, int[] defaultColors) {
         super(path, parent);
         colorCount = 4;
         int minColorCount = 2;
-        if(defaultColors != null){
+        if (defaultColors != null) {
             colorCount = max(minColorCount, defaultColors.length);
         }
         maxColorCount = max(colorCount, maxColorCount);
         directionToggle = new ToggleNode(path + "/vertical", this, true);
         wrapAtEdgesToggle = new ToggleNode(path + "/edge wrap", this, false);
         blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
-        colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, minColorCount, maxColorCount, true);
+        colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, minColorCount, maxColorCountDefault, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionToggle);
         children.add(wrapAtEdgesToggle);
         children.add(blendTypePicker);
         children.add(colorCountSlider);
         for (int i = 0; i < maxColorCount; i++) {
-            float br = 1 - map(i%colorCount,0, colorCount, 0.2f, 0.9f);
-            float colorPosition = norm(i%colorCount, 0, colorCount - 1);
-            boolean shouldUseDefaultColor = defaultColors != null && i < defaultColors.length;
+            float br = 1 - map(i % colorCount, 0, colorCount, 0.2f, 0.9f);
+            float colorPosition = 0.1f + 0.8f * norm(i%colorCount, 0, colorCount - 1);
+            boolean shouldUseDefaultColor = defaultColors != null;
             int colorHex;
             if (shouldUseDefaultColor) {
-                colorHex = defaultColors[i];
+                colorHex = defaultColors[i%colorCount];
             } else {
                 colorHex = color(0, 0, br, 1);
             }
@@ -70,7 +71,7 @@ public class GradientFolderNode extends FolderNode {
         drawGradientPreviewIcon(pg);
     }
 
-    void drawGradientPreviewIcon(PGraphics pg){
+    void drawGradientPreviewIcon(PGraphics pg) {
         pg.translate(size.x - cell * 0.5f, cell * 0.5f);
         pg.imageMode(CENTER);
         float previewRectSize = cell * 0.6f;
@@ -82,7 +83,7 @@ public class GradientFolderNode extends FolderNode {
     }
 
     private void lazyUpdateOutGraphics() {
-        if(frameLastUpdatedOutputGraphics == app.frameCount){
+        if (frameLastUpdatedOutputGraphics == app.frameCount) {
             return; // weird bugs when updated more than once per frame
         }
         frameLastUpdatedOutputGraphics = app.frameCount;
@@ -117,12 +118,12 @@ public class GradientFolderNode extends FolderNode {
     private void updateLookUpTable(PGraphics out) {
         out.loadPixels();
         boolean isVertical = isGradientDirectionVertical();
-        if(isVertical){
+        if (isVertical) {
             LUT = new int[out.height];
             for (int i = 0; i < out.height; i++) {
-                LUT[i] = out.pixels[out.width/2 + i * out.width];
+                LUT[i] = out.pixels[out.width / 2 + i * out.width];
             }
-        }else{
+        } else {
             LUT = new int[out.width];
             System.arraycopy(out.pixels, out.width * out.height / 2, LUT, 0, out.width);
         }
@@ -130,15 +131,15 @@ public class GradientFolderNode extends FolderNode {
 
     public PickerColor getGradientColorAt(float position) {
         lazyUpdateOutGraphics();
-        int lookupIndex = constrain(floor(map(position, 0, 1, 0, LUT.length-1)), 0, LUT.length-1);
+        int lookupIndex = constrain(floor(map(position, 0, 1, 0, LUT.length - 1)), 0, LUT.length - 1);
         return new PickerColor(LUT[lookupIndex]);
     }
 
     private void updateColorStopVisibility() {
         for (int i = 0; i <= maxColorCount; i++) {
-            if(i < colorCount){
+            if (i < colorCount) {
                 NodeTree.showAtFullPath(path + "/" + getColorNameByIndex(i));
-            }else{
+            } else {
                 NodeTree.hideAtFullPath(path + "/" + getColorNameByIndex(i));
             }
         }
@@ -149,7 +150,7 @@ public class GradientFolderNode extends FolderNode {
         return String.valueOf(a.charAt(index));
     }
 
-    boolean isGradientDirectionVertical(){
+    boolean isGradientDirectionVertical() {
         return directionToggle.valueBoolean;
     }
 
@@ -157,7 +158,7 @@ public class GradientFolderNode extends FolderNode {
         return directionToggle.valueBoolean ? 1 : 0;
     }
 
-    private int getBlendTypeIndex(){
+    private int getBlendTypeIndex() {
         return blendTypeOptions.indexOf(blendTypePicker.valueString);
     }
 
@@ -192,14 +193,17 @@ public class GradientFolderNode extends FolderNode {
     ArrayList<GradientColorStopNode> getAllColorStopsInPositionOrder() {
         ArrayList<GradientColorStopNode> colorStops = new ArrayList<>();
         for (int i = 0; i < colorCount; i++) {
-            colorStops.add(findColorStopByIndex(i));
+            GradientColorStopNode colorStopByIndex = findColorStopByIndex(i);
+            if(colorStopByIndex != null){
+                colorStops.add(colorStopByIndex);
+            }
         }
         // sort them by position
         colorStops.sort((o1, o2) -> Float.compare(o1.getGradientPos(), o2.getGradientPos()));
         return colorStops;
     }
 
-    GradientColorStopNode findColorStopByIndex(int i){
+    GradientColorStopNode findColorStopByIndex(int i) {
         return (GradientColorStopNode) findChildByName(getColorNameByIndex(i));
     }
 

@@ -5,6 +5,7 @@ import lazy.stores.JsonSaveStore;
 import lazy.stores.LayoutStore;
 import lazy.themes.Theme;
 import lazy.themes.ThemeStore;
+import lazy.themes.ThemeType;
 import lazy.utils.MouseHiding;
 
 /**
@@ -15,55 +16,68 @@ import lazy.utils.MouseHiding;
  *      gui = new LazyGui(this, new LazyGuiSettings()
  *          .setLoadLatestSaveOnStartup(false)
  *          .setAutosaveOnExitEnabled(false)
- *          .setMouseConfinedToWindow(true)
+ *          // ...
  *      );
  * </pre>
  */
+@SuppressWarnings("unused")
 public class LazyGuiSettings {
-
-    private boolean loadLatestSaveOnStartup, autosaveEnabled, autosaveLockGuardEnabled,
-            mouseHidesWhenDragging, mouseConfinedToWindow;
+    private boolean loadLatestSaveOnStartup;
+    private boolean autosaveOnExitEnabled;
+    private boolean autosaveLockGuardEnabled;
+    private boolean mouseShouldHideWhenDragging;
+    private boolean mouseShouldConfineToWindow;
     private long autosaveLockGuardMillisLimit;
     private float cellSize;
     private int mainFontSize, sideFontSize;
-    private Theme customTheme = null;
+    private Theme themeCustom = null;
+    private ThemeType themePreset = null;
+    private String pathToSpecificSaveToLoadOnStartup = null;
 
-    public LazyGuiSettings(){
-        autosaveEnabled = true;
+    public LazyGuiSettings() {
         initializeDefaultsFromGlobalConstants();
     }
 
-    void initializeDefaultsFromGlobalConstants(){
-        this.loadLatestSaveOnStartup = JsonSaveStore.autosaveOnExitEnabled;
+    void initializeDefaultsFromGlobalConstants() {
+        this.autosaveOnExitEnabled = JsonSaveStore.autosaveOnExitEnabled;
+        this.loadLatestSaveOnStartup = JsonSaveStore.shouldLoadLatestSaveOnStartupByDefault;
         this.autosaveLockGuardEnabled = JsonSaveStore.autosaveLockGuardEnabled;
         this.autosaveLockGuardMillisLimit = JsonSaveStore.autosaveLockGuardMillisLimit;
-        this.mouseHidesWhenDragging = MouseHiding.shouldHideWhenDragging;
-        this.mouseConfinedToWindow =  MouseHiding.shouldConfineToWindow;
+        this.mouseShouldHideWhenDragging = MouseHiding.shouldHideWhenDragging;
+        this.mouseShouldConfineToWindow = MouseHiding.shouldConfineToWindow;
         this.cellSize = LayoutStore.cell;
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
     }
 
-    void overwriteGlobalConstantsWithTheseSettings(){
-        JsonSaveStore.autosaveOnExitEnabled = this.autosaveEnabled;
+    void applySettingsOntoGui() {
+        JsonSaveStore.autosaveOnExitEnabled = this.autosaveOnExitEnabled;
         JsonSaveStore.autosaveLockGuardEnabled = this.autosaveLockGuardEnabled;
         JsonSaveStore.autosaveLockGuardMillisLimit = this.autosaveLockGuardMillisLimit;
-        MouseHiding.shouldHideWhenDragging = this.mouseHidesWhenDragging;
-        MouseHiding.shouldConfineToWindow = this.mouseConfinedToWindow;
+        MouseHiding.shouldHideWhenDragging = this.mouseShouldHideWhenDragging;
+        MouseHiding.shouldConfineToWindow = this.mouseShouldConfineToWindow;
         LayoutStore.cell = this.cellSize;
         FontStore.mainFontSizeDefault = this.mainFontSize;
         FontStore.sideFontSizeDefault = this.sideFontSize;
-        if(customTheme != null){
-            ThemeStore.setCustomPaletteAndMakeDefaultBeforeInit(customTheme);
+        if (themeCustom != null) {
+            ThemeStore.setCustomPaletteAndMakeDefaultBeforeInit(themeCustom);
+        } else if (themePreset != null){
+            ThemeStore.selectThemeByTypeBeforeInit(themePreset);
         }
     }
 
-    boolean getShouldLoadLatestSaveOnStartup() {
-        return loadLatestSaveOnStartup;
+    public LazyGuiSettings setThemePreset(ThemeType themePreset) {
+        this.themePreset = themePreset;
+        return this;
     }
 
-    public LazyGuiSettings setCustomTheme(Theme customTheme){
-        this.customTheme = customTheme;
+    public LazyGuiSettings setThemeCustom(Theme themeCustom) {
+        this.themeCustom = themeCustom;
+        return this;
+    }
+
+    public LazyGuiSettings setLoadSpecificSave(String pathToJsonFile) {
+        this.pathToSpecificSaveToLoadOnStartup = pathToJsonFile;
         return this;
     }
 
@@ -72,8 +86,18 @@ public class LazyGuiSettings {
         return this;
     }
 
-    public LazyGuiSettings setAutosaveOnExitEnabled(boolean autosaveEnabled) {
-        this.autosaveEnabled = autosaveEnabled;
+    public LazyGuiSettings setAutosaveOnExit(boolean autosaveEnabled) {
+        this.autosaveOnExitEnabled = autosaveEnabled;
+        return this;
+    }
+
+    public LazyGuiSettings setAutosaveLockGuardEnabled(boolean autosaveLockGuardEnabled) {
+        this.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
+        return this;
+    }
+
+    public LazyGuiSettings setAutosaveLockGuardMillisLimit(long autosaveLockGuardMillisLimit) {
+        this.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
         return this;
     }
 
@@ -82,13 +106,13 @@ public class LazyGuiSettings {
         return this;
     }
 
-    public LazyGuiSettings setMouseHidesWhenDragging(boolean mouseHidesWhenDragging) {
-        this.mouseHidesWhenDragging = mouseHidesWhenDragging;
+    public LazyGuiSettings setMouseShouldHideWhenDragging(boolean mouseShouldHideWhenDragging) {
+        this.mouseShouldHideWhenDragging = mouseShouldHideWhenDragging;
         return this;
     }
 
-    public LazyGuiSettings setMouseConfinedToWindow(boolean mouseConfinedToWindow) {
-        this.mouseConfinedToWindow = mouseConfinedToWindow;
+    public LazyGuiSettings setMouseShouldConfineToWindow(boolean mouseShouldConfineToWindow) {
+        this.mouseShouldConfineToWindow = mouseShouldConfineToWindow;
         return this;
     }
 
@@ -105,5 +129,13 @@ public class LazyGuiSettings {
     public LazyGuiSettings setSideFontSize(int sideFontSize) {
         this.sideFontSize = sideFontSize;
         return this;
+    }
+
+    boolean getShouldLoadLatestSaveOnStartup() {
+        return loadLatestSaveOnStartup;
+    }
+
+    public String getSpecificSaveToLoadOnStartup() {
+        return pathToSpecificSaveToLoadOnStartup;
     }
 }

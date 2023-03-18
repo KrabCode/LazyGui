@@ -48,7 +48,7 @@ public class SaveFolderNode extends FolderNode {
         children.add(autosaveFolder);
         childrenThatAreNotSaveFiles.addAll(children);
         updateReadmeVisibility();
-        updateStateList();
+        updateSaveList();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SaveFolderNode extends FolderNode {
             openSaveFolder();
         }
         updateReadmeVisibility();
-        updateStateList();
+        updateSaveList();
     }
 
     private void updateReadmeVisibility() {
@@ -75,7 +75,7 @@ public class SaveFolderNode extends FolderNode {
         }
     }
 
-    void updateStateList() {
+    void updateSaveList() {
         List<File> filenames = JsonSaveStore.getSaveFileList();
         if(filenames == null){
             return;
