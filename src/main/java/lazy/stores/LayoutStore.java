@@ -95,6 +95,10 @@ public class LayoutStore {
         LayoutStore.showPathTooltips = showPathTooltips;
     }
 
+    public static void setIsGuiHidden(boolean shouldGuiBeHidden){
+        isGuiHidden = shouldGuiBeHidden;
+    }
+
     public static boolean isGuiHidden() {
         return isGuiHidden;
     }

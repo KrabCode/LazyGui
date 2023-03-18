@@ -25,7 +25,8 @@ public class SettingsTest extends PApplet {
             .setMouseShouldHideWhenDragging(true)
             .setLoadLatestSaveOnStartup(false)
             .setAutosaveOnExit(false)
-            .setThemePreset(ThemeType.LIGHT)
+            .setThemePreset(ThemeType.DARK)
+            .setStartGuiHidden(true)
         );
         pg = createGraphics(width, height, P2D);
         colorMode(HSB, 1, 1, 1, 1);

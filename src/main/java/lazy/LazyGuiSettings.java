@@ -30,6 +30,9 @@ public class LazyGuiSettings {
     private long autosaveLockGuardMillisLimit;
     private float cellSize;
     private int mainFontSize, sideFontSize;
+
+
+    private boolean startGuiHidden = false;
     private Theme themeCustom = null;
     private ThemeType themePreset = null;
     private String pathToSpecificSaveToLoadOnStartup = null;
@@ -46,6 +49,7 @@ public class LazyGuiSettings {
         this.mouseShouldHideWhenDragging = MouseHiding.shouldHideWhenDragging;
         this.mouseShouldConfineToWindow = MouseHiding.shouldConfineToWindow;
         this.cellSize = LayoutStore.cell;
+        this.startGuiHidden = LayoutStore.isGuiHidden();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
     }
@@ -64,6 +68,7 @@ public class LazyGuiSettings {
         } else if (themePreset != null){
             ThemeStore.selectThemeByTypeBeforeInit(themePreset);
         }
+        LayoutStore.setIsGuiHidden(startGuiHidden);
     }
 
     public LazyGuiSettings setThemePreset(ThemeType themePreset) {
@@ -76,8 +81,13 @@ public class LazyGuiSettings {
         return this;
     }
 
-    public LazyGuiSettings setLoadSpecificSave(String pathToJsonFile) {
-        this.pathToSpecificSaveToLoadOnStartup = pathToJsonFile;
+    public LazyGuiSettings setStartGuiHidden(boolean startGuiHidden) {
+        this.startGuiHidden = startGuiHidden;
+        return this;
+    }
+
+    public LazyGuiSettings setLoadSpecificSave(String fileName) {
+        this.pathToSpecificSaveToLoadOnStartup = fileName;
         return this;
     }
 
