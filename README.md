@@ -27,7 +27,7 @@
 
 ## LazyGui is a GUI library for Processing
 - **focusing on flexibility**
-  - almost no gui logic in `setup()`
+  - no registration of control elements in `setup()`
   - just ask for values at unique string paths in `draw()`
   - this lets you keep related gui code together in the middle of the action
 - **and ease of use**
