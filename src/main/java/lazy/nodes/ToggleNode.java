@@ -63,7 +63,7 @@ public class ToggleNode extends AbstractNode {
     }
 
     @Override
-    public String getConsolePrintableValue() {
+    public String getValueAsString() {
         return String.valueOf(valueBoolean);
     }
 }

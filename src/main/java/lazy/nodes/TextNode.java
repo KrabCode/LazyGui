@@ -187,7 +187,7 @@ public class TextNode extends AbstractNode {
     }
 
     @Override
-    public String getConsolePrintableValue() {
+    public String getValueAsString() {
         return stringValue;
     }
 }

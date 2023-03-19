@@ -125,7 +125,7 @@ public class RadioFolderNode extends FolderNode {
     }
 
     @Override
-    public String getConsolePrintableValue() {
+    public String getValueAsString() {
         return valueString;
     }
 

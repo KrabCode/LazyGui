@@ -23,6 +23,18 @@ public class FontStore {
     private static PFont mainFont = null;
     private static PFont sideFont = null;
 
+    private static PGraphics mainFontUtilsProvider;
+
+    public static PGraphics getMainFontUtilsProvider(){
+        if(mainFontUtilsProvider == null){
+            mainFontUtilsProvider = app.createGraphics(64, 64);
+        }
+        mainFontUtilsProvider.beginDraw();
+        mainFontUtilsProvider.textFont(mainFont);
+        mainFontUtilsProvider.endDraw();
+        return mainFontUtilsProvider;
+    }
+
     public static void updateFontOptions() {
         gui.pushFolder("font");
         lazyUpdateFont(

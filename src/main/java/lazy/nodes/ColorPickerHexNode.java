@@ -31,9 +31,4 @@ class ColorPickerHexNode extends AbstractNode {
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
         parentColorPickerFolder.keyPressedOverNode(e, x, y);
     }
-
-    @Override
-    public String getConsolePrintableValue() {
-        return parentColorPickerFolder.hexString;
-    }
 }

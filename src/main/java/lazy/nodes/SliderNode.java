@@ -407,7 +407,7 @@ public class SliderNode extends AbstractNode {
     }
 
     @Override
-    public String getConsolePrintableValue() {
+    public String getValueAsString() {
         return getValueToDisplay();
     }
 

@@ -40,12 +40,12 @@ public class JsonSaveStore {
             return;
         }
         if (autosaveLockGuardEnabled && isSketchStuckInEndlessLoop()) {
-            println("save guard prevented autosave, because the last frame took more than " + autosaveLockGuardMillisLimit + " ms," +
+            println("Autosave lock guard prevented the autosave, because the last frame took more than " + autosaveLockGuardMillisLimit + " ms," +
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
         String path = JsonSaveStore.createTreeSaveFile("auto");
-        println("Autosaved at " + path);
+        println("Created new autosave: " + path);
     }
 
     public static void createNewManualSave() {
@@ -156,7 +156,7 @@ public class JsonSaveStore {
         try {
             json = readFile(file);
         } catch (IOException e) {
-            println("Error loading state from file", e.getMessage());
+            println("Error loading state from file: ", e.getMessage());
             return;
         }
         JsonElement root = getJsonElementFromString(json);

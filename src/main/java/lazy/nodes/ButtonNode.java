@@ -63,7 +63,7 @@ public class ButtonNode extends AbstractNode {
     }
 
     @Override
-    public String getConsolePrintableValue() {
-        return "(button)";
+    public String getValueAsString() {
+        return "";
     }
 }
