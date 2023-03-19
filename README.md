@@ -11,15 +11,15 @@
     * [Toggle](#toggle)
     * [Text input](#text-input)
     * [Radio](#radio)
+  * [Hotkeys](#hotkeys)
   * [Paths and folders](#paths-and-folders)
-      * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
-      * [Escaping the forward slash](#escaping-the-forward-slash)
-  * [Global path prefix stack](#global-path-prefix-stack)
+    * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
+    * [Escaping the forward slash](#escaping-the-forward-slash)
+    * [Global path prefix stack](#global-path-prefix-stack)
       * [Folder made by using the stack](#folder-made-by-using-the-stack)
       * [See the current stack for debugging](#see-the-current-stack-for-debugging)
-  * [Hide and show anything](#hide-and-show-anything)
-  * [Folder visuals](#folder-visuals)
-  * [Hotkeys](#hotkeys)
+    * [Hide and show anything](#hide-and-show-anything)
+    * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
@@ -224,28 +224,46 @@ gui.radioSet("mode", "square");
 - any changes to the available options will be ignored after the radio is first initialized
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
+## Hotkeys
+
+|   Global hotkey   | Action under mouse     |     
+|:-----------------:|:-----------------------|
+|         H         | Hide/Show GUI          |     
+|         D         | Close windows          |     
+|         I         | Save screenshot        | 
+|     CTRL + Z      | Undo                   | 
+|     CTRL + Y      | Redo                   |        
+|     CTRL + S      | Save gui state to json |   
+
+| Mouse hotkey | Action on element under mouse |
+|:------------:|:------------------------------|
+| Right click  | Close window                  |
+|      R       | Reset value to default        |
+|   CTRL + C   | Copy value or folder          |
+|   CTRL + V   | Paste to value or folder      |
+
 ## Paths and folders
 
 The **path**  is the first string parameter to every control element function, and it must be unique.
 It exists only in memory to inform the GUI - it's not a directory structure in any file storage.
 The forward slash `/` is a reserved character used to make folders, but it can be escaped with `\\` like this: `\\/` which won't separate folders.
 
-#### Creating a folder with the forward slash
+### Creating a folder with the forward slash
 ![wave folder example](readme_assets/wave_folder.png)
 ```java
 float frq = gui.slider("wave/frequency");
 float amp = gui.slider("wave/amplitude");
 ```
 
-#### Escaping the forward slash
+### Escaping the forward slash
 ![Escaped forward slash example](readme_assets/escaped_slash.png)
 ```java
 boolean state = gui.toggle("off\\/on");
 ```
 
-## Global path prefix stack
+### Global path prefix stack
 
-Repeating the whole path in every control element call can get tiresome, especially with multiple nested levels.
+Repeating the whole path in every control element call can get tiresome, especially with multiple nested folders.
 Which is why there is a helpful path stack that you can interact with using `pushFolder()` and `popFolder()`.
 
 Just like using `pushMatrix()` and `popMatrix()` in Processing, you can change your "current directory"
@@ -271,7 +289,7 @@ gui.popFolder();
 println(gui.getFolder());
 ```
 
-## Hide and show anything
+### Hide and show anything
 You can hide folders and single elements from code, while still receiving their values in code - the only change is visual. 
 This is helpful when you have a loop for folders whose paths differ by the index, and you create too many of these folders and then want to hide some of them.
 You can also use this to hide the default 'options' or 'saves' folders.
@@ -283,7 +301,7 @@ gui.hideCurrentFolder() // hide the folder at the current path prefix stack
 gui.showCurrentFolder() // show the folder at the current path prefix stack if it has been previously hidden 
 ```
 
-## Folder visuals
+### Folder visuals
 Runtime changes of what a folder row looks like in its parent window. 
 This helps with organizing folders, especially with folder paths that differ only by the index inside a loop.
 
@@ -299,23 +317,6 @@ A folder will display a name editable at runtime when there is a **text control*
   - "label"
   - "name"
 - is equal to "" (empty string)
-
-## Hotkeys
-
-|   Global hotkey   | Action under mouse     |     
-|:-----------------:|:-----------------------|
-|         H         | Hide/Show GUI          |     
-|         D         | Close windows          |     
-|         I         | Save screenshot        | 
-|     CTRL + Z      | Undo                   | 
-|     CTRL + Y      | Redo                   |        
-|     CTRL + S      | Save gui state to json |   
-
-| Mouse hotkey | Action on element under mouse |
-|:------------:|:------------------------------|
-|      R       | Reset value to default        |
-|   CTRL + C   | Copy value or folder          |
-|   CTRL + V   | Paste to value or folder      |
 
 ## Constructor settings
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
@@ -359,13 +360,13 @@ gui = new LazyGui(this, new LazyGuiSettings()
 ```
 
 ## Further reading
-- [Javadocs](https://krabcode.github.io/LazyGui/) on github pages
-- [Processing examples](src/main/java/examples)
+- [Javadocs](https://krabcode.github.io/LazyGui/) on GitHub pages
+- [Processing examples](src/main/java/examples) for the PDE
 - [IntelliJ examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
 - [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo
 - [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
-- Talk to the author on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
+- Talk to me on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
 - Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues) if you don't find your problem already in there
-- Fork the repository and submit a pull request
+- If you want to code something yourself you can fork the repository and submit a pull request with an explanation
