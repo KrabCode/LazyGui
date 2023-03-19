@@ -1,5 +1,6 @@
 package examples_intellij;
 
+import lazy.LazyGuiSettings;
 import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -23,7 +24,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
         pg = createGraphics(width, height, P2D);
         pg.smooth(8);
     }

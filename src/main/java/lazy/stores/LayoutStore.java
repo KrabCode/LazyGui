@@ -15,12 +15,14 @@ public class LayoutStore {
 
     private static boolean showPathTooltips = false;
     private static boolean isGuiHidden = false;
+    private static boolean autosuggestWindowWidth = true;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
         setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
         setShowPathTooltips(gui.toggle("show path tooltips", LayoutStore.getShowPathTooltips()));
         setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
+        setAutosuggestWindowWidth(gui.toggle("autosuggest width", LayoutStore.getAutosuggestWindowWidth()));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -105,5 +107,13 @@ public class LayoutStore {
 
     public static void hideGuiToggle(){
         isGuiHidden = !isGuiHidden;
+    }
+
+    public static boolean getAutosuggestWindowWidth() {
+        return autosuggestWindowWidth;
+    }
+
+    public static void setAutosuggestWindowWidth(boolean autosuggestWindowWidth) {
+        LayoutStore.autosuggestWindowWidth = autosuggestWindowWidth;
     }
 }

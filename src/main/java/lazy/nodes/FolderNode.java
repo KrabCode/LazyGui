@@ -13,11 +13,13 @@ import lazy.utils.ClipboardUtils;
 import lazy.stores.JsonSaveStore;
 import lazy.windows.Window;
 import lazy.windows.WindowManager;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.stores.LayoutStore.cell;
+import static processing.core.PApplet.ceil;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -173,5 +175,17 @@ public class FolderNode extends AbstractNode {
                 }
             }
         }
+    }
+
+    public float findComfyWidthForContents() {
+        float spaceForName = cell * 2;
+        float spaceForValue = cell * 2;
+        for (AbstractNode child : children) {
+            float desiredSpaceForName = cell * ceil(0.5f + child.name.length() / 2f);
+            spaceForName = PApplet.max(spaceForName, desiredSpaceForName);
+        }
+        float minimumSpaceTotal = cell * 4;
+        float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
+        return PApplet.constrain(spaceForName + spaceForValue, minimumSpaceTotal, maximumSpaceTotal);
     }
 }

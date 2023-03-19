@@ -49,7 +49,11 @@ public class Window implements UserInputSubscriber {
         this.folder = folder;
         folder.window = this;
         if (nullableSizeX == null) {
-            windowSizeX = cell * folder.idealWindowWidthInCells;
+            if(LayoutStore.getAutosuggestWindowWidth() && folder.idealWindowWidthInCells == LayoutStore.defaultWindowWidthInCells){
+                windowSizeX = folder.findComfyWidthForContents();
+            }else{
+                windowSizeX = cell * folder.idealWindowWidthInCells;
+            }
         } else {
             windowSizeX = nullableSizeX;
         }
