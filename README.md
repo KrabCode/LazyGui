@@ -18,6 +18,7 @@
       * [Folder made by using the stack](#folder-made-by-using-the-stack)
       * [See the current stack for debugging](#see-the-current-stack-for-debugging)
   * [Hide and show anything](#hide-and-show-anything)
+  * [Folder visuals](#folder-visuals)
   * [Hotkeys](#hotkeys)
   * [Constructor settings](#constructor-settings)
   * [Further reading](#further-reading)
