@@ -87,9 +87,9 @@ public class LazyGui  {
         FontStore.lazyUpdateFont();
         UserInputPublisher.initSingleton();
         HotkeySubscriber.initSingleton();
-        WindowManager.addRootWindow();
         createOptionsFolder();
         createSavesFolder();
+        WindowManager.addRootWindow();
         loadGuiStateFromExistingFiles(settings);
         JsonSaveStore.registerExitHandler();
         lazyFollowSketchResolution();

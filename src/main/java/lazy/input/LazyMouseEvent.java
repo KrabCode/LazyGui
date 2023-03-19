@@ -1,18 +1,21 @@
 package lazy.input;
 
 import static lazy.stores.GlobalReferences.app;
+import static processing.core.PConstants.CENTER;
 
 public class LazyMouseEvent {
     private boolean consumed;
     private final float x, y, px, py;
     private final int scrollWheelRotation;
+    private final int button;
 
-    LazyMouseEvent(float x, float y, float px, float py) {
+    LazyMouseEvent(float x, float y, float px, float py, int button) {
         scrollWheelRotation = 0;
         this.x = x;
         this.y = y;
         this.px = px;
         this.py = py;
+        this.button = button;
     }
 
     LazyMouseEvent(int scrollWheelRotation) {
@@ -21,6 +24,7 @@ public class LazyMouseEvent {
         y = app.mouseY;
         px = app.pmouseX;
         py = app.pmouseY;
+        button = CENTER;
     }
 
     public boolean isConsumed() {
@@ -54,5 +58,9 @@ public class LazyMouseEvent {
     @Override
     public String toString() {
         return "x " + x + " | " + "px " + px + " | " + "y " + y + " | " + "py " + py;
+    }
+
+    public int getButton() {
+        return button;
     }
 }

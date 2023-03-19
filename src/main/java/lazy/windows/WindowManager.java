@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static lazy.stores.LayoutStore.cell;
+import static lazy.stores.LayoutStore.defaultWindowWidthInCells;
 
 public class WindowManager {
     private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
     private static final ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
 
     public static void addRootWindow() {
-        addWindow(new Window(NodeTree.getRoot(), cell, cell, null));
+        addWindow(new Window(NodeTree.getRoot(), cell, cell, cell * defaultWindowWidthInCells));
     }
 
     public static void addWindow(Window window) {

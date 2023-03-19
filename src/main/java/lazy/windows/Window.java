@@ -15,6 +15,7 @@ import lazy.themes.ThemeStore;
 import lazy.utils.MouseHiding;
 import lazy.utils.SnapToGrid;
 import lazy.utils.NodePaths;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -49,7 +50,11 @@ public class Window implements UserInputSubscriber {
         this.folder = folder;
         folder.window = this;
         if (nullableSizeX == null) {
-            windowSizeX = cell * folder.idealWindowWidthInCells;
+            if (LayoutStore.getAutosuggestWindowWidth() && folder.idealWindowWidthInCells == LayoutStore.defaultWindowWidthInCells) {
+                windowSizeX = folder.findComfyWidthForContents();
+            } else {
+                windowSizeX = cell * folder.idealWindowWidthInCells;
+            }
         } else {
             windowSizeX = nullableSizeX;
         }
@@ -107,17 +112,17 @@ public class Window implements UserInputSubscriber {
             String line = pathSplit[lineCount - 1 - i];
             float tooltipWidth = max(tooltipWidthMinimum, pg.textWidth(line) + FontStore.textMarginX * 2);
             pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-            pg.rect(tooltipXOffset,  -  i * cell - cell, tooltipWidth, cell);
+            pg.rect(tooltipXOffset, -i * cell - cell, tooltipWidth, cell);
             pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
-            pg.text(line, FontStore.textMarginX + tooltipXOffset, - i * cell - FontStore.textMarginY);
+            pg.text(line, FontStore.textMarginX + tooltipXOffset, -i * cell - FontStore.textMarginY);
         }
         pg.popMatrix();
         pg.popStyle();
     }
 
-    static String[] splitFullPathWithoutEndAndRoot(String fullPath){
+    static String[] splitFullPathWithoutEndAndRoot(String fullPath) {
         String[] pathWithEnd = NodePaths.splitByUnescapedSlashes(fullPath);
-        return Arrays.copyOf(pathWithEnd, pathWithEnd.length-1);
+        return Arrays.copyOf(pathWithEnd, pathWithEnd.length - 1);
     }
 
     protected void drawBackgroundWithWindowBorder(PGraphics pg, boolean drawBackgroundOnly) {
@@ -169,7 +174,7 @@ public class Window implements UserInputSubscriber {
         pg.pushStyle();
         pg.translate(posX, posY);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_BACKGROUND) : ThemeStore.getColor(NORMAL_BACKGROUND));
-        if(!app.focused && isRoot()){
+        if (!app.focused && isRoot()) {
             pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
             leftText = "not in focus";
             highlight = true;
@@ -254,7 +259,7 @@ public class Window implements UserInputSubscriber {
         float y = cell;
         for (int i = 0; i < folder.children.size(); i++) {
             AbstractNode node = folder.children.get(i);
-            if(!node.isInlineNodeVisible()){
+            if (!node.isInlineNodeVisible()) {
                 continue;
             }
             float nodeHeight = cell * node.masterInlineNodeHeightInCells;
@@ -265,7 +270,7 @@ public class Window implements UserInputSubscriber {
             pg.popStyle();
             pg.popMatrix();
 
-            if(i > 0){
+            if (i > 0) {
                 // separator
                 pg.pushStyle();
                 drawHorizontalSeparator(pg);
@@ -281,18 +286,18 @@ public class Window implements UserInputSubscriber {
     private void drawHorizontalSeparator(PGraphics pg) {
         boolean show = LayoutStore.isShowHorizontalSeparators();
         float weight = LayoutStore.getHorizontalSeparatorStrokeWeight();
-        if(show){
+        if (show) {
             pg.strokeCap(SQUARE);
             pg.strokeWeight(weight);
             pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
-            pg.line(0,0,windowSizeX,0);
+            pg.line(0, 0, windowSizeX, 0);
         }
     }
 
     private float heightSumOfChildNodes() {
         float sum = 0;
         for (AbstractNode child : folder.children) {
-            if(!child.isInlineNodeVisible()){
+            if (!child.isInlineNodeVisible()) {
                 continue;
             }
             sum += child.masterInlineNodeHeightInCells * cell;
@@ -304,10 +309,10 @@ public class Window implements UserInputSubscriber {
     @Override
     public void mouseWheelMoved(LazyMouseEvent e) {
         // scrolling while dragging should scale the dragged inline node as opposed to whatever the cursor is hovering
-        if(app.mousePressed){
+        if (app.mousePressed) {
             List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
-            for(AbstractNode node : allNodes){
-                if(node.isInlineNodeDragged){
+            for (AbstractNode node : allNodes) {
+                if (node.isInlineNodeDragged) {
                     node.mouseWheelMovedOverNode(e.getX(), e.getY(), e.getRotation());
                     e.setConsumed(true);
                     return;
@@ -344,7 +349,7 @@ public class Window implements UserInputSubscriber {
 
     private AbstractNode tryFindChildNodeAt(float x, float y) {
         for (AbstractNode node : folder.children) {
-            if(!node.isInlineNodeVisible()){
+            if (!node.isInlineNodeVisible()) {
                 continue;
             }
             if (isPointInRect(x, y, node.pos.x, node.pos.y, node.size.x, node.size.y)) {
@@ -360,20 +365,24 @@ public class Window implements UserInputSubscriber {
         if (isClosed() || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }
-        if (isPointInsideWindow(e.getX(), e.getY())) {
+        if (isPointInsideWindow(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) {
             if (!isFocused()) {
                 setFocusOnThis();
             }
             e.setConsumed(true);
         }
-        if (isPointInsideTitleBar(e.getX(), e.getY())) {
+        if (isPointInsideTitleBar(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) {
             isBeingDraggedAround = true;
             e.setConsumed(true);
             setFocusOnThis();
             return;
-        } else if (isPointInsideCloseButton(e.getX(), e.getY())) {
+        }
+        if (!isRoot() &&
+                ((isPointInsideCloseButton(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) ||
+                (isPointInsideWindow(e.getX(), e.getY()) && e.getButton() == PConstants.RIGHT))) {
             closeButtonPressInProgress = true;
             e.setConsumed(true);
+            return;
         }
         if (isPointInsideResizeBorder(e.getX(), e.getY()) && LayoutStore.getWindowResizeEnabled()) {
             isBeingResized = true;
@@ -420,7 +429,7 @@ public class Window implements UserInputSubscriber {
         for (AbstractNode child : folder.children) {
             if (child.isInlineNodeDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e);
-                if(e.isConsumed()){
+                if (e.isConsumed()) {
                     MouseHiding.tryHideMouseForDragging();
                 }
             }
@@ -433,7 +442,9 @@ public class Window implements UserInputSubscriber {
         if (isClosed() || !folder.isInlineNodeVisibleParentAware()) {
             return;
         }
-        if (!isRoot() && closeButtonPressInProgress && isPointInsideCloseButton(e.getX(), e.getY())) {
+        if (!isRoot() && closeButtonPressInProgress &&
+                ((isPointInsideCloseButton(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) ||
+                (isPointInsideWindow(e.getX(), e.getY()) && e.getButton() == PConstants.RIGHT))) {
             close();
             e.setConsumed(true);
         } else if (isBeingDraggedAround) {
@@ -447,6 +458,9 @@ public class Window implements UserInputSubscriber {
         isBeingDraggedAround = false;
         isBeingResized = false;
 
+        if(e.isConsumed()){
+            return;
+        }
         for (AbstractNode node : folder.children) {
             node.mouseReleasedAnywhere(e);
         }
@@ -492,13 +506,13 @@ public class Window implements UserInputSubscriber {
     }
 
     public boolean isPointInsideContent(float x, float y) {
-       return isPointInRect(x, y,
+        return isPointInRect(x, y,
                 posX, posY + cell,
                 windowSizeX, windowSizeY - cell);
     }
 
     public boolean isPointInsideWindow(float x, float y) {
-       return isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
+        return isPointInRect(x, y, posX, posY, windowSizeX, windowSizeY);
     }
 
     boolean isPointInsideTitleBar(float x, float y) {

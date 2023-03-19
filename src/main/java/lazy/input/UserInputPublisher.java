@@ -132,7 +132,7 @@ public class UserInputPublisher {
     }
 
     void mousePressed(MouseEvent event) {
-        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY, event.getButton());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mousePressed(e);
             if (e.isConsumed()) {
@@ -143,7 +143,7 @@ public class UserInputPublisher {
     }
 
     void mouseReleased(MouseEvent event) {
-        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY, event.getButton());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseReleased(e);
             if (e.isConsumed()) {
@@ -154,7 +154,7 @@ public class UserInputPublisher {
     }
 
     void mouseMoved(MouseEvent event) {
-        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY, event.getButton());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseMoved(e);
             if (e.isConsumed()) {
@@ -165,7 +165,7 @@ public class UserInputPublisher {
     }
 
     void mouseDragged(MouseEvent event) {
-        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY);
+        LazyMouseEvent e = new LazyMouseEvent(event.getX(), event.getY(), prevX, prevY, event.getButton());
         for (UserInputSubscriber subscriber : subscribers) {
             subscriber.mouseDragged(e);
             if (e.isConsumed()) {
