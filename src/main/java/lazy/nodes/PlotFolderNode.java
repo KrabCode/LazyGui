@@ -39,10 +39,7 @@ public class PlotFolderNode extends FolderNode {
     protected void drawNodeForeground(PGraphics pg, String name) {
         drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
-        String vectorToDisplay = sliderX.getValueToDisplay() + "," + sliderY.getValueToDisplay();
-        if(sliderZ != null){
-            vectorToDisplay += "," + sliderZ.getValueToDisplay();
-        }
+        String vectorToDisplay = getValueAsString();
         drawRightText(pg, vectorToDisplay, true);
     }
 
@@ -70,5 +67,11 @@ public class PlotFolderNode extends FolderNode {
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);
         }
+    }
+
+    @Override
+    public String getValueAsString() {
+        return sliderX.getValueToDisplay() + "," + sliderY.getValueToDisplay() +
+                (sliderZ == null ? "" : sliderZ.getValueToDisplay());
     }
 }
