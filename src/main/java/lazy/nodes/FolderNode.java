@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 
 import lazy.input.LazyKeyEvent;
+import lazy.stores.FontStore;
 import lazy.utils.KeyCodes;
 import lazy.stores.LayoutStore;
 import lazy.themes.ThemeColorType;
@@ -177,15 +178,25 @@ public class FolderNode extends AbstractNode {
         }
     }
 
-    public float findComfyWidthForContents() {
+    public float suggestComfortableWidthForContents() {
         float spaceForName = cell * 2;
         float spaceForValue = cell * 2;
+        float titleTextWidth = findTextWidthRoundedUpToWholeCells(name);
+        spaceForName = PApplet.max(spaceForName, titleTextWidth);
         for (AbstractNode child : children) {
-            float desiredSpaceForName = cell * ceil(0.5f + child.name.length() / 2f);
-            spaceForName = PApplet.max(spaceForName, desiredSpaceForName);
+            float nameTextWidth = findTextWidthRoundedUpToWholeCells(child.name);
+            spaceForName = PApplet.max(spaceForName, nameTextWidth);
+            float valueTextWidth = findTextWidthRoundedUpToWholeCells(child.getValueAsString());
+            spaceForValue = PApplet.max(spaceForValue, valueTextWidth);
         }
         float minimumSpaceTotal = cell * 4;
         float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
-        return PApplet.constrain(spaceForName + spaceForValue, minimumSpaceTotal, maximumSpaceTotal);
+        return PApplet.constrain(spaceForName + spaceForValue + cell, minimumSpaceTotal, maximumSpaceTotal);
+    }
+
+    private float findTextWidthRoundedUpToWholeCells(String textToMeasure) {
+        PGraphics textWidthProvider = FontStore.getMainFontUtilsProvider();
+        float leftTextWidth = textWidthProvider.textWidth(textToMeasure);
+        return ceil(leftTextWidth / cell) * cell;
     }
 }

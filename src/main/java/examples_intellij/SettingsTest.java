@@ -53,11 +53,8 @@ public class SettingsTest extends PApplet {
     }
 
     public void draw() {
-        background(gui.colorPicker("background").hex);
-        int number = gui.sliderInt("pick a number", 7);
-        fill(255);
-        text(number, 400, 500);
+        image(gui.gradient("background"), 0, 0);
+        gui.draw();
     }
-
 }
 

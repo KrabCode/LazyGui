@@ -224,8 +224,7 @@ public abstract class AbstractNode {
 
     }
 
-    @SuppressWarnings("unused")
-    public String getConsolePrintableValue(){
+    public String getValueAsString(){
         return "";
     }
 

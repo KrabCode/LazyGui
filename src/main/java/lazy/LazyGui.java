@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lazy.stores.GlobalReferences.gui;
 import static lazy.stores.JsonSaveStore.*;
 import static lazy.stores.NodeTree.*;
 import static lazy.stores.NormColorStore.color;
@@ -46,7 +47,7 @@ public class LazyGui  {
     private boolean printedPopWarningAlready = false;
 
     private PGraphics guiCanvas;
-    FolderNode optionsNode;
+//    FolderNode optionsNode;
 
 
     private static LazyGui singleton;
@@ -147,6 +148,8 @@ public class LazyGui  {
      */
     public void draw(PGraphics targetCanvas) {
         if(lastFrameCountGuiWasShown == app.frameCount){
+            // we are at the end of the user's sketch draw(), but the gui has already been displayed this frame
+            gui.clearFolder();
             return;
         }
         lastFrameCountGuiWasShown = app.frameCount;
@@ -157,7 +160,7 @@ public class LazyGui  {
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
         guiCanvas.beginDraw();
         guiCanvas.clear();
-        clearFolder();
+        gui.clearFolder();
         updateOptionsFolder();
         if (!LayoutStore.isGuiHidden()) {
             SnapToGrid.displayGuideAndApplyFilter(guiCanvas, getWindowBeingDraggedIfAny());
@@ -1019,6 +1022,9 @@ public class LazyGui  {
      * @see LazyGui#getFolder()
      */
     public void pushFolder(String folderName){
+        if(folderName.equals("options")){
+            int i = 0;
+        }
         if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
             println("Too many calls to pushFolder() - stack size reached the warning limit of " + stackSizeWarningLevel +
                     ", possibly due to runaway recursion");
@@ -1185,12 +1191,9 @@ public class LazyGui  {
     }
 
     private void createOptionsFolder() {
-        String path = "options";
-        optionsNode = new FolderNode(path, NodeTree.getRoot());
-        insertNodeAtItsPath((optionsNode));
-        pushFolder("options");
+        gui.pushFolder("options");
         ThemeStore.updateThemePicker();
-        popFolder();
+        gui.popFolder();
     }
 
     private void createSavesFolder(){
@@ -1198,7 +1201,7 @@ public class LazyGui  {
     }
 
     private void updateOptionsFolder() {
-        pushFolder(optionsNode.path);
+        gui.pushFolder("options");
         LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
@@ -1207,7 +1210,7 @@ public class LazyGui  {
         HotkeyStore.updateHotkeyToggles();
         DelayStore.updateInputDelay();
         MouseHiding.updateSettings();
-        popFolder();
+        gui.popFolder();
     }
 
 }

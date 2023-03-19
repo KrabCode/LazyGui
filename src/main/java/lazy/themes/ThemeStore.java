@@ -83,7 +83,7 @@ public class ThemeStore {
     public static void updateThemePicker() {
             gui.pushFolder("themes");
             String userSelection = gui.radio("preset", ThemeType.getAllNames(), defaultThemeType);
-            gui.pushFolder("editor");
+
             if (!userSelection.equals(ThemeType.getName(ThemeStore.currentSelection))) {
                 ThemeType newSelectionToCopy = ThemeType.getValue(userSelection);
                 gui.colorPickerSet("focus foreground", ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND, newSelectionToCopy));
@@ -106,7 +106,6 @@ public class ThemeStore {
                     gui.colorPicker("normal background", defaultTheme.normalBackground).hex);
             ThemeStore.setCustomColor(ThemeColorType.WINDOW_BORDER,
                     gui.colorPicker("window border", defaultTheme.windowBorder).hex);
-            gui.popFolder();
             gui.popFolder();
     }
 }
