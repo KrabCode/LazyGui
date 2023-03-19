@@ -18,7 +18,7 @@ public enum ThemeType {
         return new ThemeType[]{DARK, LIGHT, PINK, BLUE, CUSTOM};
     }
 
-    static ThemeType getValue(String name) {
+    public static ThemeType getValue(String name) {
         switch (name) {
             case "dark": {
                 return DARK;

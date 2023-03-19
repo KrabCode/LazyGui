@@ -41,11 +41,19 @@ void drawForeground() {
     float rotation = gui.slider("rotation");
     rotate(rotation);
     PVector localTextPos = gui.plotXY("local offset");
+
+    // when a toggle starts with 'active' it also lights up the folder icon
+    if(gui.toggle("active shake")){
+      localTextPos.add(PVector.random2D().mult(3));
+    }
     translate(localTextPos.x, localTextPos.y);
     int defaultLabel = floor(pow(2, i+1));
+
+    // when the text path starts with 'label' this also sets a display name for the folder
     String label = gui.text("label text", "" + defaultLabel);
     fill(gui.colorPicker("text color", color(24)).hex);
     text(label, 0, 0);
+
     popMatrix();
     gui.popFolder();
   }
