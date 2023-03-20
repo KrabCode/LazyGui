@@ -89,7 +89,7 @@ public class FolderNode extends AbstractNode {
         if(renamingNode == null || !renamingNode.className.contains(desiredClassName)){
             renamingNode = findChildByNameStartsWith("name");
         }
-        if(renamingNode != null && renamingNode.className.contains(desiredClassName)){
+        if(renamingNode != null && renamingNode.className.contains(desiredClassName) && ((TextNode) renamingNode).stringValue.length() > 0){
             overridableName = ((TextNode) renamingNode).stringValue;
         }
         return overridableName;
