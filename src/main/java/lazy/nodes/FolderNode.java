@@ -178,9 +178,13 @@ public class FolderNode extends AbstractNode {
         }
     }
 
-    public float suggestComfortableWidthForContents() {
+    public float autosuggestWindowWidthForContents() {
+        if(!LayoutStore.getAutosuggestWindowWidth()){
+            return LayoutStore.defaultWindowWidthInCells;
+        }
         float spaceForName = cell * 2;
         float spaceForValue = cell * 2;
+        float minimumSpaceTotal = spaceForName + spaceForValue;
         float titleTextWidth = findTextWidthRoundedUpToWholeCells(name);
         spaceForName = PApplet.max(spaceForName, titleTextWidth);
         for (AbstractNode child : children) {
@@ -189,9 +193,8 @@ public class FolderNode extends AbstractNode {
             float valueTextWidth = findTextWidthRoundedUpToWholeCells(child.getValueAsString());
             spaceForValue = PApplet.max(spaceForValue, valueTextWidth);
         }
-        float minimumSpaceTotal = cell * 4;
         float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
-        return PApplet.constrain(spaceForName + spaceForValue + cell, minimumSpaceTotal, maximumSpaceTotal);
+        return PApplet.constrain(spaceForName + spaceForValue, minimumSpaceTotal, maximumSpaceTotal);
     }
 
     private float findTextWidthRoundedUpToWholeCells(String textToMeasure) {

@@ -83,7 +83,7 @@ public class LazyGui  {
         if(settings == null){
             settings = new LazyGuiSettings();
         }
-        settings.applySettingsOntoGui();
+        settings.applySettingsOntoGuiAtStartup();
         ThemeStore.init();
         FontStore.lazyUpdateFont();
         UserInputPublisher.initSingleton();

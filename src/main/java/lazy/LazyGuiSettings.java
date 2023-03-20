@@ -27,15 +27,15 @@ public class LazyGuiSettings {
     private boolean autosaveLockGuardEnabled;
     private boolean mouseShouldHideWhenDragging;
     private boolean mouseShouldConfineToWindow;
+    private boolean autosuggestWindowWidth;
     private long autosaveLockGuardMillisLimit;
     private float cellSize;
     private int mainFontSize, sideFontSize;
-
-
     private boolean startGuiHidden = false;
     private Theme themeCustom = null;
     private ThemeType themePreset = null;
     private String pathToSpecificSaveToLoadOnStartup = null;
+    private String sketchNameOverride = null;
 
     /**
      * Constructor, call this before any other function here.
@@ -63,23 +63,28 @@ public class LazyGuiSettings {
         this.startGuiHidden = LayoutStore.isGuiHidden();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
+        this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
     }
 
-    void applySettingsOntoGui() {
-        JsonSaveStore.autosaveOnExitEnabled = this.autosaveOnExitEnabled;
-        JsonSaveStore.autosaveLockGuardEnabled = this.autosaveLockGuardEnabled;
-        JsonSaveStore.autosaveLockGuardMillisLimit = this.autosaveLockGuardMillisLimit;
-        MouseHiding.shouldHideWhenDragging = this.mouseShouldHideWhenDragging;
-        MouseHiding.shouldConfineToWindow = this.mouseShouldConfineToWindow;
-        LayoutStore.cell = this.cellSize;
-        FontStore.mainFontSizeDefault = this.mainFontSize;
-        FontStore.sideFontSizeDefault = this.sideFontSize;
+    void applySettingsOntoGuiAtStartup() {
+        JsonSaveStore.autosaveOnExitEnabled = autosaveOnExitEnabled;
+        JsonSaveStore.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
+        JsonSaveStore.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
+        MouseHiding.shouldHideWhenDragging = mouseShouldHideWhenDragging;
+        MouseHiding.shouldConfineToWindow = mouseShouldConfineToWindow;
+        LayoutStore.cell = cellSize;
+        LayoutStore.setAutosuggestWindowWidth(autosuggestWindowWidth);
+        FontStore.mainFontSizeDefault = mainFontSize;
+        FontStore.sideFontSizeDefault = sideFontSize;
         if (themeCustom != null) {
             ThemeStore.setCustomPaletteAndMakeDefaultBeforeInit(themeCustom);
         } else if (themePreset != null) {
             ThemeStore.selectThemeByTypeBeforeInit(themePreset);
         }
         LayoutStore.setIsGuiHidden(startGuiHidden);
+        if(sketchNameOverride != null){
+            LayoutStore.setOverridingSketchName(sketchNameOverride);
+        }
     }
 
     /**
@@ -135,7 +140,7 @@ public class LazyGuiSettings {
 
     /**
      * When the parameter is not null, this loads a specific save file on startup.
-     * Overrides loading latest save on start.
+     * Also disables loading the latest save on startup.
      *
      * @param fileName name of the save file to load in the format "1" or "1.json"
      * @return this settings object for chaining statements easily
@@ -242,6 +247,28 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setSideFontSize(int sideFontSize) {
         this.sideFontSize = sideFontSize;
+        return this;
+    }
+
+    /**
+     * Overrides what the root window title displays. By default this is the name of your sketch.
+     *
+     * @param sketchNameOverride name to display in root window title
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setSketchNameOverride(String sketchNameOverride) {
+        this.sketchNameOverride = sketchNameOverride;
+        return this;
+    }
+
+    /**
+     * The GUI tries to make windows fit its contents snugly based on longest text in the row at window creation time.
+     * Setting this to false disables this behavior and sets all windows to some default size fitting for the folder type.
+     *
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setAutosuggestWindowWidth(boolean shouldAutosuggest){
+        this.autosuggestWindowWidth = shouldAutosuggest;
         return this;
     }
 

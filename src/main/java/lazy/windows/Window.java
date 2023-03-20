@@ -51,7 +51,7 @@ public class Window implements UserInputSubscriber {
         folder.window = this;
         if (nullableSizeX == null) {
             if (LayoutStore.getAutosuggestWindowWidth() && folder.idealWindowWidthInCells == LayoutStore.defaultWindowWidthInCells) {
-                windowSizeX = folder.suggestComfortableWidthForContents();
+                windowSizeX = folder.autosuggestWindowWidthForContents();
             } else {
                 windowSizeX = cell * folder.idealWindowWidthInCells;
             }
@@ -104,7 +104,6 @@ public class Window implements UserInputSubscriber {
         int lineCount = pathSplit.length;
         float tooltipXOffset = cell * 0.5f;
         float tooltipWidthMinimum = windowSizeX - tooltipXOffset - cell;
-//        pg.stroke(ThemeStore.getColor(WINDOW_BORDER)); // tooltip border maybe?
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.textAlign(LEFT, CENTER);

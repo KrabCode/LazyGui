@@ -13,7 +13,7 @@ public class SettingsTest extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+        size(600,600, P2D);
     }
 
     public void setup() {
@@ -23,7 +23,7 @@ public class SettingsTest extends PApplet {
 //            .setLoadSpecificSaveOnStartup("1") // expects filenames like "1" or "auto.json", overrides 'load latest'
 
             // AUTOSAVE
-            .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
+            .setAutosaveOnExit(false)    // the shutdown hook only works on graceful exit, for example the ESC button
             .setAutosaveLockGuardEnabled(true) // for not autosaving settings that locked the sketch in an endless loop
             .setAutosaveLockGuardMillisLimit(1000) // millis the last frame must be rendered faster than for autosave to work
 
@@ -46,6 +46,9 @@ public class SettingsTest extends PApplet {
                     color(200),     // normal foreground color
                     color(255))    // focused foreground color
             // custom theme overrides preset when not null
+
+            .setAutosuggestWindowWidth(true)
+            .setSketchNameOverride("Testing")
         );
 
 

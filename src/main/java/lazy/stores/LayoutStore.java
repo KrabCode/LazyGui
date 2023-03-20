@@ -17,6 +17,8 @@ public class LayoutStore {
     private static boolean isGuiHidden = false;
     private static boolean autosuggestWindowWidth = true;
 
+    private static String overridingSketchName = null;
+
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
         setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
@@ -116,4 +118,13 @@ public class LayoutStore {
     public static void setAutosuggestWindowWidth(boolean autosuggestWindowWidth) {
         LayoutStore.autosuggestWindowWidth = autosuggestWindowWidth;
     }
+
+    public static String getOverridingSketchName() {
+        return overridingSketchName;
+    }
+
+    public static void setOverridingSketchName(String overridingSketchName) {
+        LayoutStore.overridingSketchName = overridingSketchName;
+    }
+
 }

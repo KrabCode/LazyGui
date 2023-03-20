@@ -24,7 +24,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void setup() {
-        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
+        gui = new LazyGui(this, new LazyGuiSettings());
         pg = createGraphics(width, height, P2D);
         pg.smooth(8);
     }

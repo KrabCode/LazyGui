@@ -234,8 +234,12 @@ public abstract class AbstractNode {
     }
 
     private String getNameFromPath(String path) {
-        if ("".equals(path)) { // this is the root node
-            return getClassNameAsSpaceSeparatedLowerCase(app.getClass().getSimpleName());
+        if (path.equals("")) { // this is the root node
+            String overridingSketchName = LayoutStore.getOverridingSketchName();
+            if(overridingSketchName != null){
+                return overridingSketchName;
+            }
+            return app.getClass().getSimpleName(); // not using lowercase separated class name after all because it breaks what users expect to see
         }
         String[] split = NodePaths.splitByUnescapesSlashesWithoutRemovingThem(path);
         if (split.length == 0) {
@@ -245,6 +249,7 @@ public abstract class AbstractNode {
         return NodePaths.getDisplayStringWithoutEscapes(nameWithoutPrefixSlash);
     }
 
+    @SuppressWarnings("unused") // previously used for getting root window name, might still be useful some day
     private String getClassNameAsSpaceSeparatedLowerCase(String className){
         if(className.trim().length() == 0){
             return "";
