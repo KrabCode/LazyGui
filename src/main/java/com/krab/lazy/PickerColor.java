@@ -41,6 +41,14 @@ public class PickerColor {
      */
     public final float alpha;
 
+    /**
+     * Simple constructor that just assigns the parameters into the corresponding fields.
+     * @param hex processing int color
+     * @param hue hue in range of [0,1]
+     * @param sat saturation in range of [0,1]
+     * @param br brightness in range of [0,1]
+     * @param alpha alpha in range of [0,1]
+     */
     public PickerColor(int hex, float hue, float sat, float br, float alpha){
         this.hex = hex;
         this.hue = hue;
@@ -49,6 +57,12 @@ public class PickerColor {
         this.alpha = alpha;
     }
 
+    /**
+     * Utility constructor that gets all the other HSB color data from the hex int color,
+     * but this can be CPU intensive when done too much.
+     *
+     * @param hex processing integer color to parse as HSBA
+     */
     public PickerColor(int hex) {
         this.hex = hex;
         this.hue = NormColorStore.hue(hex);

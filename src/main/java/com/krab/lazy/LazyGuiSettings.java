@@ -265,6 +265,7 @@ public class LazyGuiSettings {
      * The GUI tries to make windows fit its contents snugly based on longest text in the row at window creation time.
      * Setting this to false disables this behavior and sets all windows to some default size fitting for the folder type.
      *
+     * @param shouldAutosuggest should the windows try to auto-detect optimal width?
      * @return this settings object for chaining statements easily
      */
     public LazyGuiSettings setAutosuggestWindowWidth(boolean shouldAutosuggest){

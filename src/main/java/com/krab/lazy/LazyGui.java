@@ -45,21 +45,24 @@ public class LazyGui  {
     int stackSizeWarningLevel = 64;
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
-
     private PGraphics guiCanvas;
-//    FolderNode optionsNode;
-
 
     private static LazyGui singleton;
 
+    /**
+     * Main constructor for the LazyGui object which acts as a central hub for all GUI related methods.
+     * Meant to be initialized once in setup() with <code>new LazyGui(this)</code>.
+     * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
+     *
+     * @param sketch the sketch that uses this gui, should be 'this' from the calling side
+     */
     public LazyGui(PApplet sketch){
         new LazyGui(sketch, new LazyGuiSettings());
     }
 
     /**
      * Constructor for the LazyGui object which acts as a central hub for all GUI related methods.
-     * Meant to be initialized in setup() with <code>new LazyGui(this)</code>.
-     * Not meant to be initialized more than once.
+     * Meant to be initialized once in setup() with <code>new LazyGui(this)</code>.
      * Registers itself at end of the draw() method and displays the GUI whenever draw() ends.
      *
      * @param sketch main processing sketch class to display the GUI on and use keyboard and mouse input from
