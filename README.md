@@ -39,7 +39,7 @@
   - [hotkeys](#hotkeys) for common actions
       - copy / paste any value or whole folders
       - undo / redo any change
-  - [reloading shaders](src/main/java/lazy/ShaderReloader.java) at runtime
+  - [reloading shaders](src/main/java/com/krab/lazy/ShaderReloader.java) at runtime
   
 ## How do I run this?
 
@@ -361,8 +361,8 @@ gui = new LazyGui(this, new LazyGuiSettings()
 
 ## Further reading
 - [Javadocs](https://krabcode.github.io/LazyGui/) on GitHub pages
-- [Processing examples](src/main/java/examples) for the PDE
-- [IntelliJ examples](src/main/java/examples_intellij) for use in an IDE like IntelliJ IDEA
+- [Processing examples](src/main/java/com/krab/lazy/examples) for the PDE
+- [IntelliJ examples](src/main/java/com/krab/lazy/examples_intellij) for use in an IDE like IntelliJ IDEA
 - [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo
 - [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
