@@ -179,8 +179,9 @@ public class FolderNode extends AbstractNode {
     }
 
     public float autosuggestWindowWidthForContents() {
+        float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
         if(!LayoutStore.getAutosuggestWindowWidth()){
-            return LayoutStore.defaultWindowWidthInCells;
+            return maximumSpaceTotal;
         }
         float spaceForName = cell * 2;
         float spaceForValue = cell * 2;
@@ -193,7 +194,6 @@ public class FolderNode extends AbstractNode {
             float valueTextWidth = findTextWidthRoundedUpToWholeCells(child.getValueAsString());
             spaceForValue = PApplet.max(spaceForValue, valueTextWidth);
         }
-        float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
         return PApplet.constrain(spaceForName + spaceForValue, minimumSpaceTotal, maximumSpaceTotal);
     }
 

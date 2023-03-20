@@ -155,6 +155,8 @@ public class LazyGui  {
         lastFrameCountGuiWasShown = app.frameCount;
         if(app.frameCount == 1){
             UndoRedoStore.init();
+            FolderNode root = getRoot();
+            root.window.windowSizeX = root.autosuggestWindowWidthForContents();
         }
         lazyFollowSketchResolution();
         updateAllNodeValuesRegardlessOfParentWindowOpenness();
