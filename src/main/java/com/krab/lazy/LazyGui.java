@@ -206,16 +206,14 @@ public class LazyGui  {
     }
 
     /**
-     * Utility function to tell if a mouse press collided and interacted with the GUI.
+     * Utility function to tell if the latest mouse event collided and interacted with the GUI.
      * For example with a mouse controlled brush you might not want to keep drawing on the main canvas
      * when you just want to adjust its properties in the GUI and you don't expect that to affect the artwork.
-     * The GUI cannot make the mousePressed() method stop getting called in the processing sketch,
-     * so a utility function is needed to help the library user decide what to do.
      *
-     * @return whether you should use this mouse press in the processing sketch
+     * @return whether you should use this mouse press in your processing sketch
      */
-    public boolean mousePressedOutsideGui() {
-        return app.mousePressed && UserInputPublisher.mouseFallsThroughThisFrame;
+    public boolean isMouseOutsideGui() {
+        return UserInputPublisher.mouseFallsThroughThisFrame;
     }
 
     /**

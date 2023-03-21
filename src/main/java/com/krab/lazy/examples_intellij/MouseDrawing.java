@@ -10,8 +10,8 @@ public class MouseDrawing extends PApplet {
     PGraphics canvas;
     PickerColor circleColor;
     PickerColor lineColor;
-    private float lineWeight = 2;
-    private float circleSize = 30;
+    private float lineWeight = 15;
+    private float circleSize = 50;
 
 
     public static void main(String[] args) {
@@ -26,13 +26,10 @@ public class MouseDrawing extends PApplet {
     @Override
     public void setup() {
         gui = new LazyGui(this);
-        canvas = createGraphics(width, height, P2D);
-        for (int i = 0; i < 2; i++) {
-            // there's a bug in PGraphics where you have to draw the background twice for it to stick
-            canvas.beginDraw();
-            canvas.background(150);
-            canvas.endDraw();
-        }
+        canvas = createGraphics(width, height);
+        canvas.beginDraw();
+        canvas.background(50);
+        canvas.endDraw();
         noStroke();
     }
 
@@ -50,34 +47,36 @@ public class MouseDrawing extends PApplet {
     }
 
     public void mousePressed() {
-        drawCircleAtMouse();
+        if (gui.isMouseOutsideGui()) {
+            drawCircleAtMouse();
+        }
     }
 
     public void mouseReleased() {
-        drawCircleAtMouse();
+        if (gui.isMouseOutsideGui()) {
+            drawCircleAtMouse();
+        }
     }
 
     public void mouseDragged() {
-        drawLineAtMouse();
+        if (gui.isMouseOutsideGui()) {
+            drawLineAtMouse();
+        }
     }
 
     private void drawCircleAtMouse() {
         canvas.beginDraw();
-        if(gui.mousePressedOutsideGui()){
-            canvas.noStroke();
-            canvas.fill(circleColor.hex);
-            canvas.ellipse(mouseX, mouseY, circleSize, circleSize);
-        }
+        canvas.noStroke();
+        canvas.fill(circleColor.hex);
+        canvas.ellipse(mouseX, mouseY, circleSize, circleSize);
         canvas.endDraw();
     }
 
-    private void drawLineAtMouse(){
+    private void drawLineAtMouse() {
         canvas.beginDraw();
-        if(gui.mousePressedOutsideGui()){
-            canvas.stroke(lineColor.hex);
-            canvas.strokeWeight(lineWeight);
-            canvas.line(pmouseX, pmouseY, mouseX, mouseY);
-        }
+        canvas.stroke(lineColor.hex);
+        canvas.strokeWeight(lineWeight);
+        canvas.line(pmouseX, pmouseY, mouseX, mouseY);
         canvas.endDraw();
     }
 }
