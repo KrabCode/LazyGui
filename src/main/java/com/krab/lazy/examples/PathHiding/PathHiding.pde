@@ -24,7 +24,7 @@ private void drawText() {
     String content = gui.text("content", "hello");
     text(content, 200, 600);
 
-    // You can also hide any single control element by path
+    // hide any single control element by path
     if (show) {
         gui.show("content");
     } else {
@@ -47,9 +47,9 @@ void drawRectangles() {
             // show the current folder in case it was hidden
             gui.showCurrentFolder();
         }else{
-            // this rect is over the rectCount limit, so we hide its folder and skip drawing it
+            // this rect is over the rectCount limit, so hide its folder and skip drawing it
             gui.hideCurrentFolder();
-            // shouldn't forget to pop out of the folder before 'continue'
+            // shouldn't forget to pop out of the folder before 'continue' or 'return'
             gui.popFolder();
             continue;
         }

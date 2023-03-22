@@ -14,7 +14,8 @@ public class Demo extends PApplet {
 
     @Override
     public void settings() {
-        fullScreen(P3D);
+//        fullScreen(P3D);
+        size(22*60, 22*36, P3D);
         smooth(8);
     }
 
@@ -31,38 +32,44 @@ public class Demo extends PApplet {
         gui.pushFolder("sketch");
         background(gui.colorPicker("background").hex);
         gui.gradient("z colors");
+        PVector gridPos = gui.plotXY("grid pos");
         float gridSizeHalf = gui.slider("grid size", 1000) / 2f;
         float gridDetail = gui.sliderInt("grid detail", 50);
-        float cellSize = gui.slider("cell size", gridSizeHalf / (gridDetail / 2f) + 0.5f);
         float freq = gui.slider("frequency", 0.1f);
-        stroke(gui.colorPicker("stroke").hex);
-        strokeWeight(gui.slider("stroke weight"));
+        float nh = gui.slider("noise height", 100);
         PVector rot = gui.plotXY("rotate xz");
         PVector noisePos = gui.plotXY("noise pos");
         PVector noiseSpeed = gui.plotXY("noise speed");
+        translate(width / 2f + gridPos.x, height / 2f + gridPos.y);
+        rotateX(rot.x * PI);
+        rotateZ(rot.y * PI);
         gui.plotSet("noise pos", noisePos.copy().add(noiseSpeed.div(100f)));
-        for (int xi = 0; xi < gridDetail; xi++) {
-            for (int yi = 0; yi < gridDetail; yi++) {
-                float xNorm = norm(xi, 0, gridDetail - 1);
-                float yNorm = norm(yi, 0, gridDetail - 1);
-                float x = -gridSizeHalf + xNorm * 2 * gridSizeHalf;
-                float y = -gridSizeHalf + yNorm * 2 * gridSizeHalf;
-                float noise = noise((noisePos.x + x) * freq, (noisePos.y + y) * freq);
-                int clr = gui.gradientColorAt("z colors", 1 - noise).hex;
-                float baseHeight = gui.slider("base height", 200);
-                float noiseHeight = noise * gui.slider("noise ratio", 100);
-                float h = baseHeight + noiseHeight;
-                fill(clr);
+        for (int yi = 0; yi < gridDetail; yi++) {
+            beginShape(TRIANGLE_STRIP);
+            stroke(gui.colorPicker("stroke").hex);
+            strokeWeight(gui.slider("stroke weight"));
+            if(!gui.toggle("wireframe")){
+                noStroke();
+            }
+            for (int xi = 0; xi < gridDetail; xi++) {
+                float px = map(xi, 0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
+                float py = map(yi, 0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
+                float qx = map(xi,0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
+                float qy = map(yi+1,0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
+                float pn = noise((noisePos.x + px) * 0.1f * freq, (noisePos.y + py) * 0.1f * freq);
+                float qn = noise((noisePos.x + qx) * 0.1f * freq, (noisePos.y + qy) * 0.1f * freq);
+                float ph0 = pn * nh;
+                float qh0 = qn * nh;
+                int pColor = gui.gradientColorAt("z colors", pn).hex;
+                int qColor = gui.gradientColorAt("z colors", qn).hex;
                 pushMatrix();
-                translate(width / 2f, height / 2f);
-                rotateX(rot.x * PI);
-                rotateZ(rot.y * PI);
-                rectMode(CENTER);
-                rect(x, y, cellSize, cellSize);
-                translate(x, y, h / 2f);
-                box(cellSize, cellSize, -h);
+                fill(pColor);
+                vertex(px,py,ph0);
+                fill(qColor);
+                vertex(qx,qy,qh0);
                 popMatrix();
             }
+            endShape();
         }
         gui.popFolder();
     }
