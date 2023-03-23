@@ -5,6 +5,8 @@ import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.util.ArrayList;
+
 public class Demo extends PApplet {
     LazyGui gui;
 
@@ -43,8 +45,10 @@ public class Demo extends PApplet {
         translate(width / 2f + gridPos.x, height / 2f + gridPos.y);
         rotateX(rot.x * PI);
         rotateZ(rot.y * PI);
+
         gui.plotSet("noise pos", noisePos.copy().add(noiseSpeed.div(100f)));
-        for (int yi = 0; yi < gridDetail; yi++) {
+        ArrayList<PVector> noisePositions = new ArrayList<>();
+        for (int yi = 0; yi <= gridDetail; yi++) {
             beginShape(TRIANGLE_STRIP);
             stroke(gui.colorPicker("stroke").hex);
             strokeWeight(gui.slider("stroke weight"));
@@ -62,15 +66,26 @@ public class Demo extends PApplet {
                 float qh0 = qn * nh;
                 int pColor = gui.gradientColorAt("z colors", pn).hex;
                 int qColor = gui.gradientColorAt("z colors", qn).hex;
-                pushMatrix();
                 fill(pColor);
                 vertex(px,py,ph0);
                 fill(qColor);
                 vertex(qx,qy,qh0);
-                popMatrix();
+                noisePositions.add(new PVector(px, py, ph0));
+                if(yi == gridDetail-1){
+                    noisePositions.add(new PVector(qx, qy, qh0));
+
+                }
             }
             endShape();
         }
+
+        noFill();
+        rectMode(CENTER);
+        for (PVector p : noisePositions) {
+            line(p.x, p.y, p.z, p.x, p.y, nh);
+        }
+        translate(0,0,nh);
+        rect(0,0,gridSizeHalf*2, gridSizeHalf*2);
         gui.popFolder();
     }
 }
