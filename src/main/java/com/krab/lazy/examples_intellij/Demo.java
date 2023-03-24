@@ -37,7 +37,7 @@ public class Demo extends PApplet {
         PVector gridPos = gui.plotXY("grid pos");
         float gridSizeHalf = gui.slider("grid size", 1000) / 2f;
         float gridDetail = gui.sliderInt("grid detail", 50);
-        float freq = gui.slider("frequency", 0.1f);
+        float freq = gui.slider("frequency", 0.1f) * 0.01f;
         float nh = gui.slider("noise height", 100);
         PVector rot = gui.plotXY("rotate xz");
         PVector noisePos = gui.plotXY("noise pos");
@@ -48,22 +48,26 @@ public class Demo extends PApplet {
 
         gui.plotSet("noise pos", noisePos.copy().add(noiseSpeed.div(100f)));
         ArrayList<PVector> noisePositions = new ArrayList<>();
-        for (int yi = 0; yi <= gridDetail; yi++) {
-            beginShape(TRIANGLE_STRIP);
+        for (int yi = 0; yi < gridDetail; yi++) {
+            if(gui.toggle("triangles\\/quads")){
+                beginShape(QUAD_STRIP);
+            }else{
+                beginShape(TRIANGLE_STRIP);
+            }
             stroke(gui.colorPicker("stroke").hex);
             strokeWeight(gui.slider("stroke weight"));
             if(!gui.toggle("wireframe")){
                 noStroke();
             }
-            for (int xi = 0; xi < gridDetail; xi++) {
-                float px = map(xi, 0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
-                float py = map(yi, 0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
-                float qx = map(xi,0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
-                float qy = map(yi+1,0, gridDetail-1, -gridSizeHalf, gridSizeHalf);
-                float pn = noise((noisePos.x + px) * 0.1f * freq, (noisePos.y + py) * 0.1f * freq);
-                float qn = noise((noisePos.x + qx) * 0.1f * freq, (noisePos.y + qy) * 0.1f * freq);
-                float ph0 = pn * nh;
-                float qh0 = qn * nh;
+            for (int xi = 0; xi <= gridDetail; xi++) {
+                float px = map(xi, 0, gridDetail, -gridSizeHalf, gridSizeHalf);
+                float py = map(yi, 0, gridDetail, -gridSizeHalf, gridSizeHalf);
+                float qx = px;
+                float qy = map(yi+1,0, gridDetail, -gridSizeHalf, gridSizeHalf);
+                float pn = noise((noisePos.x + px) * freq, (noisePos.y + py) * freq);
+                float qn = noise((noisePos.x + qx) * freq, (noisePos.y + qy) * freq);
+                float ph0 = (-1+2)*pn * nh;
+                float qh0 = (-1+2)*qn * nh;
                 int pColor = gui.gradientColorAt("z colors", pn).hex;
                 int qColor = gui.gradientColorAt("z colors", qn).hex;
                 fill(pColor);
@@ -71,10 +75,7 @@ public class Demo extends PApplet {
                 fill(qColor);
                 vertex(qx,qy,qh0);
                 noisePositions.add(new PVector(px, py, ph0));
-                if(yi == gridDetail-1){
-                    noisePositions.add(new PVector(qx, qy, qh0));
-
-                }
+                noisePositions.add(new PVector(qx, qy, qh0));
             }
             endShape();
         }

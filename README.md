@@ -1,3 +1,6 @@
+![LazyGui header](readme_assets/header_2.png)
+
+Contents
 <!-- TOC -->
   * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
