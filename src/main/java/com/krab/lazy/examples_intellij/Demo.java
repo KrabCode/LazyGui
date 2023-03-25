@@ -17,8 +17,8 @@ public class Demo extends PApplet {
 
     @Override
     public void settings() {
-//        fullScreen(P3D);
-        size(22*70, 22*40, P3D);
+        fullScreen(P3D);
+//        size(22*70, 22*40, P3D);
         smooth(8);
     }
 
@@ -29,6 +29,7 @@ public class Demo extends PApplet {
 //                .setAutosaveOnExit(false)
         );
         img = loadImage(defaultImagePath);
+        frameRate(144);
     }
 
     @Override
@@ -37,21 +38,25 @@ public class Demo extends PApplet {
         drawBackground();
         drawSun();
         hint(ENABLE_DEPTH_TEST);
+        lights();
+        perspective();
         drawForeground();
+        noLights();
+        resetPerspective();
     }
 
     private void drawBackground() {
         gui.pushFolder("background");
         background(gui.colorPicker("solid").hex);
-        if(gui.toggle("image", true)){
+        if (gui.toggle("image", true)) {
             String path = gui.text("image path", defaultImagePath);
-            if(gui.button("image reload")){
+            if (gui.button("image reload")) {
                 img = loadImage(path);
             }
             pushMatrix();
             imageMode(CENTER);
             float scale = gui.slider("image scale");
-            translate(width/2f, height/2f);
+            translate(width / 2f, height / 2f);
             scale(scale, scale);
             image(img, 0, 0);
             popMatrix();
@@ -62,9 +67,9 @@ public class Demo extends PApplet {
     private void drawSun() {
         gui.pushFolder("sun");
         pushMatrix();
-        int detail = gui.sliderInt("detail", 360);
+        int detail = gui.sliderInt("detail", 360) + 1;
         float radius = gui.slider("radius", 250);
-        PVector pos = gui.plotXY("pos", width/2f, 200);
+        PVector pos = gui.plotXY("pos", width / 2f, 200);
         translate(pos.x, pos.y);
         beginShape(TRIANGLE_FAN);
         noStroke();
@@ -73,7 +78,7 @@ public class Demo extends PApplet {
         vertex(0, 0, 0.5f, 0);
         for (int i = 0; i < detail; i++) {
             float theta = map(i, 0, detail - 1, 0, TAU);
-            vertex(radius*cos(theta), radius*sin(theta), 0.5f, 1f);
+            vertex(radius * cos(theta), radius * sin(theta), 0.5f, 1f);
         }
         endShape();
         popMatrix();
@@ -83,57 +88,96 @@ public class Demo extends PApplet {
     private void drawForeground() {
         gui.pushFolder("grid");
         gui.gradient("z colors");
-        PVector gridPos = gui.plotXY("grid pos");
-        float gridSizeHalf = gui.slider("grid size", 1000) / 2f;
-        float gridDetail = gui.sliderInt("grid detail", 50);
-        float freq = gui.slider("frequency", 0.1f) * 0.01f;
-        float nh = gui.slider("noise height", 100);
+        PVector gridPos = gui.plotXYZ("grid pos");
+        PVector gridSize = gui.plotXY("grid size", 1000);
+        PVector gridHalf = PVector.div(gridSize, 2);
+        PVector gridDetail = gui.plotXY("grid detail", 50);
+        gridDetail.x = floor(gridDetail.x);
+        gridDetail.y = floor(gridDetail.y);
+        PVector step = new PVector(gridSize.x / gridDetail.x, gridSize.y / gridDetail.y);
         PVector rot = gui.plotXY("rotate xz", 1.4f, 0);
-        PVector noisePos = gui.plotXY("noise pos");
-        PVector noiseSpeed = gui.plotXY("noise speed");
-        translate(width / 2f + gridPos.x, height / 2f + gridPos.y);
+        translate(width / 2f + gridPos.x, height / 2f + gridPos.y, gridPos.z);
         rotateX(rot.x * PI);
         rotateZ(rot.y * PI);
         float weight0 = gui.slider("stroke weight 0", 3);
         float weight1 = gui.slider("stroke weight 1", 1);
-
-        gui.plotSet("noise pos", noisePos.copy().add(noiseSpeed.div(100f)));
-        for (int yi = 0; yi < gridDetail; yi++) {
-            if(gui.toggle("triangles\\/quads")){
+        gui.pushFolder("noise");
+        PVector terrainPos = gui.plotXY("pos");
+        PVector terrainSpeed = gui.plotXY("speed");
+        float amp = gui.slider("amp", 1, 0, 1);
+        float freq = gui.slider("frequency", 0.1f) * 0.01f;
+        float nh = gui.slider("height", 100);
+        gui.plotSet("pos", terrainPos.copy().add(terrainSpeed));
+        PVector gridOffset = new PVector(terrainPos.x % step.x, terrainPos.y % step.y);
+        PVector noiseOffset = new PVector(floor(terrainPos.x / step.x) * step.x, floor(terrainPos.y / step.y) * step.y);
+        translate(gridOffset.x, gridOffset.y);
+        gui.popFolder();
+        for (int yi = 1; yi < gridDetail.y; yi++) {
+            if (gui.toggle("triangles\\/quads")) {
                 beginShape(QUAD_STRIP);
-            }else{
+            } else {
                 beginShape(TRIANGLE_STRIP);
             }
             stroke(gui.colorPicker("stroke").hex);
-            float yNorm = norm(yi, 0, gridDetail-1);
+            float yNorm = norm(yi, 0, gridDetail.y - 1);
             strokeWeight(lerp(weight0, weight1, yNorm));
-            if(!gui.toggle("wireframe")){
+            if (!gui.toggle("wireframe")) {
                 noStroke();
             }
-            float py = map(yi, 0, gridDetail, -gridSizeHalf, gridSizeHalf);
-            for (int xi = 0; xi <= gridDetail; xi++) {
-                float px = map(xi, 0, gridDetail, -gridSizeHalf, gridSizeHalf);
-                float qy = map(yi+1,0, gridDetail, -gridSizeHalf, gridSizeHalf);
-                float pn = noise((noisePos.x + px) * freq, (noisePos.y + py) * freq);
-                float qn = noise((noisePos.x + px) * freq, (noisePos.y + qy) * freq);
-                pn *= valley(px);
-                qn *= valley(px);
+            float py = map(yi, 0, gridDetail.y, -gridHalf.y, gridHalf.y);
+            for (int xi = 0; xi <= gridDetail.x; xi++) {
+                float xNorm = norm(xi, 0, gridDetail.x);
+                float px = map(xi, 0, gridDetail.x, -gridHalf.x, gridHalf.x);
+                float qy = map(yi + 1, 0, gridDetail.y, -gridHalf.y, gridHalf.y);
+                float pn = amp * noise((px - noiseOffset.x) * freq, (py - noiseOffset.y) * freq);
+                float qn = amp * noise((px - noiseOffset.x) * freq, (qy - noiseOffset.y) * freq);
+                pn *= valley(-1+2*xNorm);
+                qn *= valley(-1+2*xNorm);
                 float ph0 = pn * nh;
                 float qh0 = qn * nh;
-                int pColor = gui.gradientColorAt("z colors", 1-pn).hex;
-                int qColor = gui.gradientColorAt("z colors", 1-qn).hex;
+                int pColor = gui.gradientColorAt("z colors", 1 - pn).hex;
+                int qColor = gui.gradientColorAt("z colors", 1 - qn).hex;
                 fill(pColor);
-                vertex(px,py,-ph0);
+                vertex(px, py, -ph0);
                 fill(qColor);
-                vertex(px,qy,-qh0);
+                vertex(px, qy, -qh0);
             }
             endShape();
         }
         gui.popFolder();
     }
 
+    public void resetPerspective() {
+        float cameraFOV = radians(60); // at least for now
+        float cameraY = height / 2.0f;
+        float cameraZ = cameraY / ((float) Math.tan(cameraFOV / 2.0f));
+        float cameraNear = cameraZ / 10;
+        float cameraFar = cameraZ * 10;
+        float cameraAspect = (float) width / (float) height;
+        perspective(cameraFOV, cameraAspect, cameraNear, cameraFar);
+    }
+
+    public void perspective() {
+        gui.pushFolder("perspective");
+        float cameraFOV = radians(gui.slider("FOV", 60)); // at least for now
+        float cameraY = height / 2.0f;
+        float cameraZ = cameraY / ((float) Math.tan(cameraFOV / 2.0f));
+        float cameraNear = gui.slider("near", cameraZ / 10.0f);
+        float cameraFar = gui.slider("far", cameraZ * 10.0f);
+        float cameraAspect = (float) width / (float) height;
+        perspective(cameraFOV, cameraAspect, cameraNear, cameraFar);
+        gui.popFolder();
+    }
+
+    public void perspective(float fov, float aspect, float zNear, float zFar) {
+        float ymax = zNear * (float) Math.tan(fov / 2);
+        float ymin = -ymax;
+        float xmin = ymin * aspect;
+        float xmax = ymax * aspect;
+        frustum(xmin, xmax, ymin, ymax, zNear, zFar);
+    }
+
     private float valley(float x) {
-        float valleyWidth = gui.slider("valley width", 1);
-        return constrain(1-pow(abs(x*valleyWidth), gui.slider("valley power", 8)), 0, 1);
+        return abs(max(0, abs(x)-gui.slider("valley width")))*gui.slider("valley height");
     }
 }
