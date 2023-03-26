@@ -16,6 +16,7 @@ public class PlotFolderNode extends FolderNode {
     private final SliderNode sliderX;
     private final SliderNode sliderY;
     private SliderNode sliderZ;
+    int syncedPrecisionIndex = -1;
 
     public PlotFolderNode(String path, FolderNode parent, PVector defaultXY, boolean useZ) {
         super(path, parent);
@@ -37,10 +38,34 @@ public class PlotFolderNode extends FolderNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
+        syncPrecision();
         drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
         String vectorToDisplay = getValueAsString();
         drawRightText(pg, vectorToDisplay, true);
+    }
+
+    private void syncPrecision() {
+        if(syncedPrecisionIndex == -1){
+            syncedPrecisionIndex = sliderX.currentPrecisionIndex;
+        }
+        boolean changeDetected = sliderX.currentPrecisionIndex != syncedPrecisionIndex ||
+                sliderY.currentPrecisionIndex != syncedPrecisionIndex ||
+                (sliderZ != null && sliderZ.currentPrecisionIndex != syncedPrecisionIndex);
+        if(changeDetected){
+            if(sliderX.currentPrecisionIndex != syncedPrecisionIndex){
+                syncedPrecisionIndex = sliderX.currentPrecisionIndex;
+            }else if(sliderY.currentPrecisionIndex != syncedPrecisionIndex){
+                syncedPrecisionIndex = sliderY.currentPrecisionIndex;
+            }else{
+                syncedPrecisionIndex = sliderZ.currentPrecisionIndex;
+            }
+            sliderX.setPrecisionIndexAndValue(syncedPrecisionIndex);
+            sliderY.setPrecisionIndexAndValue(syncedPrecisionIndex);
+            if(sliderZ != null){
+                sliderZ.setPrecisionIndexAndValue(syncedPrecisionIndex);
+            }
+        }
     }
 
     public PVector getVectorValue() {

@@ -7,13 +7,11 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
-import java.util.HashMap;
 
 public class Demo extends PApplet {
     LazyGui gui;
     PImage img;
     private final String defaultImagePath = "https://i.imgur.com/oIppd93.jpg";
-    private boolean customNormals = false;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -55,7 +53,6 @@ public class Demo extends PApplet {
             gui.popFolder();
             return;
         }
-        customNormals = gui.toggle("custom normals");
         shininess(gui.slider("shininess"));
         {
             gui.pushFolder("directional");
