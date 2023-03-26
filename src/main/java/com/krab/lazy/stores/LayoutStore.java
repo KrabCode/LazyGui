@@ -6,7 +6,7 @@ import static processing.core.PApplet.floor;
 public class LayoutStore {
     public static float cell = 22; // cell size but shorter because used everywhere
     public static final float defaultWindowWidthInCells = 10;
-    private static boolean folderClickTogglesWindow;
+    private static boolean shouldFolderRowClickCloseWindowIfOpen;
     private static float resizeRectangleSize = 4;
     private static boolean shouldKeepWindowsInBounds = true;
     private static boolean isWindowResizeEnabled = true;
@@ -26,7 +26,7 @@ public class LayoutStore {
         setShowPathTooltips(gui.toggle("show path tooltips", LayoutStore.getShowPathTooltips()));
         setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
         setAutosuggestWindowWidth(gui.toggle("autosuggest width", LayoutStore.getAutosuggestWindowWidth()));
-        setFolderClickTogglesWindow(gui.toggle("click folder to close window", folderClickTogglesWindow()));
+        setFolderRowClickClosesWindowIfOpen(gui.toggle("click closes window", doesFolderRowClickCloseWindowIfOpen()));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -129,12 +129,11 @@ public class LayoutStore {
         LayoutStore.overridingSketchName = overridingSketchName;
     }
 
-    public static boolean folderClickTogglesWindow() {
-        return folderClickTogglesWindow;
+    public static boolean doesFolderRowClickCloseWindowIfOpen() {
+        return shouldFolderRowClickCloseWindowIfOpen;
     }
 
-    public static void setFolderClickTogglesWindow(boolean folderClickTogglesWindow) {
-        LayoutStore.folderClickTogglesWindow = folderClickTogglesWindow;
+    public static void setFolderRowClickClosesWindowIfOpen(boolean folderClickTogglesWindow) {
+        LayoutStore.shouldFolderRowClickCloseWindowIfOpen = folderClickTogglesWindow;
     }
-
 }

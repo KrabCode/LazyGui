@@ -321,6 +321,20 @@ A folder will display a name editable at runtime when there is a **text control*
   - "name"
 - is equal to "" (empty string)
 
+ ## Mouse interaction
+Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene. 
+But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI. 
+
+Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
+```java
+void mousePressed(){
+    if(gui.isMouseOutsideGui()){
+    // draw something at the mouse;
+    }
+}
+```
+
+
 ## Constructor settings
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
 Loading a save overwrites these, but you can also disable loading on startup here.
