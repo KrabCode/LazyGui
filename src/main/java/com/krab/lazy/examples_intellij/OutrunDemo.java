@@ -2,13 +2,12 @@ package com.krab.lazy.examples_intellij;
 
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
-import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
 
-public class Demo extends PApplet {
+public class OutrunDemo extends PApplet {
     LazyGui gui;
     PImage img;
     private final String defaultImagePath = "https://i.imgur.com/oIppd93.jpg";
@@ -28,8 +27,8 @@ public class Demo extends PApplet {
     public void setup() {
         colorMode(HSB, 1, 1, 1, 1);
         gui = new LazyGui(this, new LazyGuiSettings()
-//                .setLoadLatestSaveOnStartup(false)
-//                .setAutosaveOnExit(false)
+                .setLoadLatestSaveOnStartup(false)
+                .setAutosaveOnExit(false)
         );
         img = loadImage(defaultImagePath);
         frameRate(144);
@@ -42,54 +41,7 @@ public class Demo extends PApplet {
         drawSun();
         hint(ENABLE_DEPTH_TEST);
         perspective();
-        customLights();
         drawNoisyQuadStrip();
-        noLights();
-    }
-
-    private void customLights() {
-        gui.pushFolder("lights");
-        if(!gui.toggle("active")){
-            gui.popFolder();
-            return;
-        }
-        {
-            gui.pushFolder("directional");
-            PVector direction = gui.plotXYZ("direction");
-            PickerColor dirColor = gui.colorPicker("color");
-            if (gui.toggle("active")) {
-                directionalLight(dirColor.hue, dirColor.saturation, dirColor.brightness,
-                        direction.x, direction.y, direction.z);
-            }
-            gui.popFolder();
-        }
-        {
-            gui.pushFolder("specular");
-            PickerColor specColor = gui.colorPicker("color");
-            if (gui.toggle("active")) {
-                lightSpecular(specColor.hue, specColor.saturation, specColor.brightness);
-            }
-            gui.popFolder();
-        }
-        {
-            gui.pushFolder("point light");
-            PVector pos = gui.plotXYZ("pos");
-            PickerColor color = gui.colorPicker("color");
-            if(gui.toggle("active")){
-            pointLight(color.hue, color.saturation, color.brightness, pos.x, pos.y, pos.z);
-            }
-            gui.popFolder();
-        }
-        {
-            gui.pushFolder("emissive");
-            PickerColor color = gui.colorPicker("color", color(1));
-            if(gui.toggle("active")){
-                emissive(color.hue, color.saturation, color.brightness);
-            }
-            gui.popFolder();
-        }
-        shininess(gui.slider("shininess"));
-        gui.popFolder();
     }
 
     private void drawBackground() {
@@ -102,7 +54,7 @@ public class Demo extends PApplet {
             }
             pushMatrix();
             imageMode(CENTER);
-            float scale = gui.slider("image scale");
+            float scale = gui.slider("image scale", 1);
             translate(width / 2f, height / 2f);
             scale(scale, scale);
             image(img, 0, 0);
