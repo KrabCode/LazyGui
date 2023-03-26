@@ -179,7 +179,7 @@ public class FolderNode extends AbstractNode {
     }
 
     public float autosuggestWindowWidthForContents() {
-        float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells;
+        float maximumSpaceTotal = cell * LayoutStore.defaultWindowWidthInCells * 2;
         if(!LayoutStore.getAutosuggestWindowWidth()){
             return maximumSpaceTotal;
         }

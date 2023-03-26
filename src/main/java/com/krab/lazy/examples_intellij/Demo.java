@@ -2,14 +2,18 @@ package com.krab.lazy.examples_intellij;
 
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
+
+import java.util.HashMap;
 
 public class Demo extends PApplet {
     LazyGui gui;
     PImage img;
     private final String defaultImagePath = "https://i.imgur.com/oIppd93.jpg";
+    private boolean customNormals = false;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -24,6 +28,7 @@ public class Demo extends PApplet {
 
     @Override
     public void setup() {
+        colorMode(HSB, 1, 1, 1, 1);
         gui = new LazyGui(this, new LazyGuiSettings()
 //                .setLoadLatestSaveOnStartup(false)
 //                .setAutosaveOnExit(false)
@@ -38,11 +43,56 @@ public class Demo extends PApplet {
         drawBackground();
         drawSun();
         hint(ENABLE_DEPTH_TEST);
-        lights();
         perspective();
-        drawForeground();
+        customLights();
+        drawNoisyQuadStrip();
         noLights();
-        resetPerspective();
+    }
+
+    private void customLights() {
+        gui.pushFolder("lights");
+        if(!gui.toggle("active")){
+            gui.popFolder();
+            return;
+        }
+        customNormals = gui.toggle("custom normals");
+        shininess(gui.slider("shininess"));
+        {
+            gui.pushFolder("directional");
+            PVector direction = gui.plotXYZ("direction");
+            PickerColor dirColor = gui.colorPicker("color");
+            if (gui.toggle("active")) {
+                directionalLight(dirColor.hue, dirColor.saturation, dirColor.brightness,
+                        direction.x, direction.y, direction.z);
+            }
+            gui.popFolder();
+        }
+        {
+            gui.pushFolder("specular");
+            PickerColor specColor = gui.colorPicker("color");
+            if (gui.toggle("active")) {
+                lightSpecular(specColor.hue, specColor.saturation, specColor.brightness);
+            }
+            gui.popFolder();
+        }
+        {
+            gui.pushFolder("point light");
+            PVector pos = gui.plotXYZ("pos");
+            PickerColor color = gui.colorPicker("color");
+            if(gui.toggle("active")){
+            pointLight(color.hue, color.saturation, color.brightness, pos.x, pos.y, pos.z);
+            }
+            gui.popFolder();
+        }
+        {
+            gui.pushFolder("emissive");
+            PickerColor color = gui.colorPicker("color", color(1));
+            if(gui.toggle("active")){
+                emissive(color.hue, color.saturation, color.brightness);
+            }
+            gui.popFolder();
+        }
+        gui.popFolder();
     }
 
     private void drawBackground() {
@@ -85,7 +135,7 @@ public class Demo extends PApplet {
         gui.popFolder();
     }
 
-    private void drawForeground() {
+    private void drawNoisyQuadStrip() {
         gui.pushFolder("grid");
         gui.gradient("z colors");
         PVector gridPos = gui.plotXYZ("grid pos");
@@ -103,13 +153,15 @@ public class Demo extends PApplet {
         float weight1 = gui.slider("stroke weight 1", 1);
         gui.pushFolder("noise");
         PVector terrainPos = gui.plotXY("pos");
-        PVector terrainSpeed = gui.plotXY("speed");
+        noiseDetail(gui.sliderInt("detail"), gui.slider("faloff"));
+
+        float terrainSpeed = gui.slider("speed", 1);
         float amp = gui.slider("amp", 1, 0, 1);
         float freq = gui.slider("frequency", 0.1f) * 0.01f;
         float nh = gui.slider("height", 100);
-        gui.plotSet("pos", terrainPos.copy().add(terrainSpeed));
+        gui.plotSet("pos", terrainPos.copy().add(0, terrainSpeed));
         PVector gridOffset = new PVector(terrainPos.x % step.x, terrainPos.y % step.y);
-        PVector noiseOffset = new PVector(floor(terrainPos.x / step.x) * step.x, floor(terrainPos.y / step.y) * step.y);
+        PVector noiseOffset = new PVector(floor(terrainPos.x / step.x), floor(terrainPos.y / step.y));
         translate(gridOffset.x, gridOffset.y);
         gui.popFolder();
         for (int yi = 1; yi < gridDetail.y; yi++) {
@@ -129,14 +181,15 @@ public class Demo extends PApplet {
                 float xNorm = norm(xi, 0, gridDetail.x);
                 float px = map(xi, 0, gridDetail.x, -gridHalf.x, gridHalf.x);
                 float qy = map(yi + 1, 0, gridDetail.y, -gridHalf.y, gridHalf.y);
-                float pn = amp * noise((px - noiseOffset.x) * freq, (py - noiseOffset.y) * freq);
-                float qn = amp * noise((px - noiseOffset.x) * freq, (qy - noiseOffset.y) * freq);
-                pn *= valley(-1+2*xNorm);
-                qn *= valley(-1+2*xNorm);
+                float pn = amp * noise((xi - floor(noiseOffset.x)) * freq, (yi - floor(noiseOffset.y)) * freq);
+                float qn = amp * noise((xi - floor(noiseOffset.x)) * freq, (yi + 1 - floor(noiseOffset.y)) * freq);
+                float valleyMultiplier = valleyMultiplier(-1 + 2 * xNorm);
+                pn *= valleyMultiplier;
+                qn *= valleyMultiplier;
                 float ph0 = pn * nh;
                 float qh0 = qn * nh;
-                int pColor = gui.gradientColorAt("z colors", 1 - pn).hex;
-                int qColor = gui.gradientColorAt("z colors", 1 - qn).hex;
+                int pColor = gui.gradientColorAt("z colors", constrain(1 - pn * gui.slider("gradient pos *"), 0, 1)).hex;
+                int qColor = gui.gradientColorAt("z colors", constrain(1 - qn * gui.slider("gradient pos *"), 0, 1)).hex;
                 fill(pColor);
                 vertex(px, py, -ph0);
                 fill(qColor);
@@ -147,23 +200,13 @@ public class Demo extends PApplet {
         gui.popFolder();
     }
 
-    public void resetPerspective() {
-        float cameraFOV = radians(60); // at least for now
-        float cameraY = height / 2.0f;
-        float cameraZ = cameraY / ((float) Math.tan(cameraFOV / 2.0f));
-        float cameraNear = cameraZ / 10;
-        float cameraFar = cameraZ * 10;
-        float cameraAspect = (float) width / (float) height;
-        perspective(cameraFOV, cameraAspect, cameraNear, cameraFar);
-    }
-
     public void perspective() {
         gui.pushFolder("perspective");
         float cameraFOV = radians(gui.slider("FOV", 60)); // at least for now
         float cameraY = height / 2.0f;
         float cameraZ = cameraY / ((float) Math.tan(cameraFOV / 2.0f));
-        float cameraNear = gui.slider("near", cameraZ / 10.0f);
-        float cameraFar = gui.slider("far", cameraZ * 10.0f);
+        float cameraNear = cameraZ * gui.slider("near", 0.01f);
+        float cameraFar = cameraZ * gui.slider("far", 10.0f);
         float cameraAspect = (float) width / (float) height;
         perspective(cameraFOV, cameraAspect, cameraNear, cameraFar);
         gui.popFolder();
@@ -177,7 +220,13 @@ public class Demo extends PApplet {
         frustum(xmin, xmax, ymin, ymax, zNear, zFar);
     }
 
-    private float valley(float x) {
-        return abs(max(0, abs(x)-gui.slider("valley width")))*gui.slider("valley height");
+    private float valleyMultiplier(float x) {
+        gui.pushFolder("valley");
+        float result = 1;
+        if(gui.toggle("active")){
+            result = abs(max(0, pow(abs(x), gui.slider("slope power", 1)) - gui.slider("center width"))) * gui.slider("side height", 1f);
+        }
+        gui.popFolder();
+        return result;
     }
 }

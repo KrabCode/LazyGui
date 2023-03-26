@@ -186,10 +186,22 @@ public class LazyGui  {
 
     static void resetSketchMatrixInAnyRenderer() {
         if (app.sketchRenderer().equals(P3D)) {
+            resetPerspective();
             app.camera();
+            app.noLights();
         } else {
             app.resetMatrix();
         }
+    }
+
+    public static void resetPerspective() {
+        float cameraFOV = PI / 3f; // at least for now
+        float cameraAspect = (float) app.width / (float) app.height;
+        float cameraY = app.height / 2.0f;
+        float cameraZ = cameraY / tan(PI*60/360);
+        float cameraNear = cameraZ / 10;
+        float cameraFar = cameraZ * 10;
+        app.perspective(cameraFOV, cameraAspect, cameraNear, cameraFar);
     }
 
     private Window getWindowBeingDraggedIfAny() {
