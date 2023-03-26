@@ -53,7 +53,6 @@ public class Demo extends PApplet {
             gui.popFolder();
             return;
         }
-        shininess(gui.slider("shininess"));
         {
             gui.pushFolder("directional");
             PVector direction = gui.plotXYZ("direction");
@@ -89,6 +88,7 @@ public class Demo extends PApplet {
             }
             gui.popFolder();
         }
+        shininess(gui.slider("shininess"));
         gui.popFolder();
     }
 
@@ -180,6 +180,7 @@ public class Demo extends PApplet {
                 float qy = map(yi + 1, 0, gridDetail.y, -gridHalf.y, gridHalf.y);
                 float pn = amp * noise((xi - floor(noiseOffset.x)) * freq, (yi - floor(noiseOffset.y)) * freq);
                 float qn = amp * noise((xi - floor(noiseOffset.x)) * freq, (yi + 1 - floor(noiseOffset.y)) * freq);
+
                 float valleyMultiplier = valleyMultiplier(-1 + 2 * xNorm);
                 pn *= valleyMultiplier;
                 qn *= valleyMultiplier;
@@ -217,13 +218,15 @@ public class Demo extends PApplet {
         frustum(xmin, xmax, ymin, ymax, zNear, zFar);
     }
 
+    // TODO make it make sense lmao
     private float valleyMultiplier(float x) {
         gui.pushFolder("valley");
         float result = 1;
         if(gui.toggle("active")){
-            result = abs(max(0, pow(abs(x), gui.slider("slope power", 1)) - gui.slider("center width"))) * gui.slider("side height", 1f);
+            float valleyRange = gui.slider("valley range", 1);
+            result = abs(max(0, pow(abs(x), gui.slider("slope power", 1))*valleyRange - gui.slider("center width"))) * gui.slider("side height", 1f);
         }
         gui.popFolder();
-        return result;
+        return constrain(result, 0, 1);
     }
 }
