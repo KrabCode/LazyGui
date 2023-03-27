@@ -42,7 +42,7 @@ Contents
   - [hotkeys](#hotkeys) for common actions
       - copy / paste any value or whole folders
       - undo / redo any change
-  - [reloading shaders](src/main/java/com/krab/lazy/ShaderReloader.java) at runtime
+  - [reloading shaders](#live-shader-reloading) at runtime
   
 ## How do I run this?
 
@@ -377,8 +377,8 @@ gui = new LazyGui(this, new LazyGuiSettings()
 ```
 
 ## Live shader reloading
-This GUI includes the ShaderReloader class that watches your shader files and re-compiles them when changes to their text are saved. 
-It also supports vertex shaders, a custom PGraphics and the processing [shader()](https://processing.org/reference/shader_.html) and [filter()](https://processing.org/reference/filter_.html) calls.
+This GUI includes the ShaderReloader class that watches your shader files and re-compiles them when changes are made. 
+If an error occurs it keeps using the last known compilable shader and prints out the error to console.
 
 Simple fragment shader example:
 ```java
@@ -387,6 +387,7 @@ PShader shader = ShaderReloader.getShader(shaderPath);
 shader.set("time", (float) 0.001 * millis());
 ShaderReloader.filter(shaderPath);
 ```
+see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
 
 ## Further reading
 - [Javadocs](https://krabcode.github.io/LazyGui/) on GitHub pages
