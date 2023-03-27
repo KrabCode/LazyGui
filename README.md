@@ -376,6 +376,18 @@ gui = new LazyGui(this, new LazyGuiSettings()
 
 ```
 
+## Live shader reloading
+This GUI includes the ShaderReloader class that watches your shader files and re-compiles them when changes to their text are saved. 
+It also supports vertex shaders, a custom PGraphics and the processing [shader()](https://processing.org/reference/shader_.html) and [filter()](https://processing.org/reference/filter_.html) calls.
+
+Simple fragment shader example:
+```java
+String shaderPath = "template.glsl";
+PShader shader = ShaderReloader.getShader(shaderPath);
+shader.set("time", (float) 0.001 * millis());
+ShaderReloader.filter(shaderPath);
+```
+
 ## Further reading
 - [Javadocs](https://krabcode.github.io/LazyGui/) on GitHub pages
 - [Processing examples](src/main/java/com/krab/lazy/examples) for the PDE
