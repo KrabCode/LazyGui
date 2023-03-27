@@ -23,7 +23,9 @@ Contents
       * [See the current stack for debugging](#see-the-current-stack-for-debugging)
     * [Hide and show anything](#hide-and-show-anything)
     * [Folder visuals](#folder-visuals)
+  * [Mouse interaction](#mouse-interaction)
   * [Constructor settings](#constructor-settings)
+  * [Live shader reloading](#live-shader-reloading)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
