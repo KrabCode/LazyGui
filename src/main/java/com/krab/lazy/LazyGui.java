@@ -194,8 +194,8 @@ public class LazyGui  {
         }
     }
 
-    public static void resetPerspective() {
-        float cameraFOV = PI / 3f; // at least for now
+    private static void resetPerspective() {
+        float cameraFOV = PI / 3f;
         float cameraAspect = (float) app.width / (float) app.height;
         float cameraY = app.height / 2.0f;
         float cameraZ = cameraY / tan(PI*60/360);
