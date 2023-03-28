@@ -30,7 +30,7 @@ class GradientColorStopNode extends ColorPickerFolderNode {
 
     public boolean isPosSliderBeingUsed() {
         return isMouseOverNode || posSlider.isInlineNodeDragged ||
-            (window != null && window.isPointInsideContent(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY));
+            (window != null && !window.closed && window.isPointInsideContent(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY));
     }
 
 

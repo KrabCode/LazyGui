@@ -71,7 +71,7 @@ public class OutrunDemo extends PApplet {
         translate(pos.x, pos.y);
         beginShape(TRIANGLE_FAN);
         noStroke();
-        texture(gui.gradient("gradient", new int[]{color(0), color(0), color(1), color(0, 0)}));
+        texture(gui.gradient("gradient"));
         textureMode(NORMAL);
         vertex(0, 0, 0.5f, 0);
         for (int i = 0; i < detail; i++) {
