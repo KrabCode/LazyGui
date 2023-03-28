@@ -44,7 +44,7 @@ public class ShaderTest extends PApplet {
 
     private void drawShader() {
         gui.pushFolder("shader uniforms");
-        String shaderPath = gui.text("shader path", "C:\\Projects\\LazyGui\\data\\shaders\\examples\\testShader.glsl");
+        String shaderPath = gui.text("shader path", "shaders/testShader.glsl");
         PShader shader = ShaderReloader.getShader(shaderPath);
         shader.set("time", radians(frameCount));
         setUniforms(shader, UNIFORM_TYPE.INTEGER);

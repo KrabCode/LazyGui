@@ -106,22 +106,18 @@ public class SliderNode extends AbstractNode {
 
     @Override
     protected void drawNodeBackground(PGraphics pg) {
-        updateDrawSliderNodeBackground(pg);
+        boolean constrainedThisFrame = tryConstrainValue();
+        if(isInlineNodeDragged || isMouseOverNode){
+            drawBackgroundScroller(pg, constrainedThisFrame);
+        }
     }
 
     @Override
     public void updateValuesRegardlessOfParentWindowOpenness() {
-        updateNumpad();
-    }
-
-    void updateDrawSliderNodeBackground(PGraphics pg) {
         if (isInlineNodeDragged || isMouseOverNode) {
             updateValueMouseInteraction();
-            boolean constrainedThisFrame = tryConstrainValue();
-            drawBackgroundScroller(pg, constrainedThisFrame);
-            mouseDeltaX = 0;
-            mouseDeltaY = 0;
         }
+        updateNumpad();
     }
 
     @Override
@@ -237,6 +233,8 @@ public class SliderNode extends AbstractNode {
             float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
         }
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
     }
 
     protected boolean tryConstrainValue() {

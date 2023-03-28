@@ -96,7 +96,7 @@ public class PlotFolderNode extends FolderNode {
 
     @Override
     public String getValueAsString() {
-        return sliderX.getValueToDisplay() + "," + sliderY.getValueToDisplay() +
-                (sliderZ == null ? "" : sliderZ.getValueToDisplay());
+        return sliderX.getValueToDisplay() + "|" + sliderY.getValueToDisplay() +
+                (sliderZ == null ? "" : "|" + sliderZ.getValueToDisplay());
     }
 }

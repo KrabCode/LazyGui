@@ -18,8 +18,8 @@ public class OutrunDemo extends PApplet {
 
     @Override
     public void settings() {
-        fullScreen(P3D);
-//        size(22*70, 22*40, P3D);
+//        fullScreen(P3D);
+        size(22*70, 22*40, P3D);
         smooth(8);
     }
 
@@ -27,11 +27,10 @@ public class OutrunDemo extends PApplet {
     public void setup() {
         colorMode(HSB, 1, 1, 1, 1);
         gui = new LazyGui(this, new LazyGuiSettings()
-                .setLoadLatestSaveOnStartup(false)
-                .setAutosaveOnExit(false)
+//                .setLoadLatestSaveOnStartup(false)
+//                .setAutosaveOnExit(false)
         );
         img = loadImage(defaultImagePath);
-        frameRate(144);
     }
 
     @Override
@@ -66,13 +65,13 @@ public class OutrunDemo extends PApplet {
     private void drawSun() {
         gui.pushFolder("sun");
         pushMatrix();
-        int detail = gui.sliderInt("detail", 360) + 1;
+        int detail = gui.sliderInt("detail", 12) + 1;
         float radius = gui.slider("radius", 250);
         PVector pos = gui.plotXY("pos", width / 2f, 200);
         translate(pos.x, pos.y);
         beginShape(TRIANGLE_FAN);
         noStroke();
-        texture(gui.gradient("gradient"));
+        texture(gui.gradient("gradient", new int[]{color(0), color(0), color(1), color(0, 0)}));
         textureMode(NORMAL);
         vertex(0, 0, 0.5f, 0);
         for (int i = 0; i < detail; i++) {
@@ -174,9 +173,9 @@ public class OutrunDemo extends PApplet {
     private float valleyMultiplier(float x) {
         gui.pushFolder("valley");
         float result = 1;
-        if(gui.toggle("active")){
+        if (gui.toggle("active")) {
             float valleyRange = gui.slider("valley range", 1);
-            result = abs(max(0, pow(abs(x), gui.slider("slope power", 1))*valleyRange - gui.slider("center width"))) * gui.slider("side height", 1f);
+            result = abs(max(0, pow(abs(x), gui.slider("slope power", 1)) * valleyRange - gui.slider("center width"))) * gui.slider("side height", 1f);
         }
         gui.popFolder();
         return constrain(result, 0, 1);
