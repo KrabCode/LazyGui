@@ -3,7 +3,8 @@ package com.krab.lazy.nodes;
 import com.krab.lazy.input.LazyMouseEvent;
 import com.krab.lazy.stores.FontStore;
 import com.krab.lazy.stores.LayoutStore;
-import com.krab.lazy.stores.NormColorStore;
+import com.krab.lazy.themes.ThemeColorType;
+import com.krab.lazy.themes.ThemeStore;
 import processing.core.PGraphics;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
@@ -14,7 +15,8 @@ import static processing.core.PApplet.radians;
 class GradientPreviewNode extends AbstractNode {
     final GradientPickerFolderNode parent;
     final int NULL = -1;
-    int draggedColorStopIndex = NULL;
+    int hoveredColorIndex = NULL;
+    int draggedColorIndex = NULL;
 
     GradientPreviewNode(String path, GradientPickerFolderNode parent) {
         super(NodeType.TRANSIENT, path, parent);
@@ -28,6 +30,20 @@ class GradientPreviewNode extends AbstractNode {
     }
 
     @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        int colorRowToHighlight = NULL;
+        if(draggedColorIndex != NULL){
+            colorRowToHighlight = hoveredColorIndex;
+        }
+        else if(hoveredColorIndex != NULL){
+            colorRowToHighlight = hoveredColorIndex;
+        }
+        if(colorRowToHighlight != NULL){
+            parent.findColorStopByIndex(colorRowToHighlight).isMouseOverNode = true;
+        }
+    }
+
+    @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
         drawColorStops(pg);
     }
@@ -35,25 +51,29 @@ class GradientPreviewNode extends AbstractNode {
     private void drawColorStops(PGraphics pg) {
         pg.textAlign(RIGHT, CENTER);
         pg.textFont(FontStore.getSideFont());
-        int indexOfColorStopUnderMouse = NULL;
-        if(isMouseOverNode && draggedColorStopIndex == NULL){
-             indexOfColorStopUnderMouse = findClosestStopByScreenCoordinate(app.mouseX, app.mouseY);
-       }
-        // draw all the non-highlighted stops first, so they stay in the background
-        for (int i = 0; i < parent.colorCount; i++) {
-            GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
-            if (colorStop == null || colorStop.isPosSliderBeingUsed() || i == indexOfColorStopUnderMouse) {
-                continue;
-            }
-            drawColorStop(pg, colorStop, false);
+        if(isMouseOverNode && draggedColorIndex == NULL){
+             hoveredColorIndex = findClosestStopOnScreen(app.mouseX, app.mouseY);
+       }else{
+            hoveredColorIndex = NULL;
         }
         // draw all the non-highlighted stops first, so they stay in the background
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
-            if (colorStop != null && (colorStop.isPosSliderBeingUsed() || i == indexOfColorStopUnderMouse)) {
+            if (!shouldHighlightColorStop(colorStop, i, hoveredColorIndex)) {
+                drawColorStop(pg, colorStop, false);
+            }
+        }
+        // draw all the highlighted stops last, so they are put in the foreground
+        for (int i = 0; i < parent.colorCount; i++) {
+            GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
+            if (shouldHighlightColorStop(colorStop, i, hoveredColorIndex)) {
                 drawColorStop(pg, colorStop, true);
             }
         }
+    }
+
+    private boolean shouldHighlightColorStop(GradientColorStopNode colorStop, int i, int indexOfColorStopUnderMouse) {
+        return colorStop.isPosSliderBeingUsed() || i == indexOfColorStopUnderMouse;
     }
 
     private void drawColorStop(PGraphics pg, GradientColorStopNode colorStop, boolean highlight) {
@@ -69,11 +89,11 @@ class GradientPreviewNode extends AbstractNode {
             pg.rotate(HALF_PI);
         }
         pg.translate(-5, 0);
+        pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND));
         if (!highlight) {
             pg.noStroke();
-            fillBackgroundBasedOnMouseOver(pg);
         } else {
-            pg.stroke(NormColorStore.color(1));
+            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         }
         drawEquilateralTrianglePointingLeft(pg, side);
         pg.popMatrix();
@@ -91,9 +111,9 @@ class GradientPreviewNode extends AbstractNode {
     @Override
     public void mousePressedOverNode(float x, float y) {
         super.mousePressedOverNode(x, y);
-        draggedColorStopIndex = findClosestStopByScreenCoordinate(x, y);
-        if(draggedColorStopIndex != NULL){
-            GradientColorStopPositionSlider posSlider = parent.findColorStopByIndex(draggedColorStopIndex).posSlider;
+        draggedColorIndex = findClosestStopOnScreen(x, y);
+        if(draggedColorIndex != NULL){
+            GradientColorStopPositionSlider posSlider = parent.findColorStopByIndex(draggedColorIndex).posSlider;
             posSlider.verticalMouseMode = parent.isGradientDirectionVertical();
             posSlider.mousePressedOverNode(x, y);
         }
@@ -102,8 +122,8 @@ class GradientPreviewNode extends AbstractNode {
     @Override
     public void mouseDragNodeContinue(LazyMouseEvent e) {
         super.mouseDragNodeContinue(e);
-        if(draggedColorStopIndex != NULL){
-            parent.findColorStopByIndex(draggedColorStopIndex).posSlider.mouseDragNodeContinue(e);
+        if(draggedColorIndex != NULL){
+            parent.findColorStopByIndex(draggedColorIndex).posSlider.mouseDragNodeContinue(e);
             e.setConsumed(true);
         }
     }
@@ -111,14 +131,16 @@ class GradientPreviewNode extends AbstractNode {
     @Override
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         super.mouseReleasedAnywhere(e);
-        if(draggedColorStopIndex != NULL){
-            parent.findColorStopByIndex(draggedColorStopIndex).posSlider.mouseReleasedAnywhere(e);
-            parent.findColorStopByIndex(draggedColorStopIndex).posSlider.verticalMouseMode = false;
+        if(draggedColorIndex != NULL){
+            parent.findColorStopByIndex(draggedColorIndex).posSlider.mouseReleasedAnywhere(e);
+            parent.findColorStopByIndex(draggedColorIndex).posSlider.verticalMouseMode = false;
+            hoveredColorIndex = draggedColorIndex; // prevents flickering
+            e.setConsumed(true);
         }
-        draggedColorStopIndex = NULL;
+        draggedColorIndex = NULL;
     }
 
-    int findClosestStopByScreenCoordinate(float x, float y){
+    int findClosestStopOnScreen(float x, float y){
         boolean isGradientVertical = parent.isGradientDirectionVertical();
         float queryGradientPos = isGradientVertical ?
                 norm(y-pos.y, 0, size.y) :

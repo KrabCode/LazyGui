@@ -86,6 +86,7 @@ public class GradientPickerFolderNode extends FolderNode {
         frameLastUpdatedOutputGraphics = GlobalReferences.app.frameCount;
         if (out == null || out.width != GlobalReferences.app.width || out.height != GlobalReferences.app.height) {
             out = GlobalReferences.app.createGraphics(GlobalReferences.app.width, GlobalReferences.app.height, P2D);
+            out.smooth(4);
         }
         colorCount = colorCountSlider.getIntValue();
         maxColorCount = max(colorCount, maxColorCount);
