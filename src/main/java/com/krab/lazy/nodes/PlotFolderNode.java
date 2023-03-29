@@ -38,11 +38,15 @@ public class PlotFolderNode extends FolderNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        syncPrecision();
         drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
         String vectorToDisplay = getValueAsString();
         drawRightText(pg, vectorToDisplay, true);
+    }
+
+    @Override
+    public void updateValuesRegardlessOfParentWindowOpenness() {
+        syncPrecision();
     }
 
     private void syncPrecision() {

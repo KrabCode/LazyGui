@@ -51,6 +51,7 @@ public class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
+    private static final String SQUIGGLY_EQUALS = "≈";
     final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
             .add('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
             .build();
@@ -110,6 +111,8 @@ public class SliderNode extends AbstractNode {
         if(isInlineNodeDragged || isMouseOverNode){
             drawBackgroundScroller(pg, constrainedThisFrame);
         }
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
     }
 
     @Override
@@ -178,9 +181,9 @@ public class SliderNode extends AbstractNode {
             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
             valueToDisplay = nf(round(valueFloat), 0, 0);
-            if(!valueToDisplay.equals(nf(valueFloat, 0, 0)) && valueFloat < 100){
+            if(!valueToDisplay.equals(nf(valueFloat, 0, 0)) && abs(valueFloat) < 100){
                 // the display value was rounded into an integer and that made it misleading, so we indicate that
-                return "≈ " + valueToDisplay;
+                return SQUIGGLY_EQUALS + " " + valueToDisplay;
             }
         }
         // java float literals use . so we also use .
@@ -233,8 +236,6 @@ public class SliderNode extends AbstractNode {
             float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
         }
-        mouseDeltaX = 0;
-        mouseDeltaY = 0;
     }
 
     protected boolean tryConstrainValue() {
@@ -271,7 +272,7 @@ public class SliderNode extends AbstractNode {
         }
         tryReadNumpadInput(e);
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
-            String value = getValueToDisplay();
+            String value = getValueToDisplay().replaceAll(SQUIGGLY_EQUALS, "");
             if (value.endsWith(".")) {
                 value += "0";
             }
@@ -280,6 +281,7 @@ public class SliderNode extends AbstractNode {
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
+            
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);
                 if (!Float.isNaN(clipboardValue)) {
