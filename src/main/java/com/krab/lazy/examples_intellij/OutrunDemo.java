@@ -18,8 +18,8 @@ public class OutrunDemo extends PApplet {
 
     @Override
     public void settings() {
-//        fullScreen(P3D);
-        size(22*70, 22*40, P3D);
+        fullScreen(P3D);
+//        size(22*70, 22*40, P3D);
         smooth(8);
     }
 

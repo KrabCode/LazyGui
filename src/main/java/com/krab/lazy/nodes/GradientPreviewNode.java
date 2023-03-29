@@ -41,6 +41,19 @@ class GradientPreviewNode extends AbstractNode {
         if(colorRowToHighlight != NULL){
             parent.findColorStopByIndex(colorRowToHighlight).isMouseOverNode = true;
         }
+        if(isParentWindowVisible() && isMouseOverNode && draggedColorIndex == NULL){
+            hoveredColorIndex = findClosestStopOnScreen(app.mouseX, app.mouseY);
+        }else{
+            // turn off mouseover for only once when setting hovered index to NULL from non-null
+            // to allow natural mouseover interaction otherwise
+            // weird hacks here and in the PlotFolder - need a better system
+            if(hoveredColorIndex != NULL){
+                for (int i = 0; i < parent.colorCount; i++) {
+                    parent.findColorStopByIndex(i).isMouseOverNode = false;
+                }
+            }
+            hoveredColorIndex = NULL;
+        }
     }
 
     @Override
@@ -51,11 +64,6 @@ class GradientPreviewNode extends AbstractNode {
     private void drawColorStops(PGraphics pg) {
         pg.textAlign(RIGHT, CENTER);
         pg.textFont(FontStore.getSideFont());
-        if(isMouseOverNode && draggedColorIndex == NULL){
-             hoveredColorIndex = findClosestStopOnScreen(app.mouseX, app.mouseY);
-       }else{
-            hoveredColorIndex = NULL;
-        }
         // draw all the non-highlighted stops first, so they stay in the background
         for (int i = 0; i < parent.colorCount; i++) {
             GradientColorStopNode colorStop = parent.findColorStopByIndex(i);
