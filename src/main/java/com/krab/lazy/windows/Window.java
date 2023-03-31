@@ -424,6 +424,7 @@ public class Window implements UserInputSubscriber {
             float maximumWindowSize = GlobalReferences.app.width;
             windowSizeX += e.getX() - e.getPrevX();
             windowSizeX = PApplet.constrain(windowSizeX, minimumWindowSizeInCells * LayoutStore.cell, maximumWindowSize);
+            e.setConsumed(true);
         }
         for (AbstractNode child : folder.children) {
             if (child.isInlineNodeDragged && child.isParentWindowVisible()) {
