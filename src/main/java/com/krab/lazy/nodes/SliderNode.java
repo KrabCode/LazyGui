@@ -235,6 +235,8 @@ public class SliderNode extends AbstractNode {
         if (mouseDelta != 0) {
             float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
             setValueFloat(valueFloat - delta);
+            mouseDeltaX = 0;
+            mouseDeltaY = 0;
         }
     }
 

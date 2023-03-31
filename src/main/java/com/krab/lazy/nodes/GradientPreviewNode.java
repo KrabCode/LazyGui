@@ -47,7 +47,7 @@ class GradientPreviewNode extends AbstractNode {
             // turn off mouseover for only once when setting hovered index to NULL from non-null
             // to allow natural mouseover interaction otherwise
             // weird hacks here and in the PlotFolder - need a better system
-            if(hoveredColorIndex != NULL){
+            if(hoveredColorIndex != NULL && draggedColorIndex == NULL){
                 for (int i = 0; i < parent.colorCount; i++) {
                     parent.findColorStopByIndex(i).isMouseOverNode = false;
                 }
