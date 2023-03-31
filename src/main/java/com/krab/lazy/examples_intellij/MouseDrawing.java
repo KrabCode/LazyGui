@@ -43,6 +43,11 @@ public class MouseDrawing extends PApplet {
         lineWeight = gui.slider("line weight", lineWeight);
         gui.popFolder();
         clear();
+        if(gui.button("clear canvas")){
+            canvas.beginDraw();
+            canvas.background(50);
+            canvas.endDraw();
+        }
         image(canvas, 0, 0);
     }
 

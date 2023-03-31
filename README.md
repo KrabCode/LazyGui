@@ -1,6 +1,6 @@
 ![LazyGui header](readme_assets/header_2.png)
 
-Contents
+Table of Contents
 <!-- TOC -->
   * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
@@ -61,14 +61,14 @@ void setup(){
 }
 
 void draw(){
-    background(gui.colorPicker("bg").hex);
+    background(gui.colorPicker("background").hex);
 }
 ```
-The gui displays itself at the end of `draw()` and by default it shows the root folder with an inner "options" folder for tweaking the various gui settings. 
-
-A sketch with the above code should look like this:
-
 ![root and options look like this](readme_assets/basic_example.png)
+
+The gui displays itself at the end of `draw()` and by default it shows a root folder that can't be closed with two built in folders
+- **options** for tweaking the various gui settings
+- **saves** for managing your save files. 
 
 ## How do I get values from the GUI?
 - getters initialize controls when first called
@@ -76,7 +76,7 @@ A sketch with the above code should look like this:
 - optional default parameters are used when first called and then ignored
 - visually, rows of controls are ordered by when they were first initialized
 ### Slider
-![a slider looks like this](readme_assets/slider.png)
+![a slider looks like this](https://user-images.githubusercontent.com/25923016/229161773-5be9b0fa-3c15-4b9c-bebe-f428990a0111.gif)
 ```java
 // simplest getter
 float x = gui.slider("x");
@@ -95,7 +95,7 @@ gui.sliderSet("x", floatToSet);
 - there is a `sliderInt()` alternative that uses and returns `int`
 
 ### Plot
-![a plot looks like this](readme_assets/plotXY.png)
+![a plot looks like this](https://user-images.githubusercontent.com/25923016/229208020-4557e5fa-d726-4add-aa13-9fced1451373.gif)
 ```java
 // simplest getter
 PVector pos = gui.plotXY("position");
@@ -117,50 +117,51 @@ gui.plotSet("position", valuePVector);
 - there is a `plotXYZ()` variant with an extra Z slider (not connected to the grid)
 
 ### Color picker
-![a color picker looks like this](readme_assets/colorpicker.png)
+![a color picker looks like this](https://user-images.githubusercontent.com/25923016/229208014-0a79609c-41ec-4ddb-9861-d67a83294d46.gif)
 ```java
 // simplest getter
-PickerColor myColor = gui.colorPicker("color name");
+PickerColor myColor = gui.colorPicker("background");
+// use it with .hex in place of color
 background(myColor.hex);
 
 // alternative getters that specify the default color
-gui.colorPicker("color name", color(36));
-gui.colorPicker("color name", grayNorm); // 'norm' meaning float in the range [0, 1]
-gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm);
-gui.colorPicker("color name", hueNorm, saturationNorm, brightnessNorm, alphaNorm);
+gui.colorPicker("background", color(36));
+gui.colorPicker("background", grayNorm); // 'norm' meaning float in the range [0, 1]
+gui.colorPicker("background", hueNorm, saturationNorm, brightnessNorm);
+gui.colorPicker("background", hueNorm, saturationNorm, brightnessNorm, alphaNorm);
 
 // setters
-gui.colorPickerSet("color name", color(36));
-gui.colorPickerHueAdd("color name", hueToAdd);
+gui.colorPickerSet("background", color(36));
+gui.colorPickerHueAdd("background", hueToAdd);
 ```
 - HSBA color picker with a hex string display
 - returns a read-only PickerColor object with an integer 'hex' field 
   - this hex integer is the same thing as the Processing [color datatype](https://processing.org/reference/color_datatype.html)
-- copy and paste the hex with mouse over either the hex field or the color preview block
+  - displays the correct color in any Processing [color mode](https://processing.org/reference/colorMode_.html)
+- paste in values from sites like [colorhunt.co](https://colorhunt.co/)
+- copy and paste the hex value with mouse over the desired color row / preview / hex string
 
 ### Gradient picker
-![a gradient picker looks like this](https://user-images.githubusercontent.com/25923016/226012034-6ce0ced9-02d2-4288-8e5b-3ced0ee3af0f.gif)
-
+![gradient pickers also look like this](https://user-images.githubusercontent.com/25923016/229208017-99699e27-dbb7-4054-ac21-a8fe16156868.gif)
 ```java
 // simple getter
-PGraphics gradient = gui.gradient("gradient name");
-image(gradient, 0, 0);
+PGraphics bgGradient = gui.gradient("background gradient");
+image(bgGradient, 0, 0);
 
 // alternative getter that specifies default color(s)
-gui.gradient("gradient name", color(255,0,150));
-gui.gradient("gradient name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
+gui.gradient("name", color(255,0,150));
+gui.gradient("name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
 
 // special getter for a color inside the gradient at a position in range [0, 1]
 // faster than texture.get(x, y) thanks to a color look up table
-PickerColor myColor = gui.gradientColorAt("gradient name", positionNorm);
+PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 ```
 - allows you to set the position and value of individual colors and get the result as a PGraphics
-- output texture size is always kept equal to sketch size
-- try the edge wrapping!
+- output texture size is kept equal to main sketch size
 
 
 ### Button
-![a button looks like this](readme_assets/button.png)
+![a button looks like this](https://user-images.githubusercontent.com/25923016/229208008-04dec541-c3d5-4f77-bd3f-ff824d64d395.gif)
 ```java
 // getter that is only true once after being clicked then and switches to false 
 if(gui.button("do the thing!")){
@@ -169,7 +170,7 @@ if(gui.button("do the thing!")){
 ```
 
 ### Toggle
-![a toggle looks like this](readme_assets/toggle.png)
+![a toggle looks like this](https://user-images.githubusercontent.com/25923016/229208032-0e7286a0-342e-4317-8728-5d214b25d187.gif)
 - click to flip the boolean state
 - off by default
 
@@ -188,16 +189,16 @@ gui.toggleSet("spam every frame", booleanValue)
 ```
 
 ### Text input
-![text input looks like this](readme_assets/text.png)
+![text input looks like this](https://user-images.githubusercontent.com/25923016/229208031-40950a44-2be2-42fd-aee9-f72ef0d341fe.gif)
 ```java
 // simple getter
 String userInput = gui.text("text header");
 
-// alternative getters
+// getter that specifies a default content
 gui.text("text header", "this default text can be edited");
-gui.text("", "this text won't have a header row above it");
+gui.text("", "this will rename its parent folder"); 
 
-// setters
+// one time setter that also blocks any interaction when called every frame
 textSet("text header", "content")
 ```
 | Mouse Hotkey | Action under mouse    |
@@ -206,9 +207,10 @@ textSet("text header", "content")
 | Delete       | delete entire string  |
 | Backspace    | delete last character |
 - typing with mouse over the text appends to its last line
+- see [folder visuals](#folder-visuals) to rename the parent folder at runtime
 
 ### Radio
-![radio looks like this](readme_assets/radio.png)
+![radio looks like this](https://user-images.githubusercontent.com/25923016/229208026-bf14f362-8eed-493c-81bd-a3a83c1d170c.gif)
 ```java
 // simplest getter
 String mode = gui.radio("mode", new String[]{"square", "circle"});
@@ -337,50 +339,31 @@ void mousePressed(){
 ```
 
 
-## Constructor settings
+## Constructor settings 
+
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
 Loading a save overwrites these, but you can also disable loading on startup here.
 
-See all the options below:
+Here's how to use it in a builder chain where the ordering does not matter:
 
 ```java
 gui = new LazyGui(this, new LazyGuiSettings()
+        // set as false to not load anything on startup, true by default
+    .setLoadLatestSaveOnStartup(false)
         
-        // LOADING ON STARTUP
-        .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
-        .setLoadSpecificSaveOnStartup("1") // expects filenames like "1" or "auto.json", overrides 'load latest'
-
-        // AUTOSAVE
-        .setAutosaveOnExit(true)    // but the shutdown hook only works on graceful exit, for example the ESC button
-        .setAutosaveLockGuardEnabled(true) // for not autosaving settings that locked the sketch in an endless loop
-        .setAutosaveLockGuardMillisLimit(1000) // millis the last frame must be rendered faster than for autosave to work
-
-        // MOUSE
-        .setMouseHideWhenDragging(true) // when dragging a slider for example
-        .setMouseConfineToWindow(false)
-
-        // LAYOUT
-        .setCellSize(22) // affects the size of the whole gui
-        .setMainFontSize(16)
-        .setSideFontSize(15)
-        .setStartGuiHidden(false) // uncover hidden gui with the 'h' hotkey
-
-        // THEME
-        .setThemePreset("dark") // selected preset, one of "dark", "light", "pink", "blue"
-        .setThemeCustom(
-                color(0, 0, 255),   // window border color
-                color(16),       // normal background color
-                color(0, 0, 0),      // focused background color
-                color(200),     // normal foreground color
-                color(255))    // focused foreground color
-         // custom theme overrides preset when not null
+        // expects filenames like "1" or "auto.json", overrides 'load latest'    
+    .setLoadSpecificSaveOnStartup("1")
+        
+        // but the autosave will succeed only works on graceful exit, for example the ESC button    
+    .setAutosaveOnExit(true)    
 );
 
 ```
+- for a list of all the options, see the [LazyGuiSettings javadoc](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
 
 ## Live shader reloading
-This GUI includes the ShaderReloader class that watches your shader files and re-compiles them when changes are made. 
-If an error occurs it keeps using the last known compilable shader and prints out the error to console.
+This GUI includes the ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
+If an error occurs during compilation, it keeps using the last compiled state and prints out the error to console.
 
 Simple fragment shader example:
 ```java
