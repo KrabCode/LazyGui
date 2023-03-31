@@ -32,12 +32,10 @@ Table of Contents
 
 ## LazyGui is a GUI library for Processing
 - **focusing on flexibility**
-  - no registration of control elements in `setup()`
-  - just ask for values at unique string paths in `draw()`
-  - this lets you keep related gui code together in the middle of the action
+  - With no registration of control elements in `setup()` and *lazy* initialization of controls at runtime, you can ask for values at unique string paths in `draw()` and keep all related gui code in the middle of the action, which is easier to extend and edit.
 - **and ease of use**
-  - keyboard input for string, float and vector controls
-  - customizable look and feel
+  - mouse + keyboard input
+  - very customizable
   - load / save your gui state to disk as json
       - autosave on program exit
       - autoload on program start
@@ -71,17 +69,18 @@ The gui displays itself at the end of `draw()` and by default it shows a root fo
 - **saves** for managing your save files. 
 
 ## How do I get values from the GUI?
-- getters initialize controls when first called
-- setters also initialize controls when first called
+- getters and setters initialize controls when first called
+- subsequent calls at the same [path](#paths-and-folders) use the existing control element
 - optional default parameters are used when first called and then ignored
 - visually, rows of controls are ordered by when they were first initialized
+
 ### Slider
 ![a slider looks like this](https://user-images.githubusercontent.com/25923016/229161773-5be9b0fa-3c15-4b9c-bebe-f428990a0111.gif)
 ```java
-// simplest getter
+// simplest getter for an infinite slider
 float x = gui.slider("x");
 
-// alternative getters that specify defaults
+// alternative getters that specify defaults and constraints
 gui.slider("x", defaultFloat);
 gui.slider("x", defaultFloat, minimumFloat, maximumFloat);
 
@@ -163,7 +162,7 @@ PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 ### Button
 ![a button looks like this](https://user-images.githubusercontent.com/25923016/229208008-04dec541-c3d5-4f77-bd3f-ff824d64d395.gif)
 ```java
-// getter that is only true once after being clicked then and switches to false 
+// getter that is only true once after being clicked and then switches to false 
 if(gui.button("do the thing!")){
     println("it is done");
 }
@@ -333,7 +332,7 @@ Unfortunately the GUI has no way to block the sketch from receiving the mouse ev
 ```java
 void mousePressed(){
     if(gui.isMouseOutsideGui()){
-    // draw something at the mouse;
+        // draw something at the mouse
     }
 }
 ```
@@ -382,6 +381,6 @@ see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy
 - [How to run this GUI in Kotlin](https://gist.github.com/wrightwriter/98a7c5cdeaccd28bb599f3561de3a52d)
 
 ## How to contribute
-- Talk to me on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
 - Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues) if you don't find your problem already in there
+- Talk to me on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
 - If you want to code something yourself you can fork the repository and submit a pull request with an explanation
