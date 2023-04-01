@@ -26,6 +26,7 @@ Table of Contents
   * [Mouse interaction](#mouse-interaction)
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
+  * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
@@ -358,13 +359,13 @@ gui = new LazyGui(this, new LazyGuiSettings()
 );
 
 ```
-- for a list of all the options, see the [LazyGuiSettings javadoc](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
+- for a list of all the options, see the [LazyGuiSettings javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
 
 ## Live shader reloading
 This GUI includes the ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
 If an error occurs during compilation, it keeps using the last compiled state and prints out the error to console.
 
-Simple fragment shader example:
+Example using a fragment shader:
 ```java
 String shaderPath = "template.glsl";
 PShader shader = ShaderReloader.getShader(shaderPath);
@@ -373,8 +374,14 @@ ShaderReloader.filter(shaderPath);
 ```
 see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
 
+## Dependencies
+- This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
+  - legacy Processing 3.+ ([download](https://processing.org/releases))
+  - current Processing 4.+ ([download](https://processing.org/download))
+- This library uses and includes [Gson](https://github.com/google/gson), mainly due to its handy [@Expose](https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/annotations/Expose.html) annotation
+
 ## Further reading
-- [Javadocs](https://krabcode.github.io/LazyGui/) on GitHub pages
+- [LazyGui javadocs](https://krabcode.github.io/LazyGui/) with function comments going into more depth than this readme
 - [Processing examples](src/main/java/com/krab/lazy/examples) for the PDE
 - [IntelliJ examples](src/main/java/com/krab/lazy/examples_intellij) for use in an IDE like IntelliJ IDEA
 - [LazySketches](https://github.com/KrabCode/LazySketches) - bigger sketches using this GUI in my other repo

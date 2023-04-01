@@ -2,8 +2,8 @@ LazyGui gui;
 PGraphics canvas;
 PickerColor circleColor;
 PickerColor lineColor;
-private float lineWeight = 15;
-private float circleSize = 50;
+float lineWeight = 40;
+float circleSize = 75;
 
 void setup() {
   size(800, 800, P2D);
