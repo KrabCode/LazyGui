@@ -21,3 +21,4 @@ src/test/Camera.java
 .classpath
 /.settings/
 /data/recording_assets/
+/auto_deploy/
