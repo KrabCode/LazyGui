@@ -261,7 +261,7 @@ The GUI detects new, renamed and deleted save files in its save folder at runtim
 - the sketch tries to **load the latest save on startup**
   - this is usually helpful, but when bad values in a save are breaking your sketch, you can either delete the offending json file or use [constructor settings](#constructor-settings) to ignore it on startup
 - you can load values from a save by clicking its row in the `saves` window.
-- values are stored by their [GUI paths](#Paths and folders) so loading will only overwrite an exactly matching path in the GUI
+- values are stored by their [GUI paths](#paths-and-folders) so loading will only overwrite an exactly matching path in the GUI
   - copy / pasting folders also uses the same json model, so you can copy a part of the json file and paste it to a matching folder in a running GUI
 
 ## Hotkeys
