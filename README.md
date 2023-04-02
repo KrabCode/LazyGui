@@ -2,7 +2,8 @@
 
 Table of Contents
 <!-- TOC -->
-  * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
+* [LazyGui](#lazygui)
+  * [GUI library for Processing](#gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
       * [Minimal example](#minimal-example)
   * [How do I get values from the GUI?](#how-do-i-get-values-from-the-gui)
@@ -14,6 +15,10 @@ Table of Contents
     * [Toggle](#toggle)
     * [Text input](#text-input)
     * [Radio](#radio)
+  * [Mouse interaction](#mouse-interaction)
+  * [Saving and loading values](#saving-and-loading-values)
+    * [Saving](#saving)
+    * [Loading](#loading)
   * [Hotkeys](#hotkeys)
   * [Paths and folders](#paths-and-folders)
     * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
@@ -23,21 +28,20 @@ Table of Contents
       * [See the current stack for debugging](#see-the-current-stack-for-debugging)
     * [Hide and show anything](#hide-and-show-anything)
     * [Folder visuals](#folder-visuals)
-  * [Mouse interaction](#mouse-interaction)
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
   * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
-
-## LazyGui is a GUI library for Processing
+# LazyGui
+## GUI library for Processing
 - **focusing on flexibility**
-  - With no registration of control elements in `setup()` and *lazy* initialization of controls at runtime, you can ask for values at unique string paths in `draw()` and keep all related gui code in the middle of the action, which is easier to extend and edit.
+  - With no registration of control elements in `setup()` and *lazy* initialization of controls at runtime, you can ask for values at unique string paths in `draw()` and keep all related gui code in the middle of the action, which is easier to edit
 - **and ease of use**
   - mouse + keyboard input
   - very customizable
-  - load / save your gui state to disk as json
+  - [save / load](#Saving and loading values) your gui state as json files
       - autosave on program exit
       - autoload on program start
   - [hotkeys](#hotkeys) for common actions
@@ -231,16 +235,45 @@ gui.radioSet("mode", "square");
 - any changes to the available options will be ignored after the radio is first initialized
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
+## Mouse interaction
+Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene.
+But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI.
+
+Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
+```java
+void mousePressed(){
+    if(gui.isMouseOutsideGui()){
+        // draw something at the mouse
+    }
+}
+```
+
+## Saving and loading values 
+![save](readme_assets/saves.png)
+
+The GUI detects new, renamed and deleted save files in its save folder at runtime. 
+
+### Saving
+- create new saves at runtime with `CTRL + S`
+- an **autosave** is created by default when the sketch exits gracefully (like by pressing the Escape key)
+  - includes endless loop detection that prevents autosaving
+### Loading
+- the sketch tries to **load the latest save on startup**
+  - this is usually helpful, but when bad values in a save are breaking your sketch, you can either delete the offending json file or use [constructor settings](#constructor-settings) to ignore it on startup
+- you can load values from a save by clicking its row in the `saves` window.
+- values are stored by their [GUI paths](#Paths and folders) so loading will only overwrite an exactly matching path in the GUI
+  - copy / pasting folders also uses the same json model, so you can copy a part of the json file and paste it to a matching folder in a running GUI
+
 ## Hotkeys
 
-|   Global hotkey   | Action under mouse     |     
-|:-----------------:|:-----------------------|
-|         H         | Hide/Show GUI          |     
-|         D         | Close windows          |     
-|         I         | Save screenshot        | 
-|     CTRL + Z      | Undo                   | 
-|     CTRL + Y      | Redo                   |        
-|     CTRL + S      | Save gui state to json |   
+|   Global hotkey   | Action                                  |     
+|:-----------------:|:----------------------------------------|
+|         H         | Hide GUI / Show GUI                     |     
+|         D         | Close windows                           |     
+|         I         | Save screenshot                         | 
+|     CTRL + Z      | Undo                                    | 
+|     CTRL + Y      | Redo                                    |        
+|     CTRL + S      | [New save](#Saving and loading values)  |   
 
 | Mouse hotkey | Action on element under mouse |
 |:------------:|:------------------------------|
@@ -325,20 +358,6 @@ A folder will display a name editable at runtime when there is a **text control*
   - "name"
 - is equal to "" (empty string)
 
- ## Mouse interaction
-Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene. 
-But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI. 
-
-Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
-```java
-void mousePressed(){
-    if(gui.isMouseOutsideGui()){
-        // draw something at the mouse
-    }
-}
-```
-
-
 ## Constructor settings 
 
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
@@ -353,16 +372,16 @@ gui = new LazyGui(this, new LazyGuiSettings()
         
         // expects filenames like "1" or "auto.json", overrides 'load latest'    
     .setLoadSpecificSaveOnStartup("1")
-        
-        // but the autosave will succeed only works on graceful exit, for example the ESC button    
-    .setAutosaveOnExit(true)    
+            
+        // controls whether to autosave, true by default
+    .setAutosaveOnExit(false)    
 );
 
 ```
 - for a list of all the options, see the [LazyGuiSettings javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
 
 ## Live shader reloading
-This GUI includes the ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
+This GUI includes the (slightly out of scope) ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
 If an error occurs during compilation, it keeps using the last compiled state and prints out the error to console.
 
 Example using a fragment shader:
@@ -378,7 +397,7 @@ see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy
 - This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
   - legacy Processing 3.+ ([download](https://processing.org/releases))
   - current Processing 4.+ ([download](https://processing.org/download))
-- This library uses and includes [Gson](https://github.com/google/gson), mainly due to its handy [@Expose](https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/annotations/Expose.html) annotation
+- This library uses and includes [gson-2.8.9](https://github.com/google/gson), mainly due to its handy [@Expose](https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/annotations/Expose.html) annotation
 
 ## Further reading
 - [LazyGui javadocs](https://krabcode.github.io/LazyGui/) with function comments going into more depth than this readme
