@@ -2,8 +2,7 @@
 
 Table of Contents
 <!-- TOC -->
-* [LazyGui](#lazygui)
-  * [GUI library for Processing](#gui-library-for-processing)
+  * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
       * [Minimal example](#minimal-example)
   * [How do I get values from the GUI?](#how-do-i-get-values-from-the-gui)
@@ -34,8 +33,7 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
-# LazyGui
-## GUI library for Processing
+## LazyGui is a GUI library for Processing
 - **focusing on flexibility**
   - With no registration of control elements in `setup()` and *lazy* initialization of controls at runtime, you can ask for values at unique string paths in `draw()` and keep all related gui code in the middle of the action, which is easier to edit
 - **and ease of use**
@@ -266,14 +264,14 @@ The GUI detects new, renamed and deleted save files in its save folder at runtim
 
 ## Hotkeys
 
-|   Global hotkey   | Action                                  |     
-|:-----------------:|:----------------------------------------|
-|         H         | Hide GUI / Show GUI                     |     
-|         D         | Close windows                           |     
-|         I         | Save screenshot                         | 
-|     CTRL + Z      | Undo                                    | 
-|     CTRL + Y      | Redo                                    |        
-|     CTRL + S      | [New save](#Saving and loading values)  |   
+|   Global hotkey   | Action                                 |     
+|:-----------------:|:---------------------------------------|
+|         H         | Hide GUI / Show GUI                    |     
+|         D         | Close windows                          |     
+|         I         | Save screenshot                        | 
+|     CTRL + Z      | Undo                                   | 
+|     CTRL + Y      | Redo                                   |        
+|     CTRL + S      | [New save](#saving-and-loading-values) |   
 
 | Mouse hotkey | Action on element under mouse |
 |:------------:|:------------------------------|
