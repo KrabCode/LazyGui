@@ -1,4 +1,4 @@
-![LazyGui header](readme_assets/header_2.png)
+![LazyGui header](https://user-images.githubusercontent.com/25923016/229351039-be75376e-ee45-4a2b-905d-392ad2a289d4.png)
 
 Table of Contents
 <!-- TOC -->
@@ -67,7 +67,7 @@ void draw(){
     background(gui.colorPicker("background").hex);
 }
 ```
-![root and options look like this](readme_assets/basic_example.png)
+![root and options look like this](https://user-images.githubusercontent.com/25923016/229351048-1fdd04c2-1634-41f3-b29b-264a58c67709.png)
 
 The gui displays itself at the end of `draw()` and by default it shows a root folder that can't be closed with two built in folders
 - **options** for tweaking the various gui settings
@@ -249,12 +249,12 @@ void mousePressed(){
 ```
 
 ## Saving and loading values 
-![save](readme_assets/saves.png)
+![save](https://user-images.githubusercontent.com/25923016/229351055-70bc5ae6-877d-4b3f-bbcc-a40ada90bda1.png)
 
 The GUI detects new, renamed and deleted save files in its save folder at runtime. 
 
 ### Saving
-- create new saves at runtime with `CTRL + S`
+- create a new save at runtime with `CTRL + S`
 - an **autosave** is created by default when the sketch exits gracefully (like by pressing the Escape key)
   - includes endless loop detection that prevents autosaving
 ### Loading
@@ -289,14 +289,14 @@ It exists only in memory to inform the GUI - it's not a directory structure in a
 The forward slash `/` is a reserved character used to make folders, but it can be escaped with `\\` like this: `\\/` which won't separate folders.
 
 ### Creating a folder with the forward slash
-![wave folder example](readme_assets/wave_folder.png)
+![wave folder example](https://user-images.githubusercontent.com/25923016/229351063-fa338553-5a28-4571-9b60-4a75cdde67a5.png)
 ```java
 float frq = gui.slider("wave/frequency");
 float amp = gui.slider("wave/amplitude");
 ```
 
 ### Escaping the forward slash
-![Escaped forward slash example](readme_assets/escaped_slash.png)
+![Escaped forward slash example](https://user-images.githubusercontent.com/25923016/229351073-a977cf5e-030f-4e68-9625-04f24430daff.png)
 ```java
 boolean state = gui.toggle("off\\/on");
 ```
