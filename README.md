@@ -39,7 +39,7 @@ Table of Contents
 - **and ease of use**
   - mouse + keyboard input
   - very customizable
-  - [save / load](#Saving and loading values) your gui state as json files
+  - [save / load](#saving-and-loading-values) your gui state as json files
       - autosave on program exit
       - autoload on program start
   - [hotkeys](#hotkeys) for common actions
