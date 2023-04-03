@@ -5,7 +5,7 @@ Table of Contents
   * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
   * [How do I run this?](#how-do-i-run-this)
       * [Minimal example](#minimal-example)
-  * [How do I get values from the GUI?](#how-do-i-get-values-from-the-gui)
+  * [Control elements](#control-elements)
     * [Slider](#slider)
     * [Plot](#plot)
     * [Color picker](#color-picker)
@@ -14,11 +14,11 @@ Table of Contents
     * [Toggle](#toggle)
     * [Text input](#text-input)
     * [Radio](#radio)
+  * [Hotkeys](#hotkeys)
   * [Mouse interaction](#mouse-interaction)
   * [Saving and loading values](#saving-and-loading-values)
     * [Saving](#saving)
     * [Loading](#loading)
-  * [Hotkeys](#hotkeys)
   * [Paths and folders](#paths-and-folders)
     * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
     * [Escaping the forward slash](#escaping-the-forward-slash)
@@ -71,7 +71,7 @@ The gui displays itself at the end of `draw()` and by default it shows a root fo
 - **options** for tweaking the various gui settings
 - **saves** for managing your save files. 
 
-## How do I get values from the GUI?
+## Control elements
 - getters and setters initialize controls when first called
 - subsequent calls at the same [path](#paths-and-folders) use the existing control element
 - optional default parameters are used when first called and then ignored
@@ -209,7 +209,7 @@ textSet("text header", "content")
 | Delete       | delete entire string  |
 | Backspace    | delete last character |
 - typing with mouse over the text appends to its last line
-- see [folder visuals](#folder-visuals) to rename the parent folder at runtime
+- see [folder visuals](#folder-visuals) on how to rename the parent folder at runtime using this text control with a specific path
 - the text editor is pretty basic, but you can paste the text into it from elsewhere
 
 ### Radio
@@ -234,37 +234,7 @@ gui.radioSet("mode", "square");
 - any changes to the available options will be ignored after the radio is first initialized
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
-## Mouse interaction
-Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene.
-But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI.
-
-Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
-```java
-void mousePressed(){
-    if(gui.isMouseOutsideGui()){
-        // draw something at the mouse
-    }
-}
-```
-
-## Saving and loading values 
-![save](https://user-images.githubusercontent.com/25923016/229351055-70bc5ae6-877d-4b3f-bbcc-a40ada90bda1.png)
-
-The GUI detects new, renamed and deleted save files in its save folder at runtime. 
-
-### Saving
-- create a new save at runtime with `CTRL + S`
-- an **autosave** is created by default when the sketch exits gracefully (like by pressing the Escape key)
-  - includes endless loop detection that prevents autosaving
-### Loading
-- the sketch tries to **load the latest save on startup**
-  - this is usually helpful, but when bad values in a save are breaking your sketch, you can either delete the offending json file or use [constructor settings](#constructor-settings) to ignore it on startup
-- you can load values from a save by clicking its row in the `saves` window.
-- values are stored by their [GUI paths](#paths-and-folders) so loading will only overwrite an exactly matching path in the GUI
-  - copy / pasting folders also uses the same json model, so you can copy a part of the json file and paste it to a matching folder in a running GUI
-
 ## Hotkeys
-
 |   Global hotkey   | Action                                 |     
 |:-----------------:|:---------------------------------------|
 |         H         | Hide GUI / Show GUI                    |     
@@ -280,6 +250,37 @@ The GUI detects new, renamed and deleted save files in its save folder at runtim
 |      R       | Reset value to default        |
 |   CTRL + C   | Copy value or folder          |
 |   CTRL + V   | Paste to value or folder      |
+
+## Mouse interaction
+Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene.
+But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI.
+
+Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
+```java
+void mousePressed(){
+    if(gui.isMouseOutsideGui()){
+        // draw something at the mouse
+    }
+}
+```
+
+## Saving and loading values 
+The GUI can save its current values to disk in a json file. It can also load these values to overwrite the current GUI state.
+You can control this from the `saves` folder under the root window of the GUI. Any new, renamed and deleted save files will be detected by this window at runtime.
+
+![save](https://user-images.githubusercontent.com/25923016/229351055-70bc5ae6-877d-4b3f-bbcc-a40ada90bda1.png)
+
+### Saving
+- create a new save at runtime with `CTRL + S`
+- an **autosave** is created by default when the sketch exits gracefully (like by pressing the Escape key)
+  - the autosave includes endless loop detection that prevents autosaving
+### Loading
+- the sketch tries to **load the latest save on startup**
+  - this is usually helpful, but when bad values in a save are breaking your sketch, you can either delete the offending json file or use [constructor settings](#constructor-settings) to ignore it on startup
+- you can load values from a save by clicking on its row in the `saves` window.
+- loading will not initialize any new control elements 
+- for a value to be overwritten in the current GUI its [path](#paths-and-folders) needs to match exactly with the saved path for that value
+  - this means you lose saved values when you rename something 
 
 ## Paths and folders
 
