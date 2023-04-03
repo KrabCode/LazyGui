@@ -33,19 +33,26 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
 <!-- TOC -->
+
 ## LazyGui is a GUI library for Processing
-- **focusing on flexibility**
-  - With no registration of control elements in `setup()` and *lazy* initialization of controls at runtime, you can ask for values at unique string paths in `draw()` and keep all related gui code in the middle of the action, which is easier to edit
-- **and ease of use**
-  - mouse + keyboard input
-  - very customizable
-  - [save / load](#saving-and-loading-values) your gui state as json files
-      - autosave on program exit
-      - autoload on program start
-  - [hotkeys](#hotkeys) for common actions
-      - copy / paste any value or whole folders
-      - undo / redo any change
-  - [reloading shaders](#live-shader-reloading) at runtime
+
+**Main ideas**
+- no need to register your windows or controls in `setup()`
+- ask for values in `draw()` at a unique path, which will
+  - *lazily* initialize a control element
+  - place it in a window hierarchy
+  - return its current value
+
+**Quality of life features**
+- very customizable look and feel
+- mouse or keyboard value input
+- [save / load](#saving-and-loading-values) your gui state as json files
+    - autosave on program exit
+    - autoload on program start
+- [hotkeys](#hotkeys) for common actions
+    - copy / paste any value or whole folders
+    - undo / redo any change
+- [reloading shaders](#live-shader-reloading) at runtime
   
 ## How do I run this?
 
