@@ -210,6 +210,7 @@ textSet("text header", "content")
 | Backspace    | delete last character |
 - typing with mouse over the text appends to its last line
 - see [folder visuals](#folder-visuals) to rename the parent folder at runtime
+- the text editor is pretty basic, but you can paste the text into it from elsewhere
 
 ### Radio
 ![radio looks like this](https://user-images.githubusercontent.com/25923016/229208026-bf14f362-8eed-493c-81bd-a3a83c1d170c.gif)
