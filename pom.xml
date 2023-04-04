@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>krabcode</groupId>
 	<artifactId>lazygui</artifactId>
-	<version>0.11.0-0SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>LazyGui</name>
 	<build>
 		<resources>
@@ -20,7 +20,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<release>8</release>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 			<plugin>

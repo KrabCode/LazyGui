@@ -77,10 +77,10 @@ public class LazyGui  {
                     " The control element separation and grouping you're probably looking for can be achieved by using more folders rather than creating a whole new GUI object." +
                     "\n");
         }
-        singleton = this;
         if (!sketch.sketchRenderer().equals(P2D) && !sketch.sketchRenderer().equals(P3D)) {
-            println("The LazyGui library requires the P2D or P3D renderer and it will now crash because this condition was not met.");
+            throw new IllegalArgumentException("The LazyGui library requires the P2D or P3D renderer. Please set the sketch renderer to P2D or P3D before initializing LazyGui.");
         }
+        singleton = this;
         GlobalReferences.init(this, sketch);
         NormColorStore.init();
         if(settings == null){
