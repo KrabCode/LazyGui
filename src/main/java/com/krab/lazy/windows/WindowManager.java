@@ -8,11 +8,12 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WindowManager {
-    private static final CopyOnWriteArrayList<Window> windows = new CopyOnWriteArrayList<>();
-    private static final ArrayList<Window> windowsToSetFocusOn = new ArrayList<>();
+    private static final List<Window> windows = new CopyOnWriteArrayList<>();
+    private static final List<Window> windowsToSetFocusOn = new ArrayList<>();
 
     public static void addRootWindow() {
         addWindow(new Window(NodeTree.getRoot(), LayoutStore.cell, LayoutStore.cell, LayoutStore.cell * LayoutStore.defaultWindowWidthInCells));

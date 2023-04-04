@@ -14,7 +14,7 @@ import static com.krab.lazy.stores.JsonSaveStore.*;
 
 public class SaveFolderNode extends FolderNode {
 
-    private final ArrayList<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
+    private final List<AbstractNode> childrenThatAreNotSaveFiles = new ArrayList<>();
     private final ButtonNode buttonCreateNewSave, buttonOpenSaveFolder;
     private final ToggleNode autosaveEnabledToggle, autosaveGuardToggle, readAutosaveExplanationToggle;
     private final SliderIntNode autosaveMillisSlider;

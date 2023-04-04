@@ -17,6 +17,7 @@ import com.krab.lazy.windows.WindowManager;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.krab.lazy.stores.LayoutStore.cell;
@@ -34,7 +35,7 @@ public class FolderNode extends AbstractNode {
      * because the children get drawn by one thread and user input changes the list from another thread
      */
     @Expose
-    public final CopyOnWriteArrayList<AbstractNode> children = new CopyOnWriteArrayList<>();
+    public final List<AbstractNode> children = new CopyOnWriteArrayList<>();
 
     @Expose
     public

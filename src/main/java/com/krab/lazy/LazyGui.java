@@ -41,7 +41,7 @@ public class LazyGui  {
 
     private static int lastFrameCountGuiWasShown = -1;
 
-    ArrayList<String> pathPrefix = new ArrayList<>();
+    List<String> pathPrefix = new ArrayList<>();
     int stackSizeWarningLevel = 64;
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;

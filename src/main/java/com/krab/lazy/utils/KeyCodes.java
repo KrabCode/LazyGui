@@ -1,14 +1,14 @@
 package com.krab.lazy.utils;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("CommentedOutCode")
 public class KeyCodes {
     public static final int CTRL = 17;
     public static final int ALT = 18;
     public static final int SHIFT = 16;
-    private static final ArrayList<Integer> textInputIgnoredKeyCodes = new ArrayListBuilder<Integer>().add(CTRL).add(ALT).add(SHIFT).build();
+    private static final List<Integer> textInputIgnoredKeyCodes = new ListBuilder<Integer>().add(CTRL).add(ALT).add(SHIFT).build();
     public static final int DELETE = 147;
     public static final int C = 67;
     public static final int V = 86;

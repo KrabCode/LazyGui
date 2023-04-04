@@ -6,6 +6,7 @@ import processing.opengl.PShader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.max;
 import static java.lang.System.currentTimeMillis;
@@ -18,7 +19,7 @@ import static processing.core.PApplet.println;
  */
 @SuppressWarnings("unused")
 public class ShaderReloader {
-    private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
+    private static final List<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
 
     private ShaderReloader() {

@@ -12,13 +12,13 @@ import com.krab.lazy.utils.KeyCodes;
 import com.krab.lazy.stores.ShaderStore;
 import com.krab.lazy.themes.ThemeColorType;
 import com.krab.lazy.themes.ThemeStore;
-import com.krab.lazy.utils.ArrayListBuilder;
+import com.krab.lazy.utils.ListBuilder;
 import com.krab.lazy.utils.ClipboardUtils;
 import com.krab.lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static com.krab.lazy.stores.NormColorStore.*;
 import static com.krab.lazy.stores.GlobalReferences.app;
@@ -42,7 +42,7 @@ public class SliderNode extends AbstractNode {
     boolean verticalMouseMode = false;
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
-    protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
+    protected final List<Float> precisionRange = new ListBuilder<Float>()
             .add(0.0001f)
             .add(0.001f)
             .add(0.01f)
@@ -52,7 +52,7 @@ public class SliderNode extends AbstractNode {
             .add(100.0f).build();
 
     private static final String SQUIGGLY_EQUALS = "≈";
-    final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
+    final List<Character> numpadChars = new ListBuilder<Character>()
             .add('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
             .build();
     private int numpadInputAppendLastMillis = -1;

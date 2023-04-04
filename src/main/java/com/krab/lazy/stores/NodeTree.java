@@ -12,7 +12,7 @@ import static processing.core.PApplet.println;
 public class NodeTree {
     private static final FolderNode root = new FolderNode("", null);
     private static final Map<String, AbstractNode> nodesByPath = new HashMap<>();
-    static ArrayList<String> knownUnexpectedQueries = new ArrayList<>();
+    static List<String> knownUnexpectedQueries = new ArrayList<>();
 
     private NodeTree() {
 

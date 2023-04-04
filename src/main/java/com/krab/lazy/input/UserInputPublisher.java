@@ -6,16 +6,29 @@ import com.krab.lazy.utils.KeyCodes;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Internal LazyGui class used to register with PApplet user input events.
- * Must be public for PApplet to be able to reach it, but not meant to be used or even looked at by library users.
+ * An internal class used by the LazyGui library to handle and publish user
+ * input events to registered subscribers; it is marked as public to allow
+ * PApplet access, but its methods and functionality should be considered
+ * internal to the LazyGui library.
+ * <ul>
+ * <li>UserInputPublisher manages a singleton instance to register listeners and
+ * manage event propagation.</li>
+ * <li>It includes methods to subscribe, set focus, and handle key and mouse
+ * events for UserInputSubscribers.</li>
+ * <li>Event propagation is managed by a thread-safe list of subscribers, where
+ * events are consumed on a first-come, first-served basis.</li>
+ * <li>The class also provides undo and redo functionality by handling specific
+ * key combinations (CTRL+Z and CTRL+Y).</li>
+ * </ul>
  */
 public class UserInputPublisher {
     public static boolean mouseFallsThroughThisFrame = false;
     private static UserInputPublisher singleton;
-    private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
+    private final List<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
     private float prevX = -1, prevY = -1;
 
     public static void initSingleton() {

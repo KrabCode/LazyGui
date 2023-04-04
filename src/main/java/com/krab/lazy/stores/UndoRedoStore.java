@@ -4,25 +4,33 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static processing.core.PApplet.println;
 
 /**
- * For internal use by LazyGui, it's fed new states by nodes after a change and also triggered manually by the undo/redo hotkeys.
- * The stateStack is an ordered list of full json saves of the GUI state, which combines undo and redo into one stack
- *      and the stateIndex keeps track of the where we currently are inside the combined stack.
- * Indexes in the stack larger than stateIndex are for undo, indexes before it are redo.
- * undo() increments the index by 1 and tries to apply the state it found there.
- * redo() decrements the index by 1 and tries to apply the state it found there.
- * onUndoableActionEnded() clears the redo by removing all elements before the stateIndex,
- *      sets stateIndex to 0 and then inserts the new action at index 0.
+ * For internal use by LazyGui, it's fed new states by nodes after a change and
+ * also triggered manually by the undo/redo hotkeys.
+ * <p>
+ * The <code>stateStack</code> is an ordered list of full JSON saves of the GUI
+ * state, which combines undo and redo into one stack and the
+ * <code>stateIndex</code> keeps track of the where we currently are inside the
+ * combined stack.
+ * <p>
+ * Indexes in the stack larger than <code>stateIndex</code> are for undo,
+ * indexes before it are redo. <code>undo()</code> increments the index by 1 and
+ * tries to apply the state it found there. <code>redo()</code> decrements the
+ * index by 1 and tries to apply the state it found there.
+ * <code>onUndoableActionEnded()</code> clears the redo by removing all elements
+ * before the <code>stateIndex</code>, sets <code>stateIndex</code> to 0 and
+ * then inserts the new action at index 0.
  */
 public class UndoRedoStore {
     private static final boolean debugPrint = false;
     private static final String debugTopLevelTextNodeName = "font size";
     private static final String debugNodeValueKey = "valueFloat";
 
-    static ArrayList<String> stateStack = new ArrayList<>();
+    static List<String> stateStack = new ArrayList<>();
     static int stateIndex = 0;
 
     public static void init(){

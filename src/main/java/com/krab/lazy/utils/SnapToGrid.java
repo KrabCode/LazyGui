@@ -17,7 +17,7 @@ import static processing.core.PApplet.*;
 
 public class SnapToGrid {
     public static boolean snapToGridEnabled = true;
-    static final List<String> availableVisibilityModes = new ArrayListBuilder<String>().add("always", "on drag", "never").build();
+    static final List<String> availableVisibilityModes = new ListBuilder<String>().add("always", "on drag", "never").build();
     private static PShader pointShader;
     private static final String pointShaderPath = "guideGridPoints.glsl";
     private static final int VISIBILITY_ALWAYS = 0;
