@@ -235,9 +235,9 @@ public class ShaderReloader {
                         vertPath != null ? vertPath : "");
             } catch (Exception ex) {
                 lastKnownUncompilable = lastModified;
-                println((fragPath != null ? "" + fragPath : ""),
-                        (vertPath != null ? " or " + (vertFile != null ? vertPath : null) : "") + "says:");
-                println(ex.getMessage());
+                System.err.println((fragPath != null ? fragPath : "") +
+                        (vertPath != null ? " or " + (vertFile != null ? vertPath : null) : "") + "says: ");
+                System.err.println(ex.getMessage());
             }
         }
 
