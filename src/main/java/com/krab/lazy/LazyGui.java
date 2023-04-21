@@ -2,6 +2,7 @@ package com.krab.lazy;
 
 
 import com.krab.lazy.input.HotkeySubscriber;
+import com.krab.lazy.input.InputWatcherBackend;
 import com.krab.lazy.input.UserInputPublisher;
 import com.krab.lazy.nodes.*;
 import com.krab.lazy.stores.*;
@@ -89,6 +90,7 @@ public class LazyGui  {
         settings.applySettingsOntoGuiAtStartup();
         ThemeStore.init();
         FontStore.lazyUpdateFont();
+        InputWatcherBackend.initSingleton();
         UserInputPublisher.initSingleton();
         HotkeySubscriber.initSingleton();
         createOptionsFolder();

@@ -271,7 +271,7 @@ void mousePressed(){
 }
 ```
 
-## Saving and loading values 
+## Saving and loading values
 The GUI can save its current values to disk in a json file. It can also load these values to overwrite the current GUI state.
 You can control this from the `saves` folder under the root window of the GUI. Any new, renamed and deleted save files will be detected by this window at runtime.
 
@@ -365,7 +365,7 @@ A folder will display a name editable at runtime when there is a **text control*
   - "name"
 - is equal to "" (empty string)
 
-## Constructor settings 
+## Constructor settings
 
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
 Loading a save overwrites these, but you can also disable loading on startup here.
