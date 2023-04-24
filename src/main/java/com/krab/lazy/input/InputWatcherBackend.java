@@ -1,6 +1,6 @@
 package com.krab.lazy.input;
 
-import com.krab.lazy.InputKeyState;
+import com.krab.lazy.KeyState;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
@@ -20,10 +20,10 @@ public class InputWatcherBackend {
     private static InputWatcherBackend singleton;
     private static final ArrayList<Integer> codesToClearPressedOn = new ArrayList<>();
     private static final ArrayList<Integer> codesToClearReleasedOn = new ArrayList<>();
-    private static final Map<Integer, InputKeyState> codeStates = new HashMap<>();
+    private static final Map<Integer, KeyState> codeStates = new HashMap<>();
     private static final Map<Character, Integer> charsCodes = new HashMap<>();
     private static boolean debugKeys = false;
-    private static final InputKeyState nullState = new InputKeyState(false, false, false);
+    private static final KeyState nullState = new KeyState(false, false, false);
 
     public static void initSingleton() {
         if (singleton == null) {
@@ -58,9 +58,9 @@ public class InputWatcherBackend {
             charsCodes.put(key, keyCode);
         }
         if (!codeStates.containsKey(keyCode)) {
-            codeStates.put(keyCode, new InputKeyState(false, false, false));
+            codeStates.put(keyCode, new KeyState(false, false, false));
         }
-        InputKeyState state = codeStates.get(keyCode);
+        KeyState state = codeStates.get(keyCode);
         if (event.getAction() == KeyEvent.PRESS) {
             state.down = true;
             state.pressed = true;
@@ -70,12 +70,12 @@ public class InputWatcherBackend {
         }
     }
 
-    public static InputKeyState getKeyStateByChar(char keyChar) {
+    public static KeyState getKeyStateByChar(char keyChar) {
         Integer code = charsCodes.get(keyChar);
         return getKeyStateByCode(code);
     }
 
-    public static InputKeyState getKeyStateByCode(Integer keyCode) {
+    public static KeyState getKeyStateByCode(Integer keyCode) {
         if (keyCode == null || !codeStates.containsKey(keyCode)) {
             return nullState;
         }
@@ -88,7 +88,7 @@ public class InputWatcherBackend {
         }
         codesToClearPressedOn.clear();
         for (Integer keyCode : codeStates.keySet()) {
-            InputKeyState state = codeStates.get(keyCode);
+            KeyState state = codeStates.get(keyCode);
             if (state.pressed) {
                 codesToClearPressedOn.add(keyCode);
                 state.framePressed = app.frameCount;
@@ -102,7 +102,7 @@ public class InputWatcherBackend {
         }
         codesToClearReleasedOn.clear();
         for (Integer keyCode : codeStates.keySet()) {
-            InputKeyState state = codeStates.get(keyCode);
+            KeyState state = codeStates.get(keyCode);
             if (state.released) {
                 codesToClearReleasedOn.add(keyCode);
                 state.frameReleased = app.frameCount;
@@ -112,7 +112,7 @@ public class InputWatcherBackend {
 
     private void unrelease(int keyCode) {
         if (codeStates.containsKey(keyCode)) {
-            InputKeyState state = codeStates.get(keyCode);
+            KeyState state = codeStates.get(keyCode);
             state.released = false;
         }
     }
