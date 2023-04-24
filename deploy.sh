@@ -15,7 +15,7 @@ cp library.properties $t/library.properties
 cp README.md $t/README.md
 cp LICENSE.md $t/src/LICENSE.md
 
-# echo "Zipping..."
-# 7z a $n.zip $t -- todo improve zipping
+echo "Zipping..."
+7z a $n.zip $t
 
 echo "Deployed LazyGui successfully."

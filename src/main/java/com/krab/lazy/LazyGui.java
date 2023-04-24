@@ -99,6 +99,10 @@ public class LazyGui  {
         loadGuiStateFromExistingFiles(settings);
         JsonSaveStore.registerExitHandler();
         lazyFollowSketchResolution();
+        registerDrawListener();
+    }
+
+    private void registerDrawListener() {
         app.registerMethod("draw", this);
     }
 

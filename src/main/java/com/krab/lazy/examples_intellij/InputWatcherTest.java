@@ -1,6 +1,6 @@
 package com.krab.lazy.examples_intellij;
 
-import com.krab.lazy.InputWatcher;
+import com.krab.lazy.Input;
 import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -28,22 +28,25 @@ public class InputWatcherTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        if (InputWatcher.getKey('w')) {
-            print("w");
+        Input.debug(gui.toggle("debug input"));
+        char[] interestingKeys = "wsad".toCharArray();
+        StringBuilder textToDisplay = new StringBuilder();
+        for(char c : interestingKeys){
+            if(Input.getKey(c).down){
+                textToDisplay.append(c);
+            }
         }
-        if (InputWatcher.getKey('s')) {
-            print("s");
+        if(Input.getKey('w').press){
+            println("w pressed");
         }
-        if (InputWatcher.getKey('a')) {
-            print("a");
+        if(Input.getKey('w').release){
+            println("w released");
         }
-        if (InputWatcher.getKey('d')) {
-            print("d");
-        }
-        if (InputWatcher.getKey(' ')) {
-            print("_");
-        }
-        println();
+
+        pg.fill(0xffffffff);
+        pg.textFont(gui.getMainFont());
+        pg.textAlign(CENTER, CENTER);
+        pg.text(textToDisplay.toString(), width/2f, height/2f);
         pg.endDraw();
         image(pg, 0, 0);
     }
