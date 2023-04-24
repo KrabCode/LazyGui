@@ -1,14 +1,16 @@
 package com.krab.lazy.input;
 
-import com.krab.lazy.KeyState;
+import com.krab.lazy.InputKeyState;
+import processing.core.PVector;
 import processing.event.KeyEvent;
-import processing.event.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.println;
+import static processing.core.PConstants.CODED;
 
 /**
  * User-facing utility class that watches and serves individual key and mouse state at runtime.
@@ -16,11 +18,12 @@ import static processing.core.PApplet.println;
 public class InputWatcherBackend {
 
     private static InputWatcherBackend singleton;
-    private static final Map<Integer, KeyState> stateMap = new HashMap<>();
-    private static final Map<Character, Integer> codeMap = new HashMap<>();
-    private static boolean debugInput = false;
-
-    private static final KeyState nullState = new KeyState(false, false, false);
+    private static final ArrayList<Integer> codesToClearPressedOn = new ArrayList<>();
+    private static final ArrayList<Integer> codesToClearReleasedOn = new ArrayList<>();
+    private static final Map<Integer, InputKeyState> codeStates = new HashMap<>();
+    private static final Map<Character, Integer> charsCodes = new HashMap<>();
+    private static boolean debugKeys = false;
+    private static final InputKeyState nullState = new InputKeyState(false, false, false);
 
     public static void initSingleton() {
         if (singleton == null) {
@@ -32,62 +35,96 @@ public class InputWatcherBackend {
         registerListeners();
     }
 
-    public static KeyState getKeyStateByChar(char keyChar) {
-        Integer code = codeMap.get(keyChar);
-        return getKeyStateByCode(code);
-    }
-
-    public static KeyState getKeyStateByCode(Integer keyCode) {
-        if (keyCode == null || !stateMap.containsKey(keyCode)) {
-            return nullState;
-        }
-        return stateMap.get(keyCode);
-    }
-
-    public static void setDebugInput(boolean debugInput) {
-        InputWatcherBackend.debugInput = debugInput;
-    }
-
-    public void draw() {
-        clearPressAndRelease();
-    }
-
-    private void clearPressAndRelease() {
-        for (Integer code : stateMap.keySet()) {
-            KeyState state = stateMap.get(code);
-            state.press = false;
-            state.release = false;
-        }
-    }
-
     private void registerListeners() {
         // the reference passed here is the only reason to have this be a singleton instance rather than a fully static class with no instance
-        // app.registerMethod("mouseEvent", this);
         app.registerMethod("keyEvent", this);
-        app.registerMethod("draw", this);
+        app.registerMethod("post", this);
     }
 
     @SuppressWarnings("unused")
-    public void mouseEvent(MouseEvent event) {
-        if (debugInput) {
-            println(event);
-        }
+    public void post() {
+        postHandleKeyPresses();
+        postHandleKeyReleases();
     }
 
     @SuppressWarnings("unused")
     public void keyEvent(KeyEvent event) {
-        if (debugInput) {
+        if (debugKeys) {
             println(keyEventString(event));
         }
-        if (!codeMap.containsKey(event.getKey())) {
-            codeMap.put(event.getKey(), event.getKeyCode());
+        char key = event.getKey();
+        int keyCode = event.getKeyCode();
+        if (key != CODED && !charsCodes.containsKey(key)) {
+            charsCodes.put(key, keyCode);
         }
-        // TODO fix, press/release booleans don't work
+        if (!codeStates.containsKey(keyCode)) {
+            codeStates.put(keyCode, new InputKeyState(false, false, false));
+        }
+        InputKeyState state = codeStates.get(keyCode);
         if (event.getAction() == KeyEvent.PRESS) {
-            stateMap.put(event.getKeyCode(), new KeyState(true, true, false));
+            state.down = true;
+            state.pressed = true;
         } else if (event.getAction() == KeyEvent.RELEASE) {
-            stateMap.put(event.getKeyCode(), new KeyState(false, false, true));
+            state.down = false;
+            state.released = true;
         }
+    }
+
+    public static InputKeyState getKeyStateByChar(char keyChar) {
+        Integer code = charsCodes.get(keyChar);
+        return getKeyStateByCode(code);
+    }
+
+    public static InputKeyState getKeyStateByCode(Integer keyCode) {
+        if (keyCode == null || !codeStates.containsKey(keyCode)) {
+            return nullState;
+        }
+        return codeStates.get(keyCode);
+    }
+
+    private void postHandleKeyPresses() {
+        for (int keyCode : codesToClearPressedOn) {
+            unpress(keyCode);
+        }
+        codesToClearPressedOn.clear();
+        for (Integer keyCode : codeStates.keySet()) {
+            InputKeyState state = codeStates.get(keyCode);
+            if (state.pressed) {
+                codesToClearPressedOn.add(keyCode);
+                state.framePressed = app.frameCount;
+            }
+        }
+    }
+
+    private void postHandleKeyReleases() {
+        for (int keyCode : codesToClearReleasedOn) {
+            unrelease(keyCode);
+        }
+        codesToClearReleasedOn.clear();
+        for (Integer keyCode : codeStates.keySet()) {
+            InputKeyState state = codeStates.get(keyCode);
+            if (state.released) {
+                codesToClearReleasedOn.add(keyCode);
+                state.frameReleased = app.frameCount;
+            }
+        }
+    }
+
+    private void unrelease(int keyCode) {
+        if (codeStates.containsKey(keyCode)) {
+            InputKeyState state = codeStates.get(keyCode);
+            state.released = false;
+        }
+    }
+
+    private void unpress(int keyCode) {
+        if (codeStates.containsKey(keyCode)) {
+            codeStates.get(keyCode).pressed = false;
+        }
+    }
+
+    public static void setDebugKeys(boolean shouldDebugKeys) {
+        InputWatcherBackend.debugKeys = shouldDebugKeys;
     }
 
     String keyEventString(KeyEvent event) {
@@ -119,4 +156,12 @@ public class InputWatcherBackend {
         return sb.toString();
     }
 
+
+    public static PVector mousePos(){
+        return new PVector(app.mouseX, app.mouseY);
+    }
+
+    public static PVector mouseDelta() {
+        return new PVector(app.mouseX - app.pmouseX, app.mouseY - app.pmouseY);
+    }
 }
