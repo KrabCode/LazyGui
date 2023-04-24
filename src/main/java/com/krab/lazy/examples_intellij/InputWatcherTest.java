@@ -29,7 +29,7 @@ public class InputWatcherTest extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        codeDisplayMap = new HashMap<Integer, String>();
+        codeDisplayMap = new HashMap<>();
         codeDisplayMap.put(UP, "^");
         codeDisplayMap.put(DOWN, "v");
         codeDisplayMap.put(LEFT, "<");
