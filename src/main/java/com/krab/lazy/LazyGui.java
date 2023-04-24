@@ -80,7 +80,7 @@ public class LazyGui  {
         }
         singleton = this;
         if (!sketch.sketchRenderer().equals(P2D) && !sketch.sketchRenderer().equals(P3D)) {
-            println("The LazyGui library requires the P2D or P3D renderer and it will now crash because this condition was not met.");
+            throw new IllegalArgumentException("The LazyGui library requires the P2D or P3D renderer. Please set the sketch renderer to P2D or P3D before initializing LazyGui.");
         }
         GlobalReferences.init(this, sketch);
         NormColorStore.init();
