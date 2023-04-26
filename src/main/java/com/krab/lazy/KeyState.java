@@ -11,23 +11,29 @@ public class KeyState {
 
     /**
      * True for one frame after the button is pushed down to its active position.
+     * Also sets <code>framePressed</code> to the current <code>frameCount</code> when true.
      */
     public boolean pressed;
 
     /**
      * True for one frame after the button is released up from its active position into the idle position.
+     * Also sets <code>frameReleased</code> to the current <code>frameCount</code> when true.
      */
     public boolean released;
 
     /**
-     * What the frameCount was equal to last time <code>pressed</code> was true for this key or keyCode.
-     */
-    public int frameReleased = -Integer.MAX_VALUE;
-
-    /**
      * What the frameCount was equal to last time <code>released</code> was true for this key or keyCode.
+     * Equal to -Integer.MAX_VALUE rather than 0 by default to not display an animation on startup when using
+     * <code>norm(frameCount, framePressed, framePressed + animationDuration)</code>
      */
     public int framePressed = -Integer.MAX_VALUE;
+
+    /**
+     * What the frameCount was equal to last time <code>pressed</code> was true for this key or keyCode.
+     * Equal to -Integer.MAX_VALUE rather than 0 by default to not display an animation on startup when using
+     * <code>norm(frameCount, frameReleased, frameReleased + animationDuration)</code>
+     */
+    public int frameReleased = -Integer.MAX_VALUE;
 
     /**
      * Used internally by the InputWatcherBackend. Not meant to be user-facing.
