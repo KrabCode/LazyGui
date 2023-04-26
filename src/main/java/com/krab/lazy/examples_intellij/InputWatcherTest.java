@@ -33,8 +33,17 @@ public class InputWatcherTest extends PApplet {
         pg.colorMode(HSB,1,1,1,1);
         drawBackground();
         drawTexts();
+        detectCtrlSpacePress();
         pg.endDraw();
         image(pg, 0, 0);
+    }
+
+    private void detectCtrlSpacePress() {
+        boolean isControlDown = Input.getCode(CONTROL).down;
+        boolean spaceWasJustPressed = Input.getChar(' ').pressed;
+        if(isControlDown && spaceWasJustPressed){
+            println("ctrl + space pressed");
+        }
     }
 
     private void drawTexts() {
