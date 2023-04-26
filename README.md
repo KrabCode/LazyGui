@@ -50,7 +50,7 @@ Table of Contents
     - autosave on program exit
     - autoload on program start
 - [hotkeys](#hotkeys) for common actions
-    - copy / paste any value or whole folders
+    - copy / paste any value or folder
     - undo / redo any change
 - [reloading shaders](#live-shader-reloading) at runtime
   
