@@ -29,6 +29,7 @@ Table of Contents
     * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
+  * [Multiple keypress detection](#multiple-keypress-detection)
   * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
@@ -399,6 +400,12 @@ shader.set("time", (float) 0.001 * millis());
 ShaderReloader.filter(shaderPath);
 ```
 see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
+
+## Multiple keypress detection
+This GUI also includes an Input utility that makes it easier to see whether any number of keys are currently pressed on the keyboard. 
+Processing only shows you one key at a time while this utility keeps track of past events and can tell you whether any char or keyCode was just pressed, is currently held down or if it was just released. 
+
+see: [Input javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/Input.html)
 
 ## Dependencies
 - This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
