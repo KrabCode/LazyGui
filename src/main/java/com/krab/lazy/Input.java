@@ -10,6 +10,7 @@ import java.util.List;
  * Also includes two simple mouse position functions.
  * Mouse events are considered well supported by Processing so there is no alternative offered here (at least for now).
  */
+@SuppressWarnings("unused")
 public class Input {
     /**
      * Get the current keyboard button state by using its char value.

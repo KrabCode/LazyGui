@@ -4,7 +4,6 @@ import com.krab.lazy.Input;
 import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
 
 import java.util.List;
 
