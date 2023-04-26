@@ -4,9 +4,7 @@ import com.krab.lazy.KeyState;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.println;
@@ -18,8 +16,8 @@ import static processing.core.PConstants.CODED;
 public class InputWatcherBackend {
 
     private static InputWatcherBackend singleton;
-    private static final ArrayList<Integer> codesToClearPressedOn = new ArrayList<>();
-    private static final ArrayList<Integer> codesToClearReleasedOn = new ArrayList<>();
+    private static final List<Integer> codesToClearPressedOn = new ArrayList<>();
+    private static final List<Integer> codesToClearReleasedOn = new ArrayList<>();
     private static final Map<Integer, KeyState> codeStates = new HashMap<>();
     private static final Map<Character, Integer> charsCodes = new HashMap<>();
     private static boolean debugKeys = false;
@@ -45,6 +43,16 @@ public class InputWatcherBackend {
     public void post() {
         postHandleKeyPresses();
         postHandleKeyReleases();
+        recoverFromFocusLoss();
+    }
+
+    private void recoverFromFocusLoss() {
+        if(!app.keyPressed){
+            for(int code : codeStates.keySet()){
+                KeyState state = codeStates.get(code);
+                state.down = false;
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -52,19 +60,23 @@ public class InputWatcherBackend {
         if (debugKeys) {
             println(keyEventString(event));
         }
+        int action = event.getAction();
+        if(action != KeyEvent.PRESS && event.getAction() != KeyEvent.RELEASE){
+            return; // we only care about these two events, not the TYPE event
+        }
         char key = event.getKey();
         int keyCode = event.getKeyCode();
-        if (key != CODED && !charsCodes.containsKey(key)) {
+        if (keyCode != 0 && key != CODED && !charsCodes.containsKey(key)) {
             charsCodes.put(key, keyCode);
         }
         if (!codeStates.containsKey(keyCode)) {
             codeStates.put(keyCode, new KeyState(false, false, false));
         }
         KeyState state = codeStates.get(keyCode);
-        if (event.getAction() == KeyEvent.PRESS) {
+        if (action == KeyEvent.PRESS) {
             state.down = true;
             state.pressed = true;
-        } else if (event.getAction() == KeyEvent.RELEASE) {
+        } else if (action == KeyEvent.RELEASE) {
             state.down = false;
             state.released = true;
         }
@@ -123,6 +135,31 @@ public class InputWatcherBackend {
         }
     }
 
+    public static List<String> getAllDownChars() {
+        List<String> downChars = new ArrayList<>();
+        List<Integer> knownDownCodes = new ArrayList<>();
+        for (Character c : charsCodes.keySet()) {
+            int code = charsCodes.get(c);
+            if(getKeyStateByChar(c).down && !knownDownCodes.contains(code)){
+                downChars.add(c.toString().toLowerCase());
+                knownDownCodes.add(code);
+            }
+        }
+        downChars.sort(String::compareToIgnoreCase);
+        return downChars;
+    }
+
+    public static List<Integer> getAllDownCodes() {
+        ArrayList<Integer> downCodes = new ArrayList<>();
+        for (int code : codeStates.keySet()) {
+            if(getKeyStateByCode(code).down){
+                downCodes.add(code);
+            }
+        }
+        downCodes.sort(Integer::compareTo);
+        return downCodes;
+    }
+
     public static void setDebugKeys(boolean shouldDebugKeys) {
         InputWatcherBackend.debugKeys = shouldDebugKeys;
     }
@@ -159,6 +196,10 @@ public class InputWatcherBackend {
 
     public static PVector mousePos(){
         return new PVector(app.mouseX, app.mouseY);
+    }
+
+    public static PVector mousePosLastFrame(){
+        return new PVector(app.pmouseX, app.pmouseY);
     }
 
     public static PVector mouseDelta() {
