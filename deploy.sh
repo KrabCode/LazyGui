@@ -15,6 +15,11 @@ cp README.md $targetDir/README.md
 cp LICENSE.md $targetDir/src/LICENSE.md
 
 echo "Zipping..."
-7z a $name.zip $targetDir
+cd out/deploy || exit
+rm -rf $name.zip
+7z a $name.zip $name/
+
+cp $name/library.properties $name.txt
+cp $name/library/$name.jar $name.jar
 
 echo "Deployed LazyGui successfully."
