@@ -8,7 +8,7 @@ import java.util.List;
  * Static wrapper for a utility class that keeps track of all currently pressed keys to simplify the code for complex keyboard interaction, because Processing doesn't offer that.
  * Ask it for individual key states using chars or keyCodes and see if the key was pressed this frame, whether it is now down or whether it was just released.
  * Also includes two simple mouse position functions.
- * Mouse events are considered well-supported by Processing so there is no alternative offered here (at least for now).
+ * Mouse events are considered well-supported by Processing so there is no alternative offered here.
  */
 @SuppressWarnings("unused")
 public class Input {
