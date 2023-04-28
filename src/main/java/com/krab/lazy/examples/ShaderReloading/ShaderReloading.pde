@@ -1,3 +1,5 @@
+import com.krab.lazy.*;
+
 LazyGui gui;
 
 void setup() {

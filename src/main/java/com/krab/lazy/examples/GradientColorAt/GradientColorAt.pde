@@ -1,3 +1,5 @@
+import com.krab.lazy.*;
+
 int defaultBackgroundColor = 0xFF0F0F0F;
 LazyGui gui;
 

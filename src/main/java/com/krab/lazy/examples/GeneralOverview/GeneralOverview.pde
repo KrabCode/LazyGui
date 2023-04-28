@@ -1,3 +1,4 @@
+import com.krab.lazy.*;
 
 LazyGui gui;
 

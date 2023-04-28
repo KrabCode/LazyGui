@@ -3,8 +3,10 @@
 Table of Contents
 <!-- TOC -->
   * [LazyGui is a GUI library for Processing](#lazygui-is-a-gui-library-for-processing)
-  * [How do I run this?](#how-do-i-run-this)
-      * [Minimal example](#minimal-example)
+  * [How do I start using this?](#how-do-i-start-using-this)
+    * [with PDE (the default Processing editor)](#with-pde-the-default-processing-editor)
+    * [with other IDEs like IntelliJ IDEA](#with-other-ides-like-intellij-idea)
+  * [Minimal code example](#minimal-code-example)
   * [Control elements](#control-elements)
     * [Slider](#slider)
     * [Plot](#plot)
@@ -55,13 +57,23 @@ Table of Contents
     - undo / redo any change
 - [reloading shaders](#live-shader-reloading) at runtime
   
-## How do I run this?
+## How do I start using this?
 
-First get the jar from [releases](https://github.com/KrabCode/LazyGui/releases) and then drag & drop it into your Processing
-editor window. If you are using a full IDE like IntelliJ, import the jar as a standard java library just like you imported Processing.
+### with PDE (the default Processing editor)
+- Find LazyGui in the Contribution Manager under the Libraries tab and click `Install`
 
-#### Minimal example
+- See example sketches: `File -> Examples... -> Contributed Libraries`
+
+- Leaf through the offline javadocs: `Help -> Libraries Reference -> LazyGui`
+   
+
+### with other IDEs like IntelliJ IDEA
+Get the latest jar file from [releases](https://github.com/KrabCode/LazyGui/releases/latest) and then import it into your project using your IDE as a standard java library just like you imported Processing.
+
+## Minimal code example
 ```java
+import com.krab.lazy.*;
+
 LazyGui gui;
 
 void setup(){
@@ -402,8 +414,17 @@ ShaderReloader.filter(shaderPath);
 see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
 
 ## Multiple keypress detection
-This GUI also includes an Input utility that makes it easier to see whether any number of keys are currently pressed on the keyboard. 
+This GUI also includes the Input utility that makes it easier to see whether any number of keys are currently pressed on the keyboard. 
 Processing only shows you one key at a time while this utility keeps track of past events and can tell you whether any char or keyCode was just pressed, is currently held down or if it was just released. 
+
+Example detecting CTRL + SPACE with Input class static methods:
+```java
+boolean isControlDown = Input.getCode(CONTROL).down;
+boolean spaceWasJustPressed = Input.getChar(' ').pressed;
+if(isControlDown && spaceWasJustPressed){
+    println("ctrl + space pressed");
+}
+```
 
 see: [Input javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/Input.html)
 

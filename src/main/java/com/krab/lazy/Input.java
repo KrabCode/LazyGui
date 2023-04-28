@@ -5,10 +5,10 @@ import processing.core.PVector;
 import java.util.List;
 
 /**
- * Interface to a utility class that keeps track of all currently pressed keys to simplify the code for complex keyboard interaction, because Processing doesn't offer that.
+ * Static wrapper for a utility class that keeps track of all currently pressed keys to simplify the code for complex keyboard interaction, because Processing doesn't offer that.
  * Ask it for individual key states using chars or keyCodes and see if the key was pressed this frame, whether it is now down or whether it was just released.
  * Also includes two simple mouse position functions.
- * Mouse events are considered well supported by Processing so there is no alternative offered here (at least for now).
+ * Mouse events are considered well-supported by Processing so there is no alternative offered here (at least for now).
  */
 @SuppressWarnings("unused")
 public class Input {
@@ -19,7 +19,7 @@ public class Input {
      * @param key char representation of the key
      * @return current state of the keyboard button
      */
-    public static KeyState getChar(char key){
+    public static KeyState getChar(Character key){
         return InputWatcherBackend.getKeyStateByChar(key);
     }
 

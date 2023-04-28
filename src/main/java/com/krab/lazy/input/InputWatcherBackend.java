@@ -2,6 +2,7 @@ package com.krab.lazy.input;
 
 import com.krab.lazy.KeyState;
 import processing.core.PVector;
+import processing.event.Event;
 import processing.event.KeyEvent;
 
 import java.util.*;
@@ -11,7 +12,9 @@ import static processing.core.PApplet.println;
 import static processing.core.PConstants.CODED;
 
 /**
- * User-facing utility class that watches and serves individual key and mouse state at runtime.
+ * Class that watches and serves individual key and mouse state at runtime.
+ * This is a user-facing utility meant to be used through its Input.java wrapper
+ * The GUI uses a different paralell UserInputPublisher to pass the processing events into the windows and control elements.
  */
 public class InputWatcherBackend {
 
@@ -19,18 +22,19 @@ public class InputWatcherBackend {
     private static final List<Integer> codesToClearPressedOn = new ArrayList<>();
     private static final List<Integer> codesToClearReleasedOn = new ArrayList<>();
     private static final Map<Integer, KeyState> codeStates = new HashMap<>();
-    private static final Map<Character, Integer> charsCodes = new HashMap<>();
+    private static final Map<Character, Integer> namedCodes = new HashMap<>();
     private static boolean debugKeys = false;
     private static final KeyState nullState = new KeyState(false, false, false);
+
+    private InputWatcherBackend() {
+        registerListeners();
+        setupBasicCodeNames();
+    }
 
     public static void initSingleton() {
         if (singleton == null) {
             singleton = new InputWatcherBackend();
         }
-    }
-
-    private InputWatcherBackend() {
-        registerListeners();
     }
 
     private void registerListeners() {
@@ -55,6 +59,18 @@ public class InputWatcherBackend {
         }
     }
 
+    public static PVector mousePos(){
+        return new PVector(app.mouseX, app.mouseY);
+    }
+
+    public static PVector mousePosLastFrame(){
+        return new PVector(app.pmouseX, app.pmouseY);
+    }
+
+    public static PVector mouseDelta() {
+        return new PVector(app.mouseX - app.pmouseX, app.mouseY - app.pmouseY);
+    }
+
     @SuppressWarnings("unused")
     public void keyEvent(KeyEvent event) {
         if (debugKeys) {
@@ -66,8 +82,10 @@ public class InputWatcherBackend {
         }
         char key = event.getKey();
         int keyCode = event.getKeyCode();
-        if (keyCode != 0 && key != CODED && !charsCodes.containsKey(key)) {
-            charsCodes.put(key, keyCode);
+        if (keyCode != 0 && key != CODED &&
+                event.getModifiers() != Event.CTRL && // ctrl changes the reported key into some three letter abbrev
+                !namedCodes.containsKey(key)) {
+            namedCodes.put(key, keyCode);
         }
         if (!codeStates.containsKey(keyCode)) {
             codeStates.put(keyCode, new KeyState(false, false, false));
@@ -82,8 +100,8 @@ public class InputWatcherBackend {
         }
     }
 
-    public static KeyState getKeyStateByChar(char keyChar) {
-        Integer code = charsCodes.get(keyChar);
+    public static KeyState getKeyStateByChar(Character keyName) {
+        Integer code = namedCodes.get(keyName);
         return getKeyStateByCode(code);
     }
 
@@ -138,10 +156,10 @@ public class InputWatcherBackend {
     public static List<String> getAllDownChars() {
         List<String> downChars = new ArrayList<>();
         List<Integer> knownDownCodes = new ArrayList<>();
-        for (Character c : charsCodes.keySet()) {
-            int code = charsCodes.get(c);
-            if(getKeyStateByChar(c).down && !knownDownCodes.contains(code)){
-                downChars.add(c.toString().toLowerCase());
+        for (Character s : namedCodes.keySet()) {
+            int code = namedCodes.get(s);
+            if(getKeyStateByChar(s).down && !knownDownCodes.contains(code)){
+                downChars.add(s.toString().toLowerCase(Locale.getDefault()));
                 knownDownCodes.add(code);
             }
         }
@@ -193,16 +211,33 @@ public class InputWatcherBackend {
         return sb.toString();
     }
 
-
-    public static PVector mousePos(){
-        return new PVector(app.mouseX, app.mouseY);
-    }
-
-    public static PVector mousePosLastFrame(){
-        return new PVector(app.pmouseX, app.pmouseY);
-    }
-
-    public static PVector mouseDelta() {
-        return new PVector(app.mouseX - app.pmouseX, app.mouseY - app.pmouseY);
+    private void setupBasicCodeNames() {
+        namedCodes.put(' ', (int) com.jogamp.newt.event.KeyEvent.VK_SPACE);
+        namedCodes.put('a', (int) com.jogamp.newt.event.KeyEvent.VK_A);
+        namedCodes.put('b', (int) com.jogamp.newt.event.KeyEvent.VK_B);
+        namedCodes.put('c', (int) com.jogamp.newt.event.KeyEvent.VK_C);
+        namedCodes.put('d', (int) com.jogamp.newt.event.KeyEvent.VK_D);
+        namedCodes.put('e', (int) com.jogamp.newt.event.KeyEvent.VK_E);
+        namedCodes.put('f', (int) com.jogamp.newt.event.KeyEvent.VK_F);
+        namedCodes.put('g', (int) com.jogamp.newt.event.KeyEvent.VK_G);
+        namedCodes.put('h', (int) com.jogamp.newt.event.KeyEvent.VK_H);
+        namedCodes.put('i', (int) com.jogamp.newt.event.KeyEvent.VK_I);
+        namedCodes.put('j', (int) com.jogamp.newt.event.KeyEvent.VK_J);
+        namedCodes.put('k', (int) com.jogamp.newt.event.KeyEvent.VK_K);
+        namedCodes.put('l', (int) com.jogamp.newt.event.KeyEvent.VK_L);
+        namedCodes.put('m', (int) com.jogamp.newt.event.KeyEvent.VK_M);
+        namedCodes.put('n', (int) com.jogamp.newt.event.KeyEvent.VK_N);
+        namedCodes.put('o', (int) com.jogamp.newt.event.KeyEvent.VK_O);
+        namedCodes.put('p', (int) com.jogamp.newt.event.KeyEvent.VK_P);
+        namedCodes.put('q', (int) com.jogamp.newt.event.KeyEvent.VK_Q);
+        namedCodes.put('r', (int) com.jogamp.newt.event.KeyEvent.VK_R);
+        namedCodes.put('s', (int) com.jogamp.newt.event.KeyEvent.VK_S);
+        namedCodes.put('t', (int) com.jogamp.newt.event.KeyEvent.VK_T);
+        namedCodes.put('u', (int) com.jogamp.newt.event.KeyEvent.VK_U);
+        namedCodes.put('v', (int) com.jogamp.newt.event.KeyEvent.VK_V);
+        namedCodes.put('w', (int) com.jogamp.newt.event.KeyEvent.VK_W);
+        namedCodes.put('x', (int) com.jogamp.newt.event.KeyEvent.VK_X);
+        namedCodes.put('y', (int) com.jogamp.newt.event.KeyEvent.VK_Y);
+        namedCodes.put('z', (int) com.jogamp.newt.event.KeyEvent.VK_Z);
     }
 }

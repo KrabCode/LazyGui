@@ -2,6 +2,7 @@ package com.krab.lazy;
 
 /**
  * Data transfer object for representing a keyboard button state.
+ * @see Input
  */
 public class KeyState {
     /**
