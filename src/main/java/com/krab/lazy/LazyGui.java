@@ -47,6 +47,8 @@ public class LazyGui  {
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
     private PGraphics guiCanvas;
+    String optionsFolderName = "gui settings";
+    String savesFolderName = "gui saves";
 
     private static LazyGui singleton;
 
@@ -1043,9 +1045,6 @@ public class LazyGui  {
      * @see LazyGui#getFolder()
      */
     public void pushFolder(String folderName){
-        if(folderName.equals("options")){
-            int i = 0;
-        }
         if(pathPrefix.size() >= stackSizeWarningLevel && !printedPushWarningAlready){
             println("Too many calls to pushFolder() - stack size reached the warning limit of " + stackSizeWarningLevel +
                     ", possibly due to runaway recursion");
@@ -1212,17 +1211,17 @@ public class LazyGui  {
     }
 
     private void createOptionsFolder() {
-        gui.pushFolder("options");
+        gui.pushFolder(optionsFolderName);
         ThemeStore.updateThemePicker();
         gui.popFolder();
     }
 
     private void createSavesFolder(){
-        insertNodeAtItsPath(new SaveFolderNode("saves", NodeTree.getRoot()));
+        insertNodeAtItsPath(new SaveFolderNode(savesFolderName, NodeTree.getRoot()));
     }
 
     private void updateOptionsFolder() {
-        gui.pushFolder("options");
+        gui.pushFolder(optionsFolderName);
         LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();
