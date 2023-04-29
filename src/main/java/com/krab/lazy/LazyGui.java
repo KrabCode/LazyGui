@@ -47,8 +47,8 @@ public class LazyGui  {
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
     private PGraphics guiCanvas;
-    String optionsFolderName = "gui settings";
-    String savesFolderName = "gui saves";
+    String optionsFolderName = "options";
+    String savesFolderName = "saves";
 
     private static LazyGui singleton;
 
