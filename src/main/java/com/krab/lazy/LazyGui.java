@@ -868,7 +868,7 @@ public class LazyGui  {
     }
 
     /**
-     * Adds hue to the color picker, looping it correctly both in both directions.
+     * Adds hue to the color picker, looping it correctly in both directions at the [0,1] boundary.
      * Lazily initializes the color picker if needed with default color 0xFF000000 (full alpha black).
      * Does not block changing the value in the future in any way.
      *
