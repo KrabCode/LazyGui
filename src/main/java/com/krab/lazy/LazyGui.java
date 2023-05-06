@@ -121,8 +121,13 @@ public class LazyGui  {
         if (guiCanvas == null || guiCanvas.width != app.width || guiCanvas.height != app.height) {
             guiCanvas = app.createGraphics(app.width, app.height, P2D);
             guiCanvas.colorMode(HSB, 1, 1, 1, 1);
-//            pg.noSmooth();
             guiCanvas.smooth(8);
+
+            // dummy draw workaround for processing P2D PGraphics first draw loop bug where the canvas is unusable
+            guiCanvas.beginDraw();
+            guiCanvas.background(0);
+            guiCanvas.clear();
+            guiCanvas.endDraw();
         }
     }
 
