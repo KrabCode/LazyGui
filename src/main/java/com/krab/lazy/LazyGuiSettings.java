@@ -36,6 +36,7 @@ public class LazyGuiSettings {
     private ThemeType themePreset = null;
     private String pathToSpecificSaveToLoadOnStartup = null;
     private String sketchNameOverride = null;
+    private int smoothingValue;
 
     /**
      * Constructor, call this before any other function here.
@@ -61,9 +62,10 @@ public class LazyGuiSettings {
         this.mouseShouldConfineToWindow = MouseHiding.shouldConfineToWindow;
         this.cellSize = LayoutStore.cell;
         this.startGuiHidden = LayoutStore.isGuiHidden();
+        this.smoothingValue = LayoutStore.getSmoothingValue();
+        this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
-        this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
     }
 
     void applySettingsOntoGuiAtStartup() {
@@ -74,6 +76,7 @@ public class LazyGuiSettings {
         MouseHiding.shouldConfineToWindow = mouseShouldConfineToWindow;
         LayoutStore.cell = cellSize;
         LayoutStore.setAutosuggestWindowWidth(autosuggestWindowWidth);
+        LayoutStore.setSmoothingValue(smoothingValue);
         FontStore.mainFontSizeDefault = mainFontSize;
         FontStore.sideFontSizeDefault = sideFontSize;
         if (themeCustom != null) {
@@ -262,7 +265,7 @@ public class LazyGuiSettings {
     }
 
     /**
-     * The GUI tries to make windows fit its contents snugly based on longest text in the row at window creation time.
+     * Override the GUI trying to make window widths fit its contents snugly based on longest text in the row at window opening time.
      * Setting this to false disables this behavior and sets all windows to some default size fitting for the folder type.
      *
      * @param shouldAutosuggest should the windows try to auto-detect optimal width?
@@ -270,6 +273,21 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setAutosuggestWindowWidth(boolean shouldAutosuggest){
         this.autosuggestWindowWidth = shouldAutosuggest;
+        return this;
+    }
+
+    /**
+     * Override the default antialiasing level of `smooth(4)` for the GUI canvas.
+     * A value of 0 will set `noSmooth()` instead.
+     * This will not affect the smoothing level of your entire sketch - it will only affect the GUI, which will still be drawn as an image on top of your potentially differently smoothed sketch.
+     *
+     * @param smoothValue the value to be passed to `smooth()` for the gui canvas - if 0 then `noSmooth()` is used
+     * @return this settings object for chaining statements easily
+     * @see <a href="https://processing.org/reference/smooth_.html">smooth()</a>
+     * @see <a href="https://github.com/processing/processing4/issues/694">a value of 8 breaks PGraphics on some machines</a>
+     */
+    public LazyGuiSettings setSmooth(int smoothValue){
+        this.smoothingValue = smoothValue;
         return this;
     }
 

@@ -14,6 +14,7 @@ public class SettingsTest extends PApplet {
     @Override
     public void settings() {
         size(600,600, P2D);
+        noSmooth();
     }
 
     public void setup() {
@@ -49,6 +50,7 @@ public class SettingsTest extends PApplet {
 
             .setAutosuggestWindowWidth(true)
             .setSketchNameOverride("Testing")
+            .setSmooth(16)
         );
 
 

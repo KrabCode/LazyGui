@@ -18,6 +18,8 @@ public class LayoutStore {
     private static boolean isGuiHidden = false;
     private static boolean autosuggestWindowWidth = true;
 
+    private static int smoothingValue = 4;
+
     private static String overridingSketchName = null;
 
     public static void updateWindowOptions() {
@@ -135,5 +137,13 @@ public class LayoutStore {
 
     public static void setFolderRowClickClosesWindowIfOpen(boolean folderClickTogglesWindow) {
         LayoutStore.shouldFolderRowClickCloseWindowIfOpen = folderClickTogglesWindow;
+    }
+
+    public static int getSmoothingValue() {
+        return smoothingValue;
+    }
+
+    public static void setSmoothingValue(int smoothingValue) {
+        LayoutStore.smoothingValue = smoothingValue;
     }
 }

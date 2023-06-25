@@ -14,7 +14,7 @@ public class SimpleShape extends PApplet {
 
     public void settings() {
         size(22*41, 22*20, P2D);
-        smooth(8);
+        smooth(4);
     }
 
     public void setup() {

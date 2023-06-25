@@ -5,6 +5,7 @@
 /lib/
 *.iml
 /data/JetBrainsMono-2.242
+/processing-3.5.4/
 
 src/test/Camera.java
 /.fleet/

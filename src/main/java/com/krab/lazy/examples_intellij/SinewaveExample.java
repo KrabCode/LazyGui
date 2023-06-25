@@ -19,14 +19,14 @@ public class SinewaveExample extends PApplet {
     @Override
     public void settings() {
         size(1000,1000, P2D);
-        smooth(8);
+        smooth(4);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this, new LazyGuiSettings());
         pg = createGraphics(width, height, P2D);
-        pg.smooth(8);
+        pg.smooth(4);
     }
 
     @Override

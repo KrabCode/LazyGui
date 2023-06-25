@@ -1,6 +1,9 @@
 name=LazyGui
 targetDir=out/deploy/LazyGui
 
+echo "Cleaning saves from data/gui/"
+rm -rf /data/gui/*
+
 echo "Cleaning $targetDir..."
 rm -rf $targetDir/
 
