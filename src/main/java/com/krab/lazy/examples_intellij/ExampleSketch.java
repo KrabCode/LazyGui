@@ -1,5 +1,6 @@
 package com.krab.lazy.examples_intellij;
 
+import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import com.krab.lazy.LazyGui;
@@ -35,7 +36,11 @@ public class ExampleSketch extends PApplet {
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background").hex);
+        if(gui.toggle("gradient", true)){
+            pg.image(gui.gradient("background"), 0, 0);
+            return;
+        }
+        pg.fill(gui.colorPicker("background solid").hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);
