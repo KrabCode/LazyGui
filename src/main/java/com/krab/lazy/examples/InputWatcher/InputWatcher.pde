@@ -5,10 +5,6 @@ LazyGui gui;
 int nextBackgroundColor = 0xFF0F0F0F;
 int currentBackgroundColor = 0xFF0F0F0F;
 
-public static void main(String[] args) {
-  PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
-}
-
 @Override
   public void settings() {
   size(800, 800, P2D);
