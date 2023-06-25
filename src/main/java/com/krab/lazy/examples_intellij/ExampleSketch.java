@@ -1,6 +1,5 @@
 package com.krab.lazy.examples_intellij;
 
-import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import com.krab.lazy.LazyGui;
