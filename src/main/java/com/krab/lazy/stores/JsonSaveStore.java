@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static processing.core.PApplet.max;
@@ -127,7 +128,7 @@ public class JsonSaveStore {
     }
 
     private static String getFullFilePathWithoutTypeSuffix(String filenameWithSuffix) {
-        return saveDir.getAbsolutePath() + "\\" + filenameWithSuffix;
+        return Paths.get(saveDir.getAbsolutePath(), filenameWithSuffix).toString();
     }
 
     static void overwriteFile(String fullPath, String content) {
