@@ -213,7 +213,7 @@ public class JsonSaveStore {
                 }
             }
         }catch (Exception ex){
-            println("Loading gui state from json failed with: " + ex.getClass().getSimpleName() + "");
+            println("Loading gui state from json failed with: " + ex.getClass().getSimpleName());
         }
     }
 
