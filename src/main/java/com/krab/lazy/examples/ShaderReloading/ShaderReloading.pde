@@ -4,7 +4,7 @@ LazyGui gui;
 
 void setup() {
   size(800, 800, P2D);
-  gui = new LazyGui(this);
+  gui = new LazyGui(this, new LazyGuiSettings().setStartGuiHidden(true));
 }
 
 void draw() {
