@@ -1204,7 +1204,7 @@ public class LazyGui  {
         if (!HotkeyStore.isScreenshotRequestedOnMainThread()) {
             return;
         }
-        String folderPath = getGuiDataFolderPath("/screenshots");
+        String folderPath = getGuiDataFolderPath("screenshots");
         File folder = new File(folderPath);
         if(!folder.isDirectory()){
             //noinspection ResultOfMethodCallIgnored

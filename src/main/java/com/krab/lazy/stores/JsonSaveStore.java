@@ -64,7 +64,7 @@ public class JsonSaveStore {
     }
 
     private static void lazyInitSaveDir() {
-        saveDir = new File(getGuiDataFolderPath("/saves/"));
+        saveDir = new File(getGuiDataFolderPath("saves"));
         if (!saveDir.exists()) {
             boolean dirCreationResult = saveDir.mkdirs();
             if(!dirCreationResult){
@@ -242,7 +242,8 @@ public class JsonSaveStore {
         }
         int highestNumber = -1;
         for(String existingFileName : existingFiles){
-            String filenameWithoutSuffix = existingFileName.split("\\.")[0];
+            String filename = Paths.get(existingFileName).getFileName().toString();
+            String filenameWithoutSuffix = filename.split("\\.")[0];
             try{
                 int filenameInteger = Integer.parseInt(filenameWithoutSuffix);
                 highestNumber = max(filenameInteger, highestNumber);
@@ -256,6 +257,7 @@ public class JsonSaveStore {
     }
 
     public static String getGuiDataFolderPath(String innerPath) {
-        return GlobalReferences.app.dataPath("gui/" + GlobalReferences.app.getClass().getSimpleName() + innerPath);
+        return GlobalReferences.app.dataPath(
+                Paths.get("gui", GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
     }
 }
