@@ -18,6 +18,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1212,7 +1213,7 @@ public class LazyGui  {
         }
         String fileName = getNextUnusedIntegerFileNameInFolder(folder);
         String fileType = ".png";
-        String filePath = folderPath + "\\" + fileName + fileType;
+        String filePath = Paths.get(folderPath, fileName + fileType).toString();
         app.save(filePath);
         println("Screenshot saved to: " + filePath);
         HotkeyStore.setScreenshotRequestedOnMainThread(false);

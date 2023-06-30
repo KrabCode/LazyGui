@@ -20,6 +20,7 @@ import static processing.core.PApplet.max;
 import static processing.core.PApplet.println;
 
 public class JsonSaveStore {
+    private final static String JSON_TYPE_EXTENSION = ".json";
     public static boolean autosaveOnExitEnabled = true;
     public static boolean autosaveLockGuardEnabled = true;
     public static boolean shouldLoadLatestSaveOnStartupByDefault = true;
@@ -27,7 +28,6 @@ public class JsonSaveStore {
     private static long lastFrameMillisForLockGuard;
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
-    private final static String JSON_FILE_TYPE_SUFFIX = ".json";
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
@@ -67,15 +67,15 @@ public class JsonSaveStore {
         saveDir = new File(getGuiDataFolderPath("saves"));
         if (!saveDir.exists()) {
             boolean dirCreationResult = saveDir.mkdirs();
-            if(!dirCreationResult){
+            if (!dirCreationResult) {
                 println("could not create save folder at path: " + saveDir.getPath());
             }
         }
     }
 
-    public static String createTreeSaveFile(String filenameWithoutSuffix) {
+    public static String createTreeSaveFile(String filenameWithoutExtension) {
         // save main json
-        String jsonPath = getFullJsonFilePathWithFileTypeSuffix(filenameWithoutSuffix);
+        String jsonPath = getFullJsonFilePathWithFileTypeExtension(filenameWithoutExtension);
         overwriteFile(jsonPath, getTreeAsJsonString());
         return jsonPath;
     }
@@ -123,14 +123,6 @@ public class JsonSaveStore {
         return sb.toString();
     }
 
-    private static String getFullJsonFilePathWithFileTypeSuffix(String filenameWithoutSuffix) {
-        return getFullFilePathWithoutTypeSuffix(filenameWithoutSuffix + JSON_FILE_TYPE_SUFFIX);
-    }
-
-    private static String getFullFilePathWithoutTypeSuffix(String filenameWithSuffix) {
-        return Paths.get(saveDir.getAbsolutePath(), filenameWithSuffix).toString();
-    }
-
     static void overwriteFile(String fullPath, String content) {
         BufferedWriter writer;
         try {
@@ -169,7 +161,7 @@ public class JsonSaveStore {
         return gson.toJson(NodeTree.getRoot());
     }
 
-    public static String getFolderAsJsonString(FolderNode folder){
+    public static String getFolderAsJsonString(FolderNode folder) {
         return gson.toJson(folder);
     }
 
@@ -177,11 +169,11 @@ public class JsonSaveStore {
         return gson.fromJson(json, JsonElement.class);
     }
 
-    public static void loadStateFromJsonString(String json){
+    public static void loadStateFromJsonString(String json) {
         loadStateFromJsonString(json, NodeTree.getRoot().path);
     }
 
-    public static void loadStateFromJsonString(String json, String path){
+    public static void loadStateFromJsonString(String json, String path) {
         loadStateFromJsonElement(gson.fromJson(json, JsonElement.class), path);
     }
 
@@ -189,13 +181,12 @@ public class JsonSaveStore {
         lastLoadedStateMap.clear();
         Queue<JsonElement> queue = new LinkedList<>();
         queue.offer(root);
-        try{
-
+        try {
             String inputRootPath = root.getAsJsonObject().get("path").getAsString();
             while (!queue.isEmpty()) {
                 JsonElement loadedNode = queue.poll();
                 String loadedPath = loadedNode.getAsJsonObject().get("path").getAsString();
-                if(outputRootPath != null){
+                if (outputRootPath != null) {
                     // used for copy/pasting sub-folders and not the entire tree
                     loadedPath = loadedPath.replace(inputRootPath, outputRootPath);
                 }
@@ -212,7 +203,7 @@ public class JsonSaveStore {
                     }
                 }
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             println("Loading gui state from json failed with: " + ex.getClass().getSimpleName());
         }
     }
@@ -228,36 +219,42 @@ public class JsonSaveStore {
         abstractNode.overwriteState(loadedNodeState);
     }
 
-    public static File getSaveDir(){
-        return saveDir;
-    }
-
-    public static String getNextUnusedIntegerFileNameInFolder(File folder){
-        if(!folder.isDirectory()){
+    public static String getNextUnusedIntegerFileNameInFolder(File folder) {
+        if (!folder.isDirectory()) {
             return null;
         }
+        int maxNumberFound = 0;
         String[] existingFiles = folder.list();
-        if(existingFiles == null || existingFiles.length == 0){
-            return "1";
-        }
-        int highestNumber = -1;
-        for(String existingFileName : existingFiles){
-            String filename = Paths.get(existingFileName).getFileName().toString();
-            String filenameWithoutSuffix = filename.split("\\.")[0];
-            try{
-                int filenameInteger = Integer.parseInt(filenameWithoutSuffix);
-                highestNumber = max(filenameInteger, highestNumber);
-            } catch(NumberFormatException nfex){
-                // just ignore files that do not match a simple integer numbering scheme
-            } catch(Exception ex){
-                println(ex);
+        if (existingFiles != null) {
+            for (String filenameWithExtension : existingFiles) {
+                String filenameWithoutExtension = getFileNameWithoutTypeExtension(filenameWithExtension);
+                try {
+                    int filenameInteger = Integer.parseInt(filenameWithoutExtension);
+                    maxNumberFound = max(filenameInteger, maxNumberFound);
+                } catch (NumberFormatException nfex) {
+                    // just ignore files that do not match a simple integer numbering scheme
+                } catch (Exception ex) {
+                    println(ex);
+                }
             }
         }
-        return String.valueOf(highestNumber + 1);
+        return String.valueOf(maxNumberFound + 1);
     }
 
     public static String getGuiDataFolderPath(String innerPath) {
         return GlobalReferences.app.dataPath(
                 Paths.get("gui", GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
+    }
+
+    private static String getFullJsonFilePathWithFileTypeExtension(String filenameWithoutExtension) {
+        return Paths.get(saveDir.getAbsolutePath(), filenameWithoutExtension + JSON_TYPE_EXTENSION).toString();
+    }
+
+    static String getFileNameWithoutTypeExtension(String filenameWithTypeExtension) {
+        return filenameWithTypeExtension.split("\\.")[0];
+    }
+
+    public static File getSaveDir() {
+        return saveDir;
     }
 }
