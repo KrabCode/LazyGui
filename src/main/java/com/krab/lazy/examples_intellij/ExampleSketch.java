@@ -39,7 +39,7 @@ public class ExampleSketch extends PApplet {
             pg.image(gui.gradient("background"), 0, 0);
             return;
         }
-        pg.fill(gui.colorPicker("background solid").hex);
+        pg.fill(gui.colorPicker("solid").hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);
