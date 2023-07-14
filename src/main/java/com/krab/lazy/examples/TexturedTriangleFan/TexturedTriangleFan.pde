@@ -18,7 +18,7 @@ void draw() {
   PGraphics fillTexture = gui.gradient("texture");
   textureMode(NORMAL);
   texture(fillTexture);
-  vertex(0, 0, 0, 0);
+  vertex(0, 0, 0.5, 0);
   int vertexCount = gui.sliderInt("vertices", 6, 3, 10000);
   float radius = gui.slider("radius", 250);
   for (int i = 0; i <= vertexCount; i++) {
