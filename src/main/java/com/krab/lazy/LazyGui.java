@@ -90,7 +90,7 @@ public class LazyGui  {
         if(settings == null){
             settings = new LazyGuiSettings();
         }
-        settings.applySettingsOntoGuiAtStartup();
+        settings.applyEarlyStartupSettings();
         ThemeStore.init();
         FontStore.lazyUpdateFont();
         InputWatcherBackend.initSingleton();
@@ -103,6 +103,7 @@ public class LazyGui  {
         JsonSaveStore.registerExitHandler();
         lazyFollowSketchResolution();
         registerDrawListener();
+        settings.applyLateStartupSettings();
     }
 
     private void registerDrawListener() {
@@ -110,9 +111,11 @@ public class LazyGui  {
     }
 
     private void loadGuiStateFromExistingFiles(LazyGuiSettings settings) {
+        if(settings.getSpecificSaveToLoadOnStartupOnce() != null && JsonSaveStore.getSaveFileList().isEmpty()){
+            JsonSaveStore.loadStateFromFilePath(settings.getSpecificSaveToLoadOnStartupOnce());
+        }
         if(settings.getSpecificSaveToLoadOnStartup() != null){
-            String filename = settings.getSpecificSaveToLoadOnStartup();
-            JsonSaveStore.loadStateFromFile(filename);
+            JsonSaveStore.loadStateFromFilePath(settings.getSpecificSaveToLoadOnStartup());
         }else if(settings.getShouldLoadLatestSaveOnStartup()){
             JsonSaveStore.loadLatestSave();
         }

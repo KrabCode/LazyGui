@@ -82,7 +82,7 @@ public class JsonSaveStore {
 
     public static void loadLatestSave() {
         reloadSaveFolderContents();
-        if (saveFilesSorted.size() > 0) {
+        if (!saveFilesSorted.isEmpty()) {
             loadStateFromFile(saveFilesSorted.get(0));
         }
     }
@@ -97,21 +97,6 @@ public class JsonSaveStore {
             return;
         }
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
-    }
-
-    public static void loadStateFromFile(String filename) {
-        for (File saveFile : saveFilesSorted) {
-            if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + ".json")) {
-                loadStateFromFile(saveFile);
-                return;
-            }
-        }
-        for (File saveFile : saveFilesSorted) {
-            if (saveFile.getName().startsWith(filename)) {
-                loadStateFromFile(saveFile);
-                return;
-            }
-        }
     }
 
     private static String readFile(File file) throws IOException {
@@ -137,6 +122,31 @@ public class JsonSaveStore {
     public static ArrayList<File> getSaveFileList() {
         reloadSaveFolderContents();
         return saveFilesSorted;
+    }
+
+    public static void loadStateFromFilePath(String filename) {
+        // first try to find the strictest match inside the save folder
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + ".json")) {
+                loadStateFromFile(saveFile);
+                return;
+            }
+        }
+
+        // then relax and allow filenames like auto without the suffix (still inside the save folder)
+        for (File saveFile : saveFilesSorted) {
+            if (saveFile.getName().startsWith(filename)) {
+                loadStateFromFile(saveFile);
+                return;
+            }
+        }
+
+        // if all else fails this may be an absolute path anywhere on disk, we need an exact match there
+        try {
+            loadStateFromFile(new File(filename));
+        } catch (Exception ex) {
+            println(ex, ex.getMessage());
+        }
     }
 
     static void loadStateFromFile(File file) {

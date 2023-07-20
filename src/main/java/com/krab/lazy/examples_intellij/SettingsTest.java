@@ -20,8 +20,8 @@ public class SettingsTest extends PApplet {
     public void setup() {
         gui = new LazyGui(this, new LazyGuiSettings()
             // AUTOLOAD
-            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
-//            .setLoadSpecificSaveOnStartup("1") // expects filenames like "1" or "auto.json", overrides 'load latest'
+//            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
+            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\jakub Rak\\Desktop\\auto.json") // expects filenames like "1" or "auto.json", overrides 'load latest'
 
             // AUTOSAVE
             .setAutosaveOnExit(false)    // the shutdown hook only works on graceful exit, for example the ESC button
@@ -36,7 +36,7 @@ public class SettingsTest extends PApplet {
             .setCellSize(22) // affects the size of the whole gui
             .setMainFontSize(16)
             .setSideFontSize(15)
-            .setStartGuiHidden(false) // uncover hidden gui with the 'h' hotkey
+            .setStartGuiHidden(true) // uncover hidden gui with the 'h' hotkey
 
             // THEME
             .setThemePreset("dark") // selected preset, one of "dark", "light", "pink", "blue"
@@ -51,6 +51,8 @@ public class SettingsTest extends PApplet {
             .setAutosuggestWindowWidth(true)
             .setSketchNameOverride("Testing")
             .setSmooth(16)
+
+//            .setHideBuiltInFolders(true)
         );
 
 

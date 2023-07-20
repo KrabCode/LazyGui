@@ -27,7 +27,7 @@ class SaveItemNode extends AbstractNode {
     public void mousePressedOverNode(float x, float y) {
         float unmovingWindowX = saveFolderParent.window.posX;
         float unmovingWindowY = saveFolderParent.window.posY;
-        JsonSaveStore.loadStateFromFile(fileName);
+        JsonSaveStore.loadStateFromFilePath(fileName);
         saveFolderParent.window.posX = unmovingWindowX;
         saveFolderParent.window.posY = unmovingWindowY;
         saveFolderParent.window.closed = false;

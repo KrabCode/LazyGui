@@ -8,6 +8,8 @@ import com.krab.lazy.themes.Theme;
 import com.krab.lazy.themes.ThemeStore;
 import com.krab.lazy.themes.ThemeType;
 
+import static com.krab.lazy.stores.GlobalReferences.gui;
+
 /**
  * Settings to apply once inside the main LazyGui constructor on startup before loading any saves that might overwrite them.
  * To avoid these settings getting overwritten - disable loading the latest save in the settings.
@@ -31,10 +33,12 @@ public class LazyGuiSettings {
     private long autosaveLockGuardMillisLimit;
     private float cellSize;
     private int mainFontSize, sideFontSize;
-    private boolean startGuiHidden = false;
+    private boolean startWithGuiHidden = false;
+    private boolean hideBuiltInFolders = false;
     private Theme themeCustom = null;
     private ThemeType themePreset = null;
     private String pathToSpecificSaveToLoadOnStartup = null;
+    private String pathToSpecificSaveToLoadOnStartupOnce = null;
     private String sketchNameOverride = null;
     private int smoothingValue;
 
@@ -61,14 +65,14 @@ public class LazyGuiSettings {
         this.mouseShouldHideWhenDragging = MouseHiding.shouldHideWhenDragging;
         this.mouseShouldConfineToWindow = MouseHiding.shouldConfineToWindow;
         this.cellSize = LayoutStore.cell;
-        this.startGuiHidden = LayoutStore.isGuiHidden();
+        this.startWithGuiHidden = LayoutStore.isGuiHidden();
         this.smoothingValue = LayoutStore.getSmoothingValue();
         this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
     }
 
-    void applySettingsOntoGuiAtStartup() {
+    void applyEarlyStartupSettings() {
         JsonSaveStore.autosaveOnExitEnabled = autosaveOnExitEnabled;
         JsonSaveStore.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
         JsonSaveStore.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
@@ -84,9 +88,16 @@ public class LazyGuiSettings {
         } else if (themePreset != null) {
             ThemeStore.selectThemeByTypeBeforeInit(themePreset);
         }
-        LayoutStore.setIsGuiHidden(startGuiHidden);
+        LayoutStore.setIsGuiHidden(startWithGuiHidden);
         if(sketchNameOverride != null){
             LayoutStore.setOverridingSketchName(sketchNameOverride);
+        }
+    }
+
+    void applyLateStartupSettings() {
+        if(hideBuiltInFolders){
+            gui.hide(gui.optionsFolderName);
+            gui.hide(gui.savesFolderName);
         }
     }
 
@@ -119,14 +130,34 @@ public class LazyGuiSettings {
         return this;
     }
 
+
+    /**
+     * Should the built-in folders start hidden?
+     * That is the automatically created gui folders like "options" and "saves".
+     * They will still exist and will try to load their values from json
+     *  (unless overriden with other constructor settings)
+     * and the gui will still use their current values, they will just hide from the user.
+     * You can reveal them again after initialization with <code>gui.show("options")</code> and <code>gui.show("saves")</code>
+     *
+     * @param shouldHideFolders whether the built in folders should start hidden
+     * @return this settings object for chaining statements easily
+     * @see #setLoadLatestSaveOnStartup(boolean)
+     * @see #setAutosaveOnExit(boolean)
+     *
+     */
+    public LazyGuiSettings setHideBuiltInFolders(boolean shouldHideFolders) {
+        this.hideBuiltInFolders = shouldHideFolders;
+        return this;
+    }
+
     /**
      * Should the gui start hidden? Toggle hiding with the 'H' hotkey.
      *
-     * @param startGuiHidden whether the gui should start hidden
+     * @param shouldHideGui whether the gui should start hidden
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setStartGuiHidden(boolean startGuiHidden) {
-        this.startGuiHidden = startGuiHidden;
+    public LazyGuiSettings setStartGuiHidden(boolean shouldHideGui) {
+        this.startWithGuiHidden = shouldHideGui;
         return this;
     }
 
@@ -142,15 +173,31 @@ public class LazyGuiSettings {
     }
 
     /**
-     * When the parameter is not null, this loads a specific save file on startup.
+     * Loads a specific save file on startup, tries to look inside the save folder for the file first before assuming the user gave the absolute path.
      * Also disables loading the latest save on startup.
      *
-     * @param fileName name of the save file to load in the format "1" or "1.json"
+     * @param fileName name of the save file inside the save folder to load in the format "1" or "1.json" or a full absolute path to it anywhere on disk
      * @return this settings object for chaining statements easily
      * @see #setLoadLatestSaveOnStartup(boolean)
+     * @see #setLoadSpecificSaveOnStartupOnce(String)
      */
     public LazyGuiSettings setLoadSpecificSaveOnStartup(String fileName) {
         this.pathToSpecificSaveToLoadOnStartup = fileName;
+        return this;
+    }
+
+    /**
+     * Loads a specific save file on startup if the gui finds its save folder empty.
+     * Can be useful for fine-tuning global initial settings for all your gui sketches.
+     * Also disables loading the latest save on startup.
+     *
+     * @param fileName name of the save file to load in the format "1" or "1.json" in the save folder or a full absolute path to it anywhere on disk
+     * @return this settings object for chaining statements easily
+     * @see #setLoadLatestSaveOnStartup(boolean)
+     * @see #setLoadSpecificSaveOnStartup(String)
+     */
+    public LazyGuiSettings setLoadSpecificSaveOnStartupOnce(String fileName) {
+        this.pathToSpecificSaveToLoadOnStartupOnce = fileName;
         return this;
     }
 
@@ -297,5 +344,9 @@ public class LazyGuiSettings {
 
     String getSpecificSaveToLoadOnStartup() {
         return pathToSpecificSaveToLoadOnStartup;
+    }
+
+    String getSpecificSaveToLoadOnStartupOnce() {
+        return pathToSpecificSaveToLoadOnStartupOnce;
     }
 }
