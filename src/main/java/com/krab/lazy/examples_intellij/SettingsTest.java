@@ -21,7 +21,7 @@ public class SettingsTest extends PApplet {
         gui = new LazyGui(this, new LazyGuiSettings()
             // AUTOLOAD
 //            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
-            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\jakub Rak\\Desktop\\auto.json") // expects filenames like "1" or "auto.json", overrides 'load latest'
+//            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\Krab\\Desktop\\auto.json") // expects filenames like "1" or "auto.json", overrides 'load latest'
 
             // AUTOSAVE
             .setAutosaveOnExit(false)    // the shutdown hook only works on graceful exit, for example the ESC button
@@ -49,10 +49,10 @@ public class SettingsTest extends PApplet {
             // custom theme overrides preset when not null
 
             .setAutosuggestWindowWidth(true)
-            .setSketchNameOverride("Testing")
+            .setSketchNameOverride("GUI Root")
             .setSmooth(16)
 
-//            .setHideBuiltInFolders(true)
+            .setHideBuiltInFolders(true)
         );
 
 

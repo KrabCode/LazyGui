@@ -151,7 +151,7 @@ public class JsonSaveStore {
 
     static void loadStateFromFile(File file) {
         if (!file.exists()) {
-            println("Error: save file doesn't exist");
+            println("Error: save file doesn't exist at \"" + file.getAbsolutePath() + "\"");
             return;
         }
         String json;
