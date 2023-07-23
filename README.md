@@ -32,6 +32,7 @@ Table of Contents
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
   * [Multiple keypress detection](#multiple-keypress-detection)
+  * [Compatibility](#compatibility)
   * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
@@ -429,8 +430,9 @@ if(isControlDown && spaceWasJustPressed){
 see: [Input javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/Input.html)
 
 ## Compatibility
-- Linux
-- Windows
+LazyGui runs on all of these:
+- Linux (tested on Ubuntu)
+- Windows (tested on Windows 10)
 - Mac OS 
   - including Silicon, fixed in [this issue](https://github.com/KrabCode/LazyGui/issues/244)
 
