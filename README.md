@@ -428,6 +428,12 @@ if(isControlDown && spaceWasJustPressed){
 
 see: [Input javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/Input.html)
 
+## Compatibility
+- Linux
+- Windows
+- Mac OS 
+  - including Silicon, fixed in [this issue](https://github.com/KrabCode/LazyGui/issues/244)
+
 ## Dependencies
 - This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
   - legacy Processing 3.+ ([download](https://processing.org/releases))
