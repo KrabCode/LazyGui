@@ -434,7 +434,7 @@ LazyGui runs on all of these:
 - Linux (tested on Ubuntu)
 - Windows (tested on Windows 10)
 - Mac OS 
-  - including Silicon, fixed in [this issue](https://github.com/KrabCode/LazyGui/issues/244)
+  - including Silicon with its smooth() level limitation, fixed [here](https://github.com/KrabCode/LazyGui/issues/244)
 
 ## Dependencies
 - This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
