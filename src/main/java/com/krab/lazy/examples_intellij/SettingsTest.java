@@ -20,8 +20,11 @@ public class SettingsTest extends PApplet {
     public void setup() {
         gui = new LazyGui(this, new LazyGuiSettings()
             // AUTOLOAD
+
 //            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
-//            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\Krab\\Desktop\\auto.json") // expects filenames like "1" or "auto.json", overrides 'load latest'
+
+//            .setLoadSpecificSaveOnStartup("auto.json") // expects filenames like "1" or "auto.json" or an absolute path
+//            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\Krab\\Desktop\\auto.json") // loads save only when the save folder is found empty
 
             // AUTOSAVE
             .setAutosaveOnExit(false)    // the shutdown hook only works on graceful exit, for example the ESC button

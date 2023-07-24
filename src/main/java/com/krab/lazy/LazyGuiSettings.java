@@ -189,7 +189,7 @@ public class LazyGuiSettings {
     /**
      * Loads a specific save file on startup if the gui finds its save folder empty.
      * Can be useful for fine-tuning global initial settings for all your gui sketches.
-     * Also disables loading the latest save on startup.
+     * Does not disable loading latest save on startup.
      *
      * @param fileName name of the save file to load in the format "1" or "1.json" in the save folder or a full absolute path to it anywhere on disk
      * @return this settings object for chaining statements easily
