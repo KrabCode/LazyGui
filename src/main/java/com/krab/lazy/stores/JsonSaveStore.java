@@ -44,14 +44,8 @@ public class JsonSaveStore {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        String path = JsonSaveStore.createTreeSaveFile("auto");
+        String path = JsonSaveStore.createNewSaveInGuiFolder("auto");
         println("Created new autosave: " + path);
-    }
-
-    public static void createNewManualSave() {
-        String newName = getNextUnusedIntegerFileNameInFolder(saveDir);
-        String path = createTreeSaveFile(newName);
-        println("Created new save: " + path);
     }
 
     public static void updateEndlessLoopDetection() {
@@ -68,16 +62,26 @@ public class JsonSaveStore {
         if (!saveDir.exists()) {
             boolean dirCreationResult = saveDir.mkdirs();
             if (!dirCreationResult) {
-                println("could not create save folder at path: " + saveDir.getPath());
+                println("Could not create save folder at path: " + saveDir.getPath());
             }
         }
     }
 
-    public static String createTreeSaveFile(String filenameWithoutExtension) {
+    public static void createNextSaveInGuiFolder() {
+        String nextName = getNextUnusedIntegerFileNameInFolder(saveDir);
+        createNewSaveInGuiFolder(nextName);
+    }
+
+    public static String createNewSaveInGuiFolder(String fileName) {
         // save main json
-        String jsonPath = getFullJsonFilePathWithFileTypeExtension(filenameWithoutExtension);
-        overwriteFile(jsonPath, getTreeAsJsonString());
-        return jsonPath;
+        String fullSavePath = getFullFilePathWithTypeExtension(fileName);
+        createNewSaveAtAbsolutePath(fullSavePath);
+        return fullSavePath;
+    }
+
+    public static void createNewSaveAtAbsolutePath(String fileName) {
+        String fileNameWithType = String.valueOf(Paths.get(appendJsonFileTypeIfNeeded(fileName)));
+        overwriteFile(fileNameWithType, getTreeAsJsonString());
     }
 
     public static void loadLatestSave() {
@@ -92,7 +96,7 @@ public class JsonSaveStore {
         File[] saveFiles = saveDir.listFiles();
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));
-        saveFilesSorted.removeIf(file -> !file.isFile() || !file.getAbsolutePath().contains(".json"));
+        saveFilesSorted.removeIf(file -> !file.isFile() || !file.getAbsolutePath().contains(JSON_TYPE_EXTENSION));
         if (saveFilesSorted.size() == 0) {
             return;
         }
@@ -114,6 +118,7 @@ public class JsonSaveStore {
             writer = new BufferedWriter(new FileWriter(fullPath, false));
             writer.write(content);
             writer.close();
+            println("Created new save: " + fullPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,13 +132,13 @@ public class JsonSaveStore {
     public static void loadStateFromFilePath(String filename) {
         // first try to find the strictest match inside the save folder
         for (File saveFile : saveFilesSorted) {
-            if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + ".json")) {
+            if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + JSON_TYPE_EXTENSION)) {
                 loadStateFromFile(saveFile);
                 return;
             }
         }
 
-        // then relax and allow filenames like auto without the suffix (still inside the save folder)
+        // then relax and allow filenames like 'auto' without the '.json' suffix (still inside the save folder)
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().startsWith(filename)) {
                 loadStateFromFile(saveFile);
@@ -256,8 +261,14 @@ public class JsonSaveStore {
                 Paths.get("gui", GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
     }
 
-    private static String getFullJsonFilePathWithFileTypeExtension(String filenameWithoutExtension) {
-        return Paths.get(saveDir.getAbsolutePath(), filenameWithoutExtension + JSON_TYPE_EXTENSION).toString();
+    private static String getFullFilePathWithTypeExtension(String filename) {
+        return Paths.get(saveDir.getAbsolutePath(), appendJsonFileTypeIfNeeded(filename)).toString();
+    }
+
+    private static String appendJsonFileTypeIfNeeded(String filename){
+        return filename.endsWith(JSON_TYPE_EXTENSION) ?
+                filename :
+                filename + JSON_TYPE_EXTENSION;
     }
 
     static String getFileNameWithoutTypeExtension(String filenameWithTypeExtension) {

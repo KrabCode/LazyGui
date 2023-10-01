@@ -57,7 +57,7 @@ public class SaveFolderNode extends FolderNode {
         autosaveLockGuardEnabled = autosaveGuardToggle.valueBoolean;
         autosaveLockGuardMillisLimit = autosaveMillisSlider.getIntValue();
         if(buttonCreateNewSave.getBooleanValueAndSetItToFalse()){
-            JsonSaveStore.createNewManualSave();
+            JsonSaveStore.createNextSaveInGuiFolder();
         }
         if(buttonOpenSaveFolder.getBooleanValueAndSetItToFalse()){
             openSaveFolder();

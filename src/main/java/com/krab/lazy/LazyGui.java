@@ -1177,6 +1177,33 @@ public class LazyGui  {
     }
 
     /**
+     * // TODO javadocs
+     * no params: works the same way as pressing the new save button in the saves window
+     */
+    public void createSave(){
+        JsonSaveStore.createNextSaveInGuiFolder();
+    }
+
+    /**
+     *
+     * @param fileName name of the new save file
+     */
+    public void createSave(String fileName){
+        JsonSaveStore.createNewSaveInGuiFolder(fileName);
+    }
+
+    public void createSaveAbsolute(String path){
+        JsonSaveStore.createNewSaveAtAbsolutePath(path);
+    }
+
+    /**
+     *
+     */
+    public void load(String filepath){
+        JsonSaveStore.loadStateFromFilePath(filepath);
+    }
+
+    /**
      * Gets the main font as currently used by the GUI.
      * @return main gui font
      */
