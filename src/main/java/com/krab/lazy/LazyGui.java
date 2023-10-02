@@ -1185,21 +1185,17 @@ public class LazyGui  {
     }
 
     /**
-     *
-     * @param fileName name of the new save file
+     * autodetects absolute / relative path using Paths.get(ambiguousPath).isAbsolute();
+     * @param fileName name of the new save file or the absolute path, .json suffix optional
      */
     public void createSave(String fileName){
-        JsonSaveStore.createNewSaveInGuiFolder(fileName);
-    }
-
-    public void createSaveAbsolute(String path){
-        JsonSaveStore.createNewSaveAtAbsolutePath(path);
+        JsonSaveStore.createSaveAtRelativeOrAbsolutePath(fileName);
     }
 
     /**
      *
      */
-    public void load(String filepath){
+    public void loadSave(String filepath){
         JsonSaveStore.loadStateFromFilePath(filepath);
     }
 

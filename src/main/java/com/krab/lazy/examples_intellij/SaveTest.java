@@ -29,12 +29,15 @@ public class SaveTest extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        String filename = "mleb";
-        if(gui.button("mleb save")){
+        if(gui.button("# save")){
+            gui.createSave();
+        }
+        String filename = gui.text("name");
+        if(gui.button("named save")){
             gui.createSave(filename);
         }
-        if(gui.button("mleb load")){
-            gui.load(filename);
+        if(gui.button("named load")){
+            gui.loadSave(filename);
         }
         pg.endDraw();
         image(pg, 0, 0);

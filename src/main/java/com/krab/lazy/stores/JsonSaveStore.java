@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -59,11 +60,24 @@ public class JsonSaveStore {
 
     private static void lazyInitSaveDir() {
         saveDir = new File(getGuiDataFolderPath("saves"));
-        if (!saveDir.exists()) {
-            boolean dirCreationResult = saveDir.mkdirs();
+        lazyInitDir(saveDir);
+    }
+
+    private static void lazyInitDir(File dir) {
+        if (!dir.exists()) {
+            boolean dirCreationResult = dir.mkdirs();
             if (!dirCreationResult) {
-                println("Could not create save folder at path: " + saveDir.getPath());
+                println("Could not create save folder at path: " + dir.getPath());
             }
+        }
+    }
+
+    public static void createSaveAtRelativeOrAbsolutePath(String ambiguousPath){
+        boolean isAbsolute = Paths.get(ambiguousPath).isAbsolute();
+        if(isAbsolute){
+            createNewSaveAtAbsolutePath(ambiguousPath);
+        }else{
+            createNewSaveInGuiFolder(ambiguousPath);
         }
     }
 
@@ -74,7 +88,7 @@ public class JsonSaveStore {
 
     public static String createNewSaveInGuiFolder(String fileName) {
         // save main json
-        String fullSavePath = getFullFilePathWithTypeExtension(fileName);
+        String fullSavePath = getFullFilePathWithJsonFileType(fileName);
         createNewSaveAtAbsolutePath(fullSavePath);
         return fullSavePath;
     }
@@ -113,6 +127,8 @@ public class JsonSaveStore {
     }
 
     static void overwriteFile(String fullPath, String content) {
+        Path path = Paths.get(fullPath);
+        lazyInitDir(path.getParent().toFile());
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(fullPath, false));
@@ -130,6 +146,7 @@ public class JsonSaveStore {
     }
 
     public static void loadStateFromFilePath(String filename) {
+        filename = appendJsonFileTypeIfNeeded(filename);
         // first try to find the strictest match inside the save folder
         for (File saveFile : saveFilesSorted) {
             if (saveFile.getName().equals(filename) || saveFile.getName().equals(filename + JSON_TYPE_EXTENSION)) {
@@ -261,7 +278,7 @@ public class JsonSaveStore {
                 Paths.get("gui", GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
     }
 
-    private static String getFullFilePathWithTypeExtension(String filename) {
+    private static String getFullFilePathWithJsonFileType(String filename) {
         return Paths.get(saveDir.getAbsolutePath(), appendJsonFileTypeIfNeeded(filename)).toString();
     }
 
