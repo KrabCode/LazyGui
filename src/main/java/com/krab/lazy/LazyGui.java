@@ -1177,26 +1177,32 @@ public class LazyGui  {
     }
 
     /**
-     * // TODO javadocs
-     * no params: works the same way as pressing the new save button in the saves window
+     * Creates a new, sequentially numbered save file in the gui save folder inside the sketch data folder.
+     * Works the same way as clicking the "Create new save" gui button inside the built-in 'saves' window.
      */
     public void createSave(){
         JsonSaveStore.createNextSaveInGuiFolder();
     }
 
     /**
-     * autodetects absolute / relative path using Paths.get(ambiguousPath).isAbsolute();
-     * @param fileName name of the new save file or the absolute path, .json suffix optional
+     * Creates a new save file or overwrites an existing one while auto-detecting whether the parameter is a relative or an absolute path to it on disk.
+     * Relative paths get saved inside the standard gui save folder and are immediately accessible from the 'saves' window.
+     * Absolute paths get saved wherever the absolute path leads.
+     * Uses java.nio.file.Paths.get(fileName).isAbsolute() for its auto-detection.
+     * @param path name of the new save file or its entire absolute path, ".json" file type suffix is optional and will be appended if missing
      */
-    public void createSave(String fileName){
-        JsonSaveStore.createSaveAtRelativeOrAbsolutePath(fileName);
+    public void createSave(String path){
+        JsonSaveStore.createSaveAtRelativeOrAbsolutePath(path);
     }
 
     /**
-     *
+     * Loads a save file from disk, overwriting the current values in the running gui whose gui paths match with the saved elements.
+     * Accepts both relative and absolute file paths. Attempts to first find the save file inside the standard gui save folder,
+     * and if it doesn't find it there then it tries to assume the String parameter is an absolute path and tries to load that.
+     * @param path name of the existing save file inside the save folder or its entire absolute path, ".json" file type suffix is optional and will be appended if missing
      */
-    public void loadSave(String filepath){
-        JsonSaveStore.loadStateFromFilePath(filepath);
+    public void loadSave(String path){
+        JsonSaveStore.loadStateFromFilePath(path);
     }
 
     /**
