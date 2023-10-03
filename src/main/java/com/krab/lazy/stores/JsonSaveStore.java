@@ -45,8 +45,7 @@ public class JsonSaveStore {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        String path = JsonSaveStore.createNewSaveInGuiFolder("auto");
-        println("Created new autosave: " + path);
+        JsonSaveStore.createNewSaveInGuiFolder("auto");
     }
 
     public static void updateEndlessLoopDetection() {
@@ -86,11 +85,10 @@ public class JsonSaveStore {
         createNewSaveInGuiFolder(nextName);
     }
 
-    public static String createNewSaveInGuiFolder(String fileName) {
+    public static void createNewSaveInGuiFolder(String fileName) {
         // save main json
         String fullSavePath = getFullFilePathWithJsonFileType(fileName);
         createNewSaveAtAbsolutePath(fullSavePath);
-        return fullSavePath;
     }
 
     public static void createNewSaveAtAbsolutePath(String fileName) {
