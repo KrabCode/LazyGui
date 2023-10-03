@@ -222,7 +222,7 @@ gui.text("text header", "this default text can be edited");
 gui.text("", "this will rename its parent folder"); 
 
 // one time setter that also blocks any interaction when called every frame
-textSet("text header", "content")
+gui.textSet("text header", "content")
 ```
 | Mouse Hotkey | Action under mouse    |
 |--------------|-----------------------|
