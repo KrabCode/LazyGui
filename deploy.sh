@@ -20,7 +20,7 @@ cp LICENSE.md $targetDir/src/LICENSE.md
 echo "Zipping..."
 cd out/deploy || exit
 rm -rf $name.zip
-7z a $name.zip $name/
+7z a $name.zip $name/ > NUL
 
 cp $name/library.properties $name.txt
 cp $name/library/$name.jar $name.jar
