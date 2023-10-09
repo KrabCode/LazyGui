@@ -44,7 +44,7 @@ public class HotkeyStore {
             UndoRedoStore.redo();
         }
         if(keyEvent.isControlDown() && keyCode == KeyCodes.S && hotkeySaveActive){
-            JsonSaveStore.createNewManualSave();
+            JsonSaveStore.createNextSaveInGuiFolder();
         }
     }
 

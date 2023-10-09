@@ -222,7 +222,7 @@ gui.text("text header", "this default text can be edited");
 gui.text("", "this will rename its parent folder"); 
 
 // one time setter that also blocks any interaction when called every frame
-textSet("text header", "content")
+gui.textSet("text header", "content")
 ```
 | Mouse Hotkey | Action under mouse    |
 |--------------|-----------------------|
@@ -438,7 +438,7 @@ LazyGui runs on all of these:
 - Linux (tested on Ubuntu)
 - Windows (tested on Windows 10)
 - Mac OS 
-  - including Silicon, fixed in [this issue](https://github.com/KrabCode/LazyGui/issues/244)
+  - including Silicon with its smooth() level limitation, fixed [here](https://github.com/KrabCode/LazyGui/issues/244)
 
 ## Dependencies
 - This library is compiled with [Processing 3.5.4](https://github.com/processing/processing), which makes it compatible with 
