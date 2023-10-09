@@ -19,8 +19,8 @@ Table of Contents
   * [Hotkeys](#hotkeys)
   * [Mouse interaction](#mouse-interaction)
   * [Saving and loading values](#saving-and-loading-values)
-    * [Saving](#saving)
-    * [Loading](#loading)
+    * [Create save](#create-save)
+    * [Load save](#load-save)
   * [Paths and folders](#paths-and-folders)
     * [Creating a folder with the forward slash](#creating-a-folder-with-the-forward-slash)
     * [Escaping the forward slash](#escaping-the-forward-slash)
@@ -31,7 +31,7 @@ Table of Contents
     * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
-  * [Multiple keypress detection](#multiple-keypress-detection)
+  * [Input](#input)
   * [Compatibility](#compatibility)
   * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
@@ -158,7 +158,7 @@ gui.colorPickerSet("background", color(36));
 gui.colorPickerHueAdd("background", hueToAdd);
 ```
 - HSBA color picker with a hex string display
-- returns a read-only PickerColor object with an integer 'hex' field 
+- returns a read-only [PickerColor](https://krabcode.github.io/LazyGui/com/krab/lazy/PickerColor.html) object with an integer 'hex' field 
   - this hex integer is the same thing as the Processing [color datatype](https://processing.org/reference/color_datatype.html)
   - displays the correct color in any Processing [color mode](https://processing.org/reference/colorMode_.html)
 - paste in values from sites like [colorhunt.co](https://colorhunt.co/)
@@ -291,17 +291,20 @@ You can control this from the `saves` folder under the root window of the GUI. A
 
 ![save](https://user-images.githubusercontent.com/25923016/229351055-70bc5ae6-877d-4b3f-bbcc-a40ada90bda1.png)
 
-### Saving
-- create a new save at runtime with `CTRL + S`
+### Create save
+- create a new save with the button at `saves/create new save` or `CTRL + S`
+  - or create a new save from code with [createSave()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#createSave()) or [createSave(path)](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#createSave(java.lang.String))
 - an **autosave** is created by default when the sketch exits gracefully (like by pressing the Escape key)
   - the autosave includes endless loop detection that prevents autosaving
-### Loading
+  - you can edit this behavior in the `saves/autosave rules` folder
+### Load save
 - the sketch tries to **load the latest save on startup**
   - this is usually helpful, but when bad values in a save are breaking your sketch, you can either delete the offending json file or use [constructor settings](#constructor-settings) to ignore it on startup
-- you can load values from a save by clicking on its row in the `saves` window.
+- load a save manually by clicking on its row in the `saves` window 
+  - or load saves from code with [loadSave(path)](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#loadSave(java.lang.String)).
 - loading will not initialize any new control elements 
 - for a value to be overwritten in the current GUI its [path](#paths-and-folders) needs to match exactly with the saved path for that value
-  - this means you lose saved values when you rename something 
+  - this means you lose saved values when you rename something
 
 ## Paths and folders
 
@@ -336,7 +339,6 @@ as if the contents of the whole current stack got prefixed to every path paramet
 You can nest a `pushFolder()` inside another `pushFolder()` - your path stack can be many levels deep.
 Just remember to call `popFolder()` the same number of times - the stack does get cleared after the end of draw() before the GUI starts drawing itself, but it's better not to rely on that.
 
-
 #### Folder made by using the stack
 ```java
 gui.pushFolder("wave");
@@ -349,6 +351,8 @@ gui.popFolder();
 ```java
 println(gui.getFolder());
 ```
+
+see javadocs: [pushFolder()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#pushFolder(java.lang.String)), [popFolder()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#popFolder()), [getFolder()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#getFolder())
 
 ### Hide and show anything
 You can hide folders and single elements from code, while still receiving their values in code - the only change is visual. 
@@ -414,7 +418,7 @@ ShaderReloader.filter(shaderPath);
 ```
 see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
 
-## Multiple keypress detection
+## Input
 This GUI also includes the Input utility that makes it easier to see whether any number of keys are currently pressed on the keyboard. 
 Processing only shows you one key at a time while this utility keeps track of past events and can tell you whether any char or keyCode was just pressed, is currently held down or if it was just released. 
 
