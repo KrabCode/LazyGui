@@ -41,7 +41,7 @@ public class PlotFolderNode extends FolderNode {
         drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
         String vectorToDisplay = getValueAsString();
-        drawRightText(pg, vectorToDisplay, true);
+        drawRightTextToNotOverflowLeftText(pg, vectorToDisplay, name, true);
     }
 
     @Override

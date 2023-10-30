@@ -122,32 +122,19 @@ public abstract class AbstractNode {
         fillForegroundBasedOnMouseOver(pg);
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
-		//float strHeight = pg.textAscent() + pg.textDescent();
-        //using native processing function text() with defined box parameter to trim the text - alternative to author function
-		//pg.text(text, FontStore.textMarginX, LayoutStore.cell - FontStore.textMarginY, size.x - FontStore.textMarginX, strHeight );
 		pg.text(trimmedText, FontStore.textMarginX, LayoutStore.cell - FontStore.textMarginY);
     }
 
-    protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
+    protected void drawRightTextToNotOverflowLeftText(PGraphics pg, String rightText, String leftText, boolean fillBackground) {
         pg.textAlign(RIGHT, CENTER);
+        String trimmedTextLeft = FontStore.getSubstringFromStartToFit(pg, leftText, size.x - FontStore.textMarginX);
+		float leftOffset = pg.textWidth(trimmedTextLeft)+(FontStore.textMarginX*2);
+        String trimmedRightText = FontStore.getSubstringFromEndToFit(pg, rightText, size.x - FontStore.textMarginX -leftOffset);
         if(fillBackground){
-            float w = pg.textWidth(text) + FontStore.textMarginX * 2; //this needs to reflect trimmed text size
+            float w = pg.textWidth(trimmedRightText) + FontStore.textMarginX * 2;
             drawRightBackdrop(pg, w);
         }
-        pg.text(text,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY, );
-    }
-    
-    protected void drawRightTextWithOffset(PGraphics pg, String text, boolean fillBackground, String lefttext) {
-        pg.textAlign(RIGHT, CENTER);
-        //it should be whatever space is left from the text on the left side....
-        String trimmedTextLeft = FontStore.getSubstringFromEndToFit(pg, lefttext, size.x - FontStore.textMarginX); 
-		float leftOffset = textWidth(trimmedTextLeft)+(FontStore.textMarginX*2); //left margin + margin between the texts
-        String trimmedText = FontStore.getSubstringFromEndToFit(pg, text, size.x-leftOffset ); //fit whatever space is left
-        if(fillBackground){
-            float w = pg.textWidth(trimmedText) + FontStore.textMarginX * 2;
-            drawRightBackdrop(pg, w);
-        }
-        pg.text(trimmedText,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY, );
+        pg.text(trimmedRightText,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY);
     }
 
     protected void drawRightBackdrop(PGraphics pg, float backdropSize) {

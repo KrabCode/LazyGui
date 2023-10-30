@@ -127,7 +127,7 @@ public class SliderNode extends AbstractNode {
     protected void drawNodeForeground(PGraphics pg, String name) {
         fillForegroundBasedOnMouseOver(pg);
         drawLeftText(pg, name);
-        drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""), true);
+        drawRightTextToNotOverflowLeftText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""), name, true);
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
@@ -319,6 +319,7 @@ public class SliderNode extends AbstractNode {
             case '+':
             case '-':
                 if (inReplaceMode) {
+                    //noinspection ConcatenationWithEmptyString
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();

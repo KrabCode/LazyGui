@@ -32,10 +32,11 @@ public class SimpleShape extends PApplet {
     private void drawForegroundShape() {
         gui.pushFolder("shape");
         String[] shapeTypeOptions = new String[]{
+                "ellipse",
                 "rectangle",
-                "ellipse"
+                "abcdefghijklmnopqrstuvwxyz"
         };
-        String selectedShape = gui.radio("shape type", shapeTypeOptions);
+        String selectedShape =  gui.radio("shape type", shapeTypeOptions);
         PVector pos = gui.plotXY("position");
         PVector size = gui.plotXY("size", 250);
         translate(width/2f, height/2f);
@@ -52,9 +53,9 @@ public class SimpleShape extends PApplet {
         rectMode(CENTER);
         translate(pos.x, pos.y);
         rotate(radians(rotationAngle));
-        if(selectedShape.equals("ellipse")){
+        if(selectedShape.equals(shapeTypeOptions[0])){
             ellipse(0, 0, size.x, size.y);
-        }else{
+        }else if(selectedShape.equals(shapeTypeOptions[1])){
             rect(0, 0, size.x, size.y);
         }
         gui.popFolder();

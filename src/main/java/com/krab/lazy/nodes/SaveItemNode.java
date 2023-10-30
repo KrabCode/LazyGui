@@ -21,7 +21,7 @@ class SaveItemNode extends AbstractNode {
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
         drawLeftText(pg, name);
-        drawRightText(pg, "load", true);
+        drawRightTextToNotOverflowLeftText(pg, "load", name,true);
     }
 
     public void mousePressedOverNode(float x, float y) {
