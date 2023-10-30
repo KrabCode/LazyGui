@@ -63,7 +63,8 @@ public class RadioFolderNode extends FolderNode {
      // don't draw folder icon - do not call super.drawNodeForeground(pg, name)
         drawLeftText(pg, name);
         drawRightBackdrop(pg, cell);
-        drawRightText(pg, valueString, true);
+        drawRightTextWithOffset(pg, valueString, true, name); //we need to calculate how much space is left for value after the name is displayed
+		//drawRightText(pg, valueString, true);
     }
 
     @Override
