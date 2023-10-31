@@ -129,7 +129,7 @@ public abstract class AbstractNode {
         pg.textAlign(RIGHT, CENTER);
         String trimmedTextLeft = FontStore.getSubstringFromStartToFit(pg, leftText, size.x - FontStore.textMarginX);
 		float leftOffset = pg.textWidth(trimmedTextLeft)+(FontStore.textMarginX*2);
-        String trimmedRightText = FontStore.getSubstringFromEndToFit(pg, rightText, size.x - FontStore.textMarginX -leftOffset);
+        String trimmedRightText = FontStore.getSubstringFromStartToFit(pg, rightText, size.x - FontStore.textMarginX -leftOffset);
         if(fillBackground){
             float w = pg.textWidth(trimmedRightText) + FontStore.textMarginX * 2;
             drawRightBackdrop(pg, w);
