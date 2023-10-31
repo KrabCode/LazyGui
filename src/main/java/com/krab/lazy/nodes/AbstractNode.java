@@ -140,9 +140,9 @@ public abstract class AbstractNode {
     protected void drawRightTextWithOffset(PGraphics pg, String text, boolean fillBackground, String lefttext) {
         pg.textAlign(RIGHT, CENTER);
         //it should be whatever space is left from the text on the left side....
-        String trimmedTextLeft = FontStore.getSubstringFromEndToFit(pg, lefttext, size.x - FontStore.textMarginX); 
+        String trimmedTextLeft = FontStore.getSubstringFromStartToFit(pg, lefttext, size.x - FontStore.textMarginX); 
 		float leftOffset = textWidth(trimmedTextLeft)+(FontStore.textMarginX*2); //left margin + margin between the texts
-        String trimmedText = FontStore.getSubstringFromEndToFit(pg, text, size.x-leftOffset ); //fit whatever space is left
+        String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x-leftOffset ); //fit whatever space is left
         if(fillBackground){
             float w = pg.textWidth(trimmedText) + FontStore.textMarginX * 2;
             drawRightBackdrop(pg, w);
