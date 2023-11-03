@@ -141,7 +141,7 @@ public class LazyGuiSettings {
      * and the gui will still use their current values, they will just hide from the user.
      * You can reveal them again after initialization with <code>gui.show("options")</code> and <code>gui.show("saves")</code>
      *
-     * @param shouldHideFolders whether the built in folders should start hidden
+     * @param shouldHideFolders whether the built-in folders should start hidden
      * @return this settings object for chaining statements easily
      * @see #setLoadLatestSaveOnStartup(boolean)
      * @see #setAutosaveOnExit(boolean)
@@ -303,7 +303,8 @@ public class LazyGuiSettings {
     }
 
     /**
-     * Overrides what the root window title displays. By default this is the name of your sketch.
+     * Overrides what the root window title displays.
+     * It shows the name of your sketch by default, but you can set a custom value here.
      *
      * @param sketchNameOverride name to display in root window title
      * @return this settings object for chaining statements easily
