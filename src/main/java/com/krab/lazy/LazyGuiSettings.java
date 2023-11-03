@@ -347,6 +347,7 @@ public class LazyGuiSettings {
      * The option strings will still be visible once you open the radio folder.
      * This applies globally to all radio buttons and the value text is visible by default.
      * @return this settings object for chaining statements easily
+     * @param hideRadioValue whether to hide the radio value text
      */
     public LazyGuiSettings setHideRadioValue(boolean hideRadioValue){
         this.hideRadioValue = hideRadioValue;
