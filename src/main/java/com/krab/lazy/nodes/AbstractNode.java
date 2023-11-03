@@ -137,6 +137,15 @@ public abstract class AbstractNode {
         pg.text(trimmedRightText,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY);
     }
 
+    protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
+        if(fillBackground){
+            float w = pg.textWidth(text) + FontStore.textMarginX * 2;
+            drawRightBackdrop(pg, w);
+        }
+        pg.textAlign(RIGHT, CENTER);
+        pg.text(text,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY);
+    }
+
     protected void drawRightBackdrop(PGraphics pg, float backdropSize) {
         pg.pushStyle();
         fillBackgroundBasedOnMouseOver(pg);

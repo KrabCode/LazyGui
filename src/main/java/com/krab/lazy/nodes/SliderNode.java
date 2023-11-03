@@ -127,7 +127,7 @@ public class SliderNode extends AbstractNode {
     protected void drawNodeForeground(PGraphics pg, String name) {
         fillForegroundBasedOnMouseOver(pg);
         drawLeftText(pg, name);
-        drawRightTextToNotOverflowLeftText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""), name, true);
+        drawRightText(pg, getValueToDisplay() + (isNumpadInputActive() ? "_" : ""), true);
     }
 
     private void drawBackgroundScroller(PGraphics pg, boolean constrainedThisFrame) {
