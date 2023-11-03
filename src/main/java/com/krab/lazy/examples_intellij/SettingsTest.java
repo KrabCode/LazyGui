@@ -55,7 +55,7 @@ public class SettingsTest extends PApplet {
             .setSketchNameOverride("GUI Root")
             .setSmooth(16)
             .setHideBuiltInFolders(true)
-            .setHideRadioValue()
+            .setHideRadioValue(true)
         );
 
 

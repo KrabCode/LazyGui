@@ -348,8 +348,8 @@ public class LazyGuiSettings {
      * This applies globally to all radio buttons and the value text is visible by default.
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setHideRadioValue(){
-        this.hideRadioValue = true;
+    public LazyGuiSettings setHideRadioValue(boolean hideRadioValue){
+        this.hideRadioValue = hideRadioValue;
         return this;
     }
 
