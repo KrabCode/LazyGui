@@ -26,3 +26,5 @@ cp $name/library.properties $name.txt
 cp $name/library/$name.jar $name.jar
 
 echo "Deployed LazyGui successfully."
+echo "Upload the files here:"
+echo "  https://github.com/KrabCode/LazyGui/releases/tag/latest"
