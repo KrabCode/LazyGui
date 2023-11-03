@@ -3,6 +3,7 @@ package com.krab.lazy.nodes;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.krab.lazy.stores.JsonSaveStore;
+import com.krab.lazy.stores.LayoutStore;
 import processing.core.PGraphics;
 
 import java.util.*;
@@ -60,11 +61,13 @@ public class RadioFolderNode extends FolderNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-     // don't draw folder icon - do not call super.drawNodeForeground(pg, name)
         drawLeftText(pg, name);
-        drawRightBackdrop(pg, cell);
-        drawRightTextToNotOverflowLeftText(pg, valueString, name, true); //we need to calculate how much space is left for value after the name is displayed
-		//drawRightText(pg, valueString, true);
+        if(LayoutStore.shouldHideRadioValue()){
+            super.drawNodeForeground(pg, name);
+        }else{
+            drawRightBackdrop(pg, cell);
+            drawRightTextToNotOverflowLeftText(pg, valueString, name, true); //we need to calculate how much space is left for value after the name is displayed
+        }
     }
 
     @Override

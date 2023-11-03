@@ -13,13 +13,11 @@ public class LayoutStore {
     private static boolean shouldDrawResizeIndicator = true;
     private static boolean showHorizontalSeparators = false;
     private static float horizontalSeparatorStrokeWeight = 1;
-
     private static boolean showPathTooltips = false;
     private static boolean isGuiHidden = false;
     private static boolean autosuggestWindowWidth = true;
-
+    private static boolean hideRadioValue = false;
     private static int smoothingValue = 4;
-
     private static String overridingSketchName = null;
 
     public static void updateWindowOptions() {
@@ -145,5 +143,13 @@ public class LayoutStore {
 
     public static void setSmoothingValue(int smoothingValue) {
         LayoutStore.smoothingValue = smoothingValue;
+    }
+
+    public static void setHideRadioValue(boolean hideRadioValue) {
+        LayoutStore.hideRadioValue = hideRadioValue;
+    }
+
+    public static boolean shouldHideRadioValue() {
+        return hideRadioValue;
     }
 }

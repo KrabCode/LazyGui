@@ -35,6 +35,7 @@ public class LazyGuiSettings {
     private int mainFontSize, sideFontSize;
     private boolean startWithGuiHidden = false;
     private boolean hideBuiltInFolders = false;
+    private boolean hideRadioValue = false;
     private Theme themeCustom = null;
     private ThemeType themePreset = null;
     private String pathToSpecificSaveToLoadOnStartup = null;
@@ -89,6 +90,7 @@ public class LazyGuiSettings {
             ThemeStore.selectThemeByTypeBeforeInit(themePreset);
         }
         LayoutStore.setIsGuiHidden(startWithGuiHidden);
+        LayoutStore.setHideRadioValue(hideRadioValue);
         if(sketchNameOverride != null){
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
@@ -338,6 +340,18 @@ public class LazyGuiSettings {
         return this;
     }
 
+    /**
+     * Hide the selected value text on the right of the radio row and replace it with a generic folder icon.
+     * This can be useful when you want to use radio buttons with longer string values.
+     * The option strings will still be visible once you open the radio folder.
+     * This applies globally to all radio buttons and the value text is visible by default.
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setHideRadioValue(){
+        this.hideRadioValue = true;
+        return this;
+    }
+
     boolean getShouldLoadLatestSaveOnStartup() {
         return loadLatestSaveOnStartup;
     }
@@ -349,4 +363,5 @@ public class LazyGuiSettings {
     String getSpecificSaveToLoadOnStartupOnce() {
         return pathToSpecificSaveToLoadOnStartupOnce;
     }
+
 }
