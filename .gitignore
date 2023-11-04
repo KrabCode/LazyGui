@@ -22,3 +22,9 @@ src/test/Camera.java
 /.settings/
 /data/recording_assets/
 /auto_deploy/
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
