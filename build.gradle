@@ -1,4 +1,7 @@
-apply plugin: "java"
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java'
+}
 
 repositories {
     mavenCentral()
@@ -10,4 +13,16 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.processing/core
     implementation group: 'org.processing', name: 'core', version: '3.3.7'
+}
+
+shadowJar {
+    archiveClassifier = 'with-gson'
+    dependencies {
+        //noinspection GroovyAssignabilityCheck
+        include(dependency('com.google.code.gson:gson:2.8.9'))
+    }
+    from("data")
+    from compileJava
+    from processResources
+    from sourceSets.main.allSource
 }

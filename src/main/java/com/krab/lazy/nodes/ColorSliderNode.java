@@ -84,7 +84,7 @@ abstract class ColorSliderNode extends SliderNode {
     protected void drawNodeForeground(PGraphics pg, String name) {
         pg.fill(foregroundMouseOverBrightnessAwareColor());
         drawLeftText(pg, name);
-        drawRightText(pg, getValueToDisplay(), true);
+        drawRightText(pg, getValueToDisplay(), false);
     }
 
     protected int foregroundMouseOverBrightnessAwareColor(){
