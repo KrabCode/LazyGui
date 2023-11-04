@@ -37,7 +37,6 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
   * [How to compile and run this library](#how-to-compile-and-run-this-library)
-          * [below are notes for the author of this repo, who is the only one creating new releases for now](#below-are-notes-for-the-author-of-this-repo-who-is-the-only-one-creating-new-releases-for-now)
     * [How to create a new library release for the PDE](#how-to-create-a-new-library-release-for-the-pde)
     * [How to update the javadocs](#how-to-update-the-javadocs)
 <!-- TOC -->
@@ -468,7 +467,7 @@ LazyGui runs on all of these:
 - The `examples_intellij` directory contains runnable examples which you can edit to test your changes to the GUI
   
 ---
-###### below are notes for the author of this repo, who is the only one creating new releases for now
+(below are notes by and for krab, the author of this repo, who is the only one creating new official releases for now)
 
 ### How to create a new library release for the PDE
 
