@@ -36,6 +36,10 @@ Table of Contents
   * [Dependencies](#dependencies)
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
+  * [How to compile and run this library](#how-to-compile-and-run-this-library)
+          * [below are notes for the author of this repo, who is the only one creating new releases for now](#below-are-notes-for-the-author-of-this-repo-who-is-the-only-one-creating-new-releases-for-now)
+    * [How to create a new library release for the PDE](#how-to-create-a-new-library-release-for-the-pde)
+    * [How to update the javadocs](#how-to-update-the-javadocs)
 <!-- TOC -->
 
 ## LazyGui is a GUI library for Processing
