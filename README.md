@@ -459,13 +459,14 @@ LazyGui runs on all of these:
 ## How to contribute
 - Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues) if you don't find your problem already in there
 - Talk to me on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
-- If you want to code something yourself you can fork the repository, make some edits, run a test sketch as described below and when it works to your satisfaction you can submit a pull request with an explanation
+- If you want to code something yourself you can fork the repository, make some edits on the `develop` branch, run a test sketch as described below and when it works to your satisfaction you can submit a pull request with an explanation
 
 ## How to compile and run this library
-- Clone and open the library in Eclipse or IntelliJ IDEA and Gradle should get all the libraries for you 
-  - if not, try calling `gradle build`
-- The `examples_intellij` directory contains runnable examples which you can edit to test your changes to the GUI
-  
+- Clone and open the library in IntelliJ IDEA and Gradle should get all the libraries for you 
+- If this doesn't happen automatically, try to `link gradle project` which should call `gradle build` and set all the source folders correctly
+- The `com/krab/lazy/examples_intellij` directory contains runnable examples which you can edit and run to test your changes to the GUI
+- If you're making a new feature, making a new example sketch there is probably a good idea  
+
 ---
 (below are notes by and for krab, the author of this repo, who is the only one creating new official releases for now)
 
