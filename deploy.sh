@@ -23,6 +23,8 @@ rm -rf $name.zip
 cp $name/library.properties $name.txt
 cp $name/library/$name.jar $name.jar
 
-echo "Deployed LazyGui successfully."
-echo "Upload the three .jar, .txt and .zip files here:"
+echo 
+echo "Deployed LazyGui successfully to:"
+pwd
+echo "To publish this release upload LazyGui.jar, LazyGui.txt and LazyGui.zip files here:"
 echo "  https://github.com/KrabCode/LazyGui/releases/tag/latest"
