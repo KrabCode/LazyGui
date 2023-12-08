@@ -93,8 +93,6 @@ public class GradientPickerFolderNode extends FolderNode {
         updateColorStopVisibility();
 
         String gradientShaderPath = "gradient.glsl";
-//        String shaderPathLong = "shaders/gradient.glsl";
-//        PShader shader = ShaderReloader.getShader(shaderPathLong);
         PShader shader = ShaderStore.getShader(gradientShaderPath);
         shader.set("colorCount", colorCount);
         ArrayList<GradientColorStopNode> colorStopsInPositionOrder = getAllColorStopsInPositionOrder();

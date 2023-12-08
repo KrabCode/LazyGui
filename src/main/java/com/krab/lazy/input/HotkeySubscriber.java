@@ -3,7 +3,7 @@ package com.krab.lazy.input;
 import com.krab.lazy.stores.HotkeyStore;
 
 /**
- * Singleton class listening for global hotkeys that fall through all of the potential visual controls under the mouse unconsumed.
+ * Singleton class listening for global hotkeys that fall through all the potential visual controls under the mouse unconsumed.
  */
 public class HotkeySubscriber implements UserInputSubscriber {
 

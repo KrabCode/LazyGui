@@ -9,8 +9,6 @@ import processing.core.PGraphics;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.*;
-import static processing.core.PApplet.map;
-import static processing.core.PApplet.radians;
 
 class GradientPreviewNode extends AbstractNode {
     final GradientPickerFolderNode parent;

@@ -8,10 +8,6 @@ import com.krab.lazy.input.LazyKeyEvent;
 import com.krab.lazy.stores.*;
 import com.krab.lazy.utils.NodePaths;
 import com.krab.lazy.input.LazyMouseEvent;
-import com.krab.lazy.stores.FontStore;
-import com.krab.lazy.stores.LayoutStore;
-import com.krab.lazy.stores.NodeTree;
-import com.krab.lazy.stores.UndoRedoStore;
 import com.krab.lazy.themes.ThemeColorType;
 import com.krab.lazy.themes.ThemeStore;
 import processing.core.PGraphics;
@@ -242,7 +238,7 @@ public abstract class AbstractNode {
     }
 
     private String getNameFromPath(String path) {
-        if (path.equals("")) { // this is the root node
+        if ("".equals(path)) { // this is the root node
             String overridingSketchName = LayoutStore.getOverridingSketchName();
             if(overridingSketchName != null){
                 return overridingSketchName;
@@ -273,10 +269,10 @@ public abstract class AbstractNode {
         String[] split = className.split(wordSplitRegex);
         StringBuilder sb = new StringBuilder();
         for (String s : split) {
-            sb.append(s.toLowerCase());
+            sb.append(s);
             sb.append(" ");
         }
-        return sb.toString().trim();
+        return sb.toString().trim().toLowerCase();
     }
 
 

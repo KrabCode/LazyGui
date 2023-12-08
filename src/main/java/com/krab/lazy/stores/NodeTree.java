@@ -12,7 +12,7 @@ import static processing.core.PApplet.println;
 public class NodeTree {
     private static final FolderNode root = new FolderNode("", null);
     private static final Map<String, AbstractNode> nodesByPath = new HashMap<>();
-    static ArrayList<String> knownUnexpectedQueries = new ArrayList<>();
+    static final ArrayList<String> knownUnexpectedQueries = new ArrayList<>();
 
     private NodeTree() {
 
@@ -136,7 +136,7 @@ public class NodeTree {
         String expectedTypeName = expectedType.getSimpleName();
         String uniquePathAndTypeQuery = path + " - " + expectedTypeName;
         if(knownUnexpectedQueries.contains(uniquePathAndTypeQuery)){
-            // return early when this is a known conflict, no reason to spam the error or do the expensive exception
+            // return early when this is a known conflict, don't spam the path conflict error in console
             return true;
         }
         try{

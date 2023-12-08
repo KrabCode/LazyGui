@@ -49,11 +49,6 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     @Override
-    protected void drawNodeBackground(PGraphics pg) {
-
-    }
-
-    @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
         drawLeftText(pg, name);
         drawPreviewRect(pg);

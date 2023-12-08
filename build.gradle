@@ -3,9 +3,9 @@ plugins {
     id 'java'
 }
 
-tasks.withType(JavaCompile) {
-    options.release = 8
+tasks.withType(JavaCompile).configureEach {
     compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = '1.8'
 }
 
 repositories {

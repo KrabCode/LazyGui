@@ -24,7 +24,7 @@ public class JsonSaveStore {
     private final static String JSON_TYPE_EXTENSION = ".json";
     public static boolean autosaveOnExitEnabled = true;
     public static boolean autosaveLockGuardEnabled = true;
-    public static boolean shouldLoadLatestSaveOnStartupByDefault = true;
+    public static final boolean shouldLoadLatestSaveOnStartupByDefault = true;
     public static long autosaveLockGuardMillisLimit = 1000;
     private static long lastFrameMillisForLockGuard;
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();

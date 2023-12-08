@@ -21,7 +21,6 @@ public class SimpleShape extends PApplet {
         gui = new LazyGui(this);
     }
 
-    @SuppressWarnings("DuplicatedCode")
     public void draw() {
         gui.pushFolder("scene");
         drawBackground();

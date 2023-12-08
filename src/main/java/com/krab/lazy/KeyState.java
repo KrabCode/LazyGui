@@ -34,6 +34,7 @@ public class KeyState {
      * Equal to -Integer.MAX_VALUE rather than 0 by default to not display an animation on startup when using
      * <code>norm(frameCount, frameReleased, frameReleased + animationDuration)</code>
      */
+    @SuppressWarnings("unused")
     public int frameReleased = -Integer.MAX_VALUE;
 
     /**

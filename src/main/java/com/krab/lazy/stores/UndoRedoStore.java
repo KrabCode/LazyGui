@@ -22,7 +22,7 @@ public class UndoRedoStore {
     private static final String debugTopLevelTextNodeName = "font size";
     private static final String debugNodeValueKey = "valueFloat";
 
-    static ArrayList<String> stateStack = new ArrayList<>();
+    static final ArrayList<String> stateStack = new ArrayList<>();
     static int stateIndex = 0;
 
     public static void init(){

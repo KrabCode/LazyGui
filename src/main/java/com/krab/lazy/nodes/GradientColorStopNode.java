@@ -15,8 +15,7 @@ class GradientColorStopNode extends ColorPickerFolderNode {
 
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
-        drawLeftText(pg, name);
-        drawPreviewRect(pg);
+        super.drawNodeForeground(pg, name);
     }
 
     float getGradientPos() {

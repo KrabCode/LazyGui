@@ -1131,7 +1131,7 @@ public class LazyGui  {
      * @param path path to the control or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
      */
     public void hide(String path){
-        if(path.equals("") || path.equals("/")){
+        if("".equals(path) || "/".equals(path)){
             hideCurrentFolder();
             return;
         }
@@ -1158,7 +1158,7 @@ public class LazyGui  {
      * @param path path to the control element or folder being hidden - it will get prefixed by the current path prefix stack to get the full path
      */
     public void show(String path){
-        if(path.equals("") || path.equals("/")){
+        if("".equals(path) || "/".equals(path)){
             showCurrentFolder();
             return;
         }
