@@ -290,9 +290,9 @@ void mousePressed(){
 see: [isMouseOutsideGui()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#isMouseOutsideGui--), [MouseDrawing](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/MouseDrawing/MouseDrawing.pde)  
 
 ## Drawing the GUI manually
-The GUI draws itself at the end of draw() by default, but you can override this by calling `gui.draw()` before that happens. The GUI will not draw itself multiple times per one frame, so the automatic execution is skipped when this is called manually.
+The GUI draws itself at the end of draw() by default, but you can override this by calling `gui.draw()` before that happens. The GUI will never draw itself more than once per frame, so the automatic execution is skipped when this is called manually.
 
-This can be useful in cases like using PeasyCam where you want to use `cam.beginHUD()` and `cam.endHUD()` to separate the GUI overlay from the camera controlled 3D scene.
+This can be useful in cases like including the GUI in a recording or using the PeasyCam library where you probably want to display the GUI between `cam.beginHUD()` and `cam.endHUD()` to separate the GUI overlay from the camera controlled 3D scene.
 
 see: [draw()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#draw--),
 [PeasyCamExample](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/PeasyCamExample/PeasyCamExample.pde)
@@ -481,9 +481,9 @@ LazyGui runs on all of these:
 
 ### How to create a new library release for the PDE
 
-- Increment the versions in library.properties according to [semantic versioning](https://semver.org/)
+- Increment the versions in [library.properties](library.properties) according to [semantic versioning](https://semver.org/)
 - Run `gradle shadowJar` to create a new jar file in the `build/libs` directory including gson classes but not processing classes
-- Run deploy.sh which packs docs, sources and jars into a .jar, .txt and .zip format that can be parsed by a third party Processing library utility
+- Run [deploy.sh](deploy.sh) which packs docs, sources and jars into a .jar, .txt and .zip format that can be parsed by a third party Processing library utility
 - Manually upload the results of deploy.sh to the [latest release page](https://github.com/KrabCode/LazyGui/releases/tag/latest), increment the version in the release name there and add some patch notes
 - The PDE always looks for the release in the 'latest' tag of this repository and makes it instantly available in the Tools -> Manage Tools -> Libraries menu
 - When the number of "commits to master since this release" gets annoying it can be deleted with `git_delete_latest_tag.sh` 
