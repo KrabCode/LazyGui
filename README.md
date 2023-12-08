@@ -18,6 +18,7 @@ Table of Contents
     * [Radio](#radio)
   * [Hotkeys](#hotkeys)
   * [Mouse interaction](#mouse-interaction)
+  * [Drawing the GUI manually](#drawing-the-gui-manually)
   * [Saving and loading values](#saving-and-loading-values)
     * [Create save](#create-save)
     * [Load save](#load-save)
@@ -93,7 +94,7 @@ void draw(){
 
 The gui displays itself at the end of `draw()` and by default it shows a root folder that can't be closed with two built in folders
 - **options** for tweaking the various gui settings
-- **saves** for managing your save files. 
+- **saves** for managing your save files
 
 ## Control elements
 - getters and setters initialize controls when first called
@@ -276,17 +277,25 @@ gui.radioSet("mode", "square");
 |   CTRL + V   | Paste to value or folder      |
 
 ## Mouse interaction
-Interacting with your sketch using the mouse can be very useful, with some examples being drawing with a mouse brush or clicking to select an object in a 3D scene.
-But the GUI can get in the way - you don't want the sketch to draw when you're changing your brush properties in the GUI.
+Interacting with your sketch using the mouse can be very useful, but the GUI can get in the way, usually you don't want the sketch to react when you're dragging a slider in the GUI.
 
-Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell the user whether the mouse event has interacted with the GUI or not and that is what this utility function is for:
+Unfortunately the GUI has no way to block the sketch from receiving the mouse event, but it can tell you whether the mouse has interacted with the GUI thanks to the `isMouseOutsideGui()` method.
 ```java
 void mousePressed(){
     if(gui.isMouseOutsideGui()){
-        // draw something at the mouse
+        // do something at the mouse
     }
 }
 ```
+see: [isMouseOutsideGui()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#isMouseOutsideGui--), [MouseDrawing](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/MouseDrawing/MouseDrawing.pde)  
+
+## Drawing the GUI manually
+The GUI draws itself at the end of draw() by default, but you can override this by calling `gui.draw()` before that happens. The GUI will not draw itself multiple times per one frame, so the automatic execution is skipped when this is called manually.
+
+This can be useful in cases like using PeasyCam where you want to use `cam.beginHUD()` and `cam.endHUD()` to separate the GUI overlay from the camera controlled 3D scene.
+
+see: [draw()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#draw--),
+[PeasyCamExample](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/PeasyCamExample/PeasyCamExample.pde)
 
 ## Saving and loading values
 The GUI can save its current values to disk in a json file. It can also load these values to overwrite the current GUI state.

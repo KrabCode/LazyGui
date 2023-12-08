@@ -150,8 +150,10 @@ public class LazyGui  {
 
     /**
      * Updates and draws the GUI on the main processing canvas.
-     * Gets called automatically at the end of draw(),
+     * Gets called automatically at the end of draw() by default, but can also be called manually to display the GUI at a better time during the frame.
+     * The GUI will not draw itself multiple times per one frame, so the automatic execution is skipped when this is called manually.
      * Must stay public because otherwise this registering won't work: app.registerMethod("draw", this);
+     * Calls {@link LazyGui#draw(PGraphics) draw(PGraphics)} internally with the default sketch PGraphics.
      * @see LazyGui#draw(PGraphics)
      */
     public void draw() {
