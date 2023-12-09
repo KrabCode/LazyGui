@@ -5,7 +5,7 @@ import processing.core.PApplet;
 public class SliderIntNode extends SliderNode {
 
     public SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, boolean constrained) {
-        super(path, parentFolder, defaultValue, min, max, constrained);
+        super(path, parentFolder, defaultValue, min, max, constrained, false);
         minimumFloatPrecisionIndex = precisionRange.indexOf(0.01f);
     }
 

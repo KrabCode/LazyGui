@@ -25,13 +25,13 @@ public class PlotFolderNode extends FolderNode {
         if (defaultXY != null) {
             defaultPos = defaultXY.copy();
         }
-        sliderX = new SliderNode(path + "/" + SLIDER_X_NAME, this, defaultPos.x, -Float.MAX_VALUE, Float.MAX_VALUE, false);
-        sliderY = new SliderNode(path + "/" + SLIDER_Y_NAME, this, defaultPos.y, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+        sliderX = new SliderNode(path + "/" + SLIDER_X_NAME, this, defaultPos.x, -Float.MAX_VALUE, Float.MAX_VALUE, false, false);
+        sliderY = new SliderNode(path + "/" + SLIDER_Y_NAME, this, defaultPos.y, -Float.MAX_VALUE, Float.MAX_VALUE, false, false);
         children.add(new PlotDisplayNode(path + "/" + PLOT_DISPLAY_NAME, this, sliderX, sliderY));
         children.add(sliderX);
         children.add(sliderY);
         if (useZ) {
-            sliderZ = new SliderNode(path + "/" + SLIDER_Z_NAME, this, defaultPos.z, -Float.MAX_VALUE, Float.MAX_VALUE, false);
+            sliderZ = new SliderNode(path + "/" + SLIDER_Z_NAME, this, defaultPos.z, -Float.MAX_VALUE, Float.MAX_VALUE, false, false);
             children.add(sliderZ);
         }
     }
@@ -50,23 +50,23 @@ public class PlotFolderNode extends FolderNode {
     }
 
     private void syncPrecision() {
-        if(syncedPrecisionIndex == -1){
+        if (syncedPrecisionIndex == -1) {
             syncedPrecisionIndex = sliderX.currentPrecisionIndex;
         }
         boolean changeDetected = sliderX.currentPrecisionIndex != syncedPrecisionIndex ||
                 sliderY.currentPrecisionIndex != syncedPrecisionIndex ||
                 (sliderZ != null && sliderZ.currentPrecisionIndex != syncedPrecisionIndex);
-        if(changeDetected){
-            if(sliderX.currentPrecisionIndex != syncedPrecisionIndex){
+        if (changeDetected) {
+            if (sliderX.currentPrecisionIndex != syncedPrecisionIndex) {
                 syncedPrecisionIndex = sliderX.currentPrecisionIndex;
-            }else if(sliderY.currentPrecisionIndex != syncedPrecisionIndex){
+            } else if (sliderY.currentPrecisionIndex != syncedPrecisionIndex) {
                 syncedPrecisionIndex = sliderY.currentPrecisionIndex;
-            }else{
+            } else {
                 syncedPrecisionIndex = sliderZ.currentPrecisionIndex;
             }
             sliderX.setPrecisionIndexAndValue(syncedPrecisionIndex);
             sliderY.setPrecisionIndexAndValue(syncedPrecisionIndex);
-            if(sliderZ != null){
+            if (sliderZ != null) {
                 sliderZ.setPrecisionIndexAndValue(syncedPrecisionIndex);
             }
         }
@@ -83,18 +83,21 @@ public class PlotFolderNode extends FolderNode {
     public void setVectorValue(float x, float y, float z) {
         sliderX.valueFloat = x;
         sliderY.valueFloat = y;
-        if(sliderZ != null){
+        if (sliderZ != null) {
             sliderZ.valueFloat = z;
         }
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {
-        if((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)){
+        if ((e.isControlDown() && e.getKeyCode() == KeyCodes.C) || (e.isControlDown() && e.getKeyCode() == KeyCodes.V)) {
             super.keyPressedOverNode(e, x, y);
             onActionEnded();
-        }else{
+        } else {
             sliderX.keyPressedOverNode(e, x, y);
             sliderY.keyPressedOverNode(e, x, y);
+            if (sliderZ != null) {
+                sliderZ.keyPressedOverNode(e, x, y);
+            }
         }
     }
 

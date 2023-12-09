@@ -103,6 +103,10 @@ public class FontStore {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             char character = text.charAt(i);
+            if(character == '\n'){
+                // no new lines allowed in a one-line row name
+                break;
+            }
             float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
             if (textWidthAfterNewChar >= availableWidth) {
                 break;

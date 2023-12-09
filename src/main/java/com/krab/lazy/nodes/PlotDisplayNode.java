@@ -11,7 +11,10 @@ import processing.core.PVector;
 import static com.krab.lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
-
+/**
+ * A node that displays a plot grid and allows to drag the grid around.
+ * Only changes and highlights the X and Y parts of the potentially three XYZ sliders, since we can't easily use the third dimension using the 2D grid and 2D mouse input.
+ */
 class PlotDisplayNode extends AbstractNode {
 
     private final SliderNode sliderX;

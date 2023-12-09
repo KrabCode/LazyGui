@@ -51,7 +51,9 @@ public class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    private static final String SQUIGGLY_EQUALS = "≈";
+    protected static final float SQUIGGLY_EQUALS_MAX_DISPLAY_VALUE = 1000f;
+    protected static final String SQUIGGLY_EQUALS_PREFIX = "≈ ";
+    protected boolean displaySquigglyEquals = true;
     final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
             .add('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
             .build();
@@ -66,6 +68,11 @@ public class SliderNode extends AbstractNode {
     protected int maximumFloatPrecisionIndex = -1;
     protected int minimumFloatPrecisionIndex = -1;
 
+    public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained, boolean displaySquigglyEquals){
+        this(path, parentFolder, defaultValue, min, max, constrained);
+        this.displaySquigglyEquals = displaySquigglyEquals;
+    }
+
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained) {
         super(NodeType.VALUE, path, parentFolder);
         valueFloatDefault = defaultValue;
@@ -76,7 +83,7 @@ public class SliderNode extends AbstractNode {
         valueFloatMax = max;
         valueFloatConstrained = constrained &&
                 max != Float.MAX_VALUE &&
-                min != -Float.MAX_VALUE ;
+                min != -Float.MAX_VALUE;
         setSensiblePrecision(nf(valueFloat, 0, 0));
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
@@ -108,7 +115,7 @@ public class SliderNode extends AbstractNode {
     @Override
     protected void drawNodeBackground(PGraphics pg) {
         boolean constrainedThisFrame = tryConstrainValue();
-        if(isInlineNodeDragged || isMouseOverNode){
+        if (isInlineNodeDragged || isMouseOverNode) {
             drawBackgroundScroller(pg, constrainedThisFrame);
         }
         mouseDeltaX = 0;
@@ -167,7 +174,7 @@ public class SliderNode extends AbstractNode {
     }
 
     protected String getValueToDisplay() {
-        // the display value flickers back to the "valueFloat" for one frame if we just rely on "isNumpadActive()"
+        // the numpadBufferValue flickers back to the old valueFloat for one frame if we just rely on "isNumpadActive()"
         // so we keep displaying the buffer for 1 more frame with "wasNumpadInputActiveLastFrame"
         if (isNumpadInputActive() || wasNumpadInputActiveLastFrame) {
             return numpadBufferValue;
@@ -176,18 +183,22 @@ public class SliderNode extends AbstractNode {
             return "NaN";
         }
         String valueToDisplay;
+        String valueWithoutRounding = nf(valueFloat, 0, 0);
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
             valueToDisplay = nf(round(valueFloat), 0, 0);
-            if(!valueToDisplay.equals(nf(valueFloat, 0, 0)) && abs(valueFloat) < 100){
-                // the display value was rounded into an integer and that made it misleading, so we indicate that
-                return SQUIGGLY_EQUALS + " " + valueToDisplay;
+        }
+        if (displaySquigglyEquals) {
+            // java float literals use . so we also use . to be consistent
+            valueToDisplay = valueToDisplay.replaceAll(",", ".");
+            boolean precisionRoundingHidesInformation = valueToDisplay.length() < valueWithoutRounding.length();
+            if (precisionRoundingHidesInformation && abs(valueFloat) < SQUIGGLY_EQUALS_MAX_DISPLAY_VALUE) {
+                valueToDisplay = SQUIGGLY_EQUALS_PREFIX + valueToDisplay;
             }
         }
-        // java float literals use . so we also use .
-        return valueToDisplay.replaceAll(",", ".");
+        return valueToDisplay;
     }
 
     @Override
@@ -218,7 +229,7 @@ public class SliderNode extends AbstractNode {
     }
 
     protected void setPrecisionIndexAndValue(int newPrecisionIndex) {
-        if(!validatePrecision(newPrecisionIndex)){
+        if (!validatePrecision(newPrecisionIndex)) {
             return;
         }
         currentPrecisionIndex = constrain(newPrecisionIndex, 0, precisionRange.size() - 1);
@@ -226,7 +237,7 @@ public class SliderNode extends AbstractNode {
     }
 
     protected boolean validatePrecision(int newPrecisionIndex) {
-        return  (maximumFloatPrecisionIndex == -1 || newPrecisionIndex <= maximumFloatPrecisionIndex) &&
+        return (maximumFloatPrecisionIndex == -1 || newPrecisionIndex <= maximumFloatPrecisionIndex) &&
                 (minimumFloatPrecisionIndex == -1 || newPrecisionIndex >= minimumFloatPrecisionIndex);
     }
 
@@ -274,7 +285,7 @@ public class SliderNode extends AbstractNode {
         }
         tryReadNumpadInput(e);
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
-            String value = getValueToDisplay().replaceAll(SQUIGGLY_EQUALS, "");
+            String value = getValueToDisplay().replaceAll(SQUIGGLY_EQUALS_PREFIX, "");
             if (value.endsWith(".")) {
                 value += "0";
             }
@@ -283,7 +294,7 @@ public class SliderNode extends AbstractNode {
         }
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.V) {
             String clipboardString = ClipboardUtils.getClipboardString();
-            
+
             try {
                 float clipboardValue = Float.parseFloat(clipboardString);
                 if (!Float.isNaN(clipboardValue)) {
