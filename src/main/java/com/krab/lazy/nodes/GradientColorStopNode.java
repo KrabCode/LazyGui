@@ -1,6 +1,5 @@
 package com.krab.lazy.nodes;
 
-import com.google.gson.JsonElement;
 import com.krab.lazy.stores.GlobalReferences;
 import processing.core.PGraphics;
 
@@ -20,11 +19,6 @@ class GradientColorStopNode extends ColorPickerFolderNode {
 
     float getGradientPos() {
         return posSlider.valueFloat;
-    }
-
-    @Override
-    public void overwriteState(JsonElement loadedNode) {
-        super.overwriteState(loadedNode);
     }
 
     public boolean isPosSliderBeingUsed() {

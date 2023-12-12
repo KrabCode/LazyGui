@@ -61,9 +61,4 @@ public class ButtonNode extends AbstractNode {
         valueBoolean = false;
         return result;
     }
-
-    @Override
-    public String getValueAsString() {
-        return super.getValueAsString();
-    }
 }

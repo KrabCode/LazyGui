@@ -1,7 +1,5 @@
 package com.krab.lazy.windows;
 
-import com.google.gson.annotations.Expose;
-
 import com.krab.lazy.nodes.FolderNode;
 import com.krab.lazy.stores.FontStore;
 import com.krab.lazy.stores.GlobalReferences;

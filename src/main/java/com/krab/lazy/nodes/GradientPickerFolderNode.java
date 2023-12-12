@@ -1,6 +1,5 @@
 package com.krab.lazy.nodes;
 
-import com.google.gson.JsonElement;
 import com.krab.lazy.PickerColor;
 import com.krab.lazy.stores.*;
 import com.krab.lazy.utils.ArrayListBuilder;
@@ -201,11 +200,6 @@ public class GradientPickerFolderNode extends FolderNode {
 
     GradientColorStopNode findColorStopByIndex(int i) {
         return (GradientColorStopNode) findChildByName(getColorNameByIndex(i));
-    }
-
-    @Override
-    public void overwriteState(JsonElement loadedNode) {
-        super.overwriteState(loadedNode);
     }
 
     GradientColorStopNode createGradientColorPicker(String path, int hex, float pos) {

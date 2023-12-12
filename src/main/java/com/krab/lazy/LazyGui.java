@@ -43,13 +43,13 @@ public class LazyGui  {
 
     private static int lastFrameCountGuiWasShown = -1;
 
-    ArrayList<String> pathPrefix = new ArrayList<>();
-    int stackSizeWarningLevel = 64;
+    final ArrayList<String> pathPrefix = new ArrayList<>();
+    final int stackSizeWarningLevel = 64;
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
     private PGraphics guiCanvas;
-    String optionsFolderName = "options";
-    String savesFolderName = "saves";
+    final String optionsFolderName = "options";
+    final String savesFolderName = "saves";
 
     private static LazyGui singleton;
 
