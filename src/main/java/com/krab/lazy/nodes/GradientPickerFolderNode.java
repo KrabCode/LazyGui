@@ -203,6 +203,7 @@ public class GradientPickerFolderNode extends FolderNode {
         return (GradientColorStopNode) findChildByName(getColorNameByIndex(i));
     }
 
+    @Override
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
     }

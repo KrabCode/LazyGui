@@ -29,13 +29,9 @@ import static com.krab.lazy.themes.ThemeColorType.*;
 
 public class Window implements UserInputSubscriber {
     final FolderNode folder;
-    @Expose
     public float posX;
-    @Expose
     public float posY;
-    @Expose
     public boolean closed = false;
-    @Expose
     public float windowSizeX; // can be resized by user
     public float windowSizeY; // set every frame automatically based on individual node heights
     public boolean isBeingDraggedAround;
