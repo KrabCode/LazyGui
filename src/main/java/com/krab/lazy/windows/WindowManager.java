@@ -59,8 +59,6 @@ public class WindowManager {
             windows.add(window);
             window.open(setFocus);
         }
-        // the root window will always be initialized before this runs and thus always found,
-        // so if we want to load its position from json, we need to do it manually
         if(windowFound && folderNode.parent == null){
             folderNode.window.posX = pos.x;
             folderNode.window.posY = pos.y;
