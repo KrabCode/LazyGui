@@ -38,8 +38,6 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
   * [How to compile and run this library](#how-to-compile-and-run-this-library)
-    * [How to create a new library release for the PDE](#how-to-create-a-new-library-release-for-the-pde)
-    * [How to update the javadocs](#how-to-update-the-javadocs)
 <!-- TOC -->
 
 ## LazyGui is a GUI library for Processing
@@ -468,31 +466,10 @@ LazyGui runs on all of these:
 ## How to contribute
 - Create a new GitHub [issue](https://github.com/KrabCode/LazyGui/issues) if you don't find your problem already in there
 - Talk to me on the dedicated library [discord server](https://discord.gg/VBTCsnYMzd)
-- If you want to code something yourself you can fork the repository, make some edits on the `develop` branch, run a test sketch as described below and when it works to your satisfaction you can submit a pull request with an explanation
+- If you want to code something yourself you can fork the repository, make some edits on the `develop` branch (or make your own branch based on `develop`), test your changes and submit a pull request
 
 ## How to compile and run this library
-- Clone and open the library in IntelliJ IDEA and Gradle should get all the libraries for you 
-- If this doesn't happen automatically, try to `link gradle project` which should call `gradle build` and set all the source folders correctly
+- Clone and open the library in IntelliJ IDEA
+- Do `link gradle project` which should call `gradle build` and set all the source folders correctly
 - The `com/krab/lazy/examples_intellij` directory contains runnable examples which you can edit and run to test your changes to the GUI
-- If you're making a new feature, making a new example sketch there is probably a good idea  
-
----
-(below are notes by and for krab, the author of this repo, who is the only one creating new official releases for now)
-
-### How to create a new library release for the PDE
-
-- Increment the versions in [library.properties](library.properties) according to [semantic versioning](https://semver.org/)
-- Run `gradle shadowJar` to create a new jar file in the `build/libs` directory including gson classes but not processing classes
-- Run [deploy.sh](deploy.sh) which packs docs, sources and jars into a .jar, .txt and .zip format that can be parsed by a third party Processing library utility
-- Manually upload the results of deploy.sh to the [latest release page](https://github.com/KrabCode/LazyGui/releases/tag/latest), increment the version in the release name there and add some patch notes
-- The PDE always looks for the release in the 'latest' tag of this repository and makes it instantly available in the Tools -> Manage Tools -> Libraries menu
-- When the number of "commits to master since this release" gets annoying it can be deleted with `git_delete_latest_tag.sh` 
-  - But that also turns the latest release on GitHub into a draft so make sure to re-release it for it to be available in Processing
-
-### How to update the javadocs
-- If the public facing API changed then regenerate javadocs on the master branch from the `Generate Javadoc...` IntelliJ window
-- Settings:
-  - Custom scope to only include "com.krab.lazy.*" (should be around 6 files that comprise the main API)
-  - Output directory: `\docs`
-  - Visibility level: public
-- Pushing the new \docs to master will then automatically publish the docs at https://krabcode.github.io/LazyGui/
+- If you're making a new feature, making a new example sketch there is probably a good idea
