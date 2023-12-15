@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.krab.lazy.input.LazyKeyEvent;
 import com.krab.lazy.input.LazyMouseEvent;
 import com.krab.lazy.stores.DelayStore;
+import com.krab.lazy.stores.LayoutStore;
 import com.krab.lazy.utils.KeyCodes;
 import com.krab.lazy.stores.ShaderStore;
 import com.krab.lazy.themes.ThemeColorType;
@@ -51,9 +52,10 @@ public class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    protected static final float SQUIGGLY_EQUALS_MAX_DISPLAY_VALUE = 1000f;
-    protected static final String SQUIGGLY_EQUALS_PREFIX = "≈ ";
+    // true by default locally to be overridden by the global setting LayoutStore.shouldDisplaySquigglyEquals() that is false by default
     protected boolean displaySquigglyEquals = true;
+    protected static final String SQUIGGLY_EQUALS = "≈ ";
+
     final ArrayList<Character> numpadChars = new ArrayListBuilder<Character>()
             .add('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
             .build();
@@ -183,21 +185,21 @@ public class SliderNode extends AbstractNode {
             return "NaN";
         }
         String valueToDisplay;
-        String valueWithoutRounding = nf(valueFloat, 0, 0);
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
             valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
             valueToDisplay = nf(round(valueFloat), 0, 0);
         }
-        if (displaySquigglyEquals) {
-            // java float literals use . so we also use . to be consistent
-            valueToDisplay = valueToDisplay.replaceAll(",", ".");
+        if (displaySquigglyEquals && LayoutStore.shouldDisplaySquigglyEquals()) {
+            String valueWithoutRounding = nf(valueFloat, 0, 0);
             boolean precisionRoundingHidesInformation = valueToDisplay.length() < valueWithoutRounding.length();
-            if (precisionRoundingHidesInformation && abs(valueFloat) < SQUIGGLY_EQUALS_MAX_DISPLAY_VALUE) {
-                valueToDisplay = SQUIGGLY_EQUALS_PREFIX + valueToDisplay;
+            if (precisionRoundingHidesInformation) {
+                valueToDisplay = SQUIGGLY_EQUALS + valueToDisplay;
             }
         }
+        // java float literals use . so we also use . to be consistent
+        valueToDisplay = valueToDisplay.replaceAll(",", ".");
         return valueToDisplay;
     }
 
@@ -285,7 +287,7 @@ public class SliderNode extends AbstractNode {
         }
         tryReadNumpadInput(e);
         if (e.isControlDown() && e.getKeyCode() == KeyCodes.C) {
-            String value = getValueToDisplay().replaceAll(SQUIGGLY_EQUALS_PREFIX, "");
+            String value = getValueToDisplay().replaceAll(SQUIGGLY_EQUALS, "");
             if (value.endsWith(".")) {
                 value += "0";
             }
@@ -330,7 +332,6 @@ public class SliderNode extends AbstractNode {
             case '+':
             case '-':
                 if (inReplaceMode) {
-                    //noinspection ConcatenationWithEmptyString
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();

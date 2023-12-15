@@ -13,6 +13,7 @@ import com.krab.lazy.themes.ThemeStore;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static com.krab.lazy.stores.LayoutStore.cell;
 import static processing.core.PApplet.*;
 
 /**
@@ -118,7 +119,7 @@ public abstract class AbstractNode {
         fillForegroundBasedOnMouseOver(pg);
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
         pg.textAlign(LEFT, CENTER);
-		pg.text(trimmedText, FontStore.textMarginX, LayoutStore.cell - FontStore.textMarginY);
+		pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
     }
 
     protected void drawRightTextToNotOverflowLeftText(PGraphics pg, String rightText, String leftText, boolean fillBackground) {
@@ -135,7 +136,8 @@ public abstract class AbstractNode {
 
     protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
         if(fillBackground){
-            float w = pg.textWidth(text) + FontStore.textMarginX * 2;
+            float backdropBuffer = cell * 0.5f;
+            float w = pg.textWidth(text) + FontStore.textMarginX + backdropBuffer;
             drawRightBackdrop(pg, w);
         }
         pg.textAlign(RIGHT, CENTER);
@@ -153,10 +155,10 @@ public abstract class AbstractNode {
 
 
     protected void drawRightToggleHandle(PGraphics pg, boolean valueBoolean) {
-        float rectWidth = LayoutStore.cell * 0.3f;
-        float rectHeight = LayoutStore.cell * 0.25f;
+        float rectWidth = cell * 0.3f;
+        float rectHeight = cell * 0.25f;
         pg.rectMode(CENTER);
-        pg.translate(size.x - LayoutStore.cell * 0.5f, size.y * 0.5f);
+        pg.translate(size.x - cell * 0.5f, size.y * 0.5f);
         if(isMouseOverNode){
             pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
         }else{
@@ -255,7 +257,7 @@ public abstract class AbstractNode {
 
     @SuppressWarnings("unused") // previously used for getting root window name, might still be useful some day
     private String getClassNameAsSpaceSeparatedLowerCase(String className){
-        if(className.trim().length() == 0){
+        if(className.trim().isEmpty()){
             return "";
         }
         String wordSplitRegex = "(?<=.)(?=[A-Z])";

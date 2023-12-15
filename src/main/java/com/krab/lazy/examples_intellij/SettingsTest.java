@@ -56,6 +56,8 @@ public class SettingsTest extends PApplet {
             .setSmooth(16)
             .setHideBuiltInFolders(true)
             .setHideRadioValue(true)
+
+            .setShowSquigglyEqualsInsideSliders(true)
         );
 
 
@@ -64,6 +66,7 @@ public class SettingsTest extends PApplet {
 
     public void draw() {
         image(gui.gradient("background"), 0, 0);
+        gui.plotXY("hello plot");
         gui.draw();
     }
 }

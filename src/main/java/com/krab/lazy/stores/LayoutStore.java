@@ -19,6 +19,7 @@ public class LayoutStore {
     private static boolean hideRadioValue = false;
     private static int smoothingValue = 4;
     private static String overridingSketchName = null;
+    private static boolean displaySquigglyEquals = false;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -151,5 +152,13 @@ public class LayoutStore {
 
     public static boolean shouldHideRadioValue() {
         return hideRadioValue;
+    }
+
+    public static void setDisplaySquigglyEquals(boolean displaySquigglyEquals) {
+        LayoutStore.displaySquigglyEquals = displaySquigglyEquals;
+    }
+
+    public static boolean shouldDisplaySquigglyEquals() {
+        return displaySquigglyEquals;
     }
 }

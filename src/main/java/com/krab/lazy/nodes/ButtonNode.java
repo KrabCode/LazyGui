@@ -28,6 +28,7 @@ public class ButtonNode extends AbstractNode {
     @Override
     protected void drawNodeForeground(PGraphics pg, String name) {
         drawLeftText(pg, name);
+        drawRightBackdrop(pg, cell);
         drawRightButton(pg);
     }
 

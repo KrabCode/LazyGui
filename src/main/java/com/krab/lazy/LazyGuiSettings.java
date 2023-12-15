@@ -42,6 +42,7 @@ public class LazyGuiSettings {
     private String pathToSpecificSaveToLoadOnStartupOnce = null;
     private String sketchNameOverride = null;
     private int smoothingValue;
+    private boolean showSquigglyEquals = false;
 
     /**
      * Constructor, call this before any other function here.
@@ -91,6 +92,7 @@ public class LazyGuiSettings {
         }
         LayoutStore.setIsGuiHidden(startWithGuiHidden);
         LayoutStore.setHideRadioValue(hideRadioValue);
+        LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
         if(sketchNameOverride != null){
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
@@ -354,6 +356,18 @@ public class LazyGuiSettings {
         return this;
     }
 
+    /**
+     * Show the approximately equals double tilde '≈' in sliders when visually shown values are not exactly equal to the actual float values used by the program.
+     * This happens when the display value is rounded by the currently selected slider precision (controlled by the mouse wheel).
+     * This is false by default, assuming people care more about the horizontal space that would be taken up by '≈ ' than the exact precision of the values.
+     * Even when true, this doesn't show it everywhere, (for example in color sliders and plot rows where multiple slider values are combined), because the horizontal space is very limited there, for more details about the implementation see <pre>SliderNode.displaySquigglyEquals</pre> and the related SliderNode constructor that sets it.
+     * @param showSquigglyEquals whether to show the squiggly equals '≈' in sliders where the underlying values are not exactly what is shown
+     */
+    public LazyGuiSettings setShowSquigglyEqualsInsideSliders(boolean showSquigglyEquals) {
+        this.showSquigglyEquals = showSquigglyEquals;
+        return this;
+    }
+
     boolean getShouldLoadLatestSaveOnStartup() {
         return loadLatestSaveOnStartup;
     }
@@ -366,4 +380,7 @@ public class LazyGuiSettings {
         return pathToSpecificSaveToLoadOnStartupOnce;
     }
 
+    boolean getShowSquigglyEqualsInsideSliders() {
+        return showSquigglyEquals;
+    }
 }
