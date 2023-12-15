@@ -21,7 +21,7 @@ public class SettingsTest extends PApplet {
         gui = new LazyGui(this, new LazyGuiSettings()
             // AUTOLOAD
 
-//            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
+            .setLoadLatestSaveOnStartup(false) // set as false to not load anything on startup
 
 //            .setLoadSpecificSaveOnStartup("auto.json") // expects filenames like "1" or "auto.json" or an absolute path
 //            .setLoadSpecificSaveOnStartupOnce("C:\\Users\\Krab\\Desktop\\auto.json") // loads save only when the save folder is found empty
@@ -39,7 +39,7 @@ public class SettingsTest extends PApplet {
             .setCellSize(22) // affects the size of the whole gui
             .setMainFontSize(16)
             .setSideFontSize(15)
-            .setStartGuiHidden(true) // uncover hidden gui with the 'h' hotkey
+            .setStartGuiHidden(false) // uncover hidden gui with the 'h' hotkey
 
             // THEME
             .setThemePreset("dark") // selected preset, one of "dark", "light", "pink", "blue"
@@ -53,7 +53,7 @@ public class SettingsTest extends PApplet {
 
             .setAutosuggestWindowWidth(true)
             .setSketchNameOverride("GUI Root")
-            .setSmooth(16)
+            .setSmooth(0)
             .setHideBuiltInFolders(true)
             .setHideRadioValue(true)
 
@@ -67,6 +67,7 @@ public class SettingsTest extends PApplet {
     public void draw() {
         image(gui.gradient("background"), 0, 0);
         gui.plotXY("hello plot");
+        gui.slider("test slider", 7.12f);
         gui.draw();
     }
 }

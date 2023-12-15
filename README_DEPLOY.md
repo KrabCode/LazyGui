@@ -15,7 +15,7 @@
 ### How to update the javadocs
 - If the public facing API changed then regenerate javadocs on the master branch from the `Generate Javadoc...` IntelliJ window
 - Settings:
-    - Custom scope to only include "com.krab.lazy.*" (should be around 6 files that comprise the main API)
+    - Custom scope to only include `com.krab.lazy.*` (should only be around 6 classes that constitute the public facing API)
     - Output directory: `\docs`
     - Visibility level: public
 - Pushing the new \docs to master will then automatically publish the docs at https://krabcode.github.io/LazyGui/
