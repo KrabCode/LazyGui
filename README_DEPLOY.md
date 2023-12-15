@@ -5,6 +5,7 @@
 
 - Increment the versions in [library.properties](library.properties) according to [semantic versioning](https://semver.org/)
 - Run `gradle shadowJar` to create a new jar file in the `build/libs` directory including gson classes but not processing classes
+- Delete contents of [build/deploy](build/deploy) directory
 - Run [deploy.sh](deploy.sh) which packs docs, sources and jars into a .jar, .txt and .zip format that can be parsed by a third party Processing library utility
 - Manually upload the results of deploy.sh to the [latest release page](https://github.com/KrabCode/LazyGui/releases/tag/latest), increment the version in the release name there and add some patch notes
 - The PDE always looks for the release in the 'latest' tag of this repository and makes it instantly available in the Tools -> Manage Tools -> Libraries menu
