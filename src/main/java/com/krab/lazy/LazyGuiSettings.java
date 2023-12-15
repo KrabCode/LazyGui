@@ -361,6 +361,7 @@ public class LazyGuiSettings {
      * This happens when the display value is rounded by the currently selected slider precision (controlled by the mouse wheel).
      * This is false by default, assuming people care more about the horizontal space that would be taken up by '≈ ' than the exact precision of the values.
      * Even when true, this doesn't show it everywhere, (for example in plot rows where multiple slider values are combined), because the horizontal space is very limited there, for more details about the implementation see <pre>SliderNode.displaySquigglyEquals</pre> and the related SliderNode constructor that sets it.
+     * @return this settings object for chaining statements easily
      * @param showSquigglyEquals whether to show the squiggly equals '≈' in sliders where the underlying values are not exactly what is shown
      */
     public LazyGuiSettings setShowSquigglyEqualsInsideSliders(boolean showSquigglyEquals) {
