@@ -1,5 +1,6 @@
 package com.krab.lazy.examples_intellij;
 
+import com.krab.lazy.Input;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
@@ -51,7 +52,7 @@ public class TextEditor extends PApplet {
             }
         }
         gui.popFolder();
-
+        Input.debugPrintKeyEvents(true);
         String longText = "Among those who devote themselves to the transmutation of metals,"+
                 "\nhowever, there can be no such thing as mediocrity of attainment."+
                 "\nA person who studies this Art, must have either everything or nothing."+
