@@ -314,7 +314,8 @@ You can control this from the `saves` folder under the root window of the GUI. A
   - or load saves from code with [loadSave(path)](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#loadSave(java.lang.String)).
 - loading will not initialize any new control elements 
 - for a value to be overwritten in the current GUI its [path](#paths-and-folders) needs to match exactly with the saved path for that value
-  - this means you lose saved values when you rename something
+  - this means you lose saved values when you rename a folder or a control element
+  - but you can freely copy saves between sketches, the sketch name does not matter
 
 ## Paths and folders
 
