@@ -339,7 +339,7 @@ boolean state = gui.toggle("off\\/on");
 ### Global path prefix stack
 
 Repeating the whole path in every control element call can get tiresome, especially with multiple nested folders.
-Which is why there is a helpful path stack that you can interact with using `pushFolder()` and `popFolder()`.
+Which is why there's a helpful path stack that you can interact with using `pushFolder()` and `popFolder()`.
 
 Just like using `pushMatrix()` and `popMatrix()` in Processing, you can change your "current directory"
 by pushing a new folder name to a stack with `gui.pushFolder("folder name")` and have every control element called after that be placed into that folder automatically
