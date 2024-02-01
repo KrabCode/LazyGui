@@ -332,6 +332,7 @@ public class SliderNode extends AbstractNode {
             case '+':
             case '-':
                 if (inReplaceMode) {
+                    //noinspection ConcatenationWithEmptyString
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
