@@ -7,15 +7,12 @@ import com.google.gson.annotations.Expose;
 
 import com.krab.lazy.input.LazyKeyEvent;
 import com.krab.lazy.input.LazyMouseEvent;
-import com.krab.lazy.stores.DelayStore;
-import com.krab.lazy.stores.LayoutStore;
+import com.krab.lazy.stores.*;
 import com.krab.lazy.utils.KeyCodes;
-import com.krab.lazy.stores.ShaderStore;
 import com.krab.lazy.themes.ThemeColorType;
 import com.krab.lazy.themes.ThemeStore;
 import com.krab.lazy.utils.ArrayListBuilder;
 import com.krab.lazy.utils.ClipboardUtils;
-import com.krab.lazy.stores.JsonSaveStore;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -206,6 +203,9 @@ public class SliderNode extends AbstractNode {
     @Override
     public void mouseWheelMovedOverNode(float x, float y, int dir) {
         super.mouseWheelMovedOverNode(x, y, dir);
+        if(!HotkeyStore.isHotkeyMouseWheelActive()){
+            return;
+        }
         if (dir > 0) {
             increasePrecision();
         } else if (dir < 0) {

@@ -1,6 +1,7 @@
 package com.krab.lazy;
 
 import com.krab.lazy.stores.FontStore;
+import com.krab.lazy.stores.HotkeyStore;
 import com.krab.lazy.stores.JsonSaveStore;
 import com.krab.lazy.stores.LayoutStore;
 import com.krab.lazy.utils.MouseHiding;
@@ -43,6 +44,7 @@ public class LazyGuiSettings {
     private String sketchNameOverride = null;
     private int smoothingValue;
     private boolean showSquigglyEquals = false;
+    private boolean isMouseWheelPrecisionActive = true;
 
     /**
      * Constructor, call this before any other function here.
@@ -93,6 +95,7 @@ public class LazyGuiSettings {
         LayoutStore.setIsGuiHidden(startWithGuiHidden);
         LayoutStore.setHideRadioValue(hideRadioValue);
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
+        HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if(sketchNameOverride != null){
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
@@ -366,6 +369,19 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setShowSquigglyEqualsInsideSliders(boolean showSquigglyEquals) {
         this.showSquigglyEquals = showSquigglyEquals;
+        return this;
+    }
+
+    /**
+     * The mouse wheel changes a slider's precision when hovering over it.
+     * This is true by default, but it can be useful to disable if you don't have a good mouse wheel.
+     * Alternative hotkeys to achieve a change of precision are '*' and '/'.
+     * You can also change precision by typing in a numeric value into the slider like 0.56, which the slider will detect and match by setting the precision to 0.01.
+     * @param shouldMouseChangePrecision whether the mouse wheel should change the precision of the slider
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setHotkeyMouseWheelActive(boolean shouldMouseChangePrecision){
+        this.isMouseWheelPrecisionActive = shouldMouseChangePrecision;
         return this;
     }
 

@@ -301,7 +301,7 @@ public class Window implements UserInputSubscriber {
 
     @Override
     public void mouseWheelMoved(LazyMouseEvent e) {
-        // scrolling while dragging should scale the dragged inline node as opposed to whatever the cursor is hovering
+        // scrolling while dragging should scale the dragged node as opposed to whatever the cursor is hovering over
         if (GlobalReferences.app.mousePressed) {
             List<AbstractNode> allNodes = NodeTree.getAllNodesAsList();
             for (AbstractNode node : allNodes) {

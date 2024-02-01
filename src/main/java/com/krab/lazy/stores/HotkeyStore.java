@@ -7,7 +7,7 @@ import com.krab.lazy.input.LazyKeyEvent;
 public class HotkeyStore {
 
     private static boolean hotkeyHideActive, hotkeyUndoActive, hotkeyRedoActive, hotkeyScreenshotActive,
-            hotkeyCloseAllWindowsActive, hotkeySaveActive;
+            hotkeyCloseAllWindowsActive, hotkeySaveActive, hotkeyMouseWheelActive;
     private static boolean isScreenshotRequestedOnMainThread = false;
 
     public static void  updateHotkeyToggles() {
@@ -18,6 +18,7 @@ public class HotkeyStore {
         hotkeyUndoActive = GlobalReferences.gui.toggle("ctrl + z: undo", true);
         hotkeyRedoActive = GlobalReferences.gui.toggle("ctrl + y: redo", true);
         hotkeySaveActive = GlobalReferences.gui.toggle("ctrl + s: new save", true);
+        hotkeyMouseWheelActive = GlobalReferences.gui.toggle("mouse wheel", hotkeyMouseWheelActive);
         GlobalReferences.gui.textSet("mouseover specific hotkeys",
                 "r: reset control element to default value\n" +
                         "ctrl + c: copy from (single value or folder)\n" +
@@ -56,5 +57,11 @@ public class HotkeyStore {
         isScreenshotRequestedOnMainThread = val;
     }
 
+    public static void setHotkeyMouseWheelActive(boolean val){
+        hotkeyMouseWheelActive = val;
+    }
 
+    public static boolean isHotkeyMouseWheelActive(){
+        return hotkeyMouseWheelActive;
+    }
 }

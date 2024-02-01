@@ -54,10 +54,11 @@ public class SettingsTest extends PApplet {
             .setAutosuggestWindowWidth(true)
             .setSketchNameOverride("GUI Root")
             .setSmooth(0)
-            .setHideBuiltInFolders(true)
+            .setHideBuiltInFolders(false)
             .setHideRadioValue(true)
 
             .setShowSquigglyEqualsInsideSliders(true)
+            .setHotkeyMouseWheelActive(false)
         );
 
 
