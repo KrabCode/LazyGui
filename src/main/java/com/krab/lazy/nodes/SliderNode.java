@@ -92,6 +92,10 @@ public class SliderNode extends AbstractNode {
     }
 
     private void setSensiblePrecision(String value) {
+        if(valueFloatConstrained && (valueFloatMax - valueFloatMin) <= 1){
+            setPrecisionIndexAndValue(precisionRange.indexOf(0.01f));
+            return;
+        }
         if (value.equals("0") || value.equals("0.0")) {
             setPrecisionIndexAndValue(precisionRange.indexOf(0.1f));
             return;
