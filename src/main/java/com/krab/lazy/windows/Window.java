@@ -423,7 +423,7 @@ public class Window implements UserInputSubscriber {
         for (AbstractNode child : folder.children) {
             if (child.isInlineNodeDragged && child.isParentWindowVisible()) {
                 child.mouseDragNodeContinue(e);
-                if (e.isConsumed()) {
+                if (e.isConsumed() && child.isInlineNodeDraggable) {
                     MouseHiding.tryHideMouseForDragging();
                 }
             }

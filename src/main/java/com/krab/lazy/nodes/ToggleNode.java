@@ -18,6 +18,7 @@ public class ToggleNode extends AbstractNode {
     public ToggleNode(String path, FolderNode folder, boolean defaultValue) {
         super(NodeType.VALUE, path, folder);
         valueBoolean = defaultValue;
+        isInlineNodeDraggable = false;
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
@@ -51,7 +52,8 @@ public class ToggleNode extends AbstractNode {
 
     @Override
     public void mouseDragNodeContinue(LazyMouseEvent e) {
-
+        super.mouseDragNodeContinue(e);
+        e.setConsumed(true);
     }
 
     public void overwriteState(JsonElement loadedNode) {

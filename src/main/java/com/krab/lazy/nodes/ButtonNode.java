@@ -13,6 +13,7 @@ import static processing.core.PConstants.CENTER;
 public class ButtonNode extends AbstractNode {
     public ButtonNode(String path, FolderNode folder) {
         super(NodeType.TRANSIENT, path, folder);
+        isInlineNodeDraggable = false;
     }
 
     boolean valueBoolean = false;
@@ -54,7 +55,8 @@ public class ButtonNode extends AbstractNode {
 
     @Override
     public void mouseDragNodeContinue(LazyMouseEvent e) {
-
+        super.mouseDragNodeContinue(e);
+        e.setConsumed(true);
     }
 
     public boolean getBooleanValueAndSetItToFalse() {

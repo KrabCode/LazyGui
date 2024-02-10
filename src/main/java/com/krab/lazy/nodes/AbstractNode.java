@@ -40,6 +40,7 @@ public abstract class AbstractNode {
 
     public float masterInlineNodeHeightInCells = 1;
     public boolean isInlineNodeDragged = false;
+    public boolean isInlineNodeDraggable = true;
     public boolean isMouseOverNode = false;
 
     private boolean isInlineNodeVisible = true;
