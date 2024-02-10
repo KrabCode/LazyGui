@@ -20,7 +20,6 @@ import processing.core.PVector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -1282,7 +1281,6 @@ public class LazyGui  {
      */
     public String getVersion(){
         Properties prop = new Properties();
-
         try {
             FileInputStream fileInputStream = new FileInputStream("library.properties");
             prop.load(fileInputStream);

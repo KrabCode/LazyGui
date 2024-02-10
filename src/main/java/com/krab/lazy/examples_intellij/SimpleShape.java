@@ -48,7 +48,6 @@ public class SimpleShape extends PApplet {
         if(gui.button("remove all options")){
             gui.radioSetOptions("shape type", new String[]{});
         }
-
         String selectedShape =  gui.radio("shape type", shapeTypeOptions, "ellipse");
         PVector pos = gui.plotXY("position");
         PVector size = gui.plotXY("size", 250);
