@@ -1223,6 +1223,28 @@ public class LazyGui  {
         return FontStore.getSideFont();
     }
 
+    /**
+     * Hides the GUI completely and skips displaying it. Has no effect if the gui is already hidden.
+     * Reveal the gui again with showGui() or pressing 'h'.
+     */
+    public void hideGui(){
+        LayoutStore.setIsGuiHidden(true);
+    }
+
+    /**
+     * Hides the gui if it was visible. Shows the gui if it was hidden.
+     */
+    public void hideGuiToggle(){
+        LayoutStore.hideGuiToggle();
+    }
+
+    /**
+     * Shows the GUI if it was hidden with 'h' or hideGui(). Has no effect if the gui is already visible.
+     */
+    public void showGui(){
+        LayoutStore.setIsGuiHidden(false);
+    }
+
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
         List<AbstractNode> allNodes = getAllNodesAsList();
         for(AbstractNode node : allNodes){
