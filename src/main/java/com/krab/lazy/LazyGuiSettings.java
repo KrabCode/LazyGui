@@ -384,6 +384,11 @@ public class LazyGuiSettings {
         return this;
     }
 
+    /**
+     * Set the delay in milliseconds for the keyboard buffer to be considered a new input.
+     * @param millisDelayToSet the delay in milliseconds
+     * @return this settings object for chaining statements easily
+     */
     public LazyGuiSettings setKeyboardDelay(int millisDelayToSet){
         this.keyboardMillisDelay = millisDelayToSet;
         return this;
