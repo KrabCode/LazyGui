@@ -29,12 +29,18 @@ void draw() {
   gui.popFolder();
 }
 
+// Change position and rotation without creating a new gui folder.
 void transform() {
+  gui.pushFolder("transform");
   PVector pos = gui.plotXY("pos");
   translate(pos.x, pos.y);
   rotate(gui.slider("rotate"));
+  PVector scale = gui.plotXY("scale", 1.00);
+  scale(scale.x, scale.y);
+  gui.popFolder();
 }
 
+// Change drawing style
 void style() {
   gui.pushFolder("style");
   strokeWeight(gui.slider("weight", 4));
@@ -54,10 +60,11 @@ HashMap<String, PFont> fontCache = new HashMap<String, PFont>();
 HashMap<String, Integer> xAligns;
 HashMap<String, Integer> yAligns;
 
+// Select from lazily created, cached fonts.
 void font() {
   gui.pushFolder("font");
   fill(gui.colorPicker("fill", color(0)).hex);
-  int size = gui.sliderInt("size", 64);
+  int size = gui.sliderInt("size", 64, 1, 256);
   if (xAligns == null || yAligns == null) {
     xAligns = new HashMap<String, Integer>();
     xAligns.put("left", LEFT);
@@ -75,13 +82,14 @@ void font() {
   if (gui.button("list fonts")) {
     String[] fonts = PFont.list();
     for (String font : fonts) {
-      println(font);
+      println(font + "                 "); // some spaces to avoid copying newlines from the console
     }
   }
-  String fontKey = fontName + " | " + size;
+  String fontKey = fontName + " | size: " + size;
   if (!fontCache.containsKey(fontKey)) {
     PFont loadedFont = createFont(fontName, size);
     fontCache.put(fontKey, loadedFont);
+    println("Loaded font: " + fontKey);
   }
   PFont cachedFont = fontCache.get(fontKey);
   textFont(cachedFont);
