@@ -743,9 +743,6 @@ public class LazyGui  {
         if(isPathTakenByUnexpectedType(fullPath, RadioFolderNode.class)){
             return defaultOption == null ? options[0] : defaultOption;
         }
-        if (options == null || options.length == 0) {
-            throw new IllegalArgumentException("options parameter must not be null nor empty");
-        }
         RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
         if (node == null) {
             FolderNode parentFolder = NodeTree.findParentFolderLazyInitPath(fullPath);
@@ -778,6 +775,35 @@ public class LazyGui  {
                     " to a radio element at path: " + fullPath +
                     " which does not appear in the options: " + options);
             }
+        }
+    }
+
+    /**
+     * Sets the radio options to a given list of strings, overwriting any existing list.
+     * @param path forward slash separated unique path to the control element
+     * @param optionsToSet list of options to set
+     */
+    public void radioSetOptions(String path, List<String> optionsToSet){
+        if(optionsToSet == null){
+            radioSetOptions(path, new String[0]);
+            return;
+        }
+        radioSetOptions(path, optionsToSet.toArray(new String[0]));
+    }
+
+    /**
+     * Sets the radio options to a given array of strings, overwriting any existing list.
+     * @param path forward slash separated unique path to the control element
+     * @param optionsToSet list of options to set
+     */
+    public void radioSetOptions(String path, String[] optionsToSet){
+        String fullPath = getFolder() + path;
+        if(isPathTakenByUnexpectedType(fullPath, RadioFolderNode.class)){
+            return;
+        }
+        RadioFolderNode node = (RadioFolderNode) findNode(fullPath);
+        if (node != null) {
+            node.setOptions(optionsToSet, null);
         }
     }
 
