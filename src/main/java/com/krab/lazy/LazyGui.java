@@ -18,9 +18,13 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
 import static com.krab.lazy.stores.GlobalReferences.gui;
@@ -1269,6 +1273,24 @@ public class LazyGui  {
      */
     public void showGui(){
         LayoutStore.setIsGuiHidden(false);
+    }
+
+    /**
+     * Returns the current version of the library as a string in the format v{major}.{minor}.{patch} according to semantic versioning.
+     * Example: v1.6.0
+     * @return "prettyVersion" value from library.properties
+     */
+    public String getVersion(){
+        Properties prop = new Properties();
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream("library.properties");
+            prop.load(fileInputStream);
+            fileInputStream.close();
+            return prop.getProperty("prettyVersion");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void updateAllNodeValuesRegardlessOfParentWindowOpenness() {
