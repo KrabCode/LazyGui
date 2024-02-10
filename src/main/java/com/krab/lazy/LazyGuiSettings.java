@@ -1,9 +1,6 @@
 package com.krab.lazy;
 
-import com.krab.lazy.stores.FontStore;
-import com.krab.lazy.stores.HotkeyStore;
-import com.krab.lazy.stores.JsonSaveStore;
-import com.krab.lazy.stores.LayoutStore;
+import com.krab.lazy.stores.*;
 import com.krab.lazy.utils.MouseHiding;
 import com.krab.lazy.themes.Theme;
 import com.krab.lazy.themes.ThemeStore;
@@ -45,6 +42,7 @@ public class LazyGuiSettings {
     private int smoothingValue;
     private boolean showSquigglyEquals = false;
     private boolean isMouseWheelPrecisionActive = true;
+    private int keyboardMillisDelay = 500;
 
     /**
      * Constructor, call this before any other function here.
@@ -95,6 +93,7 @@ public class LazyGuiSettings {
         LayoutStore.setIsGuiHidden(startWithGuiHidden);
         LayoutStore.setHideRadioValue(hideRadioValue);
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
+        DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if(sketchNameOverride != null){
             LayoutStore.setOverridingSketchName(sketchNameOverride);
@@ -382,6 +381,11 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setHotkeyMouseWheelActive(boolean shouldMouseChangePrecision){
         this.isMouseWheelPrecisionActive = shouldMouseChangePrecision;
+        return this;
+    }
+
+    public LazyGuiSettings setKeyboardDelay(int millisDelayToSet){
+        this.keyboardMillisDelay = millisDelayToSet;
         return this;
     }
 
