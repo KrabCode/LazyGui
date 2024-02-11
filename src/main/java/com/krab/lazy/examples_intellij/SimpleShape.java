@@ -40,10 +40,7 @@ public class SimpleShape extends PApplet {
             });
         }
         if(gui.button("restore normal options")){
-            gui.radioSetOptions("shape type", new String[]{
-                    "ellipse",
-                    "rectangle"
-            });
+            gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
         }
         if(gui.button("remove all options")){
             gui.radioSetOptions("shape type", new String[]{});

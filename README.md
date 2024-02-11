@@ -38,7 +38,7 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
   * [How to compile and run this library](#how-to-compile-and-run-this-library)
-<!-- TOC -->
+<!-- TOC -->````
 
 ## LazyGui is a GUI library for Processing
 
@@ -249,12 +249,16 @@ if (mode.equals("square")) {
 // getter that specifies a default
 gui.radio("mode", stringArray, defaultOption);
 
-// setter
+// setter that changes the currently selected option
 gui.radioSet("mode", "square");
+
+// setter that specifies new options for an existing radio
+gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
 ```
 - opens a folder of toggles where setting one to true sets all others to false
 - returns the selected option as a string
-- any changes to the available options will be ignored after the radio is first initialized
+- changes to the options parameter will be ignored after the radio is first initialized
+- the options can only be changed at runtime with `radioSetOptions()`
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
 ## Hotkeys
