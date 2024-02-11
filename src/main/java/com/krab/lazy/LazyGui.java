@@ -17,9 +17,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -1281,10 +1279,10 @@ public class LazyGui  {
      */
     public String getVersion(){
         Properties prop = new Properties();
+        String fileName = "library.properties";
+        InputStream resourceStream = LazyGui.class.getClassLoader().getResourceAsStream(fileName);
         try {
-            FileInputStream fileInputStream = new FileInputStream("library.properties");
-            prop.load(fileInputStream);
-            fileInputStream.close();
+            prop.load(resourceStream);
             return prop.getProperty("prettyVersion");
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -28,6 +28,7 @@ shadowJar {
         include(dependency('com.google.code.gson:gson:2.8.9'))
     }
     from("data")
+    from("library.properties")
     from compileJava
     from processResources
     from sourceSets.main.allSource
