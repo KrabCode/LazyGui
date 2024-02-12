@@ -31,6 +31,7 @@ public class JsonSaveStore {
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    private static String dataFolderRootPath = "gui";
 
     public static void registerExitHandler() {
         Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createNewAutosave));
@@ -109,7 +110,7 @@ public class JsonSaveStore {
         assert saveFiles != null;
         saveFilesSorted = new ArrayList<>(Arrays.asList(saveFiles));
         saveFilesSorted.removeIf(file -> !file.isFile() || !file.getAbsolutePath().contains(JSON_TYPE_EXTENSION));
-        if (saveFilesSorted.size() == 0) {
+        if (saveFilesSorted.isEmpty()) {
             return;
         }
         saveFilesSorted.sort((o1, o2) -> Long.compare(o2.lastModified(), o1.lastModified()));
@@ -273,7 +274,7 @@ public class JsonSaveStore {
 
     public static String getGuiDataFolderPath(String innerPath) {
         return GlobalReferences.app.dataPath(
-                Paths.get("gui", GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
+                Paths.get(dataFolderRootPath, GlobalReferences.app.getClass().getSimpleName(), innerPath).toString());
     }
 
     private static String getFullFilePathWithJsonFileType(String filename) {
@@ -292,5 +293,9 @@ public class JsonSaveStore {
 
     public static File getSaveDir() {
         return saveDir;
+    }
+
+    public static void setCustomGuiDataFolder(String customPath) {
+        dataFolderRootPath = customPath;
     }
 }

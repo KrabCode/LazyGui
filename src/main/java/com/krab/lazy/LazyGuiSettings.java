@@ -43,6 +43,7 @@ public class LazyGuiSettings {
     private boolean showSquigglyEquals = false;
     private boolean isMouseWheelPrecisionActive = true;
     private int keyboardMillisDelay = 500;
+    private String customGuiDataFolder = null;
 
     /**
      * Constructor, call this before any other function here.
@@ -75,6 +76,9 @@ public class LazyGuiSettings {
     }
 
     void applyEarlyStartupSettings() {
+        if (customGuiDataFolder != null) {
+            JsonSaveStore.setCustomGuiDataFolder(customGuiDataFolder);
+        }
         JsonSaveStore.autosaveOnExitEnabled = autosaveOnExitEnabled;
         JsonSaveStore.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
         JsonSaveStore.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
@@ -95,13 +99,13 @@ public class LazyGuiSettings {
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
-        if(sketchNameOverride != null){
+        if (sketchNameOverride != null) {
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
     }
 
     void applyLateStartupSettings() {
-        if(hideBuiltInFolders){
+        if (hideBuiltInFolders) {
             gui.hide(gui.optionsFolderName);
             gui.hide(gui.savesFolderName);
         }
@@ -141,7 +145,7 @@ public class LazyGuiSettings {
      * Should the built-in folders start hidden?
      * That is the automatically created gui folders like "options" and "saves".
      * They will still exist and will try to load their values from json
-     *  (unless overriden with other constructor settings)
+     * (unless overriden with other constructor settings)
      * and the gui will still use their current values, they will just hide from the user.
      * You can reveal them again after initialization with <code>gui.show("options")</code> and <code>gui.show("saves")</code>
      *
@@ -149,7 +153,6 @@ public class LazyGuiSettings {
      * @return this settings object for chaining statements easily
      * @see #setLoadLatestSaveOnStartup(boolean)
      * @see #setAutosaveOnExit(boolean)
-     *
      */
     public LazyGuiSettings setHideBuiltInFolders(boolean shouldHideFolders) {
         this.hideBuiltInFolders = shouldHideFolders;
@@ -258,7 +261,8 @@ public class LazyGuiSettings {
         return this;
     }
 
-    /** Should the mouse be locked inside the sketch window? You can still exit the sketch with ESC.
+    /**
+     * Should the mouse be locked inside the sketch window? You can still exit the sketch with ESC.
      *
      * @param mouseShouldConfineToWindow confine mouse to sketch window
      * @return this settings object for chaining statements easily
@@ -325,7 +329,7 @@ public class LazyGuiSettings {
      * @param shouldAutosuggest should the windows try to auto-detect optimal width?
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setAutosuggestWindowWidth(boolean shouldAutosuggest){
+    public LazyGuiSettings setAutosuggestWindowWidth(boolean shouldAutosuggest) {
         this.autosuggestWindowWidth = shouldAutosuggest;
         return this;
     }
@@ -340,7 +344,7 @@ public class LazyGuiSettings {
      * @see <a href="https://processing.org/reference/smooth_.html">smooth()</a>
      * @see <a href="https://github.com/processing/processing4/issues/694">a value of 8 breaks PGraphics on some machines</a>
      */
-    public LazyGuiSettings setSmooth(int smoothValue){
+    public LazyGuiSettings setSmooth(int smoothValue) {
         this.smoothingValue = smoothValue;
         return this;
     }
@@ -350,10 +354,11 @@ public class LazyGuiSettings {
      * This can be useful when you want to use radio buttons with longer string values.
      * The option strings will still be visible once you open the radio folder.
      * This applies globally to all radio buttons and the value text is visible by default.
-     * @return this settings object for chaining statements easily
+     *
      * @param hideRadioValue whether to hide the radio value text
+     * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setHideRadioValue(boolean hideRadioValue){
+    public LazyGuiSettings setHideRadioValue(boolean hideRadioValue) {
         this.hideRadioValue = hideRadioValue;
         return this;
     }
@@ -363,8 +368,9 @@ public class LazyGuiSettings {
      * This happens when the display value is rounded by the currently selected slider precision (controlled by the mouse wheel).
      * This is false by default, assuming people care more about the horizontal space that would be taken up by '≈ ' than the exact precision of the values.
      * Even when true, this doesn't show it everywhere, (for example in plot rows where multiple slider values are combined, because the horizontal space is very limited there), for more details about the implementation see <pre>SliderNode.displaySquigglyEquals</pre> and the related SliderNode constructor that sets it.
-     * @return this settings object for chaining statements easily
+     *
      * @param showSquigglyEquals whether to show the squiggly equals '≈' in sliders where the underlying values are not exactly what is shown
+     * @return this settings object for chaining statements easily
      */
     public LazyGuiSettings setShowSquigglyEqualsInsideSliders(boolean showSquigglyEquals) {
         this.showSquigglyEquals = showSquigglyEquals;
@@ -376,21 +382,38 @@ public class LazyGuiSettings {
      * This is true by default, but it can be useful to disable if you don't have a good mouse wheel.
      * Alternative hotkeys to achieve a change of precision are '*' and '/'.
      * You can also change precision by typing in a numeric value into the slider like 0.56, which the slider will detect and match by setting the precision to 0.01.
+     *
      * @param shouldMouseChangePrecision whether the mouse wheel should change the precision of the slider
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setHotkeyMouseWheelActive(boolean shouldMouseChangePrecision){
+    public LazyGuiSettings setHotkeyMouseWheelActive(boolean shouldMouseChangePrecision) {
         this.isMouseWheelPrecisionActive = shouldMouseChangePrecision;
         return this;
     }
 
     /**
      * Set the delay in milliseconds for the keyboard buffer to be considered a new input.
+     *
      * @param millisDelayToSet the delay in milliseconds
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setKeyboardDelay(int millisDelayToSet){
+    public LazyGuiSettings setKeyboardDelay(int millisDelayToSet) {
         this.keyboardMillisDelay = millisDelayToSet;
+        return this;
+    }
+
+    /**
+     * Set a custom data folder for the gui to use for json saves and png screenshots.
+     * Can be either absolute path or relative to the sketch data folder.
+     * It is inside the individual sketch data folder by default under /gui/.
+     * Multiple sketches can use the same path, their data will still be separated by their sketch names.
+     * The data folder will be created if it doesn't exist.
+     *
+     * @param customPath the custom path to set, "gui" by default
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setCustomGuiDataFolder(String customPath) {
+        this.customGuiDataFolder = customPath;
         return this;
     }
 
