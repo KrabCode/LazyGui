@@ -1,7 +1,7 @@
 ###### notes by and for krab, the author of this repo, who is the only one creating new official releases for now
 
 ---
-### How to update the javadocs
+### Regenerate the javadocs
 - If the public facing API changed then regenerate javadocs on the master branch from the `Generate Javadoc...` IntelliJ window
 - Settings:
   - Custom scope to only include `com.krab.lazy.*` (should only be around 6 classes that constitute the public facing API)
@@ -10,7 +10,7 @@
 - Pushing the new \docs to master will then automatically publish the docs at https://krabcode.github.io/LazyGui/
 ---
 
-### How to create a new library release for the PDE
+### Create a new library release for the PDE
 
 - Increment the versions in [library.properties](library.properties) according to [semantic versioning](https://semver.org/)
 - Run `gradle shadowJar` to create a new jar file in the `build/libs` directory including gson classes but not processing classes
