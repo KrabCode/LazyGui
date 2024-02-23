@@ -1077,7 +1077,7 @@ public class LazyGui  {
 
     /**
      * Pushes a folder name to the global path prefix stack.
-     * Can be used multiple times in pairs just like pushMatrix and popMatrix().
+     * Can be used multiple times in pairs just like pushMatrix() and popMatrix().
      * Removes leading and trailing slashes to enforce consistency, but allows slashes to appear either escaped or anywhere else inside the string.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.
@@ -1105,7 +1105,7 @@ public class LazyGui  {
 
     /**
      * Pops the last pushed folder name from the global path prefix stack.
-     * Can be used multiple times in pairs just like pushMatrix and popMatrix().
+     * Can be used multiple times in pairs just like pushMatrix() and popMatrix().
      * Warns once when the stack is empty and popFolder() is attempted.
      * Any GUI control element call will apply all the folders in the stack as a prefix to their own path parameter.
      * This is useful for not repeating the whole path string every time you want to call a control element.

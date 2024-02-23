@@ -38,7 +38,7 @@ Table of Contents
   * [Further reading](#further-reading)
   * [How to contribute](#how-to-contribute)
   * [How to compile and run this library](#how-to-compile-and-run-this-library)
-<!-- TOC -->````
+<!-- TOC -->
 
 ## LazyGui is a GUI library for Processing
 
