@@ -24,21 +24,26 @@ public class UndoRedoStore {
 
     static final ArrayList<String> stateStack = new ArrayList<>();
     static int stateIndex = 0;
+    static int lastFrameWhenStateChanged = 0;
 
     public static void init(){
         onUndoableActionEnded();
     }
 
     public static void onUndoableActionEnded(){
+        if(lastFrameWhenStateChanged == GlobalReferences.app.frameCount){
+            return;
+        }
         String newState = JsonSaveStore.getTreeAsJsonString();
         if(!somethingActuallyChanged(newState)){
             return;
         }
+        lastFrameWhenStateChanged = GlobalReferences.app.frameCount;
         trimStack(stateIndex);
         stateStack.add(0, newState);
         stateIndex = 0;
         if(debugPrint){
-            println("new action added at 0, current list:");
+            println("undo/redo frame " + GlobalReferences.app.frameCount + " new action current list size:" + stateStack.size());
             printStack();
         }
     }

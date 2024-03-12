@@ -205,6 +205,7 @@ public class LazyGui  {
         targetCanvas.hint(ENABLE_DEPTH_TEST);
         takeScreenshotIfRequested();
         JsonSaveStore.updateEndlessLoopDetection();
+        ChangeStore.onDrawFinished();
     }
 
     static void resetSketchMatrixInAnyRenderer() {
@@ -1073,6 +1074,18 @@ public class LazyGui  {
             insertNodeAtItsPath(node);
         }
         return node.getGradientColorAt(position);
+    }
+
+    /**
+     * Returns whether a control element has changed this frame.
+     * Only true for exactly one frame during or following the change.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @return true if the control element value has changed this frame, false otherwise
+     */
+    boolean hasChanged(String path){
+        String fullPath = getFolder() + path;
+        return ChangeStore.hasChanged(fullPath);
     }
 
     /**

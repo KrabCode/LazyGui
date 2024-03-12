@@ -182,18 +182,21 @@ public abstract class AbstractNode {
     public void mousePressedOverNode(float x, float y) {
         isInlineNodeDragged = true;
         isMouseOverNode = true;
+        println("mousePressedOverNode(): " + path);
     }
 
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isInlineNodeDragged){
+            println("mouseReleasedAnywhere() and isInlineNodeDragged: " + path);
             e.setConsumed(true);
-            onActionEnded();
         }
         isInlineNodeDragged = false;
     }
 
     public void onActionEnded(){
-        UndoRedoStore.onUndoableActionEnded();
+        // TODO re-enable undo/redo when fixed
+//        UndoRedoStore.onUndoableActionEnded();
+        ChangeStore.onChange(path);
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {

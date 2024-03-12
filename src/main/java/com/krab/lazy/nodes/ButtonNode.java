@@ -62,6 +62,9 @@ public class ButtonNode extends AbstractNode {
     public boolean getBooleanValueAndSetItToFalse() {
         boolean result = valueBoolean;
         valueBoolean = false;
+        if(result){
+            onActionEnded();
+        }
         return result;
     }
 }

@@ -102,6 +102,7 @@ public class RadioFolderNode extends FolderNode {
             if (option.valueBoolean && !oldValue) {
                 valueString = option.valueString;
                 setAllOtherOptionsToFalse(option);
+                onActionEnded();
                 break;
             }
         }

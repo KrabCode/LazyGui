@@ -66,6 +66,7 @@ public class SliderNode extends AbstractNode {
     private final String shaderPath = "sliderBackground.glsl";
     protected int maximumFloatPrecisionIndex = -1;
     protected int minimumFloatPrecisionIndex = -1;
+    private String valueStringWhenMouseDragStarted = null;
 
     public SliderNode(String path, FolderNode parentFolder, float defaultValue, float min, float max, boolean constrained, boolean displaySquigglyEquals){
         this(path, parentFolder, defaultValue, min, max, constrained);
@@ -313,6 +314,21 @@ public class SliderNode extends AbstractNode {
             }
             e.consume();
         }
+    }
+
+    @Override
+    public void mousePressedOverNode(float x, float y) {
+        super.mousePressedOverNode(x, y);
+        valueStringWhenMouseDragStarted = getValueAsString();
+    }
+
+    @Override
+    public void mouseReleasedAnywhere(LazyMouseEvent e) {
+        super.mouseReleasedAnywhere(e);
+        if(valueStringWhenMouseDragStarted != null && !valueStringWhenMouseDragStarted.equals(getValueAsString())){
+            onActionEnded();
+        }
+        valueStringWhenMouseDragStarted = null;
     }
 
     private void tryReadNumpadInput(LazyKeyEvent e) {

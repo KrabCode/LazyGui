@@ -37,7 +37,7 @@ public class ColorPickerFolderNode extends FolderNode {
     }
 
     protected void lazyInitNodes() {
-        if (children.size() > 0) {
+        if (!children.isEmpty()) {
             return;
         }
         children.add(new ColorPreviewNode(path + "/preview", this));
