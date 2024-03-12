@@ -47,9 +47,9 @@ void style() {
   stroke(gui.colorPicker("stroke", color(0)).hex);
   fill(gui.colorPicker("fill", color(200)).hex);
   String rectMode = gui.radio("rect mode", new String[]{"center", "corner"});
-  if("center".equals(rectMode)){
+  if ("center".equals(rectMode)) {
     rectMode(CENTER);
-  }else{
+  } else {
     rectMode(CORNER);
   }
   gui.popFolder();
@@ -65,6 +65,7 @@ void font() {
   gui.pushFolder("font");
   fill(gui.colorPicker("fill", color(0)).hex);
   int size = gui.sliderInt("size", 64, 1, 256);
+  float leading = gui.slider("leading", 64);
   if (xAligns == null || yAligns == null) {
     xAligns = new HashMap<String, Integer>();
     xAligns.put("left", LEFT);
@@ -78,7 +79,7 @@ void font() {
   String xAlignSelection = gui.radio("align x", xAligns.keySet().toArray(new String[0]), "center");
   String yAlignSelection = gui.radio("align y", yAligns.keySet().toArray(new String[0]), "center");
   textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
-  String fontName = gui.text("font name", "Arial");
+  String fontName = gui.text("font name", "Arial").trim();
   if (gui.button("list fonts")) {
     String[] fonts = PFont.list();
     for (String font : fonts) {
@@ -93,5 +94,6 @@ void font() {
   }
   PFont cachedFont = fontCache.get(fontKey);
   textFont(cachedFont);
+  textLeading(leading);
   gui.popFolder();
 }
