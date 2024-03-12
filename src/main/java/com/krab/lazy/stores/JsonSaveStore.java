@@ -8,10 +8,8 @@ import com.krab.lazy.nodes.FolderNode;
 import com.krab.lazy.nodes.NodeType;
 import com.krab.lazy.nodes.AbstractNode;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,8 +28,12 @@ public class JsonSaveStore {
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
-    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     private static String dataFolderRootPath = "gui";
+    private static final Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setPrettyPrinting()
+            .setLenient()
+            .create();
 
     public static void registerExitHandler() {
         Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createNewAutosave));
@@ -128,9 +130,8 @@ public class JsonSaveStore {
     static void overwriteFile(String fullPath, String content) {
         Path path = Paths.get(fullPath);
         lazyInitDir(path.getParent().toFile());
-        BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(fullPath, false));
+            BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             writer.write(content);
             writer.close();
             println("Created new save: " + fullPath);
