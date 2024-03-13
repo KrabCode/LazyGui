@@ -193,10 +193,15 @@ public abstract class AbstractNode {
         isInlineNodeDragged = false;
     }
 
-    public void onActionEnded(){
+    public void onActionEnded() {
         // TODO re-enable undo/redo when fixed
 //        UndoRedoStore.onUndoableActionEnded();
-        ChangeStore.onChange(path);
+
+        ChangeStore.onValueChangingActionEnded(path);
+        if(parent != null){
+            // go up a path level recursively and keep notifying of a change until the root node is reached
+            parent.onActionEnded();
+        }
     }
 
     public void keyPressedOverNode(LazyKeyEvent e, float x, float y) {

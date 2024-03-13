@@ -1077,13 +1077,13 @@ public class LazyGui  {
     }
 
     /**
-     * Returns whether a control element has changed this frame.
-     * Only true for exactly one frame during or following the change.
+     * Returns whether a control element or any of its recursively nested children has changed this frame.
+     * Only true for exactly one frame after the change.
      *
      * @param path forward slash separated unique path to the control element
      * @return true if the control element value has changed this frame, false otherwise
      */
-    boolean hasChanged(String path){
+    public boolean hasChanged(String path){
         String fullPath = getFolder() + path;
         return ChangeStore.hasChanged(fullPath);
     }

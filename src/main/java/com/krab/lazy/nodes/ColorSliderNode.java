@@ -19,7 +19,6 @@ abstract class ColorSliderNode extends SliderNode {
     final ColorPickerFolderNode parentColorPickerFolder;
     private final String colorShaderPath = "sliderBackgroundColor.glsl";
     protected int shaderColorMode = -1;
-    private String valueHexWhenMouseDragStarted = null;
 
     ColorSliderNode(String path, ColorPickerFolderNode parentFolder) {
         super(path, parentFolder, 0, 0, 1, true);
@@ -42,21 +41,6 @@ abstract class ColorSliderNode extends SliderNode {
     public void mouseReleasedOverNode(float x, float y) {
         super.mouseReleasedOverNode(x, y);
         updateColorInParentFolder();
-    }
-
-    @Override
-    public void mousePressedOverNode(float x, float y) {
-        super.mousePressedOverNode(x, y);
-        valueHexWhenMouseDragStarted = parentColorPickerFolder.getHexString();
-    }
-
-    @Override
-    public void mouseReleasedAnywhere(LazyMouseEvent e) {
-        super.mouseReleasedAnywhere(e);
-        if(e.isConsumed() && valueHexWhenMouseDragStarted != null && !valueHexWhenMouseDragStarted.equals(parentColorPickerFolder.getHexString())){
-            parentColorPickerFolder.onActionEnded();
-        }
-        valueHexWhenMouseDragStarted = null;
     }
 
     @Override

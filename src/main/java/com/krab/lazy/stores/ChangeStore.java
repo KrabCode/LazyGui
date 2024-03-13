@@ -10,18 +10,25 @@ import java.util.ArrayList;
  *
  */
 public class ChangeStore {
-    static ArrayList<String> pathsThatChanged = new ArrayList<>();
+    static ArrayList<String> pathsThatChangedThisFrame = new ArrayList<>();
+    static ArrayList<String> pathsThatChangedLastFrame = new ArrayList<>();
 
-    public static void onChange(String path) {
-        pathsThatChanged.add(path);
+    public static void onValueChangingActionEnded(String path) {
+        pathsThatChangedThisFrame.add(path);
         PApplet.println("frame " + GlobalReferences.app.frameCount +" changed \"" + path + "\"");
     }
 
     public static void onDrawFinished(){
-        pathsThatChanged.clear();
+        pathsThatChangedLastFrame.clear();
+        pathsThatChangedLastFrame.addAll(pathsThatChangedThisFrame);
+        pathsThatChangedThisFrame.clear();
     }
 
     public static boolean hasChanged(String path){
-        return pathsThatChanged.contains(path);
+        boolean result = pathsThatChangedLastFrame.contains(path);
+        if(result){
+            PApplet.println("frame " + GlobalReferences.app.frameCount +" queried \"" + path + "\" = " + result);
+        }
+        return result;
     }
 }
