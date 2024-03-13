@@ -1,8 +1,5 @@
 package com.krab.lazy.stores;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-
 import java.util.ArrayList;
 
 import static processing.core.PApplet.println;
@@ -19,26 +16,16 @@ import static processing.core.PApplet.println;
  */
 public class UndoRedoStore {
     private static final boolean debugPrint = false;
-    private static final String debugTopLevelTextNodeName = "font size";
-    private static final String debugNodeValueKey = "valueFloat";
 
     static final ArrayList<String> stateStack = new ArrayList<>();
     static int stateIndex = 0;
-    static int lastFrameWhenStateChanged = 0;
 
     public static void init(){
         onUndoableActionEnded();
     }
 
     public static void onUndoableActionEnded(){
-        if(lastFrameWhenStateChanged == GlobalReferences.app.frameCount){
-            return;
-        }
         String newState = JsonSaveStore.getTreeAsJsonString();
-        if(!somethingActuallyChanged(newState)){
-            return;
-        }
-        lastFrameWhenStateChanged = GlobalReferences.app.frameCount;
         trimStack(stateIndex);
         stateStack.add(0, newState);
         stateIndex = 0;
@@ -46,13 +33,6 @@ public class UndoRedoStore {
             println("undo/redo frame " + GlobalReferences.app.frameCount + " new action current list size:" + stateStack.size());
             printStack();
         }
-    }
-
-    private static boolean somethingActuallyChanged(String newState) {
-        if(stateStack.isEmpty()){
-            return true;
-        }
-        return !stateStack.get(stateIndex).equals(newState);
     }
 
     private static void trimStack(int stateIndex) {
@@ -105,21 +85,8 @@ public class UndoRedoStore {
 
     private static void printStack() {
         for(int i = 0; i < stateStack.size(); i++){
-            println(i == stateIndex ? "(" + i + ")" : " " + i + " ",
-                    "\"" + parseTextValue(stateStack.get(i)) + "\"");
+            println(i == stateIndex ? "(" + i + ")" : " " + i + " ");
         }
         println("---\n");
     }
-
-    private static String parseTextValue(String fullJsonSave) {
-        JsonElement root = JsonSaveStore.getJsonElementFromString(fullJsonSave);
-        JsonArray children = root.getAsJsonObject().get("children").getAsJsonArray();
-        for (int i = 0; i < children.size(); i++) {
-            if(children.get(i).getAsJsonObject().get("path").getAsString().equals(debugTopLevelTextNodeName)){
-                return children.get(i).getAsJsonObject().get(debugNodeValueKey).getAsString();
-            }
-        }
-        return "not found";
-    }
-
 }

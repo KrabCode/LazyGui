@@ -25,16 +25,15 @@ public class Gradient extends PApplet {
     }
 
     public void draw() {
-        if(gui.hasChanged("circles")){
-            println("circles changed");
-            background(defaultBackgroundColor);
-        }
         fadeToBlack();
         drawNewCircles();
     }
 
     void drawNewCircles() {
         gui.pushFolder("circles");
+        if(gui.hasChanged()){
+            background(defaultBackgroundColor);
+        }
         gui.gradient("fill", new int[]{
                 //specify default colors for this gradient
                 unhex("FFF6E1C3"),

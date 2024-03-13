@@ -182,24 +182,19 @@ public abstract class AbstractNode {
     public void mousePressedOverNode(float x, float y) {
         isInlineNodeDragged = true;
         isMouseOverNode = true;
-        println("mousePressedOverNode(): " + path);
     }
 
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         if(isInlineNodeDragged){
-            println("mouseReleasedAnywhere() and isInlineNodeDragged: " + path);
             e.setConsumed(true);
         }
         isInlineNodeDragged = false;
     }
 
     public void onValueChangingActionEnded() {
-        // TODO re-enable undo/redo when fixed
-//        UndoRedoStore.onUndoableActionEnded();
-
-        ChangeStore.onValueChangingActionEnded(path);
+        ChangeListener.onValueChangingActionEnded(path);
         if(parent != null){
-            // go up a path level recursively and keep notifying of a change until the root node is reached
+            // go up the parent chain recursively and keep notifying of a change until the root node is reached
             parent.onValueChangingActionEnded();
         }
     }

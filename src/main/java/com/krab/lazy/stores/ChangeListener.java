@@ -1,6 +1,6 @@
 package com.krab.lazy.stores;
 
-import processing.core.PApplet;
+import com.krab.lazy.utils.NodePaths;
 
 import java.util.ArrayList;
 
@@ -9,26 +9,25 @@ import java.util.ArrayList;
  * Paths mentioned here are gui paths, not file paths.
  *
  */
-public class ChangeStore {
+public class ChangeListener {
     static ArrayList<String> pathsThatChangedThisFrame = new ArrayList<>();
     static ArrayList<String> pathsThatChangedLastFrame = new ArrayList<>();
 
     public static void onValueChangingActionEnded(String path) {
         pathsThatChangedThisFrame.add(path);
-        PApplet.println("frame " + GlobalReferences.app.frameCount +" changed \"" + path + "\"");
     }
 
-    public static void onDrawFinished(){
+    public static void onFrameFinished(){
         pathsThatChangedLastFrame.clear();
+        if(!pathsThatChangedThisFrame.isEmpty()){
+            UndoRedoStore.onUndoableActionEnded();
+        }
         pathsThatChangedLastFrame.addAll(pathsThatChangedThisFrame);
         pathsThatChangedThisFrame.clear();
     }
 
-    public static boolean hasChanged(String path){
-        boolean result = pathsThatChangedLastFrame.contains(path);
-        if(result){
-            PApplet.println("frame " + GlobalReferences.app.frameCount +" queried \"" + path + "\" = " + result);
-        }
-        return result;
+    public static boolean hasChangeFinishedLastFrame(String path){
+        String pathWithoutTrailingSlash = NodePaths.getPathWithoutTrailingSlash(path);
+        return pathsThatChangedLastFrame.contains(pathWithoutTrailingSlash);
     }
 }

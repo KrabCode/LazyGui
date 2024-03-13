@@ -31,5 +31,12 @@ public class NodePaths {
     public static String getNameWithoutPrefixSlash(String name) {
         return name.replaceAll(REGEX_UNESCAPED_SLASH_LOOKBEHIND, "");
     }
+
+    public static String getPathWithoutTrailingSlash(String path){
+        if(path.endsWith("/")){
+            return path.substring(0, path.length() - 1);
+        }
+        return path;
+    }
 }
 

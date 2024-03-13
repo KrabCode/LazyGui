@@ -205,7 +205,7 @@ public class LazyGui  {
         targetCanvas.hint(ENABLE_DEPTH_TEST);
         takeScreenshotIfRequested();
         JsonSaveStore.updateEndlessLoopDetection();
-        ChangeStore.onDrawFinished();
+        ChangeListener.onFrameFinished();
     }
 
     static void resetSketchMatrixInAnyRenderer() {
@@ -1076,16 +1076,31 @@ public class LazyGui  {
         return node.getGradientColorAt(position);
     }
 
+
+    /**
+     * Returns whether anything in the current path stack changed last frame.
+     * Only true for exactly one frame after the change. Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
+     * Equivalent to passing an empty string parameter to the overloaded hasChanged(String path), i.e. `hasChanged("")`.
+     * When called outside any pushFolder() and popFolder() calls, it will return true if anything in the whole gui has changed.
+     *
+     * @return true if the control element value has changed this frame, false otherwise
+     */
+    public boolean hasChanged(){
+        String fullPath = getFolder();
+        return ChangeListener.hasChangeFinishedLastFrame(fullPath);
+    }
+
     /**
      * Returns whether a control element or any of its recursively nested children has changed this frame.
-     * Only true for exactly one frame after the change.
+     * Only true for exactly one frame after the change. Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
+     * Prepends the current path stack to the path.
      *
      * @param path forward slash separated unique path to the control element
      * @return true if the control element value has changed this frame, false otherwise
      */
     public boolean hasChanged(String path){
         String fullPath = getFolder() + path;
-        return ChangeStore.hasChanged(fullPath);
+        return ChangeListener.hasChangeFinishedLastFrame(fullPath);
     }
 
     /**
