@@ -193,14 +193,14 @@ public abstract class AbstractNode {
         isInlineNodeDragged = false;
     }
 
-    public void onActionEnded() {
+    public void onValueChangingActionEnded() {
         // TODO re-enable undo/redo when fixed
 //        UndoRedoStore.onUndoableActionEnded();
 
         ChangeStore.onValueChangingActionEnded(path);
         if(parent != null){
             // go up a path level recursively and keep notifying of a change until the root node is reached
-            parent.onActionEnded();
+            parent.onValueChangingActionEnded();
         }
     }
 

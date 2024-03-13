@@ -152,7 +152,7 @@ public class ColorPickerFolderNode extends FolderNode {
                 int pastedHex = (int) Long.parseLong(pastedString, 16);
                 setHex(pastedHex);
                 loadValuesFromHex(false);
-                onActionEnded();
+                onValueChangingActionEnded();
             } catch (NumberFormatException nfe) {
                 println("Could not parse hex color from input string: \"" + pastedString + "\"");
             }

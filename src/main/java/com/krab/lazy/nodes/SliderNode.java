@@ -326,7 +326,7 @@ public class SliderNode extends AbstractNode {
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         super.mouseReleasedAnywhere(e);
         if(valueStringWhenMouseDragStarted != null && !valueStringWhenMouseDragStarted.equals(getValueAsString())){
-            onActionEnded();
+            onValueChangingActionEnded();
         }
         valueStringWhenMouseDragStarted = null;
     }
@@ -352,7 +352,6 @@ public class SliderNode extends AbstractNode {
             case '+':
             case '-':
                 if (inReplaceMode) {
-                    //noinspection ConcatenationWithEmptyString
                     numpadBufferValue = "" + e.getKey();
                 }
                 setNumpadInputActiveStarted();
@@ -407,7 +406,7 @@ public class SliderNode extends AbstractNode {
             return false;
         }
         setValueFloat(parsed);
-        onActionEnded();
+        onValueChangingActionEnded();
         return true;
     }
 

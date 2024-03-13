@@ -102,7 +102,7 @@ public class RadioFolderNode extends FolderNode {
             if (option.valueBoolean && !oldValue) {
                 valueString = option.valueString;
                 setAllOtherOptionsToFalse(option);
-                onActionEnded();
+                onValueChangingActionEnded();
                 break;
             }
         }
@@ -119,7 +119,7 @@ public class RadioFolderNode extends FolderNode {
         }
         if (success) {
             setAllOtherOptionsToFalse(optionToSet);
-            onActionEnded();
+            onValueChangingActionEnded();
         }
     }
 

@@ -63,7 +63,7 @@ public class ButtonNode extends AbstractNode {
         boolean result = valueBoolean;
         valueBoolean = false;
         if(result){
-            onActionEnded();
+            onValueChangingActionEnded();
         }
         return result;
     }

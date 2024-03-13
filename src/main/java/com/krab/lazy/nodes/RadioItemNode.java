@@ -14,7 +14,7 @@ class RadioItemNode extends ToggleNode {
     public void mouseReleasedOverNode(float x, float y){
         if(armed && !valueBoolean){ // can only toggle manually to true, toggle to false happens automatically
             valueBoolean = true;
-            onActionEnded();
+            onValueChangingActionEnded();
         }
         armed = false;
     }

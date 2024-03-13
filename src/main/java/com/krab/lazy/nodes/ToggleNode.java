@@ -45,7 +45,7 @@ public class ToggleNode extends AbstractNode {
         super.mouseReleasedOverNode(x,y);
         if(armed){
             valueBoolean = !valueBoolean;
-            onActionEnded();
+            onValueChangingActionEnded();
         }
         armed = false;
     }

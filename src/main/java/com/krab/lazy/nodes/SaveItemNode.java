@@ -27,6 +27,6 @@ class SaveItemNode extends AbstractNode {
     public void mousePressedOverNode(float x, float y) {
         JsonSaveStore.loadStateFromFilePath(fileName);
         WindowManager.setFocus(saveFolderParent.window);
-        onActionEnded();
+        onValueChangingActionEnded();
     }
 }

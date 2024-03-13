@@ -51,7 +51,7 @@ public class TextNode extends AbstractNode {
             lineCount += 1;
         }
         masterInlineNodeHeightInCells = lineCount;
-        String contentToDraw = toDisplay.length() == 0 ? "..." : toDisplay;
+        String contentToDraw = toDisplay.isEmpty() ? "..." : toDisplay;
         fillForegroundBasedOnMouseOver(pg);
         drawContent(pg, contentToDraw);
     }
@@ -139,7 +139,7 @@ public class TextNode extends AbstractNode {
             }
             millisInputStarted = GlobalReferences.app.millis();
             if (e.getKeyCode() == PConstants.BACKSPACE) {
-                if (buffer.length() > 0) {
+                if (!buffer.isEmpty()) {
                     buffer = buffer.substring(0, buffer.length() - 1);
                 }
                 e.consume();
@@ -174,7 +174,7 @@ public class TextNode extends AbstractNode {
 
     private void setStringValueUndoably(String newValue) {
         setStringValue(newValue);
-        onActionEnded();
+        onValueChangingActionEnded();
     }
 
     public void setStringValue(String newValue) {
