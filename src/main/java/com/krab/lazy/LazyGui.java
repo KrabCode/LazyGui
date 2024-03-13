@@ -1078,8 +1078,9 @@ public class LazyGui  {
 
 
     /**
-     * Returns whether anything in the current path stack changed last frame.
-     * Only true for exactly one frame after the change. Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
+     * Returns whether the current folder or any of its recursively nested children changed last frame.
+     * Only true for exactly one frame after the change.
+     * Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
      * Equivalent to passing an empty string parameter to the overloaded hasChanged(String path), i.e. `hasChanged("")`.
      * When called outside any pushFolder() and popFolder() calls, it will return true if anything in the whole gui has changed.
      *
@@ -1091,8 +1092,9 @@ public class LazyGui  {
     }
 
     /**
-     * Returns whether a control element or any of its recursively nested children has changed this frame.
-     * Only true for exactly one frame after the change. Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
+     * Returns whether a control element value, folder or any of its recursively nested children changed last frame.
+     * Only true for exactly one frame after the change.
+     * Calling this function does not change the boolean value it returns, only the next draw() call will reset it.
      * Prepends the current path stack to the path.
      *
      * @param path forward slash separated unique path to the control element
