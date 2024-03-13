@@ -29,6 +29,7 @@ Table of Contents
       * [Folder made by using the stack](#folder-made-by-using-the-stack)
       * [See the current stack for debugging](#see-the-current-stack-for-debugging)
     * [Hide and show anything](#hide-and-show-anything)
+    * [Has a value changed last frame?](#has-a-value-changed-last-frame)
     * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
   * [Live shader reloading](#live-shader-reloading)
@@ -380,6 +381,18 @@ gui.show("myPath") // reveal anything previously hidden at this path
 gui.hideCurrentFolder() // hide the folder at the current path prefix stack
 gui.showCurrentFolder() // show the folder at the current path prefix stack if it has been previously hidden 
 ```
+
+### Has a value changed last frame?
+You can check whether a value has changed last frame with `gui.hasChanged("myPath")` and `gui.hasChanged()`.
+This can be useful when you don't want to do an expensive operation every frame but only when its controlling parameters change.
+
+This works with single control elements, but it also works recursively through any child elements, so you can call it on a folder, and it will return true if any value nested under it has changed.
+
+The result after a change is only true for one frame after a change and then gets reset to false for the next frame.
+These functions respect the current path stack. They do not initialize any new control elements or folders.
+Calling the function does not flip the value to false by itself.
+
+See the [UtilityMethods](https://github.com/KrabCode/LazyGui/blob/1a2d857f89eba45efa4c5522b5425d7c962c69f2/src/main/java/com/krab/lazy/examples/UtilityMethods/UtilityMethods.pde) example which uses it to load a PFont whenever the user changes the font name or size.
 
 ### Folder visuals
 Runtime changes of what a folder row looks like in its parent window. 
