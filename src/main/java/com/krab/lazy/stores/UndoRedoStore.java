@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import static processing.core.PApplet.println;
 
 /**
- * For internal use by LazyGui, it's fed new states by nodes after a change and also triggered manually by the undo/redo hotkeys.
+ * For internal use by LazyGui, it's fed new states by the ChangeListener and also triggered manually by the undo/redo hotkeys.
  * The stateStack is an ordered list of full json saves of the GUI state, which combines undo and redo into one stack
  *      and the stateIndex keeps track of the where we currently are inside the combined stack.
  * Indexes in the stack larger than stateIndex are for undo, indexes before it are redo.
