@@ -38,7 +38,7 @@ public class TextEditor extends PApplet {
     }
 
     // font() related fields
-    HashMap<String, PFont> fontCache = new HashMap<String, PFont>();
+    PFont selectedFont;
     HashMap<String, Integer> xAligns;
     HashMap<String, Integer> yAligns;
 
@@ -68,14 +68,10 @@ public class TextEditor extends PApplet {
                 println(font + "                 "); // some spaces to avoid copying newlines from the console
             }
         }
-        String fontKey = fontName + " | size: " + size;
-        if (!fontCache.containsKey(fontKey)) {
-            PFont loadedFont = createFont(fontName, size);
-            fontCache.put(fontKey, loadedFont);
-            println("Loaded font: " + fontKey);
+        if (selectedFont == null || gui.hasChanged("font name") || gui.hasChanged("size")) {
+            selectedFont = createFont(fontName, size);
         }
-        PFont cachedFont = fontCache.get(fontKey);
-        textFont(cachedFont);
+        textFont(selectedFont);
         textLeading(leading);
         gui.popFolder();
     }
