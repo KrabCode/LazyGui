@@ -176,6 +176,10 @@ public class ShaderReloader {
         long lastKnownUncompilable = -shaderRefreshRateInMillis;
 
         ShaderSnapshot(String fragPath, String vertPath) {
+            if(GlobalReferences.app == null){
+                System.err.println("ShaderReloader was not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
+                throw new NullPointerException();
+            }
             if (vertPath != null) {
                 compiledShader = GlobalReferences.app.loadShader(fragPath, vertPath);
                 vertFile = GlobalReferences.app.dataFile(vertPath);
@@ -233,7 +237,7 @@ public class ShaderReloader {
 
         private void tryCompileNewVersion(long lastModified) {
             if(GlobalReferences.app == null){
-                System.err.println("ShaderReloader is not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
+                System.err.println("ShaderReloader was not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
                 return;
             }
             try {
