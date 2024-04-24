@@ -1,6 +1,7 @@
 package com.krab.lazy;
 
 import com.krab.lazy.stores.GlobalReferences;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -23,6 +24,17 @@ public class ShaderReloader {
 
     private ShaderReloader() {
 
+    }
+
+    /**
+     * Sets the PApplet reference for the ShaderReloader to use when compiling a shader.
+     * Meant to be used in setup() like this: `ShaderReloader.setApplet(this);`
+     * Calling this function is not needed if you initialize LazyGui first, since `new LazyGui(this)` also sets the PApplet for the purposes of ShaderReloader.
+     *
+     * @param applet the PApplet instance to use
+     */
+    public static void setApplet(PApplet applet){
+        GlobalReferences.app = applet;
     }
 
     /**
@@ -220,6 +232,10 @@ public class ShaderReloader {
         }
 
         private void tryCompileNewVersion(long lastModified) {
+            if(GlobalReferences.app == null){
+                System.err.println("ShaderReloader is not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
+                return;
+            }
             try {
                 PShader candidate;
                 if (vertFile == null) {
