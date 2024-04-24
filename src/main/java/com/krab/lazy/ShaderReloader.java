@@ -21,6 +21,7 @@ import static processing.core.PApplet.println;
 public class ShaderReloader {
     private static final ArrayList<ShaderSnapshot> snapshots = new ArrayList<>();
     private static final int shaderRefreshRateInMillis = 36;
+    private static final String nullPAppletErrorMessage = "ShaderReloader was not initialized with a PApplet reference. To fix this either call ShaderReloader.setApplet(this) or call new LazyGui(this) in setup().";
 
     private ShaderReloader() {
 
@@ -177,7 +178,7 @@ public class ShaderReloader {
 
         ShaderSnapshot(String fragPath, String vertPath) {
             if(GlobalReferences.app == null){
-                System.err.println("ShaderReloader was not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
+                System.err.println(nullPAppletErrorMessage);
                 throw new NullPointerException();
             }
             if (vertPath != null) {
@@ -237,7 +238,7 @@ public class ShaderReloader {
 
         private void tryCompileNewVersion(long lastModified) {
             if(GlobalReferences.app == null){
-                System.err.println("ShaderReloader was not initialized with a PApplet reference. Call ShaderReloader.setApplet(this) in setup() or initialize LazyGui first.");
+                System.err.println(nullPAppletErrorMessage);
                 return;
             }
             try {

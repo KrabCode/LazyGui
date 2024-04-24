@@ -17,7 +17,7 @@ public class ShaderWithoutGui extends PApplet {
 
     @Override
     public void setup() {
-//        ShaderReloader.setApplet(this);
+        ShaderReloader.setApplet(this);
     }
 
     @Override
