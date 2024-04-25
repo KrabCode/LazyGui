@@ -444,6 +444,11 @@ PShader shader = ShaderReloader.getShader(shaderPath);
 shader.set("time", (float) 0.001 * millis());
 ShaderReloader.filter(shaderPath);
 ```
+
+For shader compilation to work, ShaderReloader needs a reference to a PApplet, so in `setup()`:
+- either call `new LazyGui(this)` as seen in the [minimal code example](#minimal-code-example)
+- or call `ShaderReloader.setApplet(this)` in case you don't need the GUI in your sketch
+
 see: [Shader Reloader javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/ShaderReloader.html)
 
 ## Input
