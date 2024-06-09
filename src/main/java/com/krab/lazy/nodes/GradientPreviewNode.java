@@ -147,6 +147,9 @@ class GradientPreviewNode extends AbstractNode {
                 abs(colorStopNode.getGradientPos() - posSliderValueWhenDragStarted) < 0.001){
                 // if the color stop was not moved, open the color picker
                 WindowManager.uncoverOrCreateWindow(colorStopNode);
+                // any newly opened and focused window assumes you want to drag it right away with the same mouse press,
+                // here this is not the case since we're already dragging the triangle
+                colorStopNode.window.isBeingDraggedAround = false;
             }
             colorStopNode.posSlider.mouseReleasedAnywhere(e);
             colorStopNode.posSlider.verticalMouseMode = false;
