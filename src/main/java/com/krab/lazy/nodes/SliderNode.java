@@ -60,9 +60,13 @@ public class SliderNode extends AbstractNode {
     private boolean wasNumpadInputActiveLastFrame = false;
 
 
+    public static final String REGEX_NO_SYMBOL_OR_MINUS = "[-*]";
     private static final String REGEX_FRACTION_SEPARATOR = "[.,]";
     private static final String REGEX_ANY_NUMBER_SERIES = "[0-9]*";
-    private static final String FRACTIONAL_FLOAT_REGEX = REGEX_ANY_NUMBER_SERIES + REGEX_FRACTION_SEPARATOR + REGEX_ANY_NUMBER_SERIES;
+    private static final String FRACTIONAL_FLOAT_REGEX = REGEX_NO_SYMBOL_OR_MINUS
+                                                        + REGEX_ANY_NUMBER_SERIES
+                                                        + REGEX_FRACTION_SEPARATOR
+                                                        + REGEX_ANY_NUMBER_SERIES;
     private final String shaderPath = "sliderBackground.glsl";
     protected int maximumFloatPrecisionIndex = -1;
     protected int minimumFloatPrecisionIndex = -1;
