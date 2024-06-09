@@ -49,6 +49,12 @@ public class MouseDrawing extends PApplet {
             canvas.endDraw();
         }
         image(canvas, 0, 0);
+
+        if(gui.isMouseOutsideGui()){
+            fill(255);
+            noStroke();
+            ellipse(width - 20, height - 20, 10, 10);
+        }
     }
 
     public void mousePressed() {

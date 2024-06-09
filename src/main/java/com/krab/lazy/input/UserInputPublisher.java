@@ -1,6 +1,7 @@
 package com.krab.lazy.input;
 
 import com.krab.lazy.stores.GlobalReferences;
+import com.krab.lazy.stores.LayoutStore;
 import com.krab.lazy.stores.UndoRedoStore;
 import com.krab.lazy.utils.KeyCodes;
 import processing.event.KeyEvent;
@@ -138,7 +139,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        mouseFallsThroughThisFrame = !e.isConsumed();
+        updateMouseFallThroughState(e);
     }
 
     void mouseReleased(MouseEvent event) {
@@ -149,7 +150,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        mouseFallsThroughThisFrame = !e.isConsumed();
+        updateMouseFallThroughState(e);
     }
 
     void mouseMoved(MouseEvent event) {
@@ -160,7 +161,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        mouseFallsThroughThisFrame = !e.isConsumed();
+        updateMouseFallThroughState(e);
     }
 
     void mouseDragged(MouseEvent event) {
@@ -171,7 +172,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        mouseFallsThroughThisFrame = !e.isConsumed();
+        updateMouseFallThroughState(e);
     }
 
     void mouseWheel(MouseEvent event) {
@@ -183,6 +184,10 @@ public class UserInputPublisher {
                 break;
             }
         }
-        mouseFallsThroughThisFrame = !e.isConsumed();
+        updateMouseFallThroughState(e);
+    }
+
+    private void updateMouseFallThroughState(LazyMouseEvent e) {
+        mouseFallsThroughThisFrame = !e.isConsumed() || LayoutStore.isGuiHidden();
     }
 }
