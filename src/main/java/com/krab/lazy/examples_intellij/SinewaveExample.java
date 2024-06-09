@@ -33,7 +33,8 @@ public class SinewaveExample extends PApplet {
     public void draw() {
         pg.beginDraw();
         gui.pushFolder("scene");
-        drawBackground();
+//        drawBackground();
+        drawBackgroundGradient();
         pg.translate(width / 2f, height / 2f);
         drawRectangle();
         drawSinewave();
@@ -90,6 +91,10 @@ public class SinewaveExample extends PApplet {
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);
+    }
+
+    private void drawBackgroundGradient() {
+        image(gui.gradient("gradient"), 0, 0);
     }
 }
 

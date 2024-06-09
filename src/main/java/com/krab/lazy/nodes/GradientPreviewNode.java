@@ -5,16 +5,18 @@ import com.krab.lazy.stores.FontStore;
 import com.krab.lazy.stores.LayoutStore;
 import com.krab.lazy.themes.ThemeColorType;
 import com.krab.lazy.themes.ThemeStore;
+import com.krab.lazy.windows.WindowManager;
 import processing.core.PGraphics;
 
 import static com.krab.lazy.stores.GlobalReferences.app;
 import static processing.core.PApplet.*;
 
 class GradientPreviewNode extends AbstractNode {
-    final GradientPickerFolderNode parent;
-    final int NULL = -1;
-    int hoveredColorIndex = NULL;
-    int draggedColorIndex = NULL;
+    private final GradientPickerFolderNode parent;
+    private final int NULL = -1;
+    private int hoveredColorIndex = NULL;
+    private int draggedColorIndex = NULL;
+    private float posSliderValueWhenDragStarted = NULL;
 
     GradientPreviewNode(String path, GradientPickerFolderNode parent) {
         super(NodeType.TRANSIENT, path, parent);
@@ -119,7 +121,9 @@ class GradientPreviewNode extends AbstractNode {
         super.mousePressedOverNode(x, y);
         draggedColorIndex = findClosestStopOnScreen(x, y);
         if(draggedColorIndex != NULL){
-            GradientColorStopPositionSlider posSlider = parent.findColorStopByIndex(draggedColorIndex).posSlider;
+            GradientColorStopNode colorStopNode = parent.findColorStopByIndex(draggedColorIndex);
+            posSliderValueWhenDragStarted = colorStopNode.getGradientPos();
+            GradientColorStopPositionSlider posSlider = colorStopNode.posSlider;
             posSlider.verticalMouseMode = parent.isGradientDirectionVertical();
             posSlider.mousePressedOverNode(x, y);
         }
@@ -138,9 +142,16 @@ class GradientPreviewNode extends AbstractNode {
     public void mouseReleasedAnywhere(LazyMouseEvent e) {
         super.mouseReleasedAnywhere(e);
         if(draggedColorIndex != NULL){
-            parent.findColorStopByIndex(draggedColorIndex).posSlider.mouseReleasedAnywhere(e);
-            parent.findColorStopByIndex(draggedColorIndex).posSlider.verticalMouseMode = false;
+            GradientColorStopNode colorStopNode = parent.findColorStopByIndex(draggedColorIndex);
+            if(posSliderValueWhenDragStarted != NULL &&
+                abs(colorStopNode.getGradientPos() - posSliderValueWhenDragStarted) < 0.001){
+                // if the color stop was not moved, open the color picker
+                WindowManager.uncoverOrCreateWindow(colorStopNode);
+            }
+            colorStopNode.posSlider.mouseReleasedAnywhere(e);
+            colorStopNode.posSlider.verticalMouseMode = false;
             hoveredColorIndex = draggedColorIndex; // prevents flickering
+            posSliderValueWhenDragStarted = NULL;
             e.setConsumed(true);
         }
         draggedColorIndex = NULL;
