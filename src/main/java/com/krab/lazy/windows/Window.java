@@ -481,6 +481,7 @@ public class Window implements UserInputSubscriber {
     void open(boolean setFocus) {
         closed = false;
         if (setFocus) {
+            isBeingDraggedAround = true;
             setFocusOnThis();
         }
     }
