@@ -14,11 +14,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Must be public for PApplet to be able to reach it, but not meant to be used or even looked at by library users.
  */
 public class UserInputPublisher {
-    public static boolean mouseFallsThroughThisFrame = false;
+    private static boolean mouseFallsThroughGuiThisFrame = false;
+
     private static UserInputPublisher singleton;
     private final CopyOnWriteArrayList<UserInputSubscriber> subscribers = new CopyOnWriteArrayList<>();
     private float prevX = -1, prevY = -1;
-
     public static void initSingleton() {
         if (singleton == null) {
             singleton = new UserInputPublisher();
@@ -139,7 +139,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        updateMouseFallThroughState(e);
+        updateMouseFallThroughGuiState(e);
     }
 
     void mouseReleased(MouseEvent event) {
@@ -150,7 +150,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        updateMouseFallThroughState(e);
+        updateMouseFallThroughGuiState(e);
     }
 
     void mouseMoved(MouseEvent event) {
@@ -161,7 +161,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        updateMouseFallThroughState(e);
+        updateMouseFallThroughGuiState(e);
     }
 
     void mouseDragged(MouseEvent event) {
@@ -172,7 +172,7 @@ public class UserInputPublisher {
                 break;
             }
         }
-        updateMouseFallThroughState(e);
+        updateMouseFallThroughGuiState(e);
     }
 
     void mouseWheel(MouseEvent event) {
@@ -184,10 +184,14 @@ public class UserInputPublisher {
                 break;
             }
         }
-        updateMouseFallThroughState(e);
+        updateMouseFallThroughGuiState(e);
     }
 
-    private void updateMouseFallThroughState(LazyMouseEvent e) {
-        mouseFallsThroughThisFrame = !e.isConsumed() || LayoutStore.isGuiHidden();
+    private void updateMouseFallThroughGuiState(LazyMouseEvent e) {
+        mouseFallsThroughGuiThisFrame = !e.isConsumed() || LayoutStore.isGuiHidden();
+    }
+
+    public static boolean doesMouseFallThroughGuiThisFrame() {
+        return mouseFallsThroughGuiThisFrame;
     }
 }
