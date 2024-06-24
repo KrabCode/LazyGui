@@ -93,7 +93,7 @@ public class ColorPickerFolderNode extends FolderNode {
 
     private float getValue(String nodeName) {
         ColorSliderNode node = ((ColorSliderNode) findChildByName(nodeName));
-        return node.valueFloat;
+        return (float) node.valueFloat;
     }
 
     float hue() {
@@ -162,7 +162,7 @@ public class ColorPickerFolderNode extends FolderNode {
 
     public void setHue(float hueToAdd) {
         ColorSliderNode hueSlider = (ColorSliderNode) findChildByName(HUE_NODE_NAME);
-        hueSlider.valueFloat = LazyGui.hueModulo(hueSlider.valueFloat + hueToAdd);
+        hueSlider.valueFloat = LazyGui.hueModulo((float) hueSlider.valueFloat + hueToAdd);
         loadValuesFromHSBA();
     }
 }

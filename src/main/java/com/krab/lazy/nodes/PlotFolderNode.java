@@ -74,9 +74,9 @@ public class PlotFolderNode extends FolderNode {
 
     public PVector getVectorValue() {
         return new PVector(
-                sliderX.valueFloat,
-                sliderY.valueFloat,
-                sliderZ == null ? 0 : sliderZ.valueFloat
+                (float) sliderX.valueFloat,
+                (float) sliderY.valueFloat,
+                sliderZ == null ? 0 : (float) sliderZ.valueFloat
         );
     }
 

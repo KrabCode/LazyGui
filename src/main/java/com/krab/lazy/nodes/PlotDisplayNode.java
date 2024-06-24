@@ -58,8 +58,8 @@ class PlotDisplayNode extends AbstractNode {
         float valueChangePerCellY = valueChangePerCell * sliderY.valueFloatPrecision;
         float valueRangeX = cellCountX * valueChangePerCellX;
         float valueRangeY = cellCountY * valueChangePerCellY;
-        float nearValueX = valueChangePerCellX / 2 + sliderX.valueFloat % valueChangePerCellX;
-        float nearValueY = valueChangePerCellY / 2 + sliderY.valueFloat % valueChangePerCellY;
+        float nearValueX = valueChangePerCellX / 2 + (float) sliderX.valueFloat % valueChangePerCellX;
+        float nearValueY = valueChangePerCellY / 2 + (float) sliderY.valueFloat % valueChangePerCellY;
         pg.translate(w / 2f + 1, h / 2f);
         float valueStartX = -valueChangePerCellX * 2;
         float valueEndX = valueRangeX + valueChangePerCellX * 2;
@@ -85,8 +85,8 @@ class PlotDisplayNode extends AbstractNode {
         // find zero position on screen
         float zeroSize = min(w,h) * 0.08f;
         float zeroScreenRange = w / 2 - zeroSize / 2;
-        float zeroScreenX = constrain(map(-sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRange, zeroScreenRange);
-        float zeroScreenY = constrain(map(-sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRange, zeroScreenRange);
+        float zeroScreenX = constrain(map((float) -sliderX.valueFloat, -valueRangeX / 2f, valueRangeX / 2f, -w / 2f, w / 2f), -zeroScreenRange, zeroScreenRange);
+        float zeroScreenY = constrain(map((float) -sliderY.valueFloat, -valueRangeY / 2f, valueRangeY / 2f, -h / 2f, h / 2f), -zeroScreenRange, zeroScreenRange);
 
         // draw zero cross or arrow
         strokeForegroundBasedOnMouseOver(pg);

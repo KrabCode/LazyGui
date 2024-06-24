@@ -18,7 +18,7 @@ class GradientColorStopNode extends ColorPickerFolderNode {
     }
 
     float getGradientPos() {
-        return posSlider.valueFloat;
+        return (float) posSlider.valueFloat;
     }
 
     public boolean isPosSliderBeingUsed() {

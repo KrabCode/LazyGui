@@ -25,7 +25,7 @@ import static processing.core.PApplet.*;
 public class SliderNode extends AbstractNode {
 
     @Expose
-    public float valueFloat;
+    public double valueFloat; // named float for backwards compatibility with json saves, but it's a double
     @Expose
     protected int currentPrecisionIndex;
     @Expose
@@ -88,7 +88,7 @@ public class SliderNode extends AbstractNode {
         valueFloatConstrained = constrained &&
                 max != Float.MAX_VALUE &&
                 min != -Float.MAX_VALUE;
-        setSensiblePrecision(nf(valueFloat, 0, 0));
+        setSensiblePrecision(nf((float) valueFloat, 0, 0));
         JsonSaveStore.overwriteWithLoadedStateIfAny(this);
     }
 
@@ -152,7 +152,7 @@ public class SliderNode extends AbstractNode {
         float percentIndicatorNorm = 1f;
         boolean shouldShowPercentIndicator = valueFloatConstrained && showPercentIndicatorWhenConstrained;
         if (shouldShowPercentIndicator) {
-            percentIndicatorNorm = constrain(norm(valueFloat, valueFloatMin, valueFloatMax), 0, 1);
+            percentIndicatorNorm = constrain(norm((float) valueFloat, valueFloatMin, valueFloatMax), 0, 1);
             backgroundScrollX = 0;
         }
 
@@ -187,18 +187,18 @@ public class SliderNode extends AbstractNode {
         if (isNumpadInputActive() || wasNumpadInputActiveLastFrame) {
             return numpadBufferValue;
         }
-        if (Float.isNaN(valueFloat)) {
+        if (Double.isNaN(valueFloat)) {
             return "NaN";
         }
         String valueToDisplay;
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
-            valueToDisplay = nf(valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
+            valueToDisplay = nf((float) valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
         } else {
-            valueToDisplay = nf(round(valueFloat), 0, 0);
+            valueToDisplay = nf(Math.round((float) valueFloat), 0, 0);
         }
         if (displaySquigglyEquals && LayoutStore.shouldDisplaySquigglyEquals()) {
-            String valueWithoutRounding = nf(valueFloat, 0, 0);
+            String valueWithoutRounding = nf((float) valueFloat, 0, 0);
             boolean precisionRoundingHidesInformation = valueToDisplay.length() < valueWithoutRounding.length();
             if (precisionRoundingHidesInformation) {
                 valueToDisplay = SQUIGGLY_EQUALS + valueToDisplay;
@@ -256,7 +256,7 @@ public class SliderNode extends AbstractNode {
         float mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
         if (mouseDelta != 0) {
             float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
-            setValueFloat(valueFloat - delta);
+            setValueFloat((float) valueFloat - delta);
             mouseDeltaX = 0;
             mouseDeltaY = 0;
         }
@@ -268,7 +268,7 @@ public class SliderNode extends AbstractNode {
             if (valueFloat > valueFloatMax || valueFloat < valueFloatMin) {
                 constrained = true;
             }
-            valueFloat = constrain(valueFloat, valueFloatMin, valueFloatMax);
+            valueFloat = constrain((float) valueFloat, valueFloatMin, valueFloatMax);
         }
         return constrained;
     }

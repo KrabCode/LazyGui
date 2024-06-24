@@ -310,7 +310,7 @@ public class LazyGui  {
             node = createSliderNode(fullPath, defaultValue, min, max, constrained);
             insertNodeAtItsPath(node);
         }
-        return node.valueFloat;
+        return (float) node.valueFloat;
     }
 
     private SliderNode createSliderNode(String path, float defaultValue, float min, float max, boolean constrained) {
