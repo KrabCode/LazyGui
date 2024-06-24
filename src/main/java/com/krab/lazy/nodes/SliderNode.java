@@ -56,7 +56,7 @@ public class SliderNode extends AbstractNode {
             .add(10.0f)
             .add(100.0f).build();
 
-    private final Map<Integer, Integer> precisionIndexMappedToDigitsAfterPoint = new HashMap<Integer, Integer>(){
+    private final Map<Integer, Integer> precisionIndexMappedToDecimalCount = new HashMap<Integer, Integer>(){
         {
             put(0, 7);
             put(1, 6);
@@ -209,7 +209,7 @@ public class SliderNode extends AbstractNode {
         String valueToDisplay;
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
-            int digitsAfterDecimal = precisionIndexMappedToDigitsAfterPoint.get(currentPrecisionIndex);
+            int digitsAfterDecimal = precisionIndexMappedToDecimalCount.get(currentPrecisionIndex);
             valueToDisplay = nf((float) valueFloat, 0, max(0, digitsAfterDecimal));
         } else {
             valueToDisplay = nf(Math.round((float) valueFloat), 0, 0);
