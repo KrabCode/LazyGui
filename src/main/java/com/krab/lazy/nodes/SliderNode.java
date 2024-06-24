@@ -17,6 +17,8 @@ import processing.core.PGraphics;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.krab.lazy.stores.NormColorStore.*;
 import static com.krab.lazy.stores.GlobalReferences.app;
@@ -27,9 +29,11 @@ public class SliderNode extends AbstractNode {
     @Expose
     public double valueFloat; // named float for backwards compatibility with json saves, but it's a double
     @Expose
-    protected int currentPrecisionIndex;
-    @Expose
     protected float valueFloatPrecision;
+
+    // currentPrecisionIndex used to be @Exposed too, but it carried duplicate information to valueFloatPrecision,
+    // and it became misleading when the precisionRange list changed
+    protected int currentPrecisionIndex;
 
     float valueFloatDefault;
     final float valueFloatMin;
@@ -41,6 +45,9 @@ public class SliderNode extends AbstractNode {
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
     protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
+            .add(0.0000001f)
+            .add(0.000001f)
+            .add(0.00001f)
             .add(0.0001f)
             .add(0.001f)
             .add(0.01f)
@@ -48,6 +55,22 @@ public class SliderNode extends AbstractNode {
             .add(1f)
             .add(10.0f)
             .add(100.0f).build();
+
+    private final Map<Integer, Integer> precisionIndexMappedToDigitsAfterPoint = new HashMap<Integer, Integer>(){
+        {
+            put(0, 7);
+            put(1, 6);
+            put(2, 5);
+            put(3, 4);
+            put(4, 3);
+            put(5, 2);
+            put(6, 1);
+            put(7, 0);
+            put(8, 0);
+            put(9, 0);
+        }
+    };
+
 
     // true by default locally to be overridden by the global setting LayoutStore.shouldDisplaySquigglyEquals() that is false by default
     protected boolean displaySquigglyEquals = true;
@@ -60,10 +83,10 @@ public class SliderNode extends AbstractNode {
     private boolean wasNumpadInputActiveLastFrame = false;
 
 
-    public static final String REGEX_NO_SYMBOL_OR_MINUS = "[-*]";
+    public static final String REGEX_ZERO_OR_ONE_MINUS_SIGN = "[-*]?";
     private static final String REGEX_FRACTION_SEPARATOR = "[.,]";
     private static final String REGEX_ANY_NUMBER_SERIES = "[0-9]*";
-    private static final String FRACTIONAL_FLOAT_REGEX = REGEX_NO_SYMBOL_OR_MINUS
+    private static final String FRACTIONAL_FLOAT_REGEX = REGEX_ZERO_OR_ONE_MINUS_SIGN
                                                         + REGEX_ANY_NUMBER_SERIES
                                                         + REGEX_FRACTION_SEPARATOR
                                                         + REGEX_ANY_NUMBER_SERIES;
@@ -106,18 +129,11 @@ public class SliderNode extends AbstractNode {
             return;
         }
         if (value.matches(FRACTIONAL_FLOAT_REGEX)) {
-            int fractionalDigitLength = getFractionalDigitLength(value);
-            setPrecisionIndexAndValue(4 - fractionalDigitLength);
+            int fractionalDigitLength = value.split(REGEX_FRACTION_SEPARATOR)[1].length();
+            setPrecisionIndexAndValue(precisionRange.indexOf(1f) - fractionalDigitLength);
             return;
         }
         setPrecisionIndexAndValue(precisionRange.indexOf(1f));
-    }
-
-    private int getFractionalDigitLength(String value) {
-        if (value.contains(".") || value.contains(",")) {
-            return value.split(REGEX_FRACTION_SEPARATOR)[1].length();
-        }
-        return 0;
     }
 
     @Override
@@ -193,7 +209,8 @@ public class SliderNode extends AbstractNode {
         String valueToDisplay;
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
-            valueToDisplay = nf((float) valueFloat, 0, getFractionalDigitLength(String.valueOf(valueFloatPrecision)));
+            int digitsAfterDecimal = precisionIndexMappedToDigitsAfterPoint.get(currentPrecisionIndex);
+            valueToDisplay = nf((float) valueFloat, 0, max(0, digitsAfterDecimal));
         } else {
             valueToDisplay = nf(Math.round((float) valueFloat), 0, 0);
         }
@@ -434,11 +451,14 @@ public class SliderNode extends AbstractNode {
     @Override
     public void overwriteState(JsonElement loadedNode) {
         JsonObject json = loadedNode.getAsJsonObject();
-        if (json.has("currentPrecisionIndex")) {
-            currentPrecisionIndex = json.get("currentPrecisionIndex").getAsInt();
-        }
         if (json.has("valueFloatPrecision")) {
             valueFloatPrecision = json.get("valueFloatPrecision").getAsFloat();
+            try {
+                currentPrecisionIndex = precisionRange.indexOf(valueFloatPrecision);
+            }catch(Exception e){
+                println("Could not find precision index for valueFloatPrecision: "
+                        + valueFloatPrecision + " in " + precisionRange + " for slider " + path);
+            }
         }
         if (json.has("valueFloat")) {
             setValueFloat(json.get("valueFloat").getAsFloat());
