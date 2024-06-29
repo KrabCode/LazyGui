@@ -1,7 +1,5 @@
 package com.krab.lazy.nodes;
 
-import processing.core.PApplet;
-
 public class SliderIntNode extends SliderNode {
 
     public SliderIntNode(String path, FolderNode parentFolder, int defaultValue, int min, int max, boolean constrained) {
