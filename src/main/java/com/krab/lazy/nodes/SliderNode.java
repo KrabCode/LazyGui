@@ -16,7 +16,7 @@ import com.krab.lazy.utils.ClipboardUtils;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +32,12 @@ public class SliderNode extends AbstractNode {
     @Expose
     protected float valueFloatPrecision;
 
+
     // currentPrecisionIndex used to be @Exposed too, but it carried duplicate information to valueFloatPrecision,
     // and it became misleading when the precisionRange list changed
     protected int currentPrecisionIndex;
 
+    private final DecimalFormat df = new DecimalFormat("#");
     float valueFloatDefault;
     final float valueFloatMin;
     final float valueFloatMax;
@@ -46,11 +48,9 @@ public class SliderNode extends AbstractNode {
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
 
-    // TODO the old precisionRange is just too buggy, let's move to BigDecimal and use it everywhere
-    BigDecimal valueBigDecimal = new BigDecimal(0);
-    int decimalDigits = 0;
-
     protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
+            .add(0.00000001f)
+            .add(0.0000001f)
             .add(0.000001f)
             .add(0.00001f)
             .add(0.0001f)
@@ -63,15 +63,17 @@ public class SliderNode extends AbstractNode {
 
     private final Map<Integer, Integer> precisionIndexMappedToDecimalCount = new HashMap<Integer, Integer>(){
         {
-            put(0, 6);
-            put(1, 5);
-            put(2, 4);
-            put(3, 3);
-            put(4, 2);
-            put(5, 1);
-            put(6, 0);
-            put(7, 0);
+            put(0, 8);
+            put(1, 7);
+            put(2, 6);
+            put(3, 5);
+            put(4, 4);
+            put(5, 3);
+            put(6, 2);
+            put(7, 1);
             put(8, 0);
+            put(9, 0);
+            put(10, 0);
         }
     };
 
@@ -213,8 +215,13 @@ public class SliderNode extends AbstractNode {
         String valueToDisplay;
         boolean isFractionalPrecision = valueFloatPrecision % 1f > 0;
         if (isFractionalPrecision) {
-            int digitsAfterDecimal = precisionIndexMappedToDecimalCount.get(currentPrecisionIndex);
-            valueToDisplay = nf((float) valueFloat, 0, max(0, digitsAfterDecimal));
+            int fractionDigits = precisionIndexMappedToDecimalCount.get(currentPrecisionIndex);
+            df.setMaximumFractionDigits(fractionDigits);
+            df.setMinimumFractionDigits(fractionDigits);
+            valueToDisplay = df.format(valueFloat);
+            if(valueToDisplay.startsWith(".")){
+                valueToDisplay = "0" + valueToDisplay;
+            }
         } else {
             valueToDisplay = nf(Math.round((float) valueFloat), 0, 0);
         }

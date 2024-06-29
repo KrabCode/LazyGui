@@ -10,7 +10,7 @@ public class SliderIntNode extends SliderNode {
     }
 
     public int getIntValue(){
-        return PApplet.floor((float) valueFloat);
+        return (int) Math.floor(valueFloat);
     }
 
     @Override

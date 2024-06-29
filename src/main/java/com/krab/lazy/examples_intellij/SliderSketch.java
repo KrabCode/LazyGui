@@ -30,12 +30,25 @@ public class SliderSketch extends PApplet {
         pg.beginDraw();
         drawBackground();
         drawArc();
+        drawText();
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();
     }
 
+    private void drawText() {
+        pg.pushMatrix();
+        pg.fill(gui.colorPicker("text fill", color(1)).hex);
+        pg.textSize(gui.slider("text size", 32));
+        pg.textAlign(CENTER, CENTER);
+        pg.translate(width/2f, height/2f);
+        pg.translate(gui.plotXY("pos").x, gui.plotXY("pos").y);
+        pg.text(nf(gui.slider("value"), 0, 8), 0, 0);
+        pg.popMatrix();
+    }
+
     private void drawArc() {
+        pg.pushMatrix();
         float maxAngleNorm = gui.slider("max angle", 1, 0, 1);
         pg.translate(width/2f, height/2f);
         pg.fill(gui.colorPicker("fill", color(0.2f)).hex);
@@ -43,6 +56,7 @@ public class SliderSketch extends PApplet {
         pg.strokeWeight(gui.slider("stroke weight", 4));
         float diameter = gui.slider("diameter", 400);
         pg.arc(0, 0, diameter, diameter, 0, maxAngleNorm * TWO_PI);
+        pg.popMatrix();
     }
 
     private void drawBackground() {
