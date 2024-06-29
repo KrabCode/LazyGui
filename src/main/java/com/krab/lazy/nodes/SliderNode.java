@@ -16,6 +16,7 @@ import com.krab.lazy.utils.ClipboardUtils;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +45,12 @@ public class SliderNode extends AbstractNode {
     boolean verticalMouseMode = false;
     protected String numpadBufferValue = "";
     protected boolean showPercentIndicatorWhenConstrained = true;
+
+    // TODO the old precisionRange is just too buggy, let's move to BigDecimal and use it everywhere
+    BigDecimal valueBigDecimal = new BigDecimal(0);
+    int decimalDigits = 0;
+
     protected final ArrayList<Float> precisionRange = new ArrayListBuilder<Float>()
-            .add(0.0000001f)
             .add(0.000001f)
             .add(0.00001f)
             .add(0.0001f)
@@ -58,16 +63,15 @@ public class SliderNode extends AbstractNode {
 
     private final Map<Integer, Integer> precisionIndexMappedToDecimalCount = new HashMap<Integer, Integer>(){
         {
-            put(0, 7);
-            put(1, 6);
-            put(2, 5);
-            put(3, 4);
-            put(4, 3);
-            put(5, 2);
-            put(6, 1);
+            put(0, 6);
+            put(1, 5);
+            put(2, 4);
+            put(3, 3);
+            put(4, 2);
+            put(5, 1);
+            put(6, 0);
             put(7, 0);
             put(8, 0);
-            put(9, 0);
         }
     };
 
@@ -270,10 +274,10 @@ public class SliderNode extends AbstractNode {
     }
 
     private void updateValueMouseInteraction() {
-        float mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
+        double mouseDelta = verticalMouseMode ? mouseDeltaY : mouseDeltaX;
         if (mouseDelta != 0) {
-            float delta = mouseDelta * precisionRange.get(currentPrecisionIndex);
-            setValueFloat((float) valueFloat - delta);
+            double delta = mouseDelta * (double) precisionRange.get(currentPrecisionIndex);
+            setValueFloat(valueFloat - delta);
             mouseDeltaX = 0;
             mouseDeltaY = 0;
         }
@@ -431,7 +435,7 @@ public class SliderNode extends AbstractNode {
         return true;
     }
 
-    protected void setValueFloat(float floatToSet) {
+    protected void setValueFloat(double floatToSet) {
         valueFloat = floatToSet;
         onValueFloatChanged();
     }
