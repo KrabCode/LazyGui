@@ -221,6 +221,8 @@ public class SliderNode extends AbstractNode {
             valueToDisplay = df.format(valueFloat);
             if(valueToDisplay.startsWith(".")){
                 valueToDisplay = "0" + valueToDisplay;
+            }else if(valueToDisplay.startsWith("-.")){
+                valueToDisplay = valueToDisplay.replace("-.", "-0.");
             }
         } else {
             valueToDisplay = nf(Math.round((float) valueFloat), 0, 0);
