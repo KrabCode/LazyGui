@@ -323,6 +323,7 @@ public class LazyGui  {
     /**
      * Sets the value of a float slider control element manually at runtime without requiring user interaction.
      * Does not block changing the value in the future in any way.
+     * Can be used as a non-interactive value display if you set the value every frame.
      * Initializes a new float slider at the given path if needed with the value parameter used as a default value and with no constraint on min and max value.
      *
      * @param path forward slash separated unique path to the control element
