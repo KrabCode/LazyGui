@@ -30,21 +30,7 @@ public class SimpleShape extends PApplet {
 
     private void drawForegroundShape() {
         gui.pushFolder("shape");
-        String[] shapeTypeOptions = new String[]{
-        };
-        if(gui.button("add silly option")){
-            gui.radioSetOptions("shape type", new String[]{
-                    "ellipse",
-                    "rectangle",
-                    "asdndsakj"
-            });
-        }
-        if(gui.button("restore normal options")){
-            gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
-        }
-        if(gui.button("remove all options")){
-            gui.radioSetOptions("shape type", new String[]{});
-        }
+        String[] shapeTypeOptions = new String[]{"square", "circle", "triangle"};
         String selectedShape =  gui.radio("shape type", shapeTypeOptions, "ellipse");
         PVector pos = gui.plotXY("position");
         PVector size = gui.plotXY("size", 250);
@@ -63,10 +49,12 @@ public class SimpleShape extends PApplet {
         translate(pos.x, pos.y);
         rotate(radians(rotationAngle));
 //        println("shape selected: " + selectedShape);
-        if("ellipse".equals(selectedShape)){
+        if("circle".equals(selectedShape)){
             ellipse(0, 0, size.x, size.y);
-        }else if("rectangle".equals(selectedShape)){
+        }else if("square".equals(selectedShape)){
             rect(0, 0, size.x, size.y);
+        }else if("triangle".equals(selectedShape)){
+            triangle(-size.x/2, size.y/2, size.x/2, size.y/2, 0, -size.y/2);
         }
         gui.popFolder();
     }

@@ -231,7 +231,7 @@ public abstract class AbstractNode {
 
     // used by value nodes to load state from json
     public void overwriteState(JsonElement loadedNode){
-
+        // default implementation does nothing
     }
 
     public String getValueAsString(){

@@ -1,5 +1,7 @@
 package com.krab.lazy.nodes;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 
 import com.krab.lazy.input.LazyKeyEvent;
@@ -179,5 +181,40 @@ public class FolderNode extends AbstractNode {
         PGraphics textWidthProvider = FontStore.getMainFontUtilsProvider();
         float leftTextWidth = textWidthProvider.textWidth(textToMeasure);
         return ceil(leftTextWidth / cell) * cell;
+    }
+
+    public void overwriteState(JsonElement loadedNode) {
+        super.overwriteState(loadedNode);
+        if(!LayoutStore.shouldLoadingJsonRestoreWindows()){
+            return;
+        }
+        if(!loadedNode.getAsJsonObject().has("window")){
+            return;
+        }
+        if("/saves".equals(path)){
+            // saves folder should be immune to changes caused by loading saves from it
+            return;
+        }
+        JsonObject windowJson = loadedNode.getAsJsonObject().get("window").getAsJsonObject();
+        if(window == null){
+            // creating a raw new Window() here to have a non-null object to overwrite with the loaded state,
+            // bypassing the usual WindowManager.uncoverOrCreateWindow() since we don't need any
+            // of the automatic window width autosuggestions or good window placement
+            window = new Window(this, 0, 0, null);
+            // but then we need to manually add this window to the WindowManager's window list
+            WindowManager.addWindow(window);
+        }
+        if(windowJson.has("posX")){
+            window.posX = windowJson.get("posX").getAsFloat();
+        }
+        if(windowJson.has("posY")){
+            window.posY = windowJson.get("posY").getAsFloat();
+        }
+        if(windowJson.has("windowSizeX")){
+            window.windowSizeX = windowJson.get("windowSizeX").getAsFloat();
+        }
+        if(windowJson.has("closed")){
+            window.closed = windowJson.get("closed").getAsBoolean();
+        }
     }
 }

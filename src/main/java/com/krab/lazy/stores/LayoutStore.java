@@ -161,4 +161,12 @@ public class LayoutStore {
     public static boolean shouldDisplaySquigglyEquals() {
         return displaySquigglyEquals;
     }
+
+    public static boolean shouldLoadingJsonRestoreWindows() {
+        // TODO some way to control this in the constructor settings
+        //  - only the first autoload will restore windows
+        //  - all loading will restore windows
+        //  - no restoring of windows at all
+        return true;
+    }
 }

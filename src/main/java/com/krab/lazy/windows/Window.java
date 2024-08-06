@@ -1,5 +1,6 @@
 package com.krab.lazy.windows;
 
+import com.google.gson.annotations.Expose;
 import com.krab.lazy.nodes.FolderNode;
 import com.krab.lazy.stores.FontStore;
 import com.krab.lazy.stores.GlobalReferences;
@@ -26,12 +27,16 @@ import static processing.core.PApplet.*;
 import static com.krab.lazy.themes.ThemeColorType.*;
 
 public class Window implements UserInputSubscriber {
-    final FolderNode folder;
+    @Expose
     public float posX;
+    @Expose
     public float posY;
+    @Expose
     public boolean closed = false;
+    @Expose
     public float windowSizeX; // can be resized by user
     public float windowSizeY; // set every frame automatically based on individual node heights
+    final FolderNode folder;
     public boolean isBeingDraggedAround;
     boolean isBeingResized;
     private boolean isTitleHighlighted;
