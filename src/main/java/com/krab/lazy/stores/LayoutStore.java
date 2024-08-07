@@ -1,5 +1,7 @@
 package com.krab.lazy.stores;
 
+import java.util.ArrayList;
+
 import static com.krab.lazy.stores.GlobalReferences.gui;
 import static processing.core.PApplet.floor;
 
@@ -20,10 +22,8 @@ public class LayoutStore {
     private static int smoothingValue = 4;
     private static String overridingSketchName = null;
     private static boolean displaySquigglyEquals = false;
-
-    private static boolean startupLoadingInProgress = true;
     private static WindowRestorationStrategy windowRestorationStrategy = WindowRestorationStrategy.ONLY_ON_STARTUP;
-
+    static ArrayList<String> pathsOfAlreadyRestoredWindows = new ArrayList<>();
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -174,14 +174,13 @@ public class LayoutStore {
         return windowRestorationStrategy;
     }
 
-    public static boolean shouldLoadingRestoreWindows() {
-        if(startupLoadingInProgress && windowRestorationStrategy.equals(WindowRestorationStrategy.ONLY_ON_STARTUP)){
-            return true;
+    public static boolean shouldLoadingRestoreWindows(String path) {
+        if(windowRestorationStrategy.equals(WindowRestorationStrategy.ONLY_ON_STARTUP)){
+            boolean notLoadedYet = !pathsOfAlreadyRestoredWindows.contains(path);
+            pathsOfAlreadyRestoredWindows.add(path);
+            return notLoadedYet;
         }
         return windowRestorationStrategy.equals(WindowRestorationStrategy.ALWAYS);
     }
 
-    public static void startupFinished() {
-        startupLoadingInProgress = false;
-    }
 }

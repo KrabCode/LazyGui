@@ -77,9 +77,11 @@ public class LazyGui  {
     public LazyGui(PApplet sketch, LazyGuiSettings settings) {
         if(singleton != null && singleton != this){
             throw new IllegalStateException("You already initialized a LazyGui object, please don't create any more with 'new LazyGui(this)'." +
-                    " It's meant to work similar to a singleton, there cannot be more than 1 instance running in any given program," +
-                    " because it breaks mouse and key events and it would be confusing to work with multiple GUI instances." +
-                    " The control element separation and grouping you're probably looking for can be achieved by using more folders rather than creating a whole new GUI object." +
+                    "\n It's meant to work similar to a singleton, there cannot be more than 1 instance running in any given program," +
+                    " because it breaks mouse and key events." +
+                    "\n The control element nesting and grouping you may be looking for can probably be done using the built in sub-folders " +
+                    "\n  - either by using the '/' character in your control element path like gui.slider(\"hello/world\")" +
+                    "\n  - or by calling gui.pushFolder(\"myFolderName\"); <nested control elements> gui.popFolder();" +
                     "\n");
         }
         singleton = this;
@@ -105,7 +107,6 @@ public class LazyGui  {
         lazyFollowSketchResolution();
         registerDrawListener();
         settings.applyLateStartupSettings();
-        LayoutStore.startupFinished();
     }
 
     private void registerDrawListener() {

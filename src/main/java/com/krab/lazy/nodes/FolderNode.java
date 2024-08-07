@@ -185,7 +185,12 @@ public class FolderNode extends AbstractNode {
 
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
-        if(!LayoutStore.shouldLoadingRestoreWindows()){
+        boolean shouldRestoreWindows = LayoutStore.shouldLoadingRestoreWindows(path);
+        if(!shouldRestoreWindows){
+            return;
+        }
+        if("saves".equals(path)){
+            // saves folder should be immune to changes caused by loading saves from it
             return;
         }
         if(!loadedNode.getAsJsonObject().has("window")){
@@ -196,10 +201,6 @@ public class FolderNode extends AbstractNode {
                 window.closed = true;
             }
             // no window state to load other than that it should be closed
-            return;
-        }
-        if("/saves".equals(path)){
-            // saves folder should be immune to changes caused by loading saves from it
             return;
         }
         JsonObject windowJson = loadedNode.getAsJsonObject().get("window").getAsJsonObject();

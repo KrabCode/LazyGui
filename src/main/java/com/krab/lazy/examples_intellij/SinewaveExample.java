@@ -1,6 +1,5 @@
 package com.krab.lazy.examples_intellij;
 
-import com.krab.lazy.LazyGuiSettings;
 import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -24,7 +23,7 @@ public class SinewaveExample extends PApplet {
 
     @Override
     public void setup() {
-        gui = new LazyGui(this, new LazyGuiSettings());
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         pg.smooth(4);
     }
@@ -94,7 +93,7 @@ public class SinewaveExample extends PApplet {
     }
 
     private void drawBackgroundGradient() {
-        image(gui.gradient("gradient"), 0, 0);
+        pg.image(gui.gradient("gradient"), 0, 0);
     }
 }
 

@@ -425,7 +425,7 @@ public class LazyGuiSettings {
      *
      * @return this settings object for chaining statements easily
      */
-    public LazyGuiSettings setWindowRestoreOnStartup(){
+    public LazyGuiSettings setWindowRestoreOnlyOnStartup(){
         this.windowRestoreStrategy = WindowRestorationStrategy.ONLY_ON_STARTUP;
         return this;
     }
