@@ -105,6 +105,7 @@ public class LazyGui  {
         lazyFollowSketchResolution();
         registerDrawListener();
         settings.applyLateStartupSettings();
+        LayoutStore.startupFinished();
     }
 
     private void registerDrawListener() {

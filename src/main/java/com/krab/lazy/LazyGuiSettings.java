@@ -44,6 +44,7 @@ public class LazyGuiSettings {
     private boolean isMouseWheelPrecisionActive = true;
     private int keyboardMillisDelay = 500;
     private String customGuiDataFolder = null;
+    private WindowRestorationStrategy windowRestoreStrategy = null;
 
     /**
      * Constructor, call this before any other function here.
@@ -73,6 +74,7 @@ public class LazyGuiSettings {
         this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
+        this.windowRestoreStrategy = LayoutStore.getWindowRestorationStrategy();
     }
 
     void applyEarlyStartupSettings() {
@@ -102,6 +104,7 @@ public class LazyGuiSettings {
         if (sketchNameOverride != null) {
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
+        LayoutStore.setWindowRestorationStrategy(windowRestoreStrategy);
     }
 
     void applyLateStartupSettings() {
@@ -414,6 +417,36 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setCustomGuiDataFolder(String customPath) {
         this.customGuiDataFolder = customPath;
+        return this;
+    }
+
+    /**
+     * The GUI will load window positions, sizes and openness on startup and then ignore any saved window states when loading other saves.
+     *
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setWindowRestoreOnStartup(){
+        this.windowRestoreStrategy = WindowRestorationStrategy.ONLY_ON_STARTUP;
+        return this;
+    }
+
+    /**
+     * The GUI will always load window positions, sizes and openness on startup and then always try to overwrite them when loading other saves.
+     *
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setWindowRestoreAlways(){
+        this.windowRestoreStrategy = WindowRestorationStrategy.ALWAYS;
+        return this;
+    }
+
+    /**
+     * The GUI will never load window positions, sizes and openness. You will have to manually open and position the windows every time.
+     *
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setWindowRestoreNever(){
+        this.windowRestoreStrategy = WindowRestorationStrategy.NEVER;
         return this;
     }
 

@@ -22,7 +22,7 @@ public class ExampleSketch extends PApplet {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         colorMode(HSB, 1, 1, 1, 1);
-        frameRate(144);
+//        frameRate(144);
     }
 
     @Override

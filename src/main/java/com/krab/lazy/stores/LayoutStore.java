@@ -21,6 +21,10 @@ public class LayoutStore {
     private static String overridingSketchName = null;
     private static boolean displaySquigglyEquals = false;
 
+    private static boolean startupLoadingInProgress = true;
+    private static WindowRestorationStrategy windowRestorationStrategy = WindowRestorationStrategy.ONLY_ON_STARTUP;
+
+
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
         setCellSize(gui.sliderInt("cell size", floor(cell), 12, Integer.MAX_VALUE));
@@ -162,11 +166,22 @@ public class LayoutStore {
         return displaySquigglyEquals;
     }
 
-    public static boolean shouldLoadingJsonRestoreWindows() {
-        // TODO some way to control this in the constructor settings
-        //  - only the first autoload will restore windows
-        //  - all loading will restore windows
-        //  - no restoring of windows at all
-        return true;
+    public static void setWindowRestorationStrategy(WindowRestorationStrategy windowRestorationStrategy) {
+        LayoutStore.windowRestorationStrategy = windowRestorationStrategy;
+    }
+
+    public static WindowRestorationStrategy getWindowRestorationStrategy() {
+        return windowRestorationStrategy;
+    }
+
+    public static boolean shouldLoadingRestoreWindows() {
+        if(startupLoadingInProgress && windowRestorationStrategy.equals(WindowRestorationStrategy.ONLY_ON_STARTUP)){
+            return true;
+        }
+        return windowRestorationStrategy.equals(WindowRestorationStrategy.ALWAYS);
+    }
+
+    public static void startupFinished() {
+        startupLoadingInProgress = false;
     }
 }

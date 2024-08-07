@@ -185,10 +185,17 @@ public class FolderNode extends AbstractNode {
 
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
-        if(!LayoutStore.shouldLoadingJsonRestoreWindows()){
+        if(!LayoutStore.shouldLoadingRestoreWindows()){
             return;
         }
         if(!loadedNode.getAsJsonObject().has("window")){
+            if(window != null){
+                // the window object may have never been created and opened before the save was made
+                // and therefore no "window" object even exists in the json because there was nothing to serialize,
+                // and now the user loaded a save which doesn't say it should be open, so it needs to be closed
+                window.closed = true;
+            }
+            // no window state to load other than that it should be closed
             return;
         }
         if("/saves".equals(path)){

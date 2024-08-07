@@ -1,6 +1,7 @@
 package com.krab.lazy.examples_intellij;
 
 import com.krab.lazy.LazyGui;
+import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -18,7 +19,7 @@ public class SimpleShape extends PApplet {
     }
 
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setWindowRestoreAlways());
     }
 
     public void draw() {
