@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 
 import com.krab.lazy.input.LazyKeyEvent;
 import com.krab.lazy.stores.FontStore;
+import com.krab.lazy.stores.StringConstants;
 import com.krab.lazy.utils.KeyCodes;
 import com.krab.lazy.stores.LayoutStore;
 import com.krab.lazy.themes.ThemeColorType;
@@ -84,10 +85,10 @@ public class FolderNode extends AbstractNode {
         String desiredClassName = TextNode.class.getSimpleName();
         AbstractNode renamingNode = findChildByName("");
         if(renamingNode == null || !renamingNode.className.contains(desiredClassName)){
-            renamingNode = findChildByNameStartsWith("label");
+            renamingNode = findChildByNameStartsWith(StringConstants.FOLDER_AUTODETECT_LABEL);
         }
         if(renamingNode == null || !renamingNode.className.contains(desiredClassName)){
-            renamingNode = findChildByNameStartsWith("name");
+            renamingNode = findChildByNameStartsWith(StringConstants.FOLDER_AUTODETECT_NAME);
         }
         if(renamingNode != null && renamingNode.className.contains(desiredClassName) && ((TextNode) renamingNode).stringValue.length() > 0){
             overridableName = ((TextNode) renamingNode).stringValue;
@@ -99,13 +100,13 @@ public class FolderNode extends AbstractNode {
         String desiredClassName = ToggleNode.class.getSimpleName();
         AbstractNode enabledNode = findChildByName("");
         if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
-            enabledNode = findChildByNameStartsWith("active");
+            enabledNode = findChildByNameStartsWith(StringConstants.FOLDER_AUTODETECT_ACTIVE);
         }
         if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
-            enabledNode = findChildByNameStartsWith("enabled");
+            enabledNode = findChildByNameStartsWith(StringConstants.FOLDER_AUTODETECT_ENABLED);
         }
         if(enabledNode == null || !enabledNode.className.contains(desiredClassName)){
-            enabledNode = findChildByNameStartsWith("visible");
+            enabledNode = findChildByNameStartsWith(StringConstants.FOLDER_AUTODETECT_VISIBLE);
         }
         return enabledNode != null &&
                 enabledNode.className.contains(desiredClassName) &&
@@ -189,7 +190,7 @@ public class FolderNode extends AbstractNode {
         if(!shouldRestoreWindows){
             return;
         }
-        if("saves".equals(path)){
+        if(StringConstants.FOLDER_PATH_SAVES.equals(path)){
             // saves folder should be immune to changes caused by loading saves from it
             return;
         }

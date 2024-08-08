@@ -49,8 +49,6 @@ public class LazyGui  {
     private boolean printedPushWarningAlready = false;
     private boolean printedPopWarningAlready = false;
     private PGraphics guiCanvas;
-    final String optionsFolderName = "options";
-    final String savesFolderName = "saves";
 
     private static LazyGui singleton;
 
@@ -1363,17 +1361,17 @@ public class LazyGui  {
     }
 
     private void createOptionsFolder() {
-        gui.pushFolder(optionsFolderName);
+        gui.pushFolder(StringConstants.FOLDER_PATH_OPTIONS);
         ThemeStore.updateThemePicker();
         gui.popFolder();
     }
 
     private void createSavesFolder(){
-        insertNodeAtItsPath(new SaveFolderNode(savesFolderName, NodeTree.getRoot()));
+        insertNodeAtItsPath(new SaveFolderNode(StringConstants.FOLDER_PATH_SAVES, NodeTree.getRoot()));
     }
 
     private void updateOptionsFolder() {
-        gui.pushFolder(optionsFolderName);
+        gui.pushFolder(StringConstants.FOLDER_PATH_OPTIONS);
         LayoutStore.updateWindowOptions();
         FontStore.updateFontOptions();
         ThemeStore.updateThemePicker();

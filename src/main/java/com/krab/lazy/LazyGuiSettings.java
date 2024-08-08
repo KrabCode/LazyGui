@@ -109,8 +109,8 @@ public class LazyGuiSettings {
 
     void applyLateStartupSettings() {
         if (hideBuiltInFolders) {
-            gui.hide(gui.optionsFolderName);
-            gui.hide(gui.savesFolderName);
+            gui.hide(StringConstants.FOLDER_PATH_OPTIONS);
+            gui.hide(StringConstants.FOLDER_PATH_SAVES);
         }
     }
 

@@ -61,7 +61,7 @@ public class JsonSaveStore {
     }
 
     private static void lazyInitSaveDir() {
-        saveDir = new File(getGuiDataFolderPath("saves"));
+        saveDir = new File(getGuiDataFolderPath(StringConstants.FOLDER_PATH_SAVES));
         lazyInitDir(saveDir);
     }
 
