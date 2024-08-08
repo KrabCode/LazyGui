@@ -74,7 +74,7 @@ public class LazyGuiSettings {
         this.autosuggestWindowWidth = LayoutStore.getAutosuggestWindowWidth();
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
-        this.windowRestoreStrategy = LayoutStore.getWindowRestorationStrategy();
+        this.windowRestoreStrategy = JsonSaveStore.getWindowRestorationStrategy();
     }
 
     void applyEarlyStartupSettings() {
@@ -84,6 +84,8 @@ public class LazyGuiSettings {
         JsonSaveStore.autosaveOnExitEnabled = autosaveOnExitEnabled;
         JsonSaveStore.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
         JsonSaveStore.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
+        JsonSaveStore.setWindowRestorationStrategy(windowRestoreStrategy);
+
         MouseHiding.shouldHideWhenDragging = mouseShouldHideWhenDragging;
         MouseHiding.shouldConfineToWindow = mouseShouldConfineToWindow;
         LayoutStore.cell = cellSize;
@@ -104,7 +106,6 @@ public class LazyGuiSettings {
         if (sketchNameOverride != null) {
             LayoutStore.setOverridingSketchName(sketchNameOverride);
         }
-        LayoutStore.setWindowRestorationStrategy(windowRestoreStrategy);
     }
 
     void applyLateStartupSettings() {

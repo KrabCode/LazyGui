@@ -29,6 +29,8 @@ public class JsonSaveStore {
     private static File saveDir;
     private static ArrayList<File> saveFilesSorted;
     private static String dataFolderRootPath = "gui";
+    private static WindowRestorationStrategy windowRestorationStrategy = WindowRestorationStrategy.ONLY_ON_STARTUP;
+    private static final ArrayList<String> pathsOfAlreadyRestoredWindows = new ArrayList<>();
     private static final Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .setPrettyPrinting()
@@ -136,6 +138,7 @@ public class JsonSaveStore {
             writer.close();
             println("Created new save: " + fullPath);
         } catch (IOException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -299,4 +302,23 @@ public class JsonSaveStore {
     public static void setCustomGuiDataFolder(String customPath) {
         dataFolderRootPath = customPath;
     }
+
+
+    public static void setWindowRestorationStrategy(WindowRestorationStrategy windowRestorationStrategy) {
+        JsonSaveStore.windowRestorationStrategy = windowRestorationStrategy;
+    }
+
+    public static WindowRestorationStrategy getWindowRestorationStrategy() {
+        return windowRestorationStrategy;
+    }
+
+    public static boolean shouldLoadingRestoreWindows(String path) {
+        if(windowRestorationStrategy.equals(WindowRestorationStrategy.ONLY_ON_STARTUP)){
+            boolean notLoadedYet = !pathsOfAlreadyRestoredWindows.contains(path);
+            pathsOfAlreadyRestoredWindows.add(path);
+            return notLoadedYet;
+        }
+        return windowRestorationStrategy.equals(WindowRestorationStrategy.ALWAYS);
+    }
+
 }
