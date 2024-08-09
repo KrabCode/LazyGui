@@ -186,7 +186,7 @@ public class FolderNode extends AbstractNode {
 
     public void overwriteState(JsonElement loadedNode) {
         super.overwriteState(loadedNode);
-        boolean shouldRestoreWindows = JsonSaveStore.shouldLoadingRestoreWindows(path);
+        boolean shouldRestoreWindows = JsonSaveStore.shouldLoadingRestoreThisWindow(path);
         if(!shouldRestoreWindows){
             return;
         }

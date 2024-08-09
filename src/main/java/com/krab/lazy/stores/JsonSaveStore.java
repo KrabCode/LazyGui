@@ -312,7 +312,7 @@ public class JsonSaveStore {
         return windowRestorationStrategy;
     }
 
-    public static boolean shouldLoadingRestoreWindows(String path) {
+    public static boolean shouldLoadingRestoreThisWindow(String path) {
         if(windowRestorationStrategy.equals(WindowRestorationStrategy.ONLY_ON_STARTUP)){
             boolean notLoadedYet = !pathsOfAlreadyRestoredWindows.contains(path);
             pathsOfAlreadyRestoredWindows.add(path);
