@@ -440,9 +440,9 @@ gui = new LazyGui(this, new LazyGuiSettings()
 When you load a save, the GUI will try to restore the window state to what it was when the save was made. 
 This includes the position, size, and open/closed state of every window.
 There are three available modes, selected using the LazyGuiSettings. 
-    - setWindowRestoreNever()
-    - setWindowRestoreOnlyOnStartup() <- default
-    - setWindowRestoreAlways()
+- `setWindowRestoreNever()`
+- `setWindowRestoreOnlyOnStartup()` <= default
+- `setWindowRestoreAlways()`
 
 
 ## Live shader reloading
