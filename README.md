@@ -32,6 +32,7 @@ Table of Contents
     * [Has a value changed last frame?](#has-a-value-changed-last-frame)
     * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
+  * [Window restoration](#window-restoration)
   * [Live shader reloading](#live-shader-reloading)
   * [Input](#input)
   * [Compatibility](#compatibility)
