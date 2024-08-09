@@ -1,6 +1,7 @@
 package com.krab.lazy.examples_intellij;
 
 import com.krab.lazy.LazyGui;
+import com.krab.lazy.LazyGuiSettings;
 import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -25,7 +26,7 @@ public class MouseDrawing extends PApplet {
 
     @Override
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
         canvas = createGraphics(width, height);
         canvas.beginDraw();
         canvas.background(50);
@@ -50,11 +51,9 @@ public class MouseDrawing extends PApplet {
         }
         image(canvas, 0, 0);
 
-        if(gui.isMouseOutsideGui()){
-            fill(255);
-            noStroke();
-            ellipse(width - 20, height - 20, 10, 10);
-        }
+        boolean mouseOutsideGui = gui.isMouseOutsideGui();
+        textSize(32);
+        text(mouseOutsideGui ? "The mouse is now a brush." : "The mouse is now using the GUI.", 10, height - 12);
     }
 
     public void mousePressed() {

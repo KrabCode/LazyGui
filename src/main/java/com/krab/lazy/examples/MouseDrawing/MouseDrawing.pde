@@ -27,6 +27,11 @@ void draw() {
     clearCanvas();
   }
   image(canvas, 0, 0);
+
+
+  boolean mouseOutsideGui = gui.isMouseOutsideGui();
+  textSize(32);
+  text(mouseOutsideGui ? "The mouse is now a brush." : "The mouse is now using the GUI.", 10, height - 12);
 }
 
 void mousePressed() {
