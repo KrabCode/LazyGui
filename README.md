@@ -437,13 +437,12 @@ gui = new LazyGui(this, new LazyGuiSettings()
 - for a list of all the options, see the [LazyGuiSettings javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
 
 ## Window restoration
-When you load a save, the GUI will try to restore the window state to what it was when the save was made. 
-This includes the position, size, and open/closed state of every window.
-There are three available modes, selected using the LazyGuiSettings. 
-- `setWindowRestoreNever()`
-- `setWindowRestoreOnlyOnStartup()` <= default
+When you load a save, the GUI will try to restore the window state to what it was when the save was made.
+This includes the position, size, and open/closed state of each window.
+There are three available modes, selected using the [Constructor settings](#constructor-settings).
+- `setWindowRestoreNever()` 
+- `setWindowRestoreOnlyOnStartup()` <= default, a balance of startup convenience and control at runtime
 - `setWindowRestoreAlways()`
-
 
 ## Live shader reloading
 This GUI includes the (slightly out of scope) ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
