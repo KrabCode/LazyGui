@@ -416,7 +416,7 @@ A folder will display a name editable at runtime when there is a **text control*
 You can initialize your gui with an extra settings object to set various global defaults and affect startup and exit behavior.
 Loading a save overwrites these, but you can also disable loading on startup here.
 
-Here's how to use it in a builder chain where the ordering does not matter:
+Here's how to use it in a builder chain where the ordering does not matter (except for conflicting instructions):
 
 ```java
 gui = new LazyGui(this, new LazyGuiSettings()
@@ -428,10 +428,22 @@ gui = new LazyGui(this, new LazyGuiSettings()
             
         // controls whether to autosave, true by default
     .setAutosaveOnExit(false)    
+    
+        // windows will never 'restore' when loading a save (allowed once at startup by default)
+    .setWindowRestoreNever()
 );
 
 ```
 - for a list of all the options, see the [LazyGuiSettings javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
+
+## Window restoration
+When you load a save, the GUI will try to restore the window state to what it was when the save was made. 
+This includes the position, size, and open/closed state of every window.
+There are three available modes, selected using the LazyGuiSettings. 
+    - setWindowRestoreNever()
+    - setWindowRestoreOnlyOnStartup() <- default
+    - setWindowRestoreAlways()
+
 
 ## Live shader reloading
 This GUI includes the (slightly out of scope) ShaderReloader class that watches your shader files as you edit them and re-compiles them when changes are made. 
