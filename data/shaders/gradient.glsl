@@ -9,6 +9,12 @@ uniform vec4[maxColorCount] colorValues;
 uniform float[maxColorCount] colorPositions;
 uniform bool wrapAtEdges;
 
+// related to src/main/java/com/krab/lazy/nodes/GradientBlendType.java
+const int BLEND_TYPE_MIX = 0;
+const int BLEND_TYPE_RGB = 1;
+const int BLEND_TYPE_HSV = 2;
+const int BLEND_TYPE_OKLAB = 3;
+
 //---------------------------------------------------------------------------------
 //--------------------------------Color Functions----------------------------------
 //---------------------------------------------------------------------------------
@@ -188,6 +194,48 @@ vec3 hsb2rgb(in vec3 hsb){
     return hsb.z * mix(vec3(1.0), rgb, hsb.y);
 }
 
+// OKLAB - optimized color mix
+// https://www.shadertoy.com/view/ttcyRS
+
+// The MIT License
+// Copyright © 2020 Inigo Quilez
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// Optimized linear-rgb color mix in oklab space, useful
+// when our software operates in rgb space but we still
+// we want to have intuitive color mixing.
+//
+// oklab was invented by Björn Ottosson: https://bottosson.github.io/posts/oklab
+//
+// More oklab on Shadertoy: https://www.shadertoy.com/view/WtccD7
+
+vec3 oklab_mix( vec3 colA, vec3 colB, float h )
+{
+    // https://bottosson.github.io/posts/oklab
+    const mat3 kCONEtoLMS = mat3(
+    0.4121656120,  0.2118591070,  0.0883097947,
+    0.5362752080,  0.6807189584,  0.2818474174,
+    0.0514575653,  0.1074065790,  0.6302613616);
+    const mat3 kLMStoCONE = mat3(
+    4.0767245293, -1.2681437731, -0.0041119885,
+    -3.3072168827,  2.6093323231, -0.7034763098,
+    0.2307590544, -0.3411344290,  1.7068625689);
+
+    // rgb to cone (arg of pow can't be negative)
+    vec3 lmsA = pow( kCONEtoLMS*colA, vec3(1.0/3.0) );
+    vec3 lmsB = pow( kCONEtoLMS*colB, vec3(1.0/3.0) );
+    // lerp
+    vec3 lms = mix( lmsA, lmsB, h );
+    // gain in the middle (no oaklab anymore, but looks better?)
+    // lms *= 1.0+0.2*h*(1.0-h);
+    // cone to rgb
+    return kLMStoCONE*(lms*lms*lms);
+}
+
+//====================================================
+
+
+
 float map(float value, float start1, float stop1, float start2, float stop2){
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
@@ -198,14 +246,17 @@ float norm(float value, float start, float stop){
 
 vec4 lerpByBlendType(vec4 colorA, vec4 colorB, float amt){
     float mixedAlpha = mix(colorA.a, colorB.a, amt);
-    if(blendType == 0){
+    if(blendType == BLEND_TYPE_MIX){
         return mix(colorA, colorB, amt);
     }
-    if(blendType == 1){
+    if(blendType == BLEND_TYPE_RGB){
         return vec4(iLerp(colorA.rgb, colorB.rgb, amt), mixedAlpha);
     }
-    if(blendType == 2){
+    if(blendType == BLEND_TYPE_HSV){
         return vec4(hsv2rgb(lerpHSV(rgb2hsv(colorA.rgb), rgb2hsv(colorB.rgb), smoothstep(0.0, 1.0, amt))), mixedAlpha);
+    }
+    if(blendType == BLEND_TYPE_OKLAB){
+        return vec4(oklab_mix(colorA.rgb, colorB.rgb, amt), mixedAlpha);
     }
     return vec4(0,0,0,1);
 }
@@ -247,7 +298,6 @@ void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec2 cv = (gl_FragCoord.xy-.5*resolution.xy) / resolution.y;
     float pos = clamp(getPosByDirectionType(uv, cv), 0., 1.);
-    vec3 debug = ivec3(0);
     ivec2 neighbouringIndexes = findClosestNeighboursWrapAware(pos);
     int leftIndex = neighbouringIndexes.x;
     int rightIndex = neighbouringIndexes.y;
@@ -265,7 +315,5 @@ void main(){
             normalizedPosBetweenNeighbours = norm(pos, posA - 1., posB);
         }
     }
-    vec4 mixedColor = lerpByBlendType(colorA, colorB, clamp(normalizedPosBetweenNeighbours, 0., 1.));
-    mixedColor.rgb += debug;
-    gl_FragColor = mixedColor;
+    gl_FragColor = lerpByBlendType(colorA, colorB, clamp(normalizedPosBetweenNeighbours, 0., 1.));;
 }

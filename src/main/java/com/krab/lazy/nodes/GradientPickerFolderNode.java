@@ -2,7 +2,6 @@ package com.krab.lazy.nodes;
 
 import com.krab.lazy.PickerColor;
 import com.krab.lazy.stores.*;
-import com.krab.lazy.utils.ArrayListBuilder;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
@@ -17,8 +16,7 @@ public class GradientPickerFolderNode extends FolderNode {
     private final ToggleNode directionToggle;
     private final RadioFolderNode blendTypePicker;
     private final SliderIntNode colorCountSlider;
-    private final ArrayList<String> blendTypeOptions = new ArrayListBuilder<String>()
-            .add("mix").add("rgb").add("hsv").build();
+    private final String[] blendTypeOptions;
     private final int maxColorCountDefault = 8;
     private int maxColorCount = maxColorCountDefault;
     private int frameLastUpdatedOutputGraphics = -1;
@@ -31,10 +29,11 @@ public class GradientPickerFolderNode extends FolderNode {
         if (defaultColors != null) {
             colorCount = max(minColorCount, defaultColors.length);
         }
+        blendTypeOptions = GradientBlendType.getNamesAsList();
         maxColorCount = max(colorCount, maxColorCount);
         directionToggle = new ToggleNode(path + "/vertical", this, true);
         wrapAtEdgesToggle = new ToggleNode(path + "/edge wrap", this, false);
-        blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions.toArray(new String[0]), blendTypeOptions.get(0));
+        blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions, blendTypeOptions[0]);
         colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, minColorCount, maxColorCountDefault, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionToggle);
@@ -154,7 +153,7 @@ public class GradientPickerFolderNode extends FolderNode {
     }
 
     private int getBlendTypeIndex() {
-        return blendTypeOptions.indexOf(blendTypePicker.valueString);
+        return GradientBlendType.getIndexByName(blendTypePicker.valueString);
     }
 
     private float[] getColorValuesAsFloatArray(ArrayList<GradientColorStopNode> colorStops) {
