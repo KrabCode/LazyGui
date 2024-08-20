@@ -2,11 +2,11 @@ targetDir=build/deploy/LazyGui
 sourceJarName=LazyGui-with-gson.jar
 targetJarName=LazyGui.jar
 
-echo "Deleting data/gui/* ..."
+echo "Deleting data/gui/ ..."
 # testing saves are stored in /data/gui
 rm -rf ./data/gui
 
-echo "Cleaning up build/deploy/ ..."
+echo "Cleaning up build/deploy/* ..."
 # clean deploy directory
 rm -rf ./build/deploy/*
 
