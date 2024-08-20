@@ -169,7 +169,7 @@ gui.colorPickerHueAdd("background", hueToAdd);
 - copy and paste the hex value with mouse over the desired color row / preview / hex string
 
 ### Gradient picker
-![gradient pickers also look like this](https://user-images.githubusercontent.com/25923016/229208017-99699e27-dbb7-4054-ac21-a8fe16156868.gif)
+![gradient pickers look like this](https://user-images.githubusercontent.com/25923016/229208017-99699e27-dbb7-4054-ac21-a8fe16156868.gif)
 ```java
 // simple getter
 PGraphics bgGradient = gui.gradient("background gradient");
@@ -185,6 +185,12 @@ PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 ```
 - allows you to set the position and value of individual colors and get the result as a PGraphics
 - output texture size is kept equal to main sketch size
+- choose from 4 supported color spaces with the "blend" option
+  - [mix](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) - naive RGB lerp (default)
+  - iRGB - improved RGB lerp, (I forgot where I got this from, TODO find source)
+  - [hsv](https://www.shadertoy.com/view/MsS3Wc) - cycle through hues
+  - [oklab](https://bottosson.github.io/posts/oklab/) - perceptual color space
+- gradients are drawn using this shader: [data/shaders/gradient.glsl](data/shaders/gradient.glsl)
 
 
 ### Button

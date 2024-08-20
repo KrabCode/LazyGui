@@ -8,7 +8,7 @@ package com.krab.lazy.nodes;
  */
 public enum GradientBlendType {
     MIX(0, "mix"),
-    RGB(1, "rgb"),
+    RGB(1, "irgb"),
     HSV(2, "hsv"),
     OKLAB(3, "oklab");
 

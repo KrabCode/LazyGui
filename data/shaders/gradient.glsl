@@ -9,7 +9,8 @@ uniform vec4[maxColorCount] colorValues;
 uniform float[maxColorCount] colorPositions;
 uniform bool wrapAtEdges;
 
-// related to src/main/java/com/krab/lazy/nodes/GradientBlendType.java
+// BLEND_TYPE_XXX is related to the enum:
+//  src/main/java/com/krab/lazy/nodes/GradientBlendType.java
 const int BLEND_TYPE_MIX = 0;
 const int BLEND_TYPE_RGB = 1;
 const int BLEND_TYPE_HSV = 2;
@@ -92,7 +93,7 @@ vec3 lerpLch(in vec3 a, in vec3 b, in float x)
     //-----------------HSV-----------------
 
     //HSV functions from iq (https://www.shadertoy.com/view/MsS3Wc)
-    #ifdef SMOOTH_HSV
+
 vec3 hsv2rgb( in vec3 c )
 {
     vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
