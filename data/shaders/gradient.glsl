@@ -12,104 +12,20 @@ uniform bool wrapAtEdges;
 // BLEND_TYPE_XXX is related to the enum:
 //  src/main/java/com/krab/lazy/nodes/GradientBlendType.java
 const int BLEND_TYPE_MIX = 0;
-const int BLEND_TYPE_RGB = 1;
-const int BLEND_TYPE_HSV = 2;
-const int BLEND_TYPE_OKLAB = 3;
-
-//---------------------------------------------------------------------------------
-//--------------------------------Color Functions----------------------------------
-//---------------------------------------------------------------------------------
-// by nmz: https://www.shadertoy.com/view/XddGRN
-
-#define PI 3.14159365
-#define TAU 6.28318531
-
-//Allows to scale the saturation and Value/Lightness of the 2nd color
-const float SAT2MUL = 1.0;
-const float L2MUL = 1.0;
+const int BLEND_TYPE_HSV = 1;
+const int BLEND_TYPE_OKLAB = 2;
 
 
-//const vec3 wref =  vec3(.950456, 1.0, 1.089058);
-const vec3 wref =  vec3(1.0, 1.0, 1.0);
+//-----------------HSV-----------------
 
-#define SMOOTH_HSV
-#define ITR 50
-#define FAR 8.
-
-
-const float fov = 1.5;
-vec2 mo;
-mat2 mm2(in float a){float c = cos(a), s = sin(a);return mat2(c,s,-s,c);}
-
-float sRGB(float t){ return mix(1.055*pow(t, 1./2.4) - 0.055, 12.92*t, step(t, 0.0031308)); }
-vec3 sRGB(in vec3 c) { return vec3 (sRGB(c.x), sRGB(c.y), sRGB(c.z)); }
-
-//-----------------Lch-----------------
-
-float xyzF(float t){ return mix(pow(t,1./3.), 7.787037*t + 0.139731, step(t,0.00885645)); }
-float xyzR(float t){ return mix(t*t*t , 0.1284185*(t - 0.139731), step(t,0.20689655)); }
-vec3 rgb2lch(in vec3 c)
-{
-    c  *= mat3( 0.4124, 0.3576, 0.1805,
-    0.2126, 0.7152, 0.0722,
-    0.0193, 0.1192, 0.9505);
-    c.x = xyzF(c.x/wref.x);
-    c.y = xyzF(c.y/wref.y);
-    c.z = xyzF(c.z/wref.z);
-    vec3 lab = vec3(max(0.,116.0*c.y - 16.0), 500.0*(c.x - c.y), 200.0*(c.y - c.z));
-    return vec3(lab.x, length(vec2(lab.y,lab.z)), atan(lab.z, lab.y));
-}
-
-vec3 lch2rgb(in vec3 c)
-{
-    c = vec3(c.x, cos(c.z) * c.y, sin(c.z) * c.y);
-
-    float lg = 1./116.*(c.x + 16.);
-    vec3 xyz = vec3(wref.x*xyzR(lg + 0.002*c.y),
-    wref.y*xyzR(lg),
-    wref.z*xyzR(lg - 0.005*c.z));
-
-    vec3 rgb = xyz*mat3( 3.2406, -1.5372,-0.4986,
-    -0.9689,  1.8758, 0.0415,
-    0.0557,  -0.2040, 1.0570);
-
-    return rgb;
-}
-
-//cheaply lerp around a circle
-float lerpAng(in float a, in float b, in float x)
-{
-    float ang = mod(mod((a-b), TAU) + PI*3., TAU)-PI;
-    return ang*x+b;
-}
-
-//Linear interpolation between two colors in Lch space
-vec3 lerpLch(in vec3 a, in vec3 b, in float x)
-{
-    float hue = lerpAng(a.z, b.z, x);
-    return vec3(mix(b.xy, a.xy, x), hue);
-}
-
-    //-----------------HSV-----------------
-
-    //HSV functions from iq (https://www.shadertoy.com/view/MsS3Wc)
+//HSV function from iq (https://www.shadertoy.com/view/MsS3Wc)
 
 vec3 hsv2rgb( in vec3 c )
 {
     vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
-
     rgb = rgb*rgb*(3.0-2.0*rgb); // cubic smoothing
-
     return c.z * mix( vec3(1.0), rgb, c.y);
 }
-    #else
-vec3 hsv2rgb( in vec3 c )
-{
-    vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
-
-    return c.z * mix( vec3(1.0), rgb, c.y);
-}
-    #endif
 
 //From Sam Hocevar: http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl
 vec3 rgb2hsv(vec3 c)
@@ -128,64 +44,6 @@ vec3 lerpHSV(in vec3 a, in vec3 b, in float x)
 {
     float hue = (mod(mod((b.x-a.x), 1.) + 1.5, 1.)-0.5)*x + a.x;
     return vec3(hue, mix(a.yz, b.yz, x));
-}
-
-    //---------------Improved RGB--------------
-
-    /*
-        The idea behind this function is to avoid the low saturation area in the
-        rgb color space. This is done by getting the direction to that diagonal
-        and displacing the interpolated	color by it's inverse while scaling it
-        by saturation error and desired lightness.
-
-        I find it behaves very well under most circumstances, the only instance
-        where it doesn't behave ideally is when the hues are very close	to 180
-        degrees apart, since the method I am using to find the displacement vector
-        does not compensate for non-curving motion. I tried a few things to
-        circumvent this problem but none were cheap and effective enough..
-    */
-
-    //Changes the strength of the displacement
-    #define DSP_STR 1.5
-
-    //Optimizaton for getting the saturation (HSV Type) of a rgb color
-    #if 0
-float getsat(vec3 c)
-{
-    c.gb = vec2(max(c.g, c.b), min(c.g, c.b));
-    c.rg = vec2(max(c.r, c.g), min(c.r, c.g));
-    return (c.r - min(c.g, c.b)) / (c.r + 1e-7);
-}
-    #else
-//Further optimization for getting the saturation
-float getsat(vec3 c)
-{
-    float mi = min(min(c.x, c.y), c.z);
-    float ma = max(max(c.x, c.y), c.z);
-    return (ma - mi)/(ma+ 1e-7);
-}
-    #endif
-
-//Improved rgb lerp
-vec3 iLerp(in vec3 a, in vec3 b, in float x)
-{
-    //Interpolated base color (with singularity fix)
-    vec3 ic = mix(a, b, x) + vec3(1e-6,0.,0.);
-
-    //Saturation difference from ideal scenario
-    float sd = abs(getsat(ic) - mix(getsat(a), getsat(b), x));
-
-    //Displacement direction
-    vec3 dir = normalize(vec3(2.*ic.x - ic.y - ic.z, 2.*ic.y - ic.x - ic.z, 2.*ic.z - ic.y - ic.x));
-    //Simple Lighntess
-    float lgt = dot(vec3(1.0), ic);
-
-    //Extra scaling factor for the displacement
-    float ff = dot(dir, normalize(ic));
-
-    //Displace the color
-    ic += DSP_STR*dir*sd*ff*lgt;
-    return clamp(ic,0.,1.);
 }
 
 vec3 hsb2rgb(in vec3 hsb){
@@ -249,9 +107,6 @@ vec4 lerpByBlendType(vec4 colorA, vec4 colorB, float amt){
     float mixedAlpha = mix(colorA.a, colorB.a, amt);
     if(blendType == BLEND_TYPE_MIX){
         return mix(colorA, colorB, amt);
-    }
-    if(blendType == BLEND_TYPE_RGB){
-        return vec4(iLerp(colorA.rgb, colorB.rgb, amt), mixedAlpha);
     }
     if(blendType == BLEND_TYPE_HSV){
         return vec4(hsv2rgb(lerpHSV(rgb2hsv(colorA.rgb), rgb2hsv(colorB.rgb), smoothstep(0.0, 1.0, amt))), mixedAlpha);

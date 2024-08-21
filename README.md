@@ -175,9 +175,14 @@ gui.colorPickerHueAdd("background", hueToAdd);
 PGraphics bgGradient = gui.gradient("background gradient");
 image(bgGradient, 0, 0);
 
-// alternative getter that specifies default color(s)
-gui.gradient("name", color(255,0,150));
+// alternative getter that specifies the default colors
 gui.gradient("name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
+
+// alternative getter that specifies the default colors and their positions
+gui.gradient("name",
+	new int[]{color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)},
+	new float[]{0, 0.5f, 1}
+);
 
 // special getter for a color inside the gradient at a position in range [0, 1]
 // faster than texture.get(x, y) thanks to a color look up table
@@ -187,7 +192,6 @@ PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 - output texture size is kept equal to main sketch size
 - choose from 4 supported color spaces with the "blend" option
   - [mix](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) - naive RGB lerp (default)
-  - iRGB - improved RGB lerp, (I forgot where I got this from, TODO find source)
   - [hsv](https://www.shadertoy.com/view/MsS3Wc) - cycle through hues
   - [oklab](https://bottosson.github.io/posts/oklab/) - perceptual color space
 - gradients are drawn using this shader: [data/shaders/gradient.glsl](data/shaders/gradient.glsl)

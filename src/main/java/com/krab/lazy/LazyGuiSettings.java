@@ -45,6 +45,7 @@ public class LazyGuiSettings {
     private int keyboardMillisDelay = 500;
     private String customGuiDataFolder = null;
     private WindowRestorationStrategy windowRestoreStrategy = null;
+    private String defaultGradientBlendType = null;
 
     /**
      * Constructor, call this before any other function here.
@@ -75,6 +76,7 @@ public class LazyGuiSettings {
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
         this.windowRestoreStrategy = JsonSaveStore.getWindowRestorationStrategy();
+        this.defaultGradientBlendType = LayoutStore.getDefaultGradientBlendType();
     }
 
     void applyEarlyStartupSettings() {
@@ -101,6 +103,7 @@ public class LazyGuiSettings {
         LayoutStore.setIsGuiHidden(startWithGuiHidden);
         LayoutStore.setHideRadioValue(hideRadioValue);
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
+        LayoutStore.setDefaultGradientBlendType(defaultGradientBlendType);
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if (sketchNameOverride != null) {
@@ -448,6 +451,16 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setWindowRestoreNever(){
         this.windowRestoreStrategy = WindowRestorationStrategy.NEVER;
+        return this;
+    }
+
+    /**
+     * Set the default gradient blend type for all gradient control elements.
+     * @param defaultGradientBlendType one of the allowed strings in the gradient "blend" radio options - "mix", "hsv", "oklab"
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setDefaultGradientBlendType(String defaultGradientBlendType) {
+        this.defaultGradientBlendType = defaultGradientBlendType;
         return this;
     }
 

@@ -4,6 +4,7 @@ import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 
 /**
  * Created by Jakub 'Krab' Rak on 2024-08-19
@@ -24,14 +25,18 @@ public class GradientSimple extends PApplet {
     }
 
     public void setup() {
-        gui = new LazyGui(this,
-                new LazyGuiSettings());
+        gui = new LazyGui(this, new LazyGuiSettings().setAutosaveOnExit(false).setLoadLatestSaveOnStartup(false).setDefaultGradientBlendType("mix"));
         pg = createGraphics(fullWidth, fullHeight);
         noStroke();
     }
 
     public void draw() {
         tint(gui.colorPicker("tint", color(255, 255, 255, 255)).hex);
-        image(gui.gradient("gradient"), 0, 0);
+        PImage gradient = gui.gradient("gradient",
+                new int[]{color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)},
+                new float[]{0, 0.5f, 1}
+        );
+        gui.show("gradient");
+        image(gradient, 0, 0);
     }
 }

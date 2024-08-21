@@ -16,24 +16,22 @@ public class GradientPickerFolderNode extends FolderNode {
     private final ToggleNode directionToggle;
     private final RadioFolderNode blendTypePicker;
     private final SliderIntNode colorCountSlider;
-    private final String[] blendTypeOptions;
     private final int maxColorCountDefault = 8;
     private int maxColorCount = maxColorCountDefault;
     private int frameLastUpdatedOutputGraphics = -1;
     private int[] LUT;
 
-    public GradientPickerFolderNode(String path, FolderNode parent, int[] defaultColors) {
+    public GradientPickerFolderNode(String path, FolderNode parent, int[] defaultColors, float[] defaultPositions) {
         super(path, parent);
         colorCount = 4;
         int minColorCount = 2;
         if (defaultColors != null) {
             colorCount = max(minColorCount, defaultColors.length);
         }
-        blendTypeOptions = GradientBlendType.getNamesAsList();
         maxColorCount = max(colorCount, maxColorCount);
         directionToggle = new ToggleNode(path + "/vertical", this, true);
         wrapAtEdgesToggle = new ToggleNode(path + "/edge wrap", this, false);
-        blendTypePicker = new RadioFolderNode(path + "/blend", this, blendTypeOptions, blendTypeOptions[0]);
+        blendTypePicker = new RadioFolderNode(path + "/blend", this,  GradientBlendType.getNamesAsList(), LayoutStore.getDefaultGradientBlendType());
         colorCountSlider = new SliderIntNode(path + "/stops", this, colorCount, minColorCount, maxColorCountDefault, true);
         children.add(new GradientPreviewNode(path + "/preview", this));
         children.add(directionToggle);
@@ -42,7 +40,12 @@ public class GradientPickerFolderNode extends FolderNode {
         children.add(colorCountSlider);
         for (int i = 0; i < maxColorCount; i++) {
             float br = 1 - map(i % colorCount, 0, colorCount, 0.2f, 0.9f);
-            float colorPosition = 0.1f + 0.8f * norm(i%colorCount, 0, colorCount - 1);
+            float colorPosition;
+            if(defaultPositions != null && i < defaultPositions.length){
+                colorPosition = defaultPositions[i];
+            }else{
+                 colorPosition = 0.1f + 0.8f * norm(i%colorCount, 0, colorCount - 1);
+            }
             boolean shouldUseDefaultColor = defaultColors != null;
             int colorHex;
             if (shouldUseDefaultColor) {
@@ -104,7 +107,6 @@ public class GradientPickerFolderNode extends FolderNode {
         out.beginDraw();
         out.clear();
         out.filter(shader);
-//        ShaderReloader.filter(shaderPathLong, out);
         out.endDraw();
         updateLookUpTable(out);
     }

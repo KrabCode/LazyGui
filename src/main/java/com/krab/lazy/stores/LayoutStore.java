@@ -1,6 +1,8 @@
 package com.krab.lazy.stores;
 
 
+import com.krab.lazy.nodes.GradientBlendType;
+
 import static com.krab.lazy.stores.GlobalReferences.gui;
 import static processing.core.PApplet.floor;
 
@@ -21,6 +23,7 @@ public class LayoutStore {
     private static int smoothingValue = 4;
     private static String overridingSketchName = null;
     private static boolean displaySquigglyEquals = false;
+    private static String defaultGradientBlendType = GradientBlendType.MIX.name;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -163,4 +166,11 @@ public class LayoutStore {
         return displaySquigglyEquals;
     }
 
+    public static void setDefaultGradientBlendType(String defaultGradientBlendType) {
+        LayoutStore.defaultGradientBlendType = defaultGradientBlendType;
+    }
+
+    public static String getDefaultGradientBlendType() {
+        return defaultGradientBlendType;
+    }
 }
