@@ -41,7 +41,6 @@ import static processing.core.PApplet.*;
  */
 @SuppressWarnings("unused")
 public class LazyGui  {
-
     private static int lastFrameCountGuiWasShown = -1;
 
     final ArrayList<String> pathPrefix = new ArrayList<>();
@@ -200,8 +199,9 @@ public class LazyGui  {
         targetCanvas.hint(DISABLE_DEPTH_TEST);
         targetCanvas.pushStyle();
         targetCanvas.imageMode(CORNER);
+        targetCanvas.tint(0xFFFFFFFF); // reset tint to draw the gui without it
         targetCanvas.image(guiCanvas, 0, 0);
-        targetCanvas.popStyle();
+        targetCanvas.popStyle(); // pop back to any user-defined tint() or imageMode()
         targetCanvas.hint(ENABLE_DEPTH_TEST);
         takeScreenshotIfRequested();
         JsonSaveStore.updateEndlessLoopDetection();
