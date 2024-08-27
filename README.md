@@ -178,11 +178,12 @@ image(bgGradient, 0, 0);
 // alternative getter that specifies the default colors
 gui.gradient("name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
 
-// alternative getter with a more compact way to specify defaults with varargs 
+// alternative getter which allows you to specify defaults with varargs
 // here you can use two or more gui.colorPoint() parameters
-gui.gradient("name", 
-	gui.colorPoint(color(255,0,0), 0),
-	gui.colorPoint(color(0,0,255), 1)
+gui.gradient("path",
+  gui.colorPoint(color(255, 0, 0), 0f),
+  gui.colorPoint(color(0, 255, 0), 0.5f),
+  gui.colorPoint(color(0, 0, 255), 1f)
 );
 
 // special getter for a color inside the gradient at a position in range [0, 1]
