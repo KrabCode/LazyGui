@@ -25,7 +25,7 @@ public class GradientSimple extends PApplet {
     }
 
     public void setup() {
-        gui = new LazyGui(this, new LazyGuiSettings().setAutosaveOnExit(false).setLoadLatestSaveOnStartup(false).setDefaultGradientBlendType("mix"));
+        gui = new LazyGui(this, new LazyGuiSettings());
         pg = createGraphics(fullWidth, fullHeight);
         noStroke();
     }

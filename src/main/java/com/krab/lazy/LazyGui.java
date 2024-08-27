@@ -100,7 +100,7 @@ public class LazyGui  {
         createSavesFolder();
         WindowManager.addRootWindow();
         loadGuiStateFromExistingFiles(settings);
-        JsonSaveStore.registerExitHandler();
+        JsonSaveStore.registerAutosaveOnExitHandler();
         lazyFollowSketchResolution();
         registerDrawListener();
         settings.applyLateStartupSettings();

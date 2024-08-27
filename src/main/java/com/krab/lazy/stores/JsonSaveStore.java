@@ -36,9 +36,14 @@ public class JsonSaveStore {
             .setPrettyPrinting()
             .setLenient()
             .create();
+    private static final JsonSaveStore singletonInstance = new JsonSaveStore();
 
-    public static void registerExitHandler() {
-        Runtime.getRuntime().addShutdownHook(new Thread(JsonSaveStore::createNewAutosave));
+    public static void registerAutosaveOnExitHandler() {
+        GlobalReferences.app.registerMethod("dispose", singletonInstance);
+    }
+
+    public void dispose(){
+        createNewAutosave();
     }
 
     static void createNewAutosave() {
