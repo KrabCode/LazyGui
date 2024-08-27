@@ -178,7 +178,7 @@ image(bgGradient, 0, 0);
 // alternative getter that specifies the default colors
 gui.gradient("name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150)});
 
-// alternative getter which allows you to specify the positions
+// alternative getter which allows you to specify default colors and positions
 // it uses varargs so you can use two or more gui.colorPoint() parameters
 gui.gradient("path",
   gui.colorPoint(color(255, 0, 0), 0f),
@@ -192,7 +192,7 @@ PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 ```
 - allows you to set the position and value of individual colors and get the result as a PGraphics
 - output texture size is kept equal to main sketch size
-- choose from 4 supported color spaces with the "blend" option
+- choose from 3 supported color spaces with the "blend" option
   - [mix](https://registry.khronos.org/OpenGL-Refpages/gl4/html/mix.xhtml) - naive RGB lerp (default)
   - [hsv](https://www.shadertoy.com/view/MsS3Wc) - cycle through hues
   - [oklab](https://bottosson.github.io/posts/oklab/) - perceptual color space
