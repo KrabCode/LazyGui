@@ -1099,7 +1099,7 @@ public class LazyGui  {
      * @param defaultPositions default position array for all the colors in the gradient - this array must be the same length as defaultColors and must contain values in the range [0,1]
      * @return PGraphics ready to be displayed as an image
      */
-    public PGraphics gradient(String path, int[] defaultColors, float[] defaultPositions) {
+    private PGraphics gradient(String path, int[] defaultColors, float[] defaultPositions) {
         String fullPath = getFolder() + path;
         if(isPathTakenByUnexpectedType(fullPath, GradientPickerFolderNode.class)){
             return null;
