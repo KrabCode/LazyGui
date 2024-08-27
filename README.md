@@ -180,7 +180,7 @@ gui.gradient("name", new int[]{color(255,0,150), color(0,150,0), color(0,100,150
 
 // alternative getter which allows you to specify default colors and positions
 // it uses varargs so you can use two or more gui.colorPoint() parameters
-gui.gradient("path",
+gui.gradient("name",
   gui.colorPoint(color(255, 0, 0), 0f),
   gui.colorPoint(color(0, 255, 0), 0.5f),
   gui.colorPoint(color(0, 0, 255), 1f)
@@ -203,8 +203,10 @@ PickerColor myColor = gui.gradientColorAt("name", positionNorm);
 ![a button looks like this](https://user-images.githubusercontent.com/25923016/229208008-04dec541-c3d5-4f77-bd3f-ff824d64d395.gif)
 ```java
 // getter that is only true once after being clicked and then switches to false 
-if(gui.button("do the thing!")){
-    println("it is done");
+boolean clear = gui.button("clear");
+if(clear){
+    background(0.1);
+    println("background cleared");
 }
 ```
 
