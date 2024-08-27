@@ -1027,7 +1027,7 @@ public class LazyGui  {
      * @return PGraphics after endDraw() - ready to be displayed as an image
      */
     public PGraphics gradient(String path) {
-        return gradient(path, null);
+        return gradient(path, (int[]) null);
     }
 
     /**
@@ -1044,7 +1044,7 @@ public class LazyGui  {
 
     /**
      * Gets a gradient as an image with size matching the main processing sketch size.
-     * Lazily initializes the gradient picker if needed with the alpha parameter as default alpha for all its colors.
+     * Lazily initializes the gradient picker if needed with the specified colors at some sensible positions.
      *
      * @param path forward slash separated unique path to the control element
      * @param defaultColors default color array for all the colors in the gradient
@@ -1053,6 +1053,40 @@ public class LazyGui  {
      */
     public PGraphics gradient(String path, int[] defaultColors) {
         return gradient(path, defaultColors, null);
+    }
+
+    /**
+     * Helper function for calling `gui.gradient(String path, ColorPoint... colorPoints)` without having to mention the ColorPoint class.
+     * @param color hex color such as 0xFF123456, also works with processing 'color' type
+     * @param pos floating point position on the gradient between 0 and 1
+     * @return ColorPoint object with color and position to be used as default values of a gradient
+     */
+    public ColorPoint colorPoint(int color, float pos) {
+        return new ColorPoint(color, pos);
+    }
+
+    /**
+     * Gets a gradient as an image with size matching the main processing sketch size.
+     * Lazily initializes the gradient picker if needed with the specified color points as the default colors and positions.
+     * An instance of ColorPoint can be created either with `new ColorPoint(color(255,0,0), 0.5)` or with gui.colorPoint(color(255, 0, 0), position)
+     * So an example of calling this function would be `gui.gradient("path", gui.colorPoint(color(255,0,0), 0), gui.colorPoint(color(0,255,0), 1))`
+     * @param path forward slash separated unique path to the control element
+     * @param colorPoints varargs of ColorPoint - must have at least two elements - the position is expected to be between 0 and 1
+     * @return PGraphics ready to be displayed as an image
+     */
+    public PGraphics gradient(String path, ColorPoint... colorPoints){
+        if(colorPoints.length < 2){
+            println("ColorPoint array must contain at least 2 elements");
+            return null;
+        }
+        int[] colors = new int[colorPoints.length];
+        float[] positions = new float[colorPoints.length];
+        for(int i = 0; i < colorPoints.length; i++){
+            ColorPoint entry = colorPoints[i];
+            colors[i] = entry.color;
+            positions[i] = constrain(entry.position, 0, 1);
+        }
+        return gradient(path, colors, positions);
     }
 
     /**
@@ -1398,5 +1432,4 @@ public class LazyGui  {
         MouseHiding.updateSettings();
         gui.popFolder();
     }
-
 }

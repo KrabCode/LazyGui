@@ -32,11 +32,12 @@ public class GradientSimple extends PApplet {
 
     public void draw() {
         tint(gui.colorPicker("tint", color(255, 255, 255, 255)).hex);
-        PImage gradient = gui.gradient("gradient",
-                new int[]{color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)},
-                new float[]{0, 0.5f, 1}
-        );
-        gui.show("gradient");
+        PImage gradient =
+            gui.gradient("path",
+                    gui.colorPoint(color(255,0,0), 0),
+                    gui.colorPoint(color(0,255,0), 0.5f),
+                    gui.colorPoint(color(0,0,255), 1)
+            );
         image(gradient, 0, 0);
     }
 }

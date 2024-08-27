@@ -184,6 +184,12 @@ gui.gradient("name",
 	new float[]{0, 0.5f, 1}
 );
 
+// alternative getter with a more compact way to specify default colors and positions with varargs (so you can use any number of gui.colorPoint() parameters as long as it's more than 2)
+gui.gradient("path", 
+		gui.colorPoint(color(255,0,0), 0),
+		gui.colorPoint(color(0,0,255), 1)
+);
+
 // special getter for a color inside the gradient at a position in range [0, 1]
 // faster than texture.get(x, y) thanks to a color look up table
 PickerColor myColor = gui.gradientColorAt("name", positionNorm);
