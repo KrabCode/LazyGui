@@ -8,7 +8,7 @@ public class ColorPoint{
     int color; // processing hex color, e.g. 0xFF00FF00
     float position; // expected to be normalized to [0, 1]
 
-    ColorPoint(int color, float position){
+    public ColorPoint(int color, float position){
         this.color = color;
         this.position = position;
     }
