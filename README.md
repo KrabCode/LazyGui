@@ -305,7 +305,7 @@ void mousePressed(){
     }
 }
 ```
-see: [isMouseOutsideGui()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#isMouseOutsideGui--), [MouseDrawing](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/MouseDrawing/MouseDrawing.pde)  
+see: [isMouseOutsideGui()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#isMouseOutsideGui--), [isMouseOverGui()](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGui.html#isMouseOverGui--), [MouseDrawing](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/MouseDrawing/MouseDrawing.pde)  
 
 ## Drawing the GUI manually
 The GUI draws itself at the end of draw() by default, but you can override this by calling `gui.draw()` before that happens. The GUI will never draw itself more than once per frame, so the automatic execution is skipped when this is called manually.
