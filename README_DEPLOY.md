@@ -7,6 +7,7 @@
   - Custom scope to only include `com.krab.lazy.*` (should only be around 6 classes that constitute the public facing API)
   - Output directory: `\docs`
   - Visibility level: public
+- If you added a new class to the public API then don't forget to add it in git, otherwise its page in the docs will 404
 - Pushing the new \docs to master will then automatically publish the docs at https://krabcode.github.io/LazyGui/
 ---
 
