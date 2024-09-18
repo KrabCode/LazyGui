@@ -1071,14 +1071,10 @@ public class LazyGui  {
      * An instance of ColorPoint can be created either with `new ColorPoint(color(255,0,0), 0.5)` or with gui.colorPoint(color(255, 0, 0), position)
      * So an example of calling this function would be `gui.gradient("path", gui.colorPoint(color(255,0,0), 0), gui.colorPoint(color(0,255,0), 1))`
      * @param path forward slash separated unique path to the control element
-     * @param colorPoints varargs of ColorPoint - must have at least two elements - the position is expected to be between 0 and 1
+     * @param colorPoints varargs of ColorPoint - the position should be between 0 and 1
      * @return PGraphics ready to be displayed as an image
      */
     public PGraphics gradient(String path, ColorPoint... colorPoints){
-        if(colorPoints.length < 2){
-            println("ColorPoint array must contain at least 2 elements");
-            return null;
-        }
         int[] colors = new int[colorPoints.length];
         float[] positions = new float[colorPoints.length];
         for(int i = 0; i < colorPoints.length; i++){
