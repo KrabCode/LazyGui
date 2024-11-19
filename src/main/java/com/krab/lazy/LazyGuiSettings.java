@@ -468,11 +468,13 @@ public class LazyGuiSettings {
     }
 
     /**
-     * Sets the custom new save file name to be the same as the last loaded save file.
+     * Sets the custom new save file name to be the same as the last loaded save file whenever a save is loaded.
      * This automatic save name replacement is not enabled by default.
      * You can see and edit the current save name manually inside the text node at "saves/custom save name".
      * {@link LazyGui#createSave(String)} ignores the custom save name, because the parameter already contains a file name.
      * {@link LazyGui#createSave()} respects the custom save name or picks the next free integer when the custom name is empty.
+     * @param overwriteLastLoadedSave whether to overwrite the custom save name with the last loaded save name
+     * @return this settings object for chaining statements easily
      */
     public LazyGuiSettings setOverwriteLastLoadedSave(boolean overwriteLastLoadedSave) {
         this.overwriteLastLoadedSave = overwriteLastLoadedSave;

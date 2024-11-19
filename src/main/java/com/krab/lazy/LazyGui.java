@@ -1297,7 +1297,7 @@ public class LazyGui  {
      * Works the same way as clicking the "Create new save" gui button inside the built-in 'saves' window.
      * Respects the current 'custom save name' inside the 'saves' window.
      * @see LazyGui#createSave(String path)
-     * @see LazyGuiSettings#setOverwriteLastLoadedSave()
+     * @see LazyGuiSettings#setOverwriteLastLoadedSave(boolean)
      */
     public void createSave(){
         JsonSaveStore.createNextSaveInGuiFolder();
