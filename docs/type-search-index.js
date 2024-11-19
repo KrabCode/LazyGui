@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.krab.lazy","l":"ColorPoint"},{"p":"com.krab.lazy","l":"Input"},{"p":"com.krab.lazy","l":"KeyState"},{"p":"com.krab.lazy","l":"LazyGui"},{"p":"com.krab.lazy","l":"LazyGuiSettings"},{"p":"com.krab.lazy","l":"PickerColor"},{"p":"com.krab.lazy","l":"ShaderReloader"}];updateSearchResults();
