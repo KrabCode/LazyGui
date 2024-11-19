@@ -55,40 +55,42 @@ void style() {
   gui.popFolder();
 }
 
+
 // font() related fields
-PFont selectedFont;
+HashMap<String, PFont> selectedFontsByFolder = new HashMap<String, PFont>();
 HashMap<String, Integer> xAligns;
 HashMap<String, Integer> yAligns;
 
 void font() {
-    gui.pushFolder("font");
-    fill(gui.colorPicker("fill", color(255)).hex);
-    int size = gui.sliderInt("size", 64, 1, 256);
-    float leading = gui.slider("leading", 64);
-    if (xAligns == null || yAligns == null) {
-        xAligns = new HashMap<String, Integer>();
-        xAligns.put("left", LEFT);
-        xAligns.put("center", CENTER);
-        xAligns.put("right", RIGHT);
-        yAligns = new HashMap<String, Integer>();
-        yAligns.put("top", TOP);
-        yAligns.put("center", CENTER);
-        yAligns.put("bottom", BOTTOM);
+  gui.pushFolder("font");
+  fill(gui.colorPicker("fill", color(150,0,0)).hex);
+  int size = gui.sliderInt("size", 64, 1, 256);
+  float leading = gui.slider("leading", 64);
+  if (xAligns == null || yAligns == null) {
+    xAligns = new HashMap<String, Integer>();
+    xAligns.put("left", LEFT);
+    xAligns.put("center", CENTER);
+    xAligns.put("right", RIGHT);
+    yAligns = new HashMap<String, Integer>();
+    yAligns.put("top", TOP);
+    yAligns.put("center", CENTER);
+    yAligns.put("bottom", BOTTOM);
+  }
+  String xAlignSelection = gui.radio("align x", xAligns.keySet().toArray(new String[0]), "center");
+  String yAlignSelection = gui.radio("align y", yAligns.keySet().toArray(new String[0]), "center");
+  textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
+  String fontName = gui.text("font name", "Arial").trim();
+  if (gui.button("list fonts")) {
+    String[] fonts = PFont.list();
+    for (String font : fonts) {
+      println(font + "                 "); // some spaces to avoid copying newlines from the console
     }
-    String xAlignSelection = gui.radio("align x", xAligns.keySet().toArray(new String[0]), "center");
-    String yAlignSelection = gui.radio("align y", yAligns.keySet().toArray(new String[0]), "center");
-    textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
-    String fontName = gui.text("font name", "Arial").trim();
-    if (gui.button("list fonts")) {
-        String[] fonts = PFont.list();
-        for (String font : fonts) {
-            println(font + "                 "); // some spaces to avoid copying newlines from the console
-        }
-    }
-    if (selectedFont == null || gui.hasChanged("font name") || gui.hasChanged("size")) {
-        selectedFont = createFont(fontName, size);
-    }
-    textFont(selectedFont);
-    textLeading(leading);
-    gui.popFolder();
+  }
+  String mapKey = gui.getFolder(); // the map separates different font() calls from different folders which allows using multiple fonts at a time
+  if (!selectedFontsByFolder.containsKey(mapKey) || gui.hasChanged("font name") || gui.hasChanged("size")) {
+    selectedFontsByFolder.put(mapKey, createFont(fontName, size));
+  }
+  textFont(selectedFontsByFolder.get(mapKey));
+  textLeading(leading);
+  gui.popFolder();
 }
