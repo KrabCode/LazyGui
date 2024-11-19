@@ -25,7 +25,7 @@ public class GradientSimple extends PApplet {
     }
 
     public void setup() {
-        gui = new LazyGui(this, new LazyGuiSettings().setOverwriteLastLoadedSave(true));
+        gui = new LazyGui(this);
         pg = createGraphics(fullWidth, fullHeight);
         noStroke();
     }
