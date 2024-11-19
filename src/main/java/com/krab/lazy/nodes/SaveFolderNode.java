@@ -28,6 +28,7 @@ public class SaveFolderNode extends FolderNode {
 
     public SaveFolderNode(String path, FolderNode parent) {
         super(path, parent);
+        JsonSaveStore.customSaveNameOverrideNode = new TextNode(path + "/custom save name", this, "");
         buttonCreateNewSave = new ButtonNode(path + "/create new save", this);
         buttonOpenSaveFolder = new ButtonNode(path + "/open save folder", this);
         String autosaveFolderPath = "/autosave rules";
@@ -43,8 +44,9 @@ public class SaveFolderNode extends FolderNode {
         autosaveFolder.children.add(autosaveMillisSlider);
         autosaveFolder.children.add(readAutosaveExplanationToggle);
         autosaveFolder.children.add(autosaveReadmeTextNode);
-        children.add(buttonCreateNewSave);
         children.add(buttonOpenSaveFolder);
+        children.add(buttonCreateNewSave);
+        children.add(JsonSaveStore.customSaveNameOverrideNode);
         children.add(autosaveFolder);
         childrenThatAreNotSaveFiles.addAll(children);
         updateReadmeVisibility();

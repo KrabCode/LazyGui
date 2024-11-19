@@ -1295,6 +1295,9 @@ public class LazyGui  {
     /**
      * Creates a new, sequentially numbered save file in the gui save folder inside the sketch data folder.
      * Works the same way as clicking the "Create new save" gui button inside the built-in 'saves' window.
+     * Respects the current 'custom save name' inside the 'saves' window.
+     * @see LazyGui#createSave(String path)
+     * @see LazyGuiSettings#setOverwriteLastLoadedSave()
      */
     public void createSave(){
         JsonSaveStore.createNextSaveInGuiFolder();
@@ -1304,6 +1307,7 @@ public class LazyGui  {
      * Creates a new save file or overwrites an existing one while auto-detecting whether the parameter is a relative or an absolute path to it on disk.
      * Relative paths get saved inside the standard gui save folder and are immediately accessible from the 'saves' window.
      * Absolute paths get saved wherever the absolute path leads.
+     * Ignores the custom save name inside the 'saves' window, because the parameter already contains a file name.
      * Uses java.nio.file.Paths.get(fileName).isAbsolute() for its auto-detection.
      * @param path name of the new save file or its entire absolute path, ".json" file type suffix is optional and will be appended if missing
      */

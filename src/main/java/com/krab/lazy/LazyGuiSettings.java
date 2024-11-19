@@ -46,6 +46,7 @@ public class LazyGuiSettings {
     private String customGuiDataFolder = null;
     private WindowRestorationStrategy windowRestoreStrategy = null;
     private String defaultGradientBlendType = null;
+    private boolean overwriteLastLoadedSave = false;
 
     /**
      * Constructor, call this before any other function here.
@@ -76,6 +77,7 @@ public class LazyGuiSettings {
         this.mainFontSize = FontStore.mainFontSizeDefault;
         this.sideFontSize = FontStore.sideFontSizeDefault;
         this.windowRestoreStrategy = JsonSaveStore.getWindowRestorationStrategy();
+        this.overwriteLastLoadedSave = JsonSaveStore.getShouldOverwriteLastLoadedSave();
         this.defaultGradientBlendType = LayoutStore.getDefaultGradientBlendType();
     }
 
@@ -86,6 +88,7 @@ public class LazyGuiSettings {
         JsonSaveStore.autosaveOnExitEnabled = autosaveOnExitEnabled;
         JsonSaveStore.autosaveLockGuardEnabled = autosaveLockGuardEnabled;
         JsonSaveStore.autosaveLockGuardMillisLimit = autosaveLockGuardMillisLimit;
+        JsonSaveStore.setShouldOverwriteLastLoadedSave(overwriteLastLoadedSave);
         JsonSaveStore.setWindowRestorationStrategy(windowRestoreStrategy);
 
         MouseHiding.shouldHideWhenDragging = mouseShouldHideWhenDragging;
@@ -461,6 +464,18 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setDefaultGradientBlendType(String defaultGradientBlendType) {
         this.defaultGradientBlendType = defaultGradientBlendType;
+        return this;
+    }
+
+    /**
+     * Sets the custom new save file name to be the same as the last loaded save file.
+     * This automatic save name replacement is not enabled by default.
+     * You can see and edit the current save name manually inside the text node at "saves/custom save name".
+     * {@link LazyGui#createSave(String)} ignores the custom save name, because the parameter already contains a file name.
+     * {@link LazyGui#createSave()} respects the custom save name or picks the next free integer when the custom name is empty.
+     */
+    public LazyGuiSettings setOverwriteLastLoadedSave(boolean overwriteLastLoadedSave) {
+        this.overwriteLastLoadedSave = overwriteLastLoadedSave;
         return this;
     }
 

@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.krab.lazy.nodes.FolderNode;
 import com.krab.lazy.nodes.NodeType;
 import com.krab.lazy.nodes.AbstractNode;
+import com.krab.lazy.nodes.TextNode;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,8 @@ public class JsonSaveStore {
     public static boolean autosaveLockGuardEnabled = true;
     public static final boolean shouldLoadLatestSaveOnStartupByDefault = true;
     public static long autosaveLockGuardMillisLimit = 1000;
+
+
     private static long lastFrameMillisForLockGuard;
     private static final Map<String, JsonElement> lastLoadedStateMap = new HashMap<>();
     private static File saveDir;
@@ -37,9 +40,19 @@ public class JsonSaveStore {
             .setLenient()
             .create();
     private static final JsonSaveStore singletonInstance = new JsonSaveStore();
+    private static boolean shouldOverwriteLastLoadedSave = false;
+    public static TextNode customSaveNameOverrideNode = null;
 
     public static void registerAutosaveOnExitHandler() {
         GlobalReferences.app.registerMethod("dispose", singletonInstance);
+    }
+
+    public static boolean getShouldOverwriteLastLoadedSave() {
+        return shouldOverwriteLastLoadedSave;
+    }
+
+    public static void setShouldOverwriteLastLoadedSave(boolean shouldOverwriteLastLoadedSave) {
+        JsonSaveStore.shouldOverwriteLastLoadedSave = shouldOverwriteLastLoadedSave;
     }
 
     public void dispose(){
@@ -55,7 +68,7 @@ public class JsonSaveStore {
                     " which looks like the program stopped due to an exception or reached an endless loop");
             return;
         }
-        JsonSaveStore.createNewSaveInGuiFolder("auto");
+        JsonSaveStore.createNewSaveInGuiFolder(tryReplaceWithCustomFilename("auto"));
     }
 
     public static void updateEndlessLoopDetection() {
@@ -91,8 +104,9 @@ public class JsonSaveStore {
     }
 
     public static void createNextSaveInGuiFolder() {
-        String nextName = getNextUnusedIntegerFileNameInFolder(saveDir);
-        createNewSaveInGuiFolder(nextName);
+        String fileName = getNextUnusedIntegerFileNameInFolder(saveDir);
+        fileName = tryReplaceWithCustomFilename(fileName);
+        createNewSaveInGuiFolder(fileName);
     }
 
     public static void createNewSaveInGuiFolder(String fileName) {
@@ -101,9 +115,19 @@ public class JsonSaveStore {
         createNewSaveAtAbsolutePath(fullSavePath);
     }
 
-    public static void createNewSaveAtAbsolutePath(String fileName) {
-        String fileNameWithType = String.valueOf(Paths.get(appendJsonFileTypeIfNeeded(fileName)));
+    public static void createNewSaveAtAbsolutePath(String absoluteFilePath) {
+        String fileNameWithType = String.valueOf(Paths.get(appendJsonFileTypeIfNeeded(absoluteFilePath)));
         overwriteFile(fileNameWithType, getTreeAsJsonString());
+    }
+
+    private static String tryReplaceWithCustomFilename(String fileName) {
+        if (customSaveNameOverrideNode != null) {
+            String value = customSaveNameOverrideNode.getStringValue();
+            if(value != null && !value.isEmpty()){
+              return value;
+            }
+        }
+        return fileName;
     }
 
     public static void loadLatestSave() {
@@ -194,8 +218,12 @@ public class JsonSaveStore {
         JsonElement root = getJsonElementFromString(json);
         loadStateFromJsonElement(root, null);
         println("Loaded gui state from: " + file.getPath());
+        if(customSaveNameOverrideNode != null){
+            if(shouldOverwriteLastLoadedSave){
+                customSaveNameOverrideNode.setStringValue(getFileNameWithoutTypeExtension(file.getName()));
+            }
+        }
     }
-
 
     public static String getTreeAsJsonString() {
         return gson.toJson(NodeTree.getRoot());
