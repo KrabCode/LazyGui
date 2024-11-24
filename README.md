@@ -1,4 +1,4 @@
-![LazyGui header](https://user-images.githubusercontent.com/25923016/229351039-be75376e-ee45-4a2b-905d-392ad2a289d4.png)
+![LazyGui header](https://i.imgur.com/vHcxe2R.gif)
 
 Table of Contents
 <!-- TOC -->
