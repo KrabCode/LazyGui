@@ -59,6 +59,12 @@ public class ImageFolderNode extends FolderNode {
         // draw the standard left text
         drawLeftText(pg, name);
 
+        // if there is no image, show the eye with a slash
+        boolean showSlash = (image == null);
+        drawInlineEye(pg, showSlash);
+    }
+
+    private void drawInlineEye(PGraphics pg, boolean showSlash) {
         // draw a small eye icon at the same place/size as other preview icons
         float previewRectSize = LayoutStore.cell * 0.6f;
         float iconX = size.x - LayoutStore.cell * 0.5f;
@@ -67,28 +73,34 @@ public class ImageFolderNode extends FolderNode {
         pg.pushMatrix();
         pg.translate(iconX, iconY);
 
-        // eye outline
-        if (isMouseOverNode) {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-        } else {
-            pg.stroke(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        }
-        pg.strokeWeight(1.2f);
-        pg.noFill();
         float w = previewRectSize;
         float h = previewRectSize * 0.6f;
+
+        // outline color depends on hover
+        int stroke = isMouseOverNode ? ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND) : ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND);
+
+        // eye outline
+        pg.pushStyle();
+        pg.stroke(stroke);
+        pg.strokeWeight(1.2f);
+        pg.noFill();
         pg.ellipse(0, 0, w, h);
 
         // pupil
         pg.noStroke();
-        if (isMouseOverNode) {
-            pg.fill(ThemeStore.getColor(ThemeColorType.FOCUS_FOREGROUND));
-        } else {
-            pg.fill(ThemeStore.getColor(ThemeColorType.NORMAL_FOREGROUND));
-        }
+        pg.fill(stroke);
         float pupilSize = h * 0.45f;
         pg.ellipse(0, 0, pupilSize, pupilSize);
 
+        if (showSlash) {
+            // optional slash when showing null state
+            pg.stroke(stroke);
+            pg.strokeWeight(2f);
+            float slashHalfW = w * 0.45f;
+            float slashHalfH = h * 0.45f;
+            pg.line(-slashHalfW, -slashHalfH, slashHalfW, slashHalfH);
+        }
+        pg.popStyle();
         pg.popMatrix();
     }
 }
