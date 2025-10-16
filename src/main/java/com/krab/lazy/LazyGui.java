@@ -1432,4 +1432,29 @@ public class LazyGui  {
         MouseHiding.updateSettings();
         gui.popFolder();
     }
+
+    /**
+     * Displays a transient PImage in a resizable folder window at the given path.
+     * The image is not stored/serialized and is updated each frame by passing it here.
+     * Does not call get() internally to avoid performance issues,
+     * so if you want a snapshot of an image that evolves during draw() you must call get() on it before passing it here.
+     * The window contains a single inline preview row that defaults to 4 rows high and can be resized.
+     * The image is uniformly scaled down to fit the preview area and is never upscaled.
+     *
+     * @param path forward slash separated unique path to the control element
+     * @param img  a Processing PImage to display (can even be null, which will be handled gracefully as text saying "null image")
+     */
+    public void image(String path, processing.core.PImage img) {
+        String fullPath = getFolder() + path;
+        if(isPathTakenByUnexpectedType(fullPath, ImageFolderNode.class)){
+            return;
+        }
+        ImageFolderNode node = (ImageFolderNode) findNode(fullPath);
+        if (node == null) {
+            FolderNode folder = NodeTree.findParentFolderLazyInitPath(fullPath);
+            node = new ImageFolderNode(fullPath, folder);
+            insertNodeAtItsPath(node);
+        }
+        node.setImage(img);
+    }
 }

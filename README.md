@@ -16,6 +16,7 @@ Table of Contents
     * [Toggle](#toggle)
     * [Text input](#text-input)
     * [Radio](#radio)
+    * [Image preview](#image-preview)
   * [Hotkeys](#hotkeys)
     * [Global hotkeys](#global-hotkeys)
     * [Mouse-over hotkeys](#mouse-over-hotkeys)
@@ -278,6 +279,26 @@ gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
 - changes to the options parameter will be ignored after the radio is first initialized
 - the options can only be changed at runtime with `radioSetOptions()`
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
+
+### Image preview
+![image preview placeholder](https://via.placeholder.com/320x180.png?text=Image+Preview)
+
+A simple preview window for a `PImage` or `PGraphics`.
+
+- top-left aligned, resizable preview
+- doesn't call get() internally to avoid performance issues
+- you can use get() yourself to make snapshots of your main canvas during draw()
+
+Example:
+```java
+// PImage or PGraphics
+gui.image("preview", img);
+
+// Main canvas snapshots to show different states during one draw() call
+gui.image("snapshot 1", get());
+// draw something ..
+gui.image("snapshot 2", get());
+```
 
 ## Hotkeys
 
