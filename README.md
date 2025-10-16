@@ -17,6 +17,8 @@ Table of Contents
     * [Text input](#text-input)
     * [Radio](#radio)
   * [Hotkeys](#hotkeys)
+    * [Global hotkeys](#global-hotkeys)
+    * [Mouse-over hotkeys](#mouse-over-hotkeys)
   * [Mouse interaction](#mouse-interaction)
   * [Drawing the GUI manually](#drawing-the-gui-manually)
   * [Saving and loading values](#saving-and-loading-values)
@@ -116,7 +118,7 @@ gui.slider("x", defaultFloat, minimumFloat, maximumFloat);
 gui.sliderAdd("x", floatToAdd);
 gui.sliderSet("x", floatToSet);
 ```
-- mouse wheel changes the selected precision when mouse is over the slider
+- change the selected precision when mouse is over a slider with the mouse wheel or `/` and `*` keys
 - click and drag mouse horizontally - change value by (pixels * precision)
 - supports keyboard input with mouse over the slider - tries to parse the string as Float or Int
 - there is a `sliderInt()` alternative that uses and returns `int`
@@ -278,21 +280,28 @@ gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
 ## Hotkeys
-|   Global hotkey   | Action                                 |     
-|:-----------------:|:---------------------------------------|
-|         H         | Hide GUI / Show GUI                    |     
-|         D         | Close windows                          |     
-|         I         | Save screenshot                        | 
-|     CTRL + Z      | Undo                                   | 
-|     CTRL + Y      | Redo                                   |        
-|     CTRL + S      | [New save](#saving-and-loading-values) |   
 
-| Mouse hotkey | Action on element under mouse |
-|:------------:|:------------------------------|
-| Right click  | Close window                  |
-|      R       | Reset value to default        |
-|   CTRL + C   | Copy value or folder          |
-|   CTRL + V   | Paste to value or folder      |
+### Global hotkeys
+|   Key    | Action                                 |     
+|:--------:|:---------------------------------------|
+|    H     | Hide GUI / Show GUI                    |     
+|    D     | Close windows                          |     
+|    I     | Save screenshot                        | 
+| CTRL + Z | Undo                                   | 
+| CTRL + Y | Redo                                   |        
+| CTRL + S | [New save](#saving-and-loading-values) |   
+
+### Mouse-over hotkeys
+|     Key     | Action on element under mouse |
+|:-----------:|:------------------------------|
+| Right click | Close window                  |
+|      R      | Reset value to default        |
+|  CTRL + C   | Copy value or folder          |
+|  CTRL + V   | Paste to value or folder      |
+|      *      | Increase slider precision     |
+|  Wheel up   | Increase slider precision     |
+|      /      | Lower slider precision        |
+| Wheel down  | Lower slider precision        |
 
 ## Mouse interaction
 Interacting with your sketch using the mouse can be very useful, but the GUI can get in the way, usually you don't want the sketch to react when you're dragging a slider in the GUI.
