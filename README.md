@@ -281,7 +281,7 @@ gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
 ### Image preview
-![image preview](https://private-user-images.githubusercontent.com/25923016/501999099-d4acde02-e076-4814-b4eb-068c2521ad5e.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA2Mjg2ODEsIm5iZiI6MTc2MDYyODM4MSwicGF0aCI6Ii8yNTkyMzAxNi81MDE5OTkwOTktZDRhY2RlMDItZTA3Ni00ODE0LWI0ZWItMDY4YzI1MjFhZDVlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE2VDE1MjYyMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRmMDEwZDFiNWE1NGM1MDA5NmZjODA4ZjVlNzI1MjdiYzIzODk2OTRlYjYzMjQ1MmY5ZmU4NWY5Y2RkMmVkNDYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.N7QhjjSUeQsMJ6IIwsGgcfUCifNNBaDl1KAMR_P-rEs)
+![image preview](https://i.imgur.com/OujT62W.png)
 
 A simple preview window for a `PImage` or `PGraphics`.
 
