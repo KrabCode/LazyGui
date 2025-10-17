@@ -281,7 +281,7 @@ gui.radioSetOptions("mode", new String[]{"square", "circle", "triangle"});
 - instead of the `String[]` array of options you can also use `List<String>` or `ArrayList<String>`
 
 ### Image preview
-![image preview](https://i.imgur.com/OujT62W.png)
+![image preview](https://i.imgur.com/dyxAGjw.png)
 
 A simple preview window for a `PImage` or `PGraphics`.
 
