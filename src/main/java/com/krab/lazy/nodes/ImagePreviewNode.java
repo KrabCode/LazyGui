@@ -36,17 +36,14 @@ class ImagePreviewNode extends AbstractNode {
             return;
         }
         // desired draw width is the available width for the node
-        float desiredDrawW = availableW;
         // compute scale to make image match available width
-        float scaleForWidth = desiredDrawW / (float) img.width;
+        float scaleForWidth = parent.window.windowSizeX / (float) img.width;
         // clamp to 1.0 to avoid upscaling
         scaleForWidth = Math.min(scaleForWidth, 1.0f);
         // compute desired height in pixels
         float desiredDrawH = img.height * scaleForWidth;
-        // convert to cells
-        float desiredCells = Math.max(1f, desiredDrawH / LayoutStore.cell);
-        // apply immediately (no smoothing)
-        masterInlineNodeHeightInCells = desiredCells;
+        // convert to cells, apply immediately (no smoothing)
+        masterInlineNodeHeightInCells = Math.max(1f, desiredDrawH / LayoutStore.cell);
     }
 
     @Override

@@ -21,6 +21,7 @@ public class ImageFolderNode extends FolderNode {
 
     public ImageFolderNode(String path, FolderNode parent) {
         super(path, parent);
+        idealWindowWidthInCells = 8;
         // add the preview child
         children.add(new ImagePreviewNode(path + "/preview", this));
         // don't serialize image - ensure other folder state (like window) can be loaded normally
