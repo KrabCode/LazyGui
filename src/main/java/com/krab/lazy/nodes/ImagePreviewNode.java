@@ -20,7 +20,6 @@ class ImagePreviewNode extends AbstractNode {
     ImagePreviewNode(String path, ImageFolderNode parent) {
         super(NodeType.TRANSIENT, path, parent);
         this.parentFolder = parent;
-        masterInlineNodeHeightInCells = 4;
         isInlineNodeDraggable = false;
     }
 
