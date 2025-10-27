@@ -13,7 +13,7 @@ void setup() {
   gui = new LazyGui(this);
   pgInvert = createGraphics(400, 400, P2D);
   pgHue = createGraphics(400, 400, P2D);
-  img = loadImage("https://picsum.photos/id/237/400/400.jpg");
+  img = loadImage("picsum_dog.jpg");
   shaderHueShift = loadShader(SHADER_HUE_SHIFT_PATH);
 }
 
@@ -34,4 +34,7 @@ public void draw() {
     pgHue.filter(shaderHueShift);
     pgHue.endDraw();
     gui.image("hue shifted", pgHue);
+
+    imageMode(CENTER);
+    image(pgHue, 400, 400);
 }

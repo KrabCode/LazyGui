@@ -28,7 +28,7 @@ public class TexturePreviewExample extends PApplet {
         gui = new LazyGui(this);
         pgInvert = createGraphics(400, 400, P2D);
         pgHue = createGraphics(400, 400, P2D);
-        img = loadImage("https://picsum.photos/id/237/400/400.jpg");
+        img = loadImage("../src/main/java/com/krab/lazy/examples/TexturePreview/data/picsum_dog.jpg");
         shaderHueShift = loadShader(SHADER_HUE_SHIFT_PATH);
     }
 
