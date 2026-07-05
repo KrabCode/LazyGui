@@ -78,6 +78,30 @@ Table of Contents
 ### with other IDEs like IntelliJ IDEA
 Get the latest jar file from [releases](https://github.com/KrabCode/LazyGui/releases/latest) and then import it into your project using your IDE as a standard java library just like you imported Processing.
 
+### with Maven or Gradle
+LazyGui is published to Maven Central under the group id `io.github.krabcode`. Note that the dependency coordinates use that group id, while the classes you import stay under the original `com.krab.lazy` package.
+
+Maven — add to your `pom.xml`:
+```xml
+<dependency>
+    <groupId>io.github.krabcode</groupId>
+    <artifactId>lazygui</artifactId>
+    <version>1.12.2</version>
+</dependency>
+```
+
+Gradle — add to your `build.gradle`:
+```groovy
+implementation 'io.github.krabcode:lazygui:1.12.2'
+```
+
+Then import it in your sketch exactly like in the PDE:
+```java
+import com.krab.lazy.*;
+```
+
+You also need Processing itself on the classpath (`org.processing:core`, or any Processing 4.x you already use) — LazyGui deliberately does not pin a Processing version so it stays compatible with whichever one your project runs. The gson dependency is resolved automatically.
+
 ## Minimal code example
 ```java
 import com.krab.lazy.*;

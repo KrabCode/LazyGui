@@ -1,6 +1,8 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'java'
+    id 'maven-publish'
+    id 'signing'
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -47,4 +49,114 @@ shadowJar {
     from compileJava
     from processResources
     from sourceSets.main.allSource
+}
+
+// ============================================================================
+// Maven Central (Central Portal) publishing
+// groupId io.github.krabcode (GitHub-verified); Java package names stay com.krab.lazy.
+// Publishes the plain jar (bundles font + shaders since PR #335), with gson as the
+// only declared dependency. Processing core is intentionally left out so consumers
+// bring their own Processing (3.3.7+ / any 4.x), matching the README compatibility.
+// ============================================================================
+def libProps = new Properties()
+file('library.properties').withInputStream { libProps.load(it) }
+
+group = 'io.github.krabcode'
+version = libProps.getProperty('prettyVersion').replaceFirst(/^v/, '')   // v1.12.2 -> 1.12.2
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        central(MavenPublication) {
+            groupId = 'io.github.krabcode'
+            artifactId = 'lazygui'
+            version = project.version
+
+            artifact tasks.named('jar')
+            artifact tasks.named('sourcesJar')
+            artifact tasks.named('javadocJar')
+
+            pom {
+                name = 'LazyGui'
+                description = 'An animation-friendly GUI library for Processing, controllable at runtime.'
+                url = 'https://github.com/KrabCode/LazyGui'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/KrabCode/LazyGui/blob/master/LICENSE.md'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'KrabCode'
+                        name = 'Jakub Rak'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/KrabCode/LazyGui'
+                    connection = 'scm:git:https://github.com/KrabCode/LazyGui.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/KrabCode/LazyGui.git'
+                }
+                withXml {
+                    def deps = asNode().appendNode('dependencies')
+                    def gson = deps.appendNode('dependency')
+                    gson.appendNode('groupId', 'com.google.code.gson')
+                    gson.appendNode('artifactId', 'gson')
+                    gson.appendNode('version', '2.8.9')
+                    gson.appendNode('scope', 'runtime')
+                }
+            }
+        }
+    }
+    repositories {
+        // Local Maven-layout folder that we zip into a Central Portal bundle.
+        maven {
+            name = 'centralBundle'
+            url = layout.buildDirectory.dir('central-bundle')
+        }
+    }
+}
+
+// .asc signatures are mandatory for Central. useGpgCmd() shells out to the local gpg
+// (no keyring export needed). The signing key has no passphrase, so this runs unattended.
+signing {
+    useGpgCmd()
+    sign publishing.publications.central
+}
+
+// Zip the signed artifacts into a Central Portal bundle (excluding maven-metadata,
+// which the Portal rejects), then upload via the Publisher API.
+tasks.register('centralBundleZip', Zip) {
+    dependsOn 'publishCentralPublicationToCentralBundleRepository'
+    from layout.buildDirectory.dir('central-bundle')
+    exclude '**/maven-metadata.xml*'
+    archiveFileName = "lazygui-${project.version}-bundle.zip"
+    destinationDirectory = layout.buildDirectory
+}
+
+tasks.register('publishToCentral') {
+    group = 'publishing'
+    description = 'Builds the signed bundle and uploads it to the Central Portal.'
+    dependsOn 'centralBundleZip'
+    doLast {
+        def user = findProperty('centralUsername')
+        def pass = findProperty('centralPassword')
+        if (!user || !pass) {
+            throw new GradleException('Set centralUsername and centralPassword in ~/.gradle/gradle.properties (Central Portal user token)')
+        }
+        def token = "${user}:${pass}".bytes.encodeBase64().toString()
+        def bundle = layout.buildDirectory.file("lazygui-${project.version}-bundle.zip").get().asFile
+        // USER_MANAGED: uploads + validates, then waits for you to click Publish in the UI.
+        exec {
+            commandLine 'curl', '-sS', '--fail-with-body',
+                    '-H', "Authorization: Bearer ${token}",
+                    '-F', "bundle=@${bundle.absolutePath}",
+                    "https://central.sonatype.com/api/v1/publisher/upload?name=lazygui-${project.version}&publishingType=USER_MANAGED"
+        }
+        println "\nUploaded. Review & release at https://central.sonatype.com/publishing/deployments"
+    }
 }

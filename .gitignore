@@ -28,3 +28,10 @@ src/test/Camera.java
 
 # Ignore Gradle build output directory
 build
+
+# Signing key material & publishing credentials — never commit
+# (secret keys normally live in ~/.gnupg and the Central token in ~/.gradle/gradle.properties, both outside the repo)
+*.gpg
+*.asc
+*.key
+secring.gpg
