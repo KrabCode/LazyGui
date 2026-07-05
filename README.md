@@ -6,6 +6,7 @@ Table of Contents
   * [How do I start using this?](#how-do-i-start-using-this)
     * [with PDE (the default Processing editor)](#with-pde-the-default-processing-editor)
     * [with other IDEs like IntelliJ IDEA](#with-other-ides-like-intellij-idea)
+    * [with Maven or Gradle](#with-maven-or-gradle)
   * [Minimal code example](#minimal-code-example)
   * [Control elements](#control-elements)
     * [Slider](#slider)
