@@ -6,6 +6,7 @@ Table of Contents
   * [How do I start using this?](#how-do-i-start-using-this)
     * [with PDE (the default Processing editor)](#with-pde-the-default-processing-editor)
     * [with other IDEs like IntelliJ IDEA](#with-other-ides-like-intellij-idea)
+    * [with Maven or Gradle](#with-maven-or-gradle)
   * [Minimal code example](#minimal-code-example)
   * [Control elements](#control-elements)
     * [Slider](#slider)
@@ -88,11 +89,18 @@ Maven — add to your `pom.xml`:
     <artifactId>lazygui</artifactId>
     <version>1.12.2</version>
 </dependency>
+<!-- plus any Processing 3.3.7+ you already use, e.g.: -->
+<dependency>
+    <groupId>org.processing</groupId>
+    <artifactId>core</artifactId>
+    <version>4.5.5</version>
+</dependency>
 ```
 
 Gradle — add to your `build.gradle`:
 ```groovy
-implementation 'io.github.krabcode:lazygui:1.12.2'
+implementation 'io.github.krabcode:lazygui:latest.release'
+implementation 'org.processing:core:4.5.5' // or any Processing 3.3.7+ you already use
 ```
 
 Then import it in your sketch exactly like in the PDE:
@@ -100,7 +108,9 @@ Then import it in your sketch exactly like in the PDE:
 import com.krab.lazy.*;
 ```
 
-You also need Processing itself on the classpath (`org.processing:core`, or any Processing 4.x you already use) — LazyGui deliberately does not pin a Processing version so it stays compatible with whichever one your project runs. The gson dependency is resolved automatically.
+LazyGui deliberately does not pin a Processing version, so it stays compatible with whichever one your project runs — anything from Processing 3.3.7 upwards works. The gson dependency is resolved automatically.
+
+For a complete, runnable Gradle project see [lazygui-maven-sample](https://github.com/KrabCode/lazygui-maven-sample), which pulls LazyGui from Maven Central and runs one of the example sketches.
 
 ## Minimal code example
 ```java
