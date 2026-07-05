@@ -57,11 +57,11 @@ class ImagePreviewNode extends AbstractNode {
             // set text style and draw message centered vertically, left padded
             fillForegroundBasedOnMouseOver(pg);
             pg.textFont(FontStore.getSideFont());
-            pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.CENTER);
+            pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.BASELINE);
             String msg = "null image";
             String trimmed = FontStore.getSubstringFromStartToFit(pg, msg, size.x - FontStore.textMarginX * 2);
             float x = FontStore.textMarginX;
-            float y = FontStore.textMarginY;
+            float y = FontStore.getCenteredTextBaselineY(pg, size.y * 0.5f);
             pg.text(trimmed, x, y);
             pg.popStyle();
             return;

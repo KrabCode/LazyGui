@@ -8,7 +8,6 @@ import static processing.core.PApplet.println;
 public class FontStore {
 
     public static float textMarginX = 5;
-    public static float textMarginY = 13;
 
     public final static String sideFontPathDefault = "JetBrainsMono-Regular.ttf";
     public final static String mainFontPathDefault = "JetBrainsMono-Regular.ttf";
@@ -42,11 +41,21 @@ public class FontStore {
                 GlobalReferences.gui.sliderInt("side font size", sideFontSizeDefault, 2, Integer.MAX_VALUE)
         );
         textMarginX = GlobalReferences.gui.slider("x offset", textMarginX);
-        textMarginY = GlobalReferences.gui.slider("y offset", textMarginY);
         if(GlobalReferences.gui.button("print font list")){
             printAvailableFonts();
         }
         GlobalReferences.gui.popFolder();
+    }
+
+    /**
+     * Processing's textAlign(_, CENTER) positions text using only textAscent(), which leaves it a few pixels too low
+     * and only looks right at the default font size. Deriving the baseline from both textAscent() and textDescent()
+     * keeps text visually centered around rowCenterY at any font size, without a hardcoded pixel offset.
+     * Use with textAlign(_, BASELINE).
+     * See https://github.com/processing/processing4/issues/739 and https://processing.org/reference/text_
+     */
+    public static float getCenteredTextBaselineY(PGraphics pg, float rowCenterY) {
+        return rowCenterY + (pg.textAscent() - pg.textDescent()) * 0.5f;
     }
 
     public static PFont getMainFont() {

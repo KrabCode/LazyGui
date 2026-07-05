@@ -105,14 +105,15 @@ public class Window implements UserInputSubscriber {
         float tooltipWidthMinimum = windowSizeX - tooltipXOffset - LayoutStore.cell;
         pg.noStroke();
         pg.rectMode(CORNER);
-        pg.textAlign(LEFT, CENTER);
+        pg.textAlign(LEFT, BASELINE);
         for (int i = 0; i < lineCount; i++) {
             String line = pathSplit[lineCount - 1 - i];
             float tooltipWidth = max(tooltipWidthMinimum, pg.textWidth(line) + FontStore.textMarginX * 2);
             pg.fill(ThemeStore.getColor(NORMAL_BACKGROUND));
-            pg.rect(tooltipXOffset, -i * LayoutStore.cell - LayoutStore.cell, tooltipWidth, LayoutStore.cell);
+            float rowTopY = -i * LayoutStore.cell - LayoutStore.cell;
+            pg.rect(tooltipXOffset, rowTopY, tooltipWidth, LayoutStore.cell);
             pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND));
-            pg.text(line, FontStore.textMarginX + tooltipXOffset, -i * LayoutStore.cell - FontStore.textMarginY);
+            pg.text(line, FontStore.textMarginX + tooltipXOffset, FontStore.getCenteredTextBaselineY(pg, rowTopY + LayoutStore.cell * 0.5f));
         }
         pg.popMatrix();
         pg.popStyle();
@@ -182,8 +183,8 @@ public class Window implements UserInputSubscriber {
         pg.stroke(ThemeStore.getColor(WINDOW_BORDER));
         pg.rect(0, 0, titleBarWidth, LayoutStore.cell);
         pg.fill(highlight ? ThemeStore.getColor(FOCUS_FOREGROUND) : ThemeStore.getColor(NORMAL_FOREGROUND));
-        pg.textAlign(LEFT, CENTER);
-        pg.text(leftText, FontStore.textMarginX, LayoutStore.cell - FontStore.textMarginY);
+        pg.textAlign(LEFT, BASELINE);
+        pg.text(leftText, FontStore.textMarginX, FontStore.getCenteredTextBaselineY(pg, LayoutStore.cell * 0.5f));
         pg.popStyle();
         pg.popMatrix();
     }

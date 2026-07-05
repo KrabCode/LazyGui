@@ -119,12 +119,12 @@ public abstract class AbstractNode {
     protected void drawLeftText(PGraphics pg, String text){
         fillForegroundBasedOnMouseOver(pg);
         String trimmedText = FontStore.getSubstringFromStartToFit(pg, text, size.x - FontStore.textMarginX);
-        pg.textAlign(LEFT, CENTER);
-		pg.text(trimmedText, FontStore.textMarginX, cell - FontStore.textMarginY);
+        pg.textAlign(LEFT, BASELINE);
+        pg.text(trimmedText, FontStore.textMarginX, FontStore.getCenteredTextBaselineY(pg, cell * 0.5f));
     }
 
     protected void drawRightTextToNotOverflowLeftText(PGraphics pg, String rightText, String leftText, boolean fillBackground) {
-        pg.textAlign(RIGHT, CENTER);
+        pg.textAlign(RIGHT, BASELINE);
         String trimmedTextLeft = FontStore.getSubstringFromStartToFit(pg, leftText, size.x - FontStore.textMarginX);
 		float leftOffset = pg.textWidth(trimmedTextLeft)+(FontStore.textMarginX*2);
         String trimmedRightText = FontStore.getSubstringFromStartToFit(pg, rightText, size.x - FontStore.textMarginX -leftOffset);
@@ -132,7 +132,7 @@ public abstract class AbstractNode {
             float w = pg.textWidth(trimmedRightText) + FontStore.textMarginX * 2;
             drawRightBackdrop(pg, w);
         }
-        pg.text(trimmedRightText,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY);
+        pg.text(trimmedRightText, size.x - FontStore.textMarginX, FontStore.getCenteredTextBaselineY(pg, size.y * 0.5f));
     }
 
     protected void drawRightText(PGraphics pg, String text, boolean fillBackground) {
@@ -141,8 +141,8 @@ public abstract class AbstractNode {
             float w = pg.textWidth(text) + FontStore.textMarginX + backdropBuffer;
             drawRightBackdrop(pg, w);
         }
-        pg.textAlign(RIGHT, CENTER);
-        pg.text(text,size.x - FontStore.textMarginX,size.y - FontStore.textMarginY);
+        pg.textAlign(RIGHT, BASELINE);
+        pg.text(text, size.x - FontStore.textMarginX, FontStore.getCenteredTextBaselineY(pg, size.y * 0.5f));
     }
 
     protected void drawRightBackdrop(PGraphics pg, float backdropSize) {

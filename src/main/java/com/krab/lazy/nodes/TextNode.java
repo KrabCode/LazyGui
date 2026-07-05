@@ -58,7 +58,7 @@ public class TextNode extends AbstractNode {
 
     protected void drawContent(PGraphics pg, String contentToDraw) {
         fillForegroundBasedOnMouseOver(pg);
-        pg.textAlign(LEFT, CENTER);
+        pg.textAlign(LEFT, BASELINE);
         String[] lines = contentToDraw.split(regexLookBehindForNewLine);
         pg.pushMatrix();
         float contentMarginLeft = 0.3f * LayoutStore.cell;
@@ -79,7 +79,7 @@ public class TextNode extends AbstractNode {
                 lineThatFitsWindow = FontStore.getSubstringFromEndToFit(pg, line, textFieldWidth);
             }
             pg.translate(0, LayoutStore.cell);
-            pg.text(lineThatFitsWindow, contentMarginLeft + FontStore.textMarginX, -FontStore.textMarginY);
+            pg.text(lineThatFitsWindow, contentMarginLeft + FontStore.textMarginX, FontStore.getCenteredTextBaselineY(pg, -LayoutStore.cell * 0.5f));
 
             if(!isMouseOverNode){
                 int bgColor = ThemeStore.getColor(ThemeColorType.NORMAL_BACKGROUND);
