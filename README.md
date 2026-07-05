@@ -103,6 +103,8 @@ import com.krab.lazy.*;
 
 You also need Processing itself on the classpath (`org.processing:core`, or any Processing 4.x you already use) — LazyGui deliberately does not pin a Processing version so it stays compatible with whichever one your project runs. The gson dependency is resolved automatically.
 
+For a complete, runnable Gradle project see [lazygui-maven-sample](https://github.com/KrabCode/lazygui-maven-sample), which pulls LazyGui from Maven Central and runs one of the example sketches.
+
 ## Minimal code example
 ```java
 import com.krab.lazy.*;
