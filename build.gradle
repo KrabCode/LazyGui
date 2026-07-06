@@ -33,6 +33,10 @@ sourceSets {
 
 shadowJar {
     archiveClassifier = 'with-gson'
+    // Keep the shaded jar name version-agnostic (LazyGui-with-gson.jar). The Maven
+    // publishing block sets a project `version`, which would otherwise leak into this
+    // filename and break deploy.sh, which copies a fixed LazyGui-with-gson.jar.
+    archiveVersion = ''
     dependencies {
         //noinspection GroovyAssignabilityCheck
         include(dependency('com.google.code.gson:gson:2.8.9'))
