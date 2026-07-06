@@ -135,6 +135,17 @@ signing {
     sign publishing.publications.central
 }
 
+// Wipe the local bundle repo before each publish. It's a persistent Maven-layout
+// folder, so without this the previous version's signed artifacts linger and get
+// zipped into the next bundle — Central then rejects the whole upload because that
+// already-published version "already exists".
+tasks.register('cleanCentralBundle', Delete) {
+    delete layout.buildDirectory.dir('central-bundle')
+}
+tasks.named('publishCentralPublicationToCentralBundleRepository') {
+    dependsOn 'cleanCentralBundle'
+}
+
 // Zip the signed artifacts into a Central Portal bundle (excluding maven-metadata,
 // which the Portal rejects), then upload via the Publisher API.
 tasks.register('centralBundleZip', Zip) {
