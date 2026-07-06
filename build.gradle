@@ -51,6 +51,13 @@ shadowJar {
     from sourceSets.main.allSource
 }
 
+// The plain jar (published to Maven Central) must also carry library.properties
+// so LazyGui.getVersion() can read it from the classpath. It lives at the project
+// root, not under the `data` resources dir, so it isn't picked up automatically.
+jar {
+    from("library.properties")
+}
+
 // ============================================================================
 // Maven Central (Central Portal) publishing
 // groupId io.github.krabcode (GitHub-verified); Java package names stay com.krab.lazy.

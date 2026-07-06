@@ -87,7 +87,7 @@ Maven — add to your `pom.xml`:
 <dependency>
     <groupId>io.github.krabcode</groupId>
     <artifactId>lazygui</artifactId>
-    <version>1.12.2</version>
+    <version>1.12.3</version>
 </dependency>
 <!-- plus any Processing 3.3.7+ you already use, e.g.: -->
 <dependency>
