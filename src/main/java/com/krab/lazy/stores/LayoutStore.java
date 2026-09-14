@@ -24,6 +24,7 @@ public class LayoutStore {
     private static String overridingSketchName = null;
     private static boolean displaySquigglyEquals = false;
     private static String defaultGradientBlendType = GradientBlendType.MIX.name;
+    private static int maxWindowHeight = 600;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -32,6 +33,7 @@ public class LayoutStore {
         setShouldKeepWindowsInBounds(gui.toggle("keep in bounds", LayoutStore.getShouldKeepWindowsInBounds()));
         setAutosuggestWindowWidth(gui.toggle("autosuggest width", LayoutStore.getAutosuggestWindowWidth()));
         setFolderRowClickClosesWindowIfOpen(gui.toggle("click closes window", doesFolderRowClickCloseWindowIfOpen()));
+        setMaxWindowHeight(gui.sliderInt("max window height", getMaxWindowHeight(), 100, 100000));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -172,5 +174,13 @@ public class LayoutStore {
 
     public static String getDefaultGradientBlendType() {
         return defaultGradientBlendType;
+    }
+
+    public static void setMaxWindowHeight(int maxWindowHeight) {
+        LayoutStore.maxWindowHeight = maxWindowHeight;
+    }
+
+    public static int getMaxWindowHeight() {
+        return maxWindowHeight;
     }
 }
