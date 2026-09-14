@@ -10,12 +10,17 @@ import java.util.List;
 // or by click-and-dragging the scrollbar thumb.
 // You can also open the "dots" folder as a window to see its own scrollbar,
 // or change the height limit live inside the GUI at "options/windows/max window height".
+// The visible scrollbar width is set to 18 pixels with setScrollbarWidth() here,
+// and can also be changed live at "options/windows/scrollbar width".
 
 LazyGui gui;
 
 void setup() {
   size(800, 800, P2D);
-  gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300));
+  // setMaxWindowHeight() caps window height so the scrollbar shows up,
+  // setScrollbarWidth() sets the visible scrollbar width in pixels
+  // (by default it auto-scales to half of the GUI cell size).
+  gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300).setScrollbarWidth(18));
   colorMode(HSB, 1, 1, 1, 1);
 }
 

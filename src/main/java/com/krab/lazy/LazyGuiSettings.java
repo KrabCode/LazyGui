@@ -49,6 +49,7 @@ public class LazyGuiSettings {
     private boolean overwriteLastLoadedSave = false;
     private int maxWindowHeight;
     private boolean scrollbarScrollDirectionInverted;
+    private float scrollbarWidth = -1; // negative means keep the auto-scaled default
 
     /**
      * Constructor, call this before any other function here.
@@ -113,6 +114,9 @@ public class LazyGuiSettings {
         LayoutStore.setDefaultGradientBlendType(defaultGradientBlendType);
         LayoutStore.setMaxWindowHeight(maxWindowHeight);
         LayoutStore.setScrollbarScrollDirectionInverted(scrollbarScrollDirectionInverted);
+        if (scrollbarWidth > 0) {
+            LayoutStore.setScrollbarWidth(scrollbarWidth);
+        }
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if (sketchNameOverride != null) {
@@ -516,6 +520,21 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setScrollbarScrollDirectionInverted(boolean scrollbarScrollDirectionInverted) {
         this.scrollbarScrollDirectionInverted = scrollbarScrollDirectionInverted;
+        return this;
+    }
+
+    /**
+     * Sets the visible width in pixels of the vertical scrollbar which windows get
+     * when they are taller than the max window height from {@link #setMaxWindowHeight(int)}.
+     * The clickable and mouse-wheel area around it is slightly wider than this visible bar.
+     * By default the width auto-scales to half of the GUI cell size.
+     * Can also be changed live on the "options/window" tab with the "scrollbar width" slider.
+     *
+     * @param scrollbarWidth visible scrollbar width in pixels
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setScrollbarWidth(float scrollbarWidth) {
+        this.scrollbarWidth = scrollbarWidth;
         return this;
     }
 

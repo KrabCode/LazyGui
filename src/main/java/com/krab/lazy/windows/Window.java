@@ -371,7 +371,7 @@ public class Window implements UserInputSubscriber {
     }
 
     private float getScrollbarWidth() {
-        return max(6, LayoutStore.cell * 0.5f);
+        return LayoutStore.getScrollbarWidth();
     }
 
     private float getScrollbarReservedWidth() {
