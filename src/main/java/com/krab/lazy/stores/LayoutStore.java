@@ -25,6 +25,8 @@ public class LayoutStore {
     private static boolean displaySquigglyEquals = false;
     private static String defaultGradientBlendType = GradientBlendType.MIX.name;
     private static int maxWindowHeight = 600;
+    private static boolean scrollbarScrollDirectionInverted = false;
+    private static float scrollbarWidth = -1; // negative means auto-scaled from cell size
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -34,6 +36,8 @@ public class LayoutStore {
         setAutosuggestWindowWidth(gui.toggle("autosuggest width", LayoutStore.getAutosuggestWindowWidth()));
         setFolderRowClickClosesWindowIfOpen(gui.toggle("click closes window", doesFolderRowClickCloseWindowIfOpen()));
         setMaxWindowHeight(gui.sliderInt("max window height", getMaxWindowHeight(), 100, 100000));
+        setScrollbarScrollDirectionInverted(gui.toggle("invert scroll direction", isScrollbarScrollDirectionInverted()));
+        setScrollbarWidth(gui.slider("scrollbar width", getScrollbarWidth(), 2, 60));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -182,5 +186,24 @@ public class LayoutStore {
 
     public static int getMaxWindowHeight() {
         return maxWindowHeight;
+    }
+
+    public static void setScrollbarScrollDirectionInverted(boolean scrollbarScrollDirectionInverted) {
+        LayoutStore.scrollbarScrollDirectionInverted = scrollbarScrollDirectionInverted;
+    }
+
+    public static boolean isScrollbarScrollDirectionInverted() {
+        return scrollbarScrollDirectionInverted;
+    }
+
+    public static void setScrollbarWidth(float scrollbarWidth) {
+        LayoutStore.scrollbarWidth = scrollbarWidth;
+    }
+
+    public static float getScrollbarWidth() {
+        if (scrollbarWidth > 0) {
+            return scrollbarWidth;
+        }
+        return Math.max(6, cell * 0.5f);
     }
 }
