@@ -47,6 +47,7 @@ public class LazyGuiSettings {
     private WindowRestorationStrategy windowRestoreStrategy = null;
     private String defaultGradientBlendType = null;
     private boolean overwriteLastLoadedSave = false;
+    private int maxWindowHeight;
 
     /**
      * Constructor, call this before any other function here.
@@ -79,6 +80,7 @@ public class LazyGuiSettings {
         this.windowRestoreStrategy = JsonSaveStore.getWindowRestorationStrategy();
         this.overwriteLastLoadedSave = JsonSaveStore.getShouldOverwriteLastLoadedSave();
         this.defaultGradientBlendType = LayoutStore.getDefaultGradientBlendType();
+        this.maxWindowHeight = LayoutStore.getMaxWindowHeight();
     }
 
     void applyEarlyStartupSettings() {
@@ -107,6 +109,7 @@ public class LazyGuiSettings {
         LayoutStore.setHideRadioValue(hideRadioValue);
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
         LayoutStore.setDefaultGradientBlendType(defaultGradientBlendType);
+        LayoutStore.setMaxWindowHeight(maxWindowHeight);
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if (sketchNameOverride != null) {
@@ -481,6 +484,21 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setOverwriteLastLoadedSave(boolean overwriteLastLoadedSave) {
         this.overwriteLastLoadedSave = overwriteLastLoadedSave;
+        return this;
+    }
+
+    /**
+     * Sets the maximum height in pixels of any GUI window before it gets a vertical scrollbar on its right edge.
+     * The effective limit is the smaller of this value and the sketch window height.
+     * Windows taller than this will have their contents clipped and can be scrolled
+     * with the mouse wheel over the scrollbar area or by click-and-drag on the scrollbar thumb.
+     * The value is 600 by default.
+     *
+     * @param maxWindowHeight maximum window height in pixels before the scrollbar appears
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setMaxWindowHeight(int maxWindowHeight) {
+        this.maxWindowHeight = maxWindowHeight;
         return this;
     }
 
