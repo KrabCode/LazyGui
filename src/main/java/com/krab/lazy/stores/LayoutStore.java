@@ -25,6 +25,7 @@ public class LayoutStore {
     private static boolean displaySquigglyEquals = false;
     private static String defaultGradientBlendType = GradientBlendType.MIX.name;
     private static int maxWindowHeight = 600;
+    private static boolean scrollbarScrollDirectionInverted = false;
 
     public static void updateWindowOptions() {
         gui.pushFolder("windows");
@@ -34,6 +35,7 @@ public class LayoutStore {
         setAutosuggestWindowWidth(gui.toggle("autosuggest width", LayoutStore.getAutosuggestWindowWidth()));
         setFolderRowClickClosesWindowIfOpen(gui.toggle("click closes window", doesFolderRowClickCloseWindowIfOpen()));
         setMaxWindowHeight(gui.sliderInt("max window height", getMaxWindowHeight(), 100, 100000));
+        setScrollbarScrollDirectionInverted(gui.toggle("invert scroll direction", isScrollbarScrollDirectionInverted()));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -182,5 +184,13 @@ public class LayoutStore {
 
     public static int getMaxWindowHeight() {
         return maxWindowHeight;
+    }
+
+    public static void setScrollbarScrollDirectionInverted(boolean scrollbarScrollDirectionInverted) {
+        LayoutStore.scrollbarScrollDirectionInverted = scrollbarScrollDirectionInverted;
+    }
+
+    public static boolean isScrollbarScrollDirectionInverted() {
+        return scrollbarScrollDirectionInverted;
     }
 }

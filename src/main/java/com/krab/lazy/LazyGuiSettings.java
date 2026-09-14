@@ -48,6 +48,7 @@ public class LazyGuiSettings {
     private String defaultGradientBlendType = null;
     private boolean overwriteLastLoadedSave = false;
     private int maxWindowHeight;
+    private boolean scrollbarScrollDirectionInverted;
 
     /**
      * Constructor, call this before any other function here.
@@ -81,6 +82,7 @@ public class LazyGuiSettings {
         this.overwriteLastLoadedSave = JsonSaveStore.getShouldOverwriteLastLoadedSave();
         this.defaultGradientBlendType = LayoutStore.getDefaultGradientBlendType();
         this.maxWindowHeight = LayoutStore.getMaxWindowHeight();
+        this.scrollbarScrollDirectionInverted = LayoutStore.isScrollbarScrollDirectionInverted();
     }
 
     void applyEarlyStartupSettings() {
@@ -110,6 +112,7 @@ public class LazyGuiSettings {
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
         LayoutStore.setDefaultGradientBlendType(defaultGradientBlendType);
         LayoutStore.setMaxWindowHeight(maxWindowHeight);
+        LayoutStore.setScrollbarScrollDirectionInverted(scrollbarScrollDirectionInverted);
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if (sketchNameOverride != null) {
@@ -499,6 +502,20 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setMaxWindowHeight(int maxWindowHeight) {
         this.maxWindowHeight = maxWindowHeight;
+        return this;
+    }
+
+    /**
+     * Flips the direction in which the mouse wheel scrolls the contents of windows which got a vertical scrollbar
+     * because they are taller than the max window height from {@link #setMaxWindowHeight(int)}.
+     * Can also be changed live on the "options/window" tab with the "invert scroll direction" toggle.
+     * Not inverted by default.
+     *
+     * @param scrollbarScrollDirectionInverted whether scrolling the mouse wheel down should scroll the window contents up
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setScrollbarScrollDirectionInverted(boolean scrollbarScrollDirectionInverted) {
+        this.scrollbarScrollDirectionInverted = scrollbarScrollDirectionInverted;
         return this;
     }
 

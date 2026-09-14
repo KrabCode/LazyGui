@@ -309,19 +309,26 @@ public class Window implements UserInputSubscriber {
             return;
         }
         float barWidth = getScrollbarWidth();
+        float hitWidth = getScrollbarHitWidth();
         float thumbHeight = getScrollbarThumbHeight();
         float freeScrollRange = trackHeight - thumbHeight;
         float maxScrollY = getMaxScrollY();
         float thumbTopY = maxScrollY <= 0 ? 0 : scrollY / maxScrollY * freeScrollRange;
+        boolean isHovered = isPointInsideScrollbar(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY);
         boolean isGrabbed = isScrollbarThumbDragged || isPointInsideScrollbarThumb(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY);
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
         pg.noStroke();
+        if (isHovered || isGrabbed) {
+            // highlight the whole invisible hover band which also registers the mouse wheel
+            pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
+            pg.rect(windowSizeX - hitWidth, LayoutStore.cell, hitWidth, trackHeight);
+        }
         pg.fill(ThemeStore.getColor(WINDOW_BORDER));
         pg.rect(windowSizeX - barWidth, LayoutStore.cell, barWidth, trackHeight);
-        float inset = min(barWidth * 0.25f, trackHeight * 0.1f);
-        pg.fill(ThemeStore.getColor(isGrabbed ? FOCUS_FOREGROUND : NORMAL_FOREGROUND));
+        float inset = min(barWidth * 0.2f, trackHeight * 0.08f);
+        pg.fill(ThemeStore.getColor(isGrabbed || isHovered ? FOCUS_FOREGROUND : NORMAL_FOREGROUND));
         pg.rect(windowSizeX - barWidth + inset, LayoutStore.cell + thumbTopY + inset, barWidth - inset * 2, thumbHeight - inset * 2, barWidth * 0.5f);
         pg.popStyle();
         pg.popMatrix();
@@ -364,11 +371,11 @@ public class Window implements UserInputSubscriber {
     }
 
     private float getScrollbarWidth() {
-        return max(4, LayoutStore.cell * 0.3f);
+        return max(6, LayoutStore.cell * 0.5f);
     }
 
     private float getScrollbarReservedWidth() {
-        return max(getScrollbarWidth() * 2, LayoutStore.cell * 0.6f);
+        return getScrollbarWidth() * 1.6f;
     }
 
     private float getInlineContentWidth() {
@@ -379,7 +386,8 @@ public class Window implements UserInputSubscriber {
     }
 
     private float getScrollbarHitWidth() {
-        return max(getScrollbarWidth() * 1.5f, LayoutStore.cell * 0.4f);
+        // clicking and scrolling should work over the whole reserved gutter, not just the thin thumb band
+        return getScrollbarReservedWidth();
     }
 
     private float getScrollbarTrackHeight() {
@@ -462,7 +470,8 @@ public class Window implements UserInputSubscriber {
             return;
         }
         if (isPointInsideScrollbar(e.getX(), e.getY())) {
-            scrollY += e.getRotation() * LayoutStore.cell * 3;
+            float direction = LayoutStore.isScrollbarScrollDirectionInverted() ? -1 : 1;
+            scrollY += e.getRotation() * direction * LayoutStore.cell * 3;
             clampScrollY();
             e.setConsumed(true);
             return;
