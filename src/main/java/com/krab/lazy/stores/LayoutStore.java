@@ -37,7 +37,7 @@ public class LayoutStore {
         setFolderRowClickClosesWindowIfOpen(gui.toggle("click closes window", doesFolderRowClickCloseWindowIfOpen()));
         setMaxWindowHeight(gui.sliderInt("max window height", getMaxWindowHeight(), 100, 100000));
         setScrollbarScrollDirectionInverted(gui.toggle("invert scroll direction", isScrollbarScrollDirectionInverted()));
-        setScrollbarWidth(gui.slider("scrollbar width", getScrollbarWidth(), 2, 60));
+        setScrollbarWidth(gui.slider("scrollbar width", getScrollbarWidth(), 1, 12));
 
         gui.pushFolder("resize");
         setWindowResizeEnabled(gui.toggle("allow resize", LayoutStore.getWindowResizeEnabled()));
@@ -204,6 +204,6 @@ public class LayoutStore {
         if (scrollbarWidth > 0) {
             return scrollbarWidth;
         }
-        return Math.max(6, cell * 0.5f);
+        return Math.max(2, cell * 0.15f);
     }
 }

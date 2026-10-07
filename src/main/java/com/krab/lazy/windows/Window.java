@@ -42,6 +42,7 @@ public class Window implements UserInputSubscriber {
     private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
     private float scrollY;
+    private static final float SCROLLBAR_MARGIN = 2;
     private boolean isScrollbarThumbDragged;
     private float scrollbarThumbGrabOffsetY;
 
@@ -84,7 +85,9 @@ public class Window implements UserInputSubscriber {
     }
 
     private void drawResizeIndicator(PGraphics pg) {
-        if (!isPointInsideResizeBorder(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY) || !LayoutStore.getShouldDrawResizeIndicator()) {
+        float mouseX = GlobalReferences.app.mouseX;
+        float mouseY = GlobalReferences.app.mouseY;
+        if (!isPointInsideResizeBorder(mouseX, mouseY) || isPointInsideScrollbarThumb(mouseX, mouseY) || !LayoutStore.getShouldDrawResizeIndicator()) {
             return;
         }
         float w = LayoutStore.getResizeRectangleSize();
@@ -309,27 +312,21 @@ public class Window implements UserInputSubscriber {
             return;
         }
         float barWidth = getScrollbarWidth();
-        float hitWidth = getScrollbarHitWidth();
         float thumbHeight = getScrollbarThumbHeight();
         float freeScrollRange = trackHeight - thumbHeight;
         float maxScrollY = getMaxScrollY();
         float thumbTopY = maxScrollY <= 0 ? 0 : scrollY / maxScrollY * freeScrollRange;
-        boolean isHovered = isPointInsideScrollbar(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY);
-        boolean isGrabbed = isScrollbarThumbDragged || isPointInsideScrollbarThumb(GlobalReferences.app.mouseX, GlobalReferences.app.mouseY);
+        float mouseX = GlobalReferences.app.mouseX;
+        float mouseY = GlobalReferences.app.mouseY;
+        boolean isActive = isScrollbarThumbDragged || isPointInsideScrollbarThumb(mouseX, mouseY);
+        boolean isHovered = isPointInsideScrollbar(mouseX, mouseY);
         pg.pushMatrix();
         pg.pushStyle();
         pg.translate(posX, posY);
         pg.noStroke();
-        if (isHovered || isGrabbed) {
-            // highlight the whole invisible hover band which also registers the mouse wheel
-            pg.fill(ThemeStore.getColor(FOCUS_BACKGROUND));
-            pg.rect(windowSizeX - hitWidth, LayoutStore.cell, hitWidth, trackHeight);
-        }
-        pg.fill(ThemeStore.getColor(WINDOW_BORDER));
-        pg.rect(windowSizeX - barWidth, LayoutStore.cell, barWidth, trackHeight);
-        float inset = min(barWidth * 0.2f, trackHeight * 0.08f);
-        pg.fill(ThemeStore.getColor(isGrabbed || isHovered ? FOCUS_FOREGROUND : NORMAL_FOREGROUND));
-        pg.rect(windowSizeX - barWidth + inset, LayoutStore.cell + thumbTopY + inset, barWidth - inset * 2, thumbHeight - inset * 2, barWidth * 0.5f);
+        // a muted thumb which sits on top of the content, it gets a bit more visible when it can be grabbed
+        pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND), isActive ? 180 : isHovered ? 120 : 70);
+        pg.rect(windowSizeX - barWidth - SCROLLBAR_MARGIN, LayoutStore.cell + thumbTopY, barWidth, thumbHeight, barWidth * 0.5f);
         pg.popStyle();
         pg.popMatrix();
     }
@@ -374,20 +371,23 @@ public class Window implements UserInputSubscriber {
         return LayoutStore.getScrollbarWidth();
     }
 
-    private float getScrollbarReservedWidth() {
-        return getScrollbarWidth() * 1.6f;
-    }
-
     private float getInlineContentWidth() {
-        if (isScrollbarNeeded()) {
-            return windowSizeX - getScrollbarReservedWidth();
-        }
         return windowSizeX;
     }
 
-    private float getScrollbarHitWidth() {
-        // clicking and scrolling should work over the whole reserved gutter, not just the thin thumb band
-        return getScrollbarReservedWidth();
+    /**
+     * How far the right edge strip reaches inside the window. The strip is shared by the scrollbar and the window resize handle.
+     */
+    private float getRightEdgeStripInsideWidth() {
+        float resizeInsideWidth = LayoutStore.getResizeRectangleSize() / 2f;
+        if (isScrollbarNeeded()) {
+            return max(resizeInsideWidth, getScrollbarWidth() + SCROLLBAR_MARGIN * 2);
+        }
+        return resizeInsideWidth;
+    }
+
+    private float getRightEdgeStripWidth() {
+        return getRightEdgeStripInsideWidth() + LayoutStore.getResizeRectangleSize() / 2f;
     }
 
     private float getScrollbarTrackHeight() {
@@ -417,8 +417,8 @@ public class Window implements UserInputSubscriber {
             return false;
         }
         return isPointInRect(x, y,
-                posX + windowSizeX - getScrollbarHitWidth(), posY + LayoutStore.cell,
-                getScrollbarHitWidth(), getScrollbarTrackHeight());
+                posX + windowSizeX - getRightEdgeStripInsideWidth(), posY + LayoutStore.cell,
+                getRightEdgeStripWidth(), getScrollbarTrackHeight());
     }
 
     private boolean isPointInsideScrollbarThumb(float x, float y) {
@@ -426,8 +426,8 @@ public class Window implements UserInputSubscriber {
             return false;
         }
         return isPointInRect(x, y,
-                posX + windowSizeX - getScrollbarHitWidth(), getScrollbarThumbTopY(),
-                getScrollbarHitWidth(), getScrollbarThumbHeight());
+                posX + windowSizeX - getRightEdgeStripInsideWidth(), getScrollbarThumbTopY(),
+                getRightEdgeStripWidth(), getScrollbarThumbHeight());
     }
 
     private void drawHorizontalSeparator(PGraphics pg) {
@@ -538,12 +538,8 @@ public class Window implements UserInputSubscriber {
             e.setConsumed(true);
             return;
         }
-        if (isPointInsideScrollbar(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) {
+        if (isPointInsideScrollbarThumb(e.getX(), e.getY()) && e.getButton() == PConstants.LEFT) {
             isScrollbarThumbDragged = true;
-            if (!isPointInsideScrollbarThumb(e.getX(), e.getY())) {
-                float thumbTopRelativeToTrack = e.getY() - (posY + LayoutStore.cell) - getScrollbarThumbHeight() * 0.5f;
-                setScrollYFromThumbTop(thumbTopRelativeToTrack);
-            }
             scrollbarThumbGrabOffsetY = e.getY() - getScrollbarThumbTopY();
             e.setConsumed(true);
             return;
@@ -709,8 +705,7 @@ public class Window implements UserInputSubscriber {
         if (!LayoutStore.getWindowResizeEnabled()) {
             return false;
         }
-        float w = LayoutStore.getResizeRectangleSize();
-        return isPointInRect(x, y, posX + windowSizeX - w / 2f, posY, w, windowSizeY);
+        return isPointInRect(x, y, posX + windowSizeX - getRightEdgeStripInsideWidth(), posY, getRightEdgeStripWidth(), windowSizeY);
     }
 
     public boolean isTitleHighlighted() {

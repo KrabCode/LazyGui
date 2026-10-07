@@ -526,8 +526,9 @@ public class LazyGuiSettings {
     /**
      * Sets the visible width in pixels of the vertical scrollbar which windows get
      * when they are taller than the max window height from {@link #setMaxWindowHeight(int)}.
-     * The clickable and mouse-wheel area around it is slightly wider than this visible bar.
-     * By default the width auto-scales to half of the GUI cell size.
+     * The thumb is drawn over the window content. It is grabbed through the same right edge strip
+     * which resizes the window, so the clickable and mouse-wheel area is slightly wider than the visible bar.
+     * By default the width auto-scales to 15% of the GUI cell size.
      * Can also be changed live on the "options/window" tab with the "scrollbar width" slider.
      *
      * @param scrollbarWidth visible scrollbar width in pixels

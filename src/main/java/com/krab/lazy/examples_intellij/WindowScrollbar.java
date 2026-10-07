@@ -16,7 +16,7 @@ import java.util.List;
  * or by click-and-dragging the scrollbar thumb.
  * You can also open the "dots" folder as a window to see its own scrollbar,
  * or change the height limit live inside the GUI at "options/windows/max window height".
- * The visible scrollbar width is set to 18 pixels with setScrollbarWidth() here,
+ * The visible scrollbar width is set to 4 pixels with setScrollbarWidth() here,
  * and can also be changed live at "options/windows/scrollbar width".
  */
 public class WindowScrollbar extends PApplet {
@@ -35,8 +35,8 @@ public class WindowScrollbar extends PApplet {
     public void setup() {
         // setMaxWindowHeight() caps window height so the scrollbar shows up,
         // setScrollbarWidth() sets the visible scrollbar width in pixels
-        // (by default it auto-scales to half of the GUI cell size).
-        gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300).setScrollbarWidth(18));
+        // (by default it auto-scales to 15% of the GUI cell size).
+        gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300).setScrollbarWidth(4));
         colorMode(HSB, 1, 1, 1, 1);
     }
 

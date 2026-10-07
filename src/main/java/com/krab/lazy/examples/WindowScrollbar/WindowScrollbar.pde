@@ -6,11 +6,12 @@ import java.util.List;
 // GUI windows are capped at 300 pixels of height with setMaxWindowHeight(),
 // and this sketch creates far more control rows than fit into that height,
 // so the root window immediately shows a scrollbar on its right edge.
-// Scroll by hovering over the scrollbar and rolling the mouse wheel,
+// Scroll by hovering over the right window edge and rolling the mouse wheel,
 // or by click-and-dragging the scrollbar thumb.
+// The rest of the right window edge still resizes the window.
 // You can also open the "dots" folder as a window to see its own scrollbar,
 // or change the height limit live inside the GUI at "options/windows/max window height".
-// The visible scrollbar width is set to 18 pixels with setScrollbarWidth() here,
+// The visible scrollbar width is set to 4 pixels with setScrollbarWidth() here,
 // and can also be changed live at "options/windows/scrollbar width".
 
 LazyGui gui;
@@ -19,8 +20,8 @@ void setup() {
   size(800, 800, P2D);
   // setMaxWindowHeight() caps window height so the scrollbar shows up,
   // setScrollbarWidth() sets the visible scrollbar width in pixels
-  // (by default it auto-scales to half of the GUI cell size).
-  gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300).setScrollbarWidth(18));
+  // (by default it auto-scales to 15% of the GUI cell size).
+  gui = new LazyGui(this, new LazyGuiSettings().setMaxWindowHeight(300).setScrollbarWidth(4));
   colorMode(HSB, 1, 1, 1, 1);
 }
 
