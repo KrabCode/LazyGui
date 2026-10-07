@@ -36,6 +36,8 @@ dependencies {
 sourceSets {
     main {
         resources.srcDir 'data'
+        // data/gui holds the saves and screenshots of sketches run from this repo, they must never end up in a jar
+        resources.exclude 'gui/**'
     }
 }
 
