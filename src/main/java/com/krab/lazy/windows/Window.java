@@ -42,7 +42,6 @@ public class Window implements UserInputSubscriber {
     private boolean isTitleHighlighted;
     private boolean closeButtonPressInProgress;
     private float scrollY;
-    private static final float SCROLLBAR_MARGIN = 2;
     private boolean isScrollbarThumbDragged;
     private float scrollbarThumbGrabOffsetY;
 
@@ -324,9 +323,9 @@ public class Window implements UserInputSubscriber {
         pg.pushStyle();
         pg.translate(posX, posY);
         pg.noStroke();
-        // a muted thumb which sits on top of the content, it gets a bit more visible when it can be grabbed
+        // a muted thumb centered on the window edge like the resize handle, drawn over the content, it gets a bit more visible when it can be grabbed
         pg.fill(ThemeStore.getColor(NORMAL_FOREGROUND), isActive ? 180 : isHovered ? 120 : 70);
-        pg.rect(windowSizeX - barWidth - SCROLLBAR_MARGIN, LayoutStore.cell + thumbTopY, barWidth, thumbHeight, barWidth * 0.5f);
+        pg.rect(windowSizeX - barWidth / 2f, LayoutStore.cell + thumbTopY, barWidth, thumbHeight, barWidth * 0.5f);
         pg.popStyle();
         pg.popMatrix();
     }
@@ -376,18 +375,14 @@ public class Window implements UserInputSubscriber {
     }
 
     /**
-     * How far the right edge strip reaches inside the window. The strip is shared by the scrollbar and the window resize handle.
+     * Half the width of the right edge strip which is centered on the window edge and shared by the scrollbar and the window resize handle.
      */
-    private float getRightEdgeStripInsideWidth() {
-        float resizeInsideWidth = LayoutStore.getResizeRectangleSize() / 2f;
+    private float getRightEdgeStripHalfWidth() {
+        float resizeHalfWidth = LayoutStore.getResizeRectangleSize() / 2f;
         if (isScrollbarNeeded()) {
-            return max(resizeInsideWidth, getScrollbarWidth() + SCROLLBAR_MARGIN * 2);
+            return max(resizeHalfWidth, getScrollbarWidth() / 2f);
         }
-        return resizeInsideWidth;
-    }
-
-    private float getRightEdgeStripWidth() {
-        return getRightEdgeStripInsideWidth() + LayoutStore.getResizeRectangleSize() / 2f;
+        return resizeHalfWidth;
     }
 
     private float getScrollbarTrackHeight() {
@@ -417,8 +412,8 @@ public class Window implements UserInputSubscriber {
             return false;
         }
         return isPointInRect(x, y,
-                posX + windowSizeX - getRightEdgeStripInsideWidth(), posY + LayoutStore.cell,
-                getRightEdgeStripWidth(), getScrollbarTrackHeight());
+                posX + windowSizeX - getRightEdgeStripHalfWidth(), posY + LayoutStore.cell,
+                getRightEdgeStripHalfWidth() * 2, getScrollbarTrackHeight());
     }
 
     private boolean isPointInsideScrollbarThumb(float x, float y) {
@@ -426,8 +421,8 @@ public class Window implements UserInputSubscriber {
             return false;
         }
         return isPointInRect(x, y,
-                posX + windowSizeX - getRightEdgeStripInsideWidth(), getScrollbarThumbTopY(),
-                getRightEdgeStripWidth(), getScrollbarThumbHeight());
+                posX + windowSizeX - getRightEdgeStripHalfWidth(), getScrollbarThumbTopY(),
+                getRightEdgeStripHalfWidth() * 2, getScrollbarThumbHeight());
     }
 
     private void drawHorizontalSeparator(PGraphics pg) {
@@ -705,7 +700,7 @@ public class Window implements UserInputSubscriber {
         if (!LayoutStore.getWindowResizeEnabled()) {
             return false;
         }
-        return isPointInRect(x, y, posX + windowSizeX - getRightEdgeStripInsideWidth(), posY, getRightEdgeStripWidth(), windowSizeY);
+        return isPointInRect(x, y, posX + windowSizeX - getRightEdgeStripHalfWidth(), posY, getRightEdgeStripHalfWidth() * 2, windowSizeY);
     }
 
     public boolean isTitleHighlighted() {
