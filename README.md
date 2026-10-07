@@ -519,7 +519,7 @@ gui = new LazyGui(this, new LazyGuiSettings()
 ## Moving, resizing and scrolling windows
 - drag a window by its title bar to move it
 - drag the **right edge** of a window to change its width
-- a window taller than the max window height (600 pixels or the sketch height, whichever is smaller) shows a thin, muted scrollbar thumb on its right edge
+- a window taller than the max window height (600 pixels or the sketch height, whichever is smaller) shows a scrollbar on its right edge
   - the thumb shares the right edge with the resize handle: grab the thumb itself to scroll, grab anywhere else along the edge to resize
   - rolling the mouse wheel over the right edge also scrolls
 - these can be changed live in the `options/windows` folder, or at startup with [LazyGuiSettings](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html):
