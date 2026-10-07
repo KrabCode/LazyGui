@@ -110,14 +110,17 @@ public class FontStore {
 
     public static String getSubstringFromStartToFit(PGraphics pg, String text, float availableWidth) {
         StringBuilder result = new StringBuilder();
+        float resultWidth = 0;
         for (int i = 0; i < text.length(); i++) {
             char character = text.charAt(i);
             if(character == '\n'){
                 // no new lines allowed in a one-line row name
                 break;
             }
-            float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
-            if (textWidthAfterNewChar >= availableWidth) {
+            // P2D places every glyph at its whole pixel advance while textWidth() of a whole string adds up the fractional ones,
+            // so measuring the string underestimates what is drawn and the text can overflow, summing the characters matches
+            resultWidth += pg.textWidth(character);
+            if (resultWidth >= availableWidth) {
                 break;
             }
             result.append(character);
@@ -127,10 +130,11 @@ public class FontStore {
 
     public static String getSubstringFromEndToFit(PGraphics pg, String text, float availableWidth){
         StringBuilder result = new StringBuilder();
+        float resultWidth = 0;
         for (int i = text.length() - 1; i >= 0; i--) {
             char character = text.charAt(i);
-            float textWidthAfterNewChar = pg.textWidth(result.toString() + character);
-            if (textWidthAfterNewChar >= availableWidth) {
+            resultWidth += pg.textWidth(character);
+            if (resultWidth >= availableWidth) {
                 break;
             }
             result.insert(0, character);
