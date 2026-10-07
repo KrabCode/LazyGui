@@ -10,6 +10,14 @@ tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = '1.8'
 }
 
+// Force UTF-8 for javadoc as well - otherwise javadoc inherits the platform
+// encoding (like Cp1250 on Windows) and fails on UTF-8 characters such as '≈'
+// inside the source comments.
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.charSet = 'UTF-8'}
+
 repositories {
     mavenCentral()
 }

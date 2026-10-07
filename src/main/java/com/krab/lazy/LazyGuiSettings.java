@@ -47,6 +47,9 @@ public class LazyGuiSettings {
     private WindowRestorationStrategy windowRestoreStrategy = null;
     private String defaultGradientBlendType = null;
     private boolean overwriteLastLoadedSave = false;
+    private int maxWindowHeight;
+    private boolean scrollbarScrollDirectionInverted;
+    private float scrollbarWidth = -1; // negative means keep the auto-scaled default
 
     /**
      * Constructor, call this before any other function here.
@@ -79,6 +82,8 @@ public class LazyGuiSettings {
         this.windowRestoreStrategy = JsonSaveStore.getWindowRestorationStrategy();
         this.overwriteLastLoadedSave = JsonSaveStore.getShouldOverwriteLastLoadedSave();
         this.defaultGradientBlendType = LayoutStore.getDefaultGradientBlendType();
+        this.maxWindowHeight = LayoutStore.getMaxWindowHeight();
+        this.scrollbarScrollDirectionInverted = LayoutStore.isScrollbarScrollDirectionInverted();
     }
 
     void applyEarlyStartupSettings() {
@@ -107,6 +112,11 @@ public class LazyGuiSettings {
         LayoutStore.setHideRadioValue(hideRadioValue);
         LayoutStore.setDisplaySquigglyEquals(showSquigglyEquals);
         LayoutStore.setDefaultGradientBlendType(defaultGradientBlendType);
+        LayoutStore.setMaxWindowHeight(maxWindowHeight);
+        LayoutStore.setScrollbarScrollDirectionInverted(scrollbarScrollDirectionInverted);
+        if (scrollbarWidth > 0) {
+            LayoutStore.setScrollbarWidth(scrollbarWidth);
+        }
         DelayStore.setKeyboardBufferDelayMillis(keyboardMillisDelay);
         HotkeyStore.setHotkeyMouseWheelActive(isMouseWheelPrecisionActive);
         if (sketchNameOverride != null) {
@@ -481,6 +491,51 @@ public class LazyGuiSettings {
      */
     public LazyGuiSettings setOverwriteLastLoadedSave(boolean overwriteLastLoadedSave) {
         this.overwriteLastLoadedSave = overwriteLastLoadedSave;
+        return this;
+    }
+
+    /**
+     * Sets the maximum height in pixels of any GUI window before it gets a vertical scrollbar on its right edge.
+     * The effective limit is the smaller of this value and the sketch window height.
+     * Windows taller than this will have their contents clipped and can be scrolled
+     * with the mouse wheel over the scrollbar area or by click-and-drag on the scrollbar thumb.
+     * The value is 600 by default.
+     *
+     * @param maxWindowHeight maximum window height in pixels before the scrollbar appears
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setMaxWindowHeight(int maxWindowHeight) {
+        this.maxWindowHeight = maxWindowHeight;
+        return this;
+    }
+
+    /**
+     * Flips the direction in which the mouse wheel scrolls the contents of windows which got a vertical scrollbar
+     * because they are taller than the max window height from {@link #setMaxWindowHeight(int)}.
+     * Can also be changed live on the "options/window" tab with the "invert scroll direction" toggle.
+     * Not inverted by default.
+     *
+     * @param scrollbarScrollDirectionInverted whether scrolling the mouse wheel down should scroll the window contents up
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setScrollbarScrollDirectionInverted(boolean scrollbarScrollDirectionInverted) {
+        this.scrollbarScrollDirectionInverted = scrollbarScrollDirectionInverted;
+        return this;
+    }
+
+    /**
+     * Sets the visible width in pixels of the vertical scrollbar which windows get
+     * when they are taller than the max window height from {@link #setMaxWindowHeight(int)}.
+     * The thumb is drawn centered on the right window edge. It is grabbed through the same right edge strip
+     * which resizes the window, so the clickable and mouse-wheel area is slightly wider than the visible bar.
+     * By default the width auto-scales to 15% of the GUI cell size.
+     * Can also be changed live on the "options/window" tab with the "scrollbar width" slider.
+     *
+     * @param scrollbarWidth visible scrollbar width in pixels
+     * @return this settings object for chaining statements easily
+     */
+    public LazyGuiSettings setScrollbarWidth(float scrollbarWidth) {
+        this.scrollbarWidth = scrollbarWidth;
         return this;
     }
 

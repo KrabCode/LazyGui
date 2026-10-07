@@ -36,6 +36,7 @@ Table of Contents
     * [Has a value changed last frame?](#has-a-value-changed-last-frame)
     * [Folder visuals](#folder-visuals)
   * [Constructor settings](#constructor-settings)
+  * [Moving, resizing and scrolling windows](#moving-resizing-and-scrolling-windows)
   * [Window restoration](#window-restoration)
   * [Live shader reloading](#live-shader-reloading)
   * [Input](#input)
@@ -87,7 +88,7 @@ Maven — add to your `pom.xml`:
 <dependency>
     <groupId>io.github.krabcode</groupId>
     <artifactId>lazygui</artifactId>
-    <version>1.12.3</version>
+    <version>1.13.0</version>
 </dependency>
 <!-- plus any Processing 3.3.7+ you already use, e.g.: -->
 <dependency>
@@ -514,6 +515,18 @@ gui = new LazyGui(this, new LazyGuiSettings()
 
 ```
 - for a list of all the options, see the [LazyGuiSettings javadocs](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html)
+
+## Moving, resizing and scrolling windows
+- drag a window by its title bar to move it
+- drag the **right edge** of a window to change its width
+- a window taller than the max window height (600 pixels or the sketch height, whichever is smaller) shows a scrollbar on its right edge
+  - the thumb shares the right edge with the resize handle: grab the thumb itself to scroll, grab anywhere else along the edge to resize
+  - rolling the mouse wheel over the right edge also scrolls
+- these can be changed live in the `options/windows` folder, or at startup with [LazyGuiSettings](https://krabcode.github.io/LazyGui/com/krab/lazy/LazyGuiSettings.html):
+  - `setMaxWindowHeight(int)` - the height at which windows start to scroll
+  - `setScrollbarWidth(float)` - the visible thumb width in pixels
+  - `setScrollbarScrollDirectionInverted(boolean)` - flips the mouse wheel direction
+- see the [WindowScrollbar](https://github.com/KrabCode/LazyGui/blob/master/src/main/java/com/krab/lazy/examples/WindowScrollbar/WindowScrollbar.pde) example
 
 ## Window restoration
 When you load a save, the GUI will try to restore the window state to what it was when the save was made.
