@@ -27,7 +27,7 @@
 Maven/Gradle users consume the library from Maven Central under the group id `io.github.krabcode` (the `com.krab.lazy` package names are unchanged). This is a separate channel from the PDE `latest` release above.
 
 One-time setup (already done, listed here for reference / a new machine):
-- The `io.github.krabcode` namespace is verified on [central.sonatype.com](https://central.sonatype.com) via the GitHub account
+- The `io.github.krabcode` namespace is verified on [central.sonatype.com](https://central.sonatype.com) via the GitHub account — log in there with the GitHub-linked account ("Sign in with GitHub"), not a separate email/password one
 - A GPG signing key exists locally (`gpg --list-secret-keys`) and its public half is uploaded to both `keyserver.ubuntu.com` and `keys.openpgp.org` — Central verifies the `.asc` signatures against these
 - A Central Portal user token is stored in `~/.gradle/gradle.properties` as `centralUsername` / `centralPassword` (outside the repo, never committed)
 
